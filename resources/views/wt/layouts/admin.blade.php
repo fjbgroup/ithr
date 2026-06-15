@@ -3671,14 +3671,14 @@
         $impersonatorAdminItId = session('impersonator_admin_it_id');
         $isExecutiveImpersonation = $actualRole === 'admin' && filled($impersonatorAdminItId);
         $executiveSwitcherAccounts = $actualRole === 'admin_it'
-            ? \App\Models\User::where('role', 'admin')
+            ? \App\Models\WT\User::where('role', 'admin')
                 ->orderBy('full_name')
                 ->orderBy('username')
                 ->get(['user_id', 'username', 'full_name', 'department'])
             : collect();
         $headerUnreadNotifications = Auth::guard('wt')->user()->unreadNotifications()->count();
         $headerNotifications = Auth::guard('wt')->user()->notifications()->latest()->take(8)->get();
-        $approvalBadgeCount = \App\Models\AccessRequest::query()
+        $approvalBadgeCount = \App\Models\WT\AccessRequest::query()
             ->where(function ($query) use ($effectiveRole) {
                 $query->where('status', $effectiveRole === 'admin_it' ? 'Pending IT Approval' : 'Pending Admin Approval')
                     ->orWhere('return_status', $effectiveRole === 'admin_it' ? 'Pending IT Approval' : 'Pending Admin Approval');
@@ -3691,9 +3691,9 @@
             })
             ->count();
         if ($effectiveRole === 'admin_it') {
-            $approvalBadgeCount += \App\Models\MaintenanceRecord::where('status', 'PENDING ADMIN IT')->count();
+            $approvalBadgeCount += \App\Models\WT\MaintenanceRecord::where('status', 'PENDING ADMIN IT')->count();
         } else {
-            $approvalBadgeCount += \App\Models\MaintenanceRecord::where('status', 'WAITING FOR ADMIN')
+            $approvalBadgeCount += \App\Models\WT\MaintenanceRecord::where('status', 'WAITING FOR ADMIN')
                 ->where('submit_to_admin_id', auth()->id())
                 ->count();
         }
@@ -4153,10 +4153,10 @@
                     
                     @if($actualRole === 'admin_it')
                     <div class="topbar-role-switcher hidden md:flex items-center bg-stone-100 dark:bg-slate-800/50 border border-stone-200 dark:border-slate-700">
-                        <a href="{{ route('switch_view', 'admin_it') }}" class="flex items-center gap-2 px-3 {{ $effectiveRole === 'admin_it' ? 'bg-[#B38A5A] text-white' : 'text-stone-500 hover:text-stone-700 dark:text-slate-400 dark:hover:text-slate-200' }} font-bold text-[9px] uppercase tracking-widest transition">
+                        <a href="{{ route('wt.switch_view', 'admin_it') }}" class="flex items-center gap-2 px-3 {{ $effectiveRole === 'admin_it' ? 'bg-[#B38A5A] text-white' : 'text-stone-500 hover:text-stone-700 dark:text-slate-400 dark:hover:text-slate-200' }} font-bold text-[9px] uppercase tracking-widest transition">
                             <i class="fas fa-user-shield text-[10px]"></i> ICT
                         </a>
-                        <form action="{{ route('switch_executive_account') }}" method="POST" class="flex items-center">
+                        <form action="{{ route('wt.switch_executive_account') }}" method="POST" class="flex items-center">
                             @csrf
                             <label class="sr-only" for="executive_account_switcher">Executive Account</label>
                             <select id="executive_account_switcher" name="executive_user_id" onchange="if(this.value) this.form.submit()" class="min-w-[190px] border-0 bg-transparent px-3 text-[9px] font-black uppercase tracking-widest text-stone-500 outline-none transition hover:text-stone-700 dark:text-slate-400 dark:hover:text-slate-200">
@@ -4172,7 +4172,7 @@
                     @endif
 
                     @if($isExecutiveImpersonation)
-                    <form action="{{ route('return_to_ict_account') }}" method="POST" class="hidden md:block">
+                    <form action="{{ route('wt.return_to_ict_account') }}" method="POST" class="hidden md:block">
                         @csrf
                         <button type="submit" class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-[9px] font-black uppercase tracking-[0.14em] text-sky-700 transition hover:bg-sky-100 dark:border-sky-900/60 dark:bg-sky-950/30 dark:text-sky-200">
                             <i class="fas fa-arrow-left text-[10px]"></i>
@@ -4192,7 +4192,7 @@
                             <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-700">
                                 <p class="text-[10px] font-black uppercase tracking-[0.14em] text-slate-600 dark:text-slate-200">Notifications</p>
                                 @if($headerUnreadNotifications > 0)
-                                <form action="{{ route('notifications.read_all') }}" method="POST">
+                                <form action="{{ route('wt.notifications.read_all') }}" method="POST">
                                     @csrf
                                     <button class="text-[9px] font-bold uppercase tracking-[0.08em] text-[#8D6742] hover:text-[#B38A5A]">Mark all read</button>
                                 </form>
@@ -4204,7 +4204,7 @@
                                     $notificationUrl = $resolveNotificationUrl($notification);
                                 @endphp
                                 <div class="border-b border-slate-100 dark:border-slate-700/70 {{ is_null($notification->read_at) ? 'bg-amber-50/40 dark:bg-amber-900/10' : 'bg-transparent' }}">
-                                    <form action="{{ route('notifications.read', $notification->id) }}" method="POST">
+                                    <form action="{{ route('wt.notifications.read', $notification->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="redirect_url" value="{{ $notificationUrl }}">
                                         <button type="submit" class="notification-item-btn items-start justify-between gap-3 text-left transition hover:bg-slate-50 dark:hover:bg-slate-700/50">
@@ -4244,13 +4244,13 @@
                 </div>
                 @if($actualRole === 'admin_it')
                 <div class="mobile-role-switcher md:hidden bg-stone-100 dark:bg-slate-800/50 p-1 rounded-xl border border-stone-200 dark:border-slate-700 mt-3">
-                    <a href="{{ route('switch_view', 'admin_it') }}" class="flex items-center gap-1 px-2 py-2 rounded-lg {{ $effectiveRole === 'admin_it' ? 'bg-[#B38A5A] text-white' : 'text-stone-500 dark:text-slate-400' }} font-bold text-[9px] uppercase tracking-widest transition">
+                    <a href="{{ route('wt.switch_view', 'admin_it') }}" class="flex items-center gap-1 px-2 py-2 rounded-lg {{ $effectiveRole === 'admin_it' ? 'bg-[#B38A5A] text-white' : 'text-stone-500 dark:text-slate-400' }} font-bold text-[9px] uppercase tracking-widest transition">
                         <i class="fas fa-user-shield text-[10px]"></i><span>IT</span>
                     </a>
-                    <a href="{{ route('switch_view', 'admin') }}" class="flex items-center gap-1 px-2 py-2 rounded-lg {{ $effectiveRole === 'admin' ? 'bg-[#B38A5A] text-white' : 'text-stone-500 dark:text-slate-400' }} font-bold text-[9px] uppercase tracking-widest transition">
+                    <a href="{{ route('wt.switch_view', 'admin') }}" class="flex items-center gap-1 px-2 py-2 rounded-lg {{ $effectiveRole === 'admin' ? 'bg-[#B38A5A] text-white' : 'text-stone-500 dark:text-slate-400' }} font-bold text-[9px] uppercase tracking-widest transition">
                         <i class="fas fa-user-tie text-[10px]"></i><span>Executive</span>
                     </a>
-                    <form action="{{ route('switch_executive_account') }}" method="POST" class="mobile-executive-switch-form">
+                    <form action="{{ route('wt.switch_executive_account') }}" method="POST" class="mobile-executive-switch-form">
                         @csrf
                         <label class="sr-only" for="mobile_executive_account_switcher">Executive Account</label>
                         <select id="mobile_executive_account_switcher" name="executive_user_id" onchange="if(this.value) this.form.submit()" class="w-full rounded-lg border border-slate-200 bg-white px-2 py-2 font-black uppercase text-slate-600 outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
@@ -4265,7 +4265,7 @@
                 </div>
                 @endif
                 @if($isExecutiveImpersonation)
-                <form action="{{ route('return_to_ict_account') }}" method="POST" class="md:hidden mt-3">
+                <form action="{{ route('wt.return_to_ict_account') }}" method="POST" class="md:hidden mt-3">
                     @csrf
                     <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-[9px] font-black uppercase tracking-[0.14em] text-sky-700 dark:border-sky-900/60 dark:bg-sky-950/30 dark:text-sky-200">
                         <i class="fas fa-arrow-left text-[10px]"></i>

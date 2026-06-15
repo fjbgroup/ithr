@@ -11,20 +11,18 @@ class User extends Authenticatable
 
     protected $table = 'users';
     protected $connection = 'wt_mysql';
-    protected $primaryKey = 'id';
-    public $timestamps = true;
+    protected $primaryKey = 'user_id';
+    public $timestamps = false;
 
     protected $fillable = [
         'staff_id',
         'username',
-        'name',
+        'full_name',
         'department',
-        'department_id',
         'position',
         'phone_no',
         'password',
         'role',
-        'is_active',
     ];
 
     protected $hidden = [
@@ -40,14 +38,8 @@ class User extends Authenticatable
         ];
     }
 
-    // WT views/controllers use ->full_name — map to 'name'
     public function getFullNameAttribute(): string
     {
-        return $this->name ?? '';
-    }
-
-    public function setFullNameAttribute(string $value): void
-    {
-        $this->attributes['name'] = $value;
+        return $this->attributes['full_name'] ?? '';
     }
 }

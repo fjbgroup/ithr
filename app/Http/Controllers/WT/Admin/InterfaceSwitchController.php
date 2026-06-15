@@ -6,6 +6,7 @@ use App\Http\Controllers\WT\Controller;
 use App\Models\WT\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class InterfaceSwitchController extends Controller
 {
@@ -26,9 +27,9 @@ class InterfaceSwitchController extends Controller
 
         // Redirect based on the chosen view mode
         return match($role) {
-            'admin_it' => redirect()->route('admin.dashboard'),
-            'admin'    => redirect()->route('admin.walkies.myInventory'),
-            default    => redirect()->route('admin.dashboard'),
+            'admin_it' => redirect()->route('wt.admin.dashboard'),
+            'admin'    => redirect()->route('wt.admin.walkies.myInventory'),
+            default    => redirect()->route('wt.admin.dashboard'),
         };
     }
 
@@ -39,7 +40,7 @@ class InterfaceSwitchController extends Controller
         }
 
         $validated = $request->validate([
-            'executive_user_id' => 'required|integer|exists:users,user_id',
+            'executive_user_id' => ['required', 'integer', Rule::exists(User::class, 'user_id')],
         ]);
 
         $executive = User::where('role', 'admin')
@@ -56,7 +57,7 @@ class InterfaceSwitchController extends Controller
         $request->session()->put('impersonator_admin_it_id', $ictUserId);
 
         return redirect()
-            ->route('admin.walkies.myInventory')
+            ->route('wt.admin.walkies.myInventory')
             ->with('success', 'You are now accessing the selected Executive account.');
     }
 
@@ -65,7 +66,7 @@ class InterfaceSwitchController extends Controller
         $ictUserId = $request->session()->get('impersonator_admin_it_id');
 
         if (! $ictUserId) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('wt.admin.dashboard');
         }
 
         $ictUser = User::where('role', 'admin_it')
@@ -78,7 +79,7 @@ class InterfaceSwitchController extends Controller
         $request->session()->put('view_mode', 'admin_it');
 
         return redirect()
-            ->route('admin.dashboard')
+            ->route('wt.admin.dashboard')
             ->with('success', 'Returned to ICT account.');
     }
 }

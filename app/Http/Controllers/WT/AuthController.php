@@ -30,7 +30,7 @@ class AuthController extends Controller
         if ($user && Hash::check($credentials['password'], $user->password)) {
             if ($user->role !== 'admin_it') {
                 UserActivityLog::create([
-                    'user_id'      => $user->id,
+                    'user_id'      => $user->user_id,
                     'username'     => $user->username,
                     'event_type'   => 'login',
                     'event_action' => 'login_blocked_unsupported_role',
@@ -49,7 +49,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             UserActivityLog::create([
-                'user_id'    => $user->id,
+                'user_id'    => $user->user_id,
                 'username'   => $user->username,
                 'event_type' => 'login',
                 'event_action' => 'login_success',
@@ -68,7 +68,7 @@ class AuthController extends Controller
         }
 
         UserActivityLog::create([
-            'user_id'      => $user ? $user->id : 0,
+            'user_id'      => $user ? $user->user_id : 0,
             'username'     => $user ? $user->username : $credentials['staff_no'],
             'event_type'   => 'login',
             'event_action' => $user ? 'login_failed_wrong_password' : 'login_failed_user_not_found',
@@ -124,7 +124,7 @@ class AuthController extends Controller
         }
 
         PasswordResetRequest::create([
-            'user_id' => $user->id,
+            'user_id' => $user->user_id,
             'staff_id' => $request->staff_id,
             'requester_name' => trim((string) $request->requester_name),
             'requested_password' => '',
@@ -148,7 +148,7 @@ class AuthController extends Controller
         );
 
         UserActivityLog::create([
-            'user_id'      => $user->id,
+            'user_id'      => $user->user_id,
             'username'     => $user->username,
             'event_type'   => 'action',
             'event_action' => 'reset_requested',

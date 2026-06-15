@@ -86,7 +86,7 @@ class RequestController extends Controller
             : $actualRole;
 
         if ($userRole === 'admin') {
-            return redirect()->route('admin.requests.create.shared');
+            return redirect()->route('wt.admin.requests.create.shared');
         }
 
         $pendingRequests = AccessRequest::with(['handover', 'user', 'submitToAdmin', 'handler'])
@@ -227,7 +227,7 @@ class RequestController extends Controller
 
     public function createIndividual()
     {
-        return redirect()->route('admin.requests.create.shared');
+        return redirect()->route('wt.admin.requests.create.shared');
     }
 
     public function createTemporaryMenu()
@@ -247,7 +247,7 @@ class RequestController extends Controller
 
     public function createTemporaryIndividual()
     {
-        return redirect()->route('admin.requests.create.temporary');
+        return redirect()->route('wt.admin.requests.create.temporary');
     }
 
     public function store(Request $request)
@@ -428,7 +428,7 @@ class RequestController extends Controller
         ]);
 
         if ($isDraft) {
-            return redirect()->route('admin.requests.status')->with('success', $isTemporaryRequest
+            return redirect()->route('wt.admin.requests.status')->with('success', $isTemporaryRequest
                 ? 'Temporary request draft saved successfully. The selected recipient can view it in request status.'
                 : 'Draft saved successfully. The selected recipient can view it in request status.'
             );
@@ -439,9 +439,9 @@ class RequestController extends Controller
                 : 'Request submitted successfully. ICT has been notified.';
 
         return redirect()
-            ->route('admin.requests.create.shared')
+            ->route('wt.admin.requests.create.shared')
             ->with('popup_success', $successMessage)
-            ->with('popup_redirect', route('admin.all.status'));
+            ->with('popup_redirect', route('wt.admin.all.status'));
     }
 
     public function forwardToIT($id)
@@ -477,7 +477,7 @@ class RequestController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', 'Request approved by Admin and forwarded to ICT.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Request approved by Admin and forwarded to ICT.');
     }
 
     public function approve(Request $request, $id)
@@ -623,7 +623,7 @@ class RequestController extends Controller
         ]);
         
         return redirect()
-            ->route('admin.requests.index')
+            ->route('wt.admin.requests.index')
             ->with('success', 'Request approved successfully.');
     }
 
@@ -666,7 +666,7 @@ class RequestController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', 'Request rejected.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Request rejected.');
     }
 
     public function confirmReturn($id)
@@ -704,7 +704,7 @@ class RequestController extends Controller
                 'created_at' => now(),
             ]);
 
-            return redirect()->route('admin.requests.index')->with('success', 'Return reviewed by Admin and forwarded to ICT.');
+            return redirect()->route('wt.admin.requests.index')->with('success', 'Return reviewed by Admin and forwarded to ICT.');
         }
 
         $req->update([
@@ -754,7 +754,7 @@ class RequestController extends Controller
             'created_at' => now(),
         ]);
         
-        return redirect()->route('admin.requests.index')->with('success', 'Return confirmed. Unit is now marked as unused and kept in the inventory.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Return confirmed. Unit is now marked as unused and kept in the inventory.');
     }
 
     public function forwardDamageToIT($id)
@@ -796,7 +796,7 @@ class RequestController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', 'Damage report forwarded to ICT.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Damage report forwarded to ICT.');
     }
 
     public function approveDamage(Request $request, $id)
@@ -869,7 +869,7 @@ class RequestController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', 'Damage report approved for repair.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Damage report approved for repair.');
     }
 
     public function rejectDamage(Request $request, $id)
@@ -928,7 +928,7 @@ class RequestController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->route('admin.requests.index')->with('success', 'Damage report rejected and returned to user.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Damage report rejected and returned to user.');
     }
 
 
@@ -1071,7 +1071,7 @@ class RequestController extends Controller
     public function requestStatus()
     {
         return redirect()
-            ->route('admin.all.status')
+            ->route('wt.admin.all.status')
             ->with('info', 'Request Status has been moved to All Status.');
     }
 

@@ -1,7 +1,7 @@
-﻿@extends(request()->routeIs('admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
 
 @php
-    $routePrefix = request()->routeIs('admin.*') ? 'admin' : 'user';
+    $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
 @endphp
 
 @section('title', 'Return Unit')
@@ -434,7 +434,7 @@
 
 @section('content')
 @php
-    $isAdminRoute = request()->routeIs('admin.*');
+    $isAdminRoute = request()->routeIs('wt.admin.*');
     $mode = $mode ?? ($isAdminRoute ? 'self' : 'self');
     $returnPeople = $returnPeople ?? collect();
     $returnPeopleOptions = $returnPeople->map(function ($person) {

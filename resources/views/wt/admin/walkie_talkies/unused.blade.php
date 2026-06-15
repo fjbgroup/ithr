@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'Unused Walkie Talkies')
 
@@ -837,7 +837,7 @@
     }
 </style>
 
-@include('admin.partials.inventory-management-ui')
+@include('wt.admin.partials.inventory-management-ui')
 
 @php
     $booleanColumns = ['id_change_done', 'is_special_use', 'special_use_returned'];

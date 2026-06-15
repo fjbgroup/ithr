@@ -41,7 +41,7 @@ class HandoverController extends Controller
 
         if (request()->routeIs('admin.*') && ! $isIctView && auth('wt')->user()->role === 'admin_it') {
             return redirect()
-                ->route('admin.requests.index')
+                ->route('wt.admin.requests.index')
                 ->with('error', 'ICT direct handover is only available in ICT mode.');
         }
 
@@ -58,7 +58,7 @@ class HandoverController extends Controller
 
                 if ($approvedRequest->handover) {
                     return redirect()
-                        ->route('admin.all.status')
+                        ->route('wt.admin.all.status')
                         ->with('error', 'Handover for this approved request has already been submitted.');
                 }
 
@@ -146,7 +146,7 @@ class HandoverController extends Controller
 
         if ($request->routeIs('admin.*') && ! $isIctView && $request->input('handover_mode') === 'ict_direct') {
             return redirect()
-                ->route('admin.requests.index')
+                ->route('wt.admin.requests.index')
                 ->with('error', 'Executives do not perform handovers. ICT will notify the individual after approval.');
         }
 
@@ -311,7 +311,7 @@ class HandoverController extends Controller
         $validated = $request->validate([
             'direct_handover_scope' => 'nullable|in:self,on_behalf',
             'access_request_id' => 'nullable|integer|exists:access_requests,id',
-            'user_id' => 'nullable|required_without:access_request_id|integer|exists:users,user_id',
+            'user_id' => ['nullable', 'required_without:access_request_id', 'integer', Rule::exists(User::class, 'user_id')],
             'walkie_inventory_id' => 'nullable|required_without:access_request_id|integer|exists:walkie_talkies,walkie_id',
             'staff_name' => 'required|string|max:255',
             'staff_no' => 'nullable|string|max:255',
@@ -431,7 +431,7 @@ class HandoverController extends Controller
         });
 
         return redirect()
-            ->route('admin.all.status')
+            ->route('wt.admin.all.status')
             ->with('success', 'Walkie talkie handover recorded and the unit is now marked as IN USE.');
     }
 }

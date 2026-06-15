@@ -383,8 +383,8 @@ class WalkieTalkieController extends Controller
             ->mapWithKeys(fn ($walkie) => [
                 (string) $walkie->walkie_id => [
                     'walkie_id' => $walkie->walkie_id,
-                    'edit_url' => route('admin.walkies.edit', ['walkie' => $walkie->walkie_id, 'source' => 'index']),
-                    'delete_url' => route('admin.walkies.forceDelete', $walkie->walkie_id),
+                    'edit_url' => route('wt.admin.walkies.edit', ['walkie' => $walkie->walkie_id, 'source' => 'index']),
+                    'delete_url' => route('wt.admin.walkies.forceDelete', $walkie->walkie_id),
                     'can_manage' => true,
                 ],
             ])
@@ -534,12 +534,12 @@ class WalkieTalkieController extends Controller
             'pageSubtitle' => 'Fill in all required fields to register a new unit.',
             'formTitle' => 'New Unit Registration',
             'formSubtitle' => 'Complete the form below and save when ready.',
-            'backRoute' => route('admin.walkies.index'),
+            'backRoute' => route('wt.admin.walkies.index'),
             'submitLabel' => 'Save Unit',
             'returnRouteName' => 'admin.walkies.index',
             'defaults' => [],
             'hiddenFields' => [],
-            'formAction' => route('admin.walkies.store'),
+            'formAction' => route('wt.admin.walkies.store'),
             'formMethod' => 'POST',
         ]));
     }
@@ -551,7 +551,7 @@ class WalkieTalkieController extends Controller
             'pageSubtitle' => 'Register a walkie talkie as unused stock without assigning it to any user.',
             'formTitle' => 'Inventory Stock Registration',
             'formSubtitle' => 'Only unit details are needed. Status will be UNUSED and ownership will be UNALLOCATED.',
-            'backRoute' => route('admin.walkies.index'),
+            'backRoute' => route('wt.admin.walkies.index'),
             'submitLabel' => 'Save Stock Unit',
             'returnRouteName' => 'admin.walkies.index',
             'defaults' => [
@@ -563,7 +563,7 @@ class WalkieTalkieController extends Controller
                 'ownership_type' => 'UNALLOCATED',
             ],
             'inventoryOnly' => true,
-            'formAction' => route('admin.walkies.store'),
+            'formAction' => route('wt.admin.walkies.store'),
             'formMethod' => 'POST',
         ]));
     }
@@ -575,7 +575,7 @@ class WalkieTalkieController extends Controller
             'pageSubtitle' => 'Create a full page special use record without using a popup.',
             'formTitle' => 'Special Use Registration',
             'formSubtitle' => 'Register a walkie talkie that is marked for special use.',
-            'backRoute' => route('admin.walkies.specialUse'),
+            'backRoute' => route('wt.admin.walkies.specialUse'),
             'submitLabel' => 'Add Special Use Unit',
             'returnRouteName' => 'admin.walkies.specialUse',
             'defaults' => [
@@ -588,7 +588,7 @@ class WalkieTalkieController extends Controller
                 'is_special_use' => '1',
                 'special_use_returned' => '0',
             ],
-            'formAction' => route('admin.walkies.store'),
+            'formAction' => route('wt.admin.walkies.store'),
             'formMethod' => 'POST',
         ]));
     }
@@ -600,7 +600,7 @@ class WalkieTalkieController extends Controller
             'pageSubtitle' => 'Create a duplicate ID record in a full page form.',
             'formTitle' => 'Duplicated ID Registration',
             'formSubtitle' => 'Register a unit that needs an ID change or overlap tracking.',
-            'backRoute' => route('admin.walkies.duplicateIds'),
+            'backRoute' => route('wt.admin.walkies.duplicateIds'),
             'submitLabel' => 'Save Duplicate Record',
             'returnRouteName' => 'admin.walkies.duplicateIds',
             'defaults' => [
@@ -609,7 +609,7 @@ class WalkieTalkieController extends Controller
                 'status' => 'CHANGE ID',
             ],
             'hiddenFields' => [],
-            'formAction' => route('admin.walkies.store'),
+            'formAction' => route('wt.admin.walkies.store'),
             'formMethod' => 'POST',
         ]));
     }
@@ -654,7 +654,7 @@ class WalkieTalkieController extends Controller
                 'special_use_returned' => $walkie->special_use_returned ? '1' : '0',
             ],
             'hiddenFields' => [],
-            'formAction' => route('admin.walkies.updateMeta', $walkie),
+            'formAction' => route('wt.admin.walkies.updateMeta', $walkie),
             'formMethod' => 'POST',
         ]));
     }
@@ -722,8 +722,8 @@ public function repairFaulty()
         $candidateRequests = AccessRequest::with('user')
             ->where('status', 'Approved')
             ->where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhere('submit_to_admin_id', $user->id)
+                $query->where('user_id', $user->user_id)
+                    ->orWhere('submit_to_admin_id', $user->user_id)
                     ->orWhere('full_name', $user->full_name)
                     ->orWhere('full_name', $user->username);
             })
@@ -784,8 +784,8 @@ public function repairFaulty()
 
         $historyRequests = AccessRequest::with(['user', 'submitToAdmin', 'handler'])
             ->where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhere('submit_to_admin_id', $user->id)
+                $query->where('user_id', $user->user_id)
+                    ->orWhere('submit_to_admin_id', $user->user_id)
                     ->orWhere('full_name', $user->full_name)
                     ->orWhere('full_name', $user->username);
             })
@@ -924,7 +924,7 @@ public function repairFaulty()
             return redirect()->route($returnRoute)->with('success', 'Unit ' . $walkie->radio_id . ' successfully registered!');
         }
 
-        return redirect()->route('admin.walkies.index')->with('success', 'Unit ' . $walkie->radio_id . ' successfully registered!');
+        return redirect()->route('wt.admin.walkies.index')->with('success', 'Unit ' . $walkie->radio_id . ' successfully registered!');
     }
 
     public function updateMeta(Request $request, WalkieTalkie $walkie)

@@ -1,8 +1,8 @@
-﻿@extends(request()->routeIs('admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
 
 @php
-    $routePrefix = request()->routeIs('admin.*') ? 'admin' : 'user';
-    $isAdminRoute = request()->routeIs('admin.*');
+    $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
+    $isAdminRoute = request()->routeIs('wt.admin.*');
     $recordStatus = strtoupper((string) $record->status);
     $recordIsDone = (bool) $record->done || $recordStatus === 'DONE';
     $recordBadgeClass = $recordIsDone

@@ -30,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        Blade::anonymousComponentPath(resource_path('views/wt/components'), 'wt');
+
         // @canwrite ... @endcanwrite — hides write controls (add/edit/delete/import)
         // from read-only roles (CEO). Backend writes are also blocked by ReadOnlyCeo middleware.
         Blade::if('canwrite', function () {

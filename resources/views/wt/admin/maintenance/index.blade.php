@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'Under Repair / Faulty Units')
 
@@ -490,7 +490,7 @@
 
 @section('content')
 
-@include('admin.partials.inventory-management-ui')
+@include('wt.admin.partials.inventory-management-ui')
 
 <style>
     body .content-surface .maintenance-page-shell #maintTable :is(th, td),

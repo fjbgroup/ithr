@@ -291,7 +291,7 @@ class MaintenanceController extends Controller
             );
         }
 
-        return redirect()->route('admin.faultyReports.index')->with('success', 'Faulty report updated and user has been notified.');
+        return redirect()->route('wt.admin.faultyReports.index')->with('success', 'Faulty report updated and user has been notified.');
     }
 
     public function receiveFaultyWalkie(MaintenanceRecord $maintenance)
@@ -336,7 +336,7 @@ class MaintenanceController extends Controller
             );
         }
 
-        return redirect()->route('admin.faultyReports.index')->with('success', 'Walkie talkie marked as received by ICT.');
+        return redirect()->route('wt.admin.faultyReports.index')->with('success', 'Walkie talkie marked as received by ICT.');
     }
 
     public function returnOriginalWalkie(MaintenanceRecord $maintenance)
@@ -379,7 +379,7 @@ class MaintenanceController extends Controller
             );
         }
 
-        return redirect()->route('admin.faultyReports.index')->with('success', 'Spare/new unit returned and original walkie talkie handed back.');
+        return redirect()->route('wt.admin.faultyReports.index')->with('success', 'Spare/new unit returned and original walkie talkie handed back.');
     }
 
     public function store(Request $request)
@@ -431,7 +431,7 @@ class MaintenanceController extends Controller
             'user_agent'    => request()->userAgent(),
         ]);
 
-        return redirect()->route('admin.maintenance.index')->with('success', 'Repair record for serial ' . $walkie->serial_number . ' has been submitted.');
+        return redirect()->route('wt.admin.maintenance.index')->with('success', 'Repair record for serial ' . $walkie->serial_number . ' has been submitted.');
     }
 
     public function update(Request $request, MaintenanceRecord $maintenance)

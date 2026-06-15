@@ -1,7 +1,7 @@
 ﻿@php
-    $isAdminRoute = request()->routeIs('admin.*');
+    $isAdminRoute = request()->routeIs('wt.admin.*');
     $layout = $isAdminRoute ? 'layouts.admin' : 'layouts.user';
-    $routePrefix = $isAdminRoute ? 'admin' : 'user';
+    $routePrefix = $isAdminRoute ? 'wt.admin' : 'wt.user';
 @endphp
 
 @extends($layout)

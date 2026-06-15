@@ -1,4 +1,4 @@
-﻿    @extends('wt.layouts.admin')
+    @extends('wt.layouts.admin')
 
     @section('title', 'Inventory List')
 
@@ -3598,7 +3598,7 @@
 
     </style>
 
-    @include('admin.partials.inventory-management-ui')
+    @include('wt.admin.partials.inventory-management-ui')
 
     <style>
         /* Final Inventory List redesign: cleaner mobile-first workspace. */

@@ -18,7 +18,7 @@ class InteractionController extends Controller
 {
     private function routePrefix(Request $request): string
     {
-        return $request->routeIs('admin.*') ? 'admin' : 'user';
+        return $request->routeIs('admin.*') ? 'wt.admin' : 'wt.user';
     }
 
     private function managerMode(Request $request): string
@@ -279,7 +279,7 @@ class InteractionController extends Controller
 
     private function applyReturnOwnershipScope($query, Request $request, string $mode)
     {
-        $user = $request->user();
+        $user = auth('wt')->user();
         $isAdminRoute = $request->routeIs('admin.*');
 
         if ($isAdminRoute && $mode === 'staff') {
@@ -288,7 +288,7 @@ class InteractionController extends Controller
             return $query->where(function ($scope) use ($managedIds, $user) {
                 $scope->whereIn('user_id', $managedIds)
                     ->orWhere(function ($legacy) use ($user) {
-                        $legacy->where('submit_to_admin_id', $user->id)
+                        $legacy->where('submit_to_admin_id', $user->user_id)
                             ->whereNull('user_id');
                     });
             });
@@ -296,8 +296,8 @@ class InteractionController extends Controller
 
         if ($isAdminRoute) {
             return $query->where(function ($scope) use ($user) {
-                $scope->where('user_id', $user->id)
-                    ->orWhere('submit_to_admin_id', $user->id);
+                $scope->where('user_id', $user->user_id)
+                    ->orWhere('submit_to_admin_id', $user->user_id);
             });
         }
 
@@ -308,7 +308,7 @@ class InteractionController extends Controller
             ->values();
 
         return $query->where(function ($scope) use ($user, $userNames) {
-            $scope->where('user_id', $user->id);
+            $scope->where('user_id', $user->user_id);
 
             if (! blank($user->staff_id)) {
                 $scope->orWhere('staff_id', $user->staff_id);
@@ -330,7 +330,7 @@ class InteractionController extends Controller
     public function storeRequest(Request $request)
     {
         $validated = $request->validate([
-            'submit_to_admin_id' => 'required|integer|exists:users,user_id',
+            'submit_to_admin_id' => ['required', 'integer', Rule::exists(User::class, 'user_id')],
             'requestor_name' => 'required|string|max:255',
             'requestor_staff_id' => 'required|string|max:255',
             'request_date' => 'required|date',
@@ -392,7 +392,7 @@ class InteractionController extends Controller
 
         $successMsg = "Permohonan anda telah dihantar kepada {$adminName}, {$adminPos} dari {$adminDept} untuk pengesahan.";
 
-        return redirect()->route('admin.requests.index')->with('success', $successMsg);
+        return redirect()->route('wt.admin.requests.index')->with('success', $successMsg);
     }
 
     // --- RETURN UNIT ---
@@ -520,7 +520,7 @@ class InteractionController extends Controller
             : 'Return request submitted. Please hand over the unit to the Executive.';
 
         if ($isAdminRoute) {
-            return redirect()->route('admin.all.status')->with('success', $successMessage);
+            return redirect()->route('wt.admin.all.status')->with('success', $successMessage);
         }
 
         return redirect()->route('user.requests.status', ['status' => 'history'])->with('success', $successMessage);
@@ -989,13 +989,13 @@ class InteractionController extends Controller
 
         if ($isAdminRoute) {
             if ($mode === 'staff') {
-                $rules['user_id'] = 'nullable|integer|exists:users,user_id';
+                $rules['user_id'] = ['nullable', 'integer', Rule::exists(User::class, 'user_id')];
                 $rules['reporter_name'] = 'required|string|max:255';
                 $rules['department'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['designation'] = 'nullable|string|max:255';
                 $rules['quantity'] = ($isDraft ? 'nullable' : 'required') . '|integer|min:1|max:999';
                 $rules['recipient_details'] = 'nullable|array';
-                $rules['recipient_details.*.user_id'] = 'nullable|integer|exists:users,user_id';
+                $rules['recipient_details.*.user_id'] = ['nullable', 'integer', Rule::exists(User::class, 'user_id')];
                 $rules['recipient_details.*.reporter_name'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['recipient_details.*.phone_no'] = ($isDraft ? 'nullable' : 'required') . '|string|max:50';
                 $rules['recipient_details.*.department'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
@@ -1010,7 +1010,7 @@ class InteractionController extends Controller
                 $rules['device_details.*.serial_number'] = 'nullable|string|max:100';
             }
         } else {
-            $rules['submit_to_admin_id'] = ($isDraft ? 'nullable' : 'required') . '|integer|exists:users,user_id';
+            $rules['submit_to_admin_id'] = [($isDraft ? 'nullable' : 'required'), 'integer', Rule::exists(User::class, 'user_id')];
             $rules['reporter_name'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
             $rules['staff_id'] = ($isDraft ? 'nullable' : 'required') . '|string|max:100';
             $rules['designation'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';

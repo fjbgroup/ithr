@@ -28,17 +28,17 @@ class AdminITController extends Controller
             ->select('users.*')
             ->selectSub(
                 AccessRequest::selectRaw('COUNT(*)')
-                    ->whereColumn('access_requests.user_id', 'users.id'),
+                    ->whereColumn('access_requests.user_id', 'users.user_id'),
                 'request_count'
             )
             ->selectSub(
                 Handover::selectRaw('COUNT(*)')
-                    ->whereColumn('walkie_talkie_handovers.user_id', 'users.id'),
+                    ->whereColumn('walkie_talkie_handovers.user_id', 'users.user_id'),
                 'handover_count'
             )
             ->selectSub(
                 UserActivityLog::selectRaw('MAX(created_at)')
-                    ->whereColumn('user_activity_logs.user_id', 'users.id'),
+                    ->whereColumn('user_activity_logs.user_id', 'users.user_id'),
                 'last_activity_at'
             )
             ->orderByRaw("
@@ -47,7 +47,7 @@ class AdminITController extends Controller
                     ELSE 2
                 END
             ")
-            ->orderByDesc('id')
+            ->orderByDesc('user_id')
             ->get();
 
         $pendingPasswordResetRequests = PasswordResetRequest::with('user')
@@ -95,14 +95,14 @@ class AdminITController extends Controller
             'username' => Auth::guard('wt')->user()->username,
             'event_type' => 'user_management',
             'event_action' => 'create_executive_account',
-            'event_details' => 'Created executive account #' . $user->id . ' - ' . $user->username,
+            'event_details' => 'Created executive account #' . $user->user_id . ' - ' . $user->username,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'created_at' => now(),
         ]);
 
         return redirect()
-            ->route('admin.users.index')
+            ->route('wt.admin.users.index')
             ->with('success', 'Executive account created successfully.');
     }
 
@@ -110,8 +110,8 @@ class AdminITController extends Controller
     public function updateUser(Request $request, User $user)
     {
         $validated = $request->validate([
-            'staff_id' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_id')->ignore($user->id)],
-            'username' => ['required', 'string', 'max:50', Rule::unique(User::class, 'username')->ignore($user->id)],
+            'staff_id' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_id')->ignore($user->user_id)],
+            'username' => ['required', 'string', 'max:50', Rule::unique(User::class, 'username')->ignore($user->user_id)],
             'full_name' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
@@ -134,7 +134,7 @@ class AdminITController extends Controller
             'username' => Auth::guard('wt')->user()->username,
             'event_type' => 'user_management',
             'event_action' => 'update',
-            'event_details' => 'Updated user #' . $user->id . ' from ' . json_encode($original) . ' to ' . json_encode($validated),
+            'event_details' => 'Updated user #' . $user->user_id . ' from ' . json_encode($original) . ' to ' . json_encode($validated),
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'created_at' => now(),
@@ -145,12 +145,12 @@ class AdminITController extends Controller
 
     public function destroyUser(Request $request, User $user)
     {
-        if (Auth::guard('wt')->id() === $user->id) {
+        if (Auth::guard('wt')->id() === $user->user_id) {
             return back()->with('error', 'You cannot delete your own account.');
         }
 
         $deletedUserLabel = $user->username . ' (' . ($user->staff_id ?: '-') . ')';
-        $deletedUserId = $user->id;
+        $deletedUserId = $user->user_id;
 
         $user->delete();
 
@@ -183,7 +183,7 @@ class AdminITController extends Controller
             'username' => Auth::guard('wt')->user()->username,
             'event_type' => 'user_management',
             'event_action' => 'reset_password',
-            'event_details' => 'Reset password for user #' . $user->id . ' - ' . $user->username,
+            'event_details' => 'Reset password for user #' . $user->user_id . ' - ' . $user->username,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'created_at' => now(),
@@ -227,7 +227,7 @@ class AdminITController extends Controller
             'username' => Auth::guard('wt')->user()->username,
             'event_type' => 'action',
             'event_action' => 'approve_request',
-            'event_details' => 'Approved forgot password request for user #' . $user->id . ' - ' . $user->username . '. Password will be handled manually by ICT.',
+            'event_details' => 'Approved forgot password request for user #' . $user->user_id . ' - ' . $user->username . '. Password will be handled manually by ICT.',
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'created_at' => now(),

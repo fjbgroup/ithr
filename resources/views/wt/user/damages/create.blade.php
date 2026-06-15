@@ -1,7 +1,7 @@
-﻿@extends(request()->routeIs('admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
 
 @php
-    $routePrefix = request()->routeIs('admin.*') ? 'admin' : 'user';
+    $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
     $draftRecord = $draftRecord ?? null;
     $draftHandoverAt = old('handover_at', $draftRecord?->handover_at ? \Carbon\Carbon::parse($draftRecord->handover_at)->format('Y-m-d\TH:i') : '');
     $draftPickupAt = old('pickup_at', $draftRecord?->pickup_at ? \Carbon\Carbon::parse($draftRecord->pickup_at)->format('Y-m-d\TH:i') : '');
@@ -761,7 +761,7 @@
 
 @section('content')
 @php
-    $isAdminRoute = request()->routeIs('admin.*');
+    $isAdminRoute = request()->routeIs('wt.admin.*');
     $mode = $mode ?? ($isAdminRoute ? 'self' : 'self');
     $currentUser = $currentUser ?? auth('wt')->user();
     $managedUsers = $managedUsers ?? collect();

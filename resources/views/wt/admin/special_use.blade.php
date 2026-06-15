@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'Special Use Management')
 
@@ -601,7 +601,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
 </div>
 @endif
 
-<x-dark-datatable
+<x-wt::dark-datatable
     table-id="specialTable"
     search-id="specialSearchInput"
     status-id="specialStatusFilter"
@@ -665,7 +665,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
             </td>
         </tr>
     @endforeach
-</x-dark-datatable>
+</x-wt::dark-datatable>
 
 @foreach($records as $record)
 <div id="specialViewModal-{{ $record->walkie_id }}" class="modal-overlay" onclick="closeSpecialViewModalOutside(event, 'specialViewModal-{{ $record->walkie_id }}')" aria-hidden="true">
@@ -978,7 +978,7 @@ html:not(.dark) body .content-surface:has(#specialTable) {
 }
 </style>
 
-@include('admin.partials.inventory-management-ui')
+@include('wt.admin.partials.inventory-management-ui')
 
 <style>
 /* Special Use final header correction: match Faulty page without clipping. */
@@ -1615,7 +1615,7 @@ document.addEventListener('keydown', function(e) {
 
 </style>
 
-@include('admin.partials.inventory-management-ui')
+@include('wt.admin.partials.inventory-management-ui')
 
 <style>
 /* Absolute final Special Use action buttons: match inventory action styling. */
