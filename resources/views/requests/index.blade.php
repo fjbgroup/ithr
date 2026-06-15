@@ -76,6 +76,7 @@
         </div>
         
         @if ($req->status === 'Pending')
+        @canwrite
         <div class="request-footer" style="flex-direction:column; align-items:stretch; gap:.75rem;">
             <div>
                 <label style="font-size:.78rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:.35rem;">Admin Note <span style="font-weight:400;color:var(--text-muted);">(optional — visible to requester)</span></label>
@@ -95,6 +96,7 @@
                 </form>
             </div>
         </div>
+        @endcanwrite
         @else
             @if ($req->admin_note)
             <div style="padding:.75rem 1.25rem; background:#f8fafc; border-top:1px dashed var(--border); font-size:.82rem;">

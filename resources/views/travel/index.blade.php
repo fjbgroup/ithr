@@ -49,19 +49,21 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:.4rem;vertical-align:-.15em;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
             {{ $isStaff ? 'My Travel' : 'Travel Records' }}
         </h3>
+        @canwrite
         <button class="btn btn-primary btn-sm" onclick="openAddModal()">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add Travel
         </button>
+        @endcanwrite
     </div>
 
     <!-- Filters -->
     <div style="padding:.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;">
         <form id="travel-filter-form" method="GET" action="{{ route('travel.index') }}" style="display:contents;">
             @if(!$isStaff)
-            <div class="search-wrap" style="position:relative;flex:1;min-width:200px;">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" name="q" value="{{ $search }}" placeholder="Search staff, destination…" style="padding:.5rem .75rem .5rem 2rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;width:100%;">
+            <div class="app-search">
+                <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" name="q" value="{{ $search }}" placeholder="Search staff, destination…">
             </div>
             <select name="dept" style="padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;background:#fff;min-width:180px;">
                 <option value="">All Departments</option>
@@ -154,12 +156,14 @@
                         </span>
                     </td>
                     <td style="text-align:right;white-space:nowrap;">
+                        @canwrite
                         <button class="btn btn-ghost btn-xs" onclick="editTravel({{ $t->id }})" title="Edit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>   
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                         </button>
                         <button class="btn btn-danger btn-xs" onclick="deleteTravel({{ $t->id }}, '{{ addslashes($t->staff?->name ?? 'this record') }}')" title="Delete">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
                         </button>
+                        @endcanwrite
                     </td>
                 </tr>
                 @endforeach

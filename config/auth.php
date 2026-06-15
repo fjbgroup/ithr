@@ -42,6 +42,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'wt' => [
+            'driver' => 'session',
+            'provider' => 'wt_users',
+        ],
+
+        'it' => [
+            'driver' => 'session',
+            'provider' => 'it_users',
+        ],
     ],
 
     /*
@@ -67,10 +77,15 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'wt_users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\WT\User::class,
+        ],
+
+        'it_users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\IT\User::class,
+        ],
     ],
 
     /*

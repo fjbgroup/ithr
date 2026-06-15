@@ -86,8 +86,8 @@
         $prevNavDate = $ts_prev->subDay()->format('Y-m-d');
         $nextNavDate = $ts_next->addDay()->format('Y-m-d');
     }
-    $prevNav = route('home', ['date' => $prevNavDate, 'view' => $viewMode]);
-    $nextNav = route('home', ['date' => $nextNavDate, 'view' => $viewMode]);
+    $prevNav = route('hr.home', ['date' => $prevNavDate, 'view' => $viewMode]);
+    $nextNav = route('hr.home', ['date' => $nextNavDate, 'view' => $viewMode]);
 
     $navLabel = '';
     $ts = strtotime($viewDate);
@@ -205,6 +205,40 @@
   .form-group input, .form-group select { border-radius: 12px; border: 1.5px solid #e2e8f0; padding: .75rem 1rem; font-weight: 500; }
   .form-group input:focus { border-color: #0f172a; box-shadow: 0 0 0 4px rgba(15,23,42,0.05); }
 
+  /* ── Staff Login modal: matched login styling ── */
+  #loginConfirmModal .form-group label { text-transform: none; letter-spacing: 0; font-size: .8rem; font-weight: 600; color: #1e293b; }
+  #loginConfirmModal .lcm-input-wrap { position: relative; }
+  #loginConfirmModal .lcm-input-wrap > svg.lead {
+    position: absolute; left: .9rem; top: 50%; transform: translateY(-50%);
+    color: #64748b; pointer-events: none;
+  }
+  #loginConfirmModal .lcm-input-wrap input {
+    width: 100%; padding: .8rem 1rem .8rem 2.6rem;
+    background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 11px;
+    font-size: .95rem; font-weight: 500;
+    transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  #loginConfirmModal .lcm-input-wrap input::placeholder { color: #94a3b8; }
+  #loginConfirmModal .lcm-input-wrap input:focus {
+    outline: none; background: #fff; border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56,189,248,.16);
+  }
+  #loginConfirmModal .lcm-input-wrap input.has-toggle { padding-right: 2.9rem; }
+  #loginConfirmModal .lcm-toggle {
+    position: absolute; right: .35rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; padding: .5rem; cursor: pointer;
+    color: #64748b; display: flex; align-items: center; border-radius: 8px;
+  }
+  #loginConfirmModal .lcm-toggle:hover { color: #1e293b; }
+  #loginConfirmModal .btn-primary {
+    background: linear-gradient(135deg, #1a4b8c, #0284c7); border: none; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    box-shadow: 0 10px 22px -8px rgba(2,132,199,.6);
+    transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  #loginConfirmModal .btn-primary:hover { filter: brightness(1.06); box-shadow: 0 14px 26px -8px rgba(2,132,199,.7); }
+  #loginConfirmModal .btn-primary:active { transform: translateY(1px); }
+
   .rb-ro-check { border-radius: 50%; border: 2.5px solid #e2e8f0; }
   .rb-room-option.active .rb-ro-check { border-color: #0f172a; background: #0f172a; box-shadow: inset 0 0 0 3px #fff; }
   .rb-room-option { border-radius: 14px; border: 1.5px solid #e2e8f0; padding: .85rem 1rem; transition: all .2s; }
@@ -241,6 +275,7 @@
   .clock-val  { font-size:1.15rem; font-weight:800; color:#0f172a; font-variant-numeric:tabular-nums; line-height:1; }
   .clock-val.unset { color:#cbd5e1; }
   .clock-dropdown    { display:none; position:fixed; width:230px; background:#fff; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 12px 30px rgba(0,0,0,.12); z-index:400; padding:.75rem; }
+  #clockBackdrop     { display:none; position:fixed; inset:0; background:rgba(15,23,42,.5); z-index:9998; }
   .clock-section-lbl { font-size:.6rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem; }
   .clock-divider     { height:1px; background:#f1f5f9; margin:.55rem -.75rem .55rem; }
   .clock-hour-grid   { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; }
@@ -347,6 +382,44 @@
 
   @media (max-width:640px) {
     .rb-room-options { grid-template-columns: 1fr; }
+
+    /* ── Guest booking modal: make it fit the phone, no sideways scroll ── */
+    #guestBookModal .modal-box,
+    #loginConfirmModal .modal-box { border-radius: 18px; overflow-x: hidden; }
+
+    /* Tighter header / section / footer padding (was 2rem sides) */
+    #guestBookModal .modal-header,
+    #loginConfirmModal .modal-header { padding: 1.1rem 1.1rem .9rem !important; }
+    #guestBookModal .modal-header h3,
+    #loginConfirmModal .modal-header h3 { font-size: 1.15rem; }
+    .rb-modal-section { padding: 0 1.1rem 1.1rem !important; }
+    .modal-footer { padding: 1rem 1.1rem 1.25rem !important; }
+    .guest-pad { padding-left: 1.1rem !important; padding-right: 1.1rem !important; }
+    .lcm-pad { margin-left: 1.1rem !important; margin-right: 1.1rem !important; }
+    .lcm-form-pad { padding-left: 1.1rem !important; padding-right: 1.1rem !important; }
+
+    /* Booking Date, Start Time, End Time each on their own full-width row */
+    .guest-time-grid { grid-template-columns: 1fr !important; gap: .9rem !important; }
+    .guest-det-grid { grid-template-columns: 1fr 1fr !important; gap: .6rem !important; }
+    /* Roomier Start/End clock boxes to match the logged-in modal */
+    #guestBookModal .clock-display { padding: .8rem 1rem; }
+
+    /* Time picker pops up centered in the middle of the screen on mobile */
+    .clock-dropdown { width: min(320px, 90vw) !important; z-index: 9999 !important; box-shadow: 0 16px 48px rgba(0,0,0,.22); }
+
+    /* Let grid/flex children shrink instead of forcing overflow */
+    .guest-time-grid > *,
+    .guest-det-grid > *,
+    .rb-rs-info { min-width: 0 !important; }
+    #guestBookModal input,
+    #loginConfirmModal input { width: 100%; min-width: 0 !important; }
+
+    /* Room rows: tighter, drop the hover slide that can poke past the edge */
+    .rb-room-selection { padding: .7rem .85rem !important; gap: .7rem !important; }
+    .rb-room-selection:hover { transform: none !important; }
+    .rb-rs-name { font-size: .88rem; }
+
+    .rb-dur-pill { padding: .4rem .8rem; }
   }
 </style>
 </head>
@@ -366,20 +439,20 @@
 
 <div class="pub-topbar">
   <div class="pub-brand">
-    <div style="background:#0f172a;padding:5px;border-radius:10px;display:flex;">
-      <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="height:28px;width:28px;object-fit:contain;filter:brightness(0) invert(1);">
+    <div style="background:#fff;padding:5px;border-radius:10px;display:flex;border:1px solid #e2e8f0;">
+      <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="height:28px;width:28px;object-fit:contain;">
     </div>
-    <span>Booking Portal</span>
+    <span>HR and Administration Management Information System</span>
   </div>
-  <button class="pub-login-btn" onclick="openLoginModal()">
+  <a class="pub-login-btn" href="{{ route('login') }}">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
     Staff Login
-  </button>
+  </a>
 </div>
 
 <div class="pub-notice">
   <span>✨</span>
-  <span>You're viewing as a <strong>guest</strong>. Browse availability freely — <a onclick="openLoginModal();return false;">login</a> to book a room.</span>
+  <span>You're viewing as a <strong>guest</strong>. Browse availability freely — <a href="{{ route('login') }}">login</a> to book a room.</span>
 </div>
 
 <div class="pub-container">
@@ -391,9 +464,9 @@
   <!-- Controls: view toggle + date nav -->
   <div class="pub-controls">
     <div class="pub-view-tabs">
-      <a href="{{ route('home', ['date' => $viewDate, 'view' => 'day']) }}"   class="pvt-btn{{ $viewMode==='day'  ?' pvt-active':'' }}">Day</a>
-      <a href="{{ route('home', ['date' => $viewDate, 'view' => 'week']) }}"  class="pvt-btn{{ $viewMode==='week' ?' pvt-active':'' }}">Week</a>
-      <a href="{{ route('home', ['date' => $viewDate, 'view' => 'month']) }}" class="pvt-btn{{ $viewMode==='month'?' pvt-active':'' }}">Month</a>
+      <a href="{{ route('hr.home', ['date' => $viewDate, 'view' => 'day']) }}"   class="pvt-btn{{ $viewMode==='day'  ?' pvt-active':'' }}">Day</a>
+      <a href="{{ route('hr.home', ['date' => $viewDate, 'view' => 'week']) }}"  class="pvt-btn{{ $viewMode==='week' ?' pvt-active':'' }}">Week</a>
+      <a href="{{ route('hr.home', ['date' => $viewDate, 'view' => 'month']) }}" class="pvt-btn{{ $viewMode==='month'?' pvt-active':'' }}">Month</a>
     </div>
     
     <div class="pub-date-nav">
@@ -402,7 +475,7 @@
       </a>
       <label class="pub-datepicker-lbl">
         <input type="date" id="rbViewDatePicker" value="{{ $viewDate }}"
-               onchange="window.location.href='{{ route('home') }}?date='+this.value+'&view={{ $viewMode }}'">
+               onchange="window.location.href='{{ route('hr.home') }}?date='+this.value+'&view={{ $viewMode }}'">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#64748b;margin-left:auto;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       </label>
       <a href="{{ $nextNav }}" class="pub-nav-btn" title="Next">
@@ -410,7 +483,7 @@
       </a>
     </div>
     
-    <a href="{{ route('home', ['date' => date('Y-m-d'), 'view' => $viewMode]) }}" 
+    <a href="{{ route('hr.home', ['date' => date('Y-m-d'), 'view' => $viewMode]) }}" 
        class="btn btn-outline" style="border-radius:12px;padding:.5rem 1.25rem;">Today</a>
   </div>
 
@@ -608,7 +681,7 @@
           elseif ($cnt <= 4) $cc = 'pwt-mod';
           else               $cc = 'pwt-busy';
         @endphp
-      <a href="{{ route('home', ['date' => $wd, 'view' => 'day']) }}" class="pwt-cell {{ $cc }}{{ $wd===date('Y-m-d')?' pwt-today-cell':'' }}" title="{{ $cnt }} booking{{ $cnt!==1?'s':'' }}">
+      <a href="{{ route('hr.home', ['date' => $wd, 'view' => 'day']) }}" class="pwt-cell {{ $cc }}{{ $wd===date('Y-m-d')?' pwt-today-cell':'' }}" title="{{ $cnt }} booking{{ $cnt!==1?'s':'' }}">
         @if ($cnt > 0)<span class="pwt-cnt">{{ $cnt }}</span>@endif
       </a>
       @endforeach
@@ -645,7 +718,7 @@
           elseif ($bkgCnt<=6)  $dc = 'pmc-mod';
           else                 $dc = 'pmc-busy';
         @endphp
-      <a href="{{ route('home', ['date' => $day, 'view' => 'day']) }}" class="pmc-day {{ $dc }}{{ $isDay?' pmc-today':'' }}">
+      <a href="{{ route('hr.home', ['date' => $day, 'view' => 'day']) }}" class="pmc-day {{ $dc }}{{ $isDay?' pmc-today':'' }}">
         <div class="pmc-day-num">{{ (int)date('j', strtotime($day)) }}</div>
         @if ($inMonth && $bkgCnt > 0)
         <div class="pmc-bkg-cnt">{{ $bkgCnt }} booking{{ $bkgCnt>1?'s':'' }}</div>
@@ -660,6 +733,9 @@
 
 </div><!-- .pub-container -->
 
+<!-- Dimmed backdrop behind the centered mobile time picker (tap to close via document handler) -->
+<div id="clockBackdrop"></div>
+
 <!-- GUEST BOOKING MODAL -->
 <div class="modal" id="guestBookModal">
   <div class="modal-box" style="max-width:560px;width:100%">
@@ -671,7 +747,7 @@
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
 
-    <div style="padding:1.5rem 2rem 0;">
+    <div class="guest-pad" style="padding:1.5rem 2rem 0;">
       <div id="guestPastWarn" class="alert alert-warning" style="display:none;margin-bottom:1rem;border-radius:12px;">
         ⚠️ Past day cannot book
       </div>
@@ -690,13 +766,13 @@
         <span class="rb-step-badge">1</span>
         <span class="rb-step-title">Choose Date &amp; Time</span>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem;">
-        <div class="form-group">
-          <label>Date</label>
+      <div class="guest-time-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem;">
+        <div class="form-group guest-date-col">
+          <label>Booking Date</label>
           <input type="date" id="guestDate" value="{{ $viewDate }}" min="{{ date('Y-m-d') }}" onchange="buildTimePicker('start'); buildTimePicker('end');guestCheckConflict();guestUpdateSummary();guestRefreshOccupied();guestCheckPastDate()">
         </div>
         <div class="form-group" style="position:relative;">
-          <label>Start</label>
+          <label>Start Time</label>
           <div class="clock-display" id="startDisplay" onclick="toggleClock('start')">
             <div>
               <div class="clock-lbl">From</div>
@@ -714,7 +790,7 @@
           <input type="hidden" id="guestStart">
         </div>
         <div class="form-group" style="position:relative;">
-          <label>End</label>
+          <label>End Time</label>
           <div class="clock-display" id="endDisplay" onclick="toggleClock('end')">
             <div>
               <div class="clock-lbl">To</div>
@@ -769,7 +845,7 @@
         </div>
       </div>
       
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:1rem;margin-bottom:1.25rem;">
+      <div class="guest-det-grid" style="display:grid;grid-template-columns:120px 1fr;gap:1rem;margin-bottom:1.25rem;">
         <div class="form-group">
           <label>Attendees</label>
           <input type="number" id="guestAttendees" min="1" max="500" placeholder="5" oninput="guestCheckCapacity()">
@@ -821,7 +897,7 @@
     </div>
 
     <!-- Booking summary card -->
-    <div id="lcmSummary" style="margin:1.5rem 2rem 0;padding:1.25rem;background:#f0f9ff;border-radius:16px;border:1.5px solid #e0f2fe;">
+    <div id="lcmSummary" class="lcm-pad" style="margin:1.5rem 2rem 0;padding:1.25rem;background:#f0f9ff;border-radius:16px;border:1.5px solid #e0f2fe;">
       <div style="font-size:.75rem;font-weight:800;color:#0369a1;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Booking Details
@@ -835,7 +911,7 @@
     </div>
 
     <!-- Login form -->
-    <form method="POST" action="{{ route('rooms.bookings.store') }}" style="padding:1.5rem 2rem 0;">
+    <form method="POST" action="{{ route('rooms.bookings.store') }}" class="lcm-form-pad" style="padding:1.5rem 2rem 0;">
       @csrf
       <input type="hidden" name="action"            value="add">
       <input type="hidden" name="room_id"           id="lcmPendingRoom">
@@ -864,20 +940,33 @@
       @endif
 
       <div class="form-group" style="margin-bottom:.75rem;">
-        <label style="font-size:.82rem;font-weight:600;">Staff ID</label>
-        <input type="text" name="staff_no" placeholder="e.g. 0000001" required autocomplete="username" style="font-size:1rem;" value="{{ old('staff_no') }}">
+        <label>Staff ID</label>
+        <div class="lcm-input-wrap">
+          <svg class="lead" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" name="staff_no" placeholder="e.g. 0000001" required autocomplete="username"
+                 autocapitalize="none" autocorrect="off" spellcheck="false" value="{{ old('staff_no') }}">
+        </div>
       </div>
       <div class="form-group" style="margin-bottom:.75rem;">
-        <label style="font-size:.82rem;font-weight:600;">Password</label>
-        <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password" style="font-size:1rem;">      
+        <label>Password</label>
+        <div class="lcm-input-wrap">
+          <svg class="lead" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" name="password" class="has-toggle" placeholder="Enter your password" required autocomplete="current-password">
+          <button type="button" class="lcm-toggle" aria-label="Show password" onclick="lcmTogglePassword(this)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
       </div>
       <div style="font-size:.78rem;color:#64748b;margin-bottom:.5rem;text-align:right;">
-        <a href="{{ route('password.request') }}" style="color:#6366f1;">Forgot password?</a>
+        <a href="{{ route('password.request') }}" style="color:#0284c7;font-weight:600;">Forgot password?</a>
       </div>
 
       <div class="modal-footer" style="padding:0;margin-top:.25rem;border:none;">
         <button type="button" class="btn btn-ghost" id="lcmBackBtn" onclick="lcmBack()">← Back</button>
-        <button type="submit" class="btn btn-primary">Sign In →</button>
+        <button type="submit" class="btn btn-primary">
+          Sign In
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
       </div>
     </form>
   </div>
@@ -1012,6 +1101,7 @@ function gPickMinute(which, m) {
     valEl.classList.remove('unset');
     document.getElementById(which + 'Drop').style.display = 'none';
     document.getElementById(which + 'Display').classList.remove('open');
+    document.getElementById('clockBackdrop').style.display = 'none';
     if (which === 'start' && clockState.end.h === null) {
         const eh = Math.min(clockState.start.h + 1, 20);
         clockState.end.h = eh;
@@ -1035,11 +1125,24 @@ function toggleClock(which) {
     const isOpen = drop.style.display === 'block';
     document.querySelectorAll('.clock-dropdown').forEach(d => d.style.display = 'none');
     document.querySelectorAll('.clock-display').forEach(d => d.classList.remove('open'));
+    document.getElementById('clockBackdrop').style.display = 'none';
     if (!isOpen) {
         buildTimePicker(which);
-        const rect = disp.getBoundingClientRect();
-        drop.style.top  = (rect.bottom + 6) + 'px';
-        drop.style.left = rect.left + 'px';
+        if (window.innerWidth <= 768) {
+            // Mobile: center the picker in the middle of the screen.
+            // Reparent to <body> so it escapes the modal's stacking context
+            // and renders above the dimmed backdrop.
+            document.body.appendChild(drop);
+            drop.style.top = '50%';
+            drop.style.left = '50%';
+            drop.style.transform = 'translate(-50%, -50%)';
+            document.getElementById('clockBackdrop').style.display = 'block';
+        } else {
+            const rect = disp.getBoundingClientRect();
+            drop.style.top  = (rect.bottom + 6) + 'px';
+            drop.style.left = rect.left + 'px';
+            drop.style.transform = '';
+        }
         drop.style.display = 'block';
         disp.classList.add('open');
     }
@@ -1049,6 +1152,7 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.clock-display') && !e.target.closest('.clock-dropdown')) {
         document.querySelectorAll('.clock-dropdown').forEach(d => d.style.display='none');
         document.querySelectorAll('.clock-display').forEach(d => d.classList.remove('open'));
+        document.getElementById('clockBackdrop').style.display = 'none';
     }
 });
 
@@ -1304,6 +1408,16 @@ function openLoginModal() {
     openModal('loginConfirmModal');
 }
 
+function lcmTogglePassword(btn) {
+    const input = btn.parentElement.querySelector('input');
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    btn.innerHTML = showing
+      ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+      : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+}
+
 let lcmSourceModal = 'guestBookModal';
 function lcmBack() { closeModal(); openModal(lcmSourceModal); }
 
@@ -1318,50 +1432,23 @@ function guestProceedToLogin() {
         alert('Your booking list is empty. Add at least one slot before signing in.');
         return;
     }
-    const first = guestCart[0];
-    const uniqueRooms = [...new Set(guestCart.map(s => s.room_name))];
-    const uniqueDates = [...new Set(guestCart.map(s => s.booking_date))];
-    
-    document.getElementById('lcmRoom').textContent      = uniqueRooms.join(', ');
-    document.getElementById('lcmDate').textContent      = uniqueDates.length === 1 ? dateFmt(uniqueDates[0]) : dateFmt(uniqueDates[0]) + ' +' + (uniqueDates.length-1) + ' more days';
-    
-    if (guestCart.length === 1) {
-        document.getElementById('lcmTime').textContent = first.start_time + ' – ' + first.end_time;
-    } else {
-        document.getElementById('lcmTime').textContent = guestCart.length + ' separate slots';
-    }
-    
-    document.getElementById('lcmPurpose').textContent = guestCart.length === 1 ? first.purpose : 'Multi-room booking (' + guestCart.length + ' events)';
 
-    document.getElementById('lcmPendingSlots').value     = JSON.stringify(guestCart);
-    document.getElementById('lcmPendingRooms').value     = '';
-    document.getElementById('lcmPendingDates').value     = '';
-    document.getElementById('lcmPendingRoom').value      = '';
-    document.getElementById('lcmPendingDate').value      = first.booking_date;
-    document.getElementById('lcmPendingStart').value     = first.start_time;
-    document.getElementById('lcmPendingEnd').value       = first.end_time;
-    document.getElementById('lcmPendingPurpose').value   = first.purpose;
-    document.getElementById('lcmPendingAttendees').value = first.attendees;
-    document.getElementById('lcmLegacyRoom').value       = '';
-    document.getElementById('lcmLegacyDate').value       = first.booking_date;
-    document.getElementById('lcmLegacyStart').value      = first.start_time;
-    document.getElementById('lcmLegacyEnd').value        = first.end_time;
-    document.getElementById('lcmLegacyPurpose').value    = first.purpose;
-    document.getElementById('lcmLegacyAttendees').value  = first.attendees;
-    document.getElementById('lcmRedirectDate').value     = first.booking_date;
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ route("rooms.bookings.hold") }}';
 
-    document.getElementById('lcmTitle').textContent    = 'Verify Identity';
-    document.getElementById('lcmSubtitle').textContent = 'Confirming ' + guestCart.length + ' booking slot' + (guestCart.length>1?'s':'');
-    document.getElementById('lcmSummary').style.display = '';
-    document.getElementById('lcmBackBtn').style.display = '';
-    lcmSourceModal = 'guestBookModal';
-    closeModal();
-    openModal('loginConfirmModal');
+    const csrf = document.createElement('input');
+    csrf.type = 'hidden'; csrf.name = '_token'; csrf.value = '{{ csrf_token() }}';
+    form.appendChild(csrf);
+
+    const slots = document.createElement('input');
+    slots.type = 'hidden'; slots.name = 'slots'; slots.value = JSON.stringify(guestCart);
+    form.appendChild(slots);
+
+    document.body.appendChild(form);
+    form.submit();
 }
 
-@if ($errors->any())
-document.addEventListener('DOMContentLoaded', () => openLoginModal());
-@endif
 </script>
 </body>
 </html>

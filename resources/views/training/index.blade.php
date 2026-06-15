@@ -97,6 +97,7 @@
 {{-- ── PAGE HEADER ─────────────────────────────────────────── --}}
 <div class="page-header" style="margin-bottom:1rem;">
     <p class="page-subtitle" style="margin:0;">{{ $isAdmin ? 'Training attendance by department and course' : 'Your personal training attendance records' }}</p>
+    @canwrite
     <div class="header-actions">
         <button onclick="openQrScanner()" class="btn btn-outline btn-sm" style="gap:.35rem;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h.01M14 17h3M17 14v3M20 20h.01"/></svg>
@@ -111,6 +112,7 @@
         <button onclick="openModal('attendance-modal')" class="btn btn-primary btn-sm">+ Attendance</button>
         @endif
     </div>
+    @endcanwrite
 </div>
 
 {{-- ── VIEW TABS ────────────────────────────────────────────── --}}
@@ -151,9 +153,9 @@
 @if($view === 'by_dept')
 
 <div class="tr-search-bar">
-    <div class="tr-search-input-wrap" style="flex:1;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" class="tr-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="dept-search" placeholder="Search department…" class="tr-search-input" oninput="filterDeptCards()">
+    <div class="app-search" style="flex:1;">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="dept-search" placeholder="Search department…" oninput="filterDeptCards()">
     </div>
     <span class="tr-search-count">{{ count($dept_summaries) }} departments</span>
 </div>
@@ -227,9 +229,9 @@
 <form method="GET" class="tr-filter-bar">
     <input type="hidden" name="view" value="list">
     <input type="hidden" name="type" value="{{ $type_filter }}">
-    <div class="tr-search-input-wrap" style="flex:1;min-width:160px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" class="tr-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" name="q" value="{{ $search }}" placeholder="Search name or course…" class="tr-search-input">
+    <div class="app-search" style="flex:1;min-width:160px;">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" name="q" value="{{ $search }}" placeholder="Search name or course…">
     </div>
     @if($isAdmin)
     <select name="dept" class="tr-select">
@@ -351,9 +353,9 @@
 @elseif($view === 'courses')
 
 <div class="tr-search-bar" style="flex-wrap:wrap;gap:.6rem;">
-    <div class="tr-search-input-wrap" style="flex:1;min-width:180px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" class="tr-search-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="course-search" placeholder="Search course title or code…" class="tr-search-input" oninput="filterCourseCards()">
+    <div class="app-search" style="flex:1;min-width:180px;">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="course-search" placeholder="Search course title or code…" oninput="filterCourseCards()">
     </div>
     <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
         <select id="year-filter" class="tr-select" style="min-width:105px;height:32px;padding:0 .5rem;font-size:.75rem;" onchange="filterCourseCards()">
@@ -418,12 +420,20 @@
             </div>
             @if($isAdmin)
             <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border,#e2e8f0);">
+                @canwrite
                 <a href="{{ route('training.qr.page', $c->id) }}"
                    style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:#6366f1;text-decoration:none;padding:.3rem .65rem;border:1.5px solid #c7d2fe;border-radius:6px;transition:background .15s;"
                    onmouseover="this.style.background='#ede9fe'" onmouseout="this.style.background='transparent'">
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h.01M14 18h.01M18 14h.01M18 18h.01"/></svg>
-                    QR Attendance
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Attendees
                 </a>
+                <a href="{{ route('training.course.export', $c->id) }}"
+                   style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:#16a34a;text-decoration:none;padding:.3rem .65rem;border:1.5px solid #bbf7d0;border-radius:6px;transition:background .15s;margin-left:.4rem;"
+                   onmouseover="this.style.background='#dcfce7'" onmouseout="this.style.background='transparent'">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Report
+                </a>
+                @endcanwrite
                 <a href="{{ route('training.projector', $c->id) }}"
                    target="_blank"
                    style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:#0891b2;text-decoration:none;padding:.3rem .65rem;border:1.5px solid #a5f3fc;border-radius:6px;transition:background .15s;margin-left:.4rem;"
@@ -431,12 +441,14 @@
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                     Projector
                 </a>
+                @canwrite
                 <button onclick="openEditCourse({{ $c->id }})"
                    style="display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:600;color:#475569;padding:.3rem .65rem;border:1.5px solid #cbd5e1;border-radius:6px;transition:background .15s;margin-left:.4rem;background:none;cursor:pointer;"
                    onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     Edit
                 </button>
+                @endcanwrite
             </div>
             @endif
         </div>
@@ -519,48 +531,65 @@ const courseData = {
 
 <div class="modal" id="course-modal">
     <div class="modal-box" style="max-width:520px;">
-        <div class="modal-header">
+        <div class="modal-header cm-modal-header">
             <div style="display:flex;align-items:center;gap:.75rem;">
-                <div class="tr-modal-icon" style="background:#f0fdf4;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <div class="cm-header-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
                 <div>
-                    <h3>Add New Course</h3>
-                    <div style="font-size:.73rem;color:var(--muted);margin-top:.1rem;">Course code is auto-generated</div>
+                    <h3 style="color:white;margin:0;font-size:.95rem;">Add New Course</h3>
+                    <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.1rem 0 0;">Course code is auto-generated</p>
                 </div>
             </div>
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <button class="modal-close" onclick="closeModal()" style="color:rgba(255,255,255,.6);font-size:1.4rem;">×</button>
         </div>
         <form action="{{ route('training.courses.store') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="form-grid">
+
+                    <div class="cm-section-label form-full">Course Details</div>
+
                     <div class="form-group form-full">
                         <label>Course Title <span style="color:var(--danger);">*</span></label>
                         <input type="text" name="title" required placeholder="e.g. Fire Safety Awareness">
                     </div>
                     <div class="form-group">
                         <label>Type <span style="color:var(--danger);">*</span></label>
-                        <select name="training_type" required>
-                            <option value="External">External</option>
-                            <option value="Internal">Internal</option>
-                        </select>
+                        <div style="display:flex;gap:.4rem;margin-top:.2rem;">
+                            <label class="type-chip type-chip-ext">
+                                <input type="radio" name="training_type" value="External" checked>
+                                <span>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    External
+                                </span>
+                            </label>
+                            <label class="type-chip type-chip-int">
+                                <input type="radio" name="training_type" value="Internal">
+                                <span>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                    Internal
+                                </span>
+                            </label>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Company</label>
                         <input type="text" name="company" placeholder="e.g. FJB">
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Start Date</label>
-                            <input type="date" name="start_date" id="ac-start-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label>End Date</label>
-                            <input type="date" name="end_date" id="ac-end-date">
-                            <span style="font-size:.7rem;color:var(--muted);margin-top:.2rem;display:block;">Leave blank for 1-day course</span>
-                        </div>
-                    </div>                    <div class="form-group">
+
+                    <div class="cm-section-label form-full">Schedule &amp; Location</div>
+
+                    <div class="form-group">
+                        <label>Start Date <span style="color:var(--danger);">*</span></label>
+                        <input type="date" name="start_date" id="ac-start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" name="end_date" id="ac-end-date">
+                        <span style="font-size:.7rem;color:var(--muted);margin-top:.2rem;display:block;">Leave blank for 1-day course</span>
+                    </div>
+                    <div class="form-group">
                         <label>Venue</label>
                         <input type="text" name="venue" placeholder="e.g. Main Hall FJB">
                     </div>
@@ -568,17 +597,35 @@ const courseData = {
                         <label>Duration</label>
                         <input type="text" name="duration" placeholder="e.g. 2 days">
                     </div>
+
+                    <div class="cm-section-label form-full">Access</div>
+
                     <div class="form-group form-full">
                         <label>Visibility</label>
-                        <div style="display:flex;gap:.75rem;margin-top:.25rem;">
-                            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.83rem;font-weight:600;">
-                                <input type="radio" name="is_private" value="0" checked onchange="togglePrivatePicker('create',this.value)"> Open
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.35rem;">
+                            <label class="vis-card">
+                                <input type="radio" name="is_private" value="0" checked onchange="togglePrivatePicker('create',this.value)">
+                                <div class="vis-card-inner">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    <div>
+                                        <div class="vis-card-title">Open</div>
+                                        <div class="vis-card-desc">Visible to all staff</div>
+                                    </div>
+                                </div>
                             </label>
-                            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.83rem;font-weight:600;">
-                                <input type="radio" name="is_private" value="1" onchange="togglePrivatePicker('create',this.value)"> Private
+                            <label class="vis-card">
+                                <input type="radio" name="is_private" value="1" onchange="togglePrivatePicker('create',this.value)">
+                                <div class="vis-card-inner">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <div>
+                                        <div class="vis-card-title">Private</div>
+                                        <div class="vis-card-desc">Invite selected staff only</div>
+                                    </div>
+                                </div>
                             </label>
                         </div>
                     </div>
+
                     <div id="create-private-picker" style="display:none;" class="form-group form-full">
                         <label>Enroll Staff <span style="color:var(--muted);font-weight:500;">(choose who can join)</span></label>
                         <div id="create-staff-tags" style="display:flex;flex-wrap:wrap;gap:.35rem;min-height:32px;margin-bottom:.4rem;"></div>
@@ -591,11 +638,15 @@ const courseData = {
                         </div>
                         <div id="create-staff-hidden"></div>
                     </div>
+
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">Create Course</button>
+                <button type="submit" class="btn btn-primary" style="display:flex;align-items:center;gap:.4rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+                    Create Course
+                </button>
             </div>
         </form>
     </div>
@@ -603,49 +654,66 @@ const courseData = {
 
 <div class="modal" id="edit-course-modal">
     <div class="modal-box" style="max-width:520px;">
-        <div class="modal-header">
+        <div class="modal-header cm-modal-header" style="background:linear-gradient(135deg,#1a3a2a 0%,#14532d 100%);">
             <div style="display:flex;align-items:center;gap:.75rem;">
-                <div class="tr-modal-icon" style="background:#fef9c3;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <div class="cm-header-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 </div>
                 <div>
-                    <h3>Edit Course</h3>
-                    <div style="font-size:.73rem;color:var(--muted);margin-top:.1rem;">Course code cannot be changed</div>
+                    <h3 style="color:white;margin:0;font-size:.95rem;">Edit Course</h3>
+                    <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.1rem 0 0;">Course code cannot be changed</p>
                 </div>
             </div>
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <button class="modal-close" onclick="closeModal()" style="color:rgba(255,255,255,.6);font-size:1.4rem;">×</button>
         </div>
         <form id="edit-course-form" method="POST">
             @csrf
             @method('PUT')
             <div class="modal-body">
                 <div class="form-grid">
+
+                    <div class="cm-section-label form-full">Course Details</div>
+
                     <div class="form-group form-full">
                         <label>Course Title <span style="color:var(--danger);">*</span></label>
                         <input type="text" name="title" id="ec-title" required placeholder="e.g. Fire Safety Awareness">
                     </div>
                     <div class="form-group">
                         <label>Type <span style="color:var(--danger);">*</span></label>
-                        <select name="training_type" id="ec-type" required>
-                            <option value="External">External</option>
-                            <option value="Internal">Internal</option>
-                        </select>
+                        <div style="display:flex;gap:.4rem;margin-top:.2rem;">
+                            <label class="type-chip type-chip-ext">
+                                <input type="radio" name="training_type" id="ec-type-ext" value="External">
+                                <span>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    External
+                                </span>
+                            </label>
+                            <label class="type-chip type-chip-int">
+                                <input type="radio" name="training_type" id="ec-type-int" value="Internal">
+                                <span>
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                    Internal
+                                </span>
+                            </label>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Company</label>
                         <input type="text" name="company" id="ec-company" placeholder="e.g. FJB">
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Start Date</label>
-                            <input type="date" name="start_date" id="ec-start-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label>End Date</label>
-                            <input type="date" name="end_date" id="ec-end-date">
-                            <span style="font-size:.7rem;color:var(--muted);margin-top:.2rem;display:block;">Leave blank for 1-day course</span>
-                        </div>
-                    </div>                    <div class="form-group">
+
+                    <div class="cm-section-label form-full">Schedule &amp; Location</div>
+
+                    <div class="form-group">
+                        <label>Start Date <span style="color:var(--danger);">*</span></label>
+                        <input type="date" name="start_date" id="ec-start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" name="end_date" id="ec-end-date">
+                        <span style="font-size:.7rem;color:var(--muted);margin-top:.2rem;display:block;">Leave blank for 1-day course</span>
+                    </div>
+                    <div class="form-group">
                         <label>Venue</label>
                         <input type="text" name="venue" id="ec-venue" placeholder="e.g. Main Hall FJB">
                     </div>
@@ -653,17 +721,35 @@ const courseData = {
                         <label>Duration</label>
                         <input type="text" name="duration" id="ec-duration" placeholder="e.g. 2 days">
                     </div>
+
+                    <div class="cm-section-label form-full">Access</div>
+
                     <div class="form-group form-full">
                         <label>Visibility</label>
-                        <div style="display:flex;gap:.75rem;margin-top:.25rem;">
-                            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.83rem;font-weight:600;">
-                                <input type="radio" name="is_private" id="ec-open" value="0" onchange="togglePrivatePicker('edit',this.value)"> Open
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.35rem;">
+                            <label class="vis-card">
+                                <input type="radio" name="is_private" id="ec-open" value="0" onchange="togglePrivatePicker('edit',this.value)">
+                                <div class="vis-card-inner">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    <div>
+                                        <div class="vis-card-title">Open</div>
+                                        <div class="vis-card-desc">Visible to all staff</div>
+                                    </div>
+                                </div>
                             </label>
-                            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.83rem;font-weight:600;">
-                                <input type="radio" name="is_private" id="ec-private" value="1" onchange="togglePrivatePicker('edit',this.value)"> Private
+                            <label class="vis-card">
+                                <input type="radio" name="is_private" id="ec-private" value="1" onchange="togglePrivatePicker('edit',this.value)">
+                                <div class="vis-card-inner">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <div>
+                                        <div class="vis-card-title">Private</div>
+                                        <div class="vis-card-desc">Invite selected staff only</div>
+                                    </div>
+                                </div>
                             </label>
                         </div>
                     </div>
+
                     <div id="edit-private-picker" style="display:none;" class="form-group form-full">
                         <label>Add Staff to Enroll <span style="color:var(--muted);font-weight:500;">(existing enrollments kept)</span></label>
                         <div id="edit-staff-tags" style="display:flex;flex-wrap:wrap;gap:.35rem;min-height:32px;margin-bottom:.4rem;"></div>
@@ -676,11 +762,15 @@ const courseData = {
                         </div>
                         <div id="edit-staff-hidden"></div>
                     </div>
+
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-primary" style="display:flex;align-items:center;gap:.4rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    Save Changes
+                </button>
             </div>
         </form>
     </div>
@@ -921,6 +1011,61 @@ button.tr-type-pill.active { background: var(--navy); color: #fff; }
 /* ── Modal Helpers ── */
 .tr-modal-meta { display: flex; align-items: center; gap: .3rem; font-size: .73rem; color: var(--muted); }
 .tr-modal-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* ── Course Modal Redesign ── */
+.cm-modal-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
+    border-radius: 14px 14px 0 0;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+}
+.cm-header-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.cm-section-label {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--muted);
+    padding-bottom: .4rem;
+    border-bottom: 1px solid var(--border);
+}
+/* Type chips */
+.type-chip { cursor: pointer; }
+.type-chip input[type="radio"] { display: none; }
+.type-chip span {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .38rem .72rem;
+    border-radius: 99px;
+    border: 1.5px solid var(--border);
+    font-size: .78rem; font-weight: 500;
+    color: var(--text); background: var(--surface);
+    transition: background .13s, border-color .13s, color .13s;
+    user-select: none; white-space: nowrap;
+}
+.type-chip:hover span { border-color: var(--muted); }
+.type-chip-ext input:checked + span { background: #fff7ed; border-color: #f97316; color: #ea580c; }
+.type-chip-ext input:checked + span svg { stroke: #ea580c; }
+.type-chip-int input:checked + span { background: #f0fdf4; border-color: #22c55e; color: #16a34a; }
+.type-chip-int input:checked + span svg { stroke: #16a34a; }
+/* Visibility cards */
+.vis-card { cursor: pointer; }
+.vis-card input[type="radio"] { display: none; }
+.vis-card-inner {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .6rem .85rem;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    transition: border-color .13s, background .13s;
+}
+.vis-card:hover .vis-card-inner { border-color: var(--muted); }
+.vis-card input:checked + .vis-card-inner { border-color: var(--navy); background: #eef2ff; }
+.vis-card input:checked + .vis-card-inner svg { stroke: var(--navy); }
+.vis-card-title { font-size: .82rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+.vis-card-desc { font-size: .71rem; color: var(--muted); margin-top: .1rem; }
+.vis-card input:checked + .vis-card-inner .vis-card-title { color: var(--navy); }
 
 /* ── Color Utilities ── */
 .bg-orange { background: #fff7ed; } .color-orange { color: #f97316; }
@@ -1266,7 +1411,7 @@ function openEditCourse(id) {
     if (!d) return;
     document.getElementById('edit-course-form').action = '/training/courses/' + id;
     document.getElementById('ec-title').value    = d.title;
-    document.getElementById('ec-type').value     = d.type;
+    document.getElementById(d.type === 'Internal' ? 'ec-type-int' : 'ec-type-ext').checked = true;
     document.getElementById('ec-company').value  = d.company || '';
     document.getElementById('ec-start-date').value = d.start_date || '';
     document.getElementById('ec-end-date').value   = d.end_date || '';

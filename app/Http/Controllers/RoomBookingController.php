@@ -23,16 +23,8 @@ class RoomBookingController extends Controller
 
     public function store(Request $request)
     {
-        // Support guest booking: if not logged in, attempt to authenticate using staff_no and password
         if (!Auth::check()) {
-            $request->validate([
-                'staff_no' => 'required',
-                'password' => 'required',
-            ]);
-
-            if (!Auth::attempt(['staff_no' => $request->staff_no, 'password' => $request->password, 'is_active' => 1])) {
-                return back()->with('error', 'Invalid staff ID or password.');
-            }
+            return redirect()->route('login');
         }
 
         $user = Auth::user();
@@ -47,6 +39,7 @@ class RoomBookingController extends Controller
                 'booking_date' => $request->booking_date,
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
+                'is_full_day' => $request->boolean('is_full_day'),
                 'attendees' => $request->attendees,
                 'purpose' => $request->purpose,
             ];
@@ -56,6 +49,60 @@ class RoomBookingController extends Controller
             return back()->with('error', 'No booking slots provided.');
         }
 
+        return $this->finishBooking($user, $slots);
+    }
+
+    public function holdGuestBooking(Request $request)
+    {
+        $request->validate(['slots' => 'required|string']);
+
+        $slots = json_decode($request->input('slots'), true);
+        if (empty($slots) || !is_array($slots)) {
+            return redirect()->route('hr.home')->with('error', 'No valid booking slots provided.');
+        }
+
+        session(['pending_booking' => $slots]);
+
+        return redirect()->route('login');
+    }
+
+    public function processPendingBooking(Request $request)
+    {
+        $slots = session('pending_booking');
+        if (empty($slots)) {
+            return redirect()->route('rooms.index');
+        }
+
+        session()->forget('pending_booking');
+
+        return $this->finishBooking(Auth::user(), $slots);
+    }
+
+    private function finishBooking(\App\Models\User $user, array $slots)
+    {
+        $result = $this->processSlots($user, $slots);
+
+        if ($result['inserted'] === 0) {
+            return redirect()->route('rooms.index')->with('error', 'Booking failed. Possible conflict or past date.');
+        }
+
+        AuditLogger::log('create', 'rooms',
+            'Submitted ' . $result['inserted'] . ' room booking(s) for approval.',
+            ['inserted' => $result['inserted'], 'skipped' => $result['skipped']]
+        );
+
+        $firstDate = $slots[0]['booking_date'];
+        if ($result['skipped'] > 0 || $result['inserted'] > 1) {
+            return redirect()->route('rooms.index', ['date' => $firstDate])
+                ->with('success', "Processed bookings: {$result['inserted']} successful, {$result['skipped']} skipped.");
+        }
+
+        return redirect()->route('rooms.index', ['date' => $firstDate])
+            ->with('success', 'Booking submitted for approval.');
+    }
+
+    private function processSlots(\App\Models\User $user, array $slots): array
+    {
         $inserted = 0;
         $skipped = 0;
         $notificationTargets = [];
@@ -63,52 +110,40 @@ class RoomBookingController extends Controller
         foreach ($slots as $slot) {
             $roomId = $slot['room_id'];
             $date = $slot['booking_date'];
-            $startTime = $slot['start_time'];
-            $endTime = $slot['end_time'];
+            $isFullDay = !empty($slot['is_full_day']);
+            $startTime = $isFullDay ? '07:00' : $slot['start_time'];
+            $endTime = $isFullDay ? '20:00' : $slot['end_time'];
             $purpose = $slot['purpose'] ?? '';
             $attendees = $slot['attendees'] ?? 1;
 
-            if (!$roomId || !$date || !$startTime || !$endTime) {
-                $skipped++;
-                continue;
-            }
+            if (!$roomId || !$date || !$startTime || !$endTime) { $skipped++; continue; }
+            if ($isFullDay && !Carbon::parse($date)->startOfDay()->gt(Carbon::today())) { $skipped++; continue; }
+            if (Carbon::parse($date . ' ' . $startTime)->isPast()) { $skipped++; continue; }
 
-            $bookingStart = Carbon::parse($date . ' ' . $startTime);
-            if ($bookingStart->isPast()) {
-                $skipped++;
-                continue;
-            }
-
-            // Conflict check
             $conflict = RoomBooking::where('room_id', $roomId)
                 ->where('booking_date', $date)
                 ->where('status', '!=', 'Rejected')
                 ->where('start_time', '<', $endTime)
                 ->where('end_time', '>', $startTime)
                 ->exists();
-
-            if ($conflict) {
-                $skipped++;
-                continue;
-            }
+            if ($conflict) { $skipped++; continue; }
 
             $booking = RoomBooking::create([
-                'room_id' => $roomId,
-                'booked_by_id' => $user->id,
+                'room_id'        => $roomId,
+                'booked_by_id'   => $user->id,
                 'booked_by_name' => $user->name,
-                'booking_date' => $date,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'purpose' => $purpose,
-                'attendees' => $attendees,
-                'status' => 'Pending',
+                'booking_date'   => $date,
+                'start_time'     => $startTime,
+                'end_time'       => $endTime,
+                'is_full_day'    => $isFullDay,
+                'purpose'        => $purpose,
+                'attendees'      => $attendees,
+                'status'         => 'Pending',
             ]);
-
             $inserted++;
 
-            // Collect notification targets
-            $room = MeetingRoom::find($roomId);
-            $picIds = $room->pics()->pluck('users.id')->toArray();
+            $room    = MeetingRoom::find($roomId);
+            $picIds  = $room->pics()->pluck('users.id')->toArray();
             $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
             $targets = array_unique(array_merge($picIds, $adminIds));
 
@@ -116,7 +151,7 @@ class RoomBookingController extends Controller
                 $notificationTargets[$tid][] = [
                     'room' => $room->name,
                     'date' => $date,
-                    'time' => substr($startTime, 0, 5) . '–' . substr($endTime, 0, 5)
+                    'time' => substr($startTime, 0, 5) . '–' . substr($endTime, 0, 5),
                 ];
             }
 
@@ -129,40 +164,23 @@ class RoomBookingController extends Controller
             );
         }
 
-        if ($inserted === 0) {
-            return back()->with('error', 'Booking failed. Possible conflict or past date.');
-        }
-
-        // Send notifications
         foreach ($notificationTargets as $targetId => $bookings) {
             $count = count($bookings);
             $first = $bookings[0];
             $msg = $user->name . ' requested ' . ($count > 1 ? "$count bookings" : $first['room']) .
-                   ($count === 1 ? " on " . date('d M', strtotime($first['date'])) . " " . $first['time'] : "");
+                   ($count === 1 ? ' on ' . date('d M', strtotime($first['date'])) . ' ' . $first['time'] : '');
 
             Notification::create([
-                'user_id' => $targetId,
-                'type' => 'booking',
-                'title' => 'New Booking Request' . ($count > 1 ? 's' : ''),
-                'message' => $msg,
-                'link' => route('rooms.index', ['date' => $bookings[0]['date']]),
-                'is_read' => false,
+                'user_id'  => $targetId,
+                'type'     => 'booking',
+                'title'    => 'New Booking Request' . ($count > 1 ? 's' : ''),
+                'message'  => $msg,
+                'link'     => route('rooms.index', ['date' => $bookings[0]['date']]),
+                'is_read'  => false,
             ]);
         }
 
-        AuditLogger::log('create', 'rooms',
-            'Submitted ' . $inserted . ' room booking(s) for approval.',
-            ['inserted' => $inserted, 'skipped' => $skipped]
-        );
-
-        $firstDate = $slots[0]['booking_date'];
-        if ($skipped > 0 || $inserted > 1) {
-            return redirect()->route('rooms.index', ['date' => $firstDate])
-                ->with('success', "Processed bookings: $inserted successful, $skipped skipped.");
-        }
-
-        return redirect()->route('rooms.index', ['date' => $firstDate])
-            ->with('success', 'Booking submitted for approval.');
+        return compact('inserted', 'skipped');
     }
 
     public function update(Request $request, RoomBooking $booking)
@@ -377,7 +395,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Rejected',
-            'Unfortunately, your meeting room booking has been rejected by ' . $user->name . '.',
+            'Unfortunately, your meeting room booking has been rejected.',
             $booking,
             $request->rejection_reason ? 'Reason: ' . $request->rejection_reason : null
         );

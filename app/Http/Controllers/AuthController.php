@@ -46,7 +46,7 @@ class AuthController extends Controller
         }
 
         // Invalidate any existing unused OTPs
-        DB::table('password_reset_tokens')
+        DB::table('password_resets')
             ->where('user_id', $user->id)
             ->where('used', 0)
             ->update(['used' => 1]);
@@ -54,7 +54,7 @@ class AuthController extends Controller
         // Generate 6-digit OTP
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        DB::table('password_reset_tokens')->insert([
+        DB::table('password_resets')->insert([
             'user_id' => $user->id,
             'otp_code' => $otp,
             'expires_at' => Carbon::now()->addMinutes(15),
@@ -103,7 +103,7 @@ class AuthController extends Controller
             return redirect()->route('password.request');
         }
 
-        $record = DB::table('password_reset_tokens')
+        $record = DB::table('password_resets')
             ->where('user_id', $userId)
             ->where('otp_code', $request->otp)
             ->where('used', 0)
@@ -115,7 +115,7 @@ class AuthController extends Controller
         }
 
         // Mark OTP as used
-        DB::table('password_reset_tokens')
+        DB::table('password_resets')
             ->where('id', $record->id)
             ->update(['used' => 1]);
 
@@ -169,6 +169,10 @@ class AuthController extends Controller
         if (Auth::attempt(['staff_no' => $credentials['staff_no'], 'password' => $credentials['password']], $request->filled('remember'))) {
             $request->session()->regenerate();
 
+            if ($request->session()->has('pending_booking')) {
+                return redirect()->route('rooms.bookings.process-pending');
+            }
+
             return redirect()->intended('dashboard');
         }
 
@@ -179,9 +183,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
+        Auth::guard('web')->logout();
 
         $request->session()->regenerateToken();
 

@@ -12,15 +12,16 @@
 
 <div class="filter-bar" style="flex-wrap:wrap;gap:.5rem;">
     <form method="GET" action="{{ route('audit-log.index') }}" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;width:100%;">
-        <input
-            type="text"
-            name="user_name"
-            value="{{ request('user_name') }}"
-            placeholder="Search by user name&hellip;"
-            class="filter-search"
-            style="flex:2;min-width:160px;"
-            autocomplete="off"
-        >
+        <div class="app-search" style="flex:2;min-width:160px;">
+            <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input
+                type="text"
+                name="user_name"
+                value="{{ request('user_name') }}"
+                placeholder="Search by user name&hellip;"
+                autocomplete="off"
+            >
+        </div>
         <select name="module" class="filter-select">
             <option value="">All Modules</option>
             @foreach ($modules as $key => $label)

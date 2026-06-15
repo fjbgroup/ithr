@@ -10,6 +10,7 @@
             {{ $isAdmin ? 'Manage staff family member records' : 'View and edit your family records' }}
         </p>
     </div>
+    @canwrite
     <div style="display:flex;gap:.5rem;align-items:center;">
         @if($isAdmin)
         <button class="btn btn-outline" onclick="openModal('familyImportModal')">
@@ -22,12 +23,13 @@
             Add Record
         </button>
     </div>
+    @endcanwrite
 </div>
 
 @if($isAdmin)
 <form id="family-search-form" method="GET" action="{{ route('family.index') }}" class="search-bar">
-    <div class="search-input-wrap">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <div class="app-search">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="text" name="search" placeholder="Search by staff name, staff no, family member, or department..." value="{{ $search }}" class="{{ $search ? 'has-clear' : '' }}">
         @if($search)
         <a href="{{ route('family.index') }}" class="search-clear-btn" title="Clear search">
@@ -47,6 +49,7 @@
     </div>
 </div>
 @else
+@canwrite
 <div style="display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;margin-bottom:.75rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
     <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none;margin:0;">
         <input type="checkbox" id="fc-global-all" onchange="fcToggleAll(this)" style="width:16px;height:16px;cursor:pointer;accent-color:#6366f1;">
@@ -54,6 +57,7 @@
     </label>
     <span id="fc-global-count" style="font-size:.78rem;color:#94a3b8;margin-left:.25rem;"></span>
 </div>
+@endcanwrite
 @foreach($grouped as $staff_id => $members)
 @php $first = $members[0]; @endphp
 <details class="card fc-staff-card" style="margin-bottom: 1rem; border: none; background: transparent;" {{ count($grouped) == 1 ? 'open' : '' }}>
@@ -83,10 +87,12 @@
 
     <div class="fc-list" style="padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
         @if(count($members) > 1)
+        @canwrite
         <label style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .5rem;margin-bottom:.6rem;cursor:pointer;user-select:none;font-size:.78rem;color:#64748b;">
             <input type="checkbox" class="fc-section-all" data-staff="{{ $staff_id }}" onchange="fcToggleSection(this,'{{ $staff_id }}')" onclick="event.stopPropagation()" style="width:14px;height:14px;cursor:pointer;accent-color:#6366f1;">
             Select all in this group
         </label>
+        @endcanwrite
         @endif
         <style>
         .fc-staff-card[open] .staff-toggle-arrow { transform: rotate(180deg); }

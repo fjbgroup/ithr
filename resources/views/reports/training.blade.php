@@ -301,8 +301,10 @@
         <h3 class="card-title">Training Records</h3>
         <div style="display:flex;gap:.5rem;align-items:center;">
             <span style="font-size:.8rem;color:var(--muted);">{{ $total_attendees }} records</span>
-            <input type="text" id="rptSearch" placeholder="🔍 Search…" class="filter-search"
-                   oninput="filterRptTable(this.value)" style="width:180px;">
+            <div class="app-search" style="flex:none;min-width:0;width:200px;">
+                <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="rptSearch" placeholder="Search…" oninput="filterRptTable(this.value)">
+            </div>
         </div>
     </div>
     <div class="table-responsive">
@@ -364,8 +366,10 @@ function filterRptTable(q) {
 @if ($report_view === 'courses')
 {{-- By Course View --}}
 <div style="margin-bottom:1rem;">
-    <input type="text" id="courseSearch" placeholder="Search course title or code…" class="filter-search"
-           oninput="filterCourses(this.value)" style="width:100%;max-width:420px;">
+    <div class="app-search" style="max-width:420px;">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="courseSearch" placeholder="Search course title or code…" oninput="filterCourses(this.value)">
+    </div>
 </div>
 @if ($byCourse->isEmpty())
 <div class="card">

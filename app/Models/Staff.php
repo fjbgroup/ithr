@@ -15,9 +15,9 @@ class Staff extends Model
 
     protected $fillable = [
         'staff_no', 'name', 'position', 'department_id', 'company', 'company_id', 'email',
-        'date_joined', 'date_of_birth', 'gender', 'operation_support', 'location',
-        'critical_position', 'compensation_grade', 'management_level', 'job_level',
-        'job_category', 'job_family', 'job_classification', 'is_active', 'phone_number'
+        'date_joined', 'date_of_birth', 'ic_number', 'employment_status', 'last_promotion_date', 'gender', 'location',
+        'compensation_grade', 'management_level', 'job_level',
+        'job_category', 'is_active', 'phone_number'
     ];
 
     /**

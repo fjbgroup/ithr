@@ -68,7 +68,7 @@ class FamilyController extends Controller
         $user = Auth::user();
         $isAdmin = $user->isAdmin() || $user->isCeo();
 
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required',
             'relationship' => 'required',
         ]);

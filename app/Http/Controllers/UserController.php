@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['department'])
+        $users = User::with(['department', 'staff.department'])
             ->orderBy('role')
             ->orderBy('name')
             ->get();

@@ -39,42 +39,28 @@
             <div class="stat-label">Departments</div>
         </div>
     </div>
-    <div class="stat-card clickable-stat" onclick="openCompanyStaffModal('FJB', 'FGV Johor Bulkers')">
-        <div class="stat-icon" style="background:rgba(56,189,248,.1);color:#0284c7;">
+    @php
+    $coColors = [
+        ['bg' => 'rgba(56,189,248,.1)',  'text' => '#0284c7'],
+        ['bg' => 'rgba(22,163,74,.1)',   'text' => '#16a34a'],
+        ['bg' => 'rgba(245,158,11,.1)',  'text' => '#d97706'],
+        ['bg' => 'rgba(99,102,241,.1)',  'text' => '#4f46e5'],
+        ['bg' => 'rgba(236,72,153,.1)',  'text' => '#be185d'],
+        ['bg' => 'rgba(8,145,178,.1)',   'text' => '#0891b2'],
+    ];
+    @endphp
+    @foreach($allCompanies as $i => $co)
+    @php $clr = $coColors[$i % count($coColors)]; $cnt = $companyCounts[$co->code] ?? 0; @endphp
+    <div class="stat-card clickable-stat" onclick="openCompanyStaffModal('{{ $co->code }}', '{{ addslashes($co->name) }}')">
+        <div class="stat-icon" style="background:{{ $clr['bg'] }};color:{{ $clr['text'] }};">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         </div>
         <div class="stat-info">
-            <div class="stat-value">{{ $fjbCount }}</div>
-            <div class="stat-label">FJB Staff</div>
+            <div class="stat-value">{{ $cnt }}</div>
+            <div class="stat-label">{{ $co->code }} Staff</div>
         </div>
     </div>
-    <div class="stat-card clickable-stat" onclick="openCompanyStaffModal('FBSB', 'FGV Bulkers Sdn Bhd')">
-        <div class="stat-icon" style="background:rgba(22,163,74,.1);color:#16a34a;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        </div>
-        <div class="stat-info">
-            <div class="stat-value">{{ $fbsbCount }}</div>
-            <div class="stat-label">FBSB Staff</div>
-        </div>
-    </div>
-    <div class="stat-card clickable-stat" onclick="openCompanyStaffModal('LBSB', 'Langsat Bulkers Sdn Bhd')">
-        <div class="stat-icon" style="background:rgba(245,158,11,.1);color:#d97706;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        </div>
-        <div class="stat-info">
-            <div class="stat-value">{{ $lbsbCount }}</div>
-            <div class="stat-label">LBSB Staff</div>
-        </div>
-    </div>
-    <div class="stat-card clickable-stat" onclick="openCompanyStaffModal('FGT', 'FGV Transport')">
-        <div class="stat-icon" style="background:rgba(99,102,241,.1);color:#4f46e5;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        </div>
-        <div class="stat-info">
-            <div class="stat-value">{{ $fgtCount }}</div>
-            <div class="stat-label">FGT Staff</div>
-        </div>
-    </div>
+    @endforeach
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
@@ -82,22 +68,13 @@
         <div class="card-header"><h3 class="card-title">Headcount by Company</h3></div>
         <div style="padding:1.25rem;">
             <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:1rem;margin-bottom:1.5rem;">
-                <div class="co-stat-box" onclick="openCompanyStaffModal('FJB', 'FGV Johor Bulkers')" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:1rem;text-align:center;cursor:pointer;">
-                    <div style="font-size:2rem;font-weight:700;color:#0284c7;">{{ $fjbCount }}</div>
-                    <div style="font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.25rem;">FJB</div>
+                @foreach($allCompanies as $i => $co)
+                @php $clr = $coColors[$i % count($coColors)]; $cnt = $companyCounts[$co->code] ?? 0; @endphp
+                <div class="co-stat-box" onclick="openCompanyStaffModal('{{ $co->code }}', '{{ addslashes($co->name) }}')" style="background:{{ $clr['bg'] }};border:1px solid {{ $clr['text'] }}33;border-radius:8px;padding:1rem;text-align:center;cursor:pointer;">
+                    <div style="font-size:2rem;font-weight:700;color:{{ $clr['text'] }};">{{ $cnt }}</div>
+                    <div style="font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.25rem;">{{ $co->code }}</div>
                 </div>
-                <div class="co-stat-box" onclick="openCompanyStaffModal('FBSB', 'FGV Bulkers Sdn Bhd')" style="background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.2);border-radius:8px;padding:1rem;text-align:center;cursor:pointer;">
-                    <div style="font-size:2rem;font-weight:700;color:#16a34a;">{{ $fbsbCount }}</div>
-                    <div style="font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.25rem;">FBSB</div>
-                </div>
-                <div class="co-stat-box" onclick="openCompanyStaffModal('LBSB', 'Langsat Bulkers Sdn Bhd')" style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:1rem;text-align:center;cursor:pointer;">
-                    <div style="font-size:2rem;font-weight:700;color:#d97706;">{{ $lbsbCount }}</div>
-                    <div style="font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.25rem;">LBSB</div>
-                </div>
-                <div class="co-stat-box" onclick="openCompanyStaffModal('FGT', 'FGV Transport')" style="background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:1rem;text-align:center;cursor:pointer;">
-                    <div style="font-size:2rem;font-weight:700;color:#4f46e5;">{{ $fgtCount }}</div>
-                    <div style="font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.25rem;">FGT</div>
-                </div>
+                @endforeach
             </div>
             
             <h4 style="font-size:.85rem;font-weight:700;margin-bottom:.75rem;color:var(--text);">Top 8 Positions</h4>

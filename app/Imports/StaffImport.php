@@ -25,11 +25,16 @@ class StaffImport
         foreach ($rows as $i => $row) {
             $staffNo    = trim($row[$this->col('staff_no')] ?? '');
             $name       = trim($row[$this->col('name')] ?? '');
-            $dob        = $this->parseDate($row[$this->col('date_of_birth')] ?? null);
             $dateJoined = $this->parseDate($row[$this->col('date_joined')] ?? null);
+            $icNumber   = trim($row[$this->col('ic_number')] ?? '') ?: null;
 
-            if (!$staffNo || !$name || !$dob || !$dateJoined) {
-                $this->skipped[] = 'Row ' . ($i + 2) . ': missing required field(s) — Employee ID, Legal Full Name, Date of Birth, and Hire Date are all required';
+            // Derive DOB from IC if available, otherwise from DOB column
+            $dob = $icNumber
+                ? ($this->parseDobFromIc($icNumber) ?? $this->parseDate($row[$this->col('date_of_birth')] ?? null))
+                : $this->parseDate($row[$this->col('date_of_birth')] ?? null);
+
+            if (!$staffNo || !$name || !$dateJoined) {
+                $this->skipped[] = 'Row ' . ($i + 2) . ': missing required field(s) — Employee ID, Legal Full Name, and Hire Date are required';
                 continue;
             }
 
@@ -44,8 +49,7 @@ class StaffImport
                 );
             }
 
-            $company          = Company::where('code', $companyCode)->orWhere('name', $companyCode)->first();
-            $criticalPosition = in_array(strtolower(trim($row[$this->col('critical_position')] ?? '')), ['yes', '1', 'true']) ? 1 : 0;
+            $company = Company::where('code', $companyCode)->orWhere('name', $companyCode)->first();
 
             $staff = Staff::updateOrCreate(
                 ['staff_no' => $staffNo],
@@ -58,17 +62,16 @@ class StaffImport
                     'email'               => trim($row[$this->col('email')] ?? ''),
                     'date_joined'         => $dateJoined,
                     'date_of_birth'       => $dob,
+                    'ic_number'           => $icNumber,
+                    'employment_status'   => trim($row[$this->col('employment_status')] ?? '') ?: null,
+                    'last_promotion_date' => $this->parseDate($row[$this->col('last_promotion_date')] ?? null),
                     'gender'              => trim($row[$this->col('gender')] ?? ''),
-                    'operation_support'   => trim($row[$this->col('operation_support')] ?? ''),
                     'location'            => trim($row[$this->col('location')] ?? ''),
                     'phone_number'        => trim($row[$this->col('phone_number')] ?? ''),
                     'compensation_grade'  => trim($row[$this->col('compensation_grade')] ?? ''),
                     'management_level'    => trim($row[$this->col('management_level')] ?? ''),
                     'job_level'           => trim($row[$this->col('job_level')] ?? ''),
                     'job_category'        => trim($row[$this->col('job_category')] ?? ''),
-                    'job_family'          => trim($row[$this->col('job_family')] ?? ''),
-                    'job_classification'  => trim($row[$this->col('job_classification')] ?? ''),
-                    'critical_position'   => $criticalPosition,
                     'is_active'           => 1,
                 ]
             );
@@ -90,16 +93,44 @@ class StaffImport
         }
     }
 
+    private function parseDobFromIc(string $ic): ?string
+    {
+        $digits = preg_replace('/[^0-9]/', '', $ic);
+        if (strlen($digits) < 6) return null;
+        $yy   = (int) substr($digits, 0, 2);
+        $mm   = (int) substr($digits, 2, 2);
+        $dd   = (int) substr($digits, 4, 2);
+        $year = $yy > 30 ? 1900 + $yy : 2000 + $yy;
+        try {
+            return \Carbon\Carbon::createFromDate($year, $mm, $dd)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     private function parseDate($value): ?string
     {
-        if (!$value) return null;
+        if ($value === null || $value === '' || $value === 0) return null;
+
         if (is_numeric($value)) {
             try {
-                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value)->format('Y-m-d');
+                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $value)->format('Y-m-d');
             } catch (\Exception $e) {
                 return null;
             }
         }
+
+        $value = trim((string) $value);
+        if (!$value) return null;
+
+        // Try explicit formats common in Malaysian HR data (d/m/Y first)
+        foreach (['d/m/Y', 'd-m-Y', 'd/m/y', 'd.m.Y', 'Y-m-d', 'm/d/Y'] as $fmt) {
+            try {
+                $dt = \Carbon\Carbon::createFromFormat($fmt, $value);
+                if ($dt && $dt->format($fmt) === $value) return $dt->format('Y-m-d');
+            } catch (\Exception $e) {}
+        }
+
         try {
             return \Carbon\Carbon::parse($value)->format('Y-m-d');
         } catch (\Exception $e) {

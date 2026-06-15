@@ -47,6 +47,9 @@ class TrainingExport implements FromCollection, WithHeadings, WithTitle, ShouldA
         if (!empty($this->filters['company'])) {
             $query->where('departments.company', $this->filters['company']);
         }
+        if (!empty($this->filters['course_id'])) {
+            $query->where('training_attendances.course_id', $this->filters['course_id']);
+        }
 
         return $query->select(
                 'training_courses.start_date',

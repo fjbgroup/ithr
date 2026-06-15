@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::table('staff', function (Blueprint $table) {
             $table->string('company', 200)->default('')->change();
             $table->string('company_id', 200)->nullable()->change();
-            $table->string('operation_support', 100)->nullable()->change();
             $table->string('gender', 50)->nullable()->change();
         });
     }
@@ -21,7 +20,6 @@ return new class extends Migration
         Schema::table('staff', function (Blueprint $table) {
             $table->string('company', 50)->default('FJB')->change();
             $table->string('company_id', 50)->nullable()->change();
-            $table->string('operation_support', 20)->nullable()->change();
             $table->string('gender', 10)->nullable()->change();
         });
     }

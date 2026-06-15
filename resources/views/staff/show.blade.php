@@ -25,57 +25,109 @@
 <!-- Request Update Modal -->
 <div class="modal" id="requestUpdateModal">
     <div class="modal-box" style="max-width:520px;">
-        <div class="modal-header">
-            <h3>Request Information Update</h3>
-            <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-header ur-modal-header">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+                <div class="ur-header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h3 style="color:white;margin:0;font-size:.95rem;">Request Information Update</h3>
+                    <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.1rem 0 0;">
+                        Staff No: <strong style="color:rgba(255,255,255,.9);">{{ $staff->staff_no }}</strong>
+                    </p>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeModal()" style="color:rgba(255,255,255,.6);font-size:1.4rem;">×</button>
         </div>
+
         <form action="{{ route('requests.store') }}" method="POST">
             @csrf
             <input type="hidden" name="record_type" id="ur_record_type" value="Staff Data">
             <input type="hidden" name="record_id" id="ur_record_id" value="{{ $staff->id }}">
             <input type="hidden" name="record_reference" id="ur_record_reference" value="{{ $staff->staff_no }}">
-            
+
             <div class="modal-body">
-                <p id="ur_description" style="font-size:.85rem; color:var(--muted); margin-bottom:1rem;">
-                    Select the fields you want to update and provide the new information below.
-                </p>
-                <div id="ur_display_ref_wrap" style="display:none; margin-bottom:1rem;">
-                    <span style="font-size:.7rem; font-weight:700; color:var(--muted); text-transform:uppercase;">Record:</span>
-                    <div id="ur_display_ref" style="font-weight:600; font-size:.85rem;"></div>
+
+                <!-- Context banner for Training / Family records -->
+                <div id="ur_context_banner" style="display:none;background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;align-items:center;gap:.6rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <div style="font-size:.8rem;">
+                        <span style="font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.68rem;letter-spacing:.04em;">Record</span>
+                        <span id="ur_display_ref" style="display:block;font-weight:600;color:var(--navy);font-size:.85rem;"></span>
+                    </div>
                 </div>
-                
-                <div id="ur_fields_group" class="form-group">
-                    <label>Fields to Update</label>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-top:.5rem;">
-                        <label style="font-weight:400; display:flex; align-items:center; gap:.5rem;">
-                            <input type="checkbox" name="fields[]" value="Legal Name"> Legal Name
+
+                <p id="ur_description" style="font-size:.84rem;color:var(--muted);margin:0;line-height:1.5;">
+                    Select the fields you'd like corrected, then describe the right information below.
+                </p>
+
+                <!-- Field chip selectors -->
+                <div id="ur_fields_group">
+                    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.55rem;">Fields to Update</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+                        <label class="ur-chip">
+                            <input type="checkbox" name="fields[]" value="Legal Name">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                Legal Name
+                            </span>
                         </label>
-                        <label style="font-weight:400; display:flex; align-items:center; gap:.5rem;">
-                            <input type="checkbox" name="fields[]" value="Date of Birth"> Date of Birth
+                        <label class="ur-chip">
+                            <input type="checkbox" name="fields[]" value="Date of Birth">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                Date of Birth
+                            </span>
                         </label>
-                        <label style="font-weight:400; display:flex; align-items:center; gap:.5rem;">
-                            <input type="checkbox" name="fields[]" value="Gender"> Gender
+                        <label class="ur-chip">
+                            <input type="checkbox" name="fields[]" value="Gender">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M8 14s-4 1.5-4 5h16c0-3.5-4-5-4-5"/></svg>
+                                Gender
+                            </span>
                         </label>
-                        <label style="font-weight:400; display:flex; align-items:center; gap:.5rem;">
-                            <input type="checkbox" name="fields[]" value="Email"> Email
+                        <label class="ur-chip">
+                            <input type="checkbox" name="fields[]" value="Email">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                Email
+                            </span>
                         </label>
-                        <label style="font-weight:400; display:flex; align-items:center; gap:.5rem;">
-                            <input type="checkbox" name="fields[]" value="Position"> Position
+                        <label class="ur-chip">
+                            <input type="checkbox" name="fields[]" value="Position">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                Position
+                            </span>
                         </label>
-                        <label style="font-weight:400; display:flex; align-items:center; gap:.5rem;">
-                            <input type="checkbox" name="fields[]" value="Location"> Location
+                        <label class="ur-chip">
+                            <input type="checkbox" name="fields[]" value="Location">
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Location
+                            </span>
                         </label>
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-top:1rem;">
-                    <label>Message / Correct Information <span style="color:var(--danger)">*</span></label>
-                    <textarea name="message" rows="4" required placeholder="Please provide the correct information or details about the requested change..."></textarea>
+                <div class="form-group" style="margin:0;">
+                    <label>
+                        Correct Information
+                        <span style="color:var(--danger);margin-left:2px;">*</span>
+                    </label>
+                    <textarea name="message" rows="4" required
+                        style="resize:vertical;min-height:96px;"
+                        placeholder="Describe the correct information or the change you need. Be as specific as possible."></textarea>
                 </div>
+
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit Request</button>
+                <button type="submit" class="btn btn-primary" style="display:flex;align-items:center;gap:.4rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    Submit Request
+                </button>
             </div>
         </form>
     </div>
@@ -131,24 +183,40 @@
                 <div class="card-body p-4">
                     <div class="detail-grid">
                         <div class="detail-item">
+                            <label>IC Number</label>
+                            <div>{{ $staff->ic_number ?? '—' }}</div>
+                        </div>
+                        <div class="detail-item">
                             <label>Date of Birth</label>
                             <div>{{ $staff->date_of_birth ? date('d M Y', strtotime($staff->date_of_birth)) : '—' }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Age</label>
+                            <div>{{ $staff->age !== null ? $staff->age . ' years' : '—' }}</div>
                         </div>
                         <div class="detail-item">
                             <label>Gender</label>
                             <div>{{ $staff->gender ?? '—' }}</div>
                         </div>
                         <div class="detail-item">
-                            <label>Operation / Support</label>
-                            <div>{{ $staff->operation_support ?? '—' }}</div>
+                            <label>Date Joined</label>
+                            <div>{{ $staff->date_joined ? date('d M Y', strtotime($staff->date_joined)) : '—' }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Years of Service</label>
+                            <div>{{ $staff->yos ?? '—' }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Employment Status</label>
+                            <div>{{ $staff->employment_status ?? '—' }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Last Promotion Date</label>
+                            <div>{{ $staff->last_promotion_date ? date('d M Y', strtotime($staff->last_promotion_date)) : '—' }}</div>
                         </div>
                         <div class="detail-item">
                             <label>Location</label>
                             <div>{{ $staff->location ?? '—' }}</div>
-                        </div>
-                        <div class="detail-item">
-                            <label>Critical Position</label>
-                            <div>{!! $staff->critical_position ? '<span class="status-badge status-rejected">Yes</span>' : 'No' !!}</div>
                         </div>
                         <div class="detail-item">
                             <label>Company ID</label>
@@ -174,14 +242,6 @@
                             <label>Job Category</label>
                             <div>{{ $staff->job_category ?? '—' }}</div>
                         </div>
-                        <div class="detail-item">
-                            <label>Job Family</label>
-                            <div>{{ $staff->job_family ?? '—' }}</div>
-                        </div>
-                        <div class="detail-item">
-                            <label>Job Classification</label>
-                            <div>{{ $staff->job_classification ?? '—' }}</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -196,7 +256,7 @@
                         <tbody>
                             @forelse($staff->familyMembers as $fm)
                                 <tr>
-                                    <td><strong>{{ $fm->name }}</strong></td>
+                                    <td><strong>{{ $fm->family_member_name }}</strong></td>
                                     <td>{{ $fm->relationship }}</td>
                                     <td>{{ $fm->date_of_birth ? date('d M Y', strtotime($fm->date_of_birth)) : '—' }}</td>
                                     <td>{{ $fm->phone_number ?? '—' }}</td>
@@ -364,6 +424,37 @@
     .profile-layout { grid-template-columns: 1fr; }
     .profile-sidebar { max-width: 400px; margin: 0 auto; width: 100%; }
 }
+
+/* ---- Request Update Modal ---- */
+.ur-modal-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
+    border-radius: 14px 14px 0 0;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+}
+.ur-header-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.ur-chip { cursor: pointer; }
+.ur-chip input[type="checkbox"] { display: none; }
+.ur-chip span {
+    display: inline-flex; align-items: center; gap: .35rem;
+    padding: .38rem .75rem;
+    border-radius: 99px;
+    border: 1.5px solid var(--border);
+    font-size: .78rem; font-weight: 500;
+    color: var(--text); background: var(--surface);
+    transition: background .13s, border-color .13s, color .13s;
+    user-select: none; white-space: nowrap;
+}
+.ur-chip:hover span { border-color: var(--navy); color: var(--navy); }
+.ur-chip input:checked + span {
+    background: var(--navy); border-color: var(--navy); color: white;
+}
+.ur-chip input:checked + span svg { stroke: white; }
 </style>
 @endsection
 
@@ -372,29 +463,34 @@
 function openRequestModal(type, id, ref) {
     document.getElementById('ur_record_type').value = type;
     if (id) document.getElementById('ur_record_id').value = id;
+
+    const banner   = document.getElementById('ur_context_banner');
+    const refLabel = document.getElementById('ur_display_ref');
+    const desc     = document.getElementById('ur_description');
+    const fields   = document.getElementById('ur_fields_group');
+
     if (ref) {
         document.getElementById('ur_record_reference').value = ref;
-        document.getElementById('ur_display_ref').textContent = ref;
-        document.getElementById('ur_display_ref_wrap').style.display = 'block';
+        refLabel.textContent = ref;
+        banner.style.display = 'flex';
     } else {
         document.getElementById('ur_record_reference').value = '{{ $staff->staff_no }}';
-        document.getElementById('ur_display_ref_wrap').style.display = 'none';
+        banner.style.display = 'none';
     }
-    
-    const desc = document.getElementById('ur_description');
-    const fieldsGroup = document.getElementById('ur_fields_group');
-    
+
     if (type === 'Training Record') {
-        desc.textContent = 'Please specify what is incorrect in this training record and provide the correct details.';
-        fieldsGroup.style.display = 'none';
+        desc.textContent = 'Describe what is incorrect in this training record and provide the correct details.';
+        fields.style.display = 'none';
     } else if (type === 'Family Information') {
-        desc.textContent = 'Please specify the family member and the information that needs to be updated.';
-        fieldsGroup.style.display = 'none';
+        desc.textContent = 'Specify the family member and the information that needs to be updated.';
+        fields.style.display = 'none';
     } else {
-        desc.textContent = 'Select the fields you want to update and provide the new information below.';
-        fieldsGroup.style.display = 'block';
+        desc.textContent = "Select the fields you'd like corrected, then describe the right information below.";
+        fields.style.display = 'block';
+        // Reset checkboxes on reopen
+        fields.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
     }
-    
+
     openModal('requestUpdateModal');
 }
 

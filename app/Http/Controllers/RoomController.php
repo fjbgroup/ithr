@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Services\AuditLogger;
 use Carbon\Carbon;
 
 class RoomController extends Controller
@@ -248,6 +249,11 @@ class RoomController extends Controller
             }
         }
 
+        AuditLogger::log('create', 'rooms',
+            'Created meeting room "' . $room->name . '".',
+            ['room_id' => $room->id, 'capacity' => $room->capacity]
+        );
+
         return back()->with('success', 'Room added successfully.');
     }
 
@@ -285,6 +291,11 @@ class RoomController extends Controller
             }
         }
 
+        AuditLogger::log('update', 'rooms',
+            'Updated meeting room "' . $room->name . '".',
+            ['room_id' => $room->id, 'capacity' => $room->capacity]
+        );
+
         return back()->with('success', 'Room updated successfully.');
     }
 
@@ -293,6 +304,11 @@ class RoomController extends Controller
         if (!Auth::user()->isAdminIT()) {
             return back()->with('error', 'Unauthorized.');
         }
+
+        AuditLogger::log('delete', 'rooms',
+            'Deleted meeting room "' . $room->name . '".',
+            ['deleted_room_id' => $room->id]
+        );
 
         $room->bookings()->delete();
         $room->pics()->detach();

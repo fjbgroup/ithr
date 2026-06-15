@@ -11,7 +11,9 @@
     <div style="position: absolute; left: -1.5rem; top: 1.5rem; width: 1.5rem; border-top: 2px dashed #cbd5e1;"></div>
     <div style="position: absolute; left: -1.5rem; top: -1rem; height: 2.5rem; border-left: 2px dashed #cbd5e1;"></div>
     @endif
+    @canwrite
     <input type="checkbox" class="fc-checkbox" value="{{ $r->id }}" data-staff="{{ $r->staff_id }}" onclick="event.stopPropagation()" onchange="fcOnCheck(this)" style="width:16px;height:16px;flex-shrink:0;margin-top:11px;cursor:pointer;accent-color:#6366f1;">
+    @endcanwrite
     <div class="fc-avatar" style="background:{{ $relColor }}1a;color:{{ $relColor }}; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">{{ $initials }}</div>
     <div class="fc-body" style="flex: 1;">
         <div class="fc-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
@@ -41,8 +43,10 @@
             </div>
         </div>
     </div>
+    @canwrite
     <div class="fc-actions" style="display: flex; gap: 0.4rem;">
         <button type="button" class="btn btn-sm btn-outline" onclick='event.preventDefault(); event.stopPropagation(); editFamily({!! json_encode($r) !!})'>Edit</button>
         <button type="button" class="btn btn-sm btn-danger" onclick="event.preventDefault(); event.stopPropagation(); confirmFamilyDelete({{ $r->id }})">Delete</button>
     </div>
+    @endcanwrite
 </div>

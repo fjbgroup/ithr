@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Position;
-use App\Models\SystemSetting;
 use App\Models\TrainingCourse;
 use App\Models\TransportMode;
 use App\Models\Staff;
@@ -18,7 +17,7 @@ class MasterDataController extends Controller
     public function index(Request $request)
     {
         $activeTab = $request->query('tab', 'departments');
-        $validTabs = ['departments', 'companies', 'courses', 'positions', 'transport', 'settings'];
+        $validTabs = ['departments', 'companies', 'courses', 'positions', 'transport'];
         if (!in_array($activeTab, $validTabs)) {
             $activeTab = 'departments';
         }
@@ -33,7 +32,6 @@ class MasterDataController extends Controller
             'courses'     => TrainingCourse::count(),
             'positions'   => Position::count(),
             'transport'   => TransportMode::count(),
-            'settings'    => SystemSetting::count(),
         ];
 
         $tabLabels = [
@@ -42,7 +40,6 @@ class MasterDataController extends Controller
             'courses'     => 'Training Course',
             'positions'   => 'Position',
             'transport'   => 'Transport Mode',
-            'settings'    => 'System Setting',
         ];
 
         if ($activeTab === 'departments') {
@@ -104,13 +101,6 @@ class MasterDataController extends Controller
                 $tm->usage_count = DB::table('business_travel')->where('transport', $tm->name)->count();
                 return $tm;
             });
-        } elseif ($activeTab === 'settings') {
-            $query = SystemSetting::query();
-            if ($search) {
-                $query->where('setting_key', 'LIKE', "%$search%")
-                      ->orWhere('setting_value', 'LIKE', "%$search%");
-            }
-            $data['rows'] = $query->orderBy('setting_key')->get();
         }
 
         $allCompanies = Company::orderBy('code')->get();
@@ -153,16 +143,55 @@ class MasterDataController extends Controller
             Department::findOrFail($id)->update($request->only(['name', 'company']));
             AuditLogger::log('update', 'master_data', 'Updated department "' . $request->name . '" #' . $id . '.');
         } elseif ($tab === 'companies') {
-            Company::findOrFail($id)->update($request->only(['code', 'name']));
-            AuditLogger::log('update', 'master_data', 'Updated company "' . $request->name . '" #' . $id . '.');
+            $company = Company::findOrFail($id);
+            $oldCode = $company->code;
+            $newCode = strtoupper(trim($request->input('code')));
+
+            DB::transaction(function () use ($company, $request, $oldCode, $newCode, $id) {
+                $request->merge(['code' => $newCode]);
+                $company->update($request->only(['code', 'name']));
+
+                if ($oldCode !== $newCode) {
+                    $staffCount = Staff::where('company', $oldCode)->count();
+                    $userCount  = DB::table('users')->where('company', $oldCode)->count();
+                    $deptCount  = Department::where('company', $oldCode)->count();
+                    $courseCount = TrainingCourse::where('company', $oldCode)->count();
+
+                    Staff::where('company', $oldCode)->update(['company' => $newCode]);
+                    DB::table('users')->where('company', $oldCode)->update(['company' => $newCode]);
+                    Department::where('company', $oldCode)->update(['company' => $newCode]);
+                    TrainingCourse::where('company', $oldCode)->update(['company' => $newCode]);
+
+                    AuditLogger::log('update', 'master_data',
+                        'Changed company code "' . $oldCode . '" → "' . $newCode . '" (name: "' . $request->name . '"). ' .
+                        'Cascaded to: ' . $staffCount . ' staff, ' . $userCount . ' users, ' .
+                        $deptCount . ' departments, ' . $courseCount . ' courses.'
+                    );
+                } else {
+                    AuditLogger::log('update', 'master_data', 'Updated company "' . $request->name . '" #' . $id . '.');
+                }
+            });
         } elseif ($tab === 'courses') {
             TrainingCourse::findOrFail($id)->update($request->only(['code', 'title', 'training_type', 'company', 'start_date']));
             AuditLogger::log('update', 'master_data', 'Updated training course "' . $request->title . '" #' . $id . '.');
         } elseif ($tab === 'positions') {
-            Position::findOrFail($id)->update($request->only(['title']));
+            $pos = Position::findOrFail($id);
+            $oldTitle = $pos->title;
+            $newTitle = $request->input('title');
+            $pos->update($request->only(['title']));
+            if ($oldTitle !== $newTitle) {
+                Staff::where('position', $oldTitle)->update(['position' => $newTitle]);
+                DB::table('users')->where('position', $oldTitle)->update(['position' => $newTitle]);
+            }
             AuditLogger::log('update', 'master_data', 'Updated position "' . $request->title . '" #' . $id . '.');
         } elseif ($tab === 'transport') {
-            TransportMode::findOrFail($id)->update($request->only(['name']));
+            $tm = TransportMode::findOrFail($id);
+            $oldName = $tm->name;
+            $newName = $request->input('name');
+            $tm->update($request->only(['name']));
+            if ($oldName !== $newName) {
+                DB::table('business_travel')->where('transport', $oldName)->update(['transport' => $newName]);
+            }
             AuditLogger::log('update', 'master_data', 'Updated transport mode "' . $request->name . '" #' . $id . '.');
         } elseif ($tab === 'settings') {
             SystemSetting::findOrFail($id)->update($request->only(['setting_key', 'setting_value']));

@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use App\Models\RoomBooking;
 use App\Models\UpdateRequest;
-use App\Models\SystemSetting;
 
 class User extends Authenticatable
 {
@@ -105,17 +104,12 @@ class User extends Authenticatable
         return $this->role === 'staff';
     }
 
-    public function isModuleEnabled(string $module): bool
+    /**
+     * Whether this user may modify data. CEO is read-only.
+     */
+    public function canWrite(): bool
     {
-        // Admin IT and CEO always see all modules
-        if ($this->isAdminIT() || $this->isCeo()) return true;
-
-        try {
-            $setting = SystemSetting::where('setting_key', 'module_' . $module)->first();
-            return $setting ? (bool)$setting->setting_value : true;
-        } catch (\Exception $e) {
-            return true;
-        }
+        return !$this->isCeo();
     }
 
     public function getRoleLabel(): string

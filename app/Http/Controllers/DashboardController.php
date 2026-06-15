@@ -39,10 +39,11 @@ class DashboardController extends Controller
             // Monthly trend (last 6 months)
             $monthTrend = TrainingAttendance::join('training_courses', 'training_attendances.course_id', '=', 'training_courses.id')
                 ->where('training_courses.start_date', '>=', now()->subMonths(5)->startOfMonth())
+                ->where('training_courses.start_date', '<=', now()->endOfMonth())
                 ->select(
                     DB::raw("DATE_FORMAT(training_courses.start_date, '%b') as lbl"),
                     DB::raw("DATE_FORMAT(training_courses.start_date, '%Y-%m') as ym"),
-                    DB::raw("COUNT(*) as cnt")
+                    DB::raw("COUNT(DISTINCT training_courses.id) as cnt")
                 )->groupBy('ym', 'lbl')->orderBy('ym')->get();
 
             // Top 5 departments

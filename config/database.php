@@ -84,6 +84,44 @@ return [
             ]) : [],
         ],
 
+        'wt_mysql' => [
+            'driver' => 'mysql',
+            'host' => env('WT_DB_HOST', '127.0.0.1'),
+            'port' => env('WT_DB_PORT', '3306'),
+            'database' => env('WT_DB_DATABASE', 'inventory_walkietalkie_repaired'),
+            'username' => env('WT_DB_USERNAME', 'root'),
+            'password' => env('WT_DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'it_mysql' => [
+            'driver' => 'mysql',
+            'host' => env('IT_DB_HOST', '127.0.0.1'),
+            'port' => env('IT_DB_PORT', '3306'),
+            'database' => env('IT_DB_DATABASE', 'fjb_inventory'),
+            'username' => env('IT_DB_USERNAME', 'root'),
+            'password' => env('IT_DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),

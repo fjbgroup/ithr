@@ -102,16 +102,15 @@ class StaffController extends Controller
             'email' => 'nullable|email|max:255',
             'date_joined' => 'nullable|date',
             'date_of_birth' => 'nullable|date',
+            'ic_number' => 'nullable|string|max:20',
+            'employment_status' => 'nullable|string|max:50',
+            'last_promotion_date' => 'nullable|date',
             'gender' => 'nullable|string',
-            'operation_support' => 'nullable|string',
             'location' => 'nullable|string',
-            'critical_position' => 'nullable|boolean',
             'compensation_grade' => 'nullable|string',
             'management_level' => 'nullable|string',
             'job_level' => 'nullable|string',
             'job_category' => 'nullable|string',
-            'job_family' => 'nullable|string',
-            'job_classification' => 'nullable|string',
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -155,16 +154,15 @@ class StaffController extends Controller
             'email' => 'nullable|email|max:255',
             'date_joined' => 'nullable|date',
             'date_of_birth' => 'nullable|date',
+            'ic_number' => 'nullable|string|max:20',
+            'employment_status' => 'nullable|string|max:50',
+            'last_promotion_date' => 'nullable|date',
             'gender' => 'nullable|string',
-            'operation_support' => 'nullable|string',
             'location' => 'nullable|string',
-            'critical_position' => 'nullable|boolean',
             'compensation_grade' => 'nullable|string',
             'management_level' => 'nullable|string',
             'job_level' => 'nullable|string',
             'job_category' => 'nullable|string',
-            'job_family' => 'nullable|string',
-            'job_classification' => 'nullable|string',
         ]);
 
         DB::transaction(function () use ($staff, $validated) {
@@ -355,7 +353,7 @@ class StaffController extends Controller
     {
         $headers = [
             'Employee ID', 'Legal Full Name', 'Date of Birth', 'Gender',
-            'Operation/Support', 'Age', 'Location', 'Critical Position',
+            'Age', 'Location',
             'Position', 'Compensation Grade', 'Management Level',
             'Job Level - Primary Position', 'Job Category', 'Job Family',
             'Job Classifications', 'Company', 'Company - ID', 'Yos',

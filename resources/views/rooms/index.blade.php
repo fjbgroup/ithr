@@ -71,6 +71,8 @@
     .clock-display { background:#fff; border:1.5px solid var(--border); border-radius:10px; padding:.65rem .9rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:.5rem; transition:all .2s; }
     .clock-display:hover { border-color:#3b82f6; background:#f8fafc; }
     .clock-display.open  { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+    .clock-display.locked { opacity:.5; cursor:not-allowed; background:#f8fafc; }
+    .clock-display.locked:hover { border-color:var(--border); background:#f8fafc; }
     .clock-lbl  { font-size:.6rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.1rem; }
     .clock-val  { font-size:1.3rem; font-weight:800; color:#1e293b; font-variant-numeric:tabular-nums; line-height:1; }
     .clock-val.unset { color:#cbd5e1; }
@@ -123,7 +125,13 @@
 
     /* Mobile overrides — 768px */
     @media (max-width: 768px) {
+        /* Keep the booking modal strictly within the viewport — no sideways scroll */
+        #rbDashBookModal .modal-box { max-width: 100% !important; overflow-x: hidden; }
+        #rbDashBookModal .modal-body { padding: 1rem !important; }
         .dash-modal-body { flex-direction: column !important; gap: 1rem !important; }
+        /* min-width:0 lets flex children shrink below their content width instead of overflowing */
+        .dash-form-panel, .dash-cart-panel, .clock-col, .clock-display { min-width: 0 !important; }
+        .dash-form-panel > *, .dash-cart-panel > * { max-width: 100%; }
         .dash-form-row { flex-direction: column !important; gap: 0.75rem !important; }
         .dash-room-grid { grid-template-columns: 1fr !important; gap: 0.4rem !important; }
         .rb-room-option {
@@ -834,14 +842,16 @@
         </div>
 
         <div style="margin-left:auto; display:flex; gap:.5rem;">
-            @if($viewMode === 'month')
+            @if($viewMode === 'month' && (Auth::user()->isAdmin() || Auth::user()->isCeo()))
             <button class="btn btn-ghost btn-sm" onclick="openMonthReport()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:.25rem;vertical-align:middle;"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10H12z"/></svg>Monthly Report
             </button>
             @endif
+            @canwrite
             <button class="btn btn-primary btn-sm" onclick="openRoomBookingModal('', '')">
                 + New Booking
             </button>
+            @endcanwrite
             @if($viewMode === 'manage' && Auth::user()->isAdminIT())
                 <button class="btn btn-navy btn-sm" onclick="openRoomMgmtModal()">+ Add Room</button>
             @endif
@@ -899,8 +909,8 @@
                             <div class="rb-booking-bar st-{{ $b->status }}" 
                                  style="left: {{ $left }}%; width: {{ $width }}%;"
                                  onclick="event.stopPropagation(); openEditModal('{{ $b->id }}', '{{ $b->room_id }}', '{{ $b->booking_date }}', '{{ substr($b->start_time, 0, 5) }}', '{{ substr($b->end_time, 0, 5) }}', '{{ addslashes($b->purpose) }}', '{{ $b->attendees }}', '{{ $b->status }}')">
-                                <span class="rb-bar-title"><span class="rb-status-dot"></span>{{ $b->purpose }}</span>
-                                <span class="rb-bar-time">{{ substr($b->start_time, 0, 5) }} - {{ substr($b->end_time, 0, 5) }} • {{ $b->booked_by_name }}</span>
+                                <span class="rb-bar-title"><span class="rb-status-dot"></span>{{ $b->purpose }}@if($b->is_full_day) <span style="font-size:.6rem; font-weight:800; text-transform:uppercase; letter-spacing:.03em; opacity:.85;">• Full Day</span>@endif</span>
+                                <span class="rb-bar-time">{{ $b->is_full_day ? 'Full Day' : substr($b->start_time, 0, 5) . ' - ' . substr($b->end_time, 0, 5) }} • {{ $b->booked_by_name }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -941,7 +951,7 @@
                 <div class="rb-mob-chip st-{{ $b->status }}"
                      onclick="event.stopPropagation(); openEditModal('{{ $b->id }}', '{{ $b->room_id }}', '{{ $b->booking_date }}', '{{ substr($b->start_time, 0, 5) }}', '{{ substr($b->end_time, 0, 5) }}', '{{ addslashes($b->purpose) }}', '{{ $b->attendees }}', '{{ $b->status }}')">
                     <span class="rb-mob-chip-dot"></span>
-                    <span class="rb-mob-chip-time">{{ substr($b->start_time,0,5) }}–{{ substr($b->end_time,0,5) }}</span>
+                    <span class="rb-mob-chip-time">{{ $b->is_full_day ? 'Full Day' : substr($b->start_time,0,5) . '–' . substr($b->end_time,0,5) }}</span>
                     <span class="rb-mob-chip-purpose">{{ $b->purpose }}</span>
                     <span class="rb-mob-chip-booker">{{ Str::limit($b->booked_by_name, 14) }}</span>
                 </div>
@@ -1119,8 +1129,12 @@
                             </td>
                             <td class="rb-td-actions" style="padding:1.25rem; text-align:right;">
                                 @if(!$isPast && in_array($b->status, ['Pending', 'Approved', 'EditRequested']))
+                                    @canwrite
                                     <button class="btn btn-ghost btn-sm" onclick="openEditModal('{{ $b->id }}', '{{ $b->room_id }}', '{{ $b->booking_date }}', '{{ substr($b->start_time, 0, 5) }}', '{{ substr($b->end_time, 0, 5) }}', '{{ addslashes($b->purpose) }}', '{{ $b->attendees }}', '{{ $b->status }}')">Edit</button>
                                     <button class="btn btn-ghost btn-sm" style="color:#dc2626;" onclick="openRequestCancelModal('{{ $b->id }}', '{{ addslashes($b->purpose) }}')">Cancel</button>
+                                    @else
+                                    <span style="font-size: .75rem; color: #94a3b8; font-weight: 600; font-style: italic;">No actions</span>
+                                    @endcanwrite
                                 @else
                                     <span style="font-size: .75rem; color: #94a3b8; font-weight: 600; font-style: italic;">No actions</span>
                                 @endif
@@ -1131,7 +1145,7 @@
                             <td colspan="4" style="padding: 4rem 1.25rem; text-align: center; color: #94a3b8;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: .5;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                 <p style="font-size: 1rem; font-weight: 600;">You haven't made any bookings yet.</p>
-                                <button class="btn btn-primary btn-sm mt-3" onclick="openRoomBookingModal('', '')">Create Your First Booking</button>
+                                @canwrite<button class="btn btn-primary btn-sm mt-3" onclick="openRoomBookingModal('', '')">Create Your First Booking</button>@endcanwrite
                             </td>
                         </tr>
                         @endforelse
@@ -1219,6 +1233,7 @@
 {{-- END MOBILE BOTTOM NAVIGATION --}}
 
 {{-- FLOATING ACTION BUTTON (hidden on desktop via CSS) --}}
+@canwrite
 <button class="rb-fab" onclick="openRoomBookingModal('', '')" aria-label="New Booking">
     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2.5"
@@ -1227,6 +1242,7 @@
         <line x1="5" y1="12" x2="19" y2="12"/>
     </svg>
 </button>
+@endcanwrite
 {{-- END FAB --}}
 
 <!-- MODALS -->
@@ -1260,7 +1276,7 @@
                     <div class="dash-form-row">
                         <div style="flex:1;">
                             <label class="form-label">Booking Date</label>
-                            <input type="date" id="rbDashDate" class="form-control" value="{{ $viewDate }}" min="{{ date('Y-m-d') }}" onchange="dashCheckPastDate(); dashRefreshOccupied(); buildTimePicker('start'); buildTimePicker('end');">
+                            <input type="date" id="rbDashDate" class="form-control" value="{{ $viewDate }}" min="{{ date('Y-m-d') }}" onchange="dashCheckPastDate(); dashRefreshOccupied(); buildTimePicker('start'); buildTimePicker('end'); dashUpdateFullDay(); dashSyncEndDateMin();">
                             <div id="rbDashPastWarn" style="display:none; color:#dc2626; font-size:.72rem; font-weight:600; margin-top:.3rem;">⚠️ Past day cannot book</div>
                         </div>
                         <div style="flex:1;">
@@ -1270,7 +1286,21 @@
                         </div>
                     </div>
 
-                    <div class="clock-picker">
+                    <input type="hidden" name="is_full_day" id="rbDashFullDayInput" value="0">
+                    <div id="rbDashFullDayWrap" style="display:flex; flex-direction:column; gap:.3rem; padding:.6rem .75rem; border:1.5px solid var(--border); border-radius:8px; background:#f8fafc;">
+                        <label id="rbDashFullDayLabel" style="display:flex; align-items:center; gap:.5rem; cursor:pointer; font-weight:700; font-size:.82rem; color:var(--navy);">
+                            <input type="checkbox" id="rbDashFullDay" onchange="dashToggleFullDay()" style="width:1rem; height:1rem; cursor:pointer;">
+                            Full Day <span style="font-weight:600; color:#64748b;">(07:00 – 20:00)</span>
+                        </label>
+                        <div id="rbDashFullDayHint" style="font-size:.7rem; color:#94a3b8;">Available only for future dates with no existing bookings.</div>
+                        <div id="rbDashEndDateWrap" style="display:none; margin-top:.5rem; padding-top:.5rem; border-top:1px dashed var(--border);">
+                            <label style="font-size:.72rem; font-weight:700; color:var(--navy); display:block; margin-bottom:.3rem;">End Date <span style="font-weight:400; color:#94a3b8;">(optional — to book multiple days)</span></label>
+                            <input type="date" id="rbDashEndDate" class="form-control" style="font-size:.82rem;" onchange="dashUpdateMultiDayHint()">
+                            <div id="rbDashMultiDayHint" style="font-size:.68rem; color:#475569; margin-top:.28rem; font-weight:600;"></div>
+                        </div>
+                    </div>
+
+                    <div class="clock-picker" id="rbDashClockWrap">
                         <div class="clock-col">
                             <label class="form-label">Start Time</label>
                             <div class="clock-display" id="startDisplay" onclick="toggleClock('start')">
@@ -1598,7 +1628,7 @@
 
 <form id="confirmActionForm" method="POST" style="display:none;">@csrf</form>
 
-@if($viewMode === 'month')
+@if($viewMode === 'month' && (Auth::user()->isAdmin() || Auth::user()->isCeo()))
 @php
     $topBookers = $allRangeBookings
         ->groupBy('booked_by_name')
@@ -1902,12 +1932,122 @@
         dashCheckConflict();
         dashRefreshOccupied();
         buildTimePicker('start'); buildTimePicker('end');
+        dashUpdateFullDay();
         dashUpdateSummary();
     }
 
     function dashCheckPastDate() {
         const date = document.getElementById('rbDashDate').value;
         document.getElementById('rbDashPastWarn').style.display = gIsPastDate(date) ? 'block' : 'none';
+    }
+
+    function dashDayIsClear() {
+        const date = document.getElementById('rbDashDate').value;
+        if (!dashRoomId || !date) return false;
+        const dbBusy = dashBookings.some(b => b.room_id == dashRoomId && b.booking_date === date && b.status !== 'Rejected');
+        const cartBusy = dashCart.some(s => s.room_id == dashRoomId && s.booking_date === date);
+        return !dbBusy && !cartBusy;
+    }
+
+    function dashCanFullDay() {
+        const date = document.getElementById('rbDashDate').value;
+        return !!dashRoomId && !!date && !gIsPastDate(date) && !gIsToday(date) && dashDayIsClear();
+    }
+
+    function dashUpdateFullDay() {
+        const cb = document.getElementById('rbDashFullDay');
+        const hint = document.getElementById('rbDashFullDayHint');
+        const eligible = dashCanFullDay();
+        cb.disabled = !eligible;
+        document.getElementById('rbDashFullDayLabel').style.opacity = eligible ? '1' : '.5';
+        // If it was checked but is no longer eligible, revert.
+        if (cb.checked && !eligible) {
+            cb.checked = false;
+            dashToggleFullDay();
+        }
+        if (!cb.checked) {
+            hint.textContent = eligible
+                ? 'Reserves the whole day (07:00 – 20:00) for this room.'
+                : 'Available only for future dates with no existing bookings.';
+        }
+    }
+
+    function dashToggleFullDay() {
+        const cb = document.getElementById('rbDashFullDay');
+        const clockWrap = document.getElementById('rbDashClockWrap');
+        const hidden = document.getElementById('rbDashFullDayInput');
+        const endDateWrap = document.getElementById('rbDashEndDateWrap');
+        const endDateInput = document.getElementById('rbDashEndDate');
+        if (cb.checked) {
+            hidden.value = '1';
+            clockState.start = { h: 7, m: 0 };
+            clockState.end = { h: 20, m: 0 };
+            document.getElementById('rbDashStart').value = '07:00';
+            document.getElementById('rbDashEnd').value = '20:00';
+            ['start','end'].forEach(w => {
+                const v = document.getElementById(w + 'Val');
+                v.textContent = w === 'start' ? '07:00' : '20:00';
+                v.classList.remove('unset');
+            });
+            clockWrap.style.opacity = '.4';
+            clockWrap.style.pointerEvents = 'none';
+            dashRefreshEndLock();
+            document.getElementById('rbDashConflictWarn').style.display = 'none';
+            document.getElementById('rbDashFullDayHint').textContent = 'Whole day reserved (07:00 – 20:00).';
+            endDateWrap.style.display = 'block';
+            dashSyncEndDateMin();
+            endDateInput.value = '';
+            document.getElementById('rbDashMultiDayHint').textContent = '';
+        } else {
+            hidden.value = '0';
+            clockState.start = { h: null, m: null };
+            clockState.end = { h: null, m: null };
+            document.getElementById('rbDashStart').value = '';
+            document.getElementById('rbDashEnd').value = '';
+            ['start','end'].forEach(w => {
+                const v = document.getElementById(w + 'Val');
+                v.textContent = '--:--';
+                v.classList.add('unset');
+            });
+            clockWrap.style.opacity = '';
+            clockWrap.style.pointerEvents = '';
+            dashRefreshEndLock();
+            buildTimePicker('start'); buildTimePicker('end');
+            endDateWrap.style.display = 'none';
+            endDateInput.value = '';
+            document.getElementById('rbDashMultiDayHint').textContent = '';
+            dashUpdateFullDay();
+        }
+        dashUpdateSummary();
+    }
+
+    function dashSyncEndDateMin() {
+        const startDate = document.getElementById('rbDashDate').value;
+        const endDateInput = document.getElementById('rbDashEndDate');
+        if (startDate) {
+            endDateInput.min = startDate;
+            if (endDateInput.value && endDateInput.value < startDate) {
+                endDateInput.value = '';
+                document.getElementById('rbDashMultiDayHint').textContent = '';
+            }
+        }
+        dashUpdateMultiDayHint();
+    }
+
+    function dashUpdateMultiDayHint() {
+        const startDate = document.getElementById('rbDashDate').value;
+        const endDate = document.getElementById('rbDashEndDate').value;
+        const hint = document.getElementById('rbDashMultiDayHint');
+        if (!startDate || !endDate || endDate <= startDate) {
+            hint.textContent = endDate && endDate === startDate ? 'Same as start date — single day booking.' : '';
+            hint.style.color = '#94a3b8';
+            return;
+        }
+        const start = new Date(startDate + 'T00:00:00');
+        const end = new Date(endDate + 'T00:00:00');
+        const days = Math.round((end - start) / 86400000) + 1;
+        hint.textContent = `${days} day(s) selected (${startDate} → ${endDate})`;
+        hint.style.color = '#2563eb';
     }
 
     function dashIsStartDisabled(h, m) {
@@ -1962,6 +2102,17 @@
         });
     }
 
+    // Start time is "complete" only once both its hour and minute are chosen.
+    function dashStartComplete() {
+        return clockState.start.h !== null && clockState.start.m !== null;
+    }
+
+    // Lock the End Time picker until the start time is fully set.
+    function dashRefreshEndLock() {
+        document.getElementById('endDisplay')
+            .classList.toggle('locked', !dashStartComplete());
+    }
+
     function pickHour(which, h) {
         clockState[which].h = h;
         if (clockState[which].m !== null) {
@@ -1970,12 +2121,10 @@
                 : dashIsEndDisabled(h, clockState[which].m);
             if (off) clockState[which].m = null;
         }
+        // Picking the start hour may clear an invalid start minute; keep the
+        // end picker lock in sync with whether the start time is still complete.
+        if (which === 'start') dashRefreshEndLock();
         buildTimePicker(which);
-        if (clockState[which].m === null) {
-            const firstM = [0,15,30,45].find(m =>
-                !(which === 'start' ? dashIsStartDisabled(h,m) : dashIsEndDisabled(h,m)));
-            if (firstM !== undefined) pickMinute(which, firstM);
-        }
     }
 
     function pickMinute(which, m) {
@@ -1988,20 +2137,17 @@
         valEl.classList.remove('unset');
         document.getElementById(which + 'Drop').style.display = 'none';
         document.getElementById(which + 'Display').classList.remove('open');
-        if (which === 'start' && clockState.end.h === null) {
-            const eh = Math.min(clockState.start.h + 1, 20);
-            clockState.end.h = eh;
-            buildTimePicker('end');
-            const targetM = !dashIsEndDisabled(eh, m) ? m
-                : [0,15,30,45].find(mm => !dashIsEndDisabled(eh, mm));
-            if (targetM !== undefined) { pickMinute('end', targetM); return; }
-        }
+        // Start must be fully chosen before the end picker unlocks; end stays
+        // empty until the user sets it themselves (hour, then minute).
+        dashRefreshEndLock();
         buildTimePicker(which);
         dashCheckConflict();
         dashUpdateSummary();
     }
 
     function toggleClock(which) {
+        // End picker is locked until the start time is fully chosen.
+        if (which === 'end' && !dashStartComplete()) return;
         const drop = document.getElementById(which + 'Drop');
         const disp = document.getElementById(which + 'Display');
         const isOpen = drop.style.display === 'block';
@@ -2087,31 +2233,78 @@
     }
 
     function dashAddToCart() {
+        const isFullDay = document.getElementById('rbDashFullDay').checked;
         const start = document.getElementById('rbDashStart').value;
         const end = document.getElementById('rbDashEnd').value;
         const date = document.getElementById('rbDashDate').value;
+        const endDate = document.getElementById('rbDashEndDate')?.value || '';
         const purp = document.getElementById('rbDashPurpose').value;
         const att = document.getElementById('rbDashAttendees').value;
-        
+
         if (!dashRoomId || !start || !end || !date || !purp || !att) {
             alert('Please fill all fields'); return;
         }
         if (gIsPastDate(date)) { alert('Past day cannot book.'); return; }
-        if (dashCheckConflict()) {
+
+        const rm = dashRooms.find(r => r.id == dashRoomId);
+
+        // Multi-day full-day booking
+        if (isFullDay && endDate && endDate > date) {
+            let added = 0, skipped = 0;
+            const cur = new Date(date + 'T00:00:00');
+            const last = new Date(endDate + 'T00:00:00');
+            while (cur <= last) {
+                const d = cur.toISOString().slice(0, 10);
+                if (!gIsPastDate(d) && !gIsToday(d)) {
+                    const dbBusy = dashBookings.some(b => b.room_id == dashRoomId && b.booking_date === d && b.status !== 'Rejected');
+                    const cartBusy = dashCart.some(s => s.room_id == dashRoomId && s.booking_date === d);
+                    if (!dbBusy && !cartBusy) {
+                        dashCart.push({ room_id: dashRoomId, room_name: rm.name, booking_date: d, start_time: '07:00', end_time: '20:00', is_full_day: true, purpose: purp, attendees: att });
+                        added++;
+                    } else {
+                        skipped++;
+                    }
+                } else {
+                    skipped++;
+                }
+                cur.setDate(cur.getDate() + 1);
+            }
+            if (added === 0) {
+                alert('No valid dates to add. All selected dates may have conflicts or are not in the future.'); return;
+            }
+            if (skipped > 0) alert(added + ' date(s) added to list. ' + skipped + ' skipped (conflict or invalid).');
+            document.getElementById('rbDashFullDay').checked = false;
+            dashToggleFullDay();
+            renderCart();
+            dashUpdateFullDay();
+            return;
+        }
+
+        // Single booking
+        if (isFullDay && (gIsToday(date) || !dashDayIsClear())) {
+            alert('Full day requires a future date with no existing bookings.'); return;
+        }
+        if (!isFullDay && dashCheckConflict()) {
             alert('Time conflict detected'); return;
         }
 
-        const rm = dashRooms.find(r => r.id == dashRoomId);
         dashCart.push({
             room_id: dashRoomId,
             room_name: rm.name,
             booking_date: date,
             start_time: start,
             end_time: end,
+            is_full_day: isFullDay,
             purpose: purp,
             attendees: att
         });
+        // Reset full-day toggle so the next slot starts fresh.
+        if (isFullDay) {
+            document.getElementById('rbDashFullDay').checked = false;
+            dashToggleFullDay();
+        }
         renderCart();
+        dashUpdateFullDay();
     }
 
     function renderCart() {
@@ -2128,9 +2321,10 @@
             dashCart.forEach((s, idx) => {
                 const item = document.createElement('div');
                 item.style.padding = '.75rem'; item.style.background = '#fff'; item.style.border = '1px solid var(--border)'; item.style.borderRadius = '8px';
+                const timeLabel = s.is_full_day ? 'Full Day (07:00-20:00)' : `${s.start_time}-${s.end_time}`;
                 item.innerHTML = `<div style="font-weight:700; font-size:.8rem;">${s.room_name}</div>
-                                  <div style="font-size:.7rem; color:#64748b;">${s.booking_date} • ${s.start_time}-${s.end_time}</div>
-                                  <button type="button" class="btn btn-ghost btn-xs" style="color:#dc2626; margin-top:.3rem;" onclick="dashCart.splice(${idx},1); renderCart();">Remove</button>`;
+                                  <div style="font-size:.7rem; color:#64748b;">${s.booking_date} • ${timeLabel}</div>
+                                  <button type="button" class="btn btn-ghost btn-xs" style="color:#dc2626; margin-top:.3rem;" onclick="dashCart.splice(${idx},1); renderCart(); dashUpdateFullDay();">Remove</button>`;
                 list.appendChild(item);
             });
             document.getElementById('rbDashSlotsJson').value = JSON.stringify(dashCart);
@@ -2151,17 +2345,21 @@
 
     function openRoomBookingModal(rid, name) {
         dashCart = []; renderCart();
+        const fullDayCb = document.getElementById('rbDashFullDay');
+        if (fullDayCb.checked) { fullDayCb.checked = false; dashToggleFullDay(); }
         if (rid) {
             const radio = document.querySelector('input[value="'+rid+'"]');
             if (radio) { radio.checked = true; dashOnRoomChange(rid); }
         }
+        dashUpdateFullDay();
         openModal('rbDashBookModal');
     }
 
     // Initialize
     buildTimePicker('start'); buildTimePicker('end');
+    dashRefreshEndLock();
 
-    @if($viewMode === 'month')
+    @if($viewMode === 'month' && (Auth::user()->isAdmin() || Auth::user()->isCeo()))
     // ── Monthly Report ────────────────────────────────────────────────
     const _pieRoomLabels = @json($roomCounts->keys()->values());
     const _pieRoomData   = @json($roomCounts->values()->values());
@@ -2278,8 +2476,8 @@
             return `<div class="rb-booking-bar st-${b.status}" data-booking-id="${b.id}"
                 style="left:${left}%;width:${width}%;"
                 onclick="event.stopPropagation();openEditModal('${b.id}','${b.room_id}','${b.booking_date}','${s}','${e}','${escOnclick(b.purpose)}','${b.attendees}','${b.status}')">
-                <span class="rb-bar-title"><span class="rb-status-dot"></span>${escHtml(b.purpose)}</span>
-                <span class="rb-bar-time">${s} - ${e} &bull; ${escHtml(b.booked_by_name)}</span>
+                <span class="rb-bar-title"><span class="rb-status-dot"></span>${escHtml(b.purpose)}${b.is_full_day ? ' <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em;opacity:.85;">&bull; Full Day</span>' : ''}</span>
+                <span class="rb-bar-time">${b.is_full_day ? 'Full Day' : s + ' - ' + e} &bull; ${escHtml(b.booked_by_name)}</span>
             </div>`;
         }
 
@@ -2325,7 +2523,7 @@
                         const e  = b.end_time.substring(0, 5);
                         const nm = (b.booked_by_name || '').substring(0, 14);
                         const p  = (b.purpose || '').replace(/'/g, "\\'");
-                        return `<div class="rb-mob-chip st-${b.status}" onclick="event.stopPropagation();openEditModal('${b.id}','${b.room_id}','${b.booking_date}','${s}','${e}','${p}','${b.attendees}','${b.status}')"><span class="rb-mob-chip-dot"></span><span class="rb-mob-chip-time">${s}–${e}</span><span class="rb-mob-chip-purpose">${b.purpose || ''}</span><span class="rb-mob-chip-booker">${nm}</span></div>`;
+                        return `<div class="rb-mob-chip st-${b.status}" onclick="event.stopPropagation();openEditModal('${b.id}','${b.room_id}','${b.booking_date}','${s}','${e}','${p}','${b.attendees}','${b.status}')"><span class="rb-mob-chip-dot"></span><span class="rb-mob-chip-time">${b.is_full_day ? 'Full Day' : s + '–' + e}</span><span class="rb-mob-chip-purpose">${b.purpose || ''}</span><span class="rb-mob-chip-booker">${nm}</span></div>`;
                     }).join('');
                 }
                 const header = card.querySelector('.rb-mob-card-header');

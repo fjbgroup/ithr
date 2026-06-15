@@ -6,7 +6,7 @@
         <h2>User Accounts</h2>
         <p class="page-subtitle">{{ $users->count() }} user(s) — Manage system access</p>
     </div>
-    <button class="btn btn-primary" onclick="openAddUserPanel()">+ Add User</button>
+    @canwrite<button class="btn btn-primary" onclick="openAddUserPanel()">+ Add User</button>@endcanwrite
 </div>
 
 <!-- Staff Registry Search Panel -->
@@ -33,9 +33,9 @@
 </div>
 
 <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
-    <div style="position:relative;flex:1;min-width:220px;">
-        <svg style="position:absolute;left:.65rem;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted);pointer-events:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
-        <input type="text" id="userSearch" placeholder="Search name, email, staff no…" oninput="filterUsers()" style="padding-left:2rem;width:100%;box-sizing:border-box;">
+    <div class="app-search" style="min-width:220px;">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="userSearch" placeholder="Search name, email, staff no…" oninput="filterUsers()">
     </div>
     <select id="userRoleFilter" onchange="filterUsers()" style="min-width:150px;">
         <option value="">All Roles</option>
@@ -68,7 +68,7 @@
             </thead>
             <tbody>
                 @foreach ($users as $u)
-                <tr data-name="{{ strtolower($u->name) }}" data-email="{{ strtolower($u->email) }}" data-staffno="{{ strtolower($u->staff_no ?? '') }}" data-dept="{{ strtolower($u->department->name ?? '') }}" data-role="{{ $u->role }}" data-status="{{ $u->is_active ? 'active' : 'inactive' }}">
+                <tr data-name="{{ strtolower($u->name) }}" data-email="{{ strtolower($u->email) }}" data-staffno="{{ strtolower($u->staff_no ?? '') }}" data-dept="{{ strtolower($u->department->name ?? $u->staff?->department?->name ?? '') }}" data-role="{{ $u->role }}" data-status="{{ $u->is_active ? 'active' : 'inactive' }}">
                     <td><strong>{{ $u->name }}</strong></td>
                     <td style="font-size:.85rem;">{{ $u->email }}</td>
                     <td><span class="role-badge {{ str_replace('_','-',$u->role) }}">{{ $u->getRoleLabel() }}</span></td>
@@ -81,7 +81,7 @@
                         <code style="font-size:.82rem;color:#6366f1;">{{ $u->staff_no ?? '—' }}</code>
                         @endif
                     </td>
-                    <td>{{ $u->department->name ?? '—' }}</td>
+                    <td>{{ $u->department->name ?? $u->staff?->department?->name ?? '—' }}</td>
                     <td>
                         @if($u->is_active)
                         <span class="status-badge status-completed">Active</span>
@@ -93,8 +93,9 @@
                         @if ($u->isStaff() && $u->staff_id)
                         <a href="{{ route('users.show', $u->id) }}" class="btn btn-sm btn-ghost">View</a>
                         @endif
+                        @canwrite
                         <button class="btn btn-sm btn-outline" onclick="editUser({{ json_encode($u) }})">Edit</button>
-                        
+
                         @if ($u->id != auth()->id())
                             @if ($u->is_active)
                             <button class="btn btn-sm" style="background:#fef3c7;color:#92400e;" onclick="confirmToggleUser({{ $u->id }}, 0, '{{ addslashes($u->name) }}')">Disable</button>
@@ -103,6 +104,7 @@
                             @endif
                             <button class="btn btn-sm btn-danger" onclick="confirmDeleteUser({{ $u->id }})">Delete</button>
                         @endif
+                        @endcanwrite
                     </td>
                 </tr>
                 @endforeach
@@ -354,5 +356,38 @@ function confirmToggleUser(id, newActive, name) {
     }
     openModal('toggleUserModal');
 }
+
+@if ($errors->any() && (old('name') || old('email')))
+// Validation failed on the Add/Edit user form — re-open the modal and restore the admin's input
+// so they can fix the flagged field (shown in the error toast) without re-entering everything.
+document.addEventListener('DOMContentLoaded', function () {
+    const editId = @json(old('id'));
+    if (editId) {
+        document.getElementById('userModalTitle').textContent = 'Edit User';
+        document.getElementById('userForm').action = '{{ url('users') }}/' + editId;
+        document.getElementById('methodField').innerHTML = '@method('PUT')';
+        document.getElementById('userId').value = editId;
+        document.getElementById('f_upw').required = false;
+        document.getElementById('pwLabel').textContent = '(leave blank to keep current)';
+        document.getElementById('activeRow').style.display = (editId == {{ auth()->id() }}) ? 'none' : '';
+    } else {
+        document.getElementById('userModalTitle').textContent = 'Add User';
+        document.getElementById('userForm').action = '{{ route('users.store') }}';
+        document.getElementById('methodField').innerHTML = '';
+        document.getElementById('userId').value = '';
+        document.getElementById('f_upw').required = true;
+        document.getElementById('pwLabel').textContent = '(required for new user)';
+        document.getElementById('activeRow').style.display = 'none';
+    }
+    document.getElementById('f_uname').value = @json(old('name'));
+    document.getElementById('f_uemail').value = @json(old('email'));
+    document.getElementById('f_urole').value = @json(old('role') ?? 'staff');
+    document.getElementById('f_ustaffno').value = @json(old('staff_no'));
+    document.getElementById('f_udept').value = @json(old('department_id'));
+    document.getElementById('f_upos').value = @json(old('position'));
+    if (old('is_active')) document.getElementById('f_uactive').checked = true;
+    openModal('addUserModal');
+});
+@endif
 </script>
 @endsection

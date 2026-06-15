@@ -14,6 +14,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 use App\Services\AuditLogger;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TrainingExport;
 
 class TrainingController extends Controller
 {
@@ -322,10 +324,42 @@ class TrainingController extends Controller
         }
 
         $attendances = TrainingAttendance::where('course_id', $course->id)
-            ->with('staff')
+            ->with('staff.department')
             ->get();
 
-        return view('training.qr_page', compact('course', 'attendances'));
+        // Anonymous feedback summary — aggregate only, no staff identity exposed.
+        $feedbacks = \App\Models\TrainingFeedback::where('course_id', $course->id)->get();
+        $feedbackStats = null;
+        if ($feedbacks->isNotEmpty()) {
+            $recs = $feedbacks->whereNotNull('would_recommend');
+            $feedbackStats = [
+                'count'         => $feedbacks->count(),
+                'scanned'       => $attendances->whereNotNull('qr_used_at')->count(),
+                'content'       => round($feedbacks->avg('content_rating'), 1),
+                'trainer'       => round($feedbacks->avg('trainer_rating'), 1),
+                'venue'         => round($feedbacks->avg('venue_rating'), 1),
+                'overall'       => round($feedbacks->avg('overall_rating'), 1),
+                'recommend_pct' => $recs->isNotEmpty() ? round($recs->avg('would_recommend') * 100) : null,
+                // Shuffled so comment order can't be matched to scan order.
+                'comments'      => $feedbacks->pluck('comments')
+                    ->map(fn ($c) => trim((string) $c))
+                    ->filter()
+                    ->shuffle()
+                    ->values(),
+            ];
+        }
+
+        return view('training.qr_page', compact('course', 'attendances', 'feedbackStats'));
+    }
+
+    public function courseExport(TrainingCourse $course)
+    {
+        if (!Auth::user() || !(Auth::user()->role === 'admin_it' || Auth::user()->role === 'admin_hr')) {
+            return redirect()->route('training.index')->with('error', 'Unauthorized.');
+        }
+
+        $filename = 'training_' . $course->code . '_' . date('Ymd') . '.xlsx';
+        return Excel::download(new TrainingExport(['course_id' => $course->id]), $filename);
     }
 
     public function qrGenerate(Request $request, TrainingCourse $course)

@@ -28,8 +28,9 @@
 <!-- Filter bar -->
 <form id="md-filter-form" method="GET" action="{{ route('master-data.index') }}" class="md-filter-bar">
     <input type="hidden" name="tab" value="{{ $activeTab }}">
-    <div class="md-filter-search">
-        <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ $search }}">
+    <div class="app-search md-filter-search">
+        <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" name="q" placeholder="Search..." value="{{ $search }}">
     </div>
     @if(in_array($activeTab, ['departments', 'courses']))
     <div class="md-filter-select">
@@ -51,18 +52,150 @@
 
 <div id="md-results">
 @if($activeTab === 'departments')
-    <div class="stats-grid" style="margin-bottom:1.25rem;">
-        <div class="stat-card stat-blue">
-            <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>    
-            <div><div class="stat-label">Total Departments</div><div class="stat-value">{{ array_sum($data['totals']) }}</div></div>
+    <!-- Pie chart -->
+    @php
+        $totals = $data['totals'] ?? [];
+        $totalAll = array_sum($totals);
+        $colorPalette = ['#22c55e','#3b82f6','#f59e0b','#a855f7','#ef4444','#06b6d4','#f97316','#84cc16'];
+        $badgePalette = ['admin-it','dept-blue','admin-hr','dept-purple','badge-outline','badge-outline','badge-outline','badge-outline'];
+        $companyColors = [];
+        $companyBadges = [];
+        foreach ($allCompanies as $i => $co) {
+            $companyColors[$co->code] = $colorPalette[$i % count($colorPalette)];
+            $companyBadges[$co->code] = $badgePalette[$i % count($badgePalette)];
+        }
+    @endphp
+    @if($totalAll > 0)
+    <div class="card" style="margin-bottom:1.25rem;padding:1.25rem 1.5rem;">
+        <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+            <canvas id="deptPieChart" width="180" height="180" style="flex-shrink:0;cursor:pointer;"></canvas>
+            <div id="deptPieLegend" style="flex:1;min-width:200px;">
+                @foreach($allCompanies as $co)
+                @php $cnt = $totals[$co->code] ?? 0; $color = $companyColors[$co->code]; @endphp
+                @if($cnt > 0)
+                <div class="dept-pie-row" data-co="{{ $co->code }}" style="display:flex;align-items:center;gap:.65rem;padding:.45rem .6rem;border-radius:7px;margin-bottom:.3rem;cursor:default;transition:background .15s;">
+                    <span style="width:12px;height:12px;border-radius:50%;background:{{ $color }};flex-shrink:0;"></span>
+                    <span style="font-weight:600;font-size:.88rem;min-width:40px;">{{ $co->code }}</span>
+                    <div style="flex:1;background:var(--border);border-radius:4px;height:7px;overflow:hidden;">
+                        <div style="height:100%;width:{{ round($cnt/$totalAll*100,1) }}%;background:{{ $color }};border-radius:4px;transition:width .4s;"></div>
+                    </div>
+                    <span style="font-size:.85rem;font-weight:700;min-width:26px;text-align:right;">{{ $cnt }}</span>
+                    <span style="font-size:.78rem;color:var(--text-muted);">{{ round($cnt/$totalAll*100,1) }}%</span>
+                </div>
+                @endif
+                @endforeach
+            </div>
+            <div id="deptPieDetail" style="min-width:160px;text-align:center;display:none;flex-direction:column;align-items:center;gap:.35rem;">
+                <div id="dpd-dot" style="width:18px;height:18px;border-radius:50%;margin-bottom:.2rem;"></div>
+                <div id="dpd-name" style="font-size:1rem;font-weight:700;"></div>
+                <div id="dpd-count" style="font-size:2rem;font-weight:800;line-height:1;"></div>
+                <div id="dpd-pct" style="font-size:.88rem;color:var(--text-muted);"></div>
+                <div id="dpd-label" style="font-size:.78rem;color:var(--text-muted);">departments</div>
+            </div>
         </div>
-        @foreach(['FJB' => 'stat-green', 'FBSB' => 'stat-amber', 'LBSB' => 'stat-blue', 'FGT' => 'stat-purple'] as $coCode => $class)
-        <div class="stat-card {{ $class }}">
-            <div class="stat-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-            <div><div class="stat-label">{{ $coCode }}</div><div class="stat-value">{{ $data['totals'][$coCode] ?? 0 }}</div></div>
-        </div>
-        @endforeach
     </div>
+    <script>
+    (function(){
+        const totals = @json($totals);
+        const colors = @json($companyColors);
+        const entries = Object.entries(totals).filter(([,v])=>v>0);
+        const total = entries.reduce((s,[,v])=>s+v,0);
+        const canvas = document.getElementById('deptPieChart');
+        const ctx = canvas.getContext('2d');
+        const cx = 90, cy = 90, r = 78, rHover = 84;
+        let slices = [], hovered = -1;
+
+        function buildSlices() {
+            slices = [];
+            let angle = -Math.PI / 2;
+            entries.forEach(([co, cnt]) => {
+                const sweep = (cnt / total) * 2 * Math.PI;
+                slices.push({ co, cnt, color: colors[co] || '#94a3b8', start: angle, end: angle + sweep });
+                angle += sweep;
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, 180, 180);
+            slices.forEach((s, i) => {
+                const rad = i === hovered ? rHover : r;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, rad, s.start, s.end);
+                ctx.closePath();
+                ctx.fillStyle = s.color;
+                ctx.fill();
+                if (i === hovered) {
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2.5;
+                    ctx.stroke();
+                }
+            });
+            // donut hole
+            ctx.beginPath();
+            ctx.arc(cx, cy, 38, 0, 2 * Math.PI);
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg') || '#fff';
+            ctx.fill();
+            // center label
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text') || '#111';
+            ctx.font = 'bold 22px system-ui,sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(total, cx, cy - 5);
+            ctx.font = '10px system-ui,sans-serif';
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted') || '#888';
+            ctx.fillText('total', cx, cy + 12);
+        }
+
+        function getSliceAt(x, y) {
+            const dx = x - cx, dy = y - cy;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 38 || dist > rHover) return -1;
+            let angle = Math.atan2(dy, dx);
+            if (angle < -Math.PI/2) angle += 2*Math.PI;
+            for (let i = 0; i < slices.length; i++) {
+                let s = slices[i].start, e = slices[i].end;
+                if (s < -Math.PI/2) { s += 2*Math.PI; e += 2*Math.PI; }
+                if (angle >= s && angle < e) return i;
+            }
+            return -1;
+        }
+
+        function showDetail(i) {
+            const detail = document.getElementById('deptPieDetail');
+            const rows = document.querySelectorAll('.dept-pie-row');
+            if (i < 0) {
+                detail.style.display = 'none';
+                rows.forEach(r => r.style.background = '');
+                return;
+            }
+            const s = slices[i];
+            detail.style.display = 'flex';
+            document.getElementById('dpd-dot').style.background = s.color;
+            document.getElementById('dpd-name').textContent = s.co;
+            document.getElementById('dpd-name').style.color = s.color;
+            document.getElementById('dpd-count').textContent = s.cnt;
+            document.getElementById('dpd-count').style.color = s.color;
+            document.getElementById('dpd-pct').textContent = (s.cnt/total*100).toFixed(1) + '%';
+            rows.forEach(r => r.style.background = r.dataset.co === s.co ? 'var(--hover-bg,#f1f5f9)' : '');
+        }
+
+        canvas.addEventListener('mousemove', function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+            const idx = getSliceAt(x, y);
+            if (idx !== hovered) { hovered = idx; draw(); showDetail(idx); }
+        });
+        canvas.addEventListener('mouseleave', function() {
+            hovered = -1; draw(); showDetail(-1);
+        });
+
+        buildSlices();
+        draw();
+    })();
+    </script>
+    @endif
 
     <div class="card">
         <div class="card-header">
@@ -87,12 +220,7 @@
                     <td><strong>{{ $d->name }}</strong></td>
                     <td>
                         @php
-                            $badgeClass = [
-                                'FJB'  => 'admin-it',
-                                'FBSB' => 'admin-hr',
-                                'LBSB' => 'dept-blue',
-                                'FGT'  => 'dept-purple'
-                            ][strtoupper($d->company)] ?? 'badge-outline';
+                            $badgeClass = $companyBadges[$d->company] ?? 'badge-outline';
                         @endphp
                         <span class="badge-role {{ $badgeClass }}">
                             {{ $d->company }}

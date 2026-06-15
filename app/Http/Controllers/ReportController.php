@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staff;
+use App\Models\Company;
 use App\Models\Department;
 use App\Models\TrainingAttendance;
 use App\Models\TrainingCourse;
@@ -16,12 +17,15 @@ class ReportController extends Controller
 {
     public function staffReport()
     {
-        $totalStaff = Staff::where('is_active', 1)->count();
-        $totalDepts = Department::count();
-        $fjbCount   = Staff::where('company', 'FJB')->where('is_active', 1)->count();
-        $fbsbCount  = Staff::where('company', 'FBSB')->where('is_active', 1)->count();
-        $lbsbCount  = Staff::where('company', 'LBSB')->where('is_active', 1)->count();
-        $fgtCount   = Staff::where('company', 'FGT')->where('is_active', 1)->count();
+        $allCompanies = Company::orderBy('code')->get();
+        $totalStaff   = Staff::where('is_active', 1)->count();
+        $totalDepts   = Department::count();
+
+        $companyCounts = Staff::where('is_active', 1)
+            ->select('company', DB::raw('COUNT(*) as count'))
+            ->groupBy('company')
+            ->pluck('count', 'company')
+            ->toArray();
 
         $deptRows = Department::leftJoin('staff', function($join) {
                 $join->on('staff.department_id', '=', 'departments.id')
@@ -43,7 +47,7 @@ class ReportController extends Controller
             ->limit(8)
             ->get();
 
-        return view('reports.staff', compact('totalStaff', 'totalDepts', 'fjbCount', 'fbsbCount', 'lbsbCount', 'fgtCount', 'deptRows', 'posRows'));
+        return view('reports.staff', compact('totalStaff', 'totalDepts', 'allCompanies', 'companyCounts', 'deptRows', 'posRows'));
     }
 
     public function staffExport()

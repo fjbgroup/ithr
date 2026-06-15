@@ -30,6 +30,10 @@
     font-size: .68rem; color: var(--muted); max-width: 150px;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; margin-top: 2px;
 }
+.joined-yos-th-main { display: block; }
+.joined-yos-th-sub  { display: block; font-size: .62rem; color: var(--muted); font-weight: 600; margin-top: 1px; }
+.staff-joined { display: block; font-size: .73rem; color: var(--muted); }
+.staff-yos    { display: block; font-size: .75rem; font-weight: 600; margin-top: 2px; }
 
 /* ── Meta pills ── */
 .mpill {
@@ -84,6 +88,7 @@
         <h2>Staff Registry</h2>
         <p class="page-subtitle">Manage employee records and linked user accounts.</p>
     </div>
+    @canwrite
     <div class="header-actions">
         <button id="bulkDeleteBtn" class="btn btn-danger" style="display:none;" onclick="confirmBulkDelete()">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
@@ -102,13 +107,14 @@
             Add Staff
         </button>
     </div>
+    @endcanwrite
 </div>
 
 <div class="filters-card">
     <form id="staff-filter-form" action="{{ route('staff.index') }}" method="GET" class="filters-form">
         <div class="filter-group search-group">
-            <div class="search-input-wrap" style="width:100%;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div class="app-search" style="width:100%;">
+                <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input type="text" name="q" value="{{ request('q') }}" placeholder="Search name, staff no, or position...">
             </div>
         </div>
@@ -155,14 +161,15 @@
             <table class="table table-sticky table-xs">
                 <thead>
                     <tr>
-                        <th style="width:32px;text-align:center;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                        @canwrite<th style="width:32px;text-align:center;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>@endcanwrite
                         <th>Employee</th>
                         <th>Role &amp; Department</th>
                         <th>Co</th>
-                        <th class="hide-on-mobile" style="white-space:nowrap;">Joined</th>
-                        <th class="hide-on-mobile" style="white-space:nowrap;">YOS</th>
+                        <th style="white-space:nowrap;">Date Joined</th>
+                        <th style="white-space:nowrap;">YOS</th>
                         <th class="hide-on-tablet">Grade</th>
-                        <th class="hide-on-tablet">Details</th>
+                        <th class="hide-on-tablet">Gender</th>
+                        <th class="hide-on-tablet">Location</th>
                         <th style="text-align:right;white-space:nowrap;">Actions</th>
                     </tr>
                 </thead>
@@ -187,9 +194,11 @@
                             $pal = $palettes[ord(strtoupper($s->name[0] ?? 'A')) % count($palettes)];
                         @endphp
                         <tr>
+                            @canwrite
                             <td style="text-align:center;">
                                 <input type="checkbox" class="staff-checkbox" value="{{ $s->id }}" onclick="updateBulkDeleteButton()">
                             </td>
+                            @endcanwrite
 
                             {{-- Employee: avatar + name + ID --}}
                             <td>
@@ -206,6 +215,8 @@
                             <td>
                                 <span class="staff-pos" title="{{ $s->position }}">{{ $s->position ?? '—' }}</span>
                                 <span class="staff-dept" title="{{ optional($s->department)->name }}">{{ optional($s->department)->name ?? '—' }}</span>
+                                <div style="display:flex;gap:.2rem;flex-wrap:wrap;margin-top:.2rem;">
+                                </div>
                             </td>
 
                             {{-- Company badge --}}
@@ -213,14 +224,14 @@
                                 <span class="company-badge company-{{ strtolower($s->company) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $s->company }}</span>
                             </td>
 
-                            {{-- Joined date --}}
-                            <td class="hide-on-mobile" style="color:var(--muted);font-size:.73rem;white-space:nowrap;">
+                            {{-- Date Joined --}}
+                            <td style="white-space:nowrap;font-size:.74rem;">
                                 {{ $s->date_joined ? date('d M Y', strtotime($s->date_joined)) : '—' }}
                             </td>
 
                             {{-- YOS --}}
-                            <td class="hide-on-mobile" style="font-size:.75rem;white-space:nowrap;font-weight:600;">
-                                {{ $s->yos !== null ? $s->yos . 'y' : '—' }}
+                            <td style="white-space:nowrap;font-size:.74rem;text-align:center;">
+                                {{ $s->yos !== null ? $s->yos : '—' }}
                             </td>
 
                             {{-- Grade --}}
@@ -228,22 +239,14 @@
                                 {{ $s->compensation_grade ?? '—' }}
                             </td>
 
-                            {{-- Detail pills --}}
-                            <td class="hide-on-tablet">
-                                <div style="display:flex;gap:.2rem;flex-wrap:wrap;align-items:center;">
-                                    @if($s->critical_position)
-                                        <span class="mpill mpill-critical">Critical</span>
-                                    @endif
-                                    @if($s->operation_support)
-                                        <span class="mpill">{{ $s->operation_support }}</span>
-                                    @endif
-                                    @if($s->gender)
-                                        <span class="mpill">{{ $s->gender }}</span>
-                                    @endif
-                                    @if($s->location)
-                                        <span class="mpill" style="max-width:90px;overflow:hidden;text-overflow:ellipsis;" title="{{ $s->location }}">{{ $s->location }}</span>
-                                    @endif
-                                </div>
+                            {{-- Gender --}}
+                            <td class="hide-on-tablet" style="font-size:.74rem;white-space:nowrap;">
+                                {{ $s->gender ?? '—' }}
+                            </td>
+
+                            {{-- Location --}}
+                            <td class="hide-on-tablet" style="font-size:.74rem;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $s->location }}">
+                                {{ $s->location ?? '—' }}
                             </td>
 
                             {{-- Actions --}}
@@ -252,9 +255,11 @@
                                     <a href="{{ route('staff.show', $s->id) }}" class="btn-icon" title="View Profile">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </a>
+                                    @canwrite
                                     <button class="btn-icon" title="Edit" onclick="editStaff({{ json_encode($s) }})">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </button>
+                                    @endcanwrite
                                     @if(Auth::user()->isAdminIT())
                                         <form action="{{ route('staff.destroy', $s->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this staff record? This cannot be undone.');">
                                             @csrf
@@ -304,6 +309,17 @@
                 </div>
                 <div class="form-group form-full"><label>Legal Full Name *</label><input type="text" name="name" id="f_name" required></div>
                 <div class="form-group"><label>Date of Birth</label><input type="date" name="date_of_birth" id="f_date_of_birth"></div>
+                <div class="form-group"><label>IC Number</label><input type="text" name="ic_number" id="f_ic_number" placeholder="e.g. 900101-07-1234"></div>
+                <div class="form-group">
+                    <label>Employment Status</label>
+                    <select name="employment_status" id="f_employment_status">
+                        <option value="">— Select —</option>
+                        <option value="Permanent">Permanent</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Temporary">Temporary</option>
+                        <option value="Intern">Intern</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>Gender</label>
                     <select name="gender" id="f_gender">
@@ -334,22 +350,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Operation / Support</label>
-                    <select name="operation_support" id="f_operation_support">
-                        <option value="">— Select —</option>
-                        <option value="Operation">Operation</option>
-                        <option value="Support">Support</option>
-                    </select>
-                </div>
                 <div class="form-group"><label>Location</label><input type="text" name="location" id="f_location" placeholder="e.g. Johor Bahru"></div>
-                <div class="form-group">
-                    <label>Critical Position</label>
-                    <select name="critical_position" id="f_critical_position">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </div>
                 <div class="form-group"><label>Email</label><input type="email" name="email" id="f_email"></div>
                 <!-- Classification -->
                 <div class="form-group form-full" style="margin-top:.25rem;"><div style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;padding:.5rem 0 0;border-top:1px solid var(--border);">Classification</div></div>
@@ -357,8 +358,7 @@
                 <div class="form-group"><label>Management Level</label><input type="text" name="management_level" id="f_management_level" placeholder="e.g. Senior Manager"></div>
                 <div class="form-group form-full"><label>Job Level — Primary Position</label><input type="text" name="job_level" id="f_job_level"></div>
                 <div class="form-group"><label>Job Category</label><input type="text" name="job_category" id="f_job_category"></div>
-                <div class="form-group"><label>Job Family</label><input type="text" name="job_family" id="f_job_family"></div>
-                <div class="form-group form-full"><label>Job Classifications</label><input type="text" name="job_classification" id="f_job_classification"></div>
+                <div class="form-group"><label>Last Promotion Date</label><input type="date" name="last_promotion_date" id="f_last_promotion_date"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
@@ -518,20 +518,19 @@ function editStaff(data) {
     document.getElementById('f_name').value = data.name;
     document.getElementById('f_date_of_birth').value = data.date_of_birth || '';
     document.getElementById('f_gender').value = data.gender || '';
+    document.getElementById('f_ic_number').value = data.ic_number || '';
+    document.getElementById('f_employment_status').value = data.employment_status || '';
     document.getElementById('f_date_joined').value = data.date_joined || '';
     document.getElementById('f_company_id').value = data.company_id || '';
     document.getElementById('f_position').value = data.position || '';
     document.getElementById('f_department_id').value = data.department_id || '';
-    document.getElementById('f_operation_support').value = data.operation_support || '';
     document.getElementById('f_location').value = data.location || '';
-    document.getElementById('f_critical_position').value = data.critical_position ? '1' : '0';
     document.getElementById('f_email').value = data.email || '';
     document.getElementById('f_compensation_grade').value = data.compensation_grade || '';
     document.getElementById('f_management_level').value = data.management_level || '';
     document.getElementById('f_job_level').value = data.job_level || '';
     document.getElementById('f_job_category').value = data.job_category || '';
-    document.getElementById('f_job_family').value = data.job_family || '';
-    document.getElementById('f_job_classification').value = data.job_classification || '';
+    document.getElementById('f_last_promotion_date').value = data.last_promotion_date || '';
 
     openModal('addStaffModal');
 }
@@ -588,19 +587,18 @@ document.querySelector('[onclick="openModal(\'bulkAddStaffModal\')"]').addEventL
 const STAFF_IMPORT_FIELDS = [
     { key: 'staff_no',           label: 'Employee ID',                  required: true,  aliases: ['employee_id', 'emp_id', 'staff_no', 'staff_id'] },
     { key: 'name',               label: 'Legal Full Name',              required: true,  aliases: ['legal_full_name', 'full_name', 'legal_name', 'name'] },
-    { key: 'date_of_birth',      label: 'Date of Birth',                required: true,  aliases: ['date_of_birth'] },
-    { key: 'date_joined',        label: 'Hire Date',                    required: true,  aliases: ['hire_date', 'date_joined', 'date_hired', 'join_date'] },
+    { key: 'date_of_birth',      label: 'Date of Birth',                required: false, aliases: ['date_of_birth', 'date of birth'] },
+    { key: 'date_joined',        label: 'Hire Date',                    required: true,  aliases: ['hire_date', 'date_joined', 'date_hired', 'join_date', 'date joined'] },
     { key: 'gender',             label: 'Gender',                       required: false, aliases: ['gender'] },
-    { key: 'operation_support',  label: 'Operation/Support',            required: false, aliases: ['operation_support', 'operation_or_support'] },
     { key: 'location',           label: 'Location',                     required: false, aliases: ['location'] },
-    { key: 'critical_position',  label: 'Critical Position',            required: false, aliases: ['critical_position'] },
     { key: 'position',           label: 'Position',                     required: false, aliases: ['position'] },
-    { key: 'compensation_grade', label: 'Compensation Grade',           required: false, aliases: ['compensation_grade'] },
+    { key: 'compensation_grade', label: 'Compensation Grade',           required: false, aliases: ['compensation_grade', 'grade'] },
     { key: 'management_level',   label: 'Management Level',             required: false, aliases: ['management_level'] },
     { key: 'job_level',          label: 'Job Level - Primary Position', required: false, aliases: ['job_level_primary_position', 'job_level'] },
     { key: 'job_category',       label: 'Job Category',                 required: false, aliases: ['job_category'] },
-    { key: 'job_family',         label: 'Job Family',                   required: false, aliases: ['job_family'] },
-    { key: 'job_classification', label: 'Job Classifications',          required: false, aliases: ['job_classifications', 'job_classification'] },
+    { key: 'ic_number',          label: 'IC Number',                    required: false, aliases: ['ic_number', 'ic', 'nric', 'ic. no', 'ic no'] },
+    { key: 'employment_status',  label: 'Employment Status',            required: false, aliases: ['employment_status', 'status of employment', 'status'] },
+    { key: 'last_promotion_date',label: 'Last Promotion Date',          required: false, aliases: ['last_promotion_date', 'last promotion date'] },
     { key: 'company',            label: 'Company',                      required: false, aliases: ['company'] },
     { key: 'company_id',         label: 'Company - ID',                 required: false, aliases: ['company_id'] },
     { key: 'department',         label: 'Department',                   required: false, aliases: ['department'] },

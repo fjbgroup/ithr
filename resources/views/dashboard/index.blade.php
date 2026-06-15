@@ -20,7 +20,7 @@
     </div>
 </div>
 
-@if(Auth::user()->isAdmin())
+@if(Auth::user()->isAdmin() || Auth::user()->isCeo())
 
 <!-- KPI Row -->
 <div class="hd-kpi-row">
@@ -77,80 +77,87 @@
         </div>
         <div class="hd-training-body">
 
-            <!-- Type split -->
+            <!-- Type split — two stat chips + combined bar -->
             @php $typeTotal = ($extCnt + $intCnt) ?: 1; @endphp
-            <div class="hd-type-split">
-                <div class="hd-type-item">
-                    <div class="hd-type-top">
-                        <span class="hd-type-dot" style="background:#f97316;"></span>
-                        <span class="hd-type-name">External</span>
-                        <span class="hd-type-cnt">{{ number_format($extCnt) }}</span>
+            <div>
+                <div class="hd-to-type-row">
+                    <div class="hd-to-chip">
+                        <span class="hd-to-chip-dot" style="background:#f97316;"></span>
+                        <span class="hd-to-chip-lbl">External</span>
+                        <span class="hd-to-chip-val">{{ number_format($extCnt) }}</span>
+                        <span class="hd-to-chip-pct">{{ round($extCnt / $typeTotal * 100) }}%</span>
                     </div>
-                    <div class="hd-type-bar-track">
-                        <div class="hd-type-bar-fill" style="width:{{ round($extCnt / $typeTotal * 100) }}%;background:#f97316;"></div>      
-                    </div>
-                </div>
-                <div class="hd-type-item">
-                    <div class="hd-type-top">
-                        <span class="hd-type-dot" style="background:#22c55e;"></span>
-                        <span class="hd-type-name">Internal</span>
-                        <span class="hd-type-cnt">{{ number_format($intCnt) }}</span>
-                    </div>
-                    <div class="hd-type-bar-track">
-                        <div class="hd-type-bar-fill" style="width:{{ round($intCnt / $typeTotal * 100) }}%;background:#22c55e;"></div>      
+                    <div class="hd-to-chip">
+                        <span class="hd-to-chip-dot" style="background:#22c55e;"></span>
+                        <span class="hd-to-chip-lbl">Internal</span>
+                        <span class="hd-to-chip-val">{{ number_format($intCnt) }}</span>
+                        <span class="hd-to-chip-pct">{{ round($intCnt / $typeTotal * 100) }}%</span>
                     </div>
                 </div>
-                <!-- combined pill -->
-                <div style="margin-top:.5rem;">
-                    <div class="hd-pill-track">
-                        <div style="width:{{ round($extCnt / $typeTotal * 100) }}%;background:#f97316;height:100%;border-radius:99px 0 0 99px;"></div>
-                        <div style="flex:1;background:#22c55e;height:100%;border-radius:0 99px 99px 0;"></div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:.25rem;">
-                        <span>{{ round($extCnt / $typeTotal * 100) }}% External</span>
-                        <span>{{ round($intCnt / $typeTotal * 100) }}% Internal</span>
-                    </div>
+                <div class="hd-pill-track" style="height:8px;margin-top:.45rem;">
+                    <div style="width:{{ round($extCnt / $typeTotal * 100) }}%;background:#f97316;height:100%;border-radius:99px 0 0 99px;"></div>
+                    <div style="flex:1;background:#22c55e;height:100%;border-radius:0 99px 99px 0;"></div>
                 </div>
             </div>
 
-            <!-- 6-month trend -->
-            <div class="hd-trend">
-                <div class="hd-trend-label">6-Month Trend</div>
-                <div class="hd-trend-bars">
-                    @php $trendMax = $monthTrend->max('cnt') ?: 1; @endphp
-                    @foreach ($monthTrend as $m)
-                        @php $h = $trendMax > 0 ? max(4, round($m->cnt / $trendMax * 100)) : 4; @endphp
-                        <div class="hd-trend-col" title="{{ $m->lbl }}: {{ $m->cnt }}">
-                            <div class="hd-trend-cnt">{{ $m->cnt }}</div>
-                            <div class="hd-trend-bar" style="height:{{ $h }}px;"></div>
-                            <div class="hd-trend-mon">{{ $m->lbl }}</div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Top departments -->
-            <div class="hd-dept-section">
+            <!-- Top departments — donut pie -->
+            <div>
                 <div class="hd-trend-label">Top Departments</div>
-                @php $deptMax = $topDepts->max('cnt') ?: 1; @endphp
-                @foreach ($topDepts as $i => $d)
-                    @php
-                        $pct = round($d->cnt / $deptMax * 100);
-                        $colors = ['#3b82f6','#8b5cf6','#f59e0b','#10b981','#ef4444'];
-                        $c = $colors[$i] ?? '#64748b';
-                    @endphp
-                    <div class="hd-dept-row">
-                        <div class="hd-dept-name" title="{{ $d->name }}">
-                            <span class="hd-dept-dot" style="background:{{ $c }};"></span>
-                            {{ strlen($d->name) > 28 ? substr($d->name,0,28).'…' : $d->name }}
-                            <span class="hd-dept-co">{{ $d->company }}</span>
+                @php
+                    $colors = ['#3b82f6','#8b5cf6','#f59e0b','#10b981','#ef4444'];
+                    $deptTotal = $topDepts->sum('cnt') ?: 1;
+                @endphp
+                @if ($topDepts->isEmpty())
+                    <div class="hd-empty" style="padding:.5rem 0;">No training records yet.</div>
+                @else
+                    @php $ang = -90; $cx = 100; $cy = 100; $r = 85; $ri = 54; @endphp
+                    <div class="hd-to-pie-wrap hd-to-pie-side">
+                        <svg class="hd-sv-pie hd-sv-pie-lg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            @foreach ($topDepts as $i => $d)
+                                @php
+                                    $c = $colors[$i] ?? '#64748b';
+                                    $frac = $d->cnt / $deptTotal;
+                                    $sweep = $frac >= 0.999 ? 359.9999 : $frac * 360;
+                                    $a1 = deg2rad($ang); $a2 = deg2rad($ang + $sweep);
+                                    $x1 = round($cx + $r * cos($a1), 4); $y1 = round($cy + $r * sin($a1), 4);
+                                    $x2 = round($cx + $r * cos($a2), 4); $y2 = round($cy + $r * sin($a2), 4);
+                                    $ix1 = round($cx + $ri * cos($a2), 4); $iy1 = round($cy + $ri * sin($a2), 4);
+                                    $ix2 = round($cx + $ri * cos($a1), 4); $iy2 = round($cy + $ri * sin($a1), 4);
+                                    $lg = ($sweep > 180) ? 1 : 0;
+                                    $pd = "M{$x1},{$y1} A{$r},{$r} 0 {$lg},1 {$x2},{$y2} L{$ix1},{$iy1} A{$ri},{$ri} 0 {$lg},0 {$ix2},{$iy2}Z";
+                                    $ang += $sweep;
+                                @endphp
+                                <path d="{{ $pd }}" fill="{{ $c }}" class="hd-sv-slice"
+                                      data-cnt="{{ $d->cnt }}" data-sub="{{ round($frac * 100) }}%"
+                                      data-name="{{ $d->name }}" data-color="{{ $c }}" />
+                            @endforeach
+                            <text x="100" y="95" class="hd-pie-sv">{{ number_format($deptTotal) }}</text>
+                            <text x="100" y="113" class="hd-pie-sl">Total</text>
+                        </svg>
+                        <div class="hd-dept-right">
+                            <div class="hd-dept-side-panel">
+                                <span class="hd-dept-sp-dot"></span>
+                                <div class="hd-dept-sp-body">
+                                    <div class="hd-dept-sp-name"></div>
+                                    <div class="hd-dept-sp-meta">
+                                        <span class="hd-dept-sp-cnt"></span>
+                                        <span class="hd-dept-sp-pct"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hd-to-pie-legend">
+                                @foreach ($topDepts as $i => $d)
+                                    @php $c = $colors[$i] ?? '#64748b'; @endphp
+                                    <div class="hd-to-pie-leg-row">
+                                        <span class="hd-leg-dot" style="background:{{ $c }};flex-shrink:0;"></span>
+                                        <span class="hd-to-pie-leg-name" title="{{ $d->name }}">{{ strlen($d->name) > 22 ? substr($d->name,0,22).'…' : $d->name }}</span>
+                                        <span class="hd-to-pie-leg-cnt">{{ $d->cnt }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                        <div class="hd-dept-bar-wrap">
-                            <div class="hd-dept-bar" style="width:{{ $pct }}%;background:{{ $c }};"></div>
-                        </div>
-                        <span class="hd-dept-cnt">{{ $d->cnt }}</span>
                     </div>
-                @endforeach
+                @endif
             </div>
 
         </div>
@@ -254,7 +261,7 @@
             @foreach ($recentTraining as $t)
             <tr>
                 <td style="font-weight:600;">{{ $t->emp_name }}</td>
-                <td style="font-size:.8rem;color:var(--muted);">{{ $t->course->department->name ?? '—' }}</td>
+                <td style="font-size:.8rem;color:var(--muted);">{{ $t->staff->department->name ?? '—' }}</td>
                 <td>
                     <a href="{{ url('/training?view=course&course_id=' . $t->course_id) }}" style="text-decoration:none;"><code class="training-code training-code-link">{{ $t->training_code }}</code></a>
                     <span style="font-size:.82rem;margin-left:.4rem;">{{ substr($t->training_title,0,45) }}…</span>    
@@ -428,6 +435,45 @@
     tick();
     setInterval(tick, 1000);
 })();
+
+// Interactive SVG donut pies
+(function() {
+    document.querySelectorAll('.hd-sv-pie').forEach(function(svg) {
+        var slices = svg.querySelectorAll('.hd-sv-slice');
+        if (!slices.length) return;
+        var wrap      = svg.parentElement;
+        var sidePanel = wrap ? wrap.querySelector('.hd-dept-side-panel') : null;
+        var valEl     = svg.querySelector('.hd-pie-sv');
+        var lblEl     = svg.querySelector('.hd-pie-sl');
+        var defVal    = valEl ? valEl.textContent : '';
+        var defLbl    = lblEl ? lblEl.textContent : '';
+        slices.forEach(function(s) {
+            s.addEventListener('mouseenter', function() {
+                if (sidePanel) {
+                    var color = s.getAttribute('data-color') || '#64748b';
+                    sidePanel.querySelector('.hd-dept-sp-dot').style.background = color;
+                    sidePanel.querySelector('.hd-dept-sp-dot').style.boxShadow = '0 0 0 3px ' + color + '33';
+                    sidePanel.querySelector('.hd-dept-sp-name').textContent = s.getAttribute('data-name') || '';
+                    sidePanel.querySelector('.hd-dept-sp-cnt').textContent = s.getAttribute('data-cnt') + ' trainings';
+                    sidePanel.querySelector('.hd-dept-sp-pct').textContent = s.getAttribute('data-sub');
+                    sidePanel.style.borderLeftColor = color;
+                    sidePanel.classList.add('active');
+                } else {
+                    if (valEl) valEl.textContent = s.getAttribute('data-cnt');
+                    if (lblEl) lblEl.textContent = s.getAttribute('data-sub');
+                }
+            });
+            s.addEventListener('mouseleave', function() {
+                if (sidePanel) {
+                    sidePanel.classList.remove('active');
+                } else {
+                    if (valEl) valEl.textContent = defVal;
+                    if (lblEl) lblEl.textContent = defLbl;
+                }
+            });
+        });
+    });
+})();
 </script>
 @endsection
 
@@ -486,7 +532,63 @@
 /* —— Mid Row ———————————————————————————————————————————————————————— */
 .hd-mid-row { display: grid; grid-template-columns: 1fr 360px; gap: 1rem; align-items: start; }
 .hd-right-col { display: flex; flex-direction: column; gap: 0; }
-.hd-training-card .hd-training-body { padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.hd-training-card .hd-training-body { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .9rem; }
+
+/* —— Compact Training Overview ——————————————————————————————————————— */
+.hd-to-type-row { display: flex; gap: .5rem; }
+.hd-to-chip { flex: 1; display: flex; align-items: center; gap: .4rem; background: var(--bg); border-radius: 8px; padding: .45rem .6rem; font-size: .8rem; }
+.hd-to-chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.hd-to-chip-lbl { color: var(--muted); font-weight: 500; flex: 1; }
+.hd-to-chip-val { font-weight: 800; color: var(--text); }
+.hd-to-chip-pct { font-size: .7rem; color: var(--muted); background: white; padding: .1rem .3rem; border-radius: 4px; flex-shrink: 0; }
+
+.hd-to-bars { display: flex; flex-direction: column; gap: .28rem; }
+.hd-to-bar-row { display: flex; align-items: center; gap: .5rem; font-size: .78rem; }
+.hd-to-bar-mo { width: 36px; color: var(--muted); font-weight: 500; flex-shrink: 0; font-size: .72rem; }
+.hd-to-bar-track { flex: 1; height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.hd-to-bar-fill { height: 100%; border-radius: 99px; transition: width .6s; }
+.hd-to-bar-cnt { width: 28px; text-align: right; font-weight: 700; color: var(--text); flex-shrink: 0; font-size: .76rem; }
+
+.hd-to-dept-list { display: flex; flex-direction: column; gap: .32rem; }
+.hd-to-dept-row { display: flex; align-items: flex-start; gap: .45rem; }
+.hd-to-dept-rank { font-size: .7rem; font-weight: 800; width: 14px; flex-shrink: 0; margin-top: .15rem; text-align: center; }
+.hd-to-dept-body { flex: 1; min-width: 0; }
+.hd-to-dept-name-row { display: flex; align-items: center; gap: .3rem; font-size: .78rem; margin-bottom: .18rem; }
+.hd-to-dept-name { font-weight: 600; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hd-to-dept-cnt { font-weight: 700; color: var(--text); flex-shrink: 0; margin-left: auto; font-size: .76rem; }
+.hd-to-dept-bar-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.hd-to-dept-bar { height: 100%; border-radius: 99px; transition: width .6s; }
+
+/* —— SVG Donut Pie (shared: trend + departments) ———————————————————— */
+.hd-to-pie-wrap { display: flex; flex-direction: column; align-items: center; gap: .65rem; }
+.hd-sv-pie { width: 150px; height: 150px; flex-shrink: 0; overflow: visible; }
+.hd-sv-pie.hd-sv-pie-lg { width: 200px; height: 200px; }
+
+/* —— Departments side layout ———————————————————————————————————————— */
+.hd-to-pie-side { flex-direction: row !important; align-items: center; gap: 1.25rem; }
+.hd-dept-right { display: flex; flex-direction: column; gap: .55rem; flex: 1; min-width: 0; }
+.hd-dept-right .hd-to-pie-legend { flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; gap: .32rem; }
+.hd-dept-right .hd-to-pie-leg-row { font-size: .82rem; gap: .45rem; }
+.hd-dept-right .hd-to-pie-leg-name { max-width: 160px; font-weight: 600; }
+.hd-dept-right .hd-to-pie-leg-cnt { font-size: .82rem; }
+
+/* Side hover panel */
+.hd-dept-side-panel { display: none; align-items: center; gap: .65rem; background: var(--bg); border-radius: 10px; padding: .65rem .85rem; border-left: 4px solid #64748b; }
+.hd-dept-side-panel.active { display: flex; }
+.hd-dept-sp-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; transition: box-shadow .15s; }
+.hd-dept-sp-body { flex: 1; min-width: 0; }
+.hd-dept-sp-name { font-size: .88rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hd-dept-sp-meta { display: flex; gap: .5rem; margin-top: .2rem; font-size: .78rem; align-items: center; }
+.hd-dept-sp-cnt { font-weight: 700; color: var(--text); }
+.hd-dept-sp-pct { color: var(--muted); background: white; padding: .1rem .35rem; border-radius: 4px; font-weight: 600; }
+.hd-sv-slice { cursor: pointer; stroke: white; stroke-width: 2; transition: filter .15s, stroke-width .15s; }
+.hd-sv-slice:hover { filter: brightness(1.12); stroke-width: 3; }
+.hd-pie-sv { text-anchor: middle; dominant-baseline: middle; font-size: 28px; font-weight: 800; fill: #1e293b; font-family: 'DM Sans', sans-serif; }
+.hd-pie-sl { text-anchor: middle; dominant-baseline: middle; font-size: 13px; font-weight: 600; fill: #94a3b8; font-family: 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+.hd-to-pie-legend { display: flex; flex-wrap: wrap; gap: .22rem .65rem; justify-content: center; width: 100%; }
+.hd-to-pie-leg-row { display: flex; align-items: center; gap: .35rem; font-size: .74rem; flex: 0 0 auto; }
+.hd-to-pie-leg-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.hd-to-pie-leg-cnt { font-weight: 700; color: var(--text); }
 
 /* —— Year badge ————————————————————————————————————————————————————— */
 .hd-year-badge {
@@ -508,20 +610,28 @@
 
 /* —— 6-month trend —————————————————————————————————————————————————— */
 .hd-trend-label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .6rem; }
-.hd-trend-bars { display: flex; align-items: flex-end; gap: .5rem; height: 80px; }
-.hd-trend-col  { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: default; }
-.hd-trend-cnt  { font-size: .7rem; font-weight: 700; color: var(--navy); }
-.hd-trend-bar  { width: 100%; background: linear-gradient(180deg,#38bdf8,#0284c7); border-radius: 4px 4px 0 0; min-height: 4px; transition: height .5s; }
-.hd-trend-mon  { font-size: .68rem; color: var(--muted); font-weight: 600; }
 
-/* —— Dept bars —————————————————————————————————————————————————————— */
-.hd-dept-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
-.hd-dept-name { font-size: .78rem; font-weight: 500; width: 180px; flex-shrink: 0; display: flex; align-items: center; gap: .35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hd-dept-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.hd-dept-co   { font-size: .68rem; color: var(--muted); background: var(--bg); padding: .05rem .3rem; border-radius: 4px; flex-shrink: 0; }   
-.hd-dept-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
-.hd-dept-bar  { height: 100%; border-radius: 99px; transition: width .6s; }
-.hd-dept-cnt  { font-size: .78rem; font-weight: 700; color: var(--text); width: 30px; text-align: right; flex-shrink: 0; }
+/* —— Donut pie chart (shared: trend + departments) —————————————————— */
+.hd-pie-wrap { display: flex; align-items: center; gap: 1.25rem; }
+.hd-pie {
+    width: 130px; height: 130px; border-radius: 50%; flex-shrink: 0;
+    position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+}
+.hd-pie-hole {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 78px; height: 78px; background: white; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.hd-pie-total { font-size: 1.35rem; font-weight: 800; color: var(--text); line-height: 1; }
+.hd-pie-cap   { font-size: .62rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-top: .15rem; }
+.hd-legend { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .45rem; }
+.hd-leg-row { display: flex; align-items: center; gap: .5rem; font-size: .78rem; }
+.hd-leg-dot, .hd-dept-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.hd-leg-name { flex: 1; min-width: 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: .35rem; }
+.hd-dept-co   { font-size: .68rem; color: var(--muted); background: var(--bg); padding: .05rem .3rem; border-radius: 4px; flex-shrink: 0; }
+.hd-leg-cnt  { font-size: .78rem; font-weight: 700; color: var(--text); flex-shrink: 0; }
+.hd-leg-pct  { font-size: .72rem; font-weight: 600; color: var(--muted); width: 38px; text-align: right; flex-shrink: 0; }
 
 /* —— Booking list ——————————————————————————————————————————————————— */
 .hd-booking-list { padding: .5rem .75rem .75rem; display: flex; flex-direction: column; gap: .4rem; }
@@ -568,7 +678,6 @@
 @media (max-width: 1100px) {
     .hd-kpi-row { grid-template-columns: repeat(2, 1fr); }
     .hd-mid-row { grid-template-columns: 1fr; }
-    .hd-dept-name { width: 140px; }
 }
 
 @media (max-width: 768px) {
@@ -598,14 +707,11 @@
     .hd-greeting     { font-size: .9rem; }
     .hd-date         { font-size: .7rem; }
 
-    .hd-dept-name    { width: auto; flex: 0 1 100px; min-width: 0; font-size: .72rem; }
     .hd-dept-co      { display: none; }
-    .hd-dept-bar-wrap { min-width: 40px; height: 6px; }
-    .hd-dept-cnt     { font-size: .72rem; width: 24px; }
-
-    .hd-trend-bars   { height: 48px; gap: .35rem; }
-    .hd-trend-cnt    { font-size: .6rem; }
-    .hd-trend-mon    { font-size: .55rem; }
+    .hd-pie          { width: 110px; height: 110px; }
+    .hd-pie-hole     { width: 66px; height: 66px; }
+    .hd-pie-total    { font-size: 1.1rem; }
+    .hd-leg-row      { font-size: .72rem; }
 
     .hd-training-card .hd-training-body { padding: .75rem .875rem; gap: .875rem; }
     .hd-type-top { font-size: .78rem; }
@@ -616,7 +722,8 @@
 @media (max-width: 360px) {
     .hd-kpi-row { grid-template-columns: 1fr; }
     .hd-greeting { font-size: .85rem; }
-    .hd-dept-name { flex: 0 1 80px; }
+    .hd-pie-wrap { flex-direction: column; gap: .75rem; }
+    .hd-legend { width: 100%; }
 }
 </style>
 @endsection
