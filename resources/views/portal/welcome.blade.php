@@ -29,9 +29,9 @@
     align-items: center;
     justify-content: center;
     background:
-      radial-gradient(circle at 15% 15%, rgba(255,255,255,.2), transparent 40%),
-      radial-gradient(circle at 85% 85%, rgba(200,140,0,.3), transparent 45%),
-      linear-gradient(135deg, #f59e0b 0%, #fbbf24 55%, #fcd34d 100%);
+      radial-gradient(circle at 15% 15%, rgba(56,189,248,.15), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(26,75,140,.3), transparent 45%),
+      linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--blue) 100%);
     padding: 2rem 1.5rem;
   }
 
