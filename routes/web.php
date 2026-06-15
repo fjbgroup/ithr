@@ -13,17 +13,19 @@ use App\Http\Controllers\TravelController;
 use App\Http\Controllers\UpdateRequestController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\IRController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\ChatbotController;
 
-Route::get('/', [RoomController::class, 'index'])->name('home');
+Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'index'])->name('home');
+Route::get('/hr', [RoomController::class, 'landing'])->name('hr.home');
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.home');
 
-// Accessible to guests — controller handles inline staff authentication
 Route::post('rooms/bookings', [RoomBookingController::class, 'store'])->name('rooms.bookings.store');
 Route::get('rooms/bookings/poll', [RoomController::class, 'pollBookings'])->name('rooms.bookings.poll');
+Route::post('rooms/bookings/hold', [RoomBookingController::class, 'holdGuestBooking'])->name('rooms.bookings.hold');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
@@ -50,6 +52,7 @@ Route::middleware('auth')->group(function () {
         
         Route::prefix('bookings')->name('bookings.')->group(function () {
             Route::get('/pending', [RoomBookingController::class, 'pending'])->name('pending');
+            Route::get('/process-pending', [RoomBookingController::class, 'processPendingBooking'])->name('process-pending');
             Route::post('/{booking}/cancel-request', [RoomBookingController::class, 'cancelRequest'])->name('cancel-request');
             Route::post('/{booking}/approve', [RoomBookingController::class, 'approve'])->name('approve');
             Route::post('/{booking}/reject', [RoomBookingController::class, 'reject'])->name('reject');
@@ -80,6 +83,7 @@ Route::middleware('auth')->group(function () {
         Route::post('attendance', [TrainingController::class, 'storeAttendance'])->name('attendance.store');
         Route::get('{course}/qr',           [TrainingController::class, 'qrPage'])->name('qr.page');
         Route::post('{course}/qr/generate', [TrainingController::class, 'qrGenerate'])->name('qr.generate');
+        Route::get('{course}/report-export', [TrainingController::class, 'courseExport'])->name('course.export');
         Route::get('scan/{token}',          [TrainingController::class, 'qrScan'])->name('qr.scan');
         Route::post('scan/{token}',         [TrainingController::class, 'qrSubmit'])->name('qr.submit');
         Route::get('{id}/projector',        [AttendanceController::class, 'showProjector'])
@@ -116,7 +120,6 @@ Route::middleware('auth')->group(function () {
     Route::get('users/search-staff', [UserController::class, 'searchStaff'])->name('users.search_staff');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
     Route::resource('users', UserController::class);
-    Route::resource('settings', SettingsController::class)->middleware('role:admin_it');
     Route::resource('ir', IRController::class)->middleware('role:admin_it,admin_hr,ceo');
 
     // Admin routes
@@ -127,9 +130,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin_it,ceo')->group(function () {
         Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit-log.index');
     });
+
+    Route::post('chatbot/message', [ChatbotController::class, 'chat'])->name('chatbot.message');
+    Route::post('chatbot/clear', [ChatbotController::class, 'clearHistory'])->name('chatbot.clear');
 });
 
 // QR attendance — public (no auth session required; credentials submitted in the form)
+Route::get('attendance/scan',         [AttendanceController::class, 'scan'])->name('attendance.scan');
 Route::get('attendance/verify/{id}',  [AttendanceController::class, 'verify'])->name('attendance.verify');
 Route::post('attendance/verify/{id}', [AttendanceController::class, 'verifySubmit'])->name('attendance.verify.submit');
 Route::get('attendance/success/{id}', [AttendanceController::class, 'success'])->name('attendance.success');
+Route::post('attendance/feedback/{id}', [AttendanceController::class, 'feedbackStore'])->name('attendance.feedback.submit');
