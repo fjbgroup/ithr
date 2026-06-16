@@ -256,7 +256,7 @@ $action      = request('action', 'list');
               @endif
             </div>
             <div class="mu-user-sub">
-              <span class="mu-user-meta"><i class="bi bi-person-fill"></i>@{{ $row->username }}</span>
+              <span class="mu-user-meta"><i class="bi bi-person-fill"></i>{{ $row->username }}</span>
               @if($row->email)
               <span class="mu-user-meta"><i class="bi bi-envelope-fill"></i>{{ $row->email }}</span>
               @endif
