@@ -35,9 +35,8 @@ class EmailSettingController extends Controller
         $to = trim($request->test_to ?? '');
         if (!filter_var($to, FILTER_VALIDATE_EMAIL)) return back()->with('error', 'Invalid email address.');
 
-        $html = '<div style="font-family:Arial,sans-serif;max-width:480px;margin:32px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)"><div style="background:#142b47;padding:22px 28px"><div style="color:#fff;font-size:17px;font-weight:700">âœ… Email is working!</div></div><div style="padding:24px 28px;color:#475569;font-size:14px;line-height:1.7">Your SMTP settings are configured correctly. Admins will now receive email notifications when users submit requests.</div></div>';
-        $sent = NotificationService::sendEmail($to, $to, 'âœ… FJB Inventory â€” Test Email', $html);
-        return back()->with($sent ? 'success' : 'error', $sent ? 'âœ… Test email sent to '.$to.'. Check your inbox!' : 'âŒ Could not send email. Check your SMTP settings and try again.');
+        $html = '<div style="font-family:Arial,sans-serif;max-width:480px;margin:32px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)"><div style="background:#142b47;padding:22px 28px"><div style="color:#fff;font-size:17px;font-weight:700">Email is working!</div></div><div style="padding:24px 28px;color:#475569;font-size:14px;line-height:1.7">Your SMTP settings are configured correctly. Admins will now receive email notifications when users submit requests.</div></div>';
+        $sent = NotificationService::sendEmail($to, $to, 'FJB Inventory - Test Email', $html);
+        return back()->with($sent ? 'success' : 'error', $sent ? 'Test email sent to ' . $to . '. Check your inbox!' : 'Could not send email. Check your SMTP settings and try again.');
     }
 }
-

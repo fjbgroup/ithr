@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('training_attendances', function (Blueprint $table) {
-            $table->string('qr_token', 64)->nullable()->unique()->after('remarks');
+            $table->string('qr_token', 64)->nullable()->unique();
             $table->timestamp('qr_used_at')->nullable()->after('qr_token');
         });
     }

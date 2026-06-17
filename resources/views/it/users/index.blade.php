@@ -132,6 +132,16 @@ $action      = request('action', 'list');
     <form method="POST" action="{{ route('it.users.store') }}">
       @csrf
     @endif
+      @if($errors->any())
+      <div class="alert-danger-custom" style="margin-bottom:16px">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <ul style="margin:0;padding-left:18px">
+          @foreach($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
       <div class="row g-3">
         <div class="col-md-4">
           <label class="form-label">Username <span style="color:var(--red)">*</span></label>
@@ -153,7 +163,7 @@ $action      = request('action', 'list');
           <label class="form-label">Role</label>
           <select name="role" class="form-select">
             @php
-            $defaultRole = request('default_role', $editUser->role ?? 'user');
+            $defaultRole = old('role', request('default_role', $editUser->role ?? 'user'));
             $roleOpts = ['ceo'=>'Chief Executive Officer (C.E.O)','gm'=>'General Manager (G.M)','hou'=>'Head Of Unit (H.O.U)','admin'=>'IT Admin','finance_admin'=>'Finance Admin','user'=>'Staff'];
             @endphp
             @foreach($roleOpts as $rv => $rl)

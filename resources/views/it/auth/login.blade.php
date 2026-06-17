@@ -52,12 +52,12 @@ input::placeholder{color:#bfc5cc}
 .alert{border-radius:10px;padding:12px 16px;font-size:13px;display:flex;align-items:center;gap:9px;margin-bottom:18px;font-weight:500}
 .alert-error{background:#fee2e2;border:1px solid #fecaca;color:#991b1b}
 .alert-success{background:#dcfce7;border:1px solid #bbf7d0;color:#166534}
-.divider{text-align:center;margin-top:20px;font-size:11px;color:#94a3b8;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.divider{text-align:center;padding:16px 36px;border-top:1px solid var(--border);font-size:11px;color:#94a3b8;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
 </style>
 
 <div class="wrap">
   <div class="brand">
-    <img src="{{ asset('assets/img/logo.png') }}" alt="FJB Logo" onerror="this.style.display='none'">
+    <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB Logo">
     <div class="brand-text">FJB Inventory<span>Management System</span></div>
   </div>
 

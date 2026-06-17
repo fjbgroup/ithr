@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $col) {
             $col->id();
-            $col->integer('user_id')->nullable();
+            $col->unsignedBigInteger('user_id')->nullable();
             $col->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $col->string('user_name', 200)->nullable();
             $col->string('user_role', 30)->nullable();

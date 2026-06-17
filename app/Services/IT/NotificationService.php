@@ -5,8 +5,10 @@ namespace App\Services\IT;
 use App\Models\IT\Notification;
 use App\Models\IT\User;
 use App\Models\IT\EmailSetting;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 
 class NotificationService
 {
@@ -40,19 +42,33 @@ class NotificationService
             $cfg = EmailSetting::all_settings();
             if (empty($cfg['smtp_host'])) return false;
 
-            Config::set('mail.mailers.smtp.host', $cfg['smtp_host']);
-            Config::set('mail.mailers.smtp.port', $cfg['smtp_port'] ?? 587);
-            Config::set('mail.mailers.smtp.encryption', $cfg['smtp_encryption'] ?? 'tls');
-            Config::set('mail.mailers.smtp.username', $cfg['smtp_user'] ?? null);
-            Config::set('mail.mailers.smtp.password', $cfg['smtp_pass'] ?? null);
-            Config::set('mail.from.address', $cfg['smtp_from'] ?? '');
-            Config::set('mail.from.name', $cfg['smtp_from_name'] ?? 'FJB Inventory');
+            $host     = $cfg['smtp_host'];
+            $port     = (int)($cfg['smtp_port'] ?? 587);
+            $enc      = $cfg['smtp_encryption'] ?? 'tls';
+            $user     = $cfg['smtp_user'] ?? '';
+            $pass     = $cfg['smtp_pass'] ?? '';
+            $from     = !empty($cfg['smtp_from']) ? $cfg['smtp_from'] : $user;
+            $fromName = $cfg['smtp_from_name'] ?? 'FJB Inventory';
 
-            Mail::html($htmlBody, function ($m) use ($toEmail, $toName, $subject) {
-                $m->to($toEmail, $toName)->subject($subject);
-            });
+            // true = SSL-on-connect (port 465); false = STARTTLS negotiation (port 587)
+            $useSsl = ($enc === 'ssl' || $port === 465);
+
+            $transport = new EsmtpTransport($host, $port, $useSsl);
+            $transport->setUsername($user);
+            $transport->setPassword($pass);
+
+            $mailer = new SymfonyMailer($transport);
+
+            $email = (new Email())
+                ->from(new Address($from, $fromName))
+                ->to(new Address($toEmail, $toName))
+                ->subject($subject)
+                ->html($htmlBody);
+
+            $mailer->send($email);
             return true;
         } catch (\Throwable $e) {
+            \Log::error('SMTP send failed: ' . $e->getMessage());
             return false;
         }
     }

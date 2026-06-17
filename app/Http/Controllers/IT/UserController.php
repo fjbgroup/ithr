@@ -64,7 +64,8 @@ class UserController extends Controller
         ]);
 
         ActivityLogService::log('CREATE', 'user', $user->id, 'Created user: '.$user->username);
-        return back()->with('success', 'User created successfully.');
+        return redirect()->route('it.users.index', ['role_tab' => $request->role])
+            ->with('success', 'User created successfully.');
     }
 
     public function update(Request $request, int $id)

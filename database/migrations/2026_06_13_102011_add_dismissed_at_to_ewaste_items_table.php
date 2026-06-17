@@ -8,6 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (!Schema::connection('it_mysql')->hasTable('ewaste_items')) {
+            return;
+        }
         Schema::connection('it_mysql')->table('ewaste_items', function (Blueprint $table) {
             $table->timestamp('dismissed_at')->nullable()->after('created_by');
         });

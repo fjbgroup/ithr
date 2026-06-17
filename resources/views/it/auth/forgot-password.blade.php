@@ -7,7 +7,7 @@
 :root {
   --bg:#ffffff; --surface:#fff; --surface2:#f7f8fa;
   --border:#e2e5ea; --text:#1a1f2e; --muted:#6b7280;
-  --accent:#0284c7; --accent-h:#e07d1a; --red:#dc2626; --green:#16a34a;
+  --accent:#0284c7; --accent-h:#0369a1; --red:#dc2626; --green:#16a34a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 50%,#bae6fd 100%);font-family:'DM Sans',sans-serif;
@@ -23,11 +23,11 @@ body::after{content:'';position:fixed;width:600px;height:600px;
 
 .wrap{position:relative;z-index:1;width:100%;max-width:460px}
 
-.brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
-.brand img{width:48px;height:48px;object-fit:contain}
-.brand-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:800;color:#000;
+.brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:16px}
+.brand img{width:40px;height:40px;object-fit:contain}
+.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#000;
   text-transform:uppercase;letter-spacing:.06em;line-height:1.3}
-.brand-text span{color:#000;display:block;font-size:11px;letter-spacing:.1em}
+.brand-text span{color:#000;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
   overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 40px rgba(0,0,0,.07)}
@@ -97,7 +97,7 @@ input::placeholder{color:#bfc5cc}
 <div class="wrap">
 
   <div class="brand">
-    <img src="{{ asset('assets/img/logo.png') }}" alt="FJB Logo" onerror="this.style.display='none'">
+    <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB Logo">
     <div class="brand-text">FJB Pasir Gudang<span>Inventory System</span></div>
   </div>
 
@@ -160,7 +160,7 @@ input::placeholder{color:#bfc5cc}
       @endif
 
     </div>
-    <div class="divider">FJV Johor Bulkers Sdn Bhd</div>
+    <div class="divider">FJB Johor Bulkers Sdn Bhd</div>
   </div>
 
 </div>

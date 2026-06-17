@@ -10,11 +10,9 @@ return new class extends Migration
     {
         Schema::create('training_feedbacks', function (Blueprint $col) {
             $col->id();
-            // Existing tables use signed int(11) primary keys, so the foreign key
-            // columns must match that type rather than the default bigint unsigned.
-            $col->integer('attendance_id');
-            $col->integer('staff_id');
-            $col->integer('course_id');
+            $col->unsignedBigInteger('attendance_id');
+            $col->unsignedBigInteger('staff_id');
+            $col->unsignedBigInteger('course_id');
             $col->unsignedTinyInteger('content_rating')->nullable();
             $col->unsignedTinyInteger('trainer_rating')->nullable();
             $col->unsignedTinyInteger('venue_rating')->nullable();
