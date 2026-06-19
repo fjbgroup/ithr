@@ -10,22 +10,22 @@
   --accent:#38bdf8; --accent-h:#0284c7; --navy:#142b47; --red:#dc2626; --green:#16a34a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 50%,#bae6fd 100%);font-family:'DM Sans',sans-serif;
+body{min-height:100vh;background:linear-gradient(135deg,#0a1628 0%,#0f2347 50%,#142b5e 100%);font-family:'DM Sans',sans-serif;
   display:flex;align-items:center;justify-content:center;padding:20px;
   position:relative;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;
-  background-image:radial-gradient(circle,rgba(56,189,248,0.08) 1px,transparent 1px);
-  background-size:28px 28px;z-index:0;opacity:.6}
+  background-image:radial-gradient(circle,rgba(56,189,248,0.06) 1px,transparent 1px);
+  background-size:28px 28px;z-index:0;opacity:.5}
 body::after{content:'';position:fixed;width:600px;height:600px;
-  background:radial-gradient(circle,rgba(56,189,248,.18) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(56,189,248,.12) 0%,transparent 65%);
   top:-200px;right:-200px;z-index:0;animation:orb 10s ease-in-out infinite alternate}
 @keyframes orb{to{transform:translate(-60px,100px)}}
 .wrap{position:relative;z-index:1;width:100%;max-width:480px}
 .brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
 .brand img{width:48px;height:48px;object-fit:contain;background:transparent}
-.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#000;
+.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#fff;
   text-transform:uppercase;letter-spacing:.06em;line-height:1.3}
-.brand-text span{color:#000;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
+.brand-text span{color:#cbd5e1;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
   overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 40px rgba(0,0,0,.07)}
 .form-body{padding:32px 36px}
