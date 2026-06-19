@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class AccessRequest extends Model
 {
     protected $table = 'access_requests';
-    protected $connection = 'wt_mysql';
     
     // Legacy schema uses created_at only (no updated_at column).
     public $timestamps = false;
@@ -65,7 +64,7 @@ class AccessRequest extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function walkieTalkie()
@@ -75,12 +74,12 @@ class AccessRequest extends Model
 
     public function handler()
     {
-        return $this->belongsTo(User::class, 'handled_by', 'user_id');
+        return $this->belongsTo(User::class, 'handled_by', 'id');
     }
 
     public function submitToAdmin()
     {
-        return $this->belongsTo(User::class, 'submit_to_admin_id', 'user_id');
+        return $this->belongsTo(User::class, 'submit_to_admin_id', 'id');
     }
 
     public function handover()

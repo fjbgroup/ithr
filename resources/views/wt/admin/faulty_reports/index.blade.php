@@ -71,7 +71,7 @@
         outline: none;
     }
     .faulty-report-field:focus {
-        border-color: #8B5E3C;
+        border-color: #0284c7;
         background: #ffffff;
         box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.12);
     }
@@ -232,7 +232,7 @@
             <div class="faulty-report-row p-5 grid grid-cols-1 xl:grid-cols-[1.15fr_0.85fr] gap-5">
                 <div class="min-w-0">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="text-[11px] font-black text-[#8B5E3C]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
+                        <span class="text-[11px] font-black text-[#0284c7]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
                         <span class="px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-widest {{ $statusClass }}">
                             {{ $record->status ?: 'PENDING' }}
                         </span>
@@ -422,7 +422,7 @@
                             Return Spare/New & Original WT
                         </button>
                         @endif
-                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#8B5E3C] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F]">
+                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0284c7] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F]">
                             <i class="fa-solid fa-bell"></i>
                             Update User
                         </button>

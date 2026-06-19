@@ -564,8 +564,11 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
-    <a href="{{ route('home') }}" class="nav-link">
-      <i class="bi bi-house-door-fill"></i> Back to Portal
+    <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">
+      <i class="bi bi-broadcast"></i> WT System
+    </a>
+    <a href="{{ route('dashboard') }}" class="nav-link">
+      <i class="bi bi-house-door-fill"></i> HR Portal
     </a>
 
   </nav>

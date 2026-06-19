@@ -32,8 +32,8 @@ Route::prefix('wt')->name('wt.')->group(function () {
     Route::post('/switch-executive-account', [InterfaceSwitchController::class, 'impersonateExecutive'])->name('switch_executive_account')->middleware('wt.auth');
     Route::post('/return-to-ict-account', [InterfaceSwitchController::class, 'stopImpersonating'])->name('return_to_ict_account')->middleware('wt.auth');
 
-    // Admin & Admin IT shared routes
-    Route::middleware(['wt.auth', 'wt.role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Authenticated routes — ICT-only sub-sections are further guarded by wt.role:admin_it
+    Route::middleware(['wt.auth'])->prefix('admin')->name('admin.')->group(function () {
         // Walkie Talkie Management
         Route::get('/repair-faulty', [WalkieTalkieController::class, 'repairFaulty'])->name('walkies.repairFaulty');
 
@@ -111,6 +111,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
             Route::post('/requests/{id}/approve', [RequestController::class, 'approve'])->name('requests.approve');
             Route::post('/damage-reports/{id}/approve', [RequestController::class, 'approveDamage'])->name('damageReports.approve');
             Route::get('/users', [AdminITController::class, 'users'])->name('users.index');
+            Route::get('/users/staff-search', [AdminITController::class, 'staffSearch'])->name('users.staffSearch');
             Route::post('/users/{user}/update', [AdminITController::class, 'updateUser'])->name('users.update');
             Route::post('/users/{user}/reset-password', [AdminITController::class, 'resetUserPassword'])->name('users.resetPassword');
             Route::delete('/users/{user}', [AdminITController::class, 'destroyUser'])->name('users.destroy');

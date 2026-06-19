@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PasswordResetRequest extends Model
 {
-    protected $table = 'password_reset_requests';
-    protected $connection = 'wt_mysql';
+    protected $table = 'wt_password_reset_requests';
 
     public $timestamps = false;
 
@@ -25,12 +24,12 @@ class PasswordResetRequest extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function reviewer()
     {
-        return $this->belongsTo(User::class, 'reviewed_by', 'user_id');
+        return $this->belongsTo(User::class, 'reviewed_by', 'id');
     }
 }
 

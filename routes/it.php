@@ -142,6 +142,7 @@ Route::prefix('it')->name('it.')->group(function () {
             // Admin only
             Route::middleware('it.role:admin')->group(function () {
                 Route::get('/users',                         [UserController::class, 'index'])->name('users.index');
+                Route::get('/users/staff-search',            [UserController::class, 'staffSearch'])->name('users.staff-search');
                 Route::post('/users',                        [UserController::class, 'store'])->name('users.store');
                 Route::post('/users/{id}',                   [UserController::class, 'update'])->name('users.update');
                 Route::delete('/users/{id}',                 [UserController::class, 'destroy'])->name('users.destroy');

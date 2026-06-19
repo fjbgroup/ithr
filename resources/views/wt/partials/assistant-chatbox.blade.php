@@ -6,7 +6,7 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: #B38A5A;
+    background: #0284c7;
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(179,138,90,.45);
@@ -46,7 +46,7 @@
 #wt-chatbot-window.open { display: flex; }
 
 .wt-chatbot-header {
-    background: #B38A5A;
+    background: #0284c7;
     color: #fff;
     padding: .85rem 1rem;
     display: flex;
@@ -99,7 +99,7 @@
     word-break: break-word;
 }
 .wt-chat-msg.user {
-    background: #B38A5A;
+    background: #0284c7;
     color: #fff;
     align-self: flex-end;
     border-bottom-right-radius: 4px;
@@ -162,11 +162,11 @@
     overflow-y: auto;
     transition: border-color .15s;
 }
-#wt-chatbot-input:focus { border-color: #B38A5A; }
+#wt-chatbot-input:focus { border-color: #0284c7; }
 #wt-chatbot-input::placeholder { color: #94a3b8; }
 #wt-chatbot-send-btn {
     width: 36px; height: 36px;
-    background: #B38A5A;
+    background: #0284c7;
     border: none;
     border-radius: 8px;
     color: #fff;
@@ -178,7 +178,7 @@
     align-self: flex-end;
     transition: background .15s, transform .1s;
 }
-#wt-chatbot-send-btn:hover { background: #8D6742; }
+#wt-chatbot-send-btn:hover { background: #0369a1; }
 #wt-chatbot-send-btn:active { transform: scale(.93); }
 #wt-chatbot-send-btn:disabled { background: #d4b896; cursor: not-allowed; }
 

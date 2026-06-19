@@ -88,7 +88,7 @@
         color: #724d31 !important;
     }
     .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #8B5E3C !important;
+        background: #0284c7 !important;
         color: #ffffff !important;
     }
     .dark .smart-select + .select2-container .select2-selection--single,
@@ -135,7 +135,7 @@
         color: #ffe7c2 !important;
     }
     .dark .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #8B5E3C !important;
+        background: #0284c7 !important;
         color: #ffffff !important;
     }
     .admin-request-shell {
@@ -237,7 +237,7 @@
         gap: 8px !important;
         margin-bottom: 6px !important;
     }
-    .admin-request-card .bg-\[\#8B5E3C\].text-white,
+    .admin-request-card .bg-\[\#0284c7\].text-white,
     .admin-request-card .bg-red-800.text-white {
         padding: 6px !important;
         border-radius: 7px !important;
@@ -362,23 +362,23 @@
                     : 'Create an individual request using your own executive account details. Available walkie talkies will be assigned by ICT after approval.' }}
             </p>
         </div>
-        <a href="{{ route('wt.admin.all.status', ['view' => 'requests']) }}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#8B5E3C] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">
+        <a href="{{ route('wt.admin.all.status', ['view' => 'requests']) }}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0284c7] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">
             <i class="fa-solid fa-list-check"></i>
             Status Tracking
         </a>
     </div>
 </div>
 
-<div class="admin-request-card bg-white dark:bg-slate-800/80 rounded-2xl shadow-sm border border-[#8B5E3C]/10 dark:border-slate-700/50 overflow-hidden transition-all duration-300">
+<div class="admin-request-card bg-white dark:bg-slate-800/80 rounded-2xl shadow-sm border border-[#0284c7]/10 dark:border-slate-700/50 overflow-hidden transition-all duration-300">
     <div class="flex items-center gap-2.5 mb-5">
-        <div class="bg-[#8B5E3C] text-white p-2.5 rounded-xl border border-[#A67B5B] shadow-inner">
+        <div class="bg-[#0284c7] text-white p-2.5 rounded-xl border border-[#A67B5B] shadow-inner">
             <i class="fas fa-user-check text-sm"></i>
         </div>
-        <h2 class="text-xs font-black text-[#3D2B1F] dark:text-slate-100 uppercase tracking-widest">{{ $isTemporaryRequest ? 'Temporary Self-Issue Form' : 'Self-Issue Form' }}</h2>
+        <h2 class="text-xs font-black text-[#142b47] dark:text-slate-100 uppercase tracking-widest">{{ $isTemporaryRequest ? 'Temporary Self-Issue Form' : 'Self-Issue Form' }}</h2>
     </div>
 
-    <div class="mb-5 rounded-2xl border border-[#8B5E3C]/15 bg-[#FDFBF7] px-4 py-3 dark:bg-slate-900/70 dark:border-slate-700">
-        <p class="text-[9px] font-black uppercase tracking-[0.18em] text-[#8B5E3C]">ICT Assignment Notice</p>
+    <div class="mb-5 rounded-2xl border border-[#0284c7]/15 bg-[#FDFBF7] px-4 py-3 dark:bg-slate-900/70 dark:border-slate-700">
+        <p class="text-[9px] font-black uppercase tracking-[0.18em] text-[#0284c7]">ICT Assignment Notice</p>
         <p class="mt-1 text-[11px] font-semibold text-stone-600 dark:text-slate-300">
             {{ $isTemporaryRequest
                 ? 'You only need to complete this temporary request form, state the quantity needed, and explain the usage purpose. ICT will review and prepare the available units later.'
@@ -395,11 +395,11 @@
         @endunless
 
         <!-- 1. EXECUTIVE INFORMATION -->
-        <h4 class="text-[10px] font-black text-[#8B5E3C] border-l-4 border-[#8B5E3C] pl-3 uppercase tracking-widest mb-4">1. Person Details</h4>
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">1. Person Details</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div class="md:col-span-2">
-                <div class="rounded-2xl border border-[#8B5E3C]/15 bg-[#FDFBF7] dark:bg-slate-900/70 dark:border-slate-700 px-4 py-3.5">
-                    <p class="text-[9px] font-black text-[#8B5E3C] uppercase tracking-[0.22em]">Request Routing</p>
+                <div class="rounded-2xl border border-[#0284c7]/15 bg-[#FDFBF7] dark:bg-slate-900/70 dark:border-slate-700 px-4 py-3.5">
+                    <p class="text-[9px] font-black text-[#0284c7] uppercase tracking-[0.22em]">Request Routing</p>
                     <p class="mt-1 text-[11px] font-semibold text-stone-600 dark:text-slate-300">
                         This request will use your own details and go directly to ICT approval.
                     </p>
@@ -407,17 +407,17 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Full Name</label>
-                <input type="text" name="full_name" value="{{ old('full_name', $currentUser->full_name ?: $currentUser->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly required>
+                <input type="text" name="full_name" value="{{ old('full_name', $currentUser->full_name ?: $currentUser->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly required>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">ID No.</label>
-                <input type="text" name="staff_id" value="{{ old('staff_id', $currentUser->staff_id) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly required>
+                <input type="text" name="staff_id" value="{{ old('staff_id', $currentUser->staff_id) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly required>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Department</label>
                 @if($lockDepartment)
                 <input type="hidden" name="department" value="{{ $selectedDepartment }}">
-                <input type="text" value="{{ $selectedDepartment }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ $selectedDepartment }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
                 @else
                 <select name="department" class="smart-select w-full" data-placeholder="Type or select department" required>
                     <option value=""></option>
@@ -433,53 +433,53 @@
             @unless($isTemporaryRequest)
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Date</label>
-                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
             @endunless
         </div>
 
         <!-- 2. DEPLOYMENT DETAILS -->
-        <h4 class="text-[10px] font-black text-[#8B5E3C] border-l-4 border-[#8B5E3C] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Deployment' }}</h4>
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Deployment' }}</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             @if($isTemporaryRequest)
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
-                <div class="flex overflow-hidden rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-r border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease quantity">-</button>
+                <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
+                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease quantity">-</button>
                     <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-l border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase quantity">+</button>
+                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">How Many Days</label>
-                <div class="flex overflow-hidden rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
+                <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
+                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
                     <input type="number" id="temporary_duration_days" name="duration_days" min="1" max="365" inputmode="numeric" placeholder="Type days" value="{{ old('duration_days', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
+                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
                 </div>
                 <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Type the number of days, or use - / +. End date will update automatically.</p>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
-                <input type="date" id="temporary_start_date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="date" id="temporary_start_date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">End Date</label>
-                <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
                 <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Please return the walkie talkie to ICT Department on this end date.</p>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
-                <input type="text" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, crowd control, or daily operations" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="text" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, crowd control, or daily operations" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
             @endif
             @unless($isTemporaryRequest)
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
-                <div class="flex overflow-hidden rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-r border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease quantity">-</button>
+                <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
+                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease quantity">-</button>
                     <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-l border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase quantity">+</button>
+                    <button type="button" class="temporary-quantity-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
             @endunless
@@ -524,12 +524,12 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Justifications</label>
-                <textarea name="justifications" rows="1" placeholder="Reason for request..." class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>{{ old('justifications') }}</textarea>
+                <textarea name="justifications" rows="1" placeholder="Reason for request..." class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>{{ old('justifications') }}</textarea>
             </div>
         </div>
 
         <!-- 3. HANDOVER / PICKUP -->
-        <h4 class="text-[10px] font-black text-[#8B5E3C] border-l-4 border-[#8B5E3C] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '3. Handover / Pickup' : '3. Handover / Pickup' }}</h4>
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '3. Handover / Pickup' : '3. Handover / Pickup' }}</h4>
         <input type="hidden" name="pickup_method" value="self">
         <div class="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 dark:border-sky-900/60 dark:bg-sky-950/30">
             <p class="text-[10px] font-black uppercase tracking-widest text-sky-700 dark:text-sky-300">Pickup Info</p>
@@ -544,16 +544,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Preferred Pickup Date & Time</label>
-                <input type="datetime-local" name="requested_pickup_at" value="{{ old('requested_pickup_at') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="datetime-local" name="requested_pickup_at" value="{{ old('requested_pickup_at') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark <span class="text-stone-400">(Optional)</span></label>
-                <input type="text" name="pickup_note" value="{{ old('pickup_note') }}" placeholder="Example: Pickup by department representative" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200">
+                <input type="text" name="pickup_note" value="{{ old('pickup_note') }}" placeholder="Example: Pickup by department representative" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200">
             </div>
         </div>
 
         <div class="request-submit-row pt-8 flex justify-end">
-            <button type="submit" class="request-submit-btn bg-[#8B5E3C] text-white px-10 py-3.5 rounded-2xl font-black text-[11px] tracking-widest uppercase hover:bg-[#724D31] transition shadow-xl shadow-[#8B5E3C]/20 flex items-center gap-3 border border-[#A67B5B]">
+            <button type="submit" class="request-submit-btn bg-[#0284c7] text-white px-10 py-3.5 rounded-2xl font-black text-[11px] tracking-widest uppercase hover:bg-[#724D31] transition shadow-xl shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
                 {{ $isTemporaryRequest ? 'Submit Temporary Request' : 'Submit To ICT' }} <i class="fas fa-paper-plane"></i>
             </button>
         </div>

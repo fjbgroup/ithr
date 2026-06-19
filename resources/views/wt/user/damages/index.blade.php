@@ -1,4 +1,4 @@
-﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
 @php
     $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
@@ -27,7 +27,7 @@
         font-size: 2rem;
         line-height: 1;
         font-weight: 900;
-        color: #3D2B1F;
+        color: #142b47;
     }
     .dark .faulty-hub-card {
         background: linear-gradient(135deg, #1e293b 0%, #172033 100%);
@@ -63,12 +63,12 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <a href="{{ route($routePrefix . '.damages.form', $isAdminRoute ? ['mode' => $mode] : []) }}" class="faulty-hub-card p-5">
-        <div class="w-11 h-11 rounded-2xl bg-[#8B5E3C] text-white flex items-center justify-center shadow-lg shadow-[#8B5E3C]/20">
+        <div class="w-11 h-11 rounded-2xl bg-[#0284c7] text-white flex items-center justify-center shadow-lg shadow-[#0284c7]/20">
             <i class="fa-solid fa-plus text-base"></i>
         </div>
-        <h4 class="mt-4 text-sm font-black text-[#3D2B1F]">New Request</h4>
+        <h4 class="mt-4 text-sm font-black text-[#142b47]">New Request</h4>
         <p class="mt-2 text-[11px] font-bold text-stone-500 dark:text-slate-300 leading-relaxed">Create a new faulty report form and submit it for review.</p>
-        <div class="mt-4 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C]">Open Form</div>
+        <div class="mt-4 text-[10px] font-black uppercase tracking-widest text-[#0284c7]">Open Form</div>
     </a>
 
     <a href="{{ route($routePrefix . '.damages.status', array_merge(['bucket' => 'pending'], $isAdminRoute ? ['mode' => $mode] : [])) }}" class="faulty-hub-card p-5">
@@ -76,7 +76,7 @@
             <i class="fa-solid fa-hourglass-half text-base"></i>
         </div>
         <div class="mt-4 faulty-hub-count">{{ $summary['pending'] }}</div>
-        <h4 class="mt-2 text-sm font-black text-[#3D2B1F]">Pending Status</h4>
+        <h4 class="mt-2 text-sm font-black text-[#142b47]">Pending Status</h4>
         <p class="mt-2 text-[11px] font-bold text-stone-500 dark:text-slate-300 leading-relaxed">See reports that are waiting for executive review, ICT review, or repair progress.</p>
     </a>
 
@@ -85,7 +85,7 @@
             <i class="fa-solid fa-circle-check text-base"></i>
         </div>
         <div class="mt-4 faulty-hub-count">{{ $summary['completed'] }}</div>
-        <h4 class="mt-2 text-sm font-black text-[#3D2B1F]">Completed</h4>
+        <h4 class="mt-2 text-sm font-black text-[#142b47]">Completed</h4>
         <p class="mt-2 text-[11px] font-bold text-stone-500 dark:text-slate-300 leading-relaxed">View faulty reports that have already been completed or resolved.</p>
     </a>
 </div>
@@ -94,10 +94,10 @@
 <div class="mt-6 faulty-hub-card p-5">
     <div class="flex items-center justify-between gap-3">
         <div>
-            <h4 class="text-sm font-black text-[#3D2B1F] dark:text-slate-100">Latest Submitted Requests</h4>
+            <h4 class="text-sm font-black text-[#142b47] dark:text-slate-100">Latest Submitted Requests</h4>
             <p class="mt-1 text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-slate-400">Your recently submitted faulty reports appear here after submission.</p>
         </div>
-        <a href="{{ route($routePrefix . '.damages.status', array_merge(['bucket' => 'pending'], $isAdminRoute ? ['mode' => $mode] : [])) }}" class="text-[10px] font-black uppercase tracking-widest text-[#8B5E3C]">
+        <a href="{{ route($routePrefix . '.damages.status', array_merge(['bucket' => 'pending'], $isAdminRoute ? ['mode' => $mode] : [])) }}" class="text-[10px] font-black uppercase tracking-widest text-[#0284c7]">
             View All
         </a>
     </div>
@@ -117,7 +117,7 @@
                 <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-[11px] font-black text-[#8B5E3C]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
+                            <span class="text-[11px] font-black text-[#0284c7]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
                             <span class="rounded-full px-2.5 py-1 text-[9px] font-black uppercase tracking-widest {{ $statusBadgeClass }}">
                                 {{ $isDone ? 'Already Fixed / Ready To Collect' : 'Processing' }}
                             </span>
@@ -127,7 +127,7 @@
                             </span>
                             @endif
                         </div>
-                        <p class="mt-2 text-[12px] font-black text-[#3D2B1F] dark:text-slate-100">{{ $record->model ?: 'NO MODEL' }}{{ $record->radio_id ? ' - ' . $record->radio_id : ($record->serial_number ? ' - ' . $record->serial_number : '') }}</p>
+                        <p class="mt-2 text-[12px] font-black text-[#142b47] dark:text-slate-100">{{ $record->model ?: 'NO MODEL' }}{{ $record->radio_id ? ' - ' . $record->radio_id : ($record->serial_number ? ' - ' . $record->serial_number : '') }}</p>
                         <p class="mt-1 text-[11px] font-bold text-stone-500 dark:text-slate-300">{{ $record->problem_possible ?: ($record->issue_description ?: 'No problem details saved yet.') }}</p>
                         <p class="mt-1 text-[10px] font-bold text-stone-400 dark:text-slate-400">
                             Submitted: {{ $record->received_date ? \Carbon\Carbon::parse($record->received_date)->format('d M Y') : '-' }}
@@ -149,10 +149,10 @@
 <div class="mt-6 faulty-hub-card p-5">
     <div class="flex items-center justify-between gap-3">
         <div>
-            <h4 class="text-sm font-black text-[#3D2B1F] dark:text-slate-100">Latest Completed Requests</h4>
+            <h4 class="text-sm font-black text-[#142b47] dark:text-slate-100">Latest Completed Requests</h4>
             <p class="mt-1 text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-slate-400">Your recently completed or resolved faulty reports appear here.</p>
         </div>
-        <a href="{{ route($routePrefix . '.damages.status', array_merge(['bucket' => 'completed'], $isAdminRoute ? ['mode' => $mode] : [])) }}" class="text-[10px] font-black uppercase tracking-widest text-[#8B5E3C]">
+        <a href="{{ route($routePrefix . '.damages.status', array_merge(['bucket' => 'completed'], $isAdminRoute ? ['mode' => $mode] : [])) }}" class="text-[10px] font-black uppercase tracking-widest text-[#0284c7]">
             View All
         </a>
     </div>
@@ -167,7 +167,7 @@
                 <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                     <div>
                         <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-[11px] font-black text-[#8B5E3C]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
+                            <span class="text-[11px] font-black text-[#0284c7]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
                             <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-emerald-700">
                                 {{ in_array($status, ['REJECTED', 'REFUSED'], true) ? 'Rejected' : 'Already Fixed / Ready To Collect' }}
                             </span>
@@ -177,7 +177,7 @@
                             </span>
                             @endif
                         </div>
-                        <p class="mt-2 text-[12px] font-black text-[#3D2B1F] dark:text-slate-100">{{ $record->model ?: 'NO MODEL' }}{{ $record->radio_id ? ' - ' . $record->radio_id : ($record->serial_number ? ' - ' . $record->serial_number : '') }}</p>
+                        <p class="mt-2 text-[12px] font-black text-[#142b47] dark:text-slate-100">{{ $record->model ?: 'NO MODEL' }}{{ $record->radio_id ? ' - ' . $record->radio_id : ($record->serial_number ? ' - ' . $record->serial_number : '') }}</p>
                         <p class="mt-1 text-[11px] font-bold text-stone-500 dark:text-slate-300">{{ $record->problem_possible ?: ($record->issue_description ?: 'No problem details saved yet.') }}</p>
                         <p class="mt-1 text-[10px] font-bold text-stone-400 dark:text-slate-400">
                             Completed: {{ $record->finish_date ? \Carbon\Carbon::parse($record->finish_date)->format('d M Y') : ($record->updated_at ? \Carbon\Carbon::parse($record->updated_at)->format('d M Y') : ($record->received_date ? \Carbon\Carbon::parse($record->received_date)->format('d M Y') : '-')) }}

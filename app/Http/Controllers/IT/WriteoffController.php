@@ -19,7 +19,7 @@ class WriteoffController extends Controller
     {
         $user     = Auth::guard('it')->user();
         $houUsers = User::where('role', 'hou')->where('is_active', true)
-                        ->orderBy('dept_name')->orderBy('full_name')->get();
+                        ->orderBy('dept_name')->orderBy('name')->get();
 
         $savedSigUrl = ($user->signature_img && Storage::disk('public')->exists($user->signature_img))
             ? route('profile.signature.image')

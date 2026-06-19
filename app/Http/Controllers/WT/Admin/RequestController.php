@@ -774,7 +774,7 @@ class RequestController extends Controller
         );
 
         if ($record->reporter_staff_id) {
-            $reporter = User::where('staff_id', $record->reporter_staff_id)->first();
+            $reporter = User::where('staff_no', $record->reporter_staff_id)->first();
             if ($reporter) {
                 SystemNotifier::notifyUser(
                     $reporter,
@@ -838,7 +838,7 @@ class RequestController extends Controller
         }
 
         if ($record->reporter_staff_id) {
-            $reporter = User::where('staff_id', $record->reporter_staff_id)->first();
+            $reporter = User::where('staff_no', $record->reporter_staff_id)->first();
             if ($reporter) {
                 $pickupLine = $record->pickup_at
                     ? ' Pickup: ' . \Carbon\Carbon::parse($record->pickup_at)->format('d M Y, h:i A') . ' by ' . ($record->pickup_person ?: $record->reporter_name ?: 'reporter') . '.'
@@ -895,12 +895,12 @@ class RequestController extends Controller
 
         $reporter = null;
         if ($record->reporter_staff_id) {
-            $reporter = User::where('staff_id', $record->reporter_staff_id)->first();
+            $reporter = User::where('staff_no', $record->reporter_staff_id)->first();
         }
 
         if (! $reporter && $record->reporter_name) {
-            $reporter = User::where('username', $record->reporter_name)
-                ->orWhere('full_name', $record->reporter_name)
+            $reporter = User::where('staff_no', $record->reporter_name)
+                ->orWhere('name', $record->reporter_name)
                 ->first();
         }
 

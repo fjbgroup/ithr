@@ -16,7 +16,7 @@
     .ict-users-control .page-title-standard,
     .ict-users-control .text-slate-700,
     .ict-users-control .text-stone-700,
-    .ict-users-control .text-\[\#3D2B1F\] {
+    .ict-users-control .text-\[\#142b47\] {
         color: #f8fafc !important;
     }
     .ict-users-control .page-subtitle-standard,
@@ -32,7 +32,7 @@
     .ict-users-control .text-stone-400 {
         color: #94a3b8 !important;
     }
-    .ict-users-control .text-\[\#8B5E3C\] {
+    .ict-users-control .text-\[\#0284c7\] {
         color: #f6c177 !important;
     }
     .ict-users-control table.dataTable thead th,
@@ -421,15 +421,15 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-7 rounded-3xl border border-stone-200 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Total Accounts</p>
-            <div class="mt-2 text-3xl font-black text-[#3D2B1F]">{{ $roleCounts['total'] }}</div>
+            <div class="mt-2 text-3xl font-black text-[#142b47]">{{ $roleCounts['total'] }}</div>
         </div>
         <div class="bg-white p-7 rounded-3xl border border-stone-200 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">ICT</p>
-            <div class="mt-2 text-3xl font-black text-[#3D2B1F]">{{ $roleCounts['admin_it'] }}</div>
+            <div class="mt-2 text-3xl font-black text-[#142b47]">{{ $roleCounts['admin_it'] }}</div>
         </div>
         <div class="bg-white p-7 rounded-3xl border border-stone-200 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Executive</p>
-            <div class="mt-2 text-3xl font-black text-[#3D2B1F]">{{ $roleCounts['admin'] }}</div>
+            <div class="mt-2 text-3xl font-black text-[#142b47]">{{ $roleCounts['admin'] }}</div>
         </div>
     </div>
 
@@ -446,7 +446,7 @@
                         <i class="fas fa-user-plus text-[10px]"></i>
                         <span>Add Account</span>
                     </button>
-                    <span class="px-2 py-0.5 rounded-full bg-[#8B5E3C]/10 text-[#8B5E3C] text-[9px] font-black tracking-widest">{{ $users->count() }} RECORDS</span>
+                    <span class="px-2 py-0.5 rounded-full bg-[#0284c7]/10 text-[#0284c7] text-[9px] font-black tracking-widest">{{ $users->count() }} RECORDS</span>
                 </div>
             </div>
 
@@ -469,7 +469,7 @@
                         @foreach($users as $account)
                         @php
                             $roleStyles = match($account->role) {
-                                'admin_it' => 'bg-[#3D2B1F] text-white',
+                                'admin_it' => 'bg-[#142b47] text-white',
                                 'admin' => 'bg-amber-100 text-amber-700',
                                 default => 'bg-stone-100 text-slate-600',
                             };
@@ -482,7 +482,7 @@
                         <tr class="hover:bg-[#FDFBF7] transition text-[10.5px]">
                             <td class="px-3 py-2.5 font-bold text-slate-700">{{ $account->staff_id ?: '-' }}</td>
                             <td class="px-3 py-2.5">
-                                <div class="font-bold text-slate-700">{{ $account->username }}</div>
+                                <div class="font-bold text-slate-700">{{ $account->full_name ?: $account->username }}</div>
                             </td>
                             <td class="px-3 py-2.5">
                                 <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest {{ $roleStyles }}">
@@ -632,22 +632,42 @@
             @csrf
             <input type="hidden" name="form_context" value="create_executive">
             <div class="account-modal-body">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="account-field">
-                        <label>ID No.</label>
-                        <input type="text" name="staff_id" value="{{ old('staff_id') }}" required>
+
+                {{-- Staff search --}}
+                <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(96,165,250,0.18)">
+                    <label style="display:block;margin-bottom:8px;color:#9fb0c8;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase">
+                        Search HR Staff to Auto-fill
+                    </label>
+                    <div style="position:relative">
+                        <input type="text" id="wtStaffSearchInput" autocomplete="off"
+                            placeholder="Type name or staff number…"
+                            style="width:100%;min-height:42px;border-radius:12px;border:1px solid #334766;background:#0f172a;color:#f8fafc;padding:0 40px 0 14px;font-size:12px;font-weight:700;transition:all .18s ease"
+                            onfocus="this.style.borderColor='#38bdf8'" onblur="this.style.borderColor='#334766'">
+                        <i class="fas fa-search" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#64748b;font-size:12px;pointer-events:none"></i>
                     </div>
-                    <div class="account-field">
-                        <label>Username</label>
-                        <input type="text" name="username" value="{{ old('username') }}" autocapitalize="off" autocomplete="off" spellcheck="false" data-preserve-case="true" required>
+                    <div id="wtStaffResults" style="display:none;position:absolute;z-index:9999;background:#1e293b;border:1px solid rgba(96,165,250,0.28);border-radius:12px;box-shadow:0 12px 32px rgba(2,6,23,.5);width:min(680px,calc(100vw - 48px));max-height:260px;overflow-y:auto;margin-top:4px"></div>
+                    <div id="wtStaffBanner" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(14,116,144,.15);border:1px solid rgba(14,116,144,.35);border-radius:10px;align-items:center;gap:10px">
+                        <i class="fas fa-check-circle" style="color:#22d3ee;flex-shrink:0"></i>
+                        <span id="wtStaffBannerLabel" style="font-size:12px;font-weight:700;color:#f8fafc;flex:1"></span>
+                        <button type="button" onclick="wtClearStaff()" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:12px;padding:0">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <p style="margin-top:6px;font-size:10px;color:#64748b">Select a staff member to auto-fill the fields below, or fill them in manually.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="account-field md:col-span-2">
+                        <label>ID No. / Staff No.</label>
+                        <input type="text" id="wt_field_staff_id" name="staff_id" value="{{ old('staff_id') }}" required>
                     </div>
                     <div class="account-field md:col-span-2">
                         <label>Full Name</label>
-                        <input type="text" name="full_name" value="{{ old('full_name') }}" required>
+                        <input type="text" id="wt_field_full_name" name="full_name" value="{{ old('full_name') }}" required>
                     </div>
                     <div class="account-field">
                         <label>Department</label>
-                        <input type="text" name="department" list="department-options" value="{{ old('department') }}" required>
+                        <input type="text" id="wt_field_department" name="department" list="department-options" value="{{ old('department') }}" required>
                     </div>
                     <div class="account-field">
                         <label>Position</label>
@@ -657,18 +677,18 @@
                         </select>
                     </div>
                     <div class="account-field">
-                        <label>Password</label>
-                        <input type="password" name="password" minlength="6" required>
+                        <label>Password <span style="color:#94a3b8;font-weight:400;text-transform:none;letter-spacing:0">(optional if staff exists)</span></label>
+                        <input type="password" name="password" minlength="6" id="wt_field_password">
                     </div>
                     <div class="account-field">
                         <label>Confirm Password</label>
-                        <input type="password" name="password_confirmation" minlength="6" required>
+                        <input type="password" name="password_confirmation" minlength="6" id="wt_field_password_confirmation">
                     </div>
                 </div>
             </div>
             <div class="account-modal-footer">
                 <button type="button" onclick="closeCreateExecutiveModal()" class="navy-btn navy-btn-soft">Cancel</button>
-                <button type="submit" class="navy-btn">Create Account</button>
+                <button type="submit" class="navy-btn">Grant / Create Account</button>
             </div>
         </form>
     </div>
@@ -679,7 +699,7 @@
     <div class="w-full max-w-xl bg-white rounded-[28px] border border-stone-200 shadow-2xl overflow-hidden">
         <div class="px-6 py-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-black text-[#3D2B1F]">Edit User</h3>
+                <h3 class="text-lg font-black text-[#142b47]">Edit User</h3>
                 <p class="text-xs text-stone-400 mt-1">Update the user's ID, name, and role.</p>
             </div>
             <button type="button" onclick="closeEditUserModal()" class="text-stone-400 hover:text-slate-700">
@@ -734,8 +754,8 @@
     <div class="w-full max-w-xl bg-white rounded-[28px] border border-stone-200 shadow-2xl overflow-hidden">
         <div class="px-6 py-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-black text-[#3D2B1F]">Reset Password</h3>
-                <p class="text-xs text-stone-400 mt-1">Set a new password for <span id="resetUserName" class="font-bold text-[#8B5E3C]"></span>.</p>
+                <h3 class="text-lg font-black text-[#142b47]">Reset Password</h3>
+                <p class="text-xs text-stone-400 mt-1">Set a new password for <span id="resetUserName" class="font-bold text-[#0284c7]"></span>.</p>
             </div>
             <button type="button" onclick="closeResetPasswordModal()" class="text-stone-400 hover:text-slate-700">
                 <i class="fas fa-times text-lg"></i>
@@ -825,7 +845,7 @@
     }
 
     function openEditUserModal(userId, staffId, username, fullName, department, position, role) {
-        document.getElementById('editUserForm').action = "{{ url('/admin/users') }}/" + userId + "/update";
+        document.getElementById('editUserForm').action = "{{ url('/wt/admin/users') }}/" + userId + "/update";
         document.getElementById('edit_staff_id').value = staffId || '';
         document.getElementById('edit_username').value = username || '';
         document.getElementById('edit_full_name').value = fullName || '';
@@ -840,7 +860,7 @@
     }
 
     function openResetPasswordModal(userId, username) {
-        document.getElementById('resetPasswordForm').action = "{{ url('/admin/users') }}/" + userId + "/reset-password";
+        document.getElementById('resetPasswordForm').action = "{{ url('/wt/admin/users') }}/" + userId + "/reset-password";
         document.getElementById('resetUserName').innerText = username || '';
         document.getElementById('reset_password').value = '';
         document.getElementById('reset_password_confirmation').value = '';
@@ -886,6 +906,92 @@
         openCreateExecutiveModal();
     });
     @endif
+
+    // ── WT staff search ──────────────────────────────────────────────────────
+    (function () {
+        const input   = document.getElementById('wtStaffSearchInput');
+        const results = document.getElementById('wtStaffResults');
+        const banner  = document.getElementById('wtStaffBanner');
+        const label   = document.getElementById('wtStaffBannerLabel');
+        let timer;
+
+        if (!input) return;
+
+        input.addEventListener('input', function () {
+            clearTimeout(timer);
+            const q = this.value.trim();
+            if (q.length < 2) { results.style.display = 'none'; return; }
+            timer = setTimeout(() => fetchStaff(q), 280);
+        });
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') results.style.display = 'none';
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!input.contains(e.target) && !results.contains(e.target)) {
+                results.style.display = 'none';
+            }
+        });
+
+        function fetchStaff(q) {
+            fetch('{{ route('wt.admin.users.staffSearch') }}?q=' + encodeURIComponent(q), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(r => r.json())
+            .then(data => renderResults(data));
+        }
+
+        function renderResults(data) {
+            if (!data.length) {
+                results.innerHTML = '<div style="padding:14px 16px;font-size:12px;color:#64748b;text-align:center"><i class="fas fa-search" style="opacity:.4"></i> No staff found</div>';
+                results.style.display = 'block';
+                return;
+            }
+            results.innerHTML = data.map(s => `
+                <div onclick='wtSelectStaff(${JSON.stringify(s).replace(/'/g, "\\'")})'
+                    style="display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;border-bottom:1px solid rgba(96,165,250,0.15);transition:background .12s"
+                    onmouseenter="this.style.background='rgba(56,189,248,.08)'" onmouseleave="this.style.background=''">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0e7490;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;flex-shrink:0">
+                        ${s.name.charAt(0)}
+                    </div>
+                    <div style="flex:1;min-width:0">
+                        <div style="font-size:12px;font-weight:800;color:#f8fafc">${s.name}</div>
+                        <div style="font-size:10px;color:#94a3b8;margin-top:2px">
+                            <span style="font-family:monospace">${s.staff_no}</span>
+                            ${s.dept_name ? ' · ' + s.dept_name : ''}
+                            ${s.position ? ' · ' + s.position : ''}
+                        </div>
+                    </div>
+                </div>`).join('');
+            results.innerHTML += '<div style="padding:7px 14px;font-size:10px;color:#64748b;text-align:center;border-top:1px solid rgba(96,165,250,0.15)">' + data.length + ' result' + (data.length > 1 ? 's' : '') + '</div>';
+            results.style.display = 'block';
+        }
+
+        window.wtSelectStaff = function (s) {
+            document.getElementById('wt_field_staff_id').value    = s.staff_no;
+            document.getElementById('wt_field_full_name').value   = s.name;
+            document.getElementById('wt_field_department').value  = s.dept_name;
+            // Password becomes optional when granting access to existing HR staff
+            document.getElementById('wt_field_password').removeAttribute('required');
+            document.getElementById('wt_field_password_confirmation').removeAttribute('required');
+            results.style.display = 'none';
+            input.value = '';
+            label.textContent = s.name + ' (' + s.staff_no + ')' + (s.dept_name ? ' — ' + s.dept_name : '');
+            banner.style.display = 'flex';
+        };
+
+        window.wtClearStaff = function () {
+            ['wt_field_staff_id','wt_field_full_name','wt_field_department'].forEach(function (id) {
+                document.getElementById(id).value = '';
+            });
+            // Restore password as required
+            document.getElementById('wt_field_password').setAttribute('required', '');
+            document.getElementById('wt_field_password_confirmation').setAttribute('required', '');
+            banner.style.display = 'none';
+            input.value = '';
+        };
+    })();
 
     $(document).ready(function() {
         const passwordResetEmptyState = `

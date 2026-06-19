@@ -6,8 +6,8 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .form-section-title {
-        color: #8B5E3C;
-        border-left: 4px solid #8B5E3C;
+        color: #0284c7;
+        border-left: 4px solid #0284c7;
         padding-left: 10px;
         font-weight: 800;
         margin-bottom: 16px;
@@ -17,7 +17,7 @@
         font-size: 10px;
     }
     input:focus, select:focus, textarea:focus {
-        border-color: #8B5E3C !important;
+        border-color: #0284c7 !important;
         box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.1) !important;
         outline: none;
     }
@@ -31,7 +31,7 @@
         cursor: pointer; color: #57534e; font-weight: 600; transition: all 0.2s;
     }
     .radio-item input:checked + label { 
-        background: #8B5E3C; border-color: #8B5E3C; color: white;
+        background: #0284c7; border-color: #0284c7; color: white;
         box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
     }
     .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
@@ -40,7 +40,7 @@
         background: #FDFBF7; border: 1px solid rgba(139, 94, 60, 0.18);
         padding: 12px 14px; border-radius: 12px; color: #57534e; font-weight: 600;
     }
-    .checkbox-item input { width: 16px; height: 16px; accent-color: #8B5E3C; }
+    .checkbox-item input { width: 16px; height: 16px; accent-color: #0284c7; }
     .select2-container--default .select2-selection--multiple {
         border-color: rgba(139, 94, 60, 0.3) !important;
         border-radius: 0.75rem !important;
@@ -48,10 +48,10 @@
         background: rgba(253, 251, 247, 0.5) !important;
     }
     .select2-container--default.select2-container--focus .select2-selection--multiple {
-        border-color: #8B5E3C !important;
+        border-color: #0284c7 !important;
     }
     .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #8B5E3C !important;
+        background-color: #0284c7 !important;
         border: none !important;
         color: white !important;
         border-radius: 8px !important;
@@ -224,7 +224,7 @@
         gap: 8px !important;
         margin-bottom: 6px !important;
     }
-    .request-compact-card .bg-\[\#8B5E3C\].text-white {
+    .request-compact-card .bg-\[\#0284c7\].text-white {
         padding: 6px !important;
         border-radius: 7px !important;
     }
@@ -258,18 +258,18 @@
 @endphp
 <div class="px-2 request-compact-shell">
 <div class="mb-3">
-    <h3 class="text-sm font-extrabold text-[#3D2B1F] tracking-tight">Request Access</h3>
+    <h3 class="text-sm font-extrabold text-[#142b47] tracking-tight">Request Access</h3>
     <p class="text-stone-400 font-medium mt-0.5 text-[9px] tracking-widest uppercase">
         Submit a formal application to borrow communication equipment.
     </p>
 </div>
 
-<div class="request-compact-card bg-white rounded-2xl shadow-sm border border-[#8B5E3C]/10 overflow-hidden p-5 md:p-6">
+<div class="request-compact-card bg-white rounded-2xl shadow-sm border border-[#0284c7]/10 overflow-hidden p-5 md:p-6">
     <div class="flex items-center gap-2.5 mb-2.5">
-        <div class="bg-[#8B5E3C] text-white p-2 rounded-lg border border-[#A67B5B] shadow-inner">
+        <div class="bg-[#0284c7] text-white p-2 rounded-lg border border-[#A67B5B] shadow-inner">
             <i class="fa-solid fa-hand-holding-hand text-sm"></i>
         </div>
-        <h2 class="text-xs font-black text-[#3D2B1F]">Walkie Talkie Request Form</h2>
+        <h2 class="text-xs font-black text-[#142b47]">Walkie Talkie Request Form</h2>
     </div>
 
     <form action="{{ route('wt.user.requests.store') }}" method="POST" class="space-y-4">
@@ -295,7 +295,7 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Date</label>
-                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-3 py-2 rounded-lg border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 text-[11px]" required>
+                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px]" required>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Department</label>
@@ -338,7 +338,7 @@
             </div>
             <div id="shared_with_section" class="{{ old('ownership_type') === 'shared' ? '' : 'hidden' }}">
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Shared With <span class="text-red-500">*</span></label>
-                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', '')) }}" placeholder="E.G. USER / TEAM / DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 text-[11px] font-bold uppercase">
+                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', '')) }}" placeholder="E.G. USER / TEAM / DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px] font-bold uppercase">
                 @error('shared_with')
                     <div class="text-red-600 text-xs font-bold mt-2">{{ $message }}</div>
                 @enderror
@@ -391,7 +391,7 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-2 uppercase tracking-widest">Justifications</label>
-                <textarea name="justification" rows="1" placeholder="Reason for request..." class="w-full px-3 py-2 rounded-lg border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 text-[11px]" required>{{ old('justification') }}</textarea>
+                <textarea name="justification" rows="1" placeholder="Reason for request..." class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px]" required>{{ old('justification') }}</textarea>
             </div>
         </div>
 
@@ -412,15 +412,15 @@
                 </select>
                 
                 <!-- Executive Info Display -->
-                <div id="admin-details" class="mt-4 p-4 bg-[#FDFBF7] border border-[#8B5E3C]/20 rounded-2xl hidden transition-all duration-300">
+                <div id="admin-details" class="mt-4 p-4 bg-[#FDFBF7] border border-[#0284c7]/20 rounded-2xl hidden transition-all duration-300">
                     <div class="flex items-center gap-4">
-                        <div class="bg-white p-2.5 rounded-xl border border-[#8B5E3C]/10 text-[#8B5E3C]">
+                        <div class="bg-white p-2.5 rounded-xl border border-[#0284c7]/10 text-[#0284c7]">
                             <i class="fas fa-user-tie"></i>
                         </div>
                         <div class="grid grid-cols-1 gap-8 flex-1">
                             <div>
                                 <p class="text-[9px] font-black text-stone-400 uppercase tracking-[0.2em] mb-1">Department</p>
-                                <p id="admin-dept-text" class="text-xs font-bold text-[#3D2B1F] uppercase">-</p>
+                                <p id="admin-dept-text" class="text-xs font-bold text-[#142b47] uppercase">-</p>
                             </div>
                         </div>
                     </div>
@@ -433,7 +433,7 @@
         </div>
 
         <div class="pt-6 flex justify-end">
-            <button type="submit" class="bg-[#8B5E3C] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#724D31] transition shadow-lg shadow-[#8B5E3C]/20 flex items-center gap-3 border border-[#A67B5B]">
+            <button type="submit" class="bg-[#0284c7] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#724D31] transition shadow-lg shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
                 SUBMIT REQUEST <i class="fas fa-arrow-right"></i>
             </button>
         </div>

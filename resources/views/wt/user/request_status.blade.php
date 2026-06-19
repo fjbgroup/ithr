@@ -37,7 +37,7 @@
 
 <div class="px-2">
     <div class="mb-4">
-        <h3 class="text-sm font-extrabold text-[#3D2B1F] tracking-tight">Request Status</h3>
+        <h3 class="text-sm font-extrabold text-[#142b47] tracking-tight">Request Status</h3>
         <p class="text-stone-400 font-medium mt-0.5 text-[9px] tracking-widest uppercase">
             Check the latest status and return history of all your requests. Returned history is kept up to {{ $historyRetentionYears ?? 5 }} years.
         </p>
@@ -70,10 +70,10 @@
         </a>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-[#8B5E3C]/10 overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-sm border border-[#0284c7]/10 overflow-hidden">
         <div class="p-3 border-b border-stone-100 bg-stone-50/70">
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <h4 class="text-[11px] font-black text-[#3D2B1F] uppercase tracking-wider">{{ $activeStatusFilter ? ($statusFilterLabels[$activeStatusFilter] ?? 'My Request Status') : 'My Request Status' }}</h4>
+                <h4 class="text-[11px] font-black text-[#142b47] uppercase tracking-wider">{{ $activeStatusFilter ? ($statusFilterLabels[$activeStatusFilter] ?? 'My Request Status') : 'My Request Status' }}</h4>
                 @if($activeStatusFilter)
                     <a href="{{ route('wt.user.requests.status') }}" class="text-[9px] font-black uppercase tracking-widest text-stone-500 hover:text-stone-800">View All</a>
                 @endif
@@ -92,7 +92,7 @@
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p class="text-[8px] uppercase tracking-widest text-stone-400 font-black">{{ $isRepairRequest ? 'Repair Request' : 'Request' }} #{{ str_pad($request->id, 5, '0', STR_PAD_LEFT) }}</p>
-                                <p class="mt-1 text-[12px] font-black text-[#3D2B1F]">{{ $request->title ?: 'Walkie Talkie Request' }}</p>
+                                <p class="mt-1 text-[12px] font-black text-[#142b47]">{{ $request->title ?: 'Walkie Talkie Request' }}</p>
                                 @if($isRepairRequest)
                                 <p class="mt-1 text-[8px] font-black uppercase tracking-widest text-orange-600">Faulty Walkie Talkie</p>
                                 @endif

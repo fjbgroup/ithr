@@ -31,10 +31,10 @@ class CheckRole
             return $next($request);
         }
 
-        return match($userRole) {
-            'admin_it' => redirect()->route('wt.admin.dashboard'),
-            'admin' => redirect()->route('wt.admin.requests.index'),
-            default => redirect()->route('wt.login'),
-        };
+        if ($userRole === 'admin_it') {
+            return redirect()->route('wt.admin.dashboard');
+        }
+
+        return redirect()->route('wt.admin.requests.create.shared');
     }
 }

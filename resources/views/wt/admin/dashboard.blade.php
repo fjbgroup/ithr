@@ -105,7 +105,7 @@
     .dashboard-shell .total-wt-badge i,
     .dashboard-shell .total-wt-badge .card-meta,
     .dashboard-shell .total-wt-badge .total-wt-value {
-        color: #B38A5A !important;
+        color: #0284c7 !important;
     }
     html:not(.dark) .dashboard-shell .total-wt-badge {
         border-color: #e7d7c3 !important;
@@ -114,7 +114,7 @@
     html:not(.dark) .dashboard-shell .total-wt-badge i,
     html:not(.dark) .dashboard-shell .total-wt-badge .card-meta,
     html:not(.dark) .dashboard-shell .total-wt-badge .total-wt-value {
-        color: #7C5A3A !important;
+        color: #142b47 !important;
     }
     @media (max-width: 768px) {
         .dashboard-shell .profile-name {
@@ -166,15 +166,15 @@
             <div class="profile-name mb-0.5 !text-white">{{ Auth::guard('wt')->user()->full_name ?: strtoupper(Auth::guard('wt')->user()->username) }}</div>
             <div class="flex flex-wrap justify-start gap-2 mt-1.5">
                 <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
-                    <i class="fas fa-id-card text-[#D1AE7B] text-[10px]"></i>
+                    <i class="fas fa-id-card text-[#38bdf8] text-[10px]"></i>
                     <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->staff_id ?: '-' }}</span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
-                    <i class="fas fa-building text-[#D1AE7B] text-[10px]"></i>
+                    <i class="fas fa-building text-[#38bdf8] text-[10px]"></i>
                     <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->department ?: (Auth::guard('wt')->user()->role === 'admin_it' ? 'ADMINISTRATOR' : 'GENERAL') }}</span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
-                    <i class="fas fa-user-tie text-[#D1AE7B] text-[10px]"></i>
+                    <i class="fas fa-user-tie text-[#38bdf8] text-[10px]"></i>
                     <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->position ?: (Auth::guard('wt')->user()->role === 'admin_it' ? 'ICT' : 'ADMINISTRATOR') }}</span>
                 </div>
             </div>

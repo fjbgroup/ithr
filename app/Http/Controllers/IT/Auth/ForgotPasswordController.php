@@ -24,9 +24,9 @@ class ForgotPasswordController extends Controller
         $username = trim($request->fp_username);
         $staffId  = trim($request->fp_staff_id);
 
-        $user = User::where('username', $username)->where('is_active', true)->first();
+        $user = User::whereRaw('TRIM(staff_no) = ?', [$username])->where('is_active', true)->first();
 
-        if ($user && strtolower(trim($user->staff_id ?? '')) === strtolower($staffId)) {
+        if ($user && strtolower(trim($user->staff_no ?? '')) === strtolower($staffId)) {
             $existing = PasswordResetRequest::where('user_id', $user->id)->where('status', 'pending')->first();
             if ($existing) {
                 return back()->with('success', 'A reset request is already pending. Please wait for an admin to process it.');

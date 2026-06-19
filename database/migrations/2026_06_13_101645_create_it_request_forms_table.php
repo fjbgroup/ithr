@@ -6,11 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $connection = 'it_mysql';
-
     public function up(): void
     {
-        Schema::connection('it_mysql')->create('it_request_forms', function (Blueprint $table) {
+        Schema::create('it_request_forms', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('submitted_by')->nullable()->index();
             $table->string('request_type')->nullable(); // hardware, software, system, service
@@ -78,6 +76,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::connection('it_mysql')->dropIfExists('it_request_forms');
+        Schema::dropIfExists('it_request_forms');
     }
 };

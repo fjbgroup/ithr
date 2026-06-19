@@ -1,4 +1,4 @@
-﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
 @php
     $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
@@ -23,7 +23,7 @@
         font-weight: 900;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: #d9b38c;
+        color: #38bdf8;
     }
     .return-title {
         margin-top: 0;
@@ -476,7 +476,7 @@
 
     @if($activeAssets->isEmpty())
         <div class="m-4 return-empty">
-            <div class="return-empty-icon mx-auto mb-2 flex items-center justify-center border border-[#8B5E3C]/20 bg-[#8B5E3C]/10 text-[#d9b38c]">
+            <div class="return-empty-icon mx-auto mb-2 flex items-center justify-center border border-[#0284c7]/20 bg-[#0284c7]/10 text-[#38bdf8]">
                 <i class="fa-solid fa-box-open text-lg"></i>
             </div>
             <h4 class="return-empty-title font-black">No Active Units</h4>

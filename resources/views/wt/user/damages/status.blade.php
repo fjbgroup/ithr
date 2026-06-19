@@ -1,4 +1,4 @@
-﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
 @php
     $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
@@ -28,7 +28,7 @@
         <h3 class="page-title-standard">{{ $pageTitle }}</h3>
         <p class="page-subtitle-standard">{{ $pageDescription }}</p>
     </div>
-    <a href="{{ route($routePrefix . '.damages.create', $isAdminRoute ? ['mode' => $mode] : []) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#8B5E3C] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F]">
+    <a href="{{ route($routePrefix . '.damages.create', $isAdminRoute ? ['mode' => $mode] : []) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0284c7] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F]">
         <i class="fa-solid fa-grid-2"></i> Back To Faulty Module
     </a>
 </div>
@@ -36,7 +36,7 @@
 <div class="grid grid-cols-1 mb-5">
     <div class="faulty-status-card p-4">
         <p class="text-[10px] font-black uppercase tracking-widest text-stone-400 dark:text-slate-400">{{ strtoupper($bucket) }}</p>
-        <p class="mt-2 text-2xl font-black text-[#3D2B1F] dark:text-slate-100">
+        <p class="mt-2 text-2xl font-black text-[#142b47] dark:text-slate-100">
             {{ $bucket === 'pending' ? $summary['pending'] : ($bucket === 'drafts' ? $summary['drafts'] : $summary['completed']) }}
         </p>
     </div>
@@ -44,9 +44,9 @@
 
 <div class="faulty-status-card overflow-hidden">
     <div class="px-5 py-4 border-b border-stone-100 dark:border-slate-700 flex items-center justify-between gap-3">
-        <h4 class="text-[11px] font-black uppercase tracking-widest text-[#3D2B1F] dark:text-slate-100">{{ $pageTitle }}</h4>
+        <h4 class="text-[11px] font-black uppercase tracking-widest text-[#142b47] dark:text-slate-100">{{ $pageTitle }}</h4>
         @if($bucket === 'drafts')
-        <a href="{{ route($routePrefix . '.damages.form', $isAdminRoute ? ['mode' => $mode] : []) }}" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#8B5E3C] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F]">
+        <a href="{{ route($routePrefix . '.damages.form', $isAdminRoute ? ['mode' => $mode] : []) }}" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0284c7] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F]">
             <i class="fa-solid fa-plus"></i> New Request
         </a>
         @endif
@@ -67,7 +67,7 @@
                             && ($record->request_source ?? null) === 'manager_on_behalf_draft';
                     @endphp
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="text-[11px] font-black text-[#8B5E3C]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
+                        <span class="text-[11px] font-black text-[#0284c7]">#{{ str_pad($record->maintenance_id, 4, '0', STR_PAD_LEFT) }}</span>
                         <span class="px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-widest
                             {{ strtoupper((string) $record->status) === 'DRAFT' ? 'bg-slate-100 text-slate-700' : (strtoupper((string) $record->status) === 'READY TO COLLECT' ? 'bg-lime-100 text-lime-700' : ((bool) $record->done || strtoupper((string) $record->status) === 'DONE' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700')) }}">
                             {{ $record->status ?: 'Pending' }}
@@ -97,7 +97,7 @@
                         </span>
                         @endif
                     </div>
-                    <p class="mt-2 text-[12px] font-black text-[#3D2B1F] dark:text-slate-100">{{ $record->model ?: 'NO MODEL' }} {{ $record->radio_id ? '- ' . $record->radio_id : '' }}</p>
+                    <p class="mt-2 text-[12px] font-black text-[#142b47] dark:text-slate-100">{{ $record->model ?: 'NO MODEL' }} {{ $record->radio_id ? '- ' . $record->radio_id : '' }}</p>
                     <p class="mt-1 text-[11px] font-bold text-stone-500 dark:text-slate-300">{{ $record->problem_possible ?: ($record->issue_description ?: 'No problem details saved yet.') }}</p>
                     <p class="mt-1 text-[10px] font-bold text-stone-400 dark:text-slate-400">
                         Reporter: {{ $record->reporter_name ?: '-' }} | Submitted: {{ $record->received_date ? \Carbon\Carbon::parse($record->received_date)->format('d M Y') : '-' }}
@@ -119,7 +119,7 @@
                         | ICT Department Sejurumus after ICT approval
                     </p>
                     @if(!empty($record->remarks))
-                    <p class="mt-2 text-[10px] font-bold text-[#8B5E3C] dark:text-amber-300">{{ $record->remarks }}</p>
+                    <p class="mt-2 text-[10px] font-bold text-[#0284c7] dark:text-amber-300">{{ $record->remarks }}</p>
                     @endif
                     @if(!empty($record->temporary_spare_request_note))
                     <p class="mt-2 text-[10px] font-bold text-sky-700 dark:text-sky-300">Temporary WT: {{ $record->temporary_spare_request_note }}</p>

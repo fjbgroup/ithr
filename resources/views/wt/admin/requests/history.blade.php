@@ -100,7 +100,7 @@
         border-bottom: 1px solid #e7e5e4;
         background: #f8fafc;
         padding: 12px 14px;
-        color: #8B5E3C;
+        color: #0284c7;
         font-size: 10px;
         font-weight: 900;
         letter-spacing: 0.13em;
@@ -158,7 +158,7 @@
         --history-panel: #152033;
         --history-line: rgba(148, 163, 184, 0.16);
         --history-muted: #93a4bd;
-        --history-accent: #8B5E3C;
+        --history-accent: #0284c7;
         --history-accent-soft: rgba(139, 94, 60, 0.16);
     }
     .approval-history-page > .mb-4:first-child {
@@ -201,7 +201,7 @@
         justify-content: center;
         border-radius: 10px;
         background: var(--history-accent-soft);
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
         font-size: 13px !important;
     }
     .approval-history-card > .navy-panel h4 {
@@ -669,7 +669,7 @@
                         <div class="history-form-label">Reported By</div>
                         <div class="history-form-value">
                             {{ $reportedBy['name'] }}
-                            <div class="mt-1 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C]">{{ $reportedBy['role'] }}</div>
+                            <div class="mt-1 text-[10px] font-black uppercase tracking-widest text-[#0284c7]">{{ $reportedBy['role'] }}</div>
                         </div>
                     </div>
                     <div class="history-form-field">
@@ -918,7 +918,7 @@
                         @if(!empty($evidenceFiles))
                         <div class="flex flex-wrap gap-2">
                             @foreach($evidenceFiles as $path)
-                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
+                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#0284c7] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
                                 <i class="fa-solid fa-paperclip"></i> Evidence {{ $loop->iteration }}
                             </a>
                             @endforeach

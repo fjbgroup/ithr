@@ -6,7 +6,7 @@
 <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
     <div class="p-6 border-b border-stone-100 flex justify-between items-center">
         <div>
-            <h3 class="text-lg font-bold text-[#3D2B1F]">Admin General Management</h3>
+            <h3 class="text-lg font-bold text-[#142b47]">Admin General Management</h3>
             <p class="text-xs text-stone-500">Manage information in the Walkie Talkie system here.</p>
         </div>
         <button class="bg-[#A67B5B] hover:bg-[#8d684d] text-white px-4 py-2 rounded-lg text-xs font-bold transition">

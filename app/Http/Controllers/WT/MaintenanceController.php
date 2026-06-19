@@ -37,11 +37,11 @@ class MaintenanceController extends Controller
 
         return User::query()
             ->when($record->reporter_staff_id, function ($query, $staffId) {
-                $query->orWhere('staff_id', $staffId);
+                $query->orWhere('staff_no', $staffId);
             })
             ->when($record->reporter_name, function ($query, $name) {
-                $query->orWhere('full_name', $name)
-                    ->orWhere('username', $name);
+                $query->orWhere('name', $name)
+                    ->orWhere('staff_no', $name);
             })
             ->first();
     }

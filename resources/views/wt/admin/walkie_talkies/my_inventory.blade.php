@@ -22,7 +22,7 @@
         gap: 6px;
         border-radius: 6px;
         border: 1px solid rgba(139, 94, 60, 0.24);
-        background: #8B5E3C;
+        background: #0284c7;
         padding: 5px 8px;
         color: #fff;
         font-size: 8px;
@@ -54,7 +54,7 @@
         border: 1px solid rgba(139, 94, 60, 0.24);
         background: #ffffff;
         padding: 7px 10px;
-        color: #8B5E3C;
+        color: #0284c7;
         font-size: 9px;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -71,7 +71,7 @@
     .dark .my-inventory-secondary-btn {
         border-color: rgba(148, 163, 184, 0.22);
         background: rgba(15, 23, 42, 0.48);
-        color: #D1AE7B;
+        color: #38bdf8;
     }
 
     .my-inventory-modal-panel {
@@ -291,7 +291,7 @@
                                 <div class="my-inventory-modal-panel w-full max-w-3xl rounded-2xl shadow-xl">
                                     <div class="flex items-start justify-between gap-4 border-b border-stone-100 px-6 py-5 dark:border-slate-700/70">
                                         <div>
-                                            <p class="text-[9px] font-black uppercase tracking-[0.2em] text-[#8B5E3C] dark:text-[#D1AE7B]">View Form</p>
+                                            <p class="text-[9px] font-black uppercase tracking-[0.2em] text-[#0284c7] dark:text-[#38bdf8]">View Form</p>
                                             <h3 class="mt-2 text-base font-black text-stone-900 dark:text-slate-100">Request #{{ str_pad($activeRequest->id, 5, '0', STR_PAD_LEFT) }}</h3>
                                             <p class="mt-1 text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">{{ $activeRequest->request_type === 'temporary_walkie_talkie' ? 'Temporary Request' : 'Walkie Talkie Request' }}</p>
                                         </div>
@@ -307,7 +307,7 @@
                                                 @forelse($picDetails as $picIndex => $pic)
                                                 <div class="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/40">
                                                     <div class="flex items-center gap-2 border-b border-slate-100 px-3 py-2 dark:border-slate-700">
-                                                        <span class="h-5 w-1 rounded-full bg-[#8B5E3C]"></span>
+                                                        <span class="h-5 w-1 rounded-full bg-[#0284c7]"></span>
                                                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">{{ $picIndex + 1 }}. Ownership Information</p>
                                                     </div>
                                                     <div class="grid grid-cols-1 gap-3 p-3 md:grid-cols-2">
@@ -347,7 +347,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="border-t border-slate-100 bg-slate-50 px-3 py-3 dark:border-slate-700 dark:bg-slate-800/60">
-                                                        <p class="text-[8px] font-black uppercase tracking-widest text-[#8B5E3C] dark:text-[#D1AE7B]">Pickup Info</p>
+                                                        <p class="text-[8px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
                                                         <p class="mt-1 text-[10px] font-bold text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
                                                         <div class="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
                                                             <div>
@@ -364,7 +364,7 @@
                                                 @empty
                                                 <div class="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/40">
                                                     <div class="flex items-center gap-2 border-b border-slate-100 px-3 py-2 dark:border-slate-700">
-                                                        <span class="h-5 w-1 rounded-full bg-[#8B5E3C]"></span>
+                                                        <span class="h-5 w-1 rounded-full bg-[#0284c7]"></span>
                                                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">1. Ownership Information</p>
                                                     </div>
                                                     <div class="grid grid-cols-1 gap-3 p-3 md:grid-cols-2">
@@ -377,7 +377,7 @@
                                                         <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Location</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->location ?: '-' }}</p></div>
                                                     </div>
                                                     <div class="border-t border-slate-100 bg-slate-50 px-3 py-3 dark:border-slate-700 dark:bg-slate-800/60">
-                                                        <p class="text-[8px] font-black uppercase tracking-widest text-[#8B5E3C] dark:text-[#D1AE7B]">Pickup Info</p>
+                                                        <p class="text-[8px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
                                                         <p class="mt-1 text-[10px] font-bold text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
                                                         <div class="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
                                                             <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Who Will Pick Up This Walkie Talkie?</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->pickup_representative_name ?: $activeRequest->full_name ?: '-' }}</p></div>

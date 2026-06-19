@@ -1008,7 +1008,7 @@
         --approval-panel-soft: #101827;
         --approval-line: rgba(148, 163, 184, 0.16);
         --approval-muted: #93a4bd;
-        --approval-accent: #8B5E3C;
+        --approval-accent: #0284c7;
         --approval-accent-soft: rgba(139, 94, 60, 0.16);
     }
     .approval-inbox > .mb-4:first-child {
@@ -1052,7 +1052,7 @@
         justify-content: center;
         border-radius: 10px;
         background: var(--approval-accent-soft);
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
         font-size: 13px !important;
     }
     .approval-inbox .approval-card > .navy-panel h4 {
@@ -1134,7 +1134,7 @@
         border-radius: 14px;
         border-color: rgba(217, 179, 140, 0.18) !important;
         background: rgba(139, 94, 60, 0.1) !important;
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
     }
     .approval-inbox .approval-body-title,
     .approval-inbox .approval-date {
@@ -1363,9 +1363,9 @@
     .approval-inbox .return-review-status {
         display: inline-flex;
         margin-top: 8px;
-        border-left: 3px solid #d9b38c;
+        border-left: 3px solid #38bdf8;
         padding-left: 8px;
-        color: #d9b38c;
+        color: #38bdf8;
         font-size: 8px;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -1570,7 +1570,7 @@
         bottom: 12px;
         width: 4px;
         border-radius: 0 999px 999px 0;
-        background: #d9b38c;
+        background: #38bdf8;
     }
     .approval-inbox .request-summary-title {
         font-size: 12px !important;
@@ -1691,7 +1691,7 @@
         width: 28px !important;
         height: 28px !important;
         border-radius: 8px !important;
-        background: #d9b38c !important;
+        background: #38bdf8 !important;
         color: #172033 !important;
     }
     .approval-inbox .requestor-name {
@@ -3771,7 +3771,7 @@
                                     : json_decode($report->evidence_paths, true);
                             @endphp
                             @if(!empty($evidenceFiles))
-                            <a href="{{ asset('storage/' . $evidenceFiles[0]) }}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 mt-2 text-[9px] font-black uppercase tracking-widest text-[#8B5E3C] hover:text-[#B38A5A]">
+                            <a href="{{ asset('storage/' . $evidenceFiles[0]) }}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 mt-2 text-[9px] font-black uppercase tracking-widest text-[#0284c7] hover:text-[#0284c7]">
                                 <i class="fa-solid fa-paperclip"></i> Evidence
                             </a>
                             @endif
@@ -3948,7 +3948,7 @@
                         @if(!empty($evidenceFiles))
                         <div class="flex flex-wrap gap-2">
                             @foreach($evidenceFiles as $path)
-                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
+                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#0284c7] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
                                 <i class="fa-solid fa-paperclip"></i> Evidence {{ $loop->iteration }}
                             </a>
                             @endforeach

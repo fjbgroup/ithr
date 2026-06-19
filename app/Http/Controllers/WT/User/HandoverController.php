@@ -83,11 +83,11 @@ class HandoverController extends Controller
             $users = User::query()
                 ->whereIn('role', $directHandoverScope === 'on_behalf' ? ['admin'] : ['admin', 'admin_it'])
                 ->when($directHandoverScope === 'self', function ($query) {
-                    $query->where('user_id', auth('wt')->id());
+                    $query->where('id', auth('wt')->id());
                 })
-                ->orderBy('full_name')
-                ->orderBy('username')
-                ->get(['user_id', 'username', 'staff_id', 'full_name', 'department', 'position', 'role']);
+                ->orderBy('name')
+                ->orderBy('staff_no')
+                ->get();
 
             $availableRadios = WalkieTalkie::query()
                 ->where('status', 'UNUSED')
@@ -311,7 +311,7 @@ class HandoverController extends Controller
         $validated = $request->validate([
             'direct_handover_scope' => 'nullable|in:self,on_behalf',
             'access_request_id' => 'nullable|integer|exists:access_requests,id',
-            'user_id' => ['nullable', 'required_without:access_request_id', 'integer', Rule::exists(User::class, 'user_id')],
+            'user_id' => ['nullable', 'required_without:access_request_id', 'integer', Rule::exists(User::class, 'id')],
             'walkie_inventory_id' => 'nullable|required_without:access_request_id|integer|exists:walkie_talkies,walkie_id',
             'staff_name' => 'required|string|max:255',
             'staff_no' => 'nullable|string|max:255',
@@ -346,7 +346,7 @@ class HandoverController extends Controller
 
         $targetUser = User::query()
             ->when(! $accessRequest, fn ($query) => $query->whereIn('role', ['admin', 'admin_it']))
-            ->where('user_id', $validated['user_id'])
+            ->where('id', $validated['user_id'])
             ->firstOrFail();
 
         $walkies = collect();

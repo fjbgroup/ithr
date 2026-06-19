@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class WalkieTalkie extends Model
 {
     protected $table = 'walkie_talkies';
-    protected $connection = 'wt_mysql';
     protected $primaryKey = 'walkie_id';
     public $timestamps = false; // Only has created_at
 

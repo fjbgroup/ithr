@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class NonItAsset extends Model
 {
-    protected $connection = 'it_mysql';
     protected $fillable = [
         'asset_number', 'asset_class', 'description', 'serial_number', 'brand', 'model',
         'location', 'item_status', 'condition_status', 'notes', 'created_by',

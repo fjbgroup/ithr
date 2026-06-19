@@ -1,6 +1,6 @@
 ﻿@php
     $isAdminRoute = request()->routeIs('wt.admin.*');
-    $layout = $isAdminRoute ? 'layouts.admin' : 'layouts.user';
+    $layout = $isAdminRoute ? 'wt.layouts.admin' : 'wt.layouts.user';
     $routePrefix = $isAdminRoute ? 'wt.admin' : 'wt.user';
 @endphp
 
@@ -50,7 +50,7 @@ Handover WT
     }
     .handover-language-btn.is-active {
         color: #ffffff;
-        background: linear-gradient(135deg, #8B5E3C, #6f4a31);
+        background: linear-gradient(135deg, #0284c7, #6f4a31);
         box-shadow: 0 8px 18px rgba(111, 74, 49, 0.22);
     }
     .handover-language-btn:not(.is-active):hover {
@@ -80,7 +80,7 @@ Handover WT
         padding: 14px 16px;
     }
     .handover-terms-item strong {
-        color: #8B5E3C;
+        color: #0284c7;
     }
     .handover-terms-sublist {
         margin-top: 8px;
@@ -100,7 +100,7 @@ Handover WT
     }
     .dark .handover-language-btn.is-active {
         color: #ffffff;
-        background: linear-gradient(135deg, #8B5E3C, #a16207);
+        background: linear-gradient(135deg, #0284c7, #a16207);
         box-shadow: none;
     }
     .dark .handover-language-btn:not(.is-active):hover {
@@ -136,7 +136,7 @@ Handover WT
 @endphp
 <div class="px-2">
     <div class="mb-3">
-        <h3 class="text-sm font-extrabold text-[#3D2B1F] tracking-tight">Handover WT</h3>
+        <h3 class="text-sm font-extrabold text-[#142b47] tracking-tight">Handover WT</h3>
         <p class="text-stone-400 font-medium mt-0.5 text-[9px] tracking-widest uppercase">
             Respond to ICT pickup notifications for approved walkie talkie requests.
         </p>
@@ -158,9 +158,9 @@ Handover WT
         </div>
     @endif
 
-    <div class="mb-4 bg-white rounded-2xl shadow-sm border border-[#8B5E3C]/10 overflow-hidden dark:bg-slate-800 dark:border-slate-700">
+    <div class="mb-4 bg-white rounded-2xl shadow-sm border border-[#0284c7]/10 overflow-hidden dark:bg-slate-800 dark:border-slate-700">
         <div class="p-3 border-b border-stone-100 bg-stone-50/70 dark:bg-slate-900 dark:border-slate-700">
-            <h4 class="text-[11px] font-black text-[#3D2B1F] uppercase tracking-wider dark:text-slate-100">Current Handover Status WT</h4>
+            <h4 class="text-[11px] font-black text-[#142b47] uppercase tracking-wider dark:text-slate-100">Current Handover Status WT</h4>
             <p class="text-[9px] text-stone-500 mt-0.5 uppercase tracking-wide dark:text-slate-400">Check whether your request is still processing or already ready to collect.</p>
         </div>
 
@@ -172,7 +172,7 @@ Handover WT
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p class="text-[8px] uppercase tracking-widest text-stone-400 font-black">Request #{{ str_pad($request->id, 5, '0', STR_PAD_LEFT) }}</p>
-                                <p class="mt-1 text-[12px] font-black text-[#3D2B1F] dark:text-slate-100">{{ $request->event_name ?: 'Walkie Talkie Request' }}</p>
+                                <p class="mt-1 text-[12px] font-black text-[#142b47] dark:text-slate-100">{{ $request->event_name ?: 'Walkie Talkie Request' }}</p>
                             </div>
                             <span class="inline-flex rounded-full border px-2.5 py-1 text-[8px] font-black uppercase tracking-widest {{ $badge['class'] }}">
                                 {{ $badge['text'] }}
@@ -195,9 +195,9 @@ Handover WT
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-[#8B5E3C]/10 overflow-hidden dark:bg-slate-800 dark:border-slate-700">
+    <div class="bg-white rounded-2xl shadow-sm border border-[#0284c7]/10 overflow-hidden dark:bg-slate-800 dark:border-slate-700">
         <div class="p-3 border-b border-stone-100 bg-stone-50/70 dark:bg-slate-900 dark:border-slate-700">
-            <h4 class="text-[11px] font-black text-[#3D2B1F] uppercase tracking-wider dark:text-slate-100">Pickup Notifications WT</h4>
+            <h4 class="text-[11px] font-black text-[#142b47] uppercase tracking-wider dark:text-slate-100">Pickup Notifications WT</h4>
             <p class="text-[9px] text-stone-500 mt-0.5 uppercase tracking-wide dark:text-slate-400">Pick up walkie talkie at ICT Department.</p>
         </div>
 
@@ -207,7 +207,7 @@ Handover WT
                     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div class="space-y-2">
                             <p class="text-[8px] uppercase tracking-widest text-stone-400 font-black">Request #{{ str_pad($request->id, 5, '0', STR_PAD_LEFT) }}</p>
-                            <p class="text-[12px] font-black text-[#3D2B1F] dark:text-slate-100">{{ $request->full_name }}</p>
+                            <p class="text-[12px] font-black text-[#142b47] dark:text-slate-100">{{ $request->full_name }}</p>
                             <div class="grid grid-cols-1 gap-2 text-[10px] font-bold text-stone-500 md:grid-cols-2 dark:text-slate-400">
                                 <p>Radio ID: <span class="text-stone-800 dark:text-slate-100">{{ $request->radio_id ?: '-' }}</span></p>
                                 <p>Serial No: <span class="text-stone-800 dark:text-slate-100">{{ $request->assigned_serial_number ?: '-' }}</span></p>
