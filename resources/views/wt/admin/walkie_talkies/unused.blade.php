@@ -992,7 +992,7 @@
         <form id="unusedUseForm" method="POST">
             @csrf
             <input type="hidden" name="status" value="IN USE">
-            <input type="hidden" name="return_route" value="admin.walkies.unused">
+            <input type="hidden" name="return_route" value="wt.admin.walkies.unused">
             <input type="hidden" name="need_to_change_id" value="0">
             <input type="hidden" name="id_change_done" value="0">
             <input type="hidden" name="is_special_use" value="0">

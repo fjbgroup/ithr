@@ -581,16 +581,16 @@ html:not(.dark) .content-surface{background:rgba(255,255,255,.98) !important;bor
 @endphp
 
 @php
-    $inventoryNavOnInventory = request()->routeIs('admin.walkies.index') || request()->routeIs('admin.walkies.create');
-    $inventoryNavOnMaintenance = request()->routeIs('admin.maintenance.index') || request()->routeIs('admin.maintenance.create');
-    $inventoryNavOnDuplicate = request()->routeIs('admin.walkies.duplicateIds') || request()->routeIs('admin.walkies.create.duplicate');
-    $inventoryNavOnSpecialUse = request()->routeIs('admin.walkies.specialUse') || request()->routeIs('admin.walkies.create.specialUse');
+    $inventoryNavOnInventory = request()->routeIs('wt.admin.walkies.index') || request()->routeIs('wt.admin.walkies.create');
+    $inventoryNavOnMaintenance = request()->routeIs('wt.admin.maintenance.index') || request()->routeIs('wt.admin.maintenance.create');
+    $inventoryNavOnDuplicate = request()->routeIs('wt.admin.walkies.duplicateIds') || request()->routeIs('wt.admin.walkies.create.duplicate');
+    $inventoryNavOnSpecialUse = request()->routeIs('wt.admin.walkies.specialUse') || request()->routeIs('wt.admin.walkies.create.specialUse');
     $inventoryManagementOpen = $inventoryNavOnInventory || $inventoryNavOnMaintenance || $inventoryNavOnDuplicate || $inventoryNavOnSpecialUse;
-    $approvalNavOnPending = request()->routeIs('admin.requests.index');
-    $approvalNavOnHistory = request()->routeIs('admin.requests.history');
+    $approvalNavOnPending = request()->routeIs('wt.admin.requests.index');
+    $approvalNavOnHistory = request()->routeIs('wt.admin.requests.history');
     $approvalManagementOpen = $approvalNavOnPending || $approvalNavOnHistory;
-    $faultyNavOnUserReports = request()->routeIs('admin.faultyReports.*');
-    $faultyNavOnThreeMonths = request()->routeIs('admin.reports.faulty3Months');
+    $faultyNavOnUserReports = request()->routeIs('wt.admin.faultyReports.*');
+    $faultyNavOnThreeMonths = request()->routeIs('wt.admin.reports.faulty3Months');
     $faultyManagementOpen = $faultyNavOnUserReports || $faultyNavOnThreeMonths;
 @endphp
 
@@ -687,7 +687,7 @@ html:not(.dark) .content-surface{background:rgba(255,255,255,.98) !important;bor
 
     @else
     {{-- Executive/Admin view personal assets --}}
-    <a href="{{ route('wt.admin.walkies.myInventory') }}" class="nav-link has-info {{ request()->routeIs('admin.walkies.myInventory') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.walkies.myInventory') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.walkies.myInventory') ? 'active-sidebar' : '' }}">
       <i class="fa-solid fa-box" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Inventory</span>
       @include('wt.partials.sidebar-info', ['text' => 'View walkie talkies currently assigned to you.'])
     </a>
