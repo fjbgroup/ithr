@@ -1323,7 +1323,40 @@ body .content-surface .duplicate-filter-reset {
 }
 
 body .content-surface .duplicate-table-shell #duplicateTable {
-    min-width: 1680px !important;
+    min-width: 1720px !important;
+    table-layout: fixed !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(1) { width: 120px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(2) { width: 110px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(3) { width: 150px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(4) { width: 95px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(5) { width: 150px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(6) { width: 180px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(7) { width: 150px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(8) { width: 165px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(9) { width: 70px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(10) { width: 155px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(11) { width: 205px !important; }
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    box-sizing: border-box !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(1),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(3),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(6),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(7),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(8),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(11) {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    text-overflow: clip !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(11) {
+    line-height: 1.35 !important;
 }
 
 body .content-surface .duplicate-table-shell #duplicateTable th:last-child,
@@ -1553,7 +1586,6 @@ function updateFileName(input) {
 }
 </script>
 @endsection
-
 
 
 
