@@ -1,0 +1,208 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Staff;
+use App\Models\Department;
+use App\Models\Position;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use App\Services\AuditLogger;
+
+class UserController extends Controller
+{
+    public function index()
+    {
+        $users = User::with(['department', 'staff.department'])
+            ->orderBy('role')
+            ->orderBy('name')
+            ->get();
+
+        $departments = Department::orderBy('company')->orderBy('name')->get();
+        $positions = Position::orderBy('title')->get();
+
+        return view('users.index', compact('users', 'departments', 'positions'));
+    }
+
+    public function show(User $user)
+    {
+        $user->load(['staff.department', 'staff.travelRecords', 'bookings.room']);
+        
+        $trainings = [];
+        if ($user->staff_id) {
+            $trainings = \App\Models\TrainingAttendance::with('course')
+                ->where('staff_id', $user->staff_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return view('users.show', compact('user', 'trainings'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'role' => 'required|string|in:staff,admin_hr,admin_it,ceo',
+            'staff_no' => 'nullable|string|max:50',
+            'department_id' => 'nullable|exists:departments,id',
+            'position' => 'nullable|string|max:255',
+            'company' => 'nullable|string|max:50',
+        ]);
+
+        $staff = null;
+        if (!empty($validated['staff_no'])) {
+            $staff = Staff::where('staff_no', $validated['staff_no'])->first();
+        }
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
+            'staff_no' => $validated['staff_no'],
+            'staff_id' => $staff ? $staff->id : null,
+            'department_id' => $validated['department_id'],
+            'position' => $validated['position'],
+            'company' => $validated['company'] ?? 'FJB',
+            'is_active' => true,
+        ]);
+
+        AuditLogger::log('create', 'users',
+            'Created user account for ' . $user->name . ' (' . $user->role . ').',
+            ['user_id' => $user->id, 'role' => $user->role]
+        );
+
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $isSelf = auth()->id() === $user->id;
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'password' => 'nullable|string|min:6',
+            'role' => $isSelf ? 'nullable' : 'required|string|in:staff,admin_hr,admin_it,ceo',
+            'staff_no' => 'nullable|string|max:50',
+            'department_id' => 'nullable|exists:departments,id',
+            'position' => 'nullable|string|max:255',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        $staff = null;
+        if (!empty($validated['staff_no'])) {
+            $staff = Staff::where('staff_no', $validated['staff_no'])->first();
+        }
+
+        $userData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'staff_no' => $validated['staff_no'],
+            'staff_id' => $staff ? $staff->id : null,
+            'department_id' => $validated['department_id'],
+            'position' => $validated['position'],
+        ];
+
+        if (!$isSelf) {
+            $userData['role'] = $validated['role'];
+            $userData['is_active'] = $request->has('is_active');
+        }
+
+        if (!empty($validated['password'])) {
+            $userData['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($userData);
+
+        // Sync email to linked staff record
+        if ($user->staff_id) {
+            $user->staff->update(['email' => $user->email]);
+        }
+
+        AuditLogger::log('update', 'users',
+            'Updated user account for ' . $user->name . '.',
+            ['user_id' => $user->id]
+        );
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        if (auth()->id() === $user->id) {
+            return redirect()->route('users.index')->with('error', 'You cannot delete your own account.');
+        }
+
+        AuditLogger::log('delete', 'users',
+            'Deleted user account for ' . $user->name . ' (' . $user->role . ').',
+            ['deleted_user_id' => $user->id, 'role' => $user->role]
+        );
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function toggleActive(Request $request, User $user)
+    {
+        if (auth()->id() === $user->id) {
+            return response()->json(['error' => 'You cannot disable your own account.'], 403);
+        }
+
+        $user->is_active = $request->is_active;
+        $user->save();
+
+        $status = $user->is_active ? 'activated' : 'deactivated';
+        AuditLogger::log('toggle', 'users',
+            'User account for ' . $user->name . ' was ' . $status . '.',
+            ['user_id' => $user->id, 'is_active' => $user->is_active]
+        );
+
+        return redirect()->route('users.index')->with('success', 'User status updated.');
+    }
+
+    public function searchStaff(Request $request)
+    {
+        $staffId = trim($request->sr_staffid ?? '');
+        $name    = trim($request->sr_name ?? '');
+        $deptId  = (int)($request->sr_dept ?? 0);
+
+        if (!$staffId && !$name && !$deptId) {
+            return response()->json([]);
+        }
+
+        $query = Staff::with('department')->where('is_active', 1);
+
+        $query->where(function($q) use ($staffId, $name, $deptId) {
+            if ($staffId) {
+                $q->orWhere('staff_no', 'LIKE', "%{$staffId}%");
+            }
+            if ($name) {
+                $q->orWhere('name', 'LIKE', "%{$name}%");
+            }
+            if ($deptId) {
+                $q->orWhere('department_id', $deptId);
+            }
+        });
+
+        $staff = $query->orderBy('name')->limit(50)->get();
+
+        return response()->json($staff->map(function($s) {
+            return [
+                'id' => $s->id,
+                'staff_no' => $s->staff_no,
+                'name' => $s->name,
+                'position' => $s->position,
+                'email' => $s->email,
+                'department_id' => $s->department_id,
+                'dept_name' => $s->department ? $s->department->name : '—'
+            ];
+        }));
+    }
+}
