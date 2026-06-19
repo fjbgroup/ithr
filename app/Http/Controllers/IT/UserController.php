@@ -155,11 +155,11 @@ class UserController extends Controller
 
     public function destroy(int $id)
     {
-        if ($id === Auth::guard('it')->id()) return back()->with('error', 'Cannot delete your own account.');
+        if ($id === Auth::guard('it')->id()) return back()->with('error', 'Cannot revoke your own IT access.');
         $user = User::findOrFail($id);
-        ActivityLogService::log('DELETE', 'user', $id, 'Deleted user: '.$user->username);
-        $user->delete();
-        return back()->with('success', 'User deleted.');
+        $user->update(['it_role' => null]);
+        ActivityLogService::log('UPDATE', 'user', $id, 'Revoked IT access for: '.$user->username);
+        return back()->with('success', 'IT access revoked for '.$user->full_name.'.');
     }
 
     public function toggle(int $id)

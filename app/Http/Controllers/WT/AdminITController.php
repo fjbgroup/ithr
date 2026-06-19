@@ -227,26 +227,26 @@ class AdminITController extends Controller
     public function destroyUser(Request $request, User $user)
     {
         if (Auth::guard('wt')->id() === $user->user_id) {
-            return back()->with('error', 'You cannot delete your own account.');
+            return back()->with('error', 'You cannot revoke your own WT access.');
         }
 
-        $deletedUserLabel = $user->username . ' (' . ($user->staff_id ?: '-') . ')';
-        $deletedUserId = $user->user_id;
+        $userLabel = $user->username . ' (' . ($user->staff_id ?: '-') . ')';
+        $userId = $user->user_id;
 
-        $user->delete();
+        $user->update(['wt_role' => null]);
 
         UserActivityLog::create([
             'user_id' => Auth::guard('wt')->id(),
             'username' => Auth::guard('wt')->user()->username,
             'event_type' => 'user_management',
-            'event_action' => 'delete',
-            'event_details' => 'Deleted user #' . $deletedUserId . ' - ' . $deletedUserLabel,
+            'event_action' => 'revoke_wt_access',
+            'event_details' => 'Revoked WT access for user #' . $userId . ' - ' . $userLabel,
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'created_at' => now(),
         ]);
 
-        return back()->with('success', 'User deleted successfully.');
+        return back()->with('success', 'WT access revoked for ' . $user->full_name . '.');
     }
 
     public function resetUserPassword(Request $request, User $user)
