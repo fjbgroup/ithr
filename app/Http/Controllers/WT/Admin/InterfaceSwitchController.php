@@ -40,11 +40,11 @@ class InterfaceSwitchController extends Controller
         }
 
         $validated = $request->validate([
-            'executive_user_id' => ['required', 'integer', Rule::exists(User::class, 'user_id')],
+            'executive_user_id' => ['required', 'integer', Rule::exists(User::class, 'id')],
         ]);
 
         $executive = User::where('role', 'admin')
-            ->where('user_id', $validated['executive_user_id'])
+            ->where('id', $validated['executive_user_id'])
             ->firstOrFail();
 
         $ictUserId = Auth::guard('wt')->id();
@@ -70,7 +70,7 @@ class InterfaceSwitchController extends Controller
         }
 
         $ictUser = User::where('role', 'admin_it')
-            ->where('user_id', $ictUserId)
+            ->where('id', $ictUserId)
             ->firstOrFail();
 
         Auth::guard('wt')->login($ictUser);

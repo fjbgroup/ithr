@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Models\WT\PasswordResetRequest;
 use App\Models\WT\User;
 use App\Models\WT\UserActivityLog;
+use App\Services\SsoService;
 use App\Services\SystemNotifier;
 
 class AuthController extends Controller
@@ -25,46 +26,34 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('staff_id', $credentials['staff_no'])->first();
+        $user = User::whereRaw('TRIM(staff_no) = ?', [trim($credentials['staff_no'])])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
-            if ($user->role !== 'admin_it') {
-                UserActivityLog::create([
-                    'user_id'      => $user->user_id,
-                    'username'     => $user->username,
-                    'event_type'   => 'login',
-                    'event_action' => 'login_blocked_unsupported_role',
-                    'event_details'=> 'Login blocked because this account role is no longer allowed in the system.',
-                    'ip_address'   => $request->ip(),
-                    'user_agent'   => $request->userAgent(),
-                    'created_at'   => now(),
-                ]);
-
+            if (!$user->is_active) {
                 return back()
-                    ->with('error', 'Access denied. Only ICT Admin accounts may log in here.')
+                    ->with('error', 'Your account is inactive. Please contact ICT.')
                     ->onlyInput('staff_no');
             }
 
             Auth::guard('wt')->login($user);
             $request->session()->regenerate();
+            SsoService::markAuthenticated($user->id);
 
             UserActivityLog::create([
-                'user_id'    => $user->user_id,
-                'username'   => $user->username,
-                'event_type' => 'login',
-                'event_action' => 'login_success',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'created_at' => now(),
+                'user_id'     => $user->user_id,
+                'username'    => $user->username,
+                'event_type'  => 'login',
+                'event_action'=> 'login_success',
+                'ip_address'  => $request->ip(),
+                'user_agent'  => $request->userAgent(),
+                'created_at'  => now(),
             ]);
 
             if ($user->role === 'admin_it') {
                 return redirect()->route('wt.admin.dashboard');
-            } elseif ($user->role === 'admin') {
-                return redirect()->route('wt.admin.requests.create.shared');
             }
 
-            return redirect()->route('wt.login');
+            return redirect()->route('wt.admin.requests.create.shared');
         }
 
         UserActivityLog::create([
@@ -95,7 +84,12 @@ class AuthController extends Controller
             ]);
         }
 
+        SsoService::clearAuthentication();
         Auth::guard('wt')->logout();
+        Auth::guard('web')->logout();
+        Auth::guard('it')->logout();
+
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect('/');
@@ -105,14 +99,14 @@ class AuthController extends Controller
     {
         $request->validate([
             'requester_name' => 'required|string|max:255',
-            'staff_id' => ['required', 'string', Rule::exists(User::class, 'staff_id')],
+            'staff_id' => ['required', 'string', Rule::exists(User::class, 'staff_no')],
             'justification' => 'required|string|max:2000',
         ]);
 
-        $user = User::where('staff_id', $request->staff_id)->first();
+        $user = User::where('staff_no', $request->staff_id)->first();
 
-        if (! $user || ! in_array($user->role, ['admin', 'admin_it'], true)) {
-            return back()->with('error', 'Password reset is only available for Executive and ICT accounts.');
+        if (! $user) {
+            return back()->with('error', 'Staff No. not found.');
         }
 
         $hasPendingRequest = PasswordResetRequest::where('staff_id', $request->staff_id)

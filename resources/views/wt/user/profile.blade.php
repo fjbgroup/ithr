@@ -1,220 +1,165 @@
-﻿@extends('wt.layouts.user')
+@extends('wt.layouts.user')
 
 @section('title', 'My Profile')
+@section('page_title', 'My Profile')
 
 @push('styles')
 <style>
-    .profile-shell {
-        max-width: 1180px;
-    }
-    .profile-card {
-        overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        border-radius: 18px;
-        background: #162236;
-        box-shadow: none;
-    }
-    .profile-aside {
-        border-right: 1px solid rgba(148, 163, 184, 0.14);
-        background: linear-gradient(180deg, #1d2b42 0%, #142033 100%);
-        padding: 18px;
-    }
-    .profile-avatar {
-        display: flex;
-        width: 58px;
-        height: 58px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 16px;
-        border: 1px solid rgba(125, 211, 252, 0.24);
-        background: #075985;
-        color: #f8fafc;
-        font-size: 24px;
-        font-weight: 900;
-    }
-    .profile-name {
-        margin-top: 14px;
-        color: #f8fafc;
-        font-size: 15px;
-        font-weight: 900;
-        line-height: 1.2;
-        text-transform: uppercase;
-    }
-    .profile-role {
-        margin-top: 5px;
-        color: #93c5fd;
-        font-size: 9px;
-        font-weight: 900;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-    }
-    .profile-meta {
-        margin-top: 16px;
-        display: grid;
-        gap: 8px;
-    }
-    .profile-meta-item {
-        border-radius: 10px;
-        border: 1px solid rgba(148, 163, 184, 0.14);
-        background: rgba(15, 23, 42, 0.36);
-        padding: 10px;
-    }
-    .profile-meta-label,
-    .profile-label {
-        color: #94a3b8;
-        font-size: 8px;
-        font-weight: 900;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-    }
-    .profile-meta-value {
-        margin-top: 4px;
-        color: #e2e8f0;
-        font-size: 11px;
-        font-weight: 900;
-        text-transform: uppercase;
-    }
-    .profile-form {
-        padding: 18px;
-    }
-    .profile-section-title {
-        margin-bottom: 14px;
-        color: #f8fafc;
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
-    .profile-input {
-        width: 100%;
-        min-height: 38px;
-        border-radius: 10px;
-        border: 1px solid rgba(148, 163, 184, 0.22);
-        background: #0f172a;
-        padding: 9px 11px;
-        color: #f8fafc;
-        font-size: 11px;
-        font-weight: 800;
-        outline: none;
-        transition: border-color 0.16s ease, box-shadow 0.16s ease;
-    }
-    .profile-input:focus {
-        border-color: rgba(56, 189, 248, 0.62) !important;
-        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12) !important;
-    }
-    .profile-input[disabled] {
-        color: #94a3b8;
-        cursor: not-allowed;
-        background: rgba(15, 23, 42, 0.52);
-    }
-    .profile-save-btn {
-        display: inline-flex;
-        min-height: 36px;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        border-radius: 10px;
-        border: 1px solid rgba(56, 189, 248, 0.34);
-        background: rgba(14, 165, 233, 0.14);
-        padding: 9px 14px;
-        color: #bae6fd;
-        font-size: 9px;
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        transition: background 0.16s ease, border-color 0.16s ease;
-    }
-    .profile-save-btn:hover {
-        border-color: rgba(125, 211, 252, 0.56);
-        background: rgba(14, 165, 233, 0.22);
-    }
-    @media (max-width: 768px) {
-        .profile-aside {
-            border-right: 0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-        }
-    }
+.profile-hero{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.profile-hero-initial{width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800;color:#fff;flex-shrink:0}
+.profile-section-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.profile-section-header{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.profile-section-title{font-size:14px;font-weight:700;color:var(--text)}
+.profile-section-body{padding:22px}
+.account-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.account-row:last-child{border-bottom:none}
+.account-row-label{font-size:13px;color:var(--muted);font-weight:500}
+.account-row-value{font-size:13px;font-weight:600;color:var(--text)}
 </style>
 @endpush
 
 @section('content')
-<div class="page-header-block">
-    <div>
-        <h3 class="page-title-standard">My Profile</h3>
-        <p class="page-subtitle-standard">
-            Manage your personal information and account details.
-        </p>
+@php $user = Auth::guard('wt')->user(); @endphp
+
+{{-- Profile Hero --}}
+<div class="profile-hero">
+  <div class="profile-hero-initial">{{ strtoupper(substr($user->username ?? 'U', 0, 1)) }}</div>
+  <div style="flex:1;min-width:0">
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px">Your Account</div>
+    <div style="font-size:20px;font-weight:800;color:var(--text);line-height:1.1">{{ strtoupper($user->full_name ?: $user->username) }}</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap">
+      <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">{{ strtoupper(str_replace('_',' ',$user->role ?? 'user')) }}</span>
+      <span style="font-size:12px;color:var(--muted)"><i class="fas fa-user" style="font-size:11px;margin-right:3px"></i>{{ $user->username }}</span>
+      @if($user->staff_id)
+      <span style="font-size:12px;color:var(--muted)"><i class="fas fa-id-badge" style="font-size:11px;margin-right:3px"></i>{{ $user->staff_id }}</span>
+      @endif
+      @if($user->department)
+      <span style="font-size:12px;color:var(--muted)"><i class="fas fa-building" style="font-size:11px;margin-right:3px"></i>{{ $user->department }}</span>
+      @endif
     </div>
+  </div>
 </div>
 
-<div class="px-2">
-    @if(session('success'))
-    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl flex items-center gap-3">
-        <i class="fas fa-check-circle"></i>
-        <span class="font-bold text-sm">{{ session('success') }}</span>
+@if(session('success'))
+<div class="alert-success-custom mb-4"><i class="fas fa-check-circle"></i> {{ session('success') }}</div>
+@endif
+
+<div class="row g-4" style="max-width:960px">
+  <div class="col-md-7">
+    <div class="profile-section-card">
+      <div class="profile-section-header">
+        <i class="fas fa-user-edit" style="color:var(--accent);font-size:15px"></i>
+        <div class="profile-section-title">Profile Information</div>
+      </div>
+      <div class="profile-section-body">
+        <form action="{{ route('wt.user.profile.update') }}" method="POST">
+          @csrf
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Staff ID</label>
+              <input type="text" class="form-control" value="{{ $user->staff_id }}" readonly disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control" value="{{ $user->username }}" readonly disabled>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Full Name</label>
+              <input type="text" name="full_name" class="form-control" value="{{ old('full_name', $user->full_name) }}" placeholder="Enter your full name" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Phone No</label>
+              <input type="text" name="phone_no" class="form-control" value="{{ old('phone_no', $user->phone_no) }}" placeholder="e.g. 012-3456789" data-preserve-case="true">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Department</label>
+              <input type="text" name="department" list="department-options" class="form-control" value="{{ old('department', $user->department) }}" placeholder="e.g. IT Department" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Position</label>
+              <input type="text" name="position" list="position-options" class="form-control" value="{{ old('position', $user->position) }}" placeholder="e.g. Staff" required>
+            </div>
+          </div>
+          <div style="margin-top:20px;display:flex;justify-content:flex-end">
+            <button type="submit" class="btn-primary-custom">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-    @endif
 
-    <div class="profile-shell mx-auto">
-        <div class="profile-card grid grid-cols-1 md:grid-cols-[260px_1fr]">
-            <aside class="profile-aside">
-                <div class="profile-avatar">
-                    {{ strtoupper(substr(Auth::guard('wt')->user()->username, 0, 1)) }}
-                </div>
-                <h4 class="profile-name">{{ strtoupper(Auth::guard('wt')->user()->full_name ?: Auth::guard('wt')->user()->username) }}</h4>
-                <p class="profile-role">{{ strtoupper(Auth::guard('wt')->user()->role ?: 'User Account') }}</p>
+    {{-- Change Password --}}
+    <div class="profile-section-card">
+      <div class="profile-section-header">
+        <i class="fas fa-lock" style="color:var(--accent);font-size:15px"></i>
+        <div class="profile-section-title">Change Password</div>
+      </div>
+      <div class="profile-section-body">
+        <form action="{{ route('wt.user.profile.password') }}" method="POST">
+          @csrf
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Current Password</label>
+              <input type="password" name="current_password" class="form-control" placeholder="Enter current password" data-preserve-case="true">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">New Password</label>
+              <input type="password" name="password" class="form-control" placeholder="New password" data-preserve-case="true">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm new password" data-preserve-case="true">
+            </div>
+          </div>
+          <div style="margin-top:20px;display:flex;justify-content:flex-end">
+            <button type="submit" class="btn-primary-custom">
+              <i class="fas fa-key"></i> Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-                <div class="profile-meta">
-                    <div class="profile-meta-item">
-                        <div class="profile-meta-label">Staff ID</div>
-                        <div class="profile-meta-value">{{ Auth::guard('wt')->user()->staff_id ?: '-' }}</div>
-                    </div>
-                    <div class="profile-meta-item">
-                        <div class="profile-meta-label">Username</div>
-                        <div class="profile-meta-value">{{ Auth::guard('wt')->user()->username ?: '-' }}</div>
-                    </div>
-                </div>
-            </aside>
-
-            <form action="{{ route('wt.user.profile.update') }}" method="POST" class="profile-form">
-                @csrf
-                <h4 class="profile-section-title">Account Details</h4>
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                        <label class="profile-label mb-1 block">Staff ID</label>
-                        <input type="text" value="{{ Auth::guard('wt')->user()->staff_id }}" class="profile-input" readonly disabled>
-                    </div>
-                    <div>
-                        <label class="profile-label mb-1 block">Username</label>
-                        <input type="text" value="{{ Auth::guard('wt')->user()->username }}" class="profile-input" readonly disabled>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="profile-label mb-1 block">Full Name</label>
-                        <input type="text" name="full_name" value="{{ old('full_name', Auth::guard('wt')->user()->full_name) }}" placeholder="Enter your full name" class="profile-input" required>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="profile-label mb-1 block">Phone No</label>
-                        <input type="text" name="phone_no" value="{{ old('phone_no', Auth::guard('wt')->user()->phone_no) }}" placeholder="e.g. 012-3456789" class="profile-input">
-                    </div>
-                    <div>
-                        <label class="profile-label mb-1 block">Department</label>
-                        <input type="text" name="department" list="department-options" value="{{ old('department', Auth::guard('wt')->user()->department) }}" placeholder="e.g. IT Department" class="profile-input" required>
-                    </div>
-                    <div>
-                        <label class="profile-label mb-1 block">Position</label>
-                        <input type="text" name="position" list="position-options" value="{{ old('position', Auth::guard('wt')->user()->position) }}" placeholder="e.g. Staff" class="profile-input" required>
-                    </div>
-                </div>
-
-                <div class="mt-5 flex justify-end">
-                    <button type="submit" class="profile-save-btn">
-                        Save Changes <i class="fas fa-save"></i>
-                    </button>
-                </div>
-            </form>
+  <div class="col-md-5">
+    <div class="profile-section-card">
+      <div class="profile-section-header">
+        <i class="fas fa-info-circle" style="color:var(--accent);font-size:15px"></i>
+        <div class="profile-section-title">Account Info</div>
+      </div>
+      <div class="profile-section-body" style="padding:16px 22px">
+        <div class="account-row">
+          <span class="account-row-label">Staff ID</span>
+          <span class="account-row-value">{{ $user->staff_id ?: '—' }}</span>
         </div>
+        <div class="account-row">
+          <span class="account-row-label">Username</span>
+          <span class="account-row-value">{{ $user->username ?: '—' }}</span>
+        </div>
+        <div class="account-row">
+          <span class="account-row-label">Role</span>
+          <span class="account-row-value">{{ strtoupper(str_replace('_',' ',$user->role ?? 'user')) }}</span>
+        </div>
+        <div class="account-row">
+          <span class="account-row-label">Department</span>
+          <span class="account-row-value">{{ $user->department ?: '—' }}</span>
+        </div>
+        <div class="account-row">
+          <span class="account-row-label">Position</span>
+          <span class="account-row-value">{{ $user->position ?: '—' }}</span>
+        </div>
+        <div class="account-row">
+          <span class="account-row-label">Phone</span>
+          <span class="account-row-value">{{ $user->phone_no ?: '—' }}</span>
+        </div>
+        <div class="account-row">
+          <span class="account-row-label">Member Since</span>
+          <span class="account-row-value">{{ $user->created_at ? $user->created_at->format('d M Y') : '—' }}</span>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+
 @endsection
-
-

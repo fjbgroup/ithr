@@ -118,7 +118,7 @@
     }
     .handover-language-btn.is-active {
         color: #ffffff;
-        background: linear-gradient(135deg, #8B5E3C, #6f4a31);
+        background: linear-gradient(135deg, #0284c7, #6f4a31);
         box-shadow: 0 8px 18px rgba(111, 74, 49, 0.22);
     }
     .handover-language-btn:not(.is-active):hover {
@@ -148,7 +148,7 @@
         padding: 14px 16px;
     }
     .handover-terms-item strong {
-        color: #8B5E3C;
+        color: #0284c7;
     }
     .handover-terms-sublist {
         margin-top: 8px;
@@ -168,7 +168,7 @@
     }
     .dark .handover-language-btn.is-active {
         color: #ffffff;
-        background: linear-gradient(135deg, #8B5E3C, #a16207);
+        background: linear-gradient(135deg, #0284c7, #a16207);
         box-shadow: none;
     }
     .dark .handover-language-btn:not(.is-active):hover {

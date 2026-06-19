@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityLog extends Model
 {
     public $timestamps = false;
-    protected $table = 'activity_log';
-    protected $connection = 'it_mysql';
+    protected $table = 'it_activity_log';
 
     protected $fillable = ['user_id', 'action', 'item_type', 'item_id', 'description', 'ip_address'];
 

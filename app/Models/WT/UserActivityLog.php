@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class UserActivityLog extends Model
 {
     protected $table = 'user_activity_logs';
-    protected $connection = 'wt_mysql';
     protected $primaryKey = 'id';
     public $timestamps = false;
 

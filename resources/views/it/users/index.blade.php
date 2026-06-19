@@ -142,21 +142,49 @@ $action      = request('action', 'list');
         </ul>
       </div>
       @endif
+
+      @if(!$editUser)
+      {{-- Staff search — only shown on create --}}
+      <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+        <label class="form-label" style="font-weight:700">
+          <i class="bi bi-search" style="color:var(--accent)"></i>
+          Search HR Staff to auto-fill
+        </label>
+        <div style="position:relative">
+          <input type="text" id="staffSearchInput" class="form-control" autocomplete="off"
+            placeholder="Type name or staff number…"
+            style="padding-right:38px">
+          <i class="bi bi-search" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none"></i>
+        </div>
+        <div id="staffSearchResults" style="display:none;position:absolute;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);width:100%;max-width:520px;max-height:280px;overflow-y:auto;margin-top:4px"></div>
+        <div id="staffSelectedBanner" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(2,132,199,.07);border:1px solid rgba(2,132,199,.2);border-radius:8px;display:flex;align-items:center;gap:10px">
+          <i class="bi bi-check-circle-fill" style="color:var(--accent);flex-shrink:0"></i>
+          <span id="staffSelectedLabel" style="font-size:13px;font-weight:600;color:var(--text);flex:1"></span>
+          <button type="button" onclick="clearStaffSelection()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">
+          Select a staff member to auto-fill the fields below, or fill them in manually.
+        </div>
+      </div>
+      @endif
+
       <div class="row g-3">
         <div class="col-md-4">
-          <label class="form-label">Username <span style="color:var(--red)">*</span></label>
-          <input type="text" name="username" class="form-control" required value="{{ old('username', $editUser->username ?? '') }}"{{ $editUser ? ' readonly' : '' }}>
+          <label class="form-label">Username (Staff No.) <span style="color:var(--red)">*</span></label>
+          <input type="text" id="field_username" name="username" class="form-control" required value="{{ old('username', $editUser->username ?? '') }}"{{ $editUser ? ' readonly' : '' }}>
         </div>
         <div class="col-md-4">
           <label class="form-label">Full Name <span style="color:var(--red)">*</span></label>
-          <input type="text" name="full_name" class="form-control" required value="{{ old('full_name', $editUser->full_name ?? '') }}">
+          <input type="text" id="field_full_name" name="full_name" class="form-control" required value="{{ old('full_name', $editUser->full_name ?? '') }}">
         </div>
         <div class="col-md-4">
           <label class="form-label">Email</label>
-          <input type="email" name="email" class="form-control" value="{{ old('email', $editUser->email ?? '') }}">
+          <input type="email" id="field_email" name="email" class="form-control" value="{{ old('email', $editUser->email ?? '') }}">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Password {{ $editUser ? '<span style="color:var(--muted);font-weight:400">(leave blank to keep)</span>' : '<span style="color:var(--red)">*</span>' }}</label>
+          <label class="form-label">Password {!! $editUser ? '<span style="color:var(--muted);font-weight:400">(leave blank to keep)</span>' : '<span style="color:var(--red)">*</span>' !!}</label>
           <input type="password" name="password" class="form-control" {{ $editUser ? '' : 'required' }} placeholder="{{ $editUser ? 'Leave blank to keep current' : 'Set password' }}">
         </div>
         <div class="col-md-4">
@@ -172,18 +200,95 @@ $action      = request('action', 'list');
           </select>
         </div>
         <div class="col-md-4">
-          <label class="form-label">Staff ID</label>
-          <input type="text" name="department" class="form-control" value="{{ old('department', $editUser->department ?? '') }}" placeholder="e.g. FJB-0012">
-        </div>
-        <div class="col-md-4">
           <label class="form-label">Department</label>
-          <input type="text" name="dept_name" class="form-control" value="{{ old('dept_name', $editUser->dept_name ?? '') }}" placeholder="e.g. IT Department">
+          <input type="text" id="field_dept_name" name="dept_name" class="form-control" value="{{ old('dept_name', $editUser->dept_name ?? '') }}" placeholder="e.g. IT Department">
         </div>
         <div class="col-12">
           <button type="submit" class="btn-primary-custom"><i class="bi bi-check-lg"></i> {{ $editUser ? 'Update User' : 'Create User' }}</button>
         </div>
       </div>
     </form>
+
+    @if(!$editUser)
+    <script>
+    (function () {
+      const input   = document.getElementById('staffSearchInput');
+      const results = document.getElementById('staffSearchResults');
+      const banner  = document.getElementById('staffSelectedBanner');
+      const label   = document.getElementById('staffSelectedLabel');
+      let timer;
+
+      input.addEventListener('input', function () {
+        clearTimeout(timer);
+        const q = this.value.trim();
+        if (q.length < 2) { results.style.display = 'none'; return; }
+        timer = setTimeout(() => fetchStaff(q), 280);
+      });
+
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { results.style.display = 'none'; }
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!input.contains(e.target) && !results.contains(e.target)) {
+          results.style.display = 'none';
+        }
+      });
+
+      function fetchStaff(q) {
+        fetch('{{ route('it.users.staff-search') }}?q=' + encodeURIComponent(q), {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => renderResults(data));
+      }
+
+      function renderResults(data) {
+        if (!data.length) {
+          results.innerHTML = '<div style="padding:14px 16px;font-size:13px;color:var(--muted);text-align:center"><i class="bi bi-search" style="opacity:.4"></i> No staff found</div>';
+          results.style.display = 'block';
+          return;
+        }
+        results.innerHTML = data.map(s => `
+          <div class="staff-result-item" onclick="selectStaff(${JSON.stringify(s).replace(/"/g, '&quot;')})"
+            style="display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;border-bottom:1px solid var(--border)">
+            <div style="width:36px;height:36px;border-radius:50%;background:#0284c7;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">
+              ${s.name.charAt(0).toUpperCase()}
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:700;color:var(--text)">${s.name}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">
+                <span style="font-family:monospace">${s.staff_no}</span>
+                ${s.dept_name ? ' · ' + s.dept_name : ''}
+                ${s.position ? ' · ' + s.position : ''}
+              </div>
+            </div>
+          </div>`).join('');
+        results.innerHTML += '<div style="padding:8px 14px;font-size:11px;color:var(--muted);text-align:center;border-top:1px solid var(--border)">' + data.length + ' result' + (data.length > 1 ? 's' : '') + '</div>';
+        results.style.display = 'block';
+      }
+
+      window.selectStaff = function (s) {
+        document.getElementById('field_username').value  = s.staff_no;
+        document.getElementById('field_full_name').value = s.name;
+        document.getElementById('field_email').value     = s.email;
+        document.getElementById('field_dept_name').value = s.dept_name;
+        results.style.display = 'none';
+        input.value = '';
+        label.textContent = s.name + ' (' + s.staff_no + ')' + (s.dept_name ? ' — ' + s.dept_name : '');
+        banner.style.display = 'flex';
+      };
+
+      window.clearStaffSelection = function () {
+        ['field_username','field_full_name','field_email','field_dept_name'].forEach(id => {
+          document.getElementById(id).value = '';
+        });
+        banner.style.display = 'none';
+        input.value = '';
+      };
+    })();
+    </script>
+    @endif
   </div>
 </div>
 @endif

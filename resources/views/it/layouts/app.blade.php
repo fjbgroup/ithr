@@ -564,8 +564,11 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
-    <a href="{{ route('home') }}" class="nav-link">
-      <i class="bi bi-house-door-fill"></i> Back to Portal
+    <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">
+      <i class="bi bi-broadcast"></i> WT System
+    </a>
+    <a href="{{ route('dashboard') }}" class="nav-link">
+      <i class="bi bi-house-door-fill"></i> HR Portal
     </a>
 
   </nav>
@@ -650,6 +653,14 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 
     @yield('content')
 
+    <div class="app-footer" style="text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border, rgba(0,0,0,0.05)); clear: both;">
+        <div style="margin-bottom: 0.5rem;">
+            <img src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain;">
+        </div>
+        <div style="font-size: 0.85rem; color: var(--muted, #64748b); font-weight: 500;">
+            Develop by IT team
+        </div>
+    </div>
   </div>
 </div>
 

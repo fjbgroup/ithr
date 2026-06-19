@@ -10,7 +10,6 @@ class Handover extends Model
     use HasFactory;
 
     protected $table = 'walkie_talkie_handovers';
-    protected $connection = 'wt_mysql';
 
     protected $fillable = [
         'access_request_id',

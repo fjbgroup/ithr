@@ -13,8 +13,7 @@ class SystemNotifier
      */
     public static function notifyUser(User $user, string $title, string $message, string $category = 'general'): void
     {
-        \Illuminate\Support\Facades\DB::connection('wt_mysql')
-            ->table('notifications')
+        \Illuminate\Support\Facades\DB::table('wt_notifications')
             ->insert([
                 'id'              => (string) Str::uuid(),
                 'type'            => 'App\Notifications\WtSystemNotification',

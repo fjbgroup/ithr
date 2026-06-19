@@ -258,8 +258,16 @@
 
   </div>
 
-  <div class="portal-footer">
-    &copy; {{ date('Y') }} FJB Group &mdash; Internal Systems Portal
+  <div class="portal-footer" style="margin-top: 3rem; margin-bottom: 2rem;">
+    <div style="margin-bottom: 0.5rem;">
+        <img src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain;">
+    </div>
+    <div style="font-size: 0.85rem; color: rgba(255,255,255,.5); font-weight: 500; margin-bottom: 0.5rem;">
+        Develop by IT team
+    </div>
+    <div style="font-size: 0.75rem; color: rgba(255,255,255,.3);">
+        &copy; {{ date('Y') }} FJB Group &mdash; Internal Systems Portal
+    </div>
   </div>
 
 </body>

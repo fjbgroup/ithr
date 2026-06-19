@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role'          => \App\Http\Middleware\RoleMiddleware::class,
             'readonly.ceo'  => \App\Http\Middleware\ReadOnlyCeo::class,
+            'sso.autologin' => \App\Http\Middleware\SsoAutoLogin::class,
             // Walkie Talkie guards
             'wt.auth'       => \App\Http\Middleware\WT\Authenticate::class,
             'wt.guest'      => \App\Http\Middleware\WT\RedirectIfAuthenticated::class,
@@ -31,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'it.session.timeout' => \App\Http\Middleware\IT\CheckSessionTimeout::class,
             'it.must.change.pass' => \App\Http\Middleware\IT\CheckMustChangePassword::class,
         ]);
+        $middleware->appendToGroup('web', \App\Http\Middleware\SsoAutoLogin::class);
         $middleware->appendToGroup('web', \App\Http\Middleware\ReadOnlyCeo::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -6,19 +6,19 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .approval-inbox {
-        color: var(--text-primary);
+        color: var(--text);
     }
     .approval-inbox .approval-title {
         font-size: 1.25rem;
         line-height: 1.1;
         font-weight: 800;
-        color: var(--text-primary);
+        color: var(--text);
         letter-spacing: -0.02em;
     }
     .approval-inbox .approval-subtitle {
         font-size: 9px;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: var(--muted);
         letter-spacing: 0.1em;
         line-height: 1.35;
         text-transform: uppercase;
@@ -26,29 +26,25 @@
     .approval-inbox .approval-body-title {
         font-size: 10px;
         font-weight: 800;
-        color: var(--text-primary);
+        color: var(--text);
     }
     .approval-inbox .approval-body-meta {
         font-size: 9px;
-        color: var(--text-secondary);
+        color: var(--muted);
     }
     .approval-inbox .approval-date {
         font-size: 10px;
         font-weight: 700;
-        color: var(--text-primary);
+        color: var(--text);
     }
     .approval-inbox .approval-empty {
         font-size: 10px;
         font-weight: 600;
-        color: var(--text-secondary);
+        color: var(--muted);
     }
     .approval-inbox .approval-card {
-        background: #ffffff;
-        border-color: #e7e5e4;
-    }
-    .dark .approval-inbox .approval-card {
-        background: #182233;
-        border-color: #334155;
+        background: var(--surface);
+        border-color: var(--border);
     }
     .approval-inbox .empty-visual {
         display: inline-flex;
@@ -69,7 +65,7 @@
         justify-content: center;
         flex-direction: column;
         gap: 10px;
-        color: var(--text-secondary);
+        color: var(--muted);
         font-size: 11px;
         font-weight: 700;
         text-align: center;
@@ -177,7 +173,7 @@
     }
     .approval-inbox table.dataTable tbody td.dataTables_empty {
         padding: 0 !important;
-        color: var(--text-secondary) !important;
+        color: var(--muted) !important;
         background: transparent !important;
     }
     .approval-inbox table.dataTable tbody tr {
@@ -204,11 +200,11 @@
     }
     .approval-inbox .request-meta-label {
         font-size: 9px;
-        color: var(--text-secondary);
+        color: var(--muted);
     }
     .approval-inbox .request-meta-value {
         font-size: 10px;
-        color: var(--text-primary);
+        color: var(--text);
     }
     .approval-inbox .dataTables_wrapper,
     .approval-inbox .dataTables_wrapper label,
@@ -1008,7 +1004,7 @@
         --approval-panel-soft: #101827;
         --approval-line: rgba(148, 163, 184, 0.16);
         --approval-muted: #93a4bd;
-        --approval-accent: #8B5E3C;
+        --approval-accent: #0284c7;
         --approval-accent-soft: rgba(139, 94, 60, 0.16);
     }
     .approval-inbox > .mb-4:first-child {
@@ -1052,7 +1048,7 @@
         justify-content: center;
         border-radius: 10px;
         background: var(--approval-accent-soft);
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
         font-size: 13px !important;
     }
     .approval-inbox .approval-card > .navy-panel h4 {
@@ -1134,7 +1130,7 @@
         border-radius: 14px;
         border-color: rgba(217, 179, 140, 0.18) !important;
         background: rgba(139, 94, 60, 0.1) !important;
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
     }
     .approval-inbox .approval-body-title,
     .approval-inbox .approval-date {
@@ -1363,9 +1359,9 @@
     .approval-inbox .return-review-status {
         display: inline-flex;
         margin-top: 8px;
-        border-left: 3px solid #d9b38c;
+        border-left: 3px solid #38bdf8;
         padding-left: 8px;
-        color: #d9b38c;
+        color: #38bdf8;
         font-size: 8px;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -1456,7 +1452,7 @@
         background: #ffffff !important;
     }
     html:not(.dark) .approval-inbox > .mb-4:first-child {
-        background: linear-gradient(135deg, rgba(139, 94, 60, 0.08), transparent 42%), #ffffff !important;
+        background: var(--surface) !important;
         border-color: #e7e5e4 !important;
     }
     html:not(.dark) .approval-inbox .approval-title,
@@ -1570,7 +1566,7 @@
         bottom: 12px;
         width: 4px;
         border-radius: 0 999px 999px 0;
-        background: #d9b38c;
+        background: #38bdf8;
     }
     .approval-inbox .request-summary-title {
         font-size: 12px !important;
@@ -1691,7 +1687,7 @@
         width: 28px !important;
         height: 28px !important;
         border-radius: 8px !important;
-        background: #d9b38c !important;
+        background: #38bdf8 !important;
         color: #172033 !important;
     }
     .approval-inbox .requestor-name {
@@ -3771,7 +3767,7 @@
                                     : json_decode($report->evidence_paths, true);
                             @endphp
                             @if(!empty($evidenceFiles))
-                            <a href="{{ asset('storage/' . $evidenceFiles[0]) }}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 mt-2 text-[9px] font-black uppercase tracking-widest text-[#8B5E3C] hover:text-[#B38A5A]">
+                            <a href="{{ asset('storage/' . $evidenceFiles[0]) }}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 mt-2 text-[9px] font-black uppercase tracking-widest text-[#0284c7] hover:text-[#0284c7]">
                                 <i class="fa-solid fa-paperclip"></i> Evidence
                             </a>
                             @endif
@@ -3948,7 +3944,7 @@
                         @if(!empty($evidenceFiles))
                         <div class="flex flex-wrap gap-2">
                             @foreach($evidenceFiles as $path)
-                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
+                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#0284c7] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
                                 <i class="fa-solid fa-paperclip"></i> Evidence {{ $loop->iteration }}
                             </a>
                             @endforeach

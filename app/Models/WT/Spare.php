@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Spare extends Model
 {
     protected $table = 'spare';
-    protected $connection = 'wt_mysql';
     protected $primaryKey = 'replacement_id';
     public $timestamps = false;
 

@@ -1,4 +1,4 @@
-﻿@extends(request()->routeIs('wt.admin.*') ? 'layouts.admin' : 'layouts.user')
+﻿@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
 @php
     $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
@@ -51,19 +51,23 @@
     .admin-select + .select2-container {
         width: 100% !important;
     }
+    .smart-select + .select2-container,
+    .admin-select + .select2-container {
+        width: 100% !important;
+    }
     .smart-select + .select2-container .select2-selection--single,
     .admin-select + .select2-container .select2-selection--single {
         min-height: 42px;
         border-radius: 0.75rem !important;
-        border: 1px solid #e7e5e4 !important;
-        background: #f8fafc !important;
+        border: 1px solid var(--border) !important;
+        background: var(--body-bg) !important;
         padding: 6px 12px !important;
         display: flex !important;
         align-items: center !important;
     }
     .smart-select + .select2-container .select2-selection__rendered,
     .admin-select + .select2-container .select2-selection__rendered {
-        color: #334155 !important;
+        color: var(--text) !important;
         font-size: 11px !important;
         font-weight: 700 !important;
         padding-left: 0 !important;
@@ -73,7 +77,7 @@
     }
     .smart-select + .select2-container .select2-selection__placeholder,
     .admin-select + .select2-container .select2-selection__placeholder {
-        color: #94a3b8 !important;
+        color: var(--muted) !important;
     }
     .smart-select + .select2-container .select2-selection__arrow,
     .admin-select + .select2-container .select2-selection__arrow {
@@ -83,8 +87,8 @@
     #managed_user_select + .select2-container .select2-selection--single {
         min-height: 38px;
         border-radius: 9px !important;
-        border: 1px solid #d6d3d1 !important;
-        background: #ffffff !important;
+        border: 1px solid var(--border) !important;
+        background: var(--surface) !important;
         box-shadow: none !important;
     }
     #managed_user_select + .select2-container .select2-selection__rendered {
@@ -109,10 +113,9 @@
         width: 22px;
         height: 22px;
         border-radius: 7px;
-        background: #f5eee6;
-        border: 1px solid rgba(139, 94, 60, 0.18);
-        color: #ffffff;
-        color: #8B5E3C;
+        background: var(--body-bg);
+        border: 1px solid var(--border);
+        color: var(--accent);
         font-size: 9px;
         font-weight: 900;
         letter-spacing: 0.04em;
@@ -125,7 +128,7 @@
         gap: 0;
     }
     .staff-account-name {
-        color: #3d2b1f;
+        color: var(--text);
         font-size: 11px;
         font-weight: 900;
         line-height: 1.15;
@@ -135,7 +138,7 @@
         text-overflow: ellipsis;
     }
     .staff-account-meta {
-        color: #8b6f58;
+        color: var(--muted);
         font-size: 8px;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -153,78 +156,64 @@
         font-weight: 900;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #8B5E3C;
+        color: #0284c7;
     }
     .staff-account-dropdown.select2-dropdown {
         border-radius: 0 0 14px 14px !important;
-        border-color: rgba(139, 94, 60, 0.22) !important;
-        background: #fffaf5 !important;
-        box-shadow: 0 22px 46px rgba(41, 37, 36, 0.16);
+        border-color: var(--border) !important;
+        background: var(--surface) !important;
+        box-shadow: 0 22px 46px rgba(15,23,42,.16);
     }
     .staff-account-dropdown .select2-search--dropdown,
     .staff-account-dropdown .select2-results,
     .staff-account-dropdown .select2-results > .select2-results__options {
-        background: #fffaf5 !important;
+        background: var(--surface) !important;
     }
     .staff-account-dropdown .select2-search__field {
-        background: #ffffff !important;
-        color: #1f2937 !important;
-        border: 2px solid #f59e0b !important;
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
+        border: 2px solid var(--accent) !important;
         border-radius: 11px !important;
         padding: 9px 11px !important;
         font-size: 12px !important;
         font-weight: 800 !important;
     }
     .staff-account-dropdown .select2-results__option {
-        background: #fffaf5 !important;
-        color: #1f2937 !important;
+        background: var(--surface) !important;
+        color: var(--text) !important;
         padding: 9px 16px !important;
     }
     .staff-account-dropdown .select2-results__option--selected,
     .staff-account-dropdown .select2-results__option[aria-selected=true] {
-        background: #f1e4d5 !important;
-        color: #1f2937 !important;
-    }
-    .staff-account-dropdown .select2-results__option--selected .staff-account-name,
-    .staff-account-dropdown .select2-results__option[aria-selected=true] .staff-account-name {
-        color: #1f2937 !important;
-    }
-    .staff-account-dropdown .select2-results__option--selected .staff-account-meta,
-    .staff-account-dropdown .select2-results__option[aria-selected=true] .staff-account-meta {
-        color: #64748b !important;
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
     }
     .staff-account-dropdown .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #f1e4d5 !important;
-        color: #3d2b1f !important;
-    }
-    .staff-account-dropdown .select2-results__option--highlighted.select2-results__option--selectable .staff-account-name,
-    .staff-account-dropdown .select2-results__option--highlighted.select2-results__option--selectable .staff-account-meta,
-    .staff-account-dropdown .select2-results__option--highlighted.select2-results__option--selectable .staff-account-new {
-        color: #3d2b1f !important;
-    }
-    .staff-account-dropdown .select2-results__option--highlighted.select2-results__option--selectable .staff-account-avatar {
-        background: rgba(255, 255, 255, 0.18);
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
     }
     .select2-dropdown,
     .damage-select2-dropdown {
-        border: 1px solid rgba(139, 94, 60, 0.18) !important;
+        border: 1px solid var(--border) !important;
         border-radius: 14px !important;
         overflow: hidden;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        box-shadow: 0 18px 40px rgba(15,23,42,.12);
     }
     .select2-search--dropdown,
     .damage-select2-dropdown .select2-search--dropdown {
         padding: 10px !important;
-        background: #fffaf5;
+        background: var(--surface);
     }
     .select2-search--dropdown .select2-search__field,
     .damage-select2-dropdown .select2-search--dropdown .select2-search__field {
-        border: 1px solid rgba(139, 94, 60, 0.28) !important;
+        border: 1px solid var(--border) !important;
         border-radius: 10px !important;
         padding: 8px 10px !important;
         font-size: 11px !important;
         font-weight: 700 !important;
         text-transform: uppercase;
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
     }
     .select2-results__option,
     .damage-select2-dropdown .select2-results__option {
@@ -232,130 +221,20 @@
         font-weight: 700;
         text-transform: uppercase;
         padding: 10px 12px;
+        background: var(--surface) !important;
+        color: var(--text) !important;
     }
     .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable,
     .damage-select2-dropdown .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #8B5E3C !important;
-        color: #ffffff !important;
+        background: var(--accent) !important;
+        color: #fff !important;
     }
     .select2-container--default .select2-results__option--selected,
     .select2-container--default .select2-results__option[aria-selected=true],
     .damage-select2-dropdown .select2-results__option--selected,
     .damage-select2-dropdown .select2-results__option[aria-selected=true] {
-        background: #F5EEE6 !important;
-        color: #3D2B1F !important;
-    }
-    .staff-account-dropdown .select2-results__option--highlighted,
-    .staff-account-dropdown .select2-results__option--highlighted[aria-selected=true],
-    .staff-account-dropdown .select2-results__option--highlighted.select2-results__option--selected {
-        background: #f1e4d5 !important;
-        color: #3d2b1f !important;
-    }
-    .staff-account-dropdown .select2-results__option--highlighted .staff-account-name,
-    .staff-account-dropdown .select2-results__option--highlighted .staff-account-meta,
-    .staff-account-dropdown .select2-results__option--highlighted .staff-account-new {
-        color: #3d2b1f !important;
-    }
-    .staff-account-dropdown .select2-results__option:not(.select2-results__option--highlighted) .staff-account-name {
-        color: #1f2937 !important;
-    }
-    .staff-account-dropdown .select2-results__option:not(.select2-results__option--highlighted) .staff-account-meta {
-        color: #64748b !important;
-    }
-    .dark .damage-form-page .smart-select + .select2-container .select2-selection--single,
-    .dark .damage-form-page .admin-select + .select2-container .select2-selection--single {
-        background: #0f172a !important;
-        border-color: #334155 !important;
-    }
-    .dark .damage-form-page #managed_user_select + .select2-container .select2-selection--single {
-        background: #0f172a !important;
-        border-color: rgba(148, 163, 184, 0.32) !important;
-        box-shadow: none !important;
-    }
-    .dark .damage-form-page .staff-account-name {
-        color: #f8fafc;
-    }
-    .dark .damage-form-page .staff-account-meta {
-        color: #94a3b8;
-    }
-    .dark .damage-form-page .smart-select + .select2-container .select2-selection__rendered,
-    .dark .damage-form-page .admin-select + .select2-container .select2-selection__rendered {
-        color: #f1f5f9 !important;
-    }
-    .dark .damage-form-page .smart-select + .select2-container .select2-selection__placeholder,
-    .dark .damage-form-page .admin-select + .select2-container .select2-selection__placeholder {
-        color: #94a3b8 !important;
-    }
-    .dark .select2-dropdown,
-    .dark .damage-select2-dropdown {
-        background: #0f172a !important;
-        border-color: #334155 !important;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-    }
-    .dark .select2-search--dropdown,
-    .dark .select2-results,
-    .dark .select2-results > .select2-results__options,
-    .dark .select2-results__option,
-    .dark .damage-select2-dropdown .select2-search--dropdown,
-    .dark .damage-select2-dropdown .select2-results,
-    .dark .damage-select2-dropdown .select2-results > .select2-results__options,
-    .dark .damage-select2-dropdown .select2-results__option {
-        background: #0f172a !important;
-        color: #e2e8f0 !important;
-    }
-    .dark .select2-search--dropdown .select2-search__field,
-    .dark .damage-select2-dropdown .select2-search--dropdown .select2-search__field {
-        background: #111827 !important;
-        border-color: #334155 !important;
-        color: #f1f5f9 !important;
-    }
-    .dark .select2-container--default .select2-results__option--selected,
-    .dark .select2-container--default .select2-results__option[aria-selected=true],
-    .dark .damage-select2-dropdown .select2-results__option--selected,
-    .dark .damage-select2-dropdown .select2-results__option[aria-selected=true] {
-        background: rgba(139, 94, 60, 0.28) !important;
-        color: #f8fafc !important;
-    }
-    .dark .staff-account-dropdown.select2-dropdown,
-    .dark .staff-account-dropdown .select2-search--dropdown,
-    .dark .staff-account-dropdown .select2-results,
-    .dark .staff-account-dropdown .select2-results > .select2-results__options,
-    .dark .staff-account-dropdown .select2-results__option {
-        background: #0f172a !important;
-        color: #e2e8f0 !important;
-    }
-    .dark .staff-account-dropdown .select2-search__field {
-        background: #111827 !important;
-        color: #f8fafc !important;
-        border-color: #334155 !important;
-    }
-    .dark .staff-account-dropdown .select2-results__option--selected,
-    .dark .staff-account-dropdown .select2-results__option[aria-selected=true] {
-        background: rgba(139, 94, 60, 0.28) !important;
-    }
-    .dark .damage-form-page .damage-card,
-    .dark .damage-form-page .damage-panel {
-        background: #1e293b !important;
-        border-color: #334155 !important;
-    }
-    .dark .damage-form-page .damage-muted-panel {
-        background: #0f172a !important;
-        border-color: #334155 !important;
-    }
-    .dark .damage-form-page label,
-    .dark .damage-form-page .damage-check-text {
-        color: #cbd5e1 !important;
-    }
-    .dark .damage-form-page .group:hover .damage-check-text {
-        color: #38bdf8 !important;
-    }
-    .dark .damage-form-page input[type="checkbox"] {
-        background-color: #0f172a !important;
-        border-color: #64748b !important;
-    }
-    .dark .damage-form-page input[type="checkbox"]:checked {
-        background-color: #38bdf8 !important;
-        border-color: #38bdf8 !important;
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
     }
     .damage-form-page {
         --damage-compact-width: 980px;
@@ -447,11 +326,22 @@
     .damage-form-page p {
         font-size: 9px !important;
         line-height: 1.25 !important;
+        color: var(--text) !important;
     }
     .damage-form-page label {
         font-size: 8.5px !important;
         margin-bottom: 3px !important;
         letter-spacing: 0.08em !important;
+        color: var(--muted) !important;
+    }
+    .damage-form-page .damage-card,
+    .damage-form-page .damage-panel {
+        background: var(--surface) !important;
+        border-color: var(--border) !important;
+    }
+    .damage-form-page .damage-muted-panel {
+        background: var(--body-bg) !important;
+        border-color: var(--border) !important;
     }
     .damage-form-page input:not([type="checkbox"]):not([type="file"]),
     .damage-form-page select,
@@ -462,6 +352,9 @@
         padding: 5px 8px !important;
         font-size: 9.5px !important;
         line-height: 1.2 !important;
+        border: 1px solid var(--border) !important;
+        background: var(--surface) !important;
+        color: var(--text) !important;
     }
     .damage-form-page textarea {
         min-height: 44px !important;
@@ -528,18 +421,19 @@
         gap: 8px;
         padding: 10px 14px;
         border-radius: 12px;
-        border: 1px solid rgba(139, 94, 60, 0.18);
-        background: #fffaf5;
-        color: #8B5E3C;
+        border: 1px solid var(--border);
+        background: var(--body-bg);
+        color: var(--accent);
         font-size: 10px;
         font-weight: 900;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         transition: all 0.18s ease;
+        cursor: pointer;
     }
     .replacement-trigger-btn:hover {
-        background: #fef3e8;
-        border-color: rgba(139, 94, 60, 0.28);
+        background: var(--surface);
+        border-color: var(--accent);
     }
     .replacement-chip {
         display: none;
@@ -560,13 +454,11 @@
     .replacement-preview-card {
         display: none;
         border-radius: 18px;
-        border: 1px solid rgba(22, 101, 52, 0.18);
-        background:
-            radial-gradient(circle at top right, rgba(16, 185, 129, 0.10), transparent 24%),
-            linear-gradient(135deg, rgba(248, 250, 252, 0.98), rgba(240, 253, 244, 0.96));
+        border: 1px solid rgba(34,197,94,.2);
+        background: var(--body-bg);
         padding: 16px;
         margin-bottom: 22px;
-        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+        box-shadow: 0 4px 16px rgba(15,23,42,.06);
     }
     .replacement-preview-card.is-visible {
         display: block;
@@ -587,64 +479,33 @@
     }
     .replacement-preview-summary {
         border-radius: 14px;
-        border: 1px solid rgba(187, 247, 208, 0.9);
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(236, 253, 245, 0.92));
+        border: 1px solid rgba(34,197,94,.2);
+        background: var(--surface);
         padding: 14px 16px;
     }
     .replacement-preview-grid-card {
         border-radius: 14px;
-        border: 1px solid rgba(167, 243, 208, 0.7);
-        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border);
+        background: var(--surface);
         padding: 14px 16px;
     }
     .replacement-preview-grid-card.is-accent {
-        background: linear-gradient(135deg, rgba(236, 253, 245, 0.95), rgba(220, 252, 231, 0.85));
-        border-color: rgba(110, 231, 183, 0.85);
+        background: rgba(34,197,94,.06);
+        border-color: rgba(34,197,94,.2);
     }
     .replacement-preview-saved-badge {
         display: inline-flex;
         align-items: center;
         gap: 8px;
         border-radius: 999px;
-        border: 1px solid rgba(196, 181, 253, 0.8);
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(237, 233, 254, 0.95));
+        border: 1px solid rgba(99,102,241,.3);
+        background: rgba(99,102,241,.08);
         padding: 8px 14px;
         font-size: 9px;
         font-weight: 900;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: #4338ca;
-        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.08);
-    }
-    .dark .replacement-preview-card {
-        background:
-            radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 22%),
-            linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(20, 83, 45, 0.24));
-        border-color: rgba(74, 222, 128, 0.18);
-    }
-    .dark .replacement-preview-label {
-        color: #86efac;
-    }
-    .dark .replacement-preview-value {
-        color: #dcfce7;
-    }
-    .dark .replacement-preview-summary {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.96), rgba(20, 83, 45, 0.2));
-        border-color: rgba(74, 222, 128, 0.22);
-    }
-    .dark .replacement-preview-grid-card {
-        background: rgba(15, 23, 42, 0.88);
-        border-color: rgba(52, 211, 153, 0.18);
-    }
-    .dark .replacement-preview-grid-card.is-accent {
-        background: linear-gradient(135deg, rgba(20, 83, 45, 0.28), rgba(15, 23, 42, 0.9));
-        border-color: rgba(74, 222, 128, 0.24);
-    }
-    .dark .replacement-preview-saved-badge {
-        background: linear-gradient(135deg, rgba(49, 46, 129, 0.92), rgba(30, 27, 75, 0.92));
-        border-color: rgba(129, 140, 248, 0.32);
-        color: #e0e7ff;
-        box-shadow: none;
     }
     .replacement-modal-backdrop {
         position: fixed;
@@ -665,9 +526,9 @@
         width: min(100%, 620px);
         max-height: calc(100vh - 148px);
         border-radius: 22px;
-        border: 1px solid rgba(139, 94, 60, 0.14);
-        background: #ffffff;
-        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.22);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 28px 60px rgba(15,23,42,.22);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -710,41 +571,26 @@
     .replacement-item-btn {
         padding: 9px 12px;
         border-radius: 999px;
-        border: 1px solid #d6d3d1;
-        background: #ffffff;
-        color: #57534e;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
         font-size: 10px;
         font-weight: 900;
         letter-spacing: 0.04em;
         text-transform: uppercase;
         transition: all 0.18s ease;
+        cursor: pointer;
     }
     .replacement-item-btn:hover {
-        border-color: rgba(139, 94, 60, 0.4);
-        color: #8B5E3C;
-        background: #fffaf5;
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--body-bg);
     }
     .replacement-item-btn.is-active {
-        border-color: #8B5E3C;
-        background: #8B5E3C;
-        color: #ffffff;
-        box-shadow: 0 10px 24px rgba(139, 94, 60, 0.2);
-    }
-    .dark .replacement-item-btn {
-        background: #0f172a;
-        border-color: #475569;
-        color: #cbd5e1;
-    }
-    .dark .replacement-item-btn:hover {
-        border-color: #38bdf8;
-        color: #e0f2fe;
-        background: rgba(56, 189, 248, 0.12);
-    }
-    .dark .replacement-item-btn.is-active {
-        background: #38bdf8;
-        border-color: #38bdf8;
-        color: #082f49;
-        box-shadow: none;
+        border-color: var(--accent);
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(2,132,199,.25);
     }
 
     @media (max-width: 640px) {
@@ -856,43 +702,34 @@
     }
 @endphp
 <div class="damage-form-page">
-<div class="page-header-block flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+<div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px">
     <div>
-        <h3 class="page-title-standard">Report Faulty</h3>
-        <p class="page-subtitle-standard">
-            Submit a maintenance request for faulty or damaged Walkie Talkies.
-        </p>
+        <div style="font-size:16px;font-weight:800;color:var(--text)">Report Faulty</div>
+        <p style="margin-top:4px;font-size:12px;color:var(--muted)">Submit a maintenance request for faulty or damaged Walkie Talkies.</p>
     </div>
-    <a href="{{ $faultyStatusRoute }}" class="damage-status-btn inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#8B5E3C] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#734C2F] transition">
+    <a href="{{ $faultyStatusRoute }}" class="btn-primary-custom">
         <i class="fa-solid fa-list-check"></i> Status Tracking
     </a>
 </div>
 
 @if(session('error'))
-    <div class="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-[11px] font-bold text-amber-800">
-        <i class="fa-solid fa-triangle-exclamation mr-2"></i>{{ session('error') }}
-    </div>
+<div class="alert-danger-custom mb-4"><i class="fa-solid fa-triangle-exclamation"></i> {{ session('error') }}</div>
 @endif
 
 @if(session('success'))
-    <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[11px] font-bold text-emerald-700">
-        <i class="fa-solid fa-circle-check mr-2"></i>{{ session('success') }}
-    </div>
+<div class="alert-success-custom mb-4"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
 @endif
 
 @if($errors->any())
-    <div class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[11px] font-bold text-red-700">
-        <i class="fa-solid fa-circle-exclamation mr-2"></i>{{ $errors->first() }}
-    </div>
+<div class="alert-danger-custom mb-4"><i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first() }}</div>
 @endif
 
-<div class="px-2">
-<div class="damage-card bg-white rounded-2xl shadow-sm border border-[#8B5E3C]/10 overflow-hidden p-5 md:p-6">
-    <div class="flex items-center gap-2.5 mb-2.5">
-        <div class="bg-[#8B5E3C] text-white p-2 rounded-lg border border-[#A67B5B] shadow-inner">
-            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+<div class="damage-card table-card" style="padding:20px 22px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="background:var(--accent);color:#fff;padding:8px;border-radius:8px;display:flex;align-items:center">
+            <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
-        <h2 class="text-xs font-black uppercase tracking-widest text-[#3D2B1F]">Walkie Talkie Repair Form</h2>
+        <h2 style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin:0">Walkie Talkie Repair Form</h2>
     </div>
 
     <form action="{{ $isAdminRoute ? route($routePrefix . '.damages.store', ['mode' => $mode]) : route($routePrefix . '.damages.store') }}" method="POST" enctype="multipart/form-data" class="mt-4">
@@ -906,23 +743,23 @@
         @endif
 
         @if($isAdminRoute)
-        <h3 class="text-[10px] font-black text-[#8B5E3C] border-left-4 border-[#8B5E3C] pl-2.5 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">1. Executive Details</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <h3 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">1. Executive Details</h3>
+        <div class="row g-3 mb-3">
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Executive Name</label>
-                <input type="text" id="manager_name_display" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-100 text-[11px] font-bold uppercase" readonly>
+                <label class="form-label">Executive Name</label>
+                <input type="text" id="manager_name_display" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="form-control" style="text-transform:uppercase;background:var(--body-bg)" readonly>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Executive Staff ID</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->staff_id ?: '-') }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-100 text-[11px] font-bold uppercase" readonly>
+                <label class="form-label">Executive Staff ID</label>
+                <input type="text" value="{{ strtoupper(auth('wt')->user()->staff_id ?: '-') }}" class="form-control" style="text-transform:uppercase;background:var(--body-bg)" readonly>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Executive Department</label>
-                <input type="text" id="manager_department_display" value="{{ strtoupper(auth('wt')->user()->department ?: 'GENERAL') }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-100 text-[11px] font-bold uppercase" readonly>
+                <label class="form-label">Executive Department</label>
+                <input type="text" id="manager_department_display" value="{{ strtoupper(auth('wt')->user()->department ?: 'GENERAL') }}" class="form-control" style="text-transform:uppercase;background:var(--body-bg)" readonly>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Executive Phone No</label>
-                <input type="text" value="{{ old('manager_phone_display', auth('wt')->user()->phone_no ?: '-') }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-100 text-[11px] font-bold" readonly>
+                <label class="form-label">Executive Phone No</label>
+                <input type="text" value="{{ old('manager_phone_display', auth('wt')->user()->phone_no ?: '-') }}" class="form-control" style="background:var(--body-bg)" readonly>
             </div>
         </div>
         @endif
@@ -933,7 +770,7 @@
 
         <div data-faulty-ownership-section></div>
         {{-- Reporter Details --}}
-        <h3 class="text-[10px] font-black text-[#8B5E3C] border-left-4 border-[#8B5E3C] pl-2.5 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">{{ $isAdminRoute && $mode === 'staff' ? '3. Ownership Information' : 'Reporter Information' }}</h3>
+        <h3 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">{{ $isAdminRoute && $mode === 'staff' ? '3. Ownership Information' : 'Reporter Information' }}</h3>
         <div class="mb-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3">
             <p class="text-[10px] font-black uppercase tracking-widest text-sky-700">Profile Note</p>
             <p class="mt-1 text-[10px] font-bold leading-5 text-sky-800">
@@ -944,11 +781,11 @@
                 @endif
             </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="row g-3 mb-3">
             @if($isAdminRoute && $mode === 'staff')
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Ownership Name <span class="text-red-500">*</span></label>
-                <select id="managed_user_select" class="admin-select w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                <label class="form-label">Ownership Name <span class="text-red-500">*</span></label>
+                <select id="managed_user_select" class="admin-select w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                     <option value="">Search ownership name...</option>
                     @foreach($managedUsers as $user)
                         @php
@@ -995,12 +832,12 @@
             </div>
             @elseif(!$isAdminRoute)
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Name <span class="text-red-500">*</span></label>
-                <input type="text" value="{{ strtoupper($draftRecord->reporter_name ?? ($currentUser->full_name ?: $currentUser->username)) }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-100 text-[11px] font-bold uppercase" readonly>
+                <label class="form-label">Name <span class="text-red-500">*</span></label>
+                <input type="text" value="{{ strtoupper($draftRecord->reporter_name ?? ($currentUser->full_name ?: $currentUser->username)) }}" class="form-control" style="text-transform:uppercase;background:var(--body-bg)" readonly>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Executive <span class="text-red-500">*</span></label>
-                <select name="submit_to_admin_id" class="admin-select w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                <label class="form-label">Executive <span class="text-red-500">*</span></label>
+                <select name="submit_to_admin_id" class="admin-select w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                     <option value="" disabled selected>Select executive...</option>
                     @foreach($admins as $admin)
                         <option value="{{ $admin->user_id }}" @selected((string) old('submit_to_admin_id', $draftRecord->submit_to_admin_id ?? '') === (string) $admin->user_id)>{{ strtoupper($admin->full_name ?: $admin->username) }} - {{ strtoupper($admin->department ?: 'ADMIN') }}</option>
@@ -1009,13 +846,13 @@
             </div>
             @endif
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">{{ $isAdminRoute && $mode === 'staff' ? 'Ownership Phone No' : 'Phone No' }} <span class="text-red-500">*</span></label>
-                <input type="text" name="phone_no" id="phone_no" value="{{ old('phone_no', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->phone_no ?? '') : ($draftRecord->phone_no ?? ($currentUser->phone_no ?? ''))) }}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                <label class="form-label">{{ $isAdminRoute && $mode === 'staff' ? 'Ownership Phone No' : 'Phone No' }} <span class="text-red-500">*</span></label>
+                <input type="text" name="phone_no" id="phone_no" value="{{ old('phone_no', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->phone_no ?? '') : ($draftRecord->phone_no ?? ($currentUser->phone_no ?? ''))) }}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
             </div>
             <input type="hidden" name="designation" id="designation" value="{{ strtoupper(old('designation', $isAdminRoute && $mode === 'staff' ? 'STAFF' : (auth('wt')->user()->position ?: 'EXECUTIVE'))) }}">
             @if($isAdminRoute && $mode === 'staff')
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Department <span class="text-red-500">*</span></label>
+                <label class="form-label">Department <span class="text-red-500">*</span></label>
                 <select name="department" id="department" class="smart-select w-full" data-placeholder="Type or select department" required>
                     <option value=""></option>
                     @foreach($departmentOptions as $department)
@@ -1027,19 +864,19 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Ownership Type <span class="text-red-500">*</span></label>
-                <select name="ownership_type" id="ownership_type" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                <label class="form-label">Ownership Type <span class="text-red-500">*</span></label>
+                <select name="ownership_type" id="ownership_type" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                     <option value="">Select ownership type</option>
                     <option value="SHARED" @selected(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? $prefillOwnershipType)) === 'SHARED')>Shared</option>
                     <option value="INDIVIDUAL" @selected(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? $prefillOwnershipType)) === 'INDIVIDUAL')>Individual</option>
                 </select>
             </div>
             <div id="sharedWithWrapper" class="@if(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? $prefillOwnershipType)) !== 'SHARED') hidden @endif">
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Shared With <span class="text-red-500">*</span></label>
-                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', $draftRecord->shared_with ?? $prefillSharedWith)) }}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                <label class="form-label">Shared With <span class="text-red-500">*</span></label>
+                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', $draftRecord->shared_with ?? $prefillSharedWith)) }}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Sector <span class="text-red-500">*</span></label>
+                <label class="form-label">Sector <span class="text-red-500">*</span></label>
                 <select name="sector" id="sector" class="smart-select w-full" data-placeholder="Type or select sector" required>
                     <option value=""></option>
                     @foreach($sectorOptions as $sector)
@@ -1051,7 +888,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Bay <span class="text-stone-400">(Optional)</span></label>
+                <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
                 <select name="bay_from" id="bay_from" class="smart-select w-full" data-placeholder="Type number only, e.g. 3">
                     <option value="-">-</option>
                     @foreach($bayOptions as $bay)
@@ -1063,7 +900,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Location <span class="text-red-500">*</span></label>
+                <label class="form-label">Location <span class="text-red-500">*</span></label>
                 <select name="location" id="location" class="smart-select w-full" data-placeholder="Type or select location" required>
                     <option value=""></option>
                     @foreach($locationOptions as $location)
@@ -1076,7 +913,7 @@
             </div>
             @else
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Department <span class="text-red-500">*</span></label>
+                <label class="form-label">Department <span class="text-red-500">*</span></label>
                 @if($isAdminRoute)
                 <input type="text" name="department" id="department" value="{{ strtoupper(old('department', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->department_name ?? '') : ($draftRecord->department_name ?? ($currentUser->department ?: 'GENERAL')))) }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 text-[11px] font-bold uppercase" required>
                 @else
@@ -1092,19 +929,19 @@
                 @endif
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Ownership Type <span class="text-red-500">*</span></label>
-                <select name="ownership_type" id="ownership_type" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                <label class="form-label">Ownership Type <span class="text-red-500">*</span></label>
+                <select name="ownership_type" id="ownership_type" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                     <option value="">Select ownership type</option>
                     <option value="SHARED" @selected(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? '')) === 'SHARED')>Shared</option>
                     <option value="INDIVIDUAL" @selected(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? '')) === 'INDIVIDUAL')>Individual</option>
                 </select>
             </div>
             <div id="sharedWithWrapper" class="@if(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? '')) !== 'SHARED') hidden @endif">
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Shared With <span class="text-red-500">*</span></label>
-                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', $draftRecord->shared_with ?? '')) }}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                <label class="form-label">Shared With <span class="text-red-500">*</span></label>
+                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', $draftRecord->shared_with ?? '')) }}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Sector <span class="text-red-500">*</span></label>
+                <label class="form-label">Sector <span class="text-red-500">*</span></label>
                 <select name="sector" id="sector" class="smart-select w-full" data-placeholder="Type or select sector" required>
                     <option value=""></option>
                     @foreach($sectorOptions as $sector)
@@ -1116,7 +953,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Bay <span class="text-stone-400">(Optional)</span></label>
+                <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
                 <select name="bay_from" id="bay_from" class="smart-select w-full" data-placeholder="Type number only, e.g. 3">
                     <option value="-">-</option>
                     @foreach($bayOptions as $bay)
@@ -1128,7 +965,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Location <span class="text-red-500">*</span></label>
+                <label class="form-label">Location <span class="text-red-500">*</span></label>
                 <select name="location" id="location" class="smart-select w-full" data-placeholder="Type or select location" required>
                     <option value=""></option>
                     @foreach($locationOptions as $location)
@@ -1146,7 +983,7 @@
         <div id="additionalRecipientList" class="mb-6 space-y-4"></div>
         @endif
 
-        <h3 class="text-[10px] font-black text-[#8B5E3C] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">
+        <h3 class="text-[10px] font-black text-[#0284c7] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">
             Pickup & Handover Details <span class="text-red-500">*</span>
         </h3>
         <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
@@ -1155,38 +992,38 @@
                 Please hand over the faulty walkie talkie at ICT Department Sejurumus. After ICT approval or when the unit is ready, pickup can also be done at ICT Department Sejurumus.
             </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="row g-3 mb-3">
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Who Will Handover To ICT <span class="text-red-500">*</span></label>
-                <input type="text" name="handover_person" value="{{ strtoupper(old('handover_person', $draftRecord->handover_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                <label class="form-label">Who Will Handover To ICT <span class="text-red-500">*</span></label>
+                <input type="text" name="handover_person" value="{{ strtoupper(old('handover_person', $draftRecord->handover_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                 @error('handover_person')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Handover Date & Time <span class="text-red-500">*</span></label>
+                <label class="form-label">Handover Date & Time <span class="text-red-500">*</span></label>
                 <input type="hidden" id="handover_at" name="handover_at" value="{{ $draftHandoverAt }}">
                 <div class="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-2">
-                    <select id="handover_day_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                    <select id="handover_day_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                         <option value="">Day</option>
                         @for($day = 1; $day <= 31; $day++)
                             @php $dayValue = str_pad((string) $day, 2, '0', STR_PAD_LEFT); @endphp
                             <option value="{{ $dayValue }}" @selected($draftHandoverParts['day'] === $dayValue)>{{ $day }}</option>
                         @endfor
                     </select>
-                    <select id="handover_month_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                    <select id="handover_month_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                         <option value="">Month</option>
                         @foreach($damageMonthOptions as $monthValue => $monthLabel)
                             <option value="{{ $monthValue }}" @selected($draftHandoverParts['month'] === $monthValue)>{{ $monthLabel }}</option>
                         @endforeach
                     </select>
-                    <select id="handover_year_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                    <select id="handover_year_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                         <option value="">Year</option>
                         @foreach($damageYearOptions as $yearOption)
                             <option value="{{ $yearOption }}" @selected($draftHandoverParts['year'] === (string) $yearOption)>{{ $yearOption }}</option>
                         @endforeach
                     </select>
-                    <select id="handover_time_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                    <select id="handover_time_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                         <option value="">Time</option>
                         @if($draftHandoverParts['time'] && !in_array($draftHandoverParts['time'], $damageTimeOptions, true))
                             <option value="{{ $draftHandoverParts['time'] }}" selected>{{ \Carbon\Carbon::createFromFormat('H:i', $draftHandoverParts['time'])->format('g:i A') }}</option>
@@ -1195,22 +1032,22 @@
                             <option value="{{ $timeOption }}" @selected($draftHandoverParts['time'] === $timeOption)>{{ \Carbon\Carbon::createFromFormat('H:i', $timeOption)->format('g:i A') }}</option>
                         @endforeach
                     </select>
-                    <button type="button" id="handoverNowBtn" class="rounded-lg bg-[#8B5E3C] px-3 py-2 text-[9px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">Now</button>
+                    <button type="button" id="handoverNowBtn" class="rounded-lg bg-[#0284c7] px-3 py-2 text-[9px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">Now</button>
                 </div>
                 @error('handover_at')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Pickup Contact Name <span class="text-red-500">*</span></label>
-                <input type="text" name="pickup_person" value="{{ strtoupper(old('pickup_person', $draftRecord->pickup_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                <label class="form-label">Pickup Contact Name <span class="text-red-500">*</span></label>
+                <input type="text" name="pickup_person" value="{{ strtoupper(old('pickup_person', $draftRecord->pickup_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                 @error('pickup_person')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
             </div>
             <div>
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Pickup Contact Phone No <span class="text-red-500">*</span></label>
-                <input type="text" id="pickup_phone_no" value="{{ old('phone_no', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->phone_no ?? '') : ($draftRecord->phone_no ?? ($currentUser->phone_no ?? ''))) }}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                <label class="form-label">Pickup Contact Phone No <span class="text-red-500">*</span></label>
+                <input type="text" id="pickup_phone_no" value="{{ old('phone_no', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->phone_no ?? '') : ($draftRecord->phone_no ?? ($currentUser->phone_no ?? ''))) }}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                 @error('phone_no')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
@@ -1223,7 +1060,7 @@
 
         <div data-faulty-device-section>
         {{-- Device Details --}}
-        <h3 class="text-[10px] font-black text-[#8B5E3C] border-left-4 border-[#8B5E3C] pl-2.5 uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">
+        <h3 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">
             {{ $isAdminRoute ? '2. ' : '' }}Device Details <span class="text-red-500">*</span>
         </h3>
         @if($responsibleWalkies->isNotEmpty() && !($prefillModel || $prefillRadioId || $prefillSerialNumber))
@@ -1283,16 +1120,16 @@
         @else
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div>
-                    <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Model <span class="text-red-500">*</span></label>
-                    <input type="text" name="model" id="damage_model" value="{{ old('model', $draftRecord->model ?? '') }}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                    <label class="form-label">Model <span class="text-red-500">*</span></label>
+                    <input type="text" name="model" id="damage_model" value="{{ old('model', $draftRecord->model ?? '') }}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Radio ID <span class="text-red-500">*</span></label>
-                    <input type="text" name="radio_id" id="damage_radio_id" value="{{ old('radio_id', $draftRecord->radio_id ?? '') }}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                    <label class="form-label">Radio ID <span class="text-red-500">*</span></label>
+                    <input type="text" name="radio_id" id="damage_radio_id" value="{{ old('radio_id', $draftRecord->radio_id ?? '') }}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Serial No <span class="text-red-500">*</span></label>
-                    <input type="text" name="serial_number" id="damage_serial_number" value="{{ old('serial_number', $draftRecord->serial_number ?? '') }}" placeholder="Enter serial number if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                    <label class="form-label">Serial No <span class="text-red-500">*</span></label>
+                    <input type="text" name="serial_number" id="damage_serial_number" value="{{ old('serial_number', $draftRecord->serial_number ?? '') }}" placeholder="Enter serial number if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                 </div>
             </div>
         @endif
@@ -1332,7 +1169,7 @@
         </div>
 
         {{-- Problem Checklist --}}
-        <h3 class="text-[10px] font-black text-[#8B5E3C] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Problem Checklist (Select all that apply)</h3>
+        <h3 class="text-[10px] font-black text-[#0284c7] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Problem Checklist (Select all that apply)</h3>
         <div class="damage-muted-panel grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8 mb-6 bg-stone-50 p-4 rounded-xl border border-stone-100">
             @php
                 $problems = [
@@ -1350,13 +1187,13 @@
             @endphp
             @foreach($problems as $p)
             <label class="flex items-center gap-2.5 cursor-pointer group">
-                <input type="checkbox" name="problem_possible[]" value="{{ $p }}" class="w-4 h-4 rounded border-stone-300 text-[#8B5E3C] focus:ring-[#8B5E3C]" @checked(in_array($p, $selectedProblems, true))>
-                <span class="damage-check-text text-[11px] font-bold text-stone-700 group-hover:text-[#8B5E3C] transition">{{ $p }}</span>
+                <input type="checkbox" name="problem_possible[]" value="{{ $p }}" class="w-4 h-4 rounded border-stone-300 text-[#0284c7] focus:ring-[#0284c7]" @checked(in_array($p, $selectedProblems, true))>
+                <span class="damage-check-text text-[11px] font-bold text-stone-700 group-hover:text-[#0284c7] transition">{{ $p }}</span>
             </label>
             @endforeach
             <div class="col-span-2 mt-3">
-                <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Other / Additional Details</label>
-                <textarea name="other_problem" rows="2" placeholder="Please specify..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold">{{ old('other_problem', $draftOtherProblem ? trim(\Illuminate\Support\Str::after($draftOtherProblem, 'OTHER:')) : '') }}</textarea>
+                <label class="form-label">Other / Additional Details</label>
+                <textarea name="other_problem" rows="2" placeholder="Please specify..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold">{{ old('other_problem', $draftOtherProblem ? trim(\Illuminate\Support\Str::after($draftOtherProblem, 'OTHER:')) : '') }}</textarea>
             </div>
         </div>
 
@@ -1429,7 +1266,7 @@
             </div>
         </div>
 
-        <h3 class="text-[10px] font-black text-[#8B5E3C] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Evidence Upload <span class="text-slate-400">(Optional)</span></h3>
+        <h3 class="text-[10px] font-black text-[#0284c7] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Evidence Upload <span class="text-slate-400">(Optional)</span></h3>
         <div class="damage-muted-panel mb-6 bg-slate-50 border border-dashed border-slate-200 rounded-xl p-4">
             <label for="damage_evidence" class="flex flex-col md:flex-row md:items-center gap-3 cursor-pointer">
                 <span class="damage-panel w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500">
@@ -1440,7 +1277,7 @@
                     <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Optional. JPG, PNG, WEBP, MP4, MOV, or AVI. Maximum 3 files, 20MB each.</span>
                 </span>
             </label>
-            <input id="damage_evidence" type="file" name="damage_evidence[]" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/x-msvideo" multiple class="mt-3 w-full text-[10px] font-bold text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-[#8B5E3C] file:px-3 file:py-2 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:text-white">
+            <input id="damage_evidence" type="file" name="damage_evidence[]" accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/x-msvideo" multiple class="mt-3 w-full text-[10px] font-bold text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-[#0284c7] file:px-3 file:py-2 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:text-white">
             @error('damage_evidence')
                 <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
             @enderror
@@ -1450,7 +1287,7 @@
         </div>
 
         <div class="pt-4 flex flex-col sm:flex-row sm:justify-end gap-3">
-            <button type="submit" name="submit_action" value="submit" class="bg-[#8B5E3C] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#734C2F] transition shadow-lg shadow-[#8B5E3C]/10 flex items-center justify-center gap-3">
+            <button type="submit" name="submit_action" value="submit" class="bg-[#0284c7] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#734C2F] transition shadow-lg shadow-[#0284c7]/10 flex items-center justify-center gap-3">
                 <i class="fas fa-paper-plane"></i> Submit Request
             </button>
         </div>
@@ -1475,7 +1312,7 @@
         <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
                 <p class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Submitted Request Details</p>
-                <h3 class="mt-2 text-sm font-extrabold text-[#3D2B1F] dark:text-slate-100">Faulty Report #{{ str_pad($submittedRecord->maintenance_id, 4, '0', STR_PAD_LEFT) }}</h3>
+                <h3 class="mt-2 text-sm font-extrabold text-[#142b47] dark:text-slate-100">Faulty Report #{{ str_pad($submittedRecord->maintenance_id, 4, '0', STR_PAD_LEFT) }}</h3>
                 <p class="mt-1 text-[10px] font-bold uppercase tracking-widest text-stone-400">Here is the full information that was just submitted.</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
@@ -1492,7 +1329,7 @@
                     <i class="fa-solid fa-walkie-talkie mr-2"></i>Temporary WT requested
                 </span>
                 @endif
-                <a href="{{ $faultyStatusRoute }}" class="inline-flex items-center gap-2 rounded-full border border-[#8B5E3C]/20 bg-[#8B5E3C] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white hover:bg-[#734C2F]">
+                <a href="{{ $faultyStatusRoute }}" class="inline-flex items-center gap-2 rounded-full border border-[#0284c7]/20 bg-[#0284c7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white hover:bg-[#734C2F]">
                     <i class="fa-solid fa-list-check"></i> View Faulty Status
                 </a>
             </div>
@@ -1533,49 +1370,49 @@
         <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px]">
             <div class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Reporter</p>
-                <p class="mt-2 font-black text-[#3D2B1F]">{{ strtoupper($submittedRecord->reporter_name ?: '-') }}</p>
+                <p class="mt-2 font-black text-[#142b47]">{{ strtoupper($submittedRecord->reporter_name ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">{{ $submittedRecord->phone_no ?: strtoupper($submittedRecord->reporter_staff_id ?: '-') }}</p>
             </div>
             <div class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Department</p>
-                <p class="mt-2 font-black text-[#3D2B1F]">{{ strtoupper($submittedRecord->department_name ?: '-') }}</p>
+                <p class="mt-2 font-black text-[#142b47]">{{ strtoupper($submittedRecord->department_name ?: '-') }}</p>
             </div>
             <div class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Ownership / Deployment</p>
-                <p class="mt-2 font-black text-[#3D2B1F]">Ownership: {{ strtoupper($submittedRecord->ownership_type ?: '-') }}</p>
+                <p class="mt-2 font-black text-[#142b47]">Ownership: {{ strtoupper($submittedRecord->ownership_type ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Shared With: {{ strtoupper($submittedRecord->shared_with ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Sector: {{ strtoupper($submittedRecord->sector ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Location: {{ strtoupper($submittedRecord->location ?: '-') }}</p>
             </div>
             <div class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Device Details</p>
-                <p class="mt-2 font-black text-[#3D2B1F]">Model: {{ strtoupper($submittedRecord->model ?: '-') }}</p>
+                <p class="mt-2 font-black text-[#142b47]">Model: {{ strtoupper($submittedRecord->model ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Radio ID: {{ strtoupper($submittedRecord->radio_id ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Serial No: {{ strtoupper($submittedRecord->serial_number ?: '-') }}</p>
             </div>
             <div class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Submission Info</p>
-                <p class="mt-2 font-black text-[#3D2B1F]">Submitted: {{ $submittedRecord->received_date ? \Carbon\Carbon::parse($submittedRecord->received_date)->format('d M Y') : '-' }}</p>
+                <p class="mt-2 font-black text-[#142b47]">Submitted: {{ $submittedRecord->received_date ? \Carbon\Carbon::parse($submittedRecord->received_date)->format('d M Y') : '-' }}</p>
                 <p class="mt-1 font-bold text-stone-500">Phone No: {{ $submittedRecord->phone_no ?: '-' }}</p>
                 <p class="mt-1 font-bold text-stone-500">Current Status: {{ $submittedRecord->status ?: '-' }}</p>
             </div>
             <div class="md:col-span-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-emerald-700">Pickup & Handover</p>
-                <p class="mt-2 font-black text-[#3D2B1F]">Handover: {{ strtoupper($submittedRecord->handover_person ?: '-') }} | {{ $submittedRecord->handover_at ? \Carbon\Carbon::parse($submittedRecord->handover_at)->format('d M Y, h:i A') : '-' }}</p>
+                <p class="mt-2 font-black text-[#142b47]">Handover: {{ strtoupper($submittedRecord->handover_person ?: '-') }} | {{ $submittedRecord->handover_at ? \Carbon\Carbon::parse($submittedRecord->handover_at)->format('d M Y, h:i A') : '-' }}</p>
                 <p class="mt-1 font-bold text-emerald-800">Pickup contact after ICT approval: {{ strtoupper($submittedRecord->pickup_person ?: '-') }} | {{ $submittedRecord->phone_no ?: '-' }}</p>
                 <p class="mt-1 font-bold text-emerald-800">Location: ICT Department Sejurumus</p>
             </div>
             <div class="md:col-span-2 rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Problem Reported</p>
-                <p class="mt-2 font-bold text-[#3D2B1F] leading-relaxed">{{ $submittedRecord->problem_possible ?: ($submittedRecord->issue_description ?: '-') }}</p>
+                <p class="mt-2 font-bold text-[#142b47] leading-relaxed">{{ $submittedRecord->problem_possible ?: ($submittedRecord->issue_description ?: '-') }}</p>
             </div>
             <div class="md:col-span-2 rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Remarks / Replacement Details</p>
-                <p class="mt-2 font-bold text-[#3D2B1F] leading-relaxed">{{ $submittedRecord->remarks ?: 'No additional remarks.' }}</p>
+                <p class="mt-2 font-bold text-[#142b47] leading-relaxed">{{ $submittedRecord->remarks ?: 'No additional remarks.' }}</p>
             </div>
             <div class="md:col-span-2 rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Evidence Uploaded</p>
-                <p class="mt-2 font-bold text-[#3D2B1F]">
+                <p class="mt-2 font-bold text-[#142b47]">
                     {{ is_array($submittedRecord->evidence_paths) && count($submittedRecord->evidence_paths) ? count($submittedRecord->evidence_paths) . ' file(s) uploaded' : 'No evidence uploaded.' }}
                 </p>
             </div>
@@ -1589,7 +1426,7 @@
         <div class="px-6 py-4 border-b border-stone-100 dark:border-slate-700 shrink-0">
             <div class="flex items-start justify-between gap-4">
                 <div>
-                    <h4 class="text-sm font-black text-[#3D2B1F] dark:text-slate-100">Request Accessories Replacement</h4>
+                    <h4 class="text-sm font-black text-[#142b47] dark:text-slate-100">Request Accessories Replacement</h4>
                     <p class="mt-1 text-[11px] font-bold text-stone-500 dark:text-slate-300">Optional. Use this if you want ICT to consider preparing a replacement walkie while checking the faulty unit.</p>
                 </div>
                 <button type="button" id="replacementModalClose" class="text-stone-400 hover:text-stone-700 dark:text-slate-400 dark:hover:text-slate-100">
@@ -1600,7 +1437,7 @@
         <div class="replacement-modal-body px-6 py-4">
             <div class="replacement-agreement-box mb-4">
                 <label class="flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" id="replacementAgreementCheckbox" class="mt-0.5 w-4 h-4 rounded border-amber-300 text-[#8B5E3C] focus:ring-[#8B5E3C]">
+                    <input type="checkbox" id="replacementAgreementCheckbox" class="mt-0.5 w-4 h-4 rounded border-amber-300 text-[#0284c7] focus:ring-[#0284c7]">
                     <span>
                         <span class="block text-[11px] font-black text-amber-800 dark:text-amber-300 uppercase tracking-wider">Agreement</span>
                         <span class="block mt-1 text-[10px] font-bold text-amber-700 dark:text-amber-200 leading-5">I, <span id="replacementAgreementName">{{ strtoupper(($isAdminRoute && $mode === 'staff') ? (auth('wt')->user()->full_name ?: auth('wt')->user()->username) : old('reporter_name', $draftRecord->reporter_name ?? ($currentUser->full_name ?: $currentUser->username))) }}</span> - <span id="replacementAgreementDepartment">{{ strtoupper(($isAdminRoute && $mode === 'staff') ? (auth('wt')->user()->department ?: 'GENERAL') : old('department', $draftRecord->department_name ?? ($currentUser->department ?: 'GENERAL'))) }}</span>, have read and understood the terms and conditions for the use of the walkie-talkie provided. I agree to comply with those terms and conditions and will be responsible for taking proper care of and using the walkie-talkie appropriately.</span>
@@ -1609,7 +1446,7 @@
                 <p id="replacementAgreementError" class="replacement-agreement-error">Please tick the agreement before saving a replacement request.</p>
             </div>
             <label class="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" id="replacementModalCheckbox" class="mt-0.5 w-4 h-4 rounded border-stone-300 text-[#8B5E3C] focus:ring-[#8B5E3C]" {{ $draftReplacementRequested === '1' ? 'checked' : '' }}>
+                <input type="checkbox" id="replacementModalCheckbox" class="mt-0.5 w-4 h-4 rounded border-stone-300 text-[#0284c7] focus:ring-[#0284c7]" {{ $draftReplacementRequested === '1' ? 'checked' : '' }}>
                 <span>
                     <span class="block text-[11px] font-black text-stone-700 dark:text-slate-100 uppercase tracking-wider">Yes, request accessories replacement </span>
                     <span class="block mt-1 text-[10px] font-bold text-stone-500 dark:text-slate-300">ICT will review availability. Replacement is not guaranteed and depends on stock and approval.</span>
@@ -1631,16 +1468,16 @@
             </div>
             <div class="mt-4">
                 <label class="block text-[10px] font-black text-stone-500 dark:text-slate-300 uppercase tracking-wider mb-1">Others</label>
-                <textarea id="replacementModalOtherItem" rows="2" placeholder="Please specify other replacement item..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">{{ $draftReplacementOtherItem ? trim(\Illuminate\Support\Str::after($draftReplacementOtherItem, 'OTHERS:')) : '' }}</textarea>
+                <textarea id="replacementModalOtherItem" rows="2" placeholder="Please specify other replacement item..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">{{ $draftReplacementOtherItem ? trim(\Illuminate\Support\Str::after($draftReplacementOtherItem, 'OTHERS:')) : '' }}</textarea>
             </div>
             <div class="mt-4">
                 <label class="block text-[10px] font-black text-stone-500 dark:text-slate-300 uppercase tracking-wider mb-1">Replacement Note</label>
-                <textarea id="replacementModalNote" rows="3" placeholder="Optional note for ICT, for example urgent work usage or affected operation." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">{{ $draftReplacementFreeNote }}</textarea>
+                <textarea id="replacementModalNote" rows="3" placeholder="Optional note for ICT, for example urgent work usage or affected operation." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100">{{ $draftReplacementFreeNote }}</textarea>
             </div>
         </div>
         <div class="px-6 py-4 bg-stone-50 dark:bg-slate-900/60 border-t border-stone-100 dark:border-slate-700 flex justify-end gap-3 shrink-0">
             <button type="button" id="replacementModalCancel" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest text-stone-500 border border-stone-200 bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200">Cancel</button>
-            <button type="button" id="replacementModalSave" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest text-white bg-[#8B5E3C] hover:bg-[#734C2F]">Save</button>
+            <button type="button" id="replacementModalSave" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest text-white bg-[#0284c7] hover:bg-[#734C2F]">Save</button>
         </div>
     </div>
 </div>
@@ -2241,51 +2078,51 @@
             for (let index = 1; index < quantity; index += 1) {
                 const saved = existingRows[index - 1] || oldRecipientDetails[index - 1] || {};
                 const row = document.createElement('div');
-                row.className = 'rounded-2xl border border-[#8B5E3C]/15 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70';
+                row.className = 'rounded-2xl border border-[#0284c7]/15 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70';
                 row.setAttribute('data-recipient-row', '1');
                 row.innerHTML = `
                     <div class="mb-4 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">Ownership ${index + 1}</div>
                     <input type="hidden" name="recipient_details[${index}][user_id]" data-recipient-user-id value="${escapeHtml(saved.user_id || '')}">
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Ownership Name <span class="text-red-500">*</span></label>
-                            <input type="text" name="recipient_details[${index}][reporter_name]" data-recipient-name list="managedRecipientOptions" value="${escapeHtml(saved.reporter_name || '')}" placeholder="Search ownership name..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                            <label class="form-label">Ownership Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="recipient_details[${index}][reporter_name]" data-recipient-name list="managedRecipientOptions" value="${escapeHtml(saved.reporter_name || '')}" placeholder="Search ownership name..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Ownership Phone No <span class="text-red-500">*</span></label>
-                            <input type="text" name="recipient_details[${index}][phone_no]" data-recipient-phone value="${escapeHtml(saved.phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold" required>
+                            <label class="form-label">Ownership Phone No <span class="text-red-500">*</span></label>
+                            <input type="text" name="recipient_details[${index}][phone_no]" data-recipient-phone value="${escapeHtml(saved.phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Department <span class="text-red-500">*</span></label>
-                            <select name="recipient_details[${index}][department]" data-recipient-department class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                            <label class="form-label">Department <span class="text-red-500">*</span></label>
+                            <select name="recipient_details[${index}][department]" data-recipient-department class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                                 ${optionRows(departmentOptions, saved.department || '', 'Type or select department')}
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Ownership Type <span class="text-red-500">*</span></label>
-                            <select name="recipient_details[${index}][ownership_type]" data-recipient-ownership-type class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                            <label class="form-label">Ownership Type <span class="text-red-500">*</span></label>
+                            <select name="recipient_details[${index}][ownership_type]" data-recipient-ownership-type class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                                 ${optionRows(['SHARED', 'INDIVIDUAL'], saved.ownership_type || '', 'Select ownership type')}
                             </select>
                         </div>
                         <div data-recipient-shared-wrapper class="${String(saved.ownership_type || '').toUpperCase() === 'SHARED' ? '' : 'hidden'}">
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Shared With <span class="text-red-500">*</span></label>
-                            <input type="text" name="recipient_details[${index}][shared_with]" data-recipient-shared-with value="${escapeHtml(saved.shared_with || '')}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                            <label class="form-label">Shared With <span class="text-red-500">*</span></label>
+                            <input type="text" name="recipient_details[${index}][shared_with]" data-recipient-shared-with value="${escapeHtml(saved.shared_with || '')}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Sector <span class="text-red-500">*</span></label>
-                            <select name="recipient_details[${index}][sector]" data-recipient-sector class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                            <label class="form-label">Sector <span class="text-red-500">*</span></label>
+                            <select name="recipient_details[${index}][sector]" data-recipient-sector class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                                 ${optionRows(sectorOptions, saved.sector || '', 'Type or select sector')}
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Bay <span class="text-stone-400">(Optional)</span></label>
-                            <select name="recipient_details[${index}][bay_from]" data-recipient-bay class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                            <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
+                            <select name="recipient_details[${index}][bay_from]" data-recipient-bay class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                                 ${optionRows(['-', ...bayOptions], saved.bay_from || '-', 'Type number only, e.g. 3')}
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Location <span class="text-red-500">*</span></label>
-                            <select name="recipient_details[${index}][location]" data-recipient-location class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                            <label class="form-label">Location <span class="text-red-500">*</span></label>
+                            <select name="recipient_details[${index}][location]" data-recipient-location class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                                 ${optionRows(locationOptions, saved.location || '', 'Type or select location')}
                             </select>
                         </div>
@@ -2314,22 +2151,22 @@
             for (let index = 0; index < quantity; index += 1) {
                 const saved = existingRows[index] || oldDeviceDetails[index] || {};
                 const row = document.createElement('div');
-                row.className = 'rounded-xl border border-[#8B5E3C]/15 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/70';
+                row.className = 'rounded-xl border border-[#0284c7]/15 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/70';
                 row.setAttribute('data-device-row', '1');
                 row.innerHTML = `
                     <div class="mb-3 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">Walkie Talkie Details ${index + 1}</div>
                     <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Model <span class="text-red-500">*</span></label>
-                            <input type="text" name="device_details[${index}][model]" data-device-model value="${escapeHtml(saved.model || '')}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                            <label class="form-label">Model <span class="text-red-500">*</span></label>
+                            <input type="text" name="device_details[${index}][model]" data-device-model value="${escapeHtml(saved.model || '')}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Radio ID <span class="text-red-500">*</span></label>
-                            <input type="text" name="device_details[${index}][radio_id]" data-device-radio-id value="${escapeHtml(saved.radio_id || '')}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                            <label class="form-label">Radio ID <span class="text-red-500">*</span></label>
+                            <input type="text" name="device_details[${index}][radio_id]" data-device-radio-id value="${escapeHtml(saved.radio_id || '')}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-black text-stone-500 uppercase tracking-wider mb-1">Serial No <span class="text-red-500">*</span></label>
-                            <input type="text" name="device_details[${index}][serial_number]" data-device-serial-number value="${escapeHtml(saved.serial_number || '')}" placeholder="Enter serial number if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#8B5E3C] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                            <label class="form-label">Serial No <span class="text-red-500">*</span></label>
+                            <input type="text" name="device_details[${index}][serial_number]" data-device-serial-number value="${escapeHtml(saved.serial_number || '')}" placeholder="Enter serial number if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
                     </div>
                 `;

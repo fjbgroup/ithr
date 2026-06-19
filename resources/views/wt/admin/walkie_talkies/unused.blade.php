@@ -731,7 +731,7 @@
     html:not(.dark) body .content-surface .unused-page-shell > .page-header-block {
         background: #ffffff !important;
         border: 1px solid #d8e1ed !important;
-        border-left: 4px solid #c28a48 !important;
+        border-left: 4px solid #0284c7 !important;
     }
     html:not(.dark) body .content-surface .unused-page-shell .page-title-standard {
         color: #0f172a !important;

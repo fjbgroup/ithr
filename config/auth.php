@@ -43,14 +43,14 @@ return [
             'provider' => 'users',
         ],
 
-        'wt' => [
-            'driver' => 'session',
-            'provider' => 'wt_users',
-        ],
-
         'it' => [
             'driver' => 'session',
             'provider' => 'it_users',
+        ],
+
+        'wt' => [
+            'driver' => 'session',
+            'provider' => 'wt_users',
         ],
     ],
 
