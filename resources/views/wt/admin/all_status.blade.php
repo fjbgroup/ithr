@@ -291,7 +291,7 @@
 
     $resolveReportedBy = function ($request) {
         $submittedBy = $request->user ?: $request->submitToAdmin;
-        $role = strtolower((string) ($submittedBy->role ?? 'user'));
+        $role = strtolower((string) ($submittedBy->wt_role ?? 'user'));
 
         return [
             'name' => strtoupper((string) (($submittedBy->full_name ?? null) ?: ($submittedBy->username ?? null) ?: ($request->full_name ?? '-'))),

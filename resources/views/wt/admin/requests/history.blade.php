@@ -486,7 +486,7 @@
             $submittedBy = $request->submitToAdmin;
         }
 
-        $role = strtolower((string) ($submittedBy->role ?? 'user'));
+        $role = strtolower((string) ($submittedBy->wt_role ?? 'user'));
         $roleLabel = match ($role) {
             'admin' => 'Executive',
             'admin_it' => 'ICT',

@@ -436,10 +436,10 @@
     <div class="inventory-page-header page-header-block">
         <div class="inventory-header-copy">
             <h1 class="page-title-standard text-slate-100">Inventory List</h1>
-            <p class="page-subtitle-standard text-slate-400">{{ auth('wt')->user()->role === 'admin_it' ? 'Displaying all walkie talkies with full management access.' : 'Displaying all walkie talkies in read-only mode for executive review.' }}</p>
+            <p class="page-subtitle-standard text-slate-400">{{ auth('wt')->user()->wt_role === 'admin_it' ? 'Displaying all walkie talkies with full management access.' : 'Displaying all walkie talkies in read-only mode for executive review.' }}</p>
         </div>
         <div class="inventory-header-actions">
-            @if(auth('wt')->user()->role === 'admin_it')
+            @if(auth('wt')->user()->wt_role === 'admin_it')
             <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
@@ -449,7 +449,7 @@
             </button>
             @endif
 
-            @if(auth('wt')->user()->role === 'admin_it')
+            @if(auth('wt')->user()->wt_role === 'admin_it')
             <a href="{{ route('wt.admin.walkies.create') }}" class="wt-btn wt-btn-soft">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
                     <path d="M8 1a.5.5 0 0 1 .5.5V7.5H14a.5.5 0 0 1 0 1H8.5V14a.5.5 0 0 1-1 0V8.5H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z"/>
@@ -539,7 +539,7 @@
         </div>
 
         @php
-            $showInventoryBulk = auth('wt')->user()->role === 'admin_it';
+            $showInventoryBulk = auth('wt')->user()->wt_role === 'admin_it';
         @endphp
 
         @if($showInventoryBulk)
@@ -660,7 +660,7 @@
                             <div class="inventory-remark-cell" title="{{ $w->remark ?: '-' }}">{{ $w->remark ?: '-' }}</div>
                         </td>
                         <td class="text-center inventory-action-col">
-                            @if(auth('wt')->user()->role === 'admin_it')
+                            @if(auth('wt')->user()->wt_role === 'admin_it')
                             <div class="inventory-action-buttons">
                                 <button type="button" class="btn btn-info btn-sm" title="View Details" onclick="openGlobalWalkieTimeline('{{ $w->walkie_id }}')">
                                     <i class="fa-solid fa-eye"></i>
@@ -751,7 +751,7 @@
         </div>
     </div>
 
-    @if(auth('wt')->user()->role === 'admin_it')
+    @if(auth('wt')->user()->wt_role === 'admin_it')
     {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
     <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
         <div class="modal-box">

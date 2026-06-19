@@ -424,7 +424,7 @@
         <h3 class="page-title-standard">Under Repair / Faulty Units</h3>
         <p class="page-subtitle-standard">Records marked as REPAIRING, FAULTY, or B.E.R.</p>
     </div>
-    @if(auth('wt')->user()->role === 'admin_it')
+    @if(auth('wt')->user()->wt_role === 'admin_it')
     <div class="flex flex-shrink-0 items-center gap-2">
         <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
@@ -571,7 +571,7 @@
                         <button type="button" class="wt-btn wt-btn-sm" onclick="openGlobalMaintenanceTimeline('{{ $record->maintenance_id }}')">
                             View
                         </button>
-                        @if(auth('wt')->user()->role === 'admin_it')
+                        @if(auth('wt')->user()->wt_role === 'admin_it')
                         <button type="button" 
                             class="wt-btn wt-btn-sm"
                             onclick="openEditModal(
@@ -1056,7 +1056,7 @@ select.form-input {
 </style>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
     <div class="modal-box" style="max-width: 500px;">
         <div class="modal-header">

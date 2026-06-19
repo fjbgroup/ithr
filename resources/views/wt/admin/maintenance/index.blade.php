@@ -655,7 +655,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                             <span>Edit</span>
                         </a>
-                        @if(auth('wt')->user()->role === 'admin_it')
+                        @if(auth('wt')->user()->wt_role === 'admin_it')
                             <form action="{{ route('wt.admin.maintenance.destroy', $r->maintenance_id) }}" method="POST" data-modern-confirm="Delete maintenance record for {{ $r->radio_id ?? '-' }}?">
                                 @csrf
                                 @method('DELETE')
@@ -1007,7 +1007,7 @@ function closeEditOutside(e) { if (e.target === document.getElementById('editMod
 </script>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay maintenance-import-modal" onclick="closeImportModalOutside(event)">
     <div class="modal-box maintenance-import-box" style="max-width: 500px;">
         <div class="modal-header">

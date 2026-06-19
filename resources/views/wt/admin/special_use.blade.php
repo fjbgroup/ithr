@@ -542,7 +542,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
         <h3 class="page-title-standard">Special Use Walkie Talkies</h3>
         <p class="page-subtitle-standard">Records marked for special use, temporary, or spares.</p>
     </div>
-    @if(auth('wt')->user()->role === 'admin_it')
+    @if(auth('wt')->user()->wt_role === 'admin_it')
     <div class="flex flex-shrink-0 items-center gap-2">
         <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
@@ -637,7 +637,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
             <td>{{ $record->received_date ?? '-' }}</td>
             <td>{{ $record->repair_date ?? '-' }}</td>
             <td>
-                @if(auth('wt')->user()->role === 'admin_it')
+                @if(auth('wt')->user()->wt_role === 'admin_it')
                     <div class="special-action-buttons">
                         <button type="button" class="btn btn-info btn-sm" title="View Details" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">
                             <i class="fa-solid fa-eye"></i>
@@ -1284,7 +1284,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
 </div>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
     <div class="modal-box" style="max-width: 500px;">
         <div class="modal-header">

@@ -17,7 +17,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'password',
-        'staff_no', 'role',
+        'staff_no', 'role', 'it_role', 'wt_role',
         'department_id', 'position', 'company',
         'is_active', 'staff_id',
         // Extended fields shared across all modules:
@@ -69,40 +69,76 @@ class User extends Authenticatable
         return $this->attributes['id'] ?? null;
     }
 
-    // ── Role helpers — covers all three modules ────────────────────────────
+    // ── HR role helpers ────────────────────────────────────────────────────
 
     public function isAdminIT(): bool        { return $this->role === 'admin_it'; }
     public function isAdminHR(): bool        { return $this->role === 'admin_hr'; }
-    public function isAdmin(): bool          { return in_array($this->role, ['admin_it', 'admin_hr', 'admin']); }
+    public function isAdmin(): bool          { return in_array($this->role, ['admin_it', 'admin_hr']); }
     public function isCeo(): bool            { return $this->role === 'ceo'; }
     public function isStaff(): bool          { return $this->role === 'staff'; }
-    public function isFinanceAdmin(): bool   { return $this->role === 'finance_admin'; }
     public function isHOU(): bool            { return $this->role === 'hou'; }
     public function isGM(): bool             { return $this->role === 'gm'; }
     public function isSignatory(): bool      { return in_array($this->role, ['hou', 'gm']); }
     public function isReadOnlyViewer(): bool { return in_array($this->role, ['hou', 'gm', 'ceo']); }
-    public function isAdminOrFinance(): bool { return in_array($this->role, ['admin_it', 'admin', 'finance_admin']); }
-    public function canApproveWriteOff(): bool { return in_array($this->role, ['admin_it', 'admin', 'ceo']); }
     public function canWrite(): bool         { return !$this->isCeo(); }
 
     public function getRoleLabel(): string
     {
         return match($this->role) {
-            'admin_it'      => 'Admin (IT)',
-            'admin_hr'      => 'Admin (HR)',
-            'admin'         => 'IT Admin',
-            'finance_admin' => 'Finance Admin',
-            'hou'           => 'Head of Unit',
-            'gm'            => 'General Manager',
-            'staff'         => 'Staff',
-            'ceo'           => 'CEO',
-            default         => ucfirst($this->role),
+            'admin_it'  => 'Admin (IT)',
+            'admin_hr'  => 'Admin (HR)',
+            'hou'       => 'Head of Unit',
+            'gm'        => 'General Manager',
+            'staff'     => 'Staff',
+            'ceo'       => 'CEO',
+            default     => ucfirst($this->role ?? ''),
         };
     }
 
     public function roleName(): string
     {
         return $this->getRoleLabel();
+    }
+
+    // ── IT-specific role helpers (use it_role column) ──────────────────────
+
+    public function hasItAccess(): bool          { return $this->it_role !== null; }
+    public function isItAdmin(): bool            { return in_array($this->it_role, ['admin_it', 'admin']); }
+    public function isItFinanceAdmin(): bool     { return $this->it_role === 'finance_admin'; }
+    public function isItAdminOrFinance(): bool   { return in_array($this->it_role, ['admin_it', 'admin', 'finance_admin']); }
+    public function isItReadOnly(): bool         { return in_array($this->it_role, ['hou', 'gm', 'ceo']); }
+    public function canApproveWriteOff(): bool   { return in_array($this->it_role, ['admin_it', 'admin', 'ceo']); }
+    public function isFinanceAdmin(): bool       { return $this->it_role === 'finance_admin'; }
+
+    public function getItRoleLabel(): string
+    {
+        return match($this->it_role) {
+            'admin_it'      => 'Admin (IT)',
+            'admin'         => 'IT Admin',
+            'finance_admin' => 'Finance Admin',
+            'hou'           => 'Head of Unit',
+            'gm'            => 'General Manager',
+            'ceo'           => 'CEO',
+            'user'          => 'User',
+            default         => '-',
+        };
+    }
+
+    // ── WT-specific role helpers (use wt_role column) ──────────────────────
+
+    public function hasWtAccess(): bool  { return $this->wt_role !== null; }
+    public function isWtAdminIT(): bool  { return $this->wt_role === 'admin_it'; }
+    public function isWtAdmin(): bool    { return in_array($this->wt_role, ['admin_it', 'admin']); }
+    public function isWtUser(): bool     { return $this->wt_role === 'user'; }
+
+    public function getWtRoleLabel(): string
+    {
+        return match($this->wt_role) {
+            'admin_it' => 'Admin (IT)',
+            'admin'    => 'Executive',
+            'user'     => 'User',
+            default    => '-',
+        };
     }
 
     // ── HR relationships ──────────────────────────────────────────────────

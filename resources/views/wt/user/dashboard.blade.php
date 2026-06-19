@@ -18,7 +18,7 @@
 <div style="margin-bottom:24px">
   <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px">Welcome back</div>
   <div style="font-size:20px;font-weight:800;color:var(--text)">{{ Auth::guard('wt')->user()->username ?? 'User' }}</div>
-  <div style="font-size:12px;color:var(--muted);margin-top:2px">WT System &middot; {{ strtoupper(str_replace('_', ' ', Auth::guard('wt')->user()->role)) }}</div>
+  <div style="font-size:12px;color:var(--muted);margin-top:2px">WT System &middot; {{ strtoupper(str_replace('_', ' ', Auth::guard('wt')->user()->wt_role ?? 'user')) }}</div>
 </div>
 
 <div class="row g-3 mb-4">

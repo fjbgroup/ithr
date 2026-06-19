@@ -58,7 +58,7 @@
                 <div class="profile-avatar-clean">{{ strtoupper(substr(Auth::guard('wt')->user()->username, 0, 1)) }}</div>
                 <div>
                     <h4 class="profile-summary-name">{{ strtoupper(Auth::guard('wt')->user()->full_name ?: Auth::guard('wt')->user()->username) }}</h4>
-                    <p class="profile-summary-role">{{ Auth::guard('wt')->user()->role === 'admin_it' ? 'ICT Department' : 'Executive Account' }}</p>
+                    <p class="profile-summary-role">{{ Auth::guard('wt')->user()->wt_role === 'admin_it' ? 'ICT Department' : 'Executive Account' }}</p>
                 </div>
             </div>
             <div class="flex flex-wrap gap-1.5">

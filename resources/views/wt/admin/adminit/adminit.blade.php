@@ -468,12 +468,12 @@
                     <tbody class="divide-y divide-stone-100 text-sm">
                         @foreach($users as $account)
                         @php
-                            $roleStyles = match($account->role) {
+                            $roleStyles = match($account->wt_role) {
                                 'admin_it' => 'bg-[#142b47] text-white',
                                 'admin' => 'bg-amber-100 text-amber-700',
                                 default => 'bg-stone-100 text-slate-600',
                             };
-                            $roleLabel = match($account->role) {
+                            $roleLabel = match($account->wt_role) {
                                 'admin_it' => 'ICT',
                                 'admin' => 'EXECUTIVE',
                                 default => 'EXECUTIVE',
@@ -522,7 +522,7 @@
                                         <button
                                             type="button"
                                             class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
-                                            onclick="openEditUserModal('{{ $account->user_id }}', '{{ addslashes($account->staff_id ?? '') }}', '{{ addslashes($account->username ?? '') }}', '{{ addslashes($account->full_name ?? '') }}', '{{ addslashes($account->department ?? '') }}', '{{ addslashes($account->position ?? '') }}', '{{ $account->role }}'); closeAllActionMenus();">
+                                            onclick="openEditUserModal('{{ $account->user_id }}', '{{ addslashes($account->staff_id ?? '') }}', '{{ addslashes($account->username ?? '') }}', '{{ addslashes($account->full_name ?? '') }}', '{{ addslashes($account->department ?? '') }}', '{{ addslashes($account->position ?? '') }}', '{{ $account->wt_role }}'); closeAllActionMenus();">
                                             <i class="fas fa-pen w-4"></i>
                                             <span>Edit</span>
                                         </button>

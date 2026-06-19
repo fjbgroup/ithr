@@ -17,13 +17,12 @@ class UserController extends Controller
     {
         $roleOrder = ['ceo','gm','hou','admin','finance_admin','user'];
 
-        // Only show IT-relevant roles; admin_it is normalised into the 'admin' bucket
-        $itRoles  = ['admin_it','admin','finance_admin','hou','gm','ceo','user'];
-        $allUsers = User::whereIn('role', $itRoles)->orderBy('name')->get();
+        // Show users who have IT access (it_role is not null)
+        $allUsers = User::whereNotNull('it_role')->orderBy('name')->get();
 
         $grouped = array_fill_keys($roleOrder, []);
         foreach ($allUsers as $u) {
-            $key = $u->role === 'admin_it' ? 'admin' : $u->role;
+            $key = $u->it_role === 'admin_it' ? 'admin' : $u->it_role;
             if (array_key_exists($key, $grouped)) $grouped[$key][] = $u;
         }
 
@@ -83,30 +82,29 @@ class UserController extends Controller
         ]);
 
         $staffNo  = trim($request->username);
-        $itRoles  = ['admin_it','admin','finance_admin','hou','gm','ceo','user'];
         $existing = User::whereRaw('TRIM(staff_no) = ?', [$staffNo])->first();
 
         if ($existing) {
-            if (in_array($existing->role, $itRoles)) {
+            if ($existing->it_role !== null) {
                 // Already has IT access — nothing to do
                 return back()
                     ->withInput()
-                    ->withErrors(['username' => $existing->full_name.' already has IT system access (role: '.$existing->roleName().').']);
+                    ->withErrors(['username' => $existing->full_name.' already has IT system access (role: '.$existing->getItRoleLabel().').']);
             }
 
-            // HR-only staff — grant IT access by updating their role.
-            // They keep their existing password so HR login is unaffected.
-            $data = ['role' => $request->role];
+            // Staff without IT access — grant it by setting it_role.
+            // Their HR role and WT role remain unchanged.
+            $data = ['it_role' => $request->role];
             if ($request->filled('dept_name'))  $data['dept_name']  = $request->dept_name;
             if ($request->filled('email'))       $data['email']      = $request->email;
             if ($request->filled('password'))    $data['password']   = Hash::make($request->password);
 
             $existing->update($data);
-            ActivityLogService::log('UPDATE', 'user', $existing->id, 'Granted IT access (role: '.$request->role.') to: '.$existing->username);
+            ActivityLogService::log('UPDATE', 'user', $existing->id, 'Granted IT access (it_role: '.$request->role.') to: '.$existing->username);
 
             $roleTab = $request->role === 'admin_it' ? 'admin' : $request->role;
             return redirect()->route('it.users.index', ['role_tab' => $roleTab])
-                ->with('success', 'IT access granted to '.$existing->full_name.' as '.$existing->roleName().'.');
+                ->with('success', 'IT access granted to '.$existing->full_name.' as '.$existing->getItRoleLabel().'.');
         }
 
         // Brand-new user — password is required
@@ -117,7 +115,8 @@ class UserController extends Controller
             'password'  => Hash::make($request->password),
             'full_name' => $request->full_name,
             'email'     => $request->email,
-            'role'      => $request->role,
+            'role'      => 'staff',
+            'it_role'   => $request->role,
             'dept_name' => $request->dept_name,
             'is_active' => 1,
         ]);
@@ -141,7 +140,7 @@ class UserController extends Controller
         $data = [
             'full_name' => $request->full_name,
             'email'     => $request->email,
-            'role'      => $request->role,
+            'it_role'   => $request->role,
             'dept_name' => $request->dept_name,
         ];
 

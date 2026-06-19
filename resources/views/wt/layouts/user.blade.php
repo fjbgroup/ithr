@@ -317,7 +317,7 @@ html:not(.dark) .content-surface{background:rgba(255,255,255,.98) !important;bor
 <body id="main-body">
 
 @php
-    $actualRole = Auth::guard('wt')->user()->role;
+    $actualRole = Auth::guard('wt')->user()->wt_role;
     $effectiveRole = $actualRole === 'admin_it'
         ? session('view_mode', $actualRole)
         : $actualRole;

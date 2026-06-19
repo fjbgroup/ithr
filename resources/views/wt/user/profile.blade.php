@@ -28,7 +28,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px">Your Account</div>
     <div style="font-size:20px;font-weight:800;color:var(--text);line-height:1.1">{{ strtoupper($user->full_name ?: $user->username) }}</div>
     <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap">
-      <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">{{ strtoupper(str_replace('_',' ',$user->role ?? 'user')) }}</span>
+      <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">{{ strtoupper(str_replace('_',' ',$user->wt_role ?? 'user')) }}</span>
       <span style="font-size:12px;color:var(--muted)"><i class="fas fa-user" style="font-size:11px;margin-right:3px"></i>{{ $user->username }}</span>
       @if($user->staff_id)
       <span style="font-size:12px;color:var(--muted)"><i class="fas fa-id-badge" style="font-size:11px;margin-right:3px"></i>{{ $user->staff_id }}</span>
@@ -139,7 +139,7 @@
         </div>
         <div class="account-row">
           <span class="account-row-label">Role</span>
-          <span class="account-row-value">{{ strtoupper(str_replace('_',' ',$user->role ?? 'user')) }}</span>
+          <span class="account-row-value">{{ strtoupper(str_replace('_',' ',$user->wt_role ?? 'user')) }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Department</span>

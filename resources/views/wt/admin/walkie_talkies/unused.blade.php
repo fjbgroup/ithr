@@ -936,7 +936,7 @@
                             </td>
                         @endforeach
                         <td>
-                            @if(auth('wt')->user()->role === 'admin_it')
+                            @if(auth('wt')->user()->wt_role === 'admin_it')
                                 <div class="unused-actions">
                                     <button
                                         type="button"

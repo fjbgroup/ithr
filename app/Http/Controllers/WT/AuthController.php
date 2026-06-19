@@ -35,6 +35,12 @@ class AuthController extends Controller
                     ->onlyInput('staff_no');
             }
 
+            if ($user->wt_role === null) {
+                return back()
+                    ->with('error', 'You do not have access to the Walkie Talkie system. Please contact ICT.')
+                    ->onlyInput('staff_no');
+            }
+
             Auth::guard('wt')->login($user);
             $request->session()->regenerate();
             SsoService::markAuthenticated($user->id);
@@ -49,7 +55,7 @@ class AuthController extends Controller
                 'created_at'  => now(),
             ]);
 
-            if ($user->role === 'admin_it') {
+            if ($user->wt_role === 'admin_it') {
                 return redirect()->route('wt.admin.dashboard');
             }
 
@@ -127,7 +133,7 @@ class AuthController extends Controller
             'requested_at' => now(),
         ]);
 
-        $itUsers = User::where('role', 'admin_it')->get();
+        $itUsers = User::where('wt_role', 'admin_it')->get();
         SystemNotifier::notifyUsers(
             $itUsers,
             'Reset Password Request Baru',

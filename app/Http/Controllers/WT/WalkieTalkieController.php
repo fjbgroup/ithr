@@ -712,7 +712,7 @@ public function repairFaulty()
         $historyRetentionYears = max(1, min(5, (int) env('WT_RETURN_HISTORY_YEARS', 5)));
         $historyCutoff = now()->subYears($historyRetentionYears)->startOfDay();
 
-        if ($user->role === 'admin') {
+        if ($user->wt_role === 'admin') {
             $records = collect();
             $historyRequests = collect();
 

@@ -40,6 +40,10 @@ class LoginController extends Controller
             return back()->withErrors(['login' => 'Your account is deactivated. Please contact admin.'])->withInput(['username' => $input]);
         }
 
+        if ($user->it_role === null) {
+            return back()->withErrors(['login' => 'You do not have access to the IT system. Please contact your IT administrator.'])->withInput(['username' => $input]);
+        }
+
         Auth::guard('it')->login($user);
         $request->session()->regenerate();
         session(['it_last_activity' => time()]);

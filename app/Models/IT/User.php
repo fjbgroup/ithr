@@ -21,6 +21,11 @@ class User extends BaseUser
         $this->attributes['staff_no'] = $value;
     }
 
+    // ── IT role helpers (override base model to use it_role) ─────────────
+
+    public function isAdmin(): bool          { return in_array($this->it_role, ['admin_it', 'admin']); }
+    public function isAdminOrFinance(): bool { return in_array($this->it_role, ['admin_it', 'admin', 'finance_admin']); }
+
     // ── IT-specific relationships ─────────────────────────────────────────
 
     public function inventoryItems()        { return $this->hasMany(InventoryItem::class, 'created_by'); }

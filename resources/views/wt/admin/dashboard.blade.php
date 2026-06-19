@@ -171,11 +171,11 @@
                 </div>
                 <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
                     <i class="fas fa-building text-[#38bdf8] text-[10px]"></i>
-                    <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->department ?: (Auth::guard('wt')->user()->role === 'admin_it' ? 'ADMINISTRATOR' : 'GENERAL') }}</span>
+                    <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->department ?: (Auth::guard('wt')->user()->wt_role === 'admin_it' ? 'ADMINISTRATOR' : 'GENERAL') }}</span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/10">
                     <i class="fas fa-user-tie text-[#38bdf8] text-[10px]"></i>
-                    <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->position ?: (Auth::guard('wt')->user()->role === 'admin_it' ? 'ICT' : 'ADMINISTRATOR') }}</span>
+                    <span class="profile-pill !text-white">{{ Auth::guard('wt')->user()->position ?: (Auth::guard('wt')->user()->wt_role === 'admin_it' ? 'ICT' : 'ADMINISTRATOR') }}</span>
                 </div>
             </div>
         </div>

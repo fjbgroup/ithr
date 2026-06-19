@@ -843,7 +843,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
                 <h1 class="page-title-standard">Duplicated ID Management</h1>
                 <p class="page-subtitle-standard">Review units that share a Radio ID or still need an ID change.</p>
             </div>
-            @if(auth('wt')->user()->role === 'admin_it')
+            @if(auth('wt')->user()->wt_role === 'admin_it')
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
                     <i class="fa-solid fa-file-import"></i>
@@ -920,7 +920,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
                 <td>{{ $r->ownership_type_to_be ?: '-' }}</td>
                 <td class="wrap-cell">{{ $r->remark ?: '-' }}</td>
                 <td class="text-center">
-                    @if(auth('wt')->user()->role === 'admin_it')
+                    @if(auth('wt')->user()->wt_role === 'admin_it')
                     <div class="duplicate-action-stack">
                         <button type="button" class="wt-btn wt-btn-sm duplicate-action-view" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
                             <i class="fa-solid fa-eye"></i>
@@ -961,7 +961,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
 </div>
 
 {{-- ===================== ADD RECORD MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="addModal" class="modal-overlay" onclick="closeAddModalOutside(event)">
     <div class="modal-box">
         <div class="modal-header">
@@ -1169,7 +1169,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
 </div>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
     <div class="modal-box" style="max-width: 500px;">
         <div class="modal-header">

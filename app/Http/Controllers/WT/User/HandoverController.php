@@ -36,10 +36,10 @@ class HandoverController extends Controller
     public function index()
     {
         $isIctView = request()->routeIs('admin.*')
-            && auth('wt')->user()->role === 'admin_it'
-            && session('view_mode', auth('wt')->user()->role) === 'admin_it';
+            && auth('wt')->user()->wt_role === 'admin_it'
+            && session('view_mode', auth('wt')->user()->wt_role) === 'admin_it';
 
-        if (request()->routeIs('admin.*') && ! $isIctView && auth('wt')->user()->role === 'admin_it') {
+        if (request()->routeIs('admin.*') && ! $isIctView && auth('wt')->user()->wt_role === 'admin_it') {
             return redirect()
                 ->route('wt.admin.requests.index')
                 ->with('error', 'ICT direct handover is only available in ICT mode.');
@@ -81,7 +81,7 @@ class HandoverController extends Controller
             }
 
             $users = User::query()
-                ->whereIn('role', $directHandoverScope === 'on_behalf' ? ['admin'] : ['admin', 'admin_it'])
+                ->whereIn('wt_role', $directHandoverScope === 'on_behalf' ? ['admin'] : ['admin', 'admin_it'])
                 ->when($directHandoverScope === 'self', function ($query) {
                     $query->where('id', auth('wt')->id());
                 })
@@ -141,8 +141,8 @@ class HandoverController extends Controller
     public function store(Request $request)
     {
         $isIctView = $request->routeIs('admin.*')
-            && auth('wt')->user()->role === 'admin_it'
-            && session('view_mode', auth('wt')->user()->role) === 'admin_it';
+            && auth('wt')->user()->wt_role === 'admin_it'
+            && session('view_mode', auth('wt')->user()->wt_role) === 'admin_it';
 
         if ($request->routeIs('admin.*') && ! $isIctView && $request->input('handover_mode') === 'ict_direct') {
             return redirect()
@@ -215,7 +215,7 @@ class HandoverController extends Controller
                     );
                 }
 
-                $itUsers = User::where('role', 'admin_it')->get();
+                $itUsers = User::where('wt_role', 'admin_it')->get();
                 SystemNotifier::notifyUsers(
                     $itUsers,
                     'Recipient Pickup Pending',
@@ -268,7 +268,7 @@ class HandoverController extends Controller
                 'created_at' => now(),
             ]);
 
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Recipient Pickup Confirmed',
@@ -345,7 +345,7 @@ class HandoverController extends Controller
         }
 
         $targetUser = User::query()
-            ->when(! $accessRequest, fn ($query) => $query->whereIn('role', ['admin', 'admin_it']))
+            ->when(! $accessRequest, fn ($query) => $query->whereIn('wt_role', ['admin', 'admin_it']))
             ->where('id', $validated['user_id'])
             ->firstOrFail();
 

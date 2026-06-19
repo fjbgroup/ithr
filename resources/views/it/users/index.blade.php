@@ -191,7 +191,7 @@ $action      = request('action', 'list');
           <label class="form-label">Role</label>
           <select name="role" class="form-select">
             @php
-            $defaultRole = old('role', request('default_role', $editUser->role ?? 'user'));
+            $defaultRole = old('role', request('default_role', $editUser->it_role ?? 'user'));
             $roleOpts = ['ceo'=>'Chief Executive Officer (C.E.O)','gm'=>'General Manager (G.M)','hou'=>'Head Of Unit (H.O.U)','admin'=>'IT Admin','finance_admin'=>'Finance Admin','user'=>'Staff'];
             @endphp
             @foreach($roleOpts as $rv => $rl)
@@ -409,7 +409,7 @@ $action      = request('action', 'list');
                 <i class="bi bi-toggle-{{ $row->is_active ? 'on' : 'off' }}"></i>
               </button>
             </form>
-            @if($row->role !== 'admin')
+            @if($row->it_role !== 'admin_it' && $row->it_role !== 'admin')
             <form method="POST" action="{{ route('it.users.reset-password', $row->id) }}" style="display:contents"
               onsubmit="return confirm('Reset password for {{ $row->full_name }} to default?')">
               @csrf

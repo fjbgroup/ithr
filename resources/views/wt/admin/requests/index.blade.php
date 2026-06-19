@@ -3169,7 +3169,7 @@
             $submittedBy = $request->submitToAdmin;
         }
 
-        $role = strtolower((string) ($submittedBy->role ?? 'user'));
+        $role = strtolower((string) ($submittedBy->wt_role ?? 'user'));
         $roleLabel = match ($role) {
             'admin' => 'Executive',
             'admin_it' => 'ICT',
@@ -3213,12 +3213,12 @@
     <div>
         <h3 class="page-title-standard">Approval Inbox</h3>
         <p class="page-subtitle-standard">
-            {{ ($userRole ?? auth('wt')->user()->role) === 'admin_it' ? 'Manage ICT approvals, replacement requests, returns, and forwarded damage reports' : 'Review requests, returns, and damage reports before forwarding them to ICT' }}
+            {{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Manage ICT approvals, replacement requests, returns, and forwarded damage reports' : 'Review requests, returns, and damage reports before forwarding them to ICT' }}
         </p>
     </div>
     <div class="approval-header-actions flex flex-wrap items-center gap-2">
         <span class="faulty-report-count-pill">{{ $pendingApprovalTotal }} Pending</span>
-        @if(($userRole ?? auth('wt')->user()->role) === 'admin_it')
+        @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
             <a href="{{ route('wt.admin.requests.history') }}" class="wt-btn wt-btn-soft">
                 <i class="fa-solid fa-clock-rotate-left text-[15px]"></i>
                 History
@@ -3232,7 +3232,7 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-bell text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title">{{ ($userRole ?? auth('wt')->user()->role) === 'admin_it' ? 'Pending IT Approval Requests' : 'Pending Executive Approval Requests' }}</h4>
+            <h4 class="pending-queue-title">{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Pending IT Approval Requests' : 'Pending Executive Approval Requests' }}</h4>
             <p class="pending-queue-subtitle">Review new walkie talkie applications awaiting action</p>
         </div>
         <span class="pending-queue-count"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingRequests->count() }} Pending</span>
@@ -3374,7 +3374,7 @@
                     <td class="px-4 py-4 text-center">
                         <div class="approval-action-row">
                             <button type="button" onclick="openRequestFormModal('requestFormModal-{{ $req->id }}')" class="approval-action-btn approval-action-view">View Form</button>
-                            @if(($userRole ?? auth('wt')->user()->role) === 'admin_it')
+                            @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
                                 @php
                                     $approvalPayload = [
                                         'id' => $req->id,
@@ -3646,8 +3646,8 @@
                     <td class="px-4 py-4 text-center">
                         <div class="approval-action-row">
                             <button type="button" onclick="event.stopPropagation(); openReturnFormModal('returnFormModal-{{ $ret->id }}')" class="approval-action-btn approval-action-view">View Form</button>
-                            @if(($userRole ?? auth('wt')->user()->role) === 'admin_it')
-                            <form action="{{ route('wt.admin.requests.confirmReturn', $ret->id) }}" method="POST" onclick="event.stopPropagation()" data-modern-confirm="{{ ($userRole ?? auth('wt')->user()->role) === 'admin_it' ? 'Confirm final return to inventory?' : 'Review this return and forward it to ICT?' }}" data-modern-confirm-title="Confirm Return" data-modern-confirm-remark="false">
+                            @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
+                            <form action="{{ route('wt.admin.requests.confirmReturn', $ret->id) }}" method="POST" onclick="event.stopPropagation()" data-modern-confirm="{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Confirm final return to inventory?' : 'Review this return and forward it to ICT?' }}" data-modern-confirm-title="Confirm Return" data-modern-confirm-remark="false">
                                 @csrf
                                 <button type="submit" class="approval-action-btn approval-action-approve">Confirm</button>
                             </form>
@@ -3711,8 +3711,8 @@
 
             <div class="mt-5 flex flex-wrap justify-end gap-2">
                 <button type="button" onclick="closeReturnFormModal('returnFormModal-{{ $ret->id }}')" class="approval-action-btn approval-action-view">Close</button>
-                @if(($userRole ?? auth('wt')->user()->role) === 'admin_it')
-                <form action="{{ route('wt.admin.requests.confirmReturn', $ret->id) }}" method="POST" data-modern-confirm="{{ ($userRole ?? auth('wt')->user()->role) === 'admin_it' ? 'Confirm final return to inventory?' : 'Review this return and forward it to ICT?' }}" data-modern-confirm-title="Confirm Return" data-modern-confirm-remark="false">
+                @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
+                <form action="{{ route('wt.admin.requests.confirmReturn', $ret->id) }}" method="POST" data-modern-confirm="{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Confirm final return to inventory?' : 'Review this return and forward it to ICT?' }}" data-modern-confirm-title="Confirm Return" data-modern-confirm-remark="false">
                     @csrf
                     <button type="submit" class="approval-action-btn approval-action-approve">Confirm</button>
                 </form>
@@ -3774,7 +3774,7 @@
                         @endif
                     </td>
                     <td class="px-4 py-4 text-center">
-                        @if(($userRole ?? auth('wt')->user()->role) === 'admin_it')
+                        @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
                             <div class="approval-action-row">
                                 <button type="button" onclick="event.stopPropagation(); openDamageFormModal('damageFormModal-{{ $report->maintenance_id }}')" class="approval-action-btn approval-action-view">View Form</button>
                                 <button type="button" onclick="event.stopPropagation(); openApproveDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-approve">Approve</button>
@@ -3964,7 +3964,7 @@
 </div>
 @endforeach
 
-@if(($userRole ?? auth('wt')->user()->role) === 'admin_it')
+@if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
 <div id="approveModal" class="fixed inset-0 z-50 hidden flex-row items-center justify-center overflow-x-auto overflow-y-hidden bg-slate-950/50 p-3 backdrop-blur-sm" style="gap: 4px;" onclick="if (event.target === this) closeApproveModal()">
     <div class="approval-modal-card" style="margin: 0 !important; width: 430px !important; flex: 0 0 430px !important;">
         <div class="navy-panel px-6 py-5 relative">

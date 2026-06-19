@@ -59,14 +59,14 @@ class RequestController extends Controller
     {
         return $query->where(function ($executiveQuery) {
             $executiveQuery
-                ->whereHas('submitToAdmin', fn ($userQuery) => $userQuery->where('role', 'admin'))
-                ->orWhereHas('user', fn ($userQuery) => $userQuery->where('role', 'admin'));
+                ->whereHas('submitToAdmin', fn ($userQuery) => $userQuery->where('wt_role', 'admin'))
+                ->orWhereHas('user', fn ($userQuery) => $userQuery->where('wt_role', 'admin'));
         });
     }
 
     protected function applyExecutiveSubmittedFilter($query)
     {
-        return $query->whereHas('submitToAdmin', fn ($userQuery) => $userQuery->where('role', 'admin'));
+        return $query->whereHas('submitToAdmin', fn ($userQuery) => $userQuery->where('wt_role', 'admin'));
     }
 
     protected function requestVariantViewData(string $requestVariant): array
@@ -80,7 +80,7 @@ class RequestController extends Controller
 
     public function index()
     {
-        $actualRole = auth('wt')->user()->role;
+        $actualRole = auth('wt')->user()->wt_role;
         $userRole = $actualRole === 'admin_it'
             ? session('view_mode', $actualRole)
             : $actualRole;
@@ -191,7 +191,7 @@ class RequestController extends Controller
 
     public function history()
     {
-        abort_unless(auth('wt')->user()->role === 'admin_it', 403);
+        abort_unless(auth('wt')->user()->wt_role === 'admin_it', 403);
 
         TemporaryRequestExpiryService::syncExpired();
 
@@ -394,7 +394,7 @@ class RequestController extends Controller
         ]);
 
         if (! $isDraft) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Permohonan Baru Diterima',
@@ -452,7 +452,7 @@ class RequestController extends Controller
             'handled_by' => auth('wt')->id(),
         ]);
 
-        $itUsers = User::where('role', 'admin_it')->get();
+        $itUsers = User::where('wt_role', 'admin_it')->get();
         SystemNotifier::notifyUsers(
             $itUsers,
             'Permohonan Diteruskan Ke ICT',
@@ -673,13 +673,13 @@ class RequestController extends Controller
     {
         $req = AccessRequest::findOrFail($id);
 
-        if (auth('wt')->user()->role === 'admin') {
+        if (auth('wt')->user()->wt_role === 'admin') {
             $req->update([
                 'return_status' => 'Pending IT Approval',
                 'handled_by' => auth('wt')->id(),
             ]);
 
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Return Diteruskan Ke ICT',
@@ -765,7 +765,7 @@ class RequestController extends Controller
             'handled_by' => auth('wt')->id(),
         ]);
 
-        $itUsers = User::where('role', 'admin_it')->get();
+        $itUsers = User::where('wt_role', 'admin_it')->get();
         SystemNotifier::notifyUsers(
             $itUsers,
             'Laporan Kerosakan Diteruskan',

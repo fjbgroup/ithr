@@ -33,7 +33,7 @@ class InteractionController extends Controller
     private function managedUsers()
     {
         $users = User::query()
-            ->where('role', 'user')
+            ->where('wt_role', 'user')
             ->orderByRaw("CASE WHEN name IS NULL OR name = '' THEN 1 ELSE 0 END")
             ->orderBy('name')
             ->orderBy('staff_no')
@@ -70,7 +70,7 @@ class InteractionController extends Controller
         if ($targetUserId > 0) {
             $existingById = User::query()
                 ->where('id', $targetUserId)
-                ->where('role', 'user')
+                ->where('wt_role', 'user')
                 ->first();
 
             if ($existingById) {
@@ -323,7 +323,7 @@ class InteractionController extends Controller
     // --- REQUEST ACCESS ---
     public function createRequest()
     {
-        $admins = User::where('role', 'admin')->orderBy('staff_no')->get();
+        $admins = User::where('wt_role', 'admin')->orderBy('staff_no')->get();
         return view('wt.user.requests.create', compact('admins'));
     }
 
@@ -347,7 +347,7 @@ class InteractionController extends Controller
         ]);
 
         $selectedAdmin = User::where('id', $validated['submit_to_admin_id'])->first();
-        if (! $selectedAdmin || $selectedAdmin->role !== 'admin') {
+        if (! $selectedAdmin || $selectedAdmin->wt_role !== 'admin') {
             return back()
                 ->withInput()
                 ->withErrors(['submit_to_admin_id' => 'Selected approver must be an Executive account.']);
@@ -478,7 +478,7 @@ class InteractionController extends Controller
 
         $senderUser = auth('wt')->user();
         if ($isAdminRoute) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Permintaan Return Baru',
@@ -681,7 +681,7 @@ class InteractionController extends Controller
     {
         $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
         $isAdminRoute = $request->routeIs('admin.*');
-        $admins = User::where('role', 'admin')
+        $admins = User::where('wt_role', 'admin')
             ->orderBy('staff_no')
             ->get();
 
@@ -933,7 +933,7 @@ class InteractionController extends Controller
         );
 
         if ($requested) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Temporary Walkie Requested',
@@ -1070,7 +1070,7 @@ class InteractionController extends Controller
 
         if (! $isAdminRoute && ! empty($validated['submit_to_admin_id'])) {
             $selectedAdmin = User::where('id', $validated['submit_to_admin_id'])->first();
-            if (! $selectedAdmin || $selectedAdmin->role !== 'admin') {
+            if (! $selectedAdmin || $selectedAdmin->wt_role !== 'admin') {
                 return back()
                     ->withInput()
                     ->withErrors(['submit_to_admin_id' => 'Selected approver must be an Executive account.']);
@@ -1304,7 +1304,7 @@ class InteractionController extends Controller
         }
 
         if ($isAdminRoute) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Laporan Kerosakan Baru',

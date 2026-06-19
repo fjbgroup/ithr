@@ -20,13 +20,13 @@ class AdminITController extends Controller
     public function index()
     {
         $roleCounts = [
-            'total' => User::whereIn('role', ['admin_it', 'admin'])->count(),
-            'admin_it' => User::where('role', 'admin_it')->count(),
-            'admin' => User::where('role', 'admin')->count(),
+            'total' => User::whereIn('wt_role', ['admin_it', 'admin'])->count(),
+            'admin_it' => User::where('wt_role', 'admin_it')->count(),
+            'admin' => User::where('wt_role', 'admin')->count(),
         ];
 
         $users = User::query()
-            ->whereIn('role', ['admin_it', 'admin'])
+            ->whereIn('wt_role', ['admin_it', 'admin'])
             ->select('users.*')
             ->selectSub(
                 AccessRequest::selectRaw('COUNT(*)')
@@ -45,7 +45,7 @@ class AdminITController extends Controller
             )
             ->orderByRaw("
                 CASE
-                    WHEN role = 'admin_it' THEN 1
+                    WHEN wt_role = 'admin_it' THEN 1
                     ELSE 2
                 END
             ")
@@ -106,17 +106,16 @@ class AdminITController extends Controller
         ]);
 
         $staffNo  = trim($request->staff_id);
-        $wtRoles  = ['admin_it', 'admin'];
         $existing = User::whereRaw('TRIM(staff_no) = ?', [$staffNo])->first();
 
         if ($existing) {
-            if (in_array($existing->role, $wtRoles)) {
+            if ($existing->wt_role !== null) {
                 UserActivityLog::create([
                     'user_id'       => Auth::guard('wt')->id(),
                     'username'      => Auth::guard('wt')->user()->username,
                     'event_type'    => 'user_management',
                     'event_action'  => 'create_executive_account_blocked',
-                    'event_details' => $existing->full_name . ' already has WT access (role: ' . $existing->role . ')',
+                    'event_details' => $existing->full_name . ' already has WT access (wt_role: ' . $existing->wt_role . ')',
                     'ip_address'    => $request->ip(),
                     'user_agent'    => $request->userAgent(),
                     'created_at'    => now(),
@@ -127,13 +126,13 @@ class AdminITController extends Controller
                     ->with('error', $existing->full_name . ' already has Walkie Talkie system access.');
             }
 
-            // HR-only staff — grant WT Executive access by updating their role.
-            // Existing password is kept so HR login is unaffected.
+            // Staff without WT access — grant it by setting wt_role.
+            // Their HR role and IT role remain unchanged.
             $existing->update([
                 'full_name'  => Str::upper(trim($request->full_name)),
                 'dept_name'  => Str::upper(trim($request->department)),
                 'position'   => Str::upper(trim($request->position)),
-                'role'       => 'admin',
+                'wt_role'    => 'admin',
             ]);
 
             if ($request->filled('password')) {
@@ -167,7 +166,8 @@ class AdminITController extends Controller
             'dept_name' => Str::upper(trim($request->department)),
             'position'  => Str::upper(trim($request->position)),
             'password'  => Hash::make($request->password),
-            'role'      => 'admin',
+            'role'      => 'staff',
+            'wt_role'   => 'admin',
             'is_active' => 1,
         ]);
 
@@ -196,7 +196,7 @@ class AdminITController extends Controller
             'full_name' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
-            'role' => 'required|in:admin,admin_it',
+            'wt_role' => 'required|in:admin,admin_it',
         ]);
 
         $original = [
@@ -205,7 +205,7 @@ class AdminITController extends Controller
             'full_name' => $user->full_name,
             'department' => $user->department,
             'position' => $user->position,
-            'role' => $user->role,
+            'wt_role' => $user->wt_role,
         ];
 
         $user->update($validated);

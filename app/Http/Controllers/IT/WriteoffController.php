@@ -18,7 +18,7 @@ class WriteoffController extends Controller
     public function index()
     {
         $user     = Auth::guard('it')->user();
-        $houUsers = User::where('role', 'hou')->where('is_active', true)
+        $houUsers = User::where('it_role', 'hou')->where('is_active', true)
                         ->orderBy('dept_name')->orderBy('name')->get();
 
         $savedSigUrl = ($user->signature_img && Storage::disk('public')->exists($user->signature_img))
@@ -168,7 +168,7 @@ class WriteoffController extends Controller
             return redirect()->route('it.writeoff.index')->with('success', 'Write-off rejected.');
         }
 
-        $gms  = User::where('role', 'gm')->orderBy('id')->take(2)->pluck('id');
+        $gms  = User::where('it_role', 'gm')->orderBy('id')->take(2)->pluck('id');
         $gm1  = $gms[0] ?? null;
         $gm2  = $gms[1] ?? null;
         $curGm = $gm1 ?? $gm2;
@@ -205,7 +205,7 @@ class WriteoffController extends Controller
             return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) rejected.');
         }
 
-        $ceo = User::where('role', 'ceo')->first();
+        $ceo = User::where('it_role', 'ceo')->first();
         EwasteItem::whereIn('id', $ewIds)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')
             ->update(['gm_status' => 'Checked', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark, 'ceo_user_id' => $ceo?->id, 'ceo_status' => 'Pending']);
         ActivityLogService::log('GM_CHECKED', 'ewaste', $ewId, 'GM checked write-off: ' . $ew->description);

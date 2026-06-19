@@ -204,7 +204,7 @@
     $approvedDepartment = strtoupper((string) ($approvedRequest->department ?? ''));
     $selfName = strtoupper($currentUser->full_name ?: $currentUser->username ?: '');
     $selfStaffId = strtoupper($currentUser->staff_id ?: '');
-    $selfPosition = strtoupper($currentUser->position ?: ($currentUser->role === 'admin' ? 'EXECUTIVE' : 'ICT'));
+    $selfPosition = strtoupper($currentUser->position ?: ($currentUser->wt_role === 'admin' ? 'EXECUTIVE' : 'ICT'));
     $selfDepartment = strtoupper($currentUser->department ?: '');
 @endphp
 <div class="space-y-4">
@@ -268,7 +268,7 @@
                                     <option value="{{ $user->user_id }}"
                                         data-name="{{ $displayName }}"
                                         data-staff-id="{{ strtoupper($user->staff_id ?: '-') }}"
-                                        data-position="{{ strtoupper($user->position ?: ($user->role === 'admin' ? 'EXECUTIVE' : 'ICT')) }}"
+                                        data-position="{{ strtoupper($user->position ?: ($user->wt_role === 'admin' ? 'EXECUTIVE' : 'ICT')) }}"
                                         data-department="{{ $displayDepartment }}"
                                         @selected((string) old('user_id') === (string) $user->user_id)>
                                         {{ $displayName }} - {{ $displayDepartment }}

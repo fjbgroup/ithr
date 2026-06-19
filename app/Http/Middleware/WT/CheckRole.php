@@ -15,7 +15,13 @@ class CheckRole
             return redirect()->route('wt.login');
         }
 
-        $actualRole = Auth::guard('wt')->user()->role;
+        $actualRole = Auth::guard('wt')->user()->wt_role;
+
+        if ($actualRole === null) {
+            Auth::guard('wt')->logout();
+            return redirect()->route('wt.login')->with('error', 'You do not have access to the Walkie Talkie system.');
+        }
+
         $userRole = $actualRole;
 
         if ($actualRole === 'admin_it' && $request->session()->has('view_mode')) {

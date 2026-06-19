@@ -25,7 +25,7 @@ class NotificationService
 
     public static function notifyAdmins(string $type, string $title, string $message, string $link = ''): void
     {
-        $admins = User::whereIn('role', ['admin_it', 'admin'])->where('is_active', true)->get();
+        $admins = User::whereIn('it_role', ['admin_it', 'admin'])->where('is_active', true)->get();
         foreach ($admins as $admin) {
             static::create($admin->id, $type, $title, $message, $link);
         }
