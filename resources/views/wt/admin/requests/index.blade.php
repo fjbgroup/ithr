@@ -2204,21 +2204,19 @@
     /* Fresh pending queue layout */
     .approval-inbox .pending-queue-card {
         overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.18) !important;
-        border-radius: 18px !important;
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92)) !important;
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18) !important;
+        border: 1px solid var(--approval-line) !important;
+        border-radius: 16px !important;
+        background: var(--approval-panel) !important;
+        box-shadow: none !important;
     }
     .approval-inbox .pending-queue-header {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 14px;
-        padding: 18px 20px;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-        background:
-            linear-gradient(90deg, rgba(14, 165, 233, 0.16), rgba(245, 158, 11, 0.08)),
-            rgba(15, 23, 42, 0.72);
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--approval-line);
+        background: rgba(15, 23, 42, 0.35);
     }
     .approval-inbox .pending-queue-icon {
         display: inline-flex;
@@ -2265,42 +2263,19 @@
         text-transform: uppercase;
     }
     .approval-inbox .pending-queue-body {
-        padding: 16px;
-    }
-    .approval-inbox .pending-queue-card table.dataTable {
-        border-collapse: separate !important;
-        border-spacing: 0 10px !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable thead th {
-        background: transparent !important;
-        border: 0 !important;
-        color: #8ea0b8 !important;
-        padding: 0 14px 8px !important;
-        font-size: 8px !important;
+        padding: 12px 16px 16px;
     }
     .approval-inbox .pending-queue-card table.dataTable tbody tr {
-        background: rgba(15, 23, 42, 0.58) !important;
-        border: 1px solid rgba(148, 163, 184, 0.16) !important;
-        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.14);
+        background: #172236 !important;
+        border: 0 !important;
     }
     .approval-inbox .pending-queue-card table.dataTable tbody tr:hover {
-        background: rgba(30, 41, 59, 0.9) !important;
-        transform: translateY(-1px);
+        background: #1b2940 !important;
     }
     .approval-inbox .pending-queue-card table.dataTable tbody td {
-        border-top: 1px solid rgba(148, 163, 184, 0.15) !important;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.15) !important;
-        border-right: 0 !important;
-        padding: 13px 14px !important;
+        padding: 14px !important;
+        border-top: 1px solid rgba(148, 163, 184, 0.11) !important;
         vertical-align: middle !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable tbody td:first-child {
-        border-left: 1px solid rgba(148, 163, 184, 0.15) !important;
-        border-radius: 14px 0 0 14px !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable tbody td:last-child {
-        border-right: 1px solid rgba(148, 163, 184, 0.15) !important;
-        border-radius: 0 14px 14px 0 !important;
     }
     .approval-inbox .pending-queue-card .requestor-card,
     .approval-inbox .pending-queue-card .request-summary-card {
@@ -2319,15 +2294,13 @@
         font-size: 7.5px !important;
     }
     html:not(.dark) .approval-inbox .pending-queue-card {
-        background: #f8fafc !important;
-        border-color: #dbe3ee !important;
-        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08) !important;
+        background: #ffffff !important;
+        border-color: #e2e8f0 !important;
+        box-shadow: none !important;
     }
     html:not(.dark) .approval-inbox .pending-queue-header {
         border-bottom-color: #e2e8f0;
-        background:
-            linear-gradient(90deg, rgba(14, 165, 233, 0.12), rgba(245, 158, 11, 0.10)),
-            #ffffff;
+        background: #f8fafc;
     }
     html:not(.dark) .approval-inbox .pending-queue-icon {
         background: #e0f2fe;
@@ -2345,21 +2318,14 @@
         border-color: #fde68a;
         color: #92400e;
     }
-    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable thead th {
-        color: #64748b !important;
-    }
     html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody tr {
         background: #ffffff !important;
-        border-color: #dbe3ee !important;
-        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
     }
     html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody tr:hover {
         background: #f8fafc !important;
     }
-    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody td,
-    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody td:first-child,
-    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody td:last-child {
-        border-color: #dbe3ee !important;
+    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody td {
+        border-color: #e2e8f0 !important;
     }
     @media (max-width: 768px) {
         .approval-inbox .pending-queue-count {
@@ -2370,62 +2336,50 @@
         }
     }
 
-    /* Dense pending queue: compact, but keep content visible */
+    /* Pending queue sizing — match history page */
     .approval-inbox .pending-queue-card {
-        border-radius: 12px !important;
-        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12) !important;
+        border-radius: 16px !important;
+        box-shadow: none !important;
     }
     .approval-inbox .pending-queue-header {
-        gap: 10px !important;
-        padding: 10px 12px !important;
+        gap: 12px !important;
+        padding: 14px 18px !important;
     }
     .approval-inbox .pending-queue-icon {
         width: 30px !important;
         height: 30px !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
     }
     .approval-inbox .pending-queue-icon i {
-        font-size: 12px !important;
+        font-size: 13px !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 10px !important;
-        letter-spacing: 0.11em !important;
-    }
-    .approval-inbox .pending-queue-subtitle {
-        margin-top: 2px !important;
-        font-size: 7.5px !important;
-        letter-spacing: 0.06em !important;
-        line-height: 1.2 !important;
-    }
-    .approval-inbox .pending-queue-count {
-        min-height: 24px !important;
-        gap: 5px !important;
-        padding: 4px 8px !important;
-        font-size: 8px !important;
-    }
-    .approval-inbox .pending-queue-body {
-        padding: 8px 10px 10px !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable {
-        border-spacing: 0 5px !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable thead th {
-        padding: 0 8px 4px !important;
-        font-size: 7px !important;
+        font-size: 11px !important;
         letter-spacing: 0.08em !important;
     }
-    .approval-inbox .pending-queue-card table.dataTable tbody tr {
-        box-shadow: none !important;
+    .approval-inbox .pending-queue-subtitle {
+        margin-top: 3px !important;
+        font-size: 9px !important;
+        letter-spacing: 0.06em !important;
+        line-height: 1.3 !important;
+    }
+    .approval-inbox .pending-queue-count {
+        min-height: 28px !important;
+        gap: 7px !important;
+        padding: 5px 10px !important;
+        font-size: 9px !important;
+    }
+    .approval-inbox .pending-queue-body {
+        padding: 12px 16px 16px !important;
+    }
+    .approval-inbox .pending-queue-card table.dataTable thead th {
+        padding: 13px 14px !important;
+        font-size: 9px !important;
+        letter-spacing: 0.14em !important;
     }
     .approval-inbox .pending-queue-card table.dataTable tbody td {
-        padding: 7px 8px !important;
+        padding: 14px !important;
         white-space: normal !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable tbody td:first-child {
-        border-radius: 8px 0 0 8px !important;
-    }
-    .approval-inbox .pending-queue-card table.dataTable tbody td:last-child {
-        border-radius: 0 8px 8px 0 !important;
     }
     .approval-inbox .pending-queue-card .requestor-card,
     .approval-inbox .pending-queue-card .request-summary-card {
@@ -3145,6 +3099,237 @@
         body .content-surface .approval-inbox .pending-queue-header {
             gap: 8px !important;
         }
+    }
+
+    /* ── Match history page sizing ── */
+    .approval-inbox .pending-queue-card {
+        border-radius: 16px !important;
+        background: var(--approval-panel) !important;
+        box-shadow: none !important;
+        border: 1px solid var(--approval-line) !important;
+        margin-bottom: 16px !important;
+    }
+    .approval-inbox .pending-queue-header {
+        padding: 14px 18px !important;
+        gap: 12px !important;
+        background: rgba(15, 23, 42, 0.35) !important;
+        border-bottom: 1px solid var(--approval-line) !important;
+        min-height: unset !important;
+    }
+    .approval-inbox .pending-queue-icon {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 10px !important;
+    }
+    .approval-inbox .pending-queue-icon i {
+        font-size: 13px !important;
+    }
+    .approval-inbox .pending-queue-title {
+        font-size: 11px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.08em !important;
+        line-height: 1.15 !important;
+    }
+    .approval-inbox .pending-queue-subtitle {
+        margin-top: 3px !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.06em !important;
+        line-height: 1.3 !important;
+    }
+    .approval-inbox .pending-queue-count {
+        min-height: 28px !important;
+        padding: 5px 10px !important;
+        gap: 7px !important;
+        font-size: 9px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+    }
+    .approval-inbox .pending-queue-body {
+        padding: 12px 16px 16px !important;
+    }
+    .approval-inbox table.dataTable,
+    .approval-inbox .pending-queue-card table.dataTable {
+        border-radius: 12px !important;
+        border-spacing: 0 !important;
+        border-collapse: collapse !important;
+    }
+    .approval-inbox table.dataTable thead th,
+    .approval-inbox .pending-queue-card table.dataTable thead th {
+        padding: 13px 14px !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.14em !important;
+        line-height: 1.1 !important;
+    }
+    .approval-inbox table.dataTable tbody td,
+    .approval-inbox .pending-queue-card table.dataTable tbody td {
+        padding: 14px !important;
+        font-size: unset !important;
+        line-height: unset !important;
+    }
+    .approval-inbox .pending-queue-card table.dataTable tbody td {
+        border-top: 1px solid rgba(148, 163, 184, 0.11) !important;
+        border-bottom: unset !important;
+        border-left: unset !important;
+        border-right: unset !important;
+        border-radius: unset !important;
+    }
+    .approval-inbox .pending-queue-card table.dataTable tbody tr {
+        background: #172236 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+    .approval-inbox .pending-queue-card table.dataTable tbody tr:hover {
+        background: #1b2940 !important;
+        transform: none !important;
+    }
+    .approval-inbox .approval-empty-state {
+        min-height: 136px !important;
+        gap: 12px !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+    }
+    .approval-inbox .empty-visual {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 14px !important;
+    }
+    .approval-inbox .empty-visual i {
+        font-size: 16px !important;
+    }
+    .approval-inbox .requestor-name,
+    .approval-inbox .request-summary-title,
+    .approval-inbox .approval-body-title {
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        line-height: 1.2 !important;
+    }
+    .approval-inbox .requestor-meta,
+    .approval-inbox .request-summary-note,
+    .approval-inbox .approval-body-meta {
+        font-size: 9px !important;
+        line-height: 1.35 !important;
+    }
+    .approval-inbox .requestor-label,
+    .approval-inbox .summary-label,
+    .approval-inbox .request-meta-label {
+        font-size: 8px !important;
+        letter-spacing: 0.1em !important;
+        line-height: 1.1 !important;
+    }
+    .approval-inbox .requestor-value,
+    .approval-inbox .summary-value,
+    .approval-inbox .request-meta-value {
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        line-height: 1.35 !important;
+    }
+    .approval-inbox .requestor-avatar {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 999px !important;
+        font-size: 12px !important;
+    }
+    .approval-inbox .requestor-card,
+    .approval-inbox .request-summary-card {
+        border-radius: 12px !important;
+        padding: 0 !important;
+    }
+    .approval-inbox .requestor-item,
+    .approval-inbox .request-summary-card .request-meta-block {
+        padding: 10px 12px !important;
+        border-radius: unset !important;
+    }
+    .approval-inbox .request-pill {
+        min-height: 20px !important;
+        padding: 3px 7px !important;
+        font-size: 7px !important;
+        line-height: 1 !important;
+        border-radius: 6px !important;
+    }
+    .approval-inbox .request-badges {
+        gap: 5px !important;
+        margin-top: 6px !important;
+        padding: 0 12px 12px !important;
+    }
+    .approval-inbox .approval-action-btn {
+        min-height: 30px !important;
+        padding: 6px 10px !important;
+        border-radius: 9px !important;
+        font-size: 9px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.09em !important;
+        line-height: 1 !important;
+    }
+    .approval-inbox .approval-action-row {
+        gap: 6px !important;
+        max-width: 120px !important;
+    }
+    .approval-inbox .dataTables_wrapper .dataTables_length,
+    .approval-inbox .dataTables_wrapper .dataTables_filter {
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+    }
+    .approval-inbox .dataTables_wrapper .dataTables_length select,
+    .approval-inbox .dataTables_wrapper .dataTables_filter input {
+        height: 34px !important;
+        min-height: 34px !important;
+        padding: 6px 10px !important;
+        border-radius: 9px !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+    }
+    .approval-inbox .dataTables_info,
+    .approval-inbox .dataTables_paginate,
+    .approval-inbox .adminit-table-footer {
+        display: block !important;
+        min-height: unset !important;
+        padding: unset !important;
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        color: #92a4bd !important;
+        margin-top: 12px !important;
+    }
+    .approval-inbox .paginate_button,
+    .approval-inbox .adminit-page-link {
+        min-height: 32px !important;
+        height: 32px !important;
+        min-width: 72px !important;
+        font-size: 10px !important;
+        padding: 0 10px !important;
+        border-radius: 8px !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-card {
+        background: #ffffff !important;
+        border-color: #e2e8f0 !important;
+        box-shadow: none !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-header {
+        background: #f8fafc !important;
+        border-bottom-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-title {
+        color: #1f2937 !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-subtitle {
+        color: #64748b !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody tr {
+        background: #ffffff !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody tr:hover {
+        background: #f8fafc !important;
+    }
+    html:not(.dark) .approval-inbox .pending-queue-card table.dataTable tbody td {
+        border-color: #e2e8f0 !important;
+    }
+    .approval-inbox {
+        display: block !important;
+        gap: unset !important;
+        font-size: unset !important;
     }
 </style>
 @endpush

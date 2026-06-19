@@ -270,7 +270,7 @@
                     legend: {
                         position: isMobile ? 'bottom' : 'right',
                         labels: {
-                            font: { size: isMobile ? 9 : 10, family: 'Plus Jakarta Sans', weight: '700' },
+                            font: { size: isMobile ? 9 : 10, family: 'DM Sans', weight: '700' },
                             color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b',
                             usePointStyle: true,
                             padding: isMobile ? 10 : 12,
@@ -280,8 +280,8 @@
                     tooltip: {
                         backgroundColor: '#1F2937',
                         padding: 12,
-                        titleFont: { size: 13, family: 'Plus Jakarta Sans', weight: '700' },
-                        bodyFont: { size: 12, family: 'Plus Jakarta Sans' },
+                        titleFont: { size: 13, family: 'DM Sans', weight: '700' },
+                        bodyFont: { size: 12, family: 'DM Sans' },
                         cornerRadius: 12,
                         displayColors: true,
                         callbacks: {

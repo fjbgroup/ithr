@@ -3,306 +3,161 @@
 @section('title', 'Duplicated ID Management')
 
 @section('content')
+
+@include('wt.admin.partials.inventory-management-ui')
+
 <style>
-.duplicate-page { display: grid; gap: 14px; }
-.duplicate-hero,
-.duplicate-guide,
-.duplicate-table-shell {
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-}
-.dark .duplicate-hero,
-.dark .duplicate-guide,
-.dark .duplicate-table-shell {
-    background: #111827;
-    border-color: rgba(148, 163, 184, 0.16);
-    box-shadow: none;
-}
-.duplicate-hero {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-}
-.dark .duplicate-hero {
-    background: transparent;
-    box-shadow: none;
-}
-.duplicate-search-panel {
-    display: grid;
-    grid-template-columns: minmax(260px, 1fr) 270px auto;
-    align-items: end;
-    gap: 14px;
-    margin: 0 0 16px;
-    border: 1px solid #263244;
-    border-radius: 8px;
-    background: #111827;
-    padding: 14px 18px 16px;
-}
-.dark .duplicate-search-panel {
-    border-color: #263244;
-    background: #111827;
-}
-.duplicate-filter-field label {
-    display: block;
-    margin-bottom: 7px;
-    color: #94a3b8;
-    font-size: 10px;
-    line-height: 1;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-.duplicate-search,
-.duplicate-filter-select {
-    width: 100%;
-    height: 48px;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    background: #0f172a;
-    padding: 0 12px;
-    color: #e5e7eb;
-    font-size: 16px;
-    font-weight: 500;
-    outline: none;
-}
-.duplicate-search::placeholder { color: #94a3b8; }
-.duplicate-search:focus,
-.duplicate-filter-select:focus {
-    border-color: #38bdf8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
-}
-.duplicate-filter-reset {
-    width: 62px;
-    height: 48px;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    background: #0f172a;
-    color: #e5e7eb;
-    font-size: 11px;
-    font-weight: 800;
-    cursor: pointer;
-}
-.duplicate-filter-reset:hover {
-    border-color: #38bdf8;
-    color: #0284c7;
-}
-.dark .duplicate-filter-field label { color: #94a3b8; }
-.dark .duplicate-search,
-.dark .duplicate-filter-select,
-.dark .duplicate-filter-reset {
-    border-color: #334155;
-    background: #0f172a;
-    color: #e2e8f0;
-}
-.duplicate-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-}
-.duplicate-stat {
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 6px;
-    padding: 12px;
-    background: #f8fafc;
-}
-.dark .duplicate-stat {
-    background: #0f172a;
-    border-color: rgba(148, 163, 184, 0.16);
-}
-.duplicate-stat-label,
-.duplicate-step-kicker {
-    color: #64748b;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-.duplicate-stat-value {
-    margin-top: 6px;
-    color: #0f172a;
-    font-size: 24px;
-    line-height: 1;
-    font-weight: 900;
-}
-.dark .duplicate-stat-value { color: #f8fafc; }
-.duplicate-guide {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    overflow: hidden;
-}
-.duplicate-step {
-    padding: 14px 16px;
-    border-right: 1px solid rgba(148, 163, 184, 0.16);
-}
-.duplicate-step:last-child { border-right: 0; }
-.duplicate-step-kicker { color: #0ea5e9; }
-.duplicate-step-title {
-    margin-top: 4px;
-    color: #0f172a;
-    font-size: 12px;
-    font-weight: 900;
-}
-.duplicate-step-copy {
-    margin-top: 4px;
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1.45;
-}
-.dark .duplicate-step-title { color: #f8fafc; }
-.dark .duplicate-step-copy,
-.dark .duplicate-stat-label { color: #94a3b8; }
-.duplicate-table-shell {
-    overflow: hidden;
-    padding: 0;
-    border: 1px solid #263244;
-    border-radius: 10px;
-    background: #111827;
-    box-shadow: none;
-}
-.duplicate-table-shell .dataTables_wrapper,
-.duplicate-table-shell table.dataTable { width: 100% !important; }
-.duplicate-table-shell .dataTables_wrapper .dataTables_length,
-.duplicate-table-shell .dataTables_wrapper .dataTables_filter { padding: 14px 16px 10px !important; }
-.content-surface .duplicate-table-shell .dataTables_length,
-.content-surface .duplicate-table-shell .dataTables_info,
-.content-surface .duplicate-table-shell .dataTables_paginate,
-.content-surface .duplicate-table-shell .adminit-table-info {
-    display: none !important;
-}
-.duplicate-table-shell table.dataTable thead th { white-space: nowrap; }
-.duplicate-table-shell table.dataTable tbody td.wrap-cell {
-    min-width: 220px;
-    max-width: 320px;
-    white-space: normal !important;
-}
-.duplicate-table-shell table.dataTable tbody td.dataTables_empty {
-    height: 0 !important;
-    padding: 0 !important;
+/* ── Duplicated ID Page ── */
+
+body .content-surface:has(#duplicateTable) {
+    padding: 10px !important;
+    background: #0b1220 !important;
     border: 0 !important;
-    color: transparent !important;
-    text-align: center !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
-.content-surface .duplicate-table-shell .dataTables_scrollHead,
-.content-surface .duplicate-table-shell .dataTables_scrollHeadInner,
-.content-surface .duplicate-table-shell .dataTables_scrollHead table,
-.content-surface .duplicate-table-shell .dataTables_scrollBody,
-.content-surface .duplicate-table-shell .dataTables_scrollBody table {
-    background: #111827 !important;
+html:not(.dark) body .content-surface:has(#duplicateTable) {
+    background: #f0f4f8 !important;
 }
-body .content-surface .duplicate-table-shell #duplicateTable thead th {
-    height: 54px !important;
-    padding: 0 20px !important;
-    border: 1px solid #263244 !important;
-    background: #111827 !important;
-    color: #dbeafe !important;
-    font-size: 17px !important;
+
+/* ── Hero ── */
+body .content-surface .duplicate-page .page-title-standard {
+    margin: 0 !important;
+    color: #f8fafc !important;
+    font-size: 19px !important;
     font-weight: 900 !important;
     line-height: 1.1 !important;
-    letter-spacing: 0.02em !important;
+}
+body .content-surface .duplicate-page .page-subtitle-standard {
+    margin-top: 5px !important;
+    color: #93a4ba !important;
+    font-size: 9px !important;
+    font-weight: 900 !important;
+    letter-spacing: .16em !important;
+    line-height: 1.45 !important;
     text-transform: uppercase !important;
 }
-body .content-surface .duplicate-table-shell #duplicateTable tbody td {
-    height: 40px !important;
-    padding: 8px 20px !important;
-    border: 1px solid #263244 !important;
+body .content-surface .duplicate-hero .wt-btn {
+    width: auto !important;
+    min-width: 118px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(148,163,184,.24) !important;
     background: #111827 !important;
-    color: #dbe4f0 !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-}
-body .content-surface .duplicate-table-shell #duplicateTable tbody td.dataTables_empty {
-    height: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    color: transparent !important;
-}
-.content-surface .duplicate-table-shell .dataTables_scrollBody {
-    border-top: 0 !important;
-    scrollbar-width: auto;
-    scrollbar-color: #526174 #111827;
-}
-.content-surface .duplicate-table-shell .dataTables_scrollBody::-webkit-scrollbar {
-    height: 11px !important;
-}
-.content-surface .duplicate-table-shell .dataTables_scrollBody::-webkit-scrollbar-track {
-    background: #111827 !important;
-}
-.content-surface .duplicate-table-shell .dataTables_scrollBody::-webkit-scrollbar-thumb {
-    background: #526174 !important;
-    border-radius: 999px !important;
-}
-.content-surface .duplicate-table-shell .adminit-table-footer {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: 12px !important;
-    min-height: 64px !important;
-    padding: 10px 20px !important;
-    border-top: 1px solid #263244 !important;
-    background: #1e293b !important;
-}
-.content-surface .duplicate-table-shell .adminit-table-info {
-    color: #dbeafe !important;
-    font-size: 17px !important;
+    color: #f8fafc !important;
+    font-size: 12px !important;
     font-weight: 900 !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
+    box-shadow: none !important;
 }
-.content-surface .duplicate-table-shell .adminit-table-pagination {
+html:not(.dark) body .content-surface .duplicate-page .page-title-standard { color: #0f172a !important; }
+html:not(.dark) body .content-surface .duplicate-page .page-subtitle-standard { color: #526781 !important; }
+html:not(.dark) body .content-surface .duplicate-hero .wt-btn {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+/* ── Stats Row ── */
+.dup-stats-row {
     display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
 }
-.content-surface .duplicate-table-shell .adminit-page-link,
-.content-surface .duplicate-table-shell .adminit-page-current {
-    min-width: 52px !important;
-    height: 44px !important;
-    border-radius: 8px !important;
-    border: 1px solid #2f4d74 !important;
-    background: #111827 !important;
-    color: #c7d7ee !important;
-    font-size: 16px !important;
+.dup-stat-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+    padding: 10px 16px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(148,163,184,.16) !important;
+    background: #0f172a !important;
+    min-width: 110px !important;
+}
+.dup-stat-num {
+    font-size: 22px !important;
     font-weight: 900 !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
+    line-height: 1 !important;
+    color: #f1f5f9 !important;
 }
-.content-surface .duplicate-table-shell .adminit-page-link {
-    min-width: 124px !important;
-    padding: 0 18px !important;
-}
-.content-surface .duplicate-table-shell .adminit-page-current {
-    background: #0f3a72 !important;
-    border-color: #3b82f6 !important;
-    color: #ffffff !important;
-}
-.content-surface .duplicate-table-shell .adminit-page-link:disabled {
-    opacity: 0.48 !important;
-    color: #6b7788 !important;
-    cursor: not-allowed !important;
-}
-.content-surface .duplicate-table-shell .adminit-prev-page::before {
-    content: '\2039';
-    margin-right: 8px;
-    font-size: 26px;
-    line-height: 0;
-}
-.content-surface .duplicate-table-shell .adminit-next-page::after {
-    content: '\203A';
-    margin-left: 8px;
-    font-size: 26px;
-    line-height: 0;
-}
-html:not(.dark) body .content-surface .duplicate-search-panel {
-    background: #f8fafc !important;
-    border-color: #d6e0ec !important;
-}
-html:not(.dark) body .content-surface .duplicate-filter-field label {
+.dup-stat-lbl {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: .12em !important;
+    text-transform: uppercase !important;
     color: #64748b !important;
 }
+.dup-stat-card.is-pending { border-color: rgba(251,191,36,.22) !important; background: #130f01 !important; }
+.dup-stat-card.is-pending .dup-stat-num { color: #fbbf24 !important; }
+.dup-stat-card.is-done { border-color: rgba(74,222,128,.2) !important; background: #011308 !important; }
+.dup-stat-card.is-done .dup-stat-num { color: #4ade80 !important; }
+.dup-stat-card.is-visible { border-color: rgba(56,189,248,.18) !important; background: #00111c !important; }
+.dup-stat-card.is-visible .dup-stat-num { color: #38bdf8 !important; }
+
+html:not(.dark) .dup-stat-card { background: #ffffff !important; border-color: #d6e0ec !important; }
+html:not(.dark) .dup-stat-num { color: #1e293b !important; }
+html:not(.dark) .dup-stat-lbl { color: #64748b !important; }
+html:not(.dark) .dup-stat-card.is-pending { background: #fffbeb !important; border-color: #fde68a !important; }
+html:not(.dark) .dup-stat-card.is-pending .dup-stat-num { color: #b45309 !important; }
+html:not(.dark) .dup-stat-card.is-done { background: #f0fdf4 !important; border-color: #bbf7d0 !important; }
+html:not(.dark) .dup-stat-card.is-done .dup-stat-num { color: #166534 !important; }
+html:not(.dark) .dup-stat-card.is-visible { background: #f0f9ff !important; border-color: #bae6fd !important; }
+html:not(.dark) .dup-stat-card.is-visible .dup-stat-num { color: #0369a1 !important; }
+
+/* ── Filter panel ── */
+body .content-surface .duplicate-search-panel {
+    display: grid !important;
+    grid-template-columns: minmax(200px,1fr) 150px 140px auto !important;
+    gap: 10px !important;
+    align-items: end !important;
+    margin: 0 !important;
+    padding: 12px !important;
+    border: 1px solid rgba(148,163,184,.18) !important;
+    border-radius: 14px !important;
+    background: #0f172a !important;
+    box-shadow: none !important;
+}
+body .content-surface .duplicate-filter-field label {
+    display: block !important;
+    margin: 0 0 6px !important;
+    color: #8ea0b8 !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: .12em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+}
+body .content-surface .duplicate-search,
+body .content-surface .duplicate-filter-select,
+body .content-surface .duplicate-filter-reset {
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(148,163,184,.26) !important;
+    background: #111827 !important;
+    color: #e5edf7 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+body .content-surface .duplicate-search { padding: 0 14px !important; width: 100% !important; }
+body .content-surface .duplicate-filter-select { padding: 0 30px 0 14px !important; width: 100% !important; }
+body .content-surface .duplicate-filter-reset {
+    padding: 0 18px !important;
+    width: auto !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    color: #dbeafe !important;
+}
+html:not(.dark) body .content-surface .duplicate-search-panel {
+    background: #ffffff !important;
+    border-color: #d6e0ec !important;
+}
+html:not(.dark) body .content-surface .duplicate-filter-field label { color: #64748b !important; }
 html:not(.dark) body .content-surface .duplicate-search,
 html:not(.dark) body .content-surface .duplicate-filter-select,
 html:not(.dark) body .content-surface .duplicate-filter-reset {
@@ -310,167 +165,48 @@ html:not(.dark) body .content-surface .duplicate-filter-reset {
     border-color: #cbd5e1 !important;
     color: #1f2937 !important;
 }
-html:not(.dark) body .content-surface .duplicate-table-shell,
-html:not(.dark) body .content-surface .duplicate-table-shell .dataTables_scrollHead,
-html:not(.dark) body .content-surface .duplicate-table-shell .dataTables_scrollHeadInner,
-html:not(.dark) body .content-surface .duplicate-table-shell .dataTables_scrollHead table,
-html:not(.dark) body .content-surface .duplicate-table-shell .dataTables_scrollBody,
-html:not(.dark) body .content-surface .duplicate-table-shell .dataTables_scrollBody table {
-    background: #ffffff !important;
-    border-color: #cbd5e1 !important;
-}
-html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable thead th {
-    background: #f8fafc !important;
-    border-color: #e2e8f0 !important;
-    color: #1e3a5f !important;
-}
-html:not(.dark) body .content-surface .duplicate-table-shell .adminit-table-footer {
-    background: #ffffff !important;
-    border-top-color: #d6e0ec !important;
-}
-html:not(.dark) body .content-surface .duplicate-table-shell .adminit-table-info {
-    color: #334155 !important;
-}
-.duplicate-action-stack {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    white-space: nowrap;
-}
-body .content-surface #duplicateTable th:last-child,
-body .content-surface #duplicateTable td:last-child {
-    display: table-cell !important;
-    width: 240px !important;
-    min-width: 240px !important;
-    max-width: 240px !important;
-    text-align: center !important;
-}
-.duplicate-unit { min-width: 210px; }
-.duplicate-unit-id {
-    color: #0f172a;
-    font-size: 13px;
-    font-weight: 900;
-}
-.dark .duplicate-unit-id { color: #f8fafc; }
-.duplicate-unit-meta {
-    margin-top: 3px;
-    color: #64748b;
-    font-size: 10px;
-    font-weight: 800;
-    line-height: 1.4;
-}
-.dark .duplicate-unit-meta { color: #94a3b8; }
-.duplicate-pill {
-    display: inline-flex;
-    align-items: center;
-    min-height: 22px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid rgba(148, 163, 184, 0.22);
-    background: #f8fafc;
-    color: #334155;
-    font-size: 10px;
-    font-weight: 900;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-.duplicate-count-pill {
-    border-color: #bbf7d0;
-    background: #dcfce7;
-    color: #166534;
-    border-radius: 999px;
-    padding: 6px 12px;
-}
-.duplicate-pill-danger {
-    border-color: rgba(239, 68, 68, 0.28);
-    background: #fef2f2;
-    color: #b91c1c;
-}
-.duplicate-pill-ok {
-    border-color: rgba(34, 197, 94, 0.28);
-    background: #f0fdf4;
-    color: #15803d;
-}
-.duplicate-pill-warn {
-    border-color: rgba(245, 158, 11, 0.3);
-    background: #fffbeb;
-    color: #b45309;
-}
-.dark .duplicate-pill {
-    background: #0f172a;
-    border-color: rgba(148, 163, 184, 0.22);
-    color: #cbd5e1;
-}
-.dark .duplicate-pill-danger {
-    background: rgba(127, 29, 29, 0.32);
-    color: #fecaca;
-}
-.dark .duplicate-pill-ok {
-    background: rgba(22, 101, 52, 0.26);
-    color: #bbf7d0;
-}
-.dark .duplicate-pill-warn {
-    background: rgba(120, 53, 15, 0.28);
-    color: #fde68a;
-}
-.duplicate-search-panel,
-.duplicate-table-shell {
-    border-radius: 6px !important;
-}
-.duplicate-search-panel {
-    margin: 0 0 10px !important;
-    padding: 10px 12px !important;
+
+/* ── Table shell ── */
+body .content-surface .duplicate-table-shell {
     border: 1px solid #263244 !important;
-    background: #111827 !important;
-}
-.duplicate-search-panel .duplicate-filter-field label {
-    display: block !important;
-    margin-bottom: 5px !important;
-    color: #94a3b8 !important;
-    font-size: 9px !important;
-    line-height: 1 !important;
-    letter-spacing: 0.08em !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-}
-.duplicate-search,
-.duplicate-filter-select,
-.duplicate-filter-reset {
-    width: 100% !important;
-    height: 32px !important;
     border-radius: 6px !important;
-    background: #0f172a !important;
-    border: 1px solid #334155 !important;
-    color: #e5e7eb !important;
-    font-size: 11px !important;
-    font-weight: 400 !important;
-    box-shadow: none !important;
-    outline: none !important;
-}
-.duplicate-search { padding: 0 10px !important; }
-.duplicate-filter-select { padding: 0 28px 0 10px !important; }
-.duplicate-filter-reset {
-    width: auto !important;
-    padding: 0 12px !important;
-    cursor: pointer !important;
-}
-.duplicate-table-shell {
-    margin: 0 !important;
+    background: #111827 !important;
     padding: 0 !important;
     overflow: hidden !important;
-    background: #111827 !important;
-    border: 1px solid #263244 !important;
     box-shadow: none !important;
 }
-.duplicate-table-scroll { overflow-x: auto !important; }
+body .content-surface .duplicate-table-scroll { overflow-x: auto !important; }
+
 body .content-surface .duplicate-table-shell #duplicateTable {
+    min-width: 1485px !important;
     width: 100% !important;
-    min-width: 1900px !important;
     margin: 0 !important;
     border-collapse: collapse !important;
     border: 0 !important;
+    table-layout: fixed !important;
 }
+
+/* ── Column widths — driven by <col> elements; these are fallback overrides ── */
+#duplicateTable col:nth-child(1)  { width: 75px; }
+#duplicateTable col:nth-child(2)  { width: 100px; }
+#duplicateTable col:nth-child(3)  { width: 130px; }
+#duplicateTable col:nth-child(4)  { width: 80px; }
+#duplicateTable col:nth-child(5)  { width: 115px; }
+#duplicateTable col:nth-child(6)  { width: 155px; }
+#duplicateTable col:nth-child(7)  { width: 145px; }
+#duplicateTable col:nth-child(8)  { width: 110px; }
+#duplicateTable col:nth-child(9)  { width: 70px; }
+#duplicateTable col:nth-child(10) { width: 120px; }
+#duplicateTable col:nth-child(11) { width: 185px; }
+#duplicateTable col:nth-child(12) { width: 175px; }
+
+/* Centre the Done and Action columns */
+#duplicateTable th:nth-child(9),
+#duplicateTable td:nth-child(9),
+#duplicateTable th:nth-child(12),
+#duplicateTable td:nth-child(12) { text-align: center !important; }
+
+/* ── Sortable headers ── */
 body .content-surface .duplicate-table-shell #duplicateTable thead th {
     height: 34px !important;
     padding: 8px 10px !important;
@@ -480,10 +216,40 @@ body .content-surface .duplicate-table-shell #duplicateTable thead th {
     font-size: 10px !important;
     font-weight: 600 !important;
     line-height: 1.1 !important;
-    letter-spacing: 0.05em !important;
+    letter-spacing: .05em !important;
     text-transform: uppercase !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    user-select: none !important;
 }
+body .content-surface .duplicate-table-shell #duplicateTable thead th.sortable {
+    cursor: pointer !important;
+}
+body .content-surface .duplicate-table-shell #duplicateTable thead th.sortable:hover {
+    background: #273548 !important;
+    color: #e2e8f0 !important;
+}
+body .content-surface .duplicate-table-shell #duplicateTable thead th.sort-asc,
+body .content-surface .duplicate-table-shell #duplicateTable thead th.sort-desc {
+    background: #1a2f48 !important;
+    color: #38bdf8 !important;
+    border-bottom-color: #38bdf8 !important;
+}
+.dup-sort-icon {
+    display: inline-block !important;
+    margin-left: 4px !important;
+    opacity: 0.4 !important;
+    font-style: normal !important;
+    font-size: 9px !important;
+}
+th.sort-asc .dup-sort-icon,
+th.sort-desc .dup-sort-icon {
+    opacity: 1 !important;
+    color: #38bdf8 !important;
+}
+
+/* ── Body cells ── */
 body .content-surface .duplicate-table-shell #duplicateTable tbody td {
     height: 38px !important;
     padding: 7px 10px !important;
@@ -491,354 +257,223 @@ body .content-surface .duplicate-table-shell #duplicateTable tbody td {
     border: 1px solid #263244 !important;
     color: #dbe4f0 !important;
     font-size: 11px !important;
-    line-height: 1.25 !important;
     font-weight: 400 !important;
+    line-height: 1.25 !important;
     vertical-align: middle !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    transition: background .1s !important;
 }
+body .content-surface .duplicate-table-shell #duplicateTable :is(th,td):nth-child(11) {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    text-overflow: clip !important;
+}
+
+/* ── Row group alternating highlight ── */
+body .content-surface .duplicate-table-shell #duplicateTable tbody tr[data-group="1"] td {
+    background: #0f1e30 !important;
+}
+body .content-surface .duplicate-table-shell #duplicateTable tbody tr[data-group="0"] td {
+    background: #111827 !important;
+}
+
+/* ── Row hover ── */
 body .content-surface .duplicate-table-shell #duplicateTable tbody tr:hover td {
     background: #172033 !important;
 }
-.duplicate-table-footer {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 12px !important;
-    min-height: 64px !important;
-    padding: 10px 20px !important;
-    background: #111827 !important;
-    border-top: 1px solid #263244 !important;
+
+/* ── Done row: subtle mute ── */
+body .content-surface .duplicate-table-shell #duplicateTable tbody tr.is-done-row td {
+    opacity: 0.7 !important;
 }
-.duplicate-table-info {
-    color: #dbeafe !important;
-    font-size: 17px !important;
-    font-weight: 900 !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important;
+body .content-surface .duplicate-table-shell #duplicateTable tbody tr.is-done-row:hover td {
+    opacity: 1 !important;
 }
-.duplicate-table-pagination {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-}
-.duplicate-page-link {
-    min-width: 52px !important;
-    height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 8px !important;
-    border: 1px solid #2f4d74 !important;
-    background: #0f172a !important;
-    color: #bfdbfe !important;
-    font-size: 13px !important;
-    font-weight: 900 !important;
-}
-.duplicate-page-link.is-nav {
-    min-width: 128px !important;
-    padding: 0 18px !important;
-    color: #cbd5e1 !important;
-    font-size: 16px !important;
-}
-.duplicate-page-link.is-active {
-    background: #0f3a72 !important;
-    border-color: #3b82f6 !important;
-    color: #ffffff !important;
-}
-.duplicate-page-link:disabled {
-    opacity: 0.35 !important;
-    cursor: not-allowed !important;
-}
-.duplicate-page-ellipsis {
-    min-width: 26px !important;
-    height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    color: #64748b !important;
-    font-size: 14px !important;
-    font-weight: 900 !important;
-}
-html:not(.dark) body .content-surface .duplicate-search-panel,
-html:not(.dark) body .content-surface .duplicate-table-shell,
-html:not(.dark) body .content-surface .duplicate-table-footer {
+
+/* ── Light mode table ── */
+html:not(.dark) body .content-surface .duplicate-table-shell {
     background: #ffffff !important;
     border-color: #cbd5e1 !important;
-}
-html:not(.dark) body .content-surface .duplicate-search,
-html:not(.dark) body .content-surface .duplicate-filter-select,
-html:not(.dark) body .content-surface .duplicate-filter-reset {
-    background: #ffffff !important;
-    border-color: #cbd5e1 !important;
-    color: #1f2937 !important;
 }
 html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable thead th {
     background: #e8eef5 !important;
     border-color: #d6e0ec !important;
     color: #475569 !important;
 }
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable thead th.sortable:hover {
+    background: #dce5f0 !important;
+}
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable thead th.sort-asc,
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable thead th.sort-desc {
+    background: #dbeafe !important;
+    color: #0369a1 !important;
+    border-bottom-color: #0369a1 !important;
+}
+html:not(.dark) th.sort-asc .dup-sort-icon,
+html:not(.dark) th.sort-desc .dup-sort-icon { color: #0369a1 !important; }
 html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable tbody td {
     background: #ffffff !important;
     border-color: #e2e8f0 !important;
     color: #334155 !important;
 }
-@media (max-width: 900px) {
-    .duplicate-summary-grid,
-    .duplicate-guide,
-    .duplicate-search-panel { grid-template-columns: 1fr; }
-    .duplicate-filter-reset { width: 100%; }
-    .duplicate-step {
-        border-right: 0;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-    }
-    .duplicate-step:last-child { border-bottom: 0; }
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable tbody tr[data-group="1"] td {
+    background: #f8fafc !important;
+}
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable tbody tr[data-group="0"] td {
+    background: #ffffff !important;
+}
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable tbody tr:hover td {
+    background: #f0f9ff !important;
+}
+html:not(.dark) body .content-surface .duplicate-table-shell #duplicateTable tbody tr.is-done-row td {
+    opacity: 0.6 !important;
 }
 
-/* Final compact duplicate page pass. */
-body .content-surface:has(.duplicate-page) {
-    padding: 16px !important;
-    border: 1px solid #273449 !important;
-    border-radius: 14px !important;
-    background: #111827 !important;
-    box-shadow: none !important;
-}
-.duplicate-page {
-    gap: 12px !important;
-}
-.duplicate-hero .page-header-block {
-    min-height: 42px !important;
-    padding: 8px 14px !important;
-    border-radius: 7px !important;
-    border-left-width: 4px !important;
-    gap: 8px !important;
+/* ── Footer ── */
+body .content-surface .duplicate-table-footer {
+    display: flex !important;
     align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    min-height: 44px !important;
+    padding: 7px 12px !important;
+    background: #111827 !important;
+    border-top: 1px solid #263244 !important;
 }
-.duplicate-hero .page-title-standard {
-    font-size: 19px !important;
-    line-height: 1 !important;
-    margin: 0 0 3px !important;
+body .content-surface .duplicate-table-info {
+    color: #dbeafe !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
 }
-.duplicate-hero .page-subtitle-standard {
-    font-size: 8px !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.24em !important;
+body .content-surface .duplicate-table-pagination {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }
-body .content-surface .duplicate-hero .wt-btn {
-    width: 106px !important;
-    min-width: 106px !important;
-    height: 28px !important;
-    min-height: 28px !important;
-    padding: 0 9px !important;
-    border-radius: 7px !important;
+body .content-surface .duplicate-page-link {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 5px !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    line-height: 1 !important;
-    letter-spacing: 0.02em !important;
-    white-space: nowrap !important;
-}
-body .content-surface .duplicate-hero .wt-btn i {
-    width: 11px !important;
-    font-size: 11px !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-}
-.duplicate-table-footer {
-    min-height: 44px !important;
-    padding: 7px 12px !important;
-    gap: 10px !important;
-}
-.duplicate-table-info {
-    color: #334155 !important;
-    font-size: 12px !important;
-    font-weight: 800 !important;
-    letter-spacing: 0 !important;
-}
-.duplicate-table-pagination {
-    gap: 8px !important;
-}
-.duplicate-page-link {
-    height: 30px !important;
-    min-height: 30px !important;
-    min-width: 34px !important;
-    padding: 0 10px !important;
-    border-radius: 7px !important;
-    font-size: 11px !important;
-    line-height: 1 !important;
-}
-.duplicate-page-link.is-nav {
-    min-width: 74px !important;
-    padding: 0 10px !important;
-    font-size: 11px !important;
-}
-.duplicate-page-link.is-active {
-    width: 34px !important;
-    min-width: 34px !important;
-}
-.duplicate-page-ellipsis {
-    height: 30px !important;
-    min-width: 22px !important;
-    font-size: 11px !important;
-}
-html:not(.dark) body .content-surface .duplicate-hero .page-header-block {
-    background: #ffffff !important;
-    border: 1px solid #d8e1ed !important;
-    border-left: 4px solid #0284c7 !important;
-}
-html:not(.dark) body .content-surface .duplicate-hero .page-title-standard {
-    color: #0f172a !important;
-}
-html:not(.dark) body .content-surface .duplicate-hero .page-subtitle-standard {
-    color: #64748b !important;
-}
-html:not(.dark) body .content-surface .duplicate-hero .wt-btn {
-    background: #ffffff !important;
-    border-color: #cbd5e1 !important;
-    color: #0f172a !important;
-}
-html:not(.dark) body .content-surface .duplicate-table-info {
-    color: #334155 !important;
-}
-.dark body .content-surface .duplicate-hero .page-header-block {
-    background: linear-gradient(90deg, rgba(31, 41, 55, 0.98), rgba(30, 41, 59, 0.98)) !important;
-    border-color: rgba(148, 163, 184, 0.12) !important;
-    border-left-color: #f2c48d !important;
-}
-.dark body .content-surface .duplicate-hero .wt-btn {
+    min-width: 32px !important;
+    height: 28px !important;
+    padding: 0 8px !important;
+    border-radius: 6px !important;
+    border: 1px solid #2f4d74 !important;
     background: #0f172a !important;
-    border-color: #334155 !important;
-    color: #e2e8f0 !important;
+    color: #bfdbfe !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
 }
-.dark body .content-surface .duplicate-table-info {
-    color: #dbeafe !important;
-}
-html:not(.dark) body .content-surface:has(.duplicate-page) {
-    background: #f5f8fc !important;
-    border-color: #d8e1ed !important;
-}
-</style>
+body .content-surface .duplicate-page-link.is-nav { min-width: 64px !important; color: #cbd5e1 !important; }
+body .content-surface .duplicate-page-link.is-active { background: #0f3a72 !important; border-color: #3b82f6 !important; color: #ffffff !important; }
+body .content-surface .duplicate-page-link:disabled { opacity: .35 !important; cursor: not-allowed !important; }
+html:not(.dark) body .content-surface .duplicate-table-footer { background: #ffffff !important; border-top-color: #d6e0ec !important; }
+html:not(.dark) body .content-surface .duplicate-table-info { color: #334155 !important; }
+html:not(.dark) body .content-surface .duplicate-page-link { background: #ffffff !important; border-color: #cbd5e1 !important; color: #334155 !important; }
+html:not(.dark) body .content-surface .duplicate-page-link.is-active { background: #0284c7 !important; border-color: #0284c7 !important; color: #ffffff !important; }
 
-@include('wt.admin.partials.inventory-management-ui')
-
-<style>
-body .content-surface .duplicate-search-panel {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 360px 82px !important;
-    gap: 5px !important;
-    align-items: end !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 0 10px !important;
-    padding: 10px 12px 12px !important;
-    border: 1px solid #d8e1ed !important;
-    border-radius: 12px !important;
-    background: #ffffff !important;
+/* ── Action buttons ── */
+body .content-surface #duplicateTable .dup-actions {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+}
+body .content-surface #duplicateTable .dup-actions form { display: inline-flex !important; margin: 0 !important; }
+body .content-surface #duplicateTable .btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    padding: 0 8px !important;
+    border: 1px solid transparent !important;
+    border-radius: 5px !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
     box-shadow: none !important;
 }
-body .content-surface .duplicate-search-panel .duplicate-filter-field label {
-    margin: 0 0 5px !important;
-    color: #64748b !important;
-    font-size: 8px !important;
+body .content-surface #duplicateTable .btn i { font-size: 11px !important; }
+body .content-surface #duplicateTable .btn-info    { border-color: #0dcaf0 !important; background: #0dcaf0 !important; color: #052c33 !important; }
+body .content-surface #duplicateTable .btn-primary { border-color: #0d6efd !important; background: #0d6efd !important; }
+body .content-surface #duplicateTable .btn-danger  { border-color: #dc3545 !important; background: #dc3545 !important; }
+
+/* ── Status badges with per-status colors ── */
+.dup-status-badge {
+    display: inline-flex !important;
+    border-radius: 4px !important;
+    padding: 2px 8px !important;
+    font-size: 10px !important;
     font-weight: 900 !important;
-    letter-spacing: .14em !important;
-    line-height: 1 !important;
     text-transform: uppercase !important;
+    letter-spacing: .04em !important;
 }
-body .content-surface .duplicate-search,
-body .content-surface .duplicate-filter-select,
-body .content-surface .duplicate-filter-reset {
-    height: 32px !important;
-    min-height: 32px !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 8px !important;
-    background: #ffffff !important;
-    color: #172033 !important;
-    font-size: 11px !important;
-    font-weight: 800 !important;
-    box-shadow: none !important;
-}
-body .content-surface .duplicate-search {
-    width: 100% !important;
-    max-width: none !important;
-    padding: 0 10px !important;
-}
-body .content-surface .duplicate-search::placeholder {
-    color: #94a3b8 !important;
-}
-body .content-surface .duplicate-filter-select {
-    padding: 0 28px 0 10px !important;
-}
-body .content-surface .duplicate-filter-reset {
-    width: 82px !important;
-    min-width: 82px !important;
-    padding: 0 !important;
-}
-.dark body .content-surface .duplicate-search-panel {
-    border-color: #263244 !important;
-    background: #111827 !important;
-}
-.dark body .content-surface .duplicate-search,
-.dark body .content-surface .duplicate-filter-select,
-.dark body .content-surface .duplicate-filter-reset {
-    border-color: #334155 !important;
-    background: #0f172a !important;
-    color: #e2e8f0 !important;
-}
-@media (max-width: 900px) {
-    body .content-surface .duplicate-search-panel {
-        grid-template-columns: 1fr !important;
-        width: 100% !important;
-    }
-    body .content-surface .duplicate-filter-reset {
-        width: 100% !important;
-    }
-}
-body .content-surface .duplicate-hero,
-body .content-surface .duplicate-hero .page-header-block,
-html:not(.dark) body .content-surface .duplicate-hero,
-html:not(.dark) body .content-surface .duplicate-hero .page-header-block,
-html.dark body .content-surface .duplicate-hero,
-html.dark body .content-surface .duplicate-hero .page-header-block,
-.dark body .content-surface .duplicate-hero,
-.dark body .content-surface .duplicate-hero .page-header-block {
-    background: transparent !important;
-    border: 0 !important;
-    border-left: 0 !important;
-    box-shadow: none !important;
-}
+.dup-status-badge.is-in-use    { background: #052e16 !important; border: 1px solid #166534 !important; color: #4ade80 !important; }
+.dup-status-badge.is-repairing { background: #1a0e00 !important; border: 1px solid #92400e !important; color: #fbbf24 !important; }
+.dup-status-badge.is-unknown   { background: #1e293b !important; border: 1px solid #475569 !important; color: #94a3b8 !important; }
+.dup-status-badge.is-unused    { background: #0f172a !important; border: 1px solid #334155 !important; color: #64748b !important; }
+.dup-status-badge.is-change-id { background: #1c0a00 !important; border: 1px solid #c2410c !important; color: #fb923c !important; }
+.dup-status-badge.is-other     { background: #1f2937 !important; border: 1px solid #4b5563 !important; color: #d1d5db !important; }
 
-body .content-surface .duplicate-hero .page-header-block {
-    padding: 0 2px 12px !important;
-    border-radius: 0 !important;
-}
+html:not(.dark) .dup-status-badge.is-in-use    { background: #dcfce7 !important; border-color: #86efac !important; color: #166534 !important; }
+html:not(.dark) .dup-status-badge.is-repairing { background: #fffbeb !important; border-color: #fde68a !important; color: #92400e !important; }
+html:not(.dark) .dup-status-badge.is-unknown   { background: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #475569 !important; }
+html:not(.dark) .dup-status-badge.is-unused    { background: #f8fafc !important; border-color: #e2e8f0 !important; color: #64748b !important; }
+html:not(.dark) .dup-status-badge.is-change-id { background: #fff7ed !important; border-color: #fdba74 !important; color: #c2410c !important; }
+html:not(.dark) .dup-status-badge.is-other     { background: #e2e8f0 !important; border-color: #cbd5e1 !important; color: #334155 !important; }
 
-body .content-surface .duplicate-hero .wt-btn {
-    min-width: 96px !important;
-    height: 30px !important;
-    min-height: 30px !important;
-    padding: 0 11px !important;
-    border-radius: 7px !important;
+/* ── Done badge ── */
+.dup-done-badge {
+    display: inline-flex !important;
+    border-radius: 4px !important;
+    padding: 2px 8px !important;
     font-size: 10px !important;
-    gap: 6px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .04em !important;
 }
+.dup-done-badge.is-yes { background: #052e16 !important; border: 1px solid #166534 !important; color: #4ade80 !important; }
+.dup-done-badge.is-no  { background: #2d0a0a !important; border: 1px solid #7f1d1d !important; color: #f87171 !important; }
+html:not(.dark) .dup-done-badge.is-yes { background: #dcfce7 !important; border-color: #86efac !important; color: #166534 !important; }
+html:not(.dark) .dup-done-badge.is-no  { background: #fef2f2 !important; border-color: #fca5a5 !important; color: #b91c1c !important; }
 
-body .content-surface .duplicate-hero .wt-btn i,
-body .content-surface .duplicate-hero .wt-btn svg {
-    font-size: 11px !important;
-    width: 11px !important;
-    height: 11px !important;
+/* ── "Change ID To" cell accent ── */
+.dup-change-id-val {
+    font-weight: 700 !important;
+    color: #38bdf8 !important;
 }
+.dup-change-id-empty {
+    color: #374151 !important;
+}
+html:not(.dark) .dup-change-id-val  { color: #0369a1 !important; }
+html:not(.dark) .dup-change-id-empty { color: #94a3b8 !important; }
+
+/* ── Scrollbar ── */
+body .content-surface .duplicate-table-scroll::-webkit-scrollbar { height: 8px; }
+body .content-surface .duplicate-table-scroll::-webkit-scrollbar-track { background: #111827; }
+body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 999px; }
 </style>
 
 @php
     $totalRecords = $records->count();
+    $pendingCount = $records->filter(fn($r) => (int)($r->id_change_done ?? 0) !== 1)->count();
+    $doneCount    = $records->filter(fn($r) => (int)($r->id_change_done ?? 0) === 1)->count();
 @endphp
 
-<div class="duplicate-page">
+<div class="duplicate-page" style="display:flex;flex-direction:column;gap:10px;">
+
+    {{-- Header --}}
     <div class="duplicate-hero">
-        <div class="page-header-block flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div class="page-header-block flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
                 <h1 class="page-title-standard">Duplicated ID Management</h1>
                 <p class="page-subtitle-standard">Review units that share a Radio ID or still need an ID change.</p>
@@ -846,118 +481,173 @@ body .content-surface .duplicate-hero .wt-btn svg {
             @if(auth('wt')->user()->wt_role === 'admin_it')
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
-                    <i class="fa-solid fa-file-import"></i>
-                    Import Excel
+                    <i class="fa-solid fa-file-import"></i> Import Excel
                 </button>
                 <a href="{{ route('wt.admin.walkies.create.duplicate') }}" class="wt-btn wt-btn-soft">
-                    <i class="fa-solid fa-plus"></i>
-                    Add Item
+                    <i class="fa-solid fa-plus"></i> Add Item
                 </a>
             </div>
             @endif
         </div>
     </div>
 
+    {{-- Stats Bar --}}
+    <div class="dup-stats-row">
+        <div class="dup-stat-card">
+            <span class="dup-stat-num" id="statTotal">{{ $totalRecords }}</span>
+            <span class="dup-stat-lbl">Total Records</span>
+        </div>
+        <div class="dup-stat-card is-pending">
+            <span class="dup-stat-num" id="statPending">{{ $pendingCount }}</span>
+            <span class="dup-stat-lbl">Pending Change</span>
+        </div>
+        <div class="dup-stat-card is-done">
+            <span class="dup-stat-num" id="statDone">{{ $doneCount }}</span>
+            <span class="dup-stat-lbl">ID Changed</span>
+        </div>
+        <div class="dup-stat-card is-visible">
+            <span class="dup-stat-num" id="statVisible">{{ $totalRecords }}</span>
+            <span class="dup-stat-lbl">Showing</span>
+        </div>
+    </div>
+
+    {{-- Filters --}}
     <div class="duplicate-search-panel">
         <div class="duplicate-filter-field">
             <label for="duplicateSearchInput">Search</label>
-            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Keywords">
+            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, ownership…">
         </div>
         <div class="duplicate-filter-field">
             <label for="duplicateStatusFilter">Status</label>
             <select id="duplicateStatusFilter" class="duplicate-filter-select">
                 <option value="">All Status</option>
-                @foreach(['IN USE', 'REPAIRING', 'UNKNOWN', 'UNUSED'] as $statusOption)
+                @foreach(['IN USE', 'REPAIRING', 'UNKNOWN', 'UNUSED', 'CHANGE ID'] as $statusOption)
                     <option value="{{ $statusOption }}">{{ $statusOption }}</option>
                 @endforeach
+            </select>
+        </div>
+        <div class="duplicate-filter-field">
+            <label for="duplicateDoneFilter">ID Change Done</label>
+            <select id="duplicateDoneFilter" class="duplicate-filter-select">
+                <option value="">All</option>
+                <option value="YES">Done</option>
+                <option value="NO">Pending</option>
             </select>
         </div>
         <button type="button" id="duplicateResetFilters" class="duplicate-filter-reset">Reset</button>
     </div>
 
-@if(session('success'))
-<div id="alertBox" class="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-2xl flex items-center gap-3 animate-slide-in">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-    </svg>
-    <span class="font-bold text-sm">{{ session('success') }}</span>
-</div>
-@endif
-
-<div id="mainTableContainer" class="duplicate-table-shell">
-    <div id="duplicateTableScroll" class="duplicate-table-scroll">
-    <table id="duplicateTable" class="text-left">
-        <thead>
-            <tr>
-                <th>RADIO ID</th>
-                <th>STATUS</th>
-                <th>SERIAL NO.</th>
-                <th>MODEL</th>
-                <th>CURRENT OWNERSHIP TYPE</th>
-                <th>CURRENT OWNERSHIP</th>
-                <th>DEPARTMENT</th>
-                <th>NEED TO CHANGE ID INTO</th>
-                <th>DONE</th>
-                <th>OWNERSHIP TYPE TO BE</th>
-                <th>REMARKS</th>
-                <th class="text-center">ACTION</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($records as $r)
-            <tr class="duplicate-row"
-                data-status="{{ strtoupper((string) ($r->status ?: '')) }}"
-                data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->ownership_type ?? '') . ' ' . ($r->shared_with ?? '') . ' ' . ($r->ownership ?? '') . ' ' . ($r->department ?? '') . ' ' . ($r->position ?? '') . ' ' . ($r->temporary_radio_id ?? '') . ' ' . ($r->tracking_ref ?? '') . ' ' . ($r->remark ?? '') . ' ' . ($r->need_to_change_id ?? '') . ' ' . ($r->ownership_type_to_be ?? ''))) }}">
-                <td>{{ $r->radio_id ?: '-' }}</td>
-                <td>{{ $r->status ?: '-' }}</td>
-                <td>{{ $r->serial_number ?: '-' }}</td>
-                <td>{{ $r->model ?: '-' }}</td>
-                <td>{{ $r->ownership_type ?: '-' }}</td>
-                <td>{{ $r->ownership ?: '-' }}</td>
-                <td>{{ $r->department ?: '-' }}</td>
-                <td>{{ $r->need_to_change_id ?: '-' }}</td>
-                <td>{{ (int) ($r->id_change_done ?? 0) === 1 ? 'YES' : 'NO' }}</td>
-                <td>{{ $r->ownership_type_to_be ?: '-' }}</td>
-                <td class="wrap-cell">{{ $r->remark ?: '-' }}</td>
-                <td class="text-center">
-                    @if(auth('wt')->user()->wt_role === 'admin_it')
-                    <div class="duplicate-action-stack">
-                        <button type="button" class="wt-btn wt-btn-sm duplicate-action-view" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
-                            <i class="fa-solid fa-eye"></i>
-                            <span>View</span>
-                        </button>
-                        <a href="{{ route('wt.admin.walkies.edit', ['walkie' => $r->walkie_id, 'source' => 'duplicate']) }}"
-                            class="wt-btn wt-btn-sm duplicate-action-edit">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                            <span>Edit</span>
-                        </a>
-                        <form action="{{ route('wt.admin.walkies.destroy', $r->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Delete duplicated ID record for {{ $r->radio_id ?? '-' }}?">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="wt-btn wt-btn-danger wt-btn-sm duplicate-action-delete">
-                                <i class="fa-solid fa-trash"></i>
-                                <span>Delete</span>
-                            </button>
-                        </form>
-                    </div>
-                    @else
-                    <button type="button" class="wt-btn wt-btn-sm duplicate-action-view" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
-                        <i class="fa-solid fa-eye"></i>
-                        <span>View</span>
-                    </button>
-                    @endif
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    @if(session('success'))
+    <div id="alertBox" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#15803d;font-size:12px;font-weight:600;">
+        <i class="fas fa-check-circle"></i> {{ session('success') }}
     </div>
-    <div id="duplicatePagination" class="duplicate-table-footer">
-        <div class="duplicate-table-info">
-            Total: <span id="duplicateTotalItems">0</span> items
+    @endif
+
+    {{-- Table --}}
+    <div id="mainTableContainer" class="duplicate-table-shell">
+        <div id="duplicateTableScroll" class="duplicate-table-scroll">
+            <table id="duplicateTable">
+                <colgroup>
+                    <col style="width:75px">
+                    <col style="width:100px">
+                    <col style="width:130px">
+                    <col style="width:80px">
+                    <col style="width:115px">
+                    <col style="width:155px">
+                    <col style="width:145px">
+                    <col style="width:110px">
+                    <col style="width:70px">
+                    <col style="width:120px">
+                    <col style="width:185px">
+                    <col style="width:200px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="sortable" data-col="0" data-type="num">Radio ID <i class="dup-sort-icon">↕</i></th>
+                        <th>Status</th>
+                        <th class="sortable" data-col="2" data-type="text">Serial No. <i class="dup-sort-icon">↕</i></th>
+                        <th class="sortable" data-col="3" data-type="text">Model <i class="dup-sort-icon">↕</i></th>
+                        <th>Ownership Type</th>
+                        <th class="sortable" data-col="5" data-type="text">Current Ownership <i class="dup-sort-icon">↕</i></th>
+                        <th class="sortable" data-col="6" data-type="text">Department <i class="dup-sort-icon">↕</i></th>
+                        <th class="sortable" data-col="7" data-type="num">Change ID To <i class="dup-sort-icon">↕</i></th>
+                        <th>Done</th>
+                        <th>Type To Be</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($records as $r)
+                    @php
+                        $done = (int)($r->id_change_done ?? 0) === 1;
+                        $statusClass = match(strtoupper($r->status ?? '')) {
+                            'IN USE'    => 'is-in-use',
+                            'REPAIRING' => 'is-repairing',
+                            'UNKNOWN'   => 'is-unknown',
+                            'UNUSED'    => 'is-unused',
+                            'CHANGE ID' => 'is-change-id',
+                            default     => 'is-other',
+                        };
+                    @endphp
+                    <tr class="duplicate-row{{ $done ? ' is-done-row' : '' }}"
+                        data-status="{{ strtoupper((string)($r->status ?? '')) }}"
+                        data-done="{{ $done ? 'YES' : 'NO' }}"
+                        data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->ownership_type ?? '') . ' ' . ($r->shared_with ?? '') . ' ' . ($r->ownership ?? '') . ' ' . ($r->department ?? '') . ' ' . ($r->remark ?? '') . ' ' . ($r->need_to_change_id ?? '') . ' ' . ($r->ownership_type_to_be ?? ''))) }}">
+                        <td style="font-weight:700;">{{ $r->radio_id ?: '-' }}</td>
+                        <td>
+                            <span class="dup-status-badge {{ $statusClass }}">{{ $r->status ?: '-' }}</span>
+                        </td>
+                        <td>{{ $r->serial_number ?: '-' }}</td>
+                        <td>{{ $r->model ?: '-' }}</td>
+                        <td>{{ $r->ownership_type ?: '-' }}</td>
+                        <td>{{ $r->ownership ?: '-' }}</td>
+                        <td>{{ $r->department ?: '-' }}</td>
+                        <td>
+                            @if($r->need_to_change_id)
+                                <span class="dup-change-id-val">{{ $r->need_to_change_id }}</span>
+                            @else
+                                <span class="dup-change-id-empty">—</span>
+                            @endif
+                        </td>
+                        <td style="text-align:center;">
+                            <span class="dup-done-badge {{ $done ? 'is-yes' : 'is-no' }}">{{ $done ? 'YES' : 'NO' }}</span>
+                        </td>
+                        <td>{{ $r->ownership_type_to_be ?: '-' }}</td>
+                        <td>{{ $r->remark ?: '-' }}</td>
+                        <td style="text-align:center;">
+                            @if(auth('wt')->user()->wt_role === 'admin_it')
+                            <div class="dup-actions">
+                                <button type="button" class="btn btn-info" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
+                                    <i class="fa-solid fa-eye"></i><span>View</span>
+                                </button>
+                                <a href="{{ route('wt.admin.walkies.edit', ['walkie' => $r->walkie_id, 'source' => 'duplicate']) }}" class="btn btn-primary">
+                                    <i class="fa-solid fa-edit"></i><span>Edit</span>
+                                </a>
+                                <form action="{{ route('wt.admin.walkies.destroy', $r->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Delete duplicated ID record for {{ $r->radio_id ?? '-' }}?">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa-solid fa-trash"></i><span>Delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                            @else
+                            <button type="button" class="btn btn-info" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
+                                <i class="fa-solid fa-eye"></i><span>View</span>
+                            </button>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="duplicate-table-footer">
+            <div class="duplicate-table-info">Showing <span id="duplicateTotalItems">0</span> records</div>
+            <div class="duplicate-table-pagination" id="dupPaginationBar"></div>
         </div>
     </div>
-</div>
+
 </div>
 
 {{-- ===================== ADD RECORD MODAL ===================== --}}
@@ -965,18 +655,11 @@ body .content-surface .duplicate-hero .wt-btn svg {
 <div id="addModal" class="modal-overlay" onclick="closeAddModalOutside(event)">
     <div class="modal-box">
         <div class="modal-header">
-            <div>
-                <h2 class="modal-title">Add Duplicated ID Record</h2>
-            </div>
-            <button onclick="closeAddModal()" class="modal-close-btn" title="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-            </button>
+            <h2 class="modal-title">Add Duplicated ID Record</h2>
+            <button onclick="closeAddModal()" class="modal-close-btn"><i class="fas fa-times"></i></button>
         </div>
         <form action="{{ route('wt.admin.walkies.store') }}" method="POST" class="flex flex-col h-full overflow-hidden">
             @csrf
-            {{-- Force this record to be flagged as needing ID change --}}
             <input type="hidden" name="is_duplicated" value="1">
             <div class="modal-body">
                 <div class="form-grid">
@@ -1021,7 +704,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
                         <label class="form-label">Current Ownership</label>
                         <input type="text" name="ownership" class="form-input" placeholder="Current ownership">
                     </div>
-                    <div class="form-group" style="grid-column: span 3;">
+                    <div class="form-group" style="grid-column:span 3;">
                         <label class="form-label">Department</label>
                         <input type="text" name="department" list="department-options" class="form-input" placeholder="Department">
                     </div>
@@ -1045,9 +728,9 @@ body .content-surface .duplicate-hero .wt-btn svg {
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group" style="grid-column: span 3;">
+                    <div class="form-group" style="grid-column:span 3;">
                         <label class="form-label">Remarks</label>
-                        <textarea name="remark" class="form-input" style="height:35px; resize:none;" placeholder="Remarks"></textarea>
+                        <textarea name="remark" class="form-input" style="height:60px;resize:none;" placeholder="Remarks"></textarea>
                     </div>
                 </div>
             </div>
@@ -1060,31 +743,24 @@ body .content-surface .duplicate-hero .wt-btn svg {
 </div>
 @endif
 
-{{-- ===================== QUICK UPDATE MODAL ===================== --}}
+{{-- ===================== EDIT MODAL ===================== --}}
 <div id="editModal" class="modal-overlay" onclick="closeEditModalOutside(event)">
     <div class="modal-box" id="editModalBox">
         <div class="modal-header">
-            <div>
-                <h2 class="modal-title">Update Unit Details</h2>
-            </div>
-            <button onclick="closeEditModal()" class="modal-close-btn" title="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-            </button>
+            <h2 class="modal-title">Update Unit Details</h2>
+            <button onclick="closeEditModal()" class="modal-close-btn"><i class="fas fa-times"></i></button>
         </div>
-
         <form method="POST" id="editWalkieForm" class="flex flex-col h-full overflow-hidden">
             @csrf
             <div class="modal-body">
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Radio ID <span class="required">*</span></label>
-                        <input type="text" name="radio_id" id="edit_radio_id" class="form-input" placeholder="Radio ID" required>
+                        <input type="text" name="radio_id" id="edit_radio_id" class="form-input" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Serial No. <span class="required">*</span></label>
-                        <input type="text" name="serial_number" id="edit_serial_number" class="form-input" placeholder="Serial number" required>
+                        <input type="text" name="serial_number" id="edit_serial_number" class="form-input" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Model <span class="required">*</span></label>
@@ -1116,23 +792,23 @@ body .content-surface .duplicate-hero .wt-btn svg {
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership</label>
-                        <input type="text" name="ownership" id="edit_ownership" class="form-input" placeholder="Owner name">
+                        <input type="text" name="ownership" id="edit_ownership" class="form-input">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Position</label>
-                        <input type="text" name="position" id="edit_position" list="position-options" class="form-input" placeholder="Position">
+                        <input type="text" name="position" id="edit_position" list="position-options" class="form-input">
                     </div>
-                    <div class="form-group" style="grid-column: span 2;">
+                    <div class="form-group" style="grid-column:span 2;">
                         <label class="form-label">Department</label>
-                        <input type="text" name="department" id="edit_department" list="department-options" class="form-input" placeholder="Department">
+                        <input type="text" name="department" id="edit_department" list="department-options" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Temporary / Swapped WT Radio ID</label>
-                        <input type="text" name="temporary_radio_id" id="edit_temporary_radio_id" class="form-input" placeholder="Temporary / swapped radio ID">
+                        <label class="form-label">Temp / Swapped Radio ID</label>
+                        <input type="text" name="temporary_radio_id" id="edit_temporary_radio_id" class="form-input">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Tracking REF</label>
-                        <input type="text" name="tracking_ref" id="edit_tracking_ref" class="form-input" placeholder="Tracking reference">
+                        <input type="text" name="tracking_ref" id="edit_tracking_ref" class="form-input">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Need To Change ID</label>
@@ -1149,14 +825,14 @@ body .content-surface .duplicate-hero .wt-btn svg {
                         <label class="form-label">Ownership Type To Be</label>
                         <select name="ownership_type_to_be" id="edit_ownership_type_to_be" class="form-input">
                             <option value="">Select target...</option>
-                            @foreach(['SPARE','UNALLOCATED'] as $targetOwnershipType)
-                            <option value="{{ $targetOwnershipType }}">{{ $targetOwnershipType }}</option>
+                            @foreach(['SPARE','UNALLOCATED'] as $t)
+                            <option value="{{ $t }}">{{ $t }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group" style="grid-column: span 3;">
+                    <div class="form-group" style="grid-column:span 3;">
                         <label class="form-label">Remarks</label>
-                        <textarea name="remark" id="edit_remark" class="form-input" style="height:35px; resize:none;" placeholder="Remarks"></textarea>
+                        <textarea name="remark" id="edit_remark" class="form-input" style="height:60px;resize:none;"></textarea>
                     </div>
                 </div>
             </div>
@@ -1168,33 +844,24 @@ body .content-surface .duplicate-hero .wt-btn svg {
     </div>
 </div>
 
-{{-- ===================== IMPORT EXCEL MODAL ===================== --}}
+{{-- ===================== IMPORT MODAL ===================== --}}
 @if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
-    <div class="modal-box" style="max-width: 500px;">
+    <div class="modal-box" style="max-width:480px;">
         <div class="modal-header">
-            <div>
-                <h2 class="modal-title">Bulk Import Duplicated IDs</h2>
-            </div>
-            <button onclick="closeImportModal()" class="modal-close-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
-            </button>
+            <h2 class="modal-title">Bulk Import Duplicated IDs</h2>
+            <button onclick="closeImportModal()" class="modal-close-btn"><i class="fas fa-times"></i></button>
         </div>
         <form action="{{ route('wt.admin.walkies.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="modal-body p-6">
-                <div class="bg-stone-50 border-2 border-dashed border-stone-200 rounded-2xl p-8 text-center">
+            <div class="modal-body" style="padding:24px;">
+                <div style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;background:var(--body-bg);">
                     <input type="file" name="file" id="import_file" class="hidden" required onchange="updateFileName(this)">
-                    <label for="import_file" class="cursor-pointer">
-                        <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-4 border border-stone-100">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#142b47" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                            </svg>
+                    <label for="import_file" style="display:block;cursor:pointer;">
+                        <div style="width:48px;height:48px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+                            <i class="fas fa-cloud-upload-alt" style="font-size:18px;color:var(--accent);"></i>
                         </div>
-                        <p class="text-xs font-bold text-stone-700" id="fileNameDisplay">Click to upload Excel or CSV</p>
+                        <p id="fileNameDisplay" style="font-size:12px;font-weight:600;color:var(--muted);">Click to upload Excel or CSV</p>
                     </label>
                 </div>
             </div>
@@ -1207,385 +874,194 @@ body .content-surface .duplicate-hero .wt-btn svg {
 </div>
 @endif
 
-<style>
-/* Match Under Repair / Faulty controls exactly. */
-body .content-surface:has(.duplicate-page) {
-    background: #0b1220 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    padding: 10px !important;
-    box-shadow: none !important;
-}
-
-body .content-surface .duplicate-page {
-    background: transparent !important;
-    border: 0 !important;
-    padding: 0 !important;
-    gap: 12px !important;
-}
-
-body .content-surface .duplicate-hero .page-header-block {
-    padding: 0 2px 10px !important;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-}
-
-body .content-surface .duplicate-hero .page-title-standard {
-    margin: 0 !important;
-    color: #f8fafc !important;
-    font-size: 19px !important;
-    line-height: 1.1 !important;
-}
-
-body .content-surface .duplicate-hero .page-subtitle-standard {
-    max-width: 560px !important;
-    margin-top: 5px !important;
-    color: #93a4ba !important;
-    font-size: 9px !important;
-    letter-spacing: .16em !important;
-    line-height: 1.45 !important;
-}
-
-body .content-surface .duplicate-hero .wt-btn {
-    width: auto !important;
-    min-width: 118px !important;
-    height: 34px !important;
-    min-height: 34px !important;
-    padding: 0 12px !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(148, 163, 184, .24) !important;
-    background: #111827 !important;
-    color: #f8fafc !important;
-    font-size: 12px !important;
-    font-weight: 900 !important;
-    box-shadow: none !important;
-}
-
-body .content-surface .duplicate-search-panel {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 360px 82px !important;
-    gap: 5px !important;
-    align-items: end !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 12px !important;
-    border: 1px solid rgba(148, 163, 184, .18) !important;
-    border-radius: 14px !important;
-    background: #0f172a !important;
-    box-shadow: none !important;
-}
-
-body .content-surface .duplicate-search-panel > .duplicate-filter-field {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: none !important;
-}
-
-body .content-surface .duplicate-filter-field label {
-    margin: 0 0 6px !important;
-    color: #8ea0b8 !important;
-    font-size: 9px !important;
-    letter-spacing: .12em !important;
-}
-
-body .content-surface .duplicate-search,
-body .content-surface .duplicate-filter-select,
-body .content-surface .duplicate-filter-reset {
-    height: 38px !important;
-    min-height: 38px !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(148, 163, 184, .26) !important;
-    background: #111827 !important;
-    color: #e5edf7 !important;
-    font-size: 12px !important;
-    font-weight: 750 !important;
-}
-
-body .content-surface .duplicate-search {
-    width: 100% !important;
-    max-width: none !important;
-    padding: 0 14px !important;
-}
-
-body .content-surface .duplicate-filter-select {
-    width: 100% !important;
-    padding: 0 30px 0 14px !important;
-}
-
-body .content-surface .duplicate-filter-reset {
-    width: 82px !important;
-    min-width: 82px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    color: #dbeafe !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable {
-    min-width: 1720px !important;
-    table-layout: fixed !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(1) { width: 120px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(2) { width: 110px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(3) { width: 150px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(4) { width: 95px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(5) { width: 150px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(6) { width: 180px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(7) { width: 150px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(8) { width: 165px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(9) { width: 70px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(10) { width: 155px !important; }
-body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(11) { width: 205px !important; }
-
-body .content-surface .duplicate-table-shell #duplicateTable th,
-body .content-surface .duplicate-table-shell #duplicateTable td {
-    box-sizing: border-box !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(1),
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(3),
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(6),
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(7),
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(8),
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(11) {
-    white-space: normal !important;
-    overflow-wrap: anywhere !important;
-    text-overflow: clip !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(11) {
-    line-height: 1.35 !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable th:last-child,
-body .content-surface .duplicate-table-shell #duplicateTable td:last-child {
-    width: 190px !important;
-    min-width: 190px !important;
-    max-width: 190px !important;
-    text-align: center !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 4px !important;
-    width: 100% !important;
-    white-space: nowrap !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack form {
-    display: inline-flex !important;
-    margin: 0 !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack .wt-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 3px !important;
-    width: auto !important;
-    min-width: 0 !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    padding: 0 6px !important;
-    border: 1px solid transparent !important;
-    border-radius: 5px !important;
-    color: #ffffff !important;
-    font-size: 10px !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-    letter-spacing: 0 !important;
-    text-decoration: none !important;
-    text-transform: none !important;
-    box-shadow: none !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack .wt-btn i {
-    font-size: 10px !important;
-    line-height: 1 !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-view {
-    width: 46px !important;
-    min-width: 46px !important;
-    max-width: 46px !important;
-    border-color: #0dcaf0 !important;
-    background: #0dcaf0 !important;
-    color: #052c33 !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-edit {
-    width: 52px !important;
-    min-width: 52px !important;
-    max-width: 52px !important;
-    border-color: #0d6efd !important;
-    background: #0d6efd !important;
-    color: #ffffff !important;
-}
-
-body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-delete {
-    width: 62px !important;
-    min-width: 62px !important;
-    max-width: 62px !important;
-    border-color: #dc3545 !important;
-    background: #dc3545 !important;
-    color: #ffffff !important;
-}
-
-@media (max-width: 1250px) {
-    body .content-surface .duplicate-search-panel {
-        grid-template-columns: minmax(240px, 1fr) 360px 82px !important;
-    }
-}
-</style>
-
 <script>
-$(document).ready(function() {
-    const duplicateSearchInput = document.getElementById('duplicateSearchInput');
-    const duplicateStatusFilter = document.getElementById('duplicateStatusFilter');
-    const duplicateResetFilters = document.getElementById('duplicateResetFilters');
-    const rows = Array.from(document.querySelectorAll('#duplicateTable tbody .duplicate-row'));
-    const paginationContainer = document.querySelector('.duplicate-table-pagination');
-    const totalItems = document.getElementById('duplicateTotalItems');
-    const itemsPerPage = 10;
-    const maxVisiblePages = 4;
-    let currentPage = 1;
-    let filteredRows = [];
+$(document).ready(function () {
+    const searchInput  = document.getElementById('duplicateSearchInput');
+    const statusFilter = document.getElementById('duplicateStatusFilter');
+    const doneFilter   = document.getElementById('duplicateDoneFilter');
+    const resetBtn     = document.getElementById('duplicateResetFilters');
+    const allRows      = Array.from(document.querySelectorAll('#duplicateTable tbody .duplicate-row'));
+    const totalEl      = document.getElementById('duplicateTotalItems');
+    const paginationEl = document.getElementById('dupPaginationBar');
+    const statVisible  = document.getElementById('statVisible');
+    const statPending  = document.getElementById('statPending');
+    const statDone     = document.getElementById('statDone');
+    const PER_PAGE     = 15;
+    let currentPage    = 1;
+    let filtered       = [];
+    let sortCol        = 0;
+    let sortDir        = 'asc';
 
-    function updateDuplicateTableDisplay() {
-        rows.forEach(row => row.style.display = 'none');
-        filteredRows.forEach(row => row.style.display = '');
+    /* ── Sorting ── */
+    function getSortVal(row, col) {
+        const text = (row.cells[col]?.textContent || '').trim();
+        if (col === 0 || col === 7) {
+            const n = parseFloat(text.replace(/[^0-9.\-]/g, ''));
+            if (!isNaN(n)) return n;
+        }
+        return text.toLowerCase();
     }
 
-    function renderDuplicatePagination() {
-        if (totalItems) totalItems.innerText = filteredRows.length;
-        if (paginationContainer) paginationContainer.innerHTML = '';
-    }
-
-    function changeDuplicatePage(page) {
-        currentPage = page;
-        updateDuplicateTableDisplay();
-        renderDuplicatePagination();
-    }
-
-    function applyDuplicateFilters() {
-        const searchValue = (duplicateSearchInput?.value || '').trim().toUpperCase();
-        const statusValue = (duplicateStatusFilter?.value || '').trim().toUpperCase();
-        filteredRows = rows.filter((row) => {
-            const matchesSearch = !searchValue || (row.dataset.search || '').includes(searchValue);
-            const matchesStatus = !statusValue || row.dataset.status === statusValue;
-            return matchesSearch && matchesStatus;
+    function sortRows(rows) {
+        return [...rows].sort((a, b) => {
+            const av = getSortVal(a, sortCol);
+            const bv = getSortVal(b, sortCol);
+            if (typeof av === 'number' && typeof bv === 'number')
+                return sortDir === 'asc' ? av - bv : bv - av;
+            return sortDir === 'asc'
+                ? String(av).localeCompare(String(bv))
+                : String(bv).localeCompare(String(av));
         });
+    }
+
+    function assignGroups(rows) {
+        let gIdx = 0, lastId = null;
+        rows.forEach(r => {
+            const rid = (r.cells[0]?.textContent || '').trim();
+            if (rid !== lastId) { gIdx++; lastId = rid; }
+            r.setAttribute('data-group', gIdx % 2);
+        });
+    }
+
+    /* ── Sort header indicators ── */
+    document.querySelectorAll('#duplicateTable thead th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = parseInt(th.dataset.col);
+            if (sortCol === col) {
+                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortCol = col;
+                sortDir = 'asc';
+            }
+            updateSortHeaders();
+            currentPage = 1;
+            applyFilter();
+        });
+    });
+
+    function updateSortHeaders() {
+        document.querySelectorAll('#duplicateTable thead th.sortable').forEach(th => {
+            const col = parseInt(th.dataset.col);
+            const icon = th.querySelector('.dup-sort-icon');
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (icon) icon.textContent = '↕';
+            if (col === sortCol) {
+                th.classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+                if (icon) icon.textContent = sortDir === 'asc' ? '↑' : '↓';
+            }
+        });
+    }
+
+    /* ── Render ── */
+    function render() {
+        const sorted = sortRows(filtered);
+        assignGroups(sorted);
+
+        allRows.forEach(r => r.style.display = 'none');
+        const start = (currentPage - 1) * PER_PAGE;
+        sorted.slice(start, start + PER_PAGE).forEach(r => r.style.display = '');
+
+        const pending = filtered.filter(r => r.dataset.done === 'NO').length;
+        const done    = filtered.filter(r => r.dataset.done === 'YES').length;
+
+        if (totalEl)   totalEl.textContent  = filtered.length;
+        if (statVisible) statVisible.textContent = filtered.length;
+        if (statPending) statPending.textContent  = pending;
+        if (statDone)    statDone.textContent     = done;
+
+        renderPagination(sorted.length);
+    }
+
+    function renderPagination(total) {
+        if (!paginationEl) return;
+        const pages = Math.ceil(total / PER_PAGE);
+        if (pages <= 1) { paginationEl.innerHTML = ''; return; }
+        let html = `<button class="duplicate-page-link is-nav" ${currentPage===1?'disabled':''} onclick="dupPage(${currentPage-1})">‹ Prev</button>`;
+        for (let i = 1; i <= pages; i++) {
+            if (i===1 || i===pages || Math.abs(i-currentPage)<=1)
+                html += `<button class="duplicate-page-link${i===currentPage?' is-active':''}" onclick="dupPage(${i})">${i}</button>`;
+            else if (Math.abs(i-currentPage)===2)
+                html += `<span style="padding:0 2px;color:#64748b;font-size:11px">…</span>`;
+        }
+        html += `<button class="duplicate-page-link is-nav" ${currentPage===pages?'disabled':''} onclick="dupPage(${currentPage+1})">Next ›</button>`;
+        paginationEl.innerHTML = html;
+    }
+
+    window.dupPage = function (p) { currentPage = p; render(); };
+
+    function applyFilter() {
+        const s  = (searchInput?.value  || '').trim().toUpperCase();
+        const st = (statusFilter?.value || '').trim().toUpperCase();
+        const dn = (doneFilter?.value   || '').trim().toUpperCase();
+        filtered = allRows.filter(r =>
+            (!s  || (r.dataset.search || '').includes(s)) &&
+            (!st || r.dataset.status === st) &&
+            (!dn || r.dataset.done   === dn)
+        );
         currentPage = 1;
-        updateDuplicateTableDisplay();
-        renderDuplicatePagination();
+        render();
     }
 
-    if (duplicateSearchInput) duplicateSearchInput.addEventListener('input', applyDuplicateFilters);
-    if (duplicateStatusFilter) duplicateStatusFilter.addEventListener('change', applyDuplicateFilters);
-    if (duplicateResetFilters) {
-        duplicateResetFilters.addEventListener('click', function() {
-            if (duplicateSearchInput) duplicateSearchInput.value = '';
-            if (duplicateStatusFilter) duplicateStatusFilter.value = '';
-            applyDuplicateFilters();
-        });
-    }
-    applyDuplicateFilters();
+    if (searchInput)  searchInput.addEventListener('input', applyFilter);
+    if (statusFilter) statusFilter.addEventListener('change', applyFilter);
+    if (doneFilter)   doneFilter.addEventListener('change', applyFilter);
+    if (resetBtn) resetBtn.addEventListener('click', () => {
+        if (searchInput)  searchInput.value = '';
+        if (statusFilter) statusFilter.value = '';
+        if (doneFilter)   doneFilter.value = '';
+        applyFilter();
+    });
+
+    /* Default sort: Radio ID ascending */
+    updateSortHeaders();
+    applyFilter();
 });
 
-function openEditModal(id, radio, serialNumber, model, status, ownershipType, ownership, position, department, temporaryRadioId, trackingRef, remark, needToChangeId, idChangeDone, ownershipTypeToBe) {
-    const form = document.getElementById('editWalkieForm');
-    form.action = "{{ route('wt.admin.walkies.updateMeta', ['walkie' => '__ID__']) }}".replace('__ID__', id);
-    document.getElementById('edit_radio_id').value = radio || '';
-    document.getElementById('edit_serial_number').value = serialNumber || '';
-    document.getElementById('edit_model').value = model || '';
-    document.getElementById('edit_status').value = status || '';
-    document.getElementById('edit_ownership_type').value = ownershipType || '';
-    document.getElementById('edit_ownership').value = ownership || '';
-    document.getElementById('edit_position').value = position || '';
-    document.getElementById('edit_department').value = department || '';
-    document.getElementById('edit_temporary_radio_id').value = temporaryRadioId || '';
-    document.getElementById('edit_tracking_ref').value = trackingRef || '';
-    document.getElementById('edit_remark').value = remark || '';
-    document.getElementById('edit_need_to_change_id').value = needToChangeId || '';
-    document.getElementById('edit_id_change_done').value = idChangeDone || '0';
-    document.getElementById('edit_ownership_type_to_be').value = ownershipTypeToBe || '';
+function openEditModal(id,radio,serialNumber,model,status,ownershipType,ownership,position,department,temporaryRadioId,trackingRef,remark,needToChangeId,idChangeDone,ownershipTypeToBe){
+    const form=document.getElementById('editWalkieForm');
+    form.action="{{ route('wt.admin.walkies.updateMeta',['walkie'=>'__ID__']) }}".replace('__ID__',id);
+    document.getElementById('edit_radio_id').value=radio||'';
+    document.getElementById('edit_serial_number').value=serialNumber||'';
+    document.getElementById('edit_model').value=model||'';
+    document.getElementById('edit_status').value=status||'';
+    document.getElementById('edit_ownership_type').value=ownershipType||'';
+    document.getElementById('edit_ownership').value=ownership||'';
+    document.getElementById('edit_position').value=position||'';
+    document.getElementById('edit_department').value=department||'';
+    document.getElementById('edit_temporary_radio_id').value=temporaryRadioId||'';
+    document.getElementById('edit_tracking_ref').value=trackingRef||'';
+    document.getElementById('edit_remark').value=remark||'';
+    document.getElementById('edit_need_to_change_id').value=needToChangeId||'';
+    document.getElementById('edit_id_change_done').value=idChangeDone||'0';
+    document.getElementById('edit_ownership_type_to_be').value=ownershipTypeToBe||'';
     document.getElementById('editModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow='hidden';
 }
+function closeEditModal(){ document.getElementById('editModal').classList.remove('active'); document.body.style.overflow=''; }
+function closeEditModalOutside(e){ if(e.target===document.getElementById('editModal')) closeEditModal(); }
 
-function closeEditModal() {
-    document.getElementById('editModal').classList.remove('active');
-    document.body.style.overflow = '';
+function syncSharedWith(select){
+    const form=select.closest('form'); if(!form) return;
+    const isShared=(select.value||'').toUpperCase()==='SHARED';
+    const g=form.querySelector('.shared-with-group'), i=form.querySelector('.shared-with-input');
+    if(g) g.classList.toggle('hidden',!isShared);
+    if(i){ i.required=isShared; if(!isShared) i.value=''; }
 }
+document.querySelectorAll('.ownership-type-control').forEach(s=>{ s.addEventListener('change',()=>syncSharedWith(s)); syncSharedWith(s); });
 
-function closeEditModalOutside(event) {
-    if (event.target === document.getElementById('editModal')) closeEditModal();
+function openImportModal(){ document.getElementById('importModal').classList.add('active'); document.body.style.overflow='hidden'; }
+function closeImportModal(){ document.getElementById('importModal').classList.remove('active'); document.body.style.overflow=''; }
+function closeImportModalOutside(e){ if(e.target===document.getElementById('importModal')) closeImportModal(); }
+function openAddModal(){ document.getElementById('addModal').classList.add('active'); document.body.style.overflow='hidden'; }
+function closeAddModal(){ document.getElementById('addModal').classList.remove('active'); document.body.style.overflow=''; }
+function closeAddModalOutside(e){ if(e.target===document.getElementById('addModal')) closeAddModal(); }
+function updateFileName(input){
+    const el=document.getElementById('fileNameDisplay');
+    el.textContent=input.files?.length ? 'Selected: '+input.files[0].name : 'Click to upload Excel or CSV';
+    el.style.color=input.files?.length ? '#16a34a' : '';
 }
-
-function syncSharedWith(select) {
-    const form = select.closest('form');
-    if (!form) return;
-
-    const isShared = (select.value || '').toUpperCase() === 'SHARED';
-    const sharedGroup = form.querySelector('.shared-with-group');
-    const sharedInput = form.querySelector('.shared-with-input');
-
-    if (sharedGroup) sharedGroup.classList.toggle('hidden', !isShared);
-    if (sharedInput) {
-        sharedInput.required = isShared;
-        if (!isShared) sharedInput.value = '';
-    }
-}
-
-document.querySelectorAll('.ownership-type-control').forEach((select) => {
-    select.addEventListener('change', () => syncSharedWith(select));
-    syncSharedWith(select);
+document.addEventListener('keydown', e => {
+    if(e.key==='Escape'){ closeEditModal(); closeAddModal(); closeImportModal(); }
 });
-
-function openImportModal() {
-    document.getElementById('importModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeImportModal() {
-    document.getElementById('importModal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function closeImportModalOutside(event) {
-    if (event.target === document.getElementById('importModal')) closeImportModal();
-}
-
-function openAddModal() {
-    document.getElementById('addModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeAddModal() {
-    document.getElementById('addModal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function closeAddModalOutside(event) {
-    if (event.target === document.getElementById('addModal')) closeAddModal();
-}
-
-function updateFileName(input) {
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    if (input.files && input.files.length > 0) {
-        fileNameDisplay.innerText = "Selected: " + input.files[0].name;
-        fileNameDisplay.classList.add('text-green-600');
-    } else {
-        fileNameDisplay.innerText = "Click to upload Excel or CSV";
-        fileNameDisplay.classList.remove('text-green-600');
-    }
-}
 </script>
 @endsection
-
-
-

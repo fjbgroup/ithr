@@ -958,7 +958,7 @@
                     <div style="flex:1;min-width:0">
                         <div style="font-size:12px;font-weight:800;color:#f8fafc">${s.name}</div>
                         <div style="font-size:10px;color:#94a3b8;margin-top:2px">
-                            <span style="font-family:monospace">${s.staff_no}</span>
+                            <span>${s.staff_no}</span>
                             ${s.dept_name ? ' · ' + s.dept_name : ''}
                             ${s.position ? ' · ' + s.position : ''}
                         </div>

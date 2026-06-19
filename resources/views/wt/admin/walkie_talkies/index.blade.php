@@ -5774,7 +5774,7 @@
                 <head>
                     <title>Walkie QR - ${timelineEscape(currentWalkieQr.radio_id || '-')}</title>
                     <style>
-                        body { font-family: Arial, sans-serif; margin: 32px; color: #111827; }
+                        body { font-family: 'DM Sans', sans-serif; margin: 32px; color: #111827; }
                         .label { width: 320px; border: 1px solid #d1d5db; border-radius: 10px; padding: 20px; }
                         h1 { margin: 0 0 12px; font-size: 20px; }
                         img { width: 220px; height: 220px; display: block; margin: 12px auto; }
