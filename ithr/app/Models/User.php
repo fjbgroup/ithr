@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,50 +13,135 @@ use App\Models\UpdateRequest;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'staff_no',
-        'role',
-        'department_id',
-        'position',
-        'company',
-        'is_active',
-        'staff_id',
+        'name', 'email', 'password',
+        'staff_no', 'role', 'it_role', 'wt_role',
+        'department_id', 'position', 'company',
+        'is_active', 'staff_id',
+        // Extended fields shared across all modules:
+        'department', 'dept_name',
+        'must_change_password', 'last_login',
+        'avatar', 'signature_img', 'phone_no',
+        // Backward-compat aliases — resolved via mutators, not stored directly:
+        'username', 'full_name',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_active' => 'boolean',
+            'email_verified_at'    => 'datetime',
+            'password'             => 'hashed',
+            'is_active'            => 'boolean',
+            'must_change_password' => 'boolean',
+            'last_login'           => 'datetime',
         ];
     }
+
+    // ── Backward-compat accessors (IT/WT used different column names) ──────
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->attributes['name'] ?? '';
+    }
+
+    public function setFullNameAttribute(string $value): void
+    {
+        $this->attributes['name'] = $value;
+    }
+
+    public function getUsernameAttribute(): string
+    {
+        return $this->attributes['staff_no'] ?? '';
+    }
+
+    public function setUsernameAttribute(string $value): void
+    {
+        $this->attributes['staff_no'] = $value;
+    }
+
+    // Maps legacy user_id alias (WT module) to the primary key
+    public function getUserIdAttribute(): mixed
+    {
+        return $this->attributes['id'] ?? null;
+    }
+
+    // ── HR role helpers ────────────────────────────────────────────────────
+
+    public function isAdminIT(): bool        { return $this->role === 'admin_it'; }
+    public function isAdminHR(): bool        { return $this->role === 'admin_hr'; }
+    public function isAdmin(): bool          { return in_array($this->role, ['admin_it', 'admin_hr']); }
+    public function isCeo(): bool            { return $this->role === 'ceo'; }
+    public function isStaff(): bool          { return $this->role === 'staff'; }
+    public function isHOU(): bool            { return $this->role === 'hou'; }
+    public function isGM(): bool             { return $this->role === 'gm'; }
+    public function isSignatory(): bool      { return in_array($this->role, ['hou', 'gm']); }
+    public function isReadOnlyViewer(): bool { return in_array($this->role, ['hou', 'gm', 'ceo']); }
+    public function canWrite(): bool         { return !$this->isCeo(); }
+
+    public function getRoleLabel(): string
+    {
+        return match($this->role) {
+            'admin_it'  => 'Admin (IT)',
+            'admin_hr'  => 'Admin (HR)',
+            'hou'       => 'Head of Unit',
+            'gm'        => 'General Manager',
+            'staff'     => 'Staff',
+            'ceo'       => 'CEO',
+            default     => ucfirst($this->role ?? ''),
+        };
+    }
+
+    public function roleName(): string
+    {
+        return $this->getRoleLabel();
+    }
+
+    // ── IT-specific role helpers (use it_role column) ──────────────────────
+
+    public function hasItAccess(): bool          { return $this->it_role !== null; }
+    public function isItAdmin(): bool            { return in_array($this->it_role, ['admin_it', 'admin']); }
+    public function isItFinanceAdmin(): bool     { return $this->it_role === 'finance_admin'; }
+    public function isItAdminOrFinance(): bool   { return in_array($this->it_role, ['admin_it', 'admin', 'finance_admin']); }
+    public function isItReadOnly(): bool         { return in_array($this->it_role, ['hou', 'gm', 'ceo']); }
+    public function canApproveWriteOff(): bool   { return in_array($this->it_role, ['admin_it', 'admin', 'ceo']); }
+    public function isFinanceAdmin(): bool       { return $this->it_role === 'finance_admin'; }
+
+    public function getItRoleLabel(): string
+    {
+        return match($this->it_role) {
+            'admin_it'      => 'Admin (IT)',
+            'admin'         => 'IT Admin',
+            'finance_admin' => 'Finance Admin',
+            'hou'           => 'Head of Unit',
+            'gm'            => 'General Manager',
+            'ceo'           => 'CEO',
+            'user'          => 'User',
+            default         => '-',
+        };
+    }
+
+    // ── WT-specific role helpers (use wt_role column) ──────────────────────
+
+    public function hasWtAccess(): bool  { return $this->wt_role !== null; }
+    public function isWtAdminIT(): bool  { return $this->wt_role === 'admin_it'; }
+    public function isWtAdmin(): bool    { return in_array($this->wt_role, ['admin_it', 'admin']); }
+    public function isWtUser(): bool     { return $this->wt_role === 'user'; }
+
+    public function getWtRoleLabel(): string
+    {
+        return match($this->wt_role) {
+            'admin_it' => 'Admin (IT)',
+            'admin'    => 'Executive',
+            'user'     => 'User',
+            default    => '-',
+        };
+    }
+
+    // ── HR relationships ──────────────────────────────────────────────────
 
     public function staff(): BelongsTo
     {
@@ -66,7 +150,7 @@ class User extends Authenticatable
 
     public function department(): BelongsTo
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function bookings(): HasMany
@@ -74,54 +158,12 @@ class User extends Authenticatable
         return $this->hasMany(RoomBooking::class, 'booked_by_id');
     }
 
-    public function notifications(): HasMany
+    public function notifications()
     {
         return $this->hasMany(Notification::class);
     }
 
-    public function isAdminIT(): bool
-    {
-        return $this->role === 'admin_it';
-    }
-
-    public function isAdminHR(): bool
-    {
-        return $this->role === 'admin_hr';
-    }
-
-    public function isAdmin(): bool
-    {
-        return in_array($this->role, ['admin_it', 'admin_hr']);
-    }
-
-    public function isCeo(): bool
-    {
-        return $this->role === 'ceo';
-    }
-
-    public function isStaff(): bool
-    {
-        return $this->role === 'staff';
-    }
-
-    /**
-     * Whether this user may modify data. CEO is read-only.
-     */
-    public function canWrite(): bool
-    {
-        return !$this->isCeo();
-    }
-
-    public function getRoleLabel(): string
-    {
-        return match($this->role) {
-            'admin_it' => 'Admin (IT)',
-            'admin_hr' => 'Admin (HR)',
-            'staff'    => 'Staff',
-            'ceo'      => 'CEO',
-            default    => ucfirst($this->role),
-        };
-    }
+    // ── HR notification helpers ───────────────────────────────────────────
 
     public function getUnreadBookingCount(): int
     {
@@ -144,7 +186,6 @@ class User extends Authenticatable
             return RoomBooking::whereIn('status', ['Pending', 'CancelRequested', 'EditRequested'])->count();
         }
 
-        // Check if user is PIC for any room
         $myPicRoomIds = DB::table('room_pics')
             ->where('user_id', $this->id)
             ->pluck('room_id');

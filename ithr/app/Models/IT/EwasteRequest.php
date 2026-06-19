@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EwasteRequest extends Model
 {
-    protected $connection = 'it_mysql';
-    public $timestamps = false;
     protected $fillable = [
         'type', 'requested_by', 'inventory_id',
         'asset_number', 'asset_class', 'description', 'serial_number',

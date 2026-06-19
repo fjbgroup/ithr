@@ -6,6 +6,7 @@ use App\Http\Controllers\IT\Controller;
 use App\Models\IT\PasswordResetRequest;
 use App\Models\IT\User;
 use App\Services\IT\ActivityLogService;
+use App\Services\SsoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,10 +28,9 @@ class LoginController extends Controller
         ]);
 
         $input = trim($request->username);
-        $user = User::where('username', $input)
-            ->orWhere(function ($q) use ($input) {
-                $q->whereNotNull('staff_id')->whereRaw('TRIM(staff_id) = ?', [$input]);
-            })->first();
+        $user = User::whereRaw('TRIM(staff_no) = ?', [$input])
+            ->orWhere('email', $input)
+            ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return back()->withErrors(['login' => 'Invalid username / staff ID or password.'])->withInput(['username' => $input]);
@@ -40,9 +40,14 @@ class LoginController extends Controller
             return back()->withErrors(['login' => 'Your account is deactivated. Please contact admin.'])->withInput(['username' => $input]);
         }
 
+        if ($user->it_role === null) {
+            return back()->withErrors(['login' => 'You do not have access to the IT system. Please contact your IT administrator.'])->withInput(['username' => $input]);
+        }
+
         Auth::guard('it')->login($user);
         $request->session()->regenerate();
         session(['it_last_activity' => time()]);
+        SsoService::markAuthenticated($user->id);
 
         try {
             $user->update(['last_login' => now()]);

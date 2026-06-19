@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\WT;
 
+use App\Models\Staff;
 use App\Models\WT\AccessRequest;
 use App\Models\WT\Handover;
 use App\Models\WT\PasswordResetRequest;
@@ -19,35 +20,36 @@ class AdminITController extends Controller
     public function index()
     {
         $roleCounts = [
-            'total' => User::whereIn('role', ['admin_it', 'admin'])->count(),
-            'admin_it' => User::where('role', 'admin_it')->count(),
-            'admin' => User::where('role', 'admin')->count(),
+            'total' => User::whereIn('wt_role', ['admin_it', 'admin'])->count(),
+            'admin_it' => User::where('wt_role', 'admin_it')->count(),
+            'admin' => User::where('wt_role', 'admin')->count(),
         ];
 
         $users = User::query()
+            ->whereIn('wt_role', ['admin_it', 'admin'])
             ->select('users.*')
             ->selectSub(
                 AccessRequest::selectRaw('COUNT(*)')
-                    ->whereColumn('access_requests.user_id', 'users.user_id'),
+                    ->whereColumn('access_requests.user_id', 'users.id'),
                 'request_count'
             )
             ->selectSub(
                 Handover::selectRaw('COUNT(*)')
-                    ->whereColumn('walkie_talkie_handovers.user_id', 'users.user_id'),
+                    ->whereColumn('walkie_talkie_handovers.user_id', 'users.id'),
                 'handover_count'
             )
             ->selectSub(
                 UserActivityLog::selectRaw('MAX(created_at)')
-                    ->whereColumn('user_activity_logs.user_id', 'users.user_id'),
+                    ->whereColumn('user_activity_logs.user_id', 'users.id'),
                 'last_activity_at'
             )
             ->orderByRaw("
                 CASE
-                    WHEN role = 'admin_it' THEN 1
+                    WHEN wt_role = 'admin_it' THEN 1
                     ELSE 2
                 END
             ")
-            ->orderByDesc('user_id')
+            ->orderByDesc('id')
             ->get();
 
         $pendingPasswordResetRequests = PasswordResetRequest::with('user')
@@ -68,37 +70,116 @@ class AdminITController extends Controller
         return $this->index();
     }
 
+    public function staffSearch(Request $request)
+    {
+        $q = trim($request->get('q', ''));
+        if (strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Staff::with('department')
+            ->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('staff_no', 'like', "%{$q}%");
+            })
+            ->where('is_active', 1)
+            ->orderBy('name')
+            ->limit(15)
+            ->get()
+            ->map(fn($s) => [
+                'staff_no'   => $s->staff_no,
+                'name'       => Str::upper($s->name),
+                'dept_name'  => Str::upper($s->department?->name ?? ''),
+                'position'   => Str::upper($s->position ?? ''),
+            ]);
+
+        return response()->json($results);
+    }
+
     public function storeManager(Request $request)
     {
-        $validated = $request->validate([
-            'staff_id' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_id')],
-            'username' => ['required', 'string', 'max:50', Rule::unique(User::class, 'username')],
+        $request->validate([
+            'staff_id'  => 'required|string|max:50',
             'full_name' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
-            'password' => 'required|string|min:6|confirmed',
+            'department'=> 'required|string|max:255',
+            'position'  => 'required|string|max:255',
         ]);
 
+        $staffNo  = trim($request->staff_id);
+        $existing = User::whereRaw('TRIM(staff_no) = ?', [$staffNo])->first();
+
+        if ($existing) {
+            if ($existing->wt_role !== null) {
+                UserActivityLog::create([
+                    'user_id'       => Auth::guard('wt')->id(),
+                    'username'      => Auth::guard('wt')->user()->username,
+                    'event_type'    => 'user_management',
+                    'event_action'  => 'create_executive_account_blocked',
+                    'event_details' => $existing->full_name . ' already has WT access (wt_role: ' . $existing->wt_role . ')',
+                    'ip_address'    => $request->ip(),
+                    'user_agent'    => $request->userAgent(),
+                    'created_at'    => now(),
+                ]);
+
+                return back()
+                    ->withInput()
+                    ->with('error', $existing->full_name . ' already has Walkie Talkie system access.');
+            }
+
+            // Staff without WT access — grant it by setting wt_role.
+            // Their HR role and IT role remain unchanged.
+            $existing->update([
+                'full_name'  => Str::upper(trim($request->full_name)),
+                'dept_name'  => Str::upper(trim($request->department)),
+                'position'   => Str::upper(trim($request->position)),
+                'wt_role'    => 'admin',
+            ]);
+
+            if ($request->filled('password')) {
+                $request->validate(['password' => 'min:6|confirmed']);
+                $existing->update(['password' => Hash::make($request->password)]);
+            }
+
+            UserActivityLog::create([
+                'user_id'       => Auth::guard('wt')->id(),
+                'username'      => Auth::guard('wt')->user()->username,
+                'event_type'    => 'user_management',
+                'event_action'  => 'grant_wt_access',
+                'event_details' => 'Granted WT Executive access to existing user #' . $existing->id . ' - ' . $existing->username,
+                'ip_address'    => $request->ip(),
+                'user_agent'    => $request->userAgent(),
+                'created_at'    => now(),
+            ]);
+
+            return redirect()
+                ->route('wt.admin.users.index')
+                ->with('success', 'WT access granted to ' . $existing->full_name . ' as Executive.');
+        }
+
+        // Brand-new user — password is required
+        $request->validate(['password' => 'required|string|min:6|confirmed']);
+
         $user = User::create([
-            'staff_id' => trim($validated['staff_id']),
-            'username' => trim($validated['username']),
-            'full_name' => Str::upper(trim($validated['full_name'])),
-            'department' => Str::upper(trim($validated['department'])),
-            'position' => Str::upper(trim($validated['position'])),
-            'password' => Hash::make($validated['password']),
-            'role' => 'admin',
-            'created_at' => now(),
+            'staff_id'  => $staffNo,
+            'username'  => $staffNo,
+            'full_name' => Str::upper(trim($request->full_name)),
+            'dept_name' => Str::upper(trim($request->department)),
+            'position'  => Str::upper(trim($request->position)),
+            'password'  => Hash::make($request->password),
+            'role'      => 'staff',
+            'wt_role'   => 'admin',
+            'is_active' => 1,
         ]);
 
         UserActivityLog::create([
-            'user_id' => Auth::guard('wt')->id(),
-            'username' => Auth::guard('wt')->user()->username,
-            'event_type' => 'user_management',
-            'event_action' => 'create_executive_account',
-            'event_details' => 'Created executive account #' . $user->user_id . ' - ' . $user->username,
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'created_at' => now(),
+            'user_id'       => Auth::guard('wt')->id(),
+            'username'      => Auth::guard('wt')->user()->username,
+            'event_type'    => 'user_management',
+            'event_action'  => 'create_executive_account',
+            'event_details' => 'Created executive account #' . $user->id . ' - ' . $user->username,
+            'ip_address'    => $request->ip(),
+            'user_agent'    => $request->userAgent(),
+            'created_at'    => now(),
         ]);
 
         return redirect()
@@ -110,12 +191,12 @@ class AdminITController extends Controller
     public function updateUser(Request $request, User $user)
     {
         $validated = $request->validate([
-            'staff_id' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_id')->ignore($user->user_id)],
-            'username' => ['required', 'string', 'max:50', Rule::unique(User::class, 'username')->ignore($user->user_id)],
+            'staff_id' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_no')->ignore($user->id)],
+            'username' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_no')->ignore($user->id)],
             'full_name' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
-            'role' => 'required|in:admin,admin_it',
+            'wt_role' => 'required|in:admin,admin_it',
         ]);
 
         $original = [
@@ -124,7 +205,7 @@ class AdminITController extends Controller
             'full_name' => $user->full_name,
             'department' => $user->department,
             'position' => $user->position,
-            'role' => $user->role,
+            'wt_role' => $user->wt_role,
         ];
 
         $user->update($validated);
@@ -198,7 +279,7 @@ class AdminITController extends Controller
             return back()->with('error', 'This password reset request has already been processed.');
         }
 
-        $user = $passwordResetRequest->user ?: User::where('staff_id', $passwordResetRequest->staff_id)->first();
+        $user = $passwordResetRequest->user ?: User::where('staff_no', $passwordResetRequest->staff_id)->first();
         if (! $user) {
             $passwordResetRequest->update([
                 'status' => 'Rejected',
@@ -248,7 +329,7 @@ class AdminITController extends Controller
             'reviewed_at' => now(),
         ]);
 
-        $user = $passwordResetRequest->user ?: User::where('staff_id', $passwordResetRequest->staff_id)->first();
+        $user = $passwordResetRequest->user ?: User::where('staff_no', $passwordResetRequest->staff_id)->first();
         if ($user) {
             SystemNotifier::notifyUser(
                 $user,

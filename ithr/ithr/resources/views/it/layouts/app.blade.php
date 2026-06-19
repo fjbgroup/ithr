@@ -1,0 +1,946 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>@yield('title', 'Dashboard') — FJB Inventory System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="{{ asset('it-assets/css/style.css') }}" rel="stylesheet">
+<style>
+:root {
+  --sidebar-bg:        #142b47;
+  --sidebar-hover:     rgba(255,255,255,.08);
+  --sidebar-active-bg: rgba(56,189,248,.18);
+  --sidebar-text:      rgba(255,255,255,.65);
+  --sidebar-head:      #ffffff;
+  --sidebar-w:         250px;
+  --accent:            #0284c7;
+  --accent-h:          #0369a1;
+  --accent-rgb:        2,132,199;
+  --navy:              #142b47;
+  --navy-mid:          #254a78;
+  --sky:               #38bdf8;
+  --sky-dark:          #0284c7;
+  --body-bg:           #f1f5f9;
+  --surface:           #ffffff;
+  --border:            #e2e8f0;
+  --text:              #1e293b;
+  --muted:             #64748b;
+  --red:               #ef4444;
+  --green:             #22c55e;
+  --yellow:            #f59e0b;
+  --blue:              #3b82f6;
+  --shadow:            0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg:         0 8px 30px rgba(0,0,0,.12);
+  --table-hover:       #f0f9ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+  background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:100;
+  transition:transform .3s;
+}
+.sidebar-brand{
+  padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;gap:12px;
+}
+.sidebar-brand img{width:36px;height:36px;object-fit:contain;background:transparent}
+.brand-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;
+  text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
+.brand-name span{color:#fff;display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
+
+.sidebar-nav{flex:1;overflow-y:auto;padding:16px 12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent}
+.sidebar-nav::-webkit-scrollbar{width:3px}
+.sidebar-nav::-webkit-scrollbar-track{background:transparent}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:99px}
+.sidebar-nav::-webkit-scrollbar-thumb:hover{background:rgba(2,132,199,.4)}
+.sidebar-nav:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14)}
+.nav-section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;
+  color:rgba(255,255,255,.3);padding:0 8px;margin:20px 0 6px}
+.nav-section-label:first-child{margin-top:4px}
+
+.nav-link{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+  color:var(--sidebar-text);text-decoration:none;font-size:13.5px;font-weight:500;
+  transition:all .15s;margin-bottom:2px;
+}
+.nav-link i{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-link.active{background:rgba(56,189,248,.18);color:var(--sky);font-weight:600}
+.nav-link .badge-count, button .badge-count{
+  margin-left:auto;background:var(--red);color:#fff;
+  border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;flex-shrink:0;
+}
+button .badge-count{ margin-left:0; }
+
+.sidebar-footer{padding:14px 12px;border-top:1px solid rgba(255,255,255,.08)}
+.user-card{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border-radius:8px;background:rgba(255,255,255,.06);
+  margin-bottom:10px;text-decoration:none;transition:background .15s;cursor:pointer;
+}
+.user-card:hover{background:rgba(255,255,255,.1)}
+.user-avatar{
+  width:34px;height:34px;border-radius:50%;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.user-info{min-width:0;flex:1}
+.user-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.btn-logout{
+  display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;
+  background:rgba(255,255,255,.06);border:none;border-radius:8px;
+  color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;text-decoration:none;
+  transition:all .15s;font-family:'DM Sans',sans-serif;
+}
+.btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
+
+/* ── MAIN ── */
+.main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-left{flex:1}
+.topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy,var(--text))}
+.topbar-breadcrumb{font-size:11px;color:var(--muted);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-user{
+  display:flex;align-items:center;gap:8px;
+  background:var(--body-bg);border:1px solid var(--border);
+  border-radius:8px;padding:6px 12px;
+}
+.topbar-user-name{font-size:13px;font-weight:600;color:var(--text)}
+.topbar-role-badge{
+  background:#dbeafe;color:#1d4ed8;
+  border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;text-transform:uppercase;
+}
+.theme-toggle{
+  width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:var(--body-bg);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;font-size:16px;transition:all .15s;
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.page-body{padding:24px 28px;flex:1}
+
+/* ── STAT CARDS ── */
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:20px 22px;
+  border-left:4px solid var(--accent);
+  box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  transition:box-shadow .2s,transform .2s;cursor:default;
+}
+.stat-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.12);transform:translateY(-2px)}
+.stat-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;
+}
+.stat-value{font-family:'DM Sans',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* ── TABLE CARD ── */
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
+.table-card-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;background:var(--surface);
+}
+.table-card-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);flex:1}
+.table{color:var(--text);margin:0}
+.table thead th{
+  background:var(--table-head-bg, #e2e8f0) !important;
+  border-color:var(--border) !important;
+  color:var(--table-head-color, #475569);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;
+  padding:12px 16px;white-space:nowrap;
+}
+.table tbody tr{background:var(--surface) !important;color:var(--text) !important}
+.table tbody tr:hover{background:var(--table-hover) !important}
+.table tbody td{
+  border-color:var(--border) !important;padding:12px 16px;
+  vertical-align:middle;color:var(--text) !important;background:transparent !important;
+}
+.table tbody td span:not(.badge-status),.table tbody td div,.table tbody td a{color:var(--text) !important}
+.table tbody td code{color:var(--accent) !important}
+
+/* ── BADGES ── */
+.badge-status{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.bs-active  {background:rgba(34,197,94,.12);color:#16a34a}
+.bs-disposed{background:rgba(239,68,68,.12);color:#dc2626}
+.bs-pending {background:rgba(245,158,11,.12);color:#d97706}
+.bs-repair  {background:rgba(59,130,246,.12);color:#2563eb}
+
+/* ── FORM ── */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
+.form-label{color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.form-control,.form-select{
+  background:var(--form-input-bg, #fff) !important;
+  border:1.5px solid var(--form-input-border, var(--border)) !important;
+  color:var(--form-input-color, var(--text)) !important;
+  border-radius:8px;padding:9px 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;
+}
+.form-control:focus,.form-select:focus{
+  border-color:var(--sky-dark,var(--accent)) !important;
+  box-shadow:0 0 0 3px rgba(56,189,248,.15) !important;outline:none;
+}
+textarea.form-control{min-height:90px;resize:vertical}
+.form-control::placeholder{color:var(--muted);opacity:.7}
+
+/* ── BUTTONS ── */
+.btn-primary-custom{
+  background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;
+  padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.btn-primary-custom:hover{background:var(--navy-mid,#254a78);color:#fff;transform:translateY(-1px)}
+.btn-secondary-custom{
+  background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;
+  padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;
+  transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-secondary-custom:hover{border-color:var(--navy,#142b47);color:var(--navy,#142b47)}
+.btn-icon{
+  width:30px;height:30px;border-radius:6px;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:14px;border:none;cursor:pointer;transition:all .15s;text-decoration:none;
+}
+.btn-edit      {background:rgba(59,130,246,.1);color:#2563eb}
+.btn-edit:hover{background:rgba(59,130,246,.2);color:#2563eb}
+.btn-delete      {background:rgba(239,68,68,.1);color:#dc2626}
+.btn-delete:hover{background:rgba(239,68,68,.2);color:#dc2626}
+.btn-view      {background:rgba(var(--accent-rgb),.1);color:var(--accent)}
+.btn-view:hover{background:rgba(var(--accent-rgb),.2);color:var(--accent)}
+
+/* ── ALERTS ── */
+.alert-success-custom{
+  background:#dcfce7;border:1px solid #bbf7d0;
+  color:#166534;border-radius:8px;padding:12px 16px;
+  margin-bottom:20px;display:flex;align-items:center;gap:8px;font-size:13px;
+}
+.alert-danger-custom{
+  background:#fee2e2;border:1px solid #fecaca;
+  color:#991b1b;border-radius:8px;padding:12px 16px;
+  margin-bottom:20px;display:flex;align-items:center;gap:8px;font-size:13px;
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select{
+  background:var(--form-input-bg, #fff) !important;
+  border:1.5px solid var(--form-input-border, var(--border)) !important;
+  color:var(--form-input-color, var(--text)) !important;
+  border-radius:6px;padding:5px 10px;
+}
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_filter label,
+.dataTables_wrapper .dataTables_length label{color:var(--muted)}
+.dataTables_wrapper .dataTables_paginate .paginate_button{background:transparent !important;border:none !important;margin:0 !important;padding:0 !important;}
+.dataTables_wrapper .pagination{gap:3px;flex-wrap:wrap}
+.dataTables_wrapper .pagination .page-item .page-link{
+  font-size:12px !important;font-weight:600 !important;font-family:'DM Sans',sans-serif !important;
+  padding:4px 10px !important;line-height:1.5 !important;
+  border-radius:6px !important;border:1px solid var(--border) !important;
+  background:transparent !important;color:var(--muted) !important;transition:all .15s;
+}
+.dataTables_wrapper .pagination .page-item.active .page-link{background:var(--navy,#142b47) !important;border-color:var(--navy,#142b47) !important;color:#fff !important;}
+.dataTables_wrapper .pagination .page-item .page-link:hover{background:#f1f5f9 !important;color:var(--text) !important;}
+.dataTables_wrapper .dataTables_info{font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif;padding-top:6px;}
+table.dataTable tbody tr,
+table.dataTable tbody tr.odd,
+table.dataTable tbody tr.even{background-color:var(--surface) !important;color:var(--text) !important}
+table.dataTable tbody tr:hover,
+table.dataTable tbody tr.odd:hover,
+table.dataTable tbody tr.even:hover{background-color:var(--table-hover) !important}
+table.dataTable tbody td{color:var(--text) !important}
+code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-radius:4px;font-size:12px}
+
+/* ── MOBILE ── */
+.sidebar-toggle{display:none;background:none;border:1.5px solid var(--border);
+  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'DM Sans',sans-serif}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:none}
+  .main-content{margin-left:0}
+  .sidebar-toggle{display:flex;align-items:center}
+}
+</style>
+@stack('styles')
+</head>
+<body>
+
+@php $user = auth('it')->user(); @endphp
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand" onclick="_eggClick()" style="cursor:default;user-select:none">
+    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+      <img src="{{ asset('assets/img/logo_transparent.png') }}" alt="FJB Logo" onerror="this.style.display='none'">
+    </div>
+    <div class="brand-name">FJB Inventory<span>Management System</span></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label" style="margin-top:4px">Main</div>
+    <a href="{{ route('it.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+
+    <div class="nav-section-label">Inventory</div>
+
+    @php
+      $itActive = request()->routeIs('inventory.*') || request()->routeIs('non-it.*');
+      $itPending = request()->routeIs('inventory.index') && request()->get('view') === 'pending_requests';
+    @endphp
+
+    @if($user->isAdmin())
+    {{-- Admin: All Assets with sub-nav --}}
+    <div>
+      <button onclick="toggleITAssets()" id="itAssetsToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $itActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $itActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $itActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">All Assets</span>
+        <i class="bi bi-chevron-down" id="itAssetsChevron"
+          style="font-size:11px;transition:transform .2s;{{ $itActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="itAssetsMenu" style="{{ $itActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('inventory.index') && !request()->get('view') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
+        </a>
+        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('non-it.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
+        </a>
+        <a href="{{ route('it.inventory.index') }}?view=pending_requests" class="nav-link {{ $itPending ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-hourglass-split" style="font-size:14px"></i> Pending Requests
+        </a>
+      </div>
+    </div>
+    @else
+    {{-- Non-admin: IT + Non-IT + My Requests --}}
+    <div>
+      <button onclick="toggleITAssets()" id="itAssetsToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $itActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $itActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $itActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">All Assets</span>
+        <i class="bi bi-chevron-down" id="itAssetsChevron"
+          style="font-size:11px;transition:transform .2s;{{ $itActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="itAssetsMenu" style="{{ $itActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('inventory.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
+        </a>
+        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('non-it.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
+        </a>
+        @if(!$user->isReadOnlyViewer())
+        <a href="{{ route('it.inventory.index') }}?view=my_requests" class="nav-link"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-clock-history" style="font-size:14px"></i> My Requests
+        </a>
+        @endif
+      </div>
+    </div>
+    @endif
+    <script>
+    function toggleITAssets() {
+      const menu = document.getElementById('itAssetsMenu');
+      const chevron = document.getElementById('itAssetsChevron');
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    </script>
+
+    {{-- Write Off — all users --}}
+    <a href="{{ route('it.writeoff.index') }}" class="nav-link {{ request()->routeIs('writeoff.index') || request()->routeIs('writeoff.hou-sign') || request()->routeIs('writeoff.gm-sign') || request()->routeIs('writeoff.ceo-approve') || request()->routeIs('writeoff.assign-hou') ? 'active' : '' }}">
+      <i class="bi bi-pen-fill"></i> Write Off
+    </a>
+
+    {{-- Write Off Inventory — Finance Admin only --}}
+    @if($user->isFinanceAdmin())
+    <a href="{{ route('it.writeoff-inventory.index') }}" class="nav-link {{ request()->routeIs('writeoff-inventory.*') ? 'active' : '' }}">
+      <i class="bi bi-clipboard2-x-fill"></i> Write Off Inventory
+    </a>
+    @endif
+
+    {{-- E-Waste — Admin + Finance only --}}
+    @if($user->isAdminOrFinance())
+    @php $ewActive = request()->routeIs('ewaste.*') || request()->routeIs('ewaste.collected'); @endphp
+    <div>
+      <button onclick="toggleEwaste()" id="ewasteToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $ewActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $ewActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $ewActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-recycle" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">E-Waste</span>
+        <i class="bi bi-chevron-down" id="ewasteChevron"
+          style="font-size:11px;transition:transform .2s;{{ $ewActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="ewasteMenu" style="{{ $ewActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.ewaste.index') }}" class="nav-link {{ request()->routeIs('ewaste.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-recycle" style="font-size:14px"></i> E-Waste Items
+        </a>
+        <a href="{{ route('it.ewaste.collected') }}" class="nav-link {{ request()->routeIs('ewaste.collected') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-patch-check-fill" style="font-size:14px"></i> Collected Proofs
+        </a>
+      </div>
+    </div>
+    <script>
+    function toggleEwaste() {
+      const menu = document.getElementById('ewasteMenu');
+      const chevron = document.getElementById('ewasteChevron');
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    </script>
+
+    {{-- Disposal — Admin + Finance only --}}
+    @php $dispActive = request()->routeIs('disposal.*'); @endphp
+    <div>
+      <button onclick="toggleDisposal()" id="disposalToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $dispActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $dispActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $dispActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-trash3-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">Disposal</span>
+        <i class="bi bi-chevron-down" id="disposalChevron"
+          style="font-size:11px;transition:transform .2s;{{ $dispActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="disposalMenu" style="{{ $dispActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.disposal.index') }}" class="nav-link {{ request()->routeIs('disposal.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-arrow-right" style="font-size:14px"></i> Disposal Items
+        </a>
+        <a href="{{ route('it.disposal.proofs') }}" class="nav-link {{ request()->routeIs('disposal.proofs') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-patch-check-fill" style="font-size:14px"></i> Collected Proofs
+        </a>
+      </div>
+    </div>
+    <script>
+    function toggleDisposal() {
+      const menu = document.getElementById('disposalMenu');
+      const chevron = document.getElementById('disposalChevron');
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    </script>
+    @endif
+
+    {{-- Request Form — all users --}}
+    <div class="nav-section-label">Request Form</div>
+    @php
+      $itrActive = request()->routeIs('it-request-form') || request()->routeIs('it-request-form.drafts');
+    @endphp
+    @if(!$user->isAdmin() && $itDraftCount > 0)
+    <div>
+      <button onclick="toggleITRequestForm()" id="itrToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $itrActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $itrActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $itrActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-file-earmark-text-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">IT Request Form</span>
+        <i class="bi bi-chevron-down" id="itrChevron"
+          style="font-size:11px;transition:transform .2s;{{ $itrActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="itrMenu" style="{{ $itrActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.it-request-form') }}" class="nav-link {{ request()->routeIs('it-request-form') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-plus-circle" style="font-size:14px"></i> New Request
+        </a>
+        <a href="{{ route('it.it-request-form.drafts') }}" class="nav-link {{ request()->routeIs('it-request-form.drafts') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-floppy-fill" style="font-size:14px"></i> Saved Drafts
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-weight:700;margin-left:4px">{{ $itDraftCount }}</span>
+        </a>
+      </div>
+    </div>
+    <script>
+    function toggleITRequestForm() {
+      const menu = document.getElementById('itrMenu');
+      const chevron = document.getElementById('itrChevron');
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    </script>
+    @else
+    <a href="{{ route('it.it-request-form') }}" class="nav-link {{ $itrActive ? 'active' : '' }}">
+      <i class="bi bi-file-earmark-text-fill"></i> IT Request Form
+    </a>
+    @endif
+
+    {{-- Admin section --}}
+    @if($user->isAdminOrFinance())
+    <div class="nav-section-label">Admin</div>
+
+    @if($user->isAdmin())
+    <a href="{{ route('it.users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+      <i class="bi bi-people-fill"></i> Manage Users
+    </a>
+    @endif
+
+    <a href="{{ route('it.asset-classes.index') }}" class="nav-link {{ request()->routeIs('asset-classes.*') ? 'active' : '' }}">
+      <i class="bi bi-tags-fill"></i> Asset Classes
+    </a>
+
+    @php $rptActive = request()->routeIs('reports.*'); @endphp
+    <div>
+      <button onclick="toggleReports()" id="reportsToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $rptActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $rptActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $rptActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-bar-chart-line-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">Reports</span>
+        <i class="bi bi-chevron-down" id="reportsChevron"
+          style="font-size:11px;transition:transform .2s;{{ $rptActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="reportsMenu" style="{{ $rptActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.reports.it') }}" class="nav-link {{ request()->routeIs('reports.it') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
+        </a>
+        <a href="{{ route('it.reports.non-it') }}" class="nav-link {{ request()->routeIs('reports.non-it') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-archive" style="font-size:14px"></i> Non-IT Assets
+        </a>
+      </div>
+    </div>
+    <script>
+    function toggleReports() {
+      const menu = document.getElementById('reportsMenu');
+      const chevron = document.getElementById('reportsChevron');
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    </script>
+
+    @if($user->isAdmin())
+    <a href="{{ route('it.activity.index') }}" class="nav-link {{ request()->routeIs('activity.*') ? 'active' : '' }}">
+      <i class="bi bi-clock-history"></i> Activity Log
+    </a>
+    <a href="{{ route('it.email-settings.index') }}" class="nav-link {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">
+      <i class="bi bi-envelope-gear-fill"></i> Email Settings
+    </a>
+    @endif
+    @endif
+
+    <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+    <a href="{{ route('home') }}" class="nav-link">
+      <i class="bi bi-house-door-fill"></i> Back to Portal
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="{{ route('it.profile') }}" class="user-card">
+      @if($user->avatar)
+        <img src="{{ Storage::url($user->avatar) }}" alt="avatar"
+          style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0">
+      @else
+        <div class="user-avatar">{{ strtoupper(substr($user->full_name, 0, 1)) }}</div>
+      @endif
+      <div class="user-info">
+        <div class="user-name">{{ $user->full_name }}</div>
+        <div class="user-role" style="color:{{ $user->isAdmin() ? 'var(--accent)' : ($user->isFinanceAdmin() ? '#38bdf8' : ($user->isCEO() ? '#f59e0b' : ($user->isGM() ? '#2dd4bf' : ($user->isHOU() ? '#a78bfa' : 'rgba(255,255,255,.4)')))) }}">
+          {{ $user->roleName() }}
+        </div>
+      </div>
+      <i class="bi bi-gear" style="color:rgba(255,255,255,.3);font-size:13px;flex-shrink:0"></i>
+    </a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="topbar">
+    <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+      <i class="bi bi-list"></i>
+    </button>
+    <div class="topbar-left">
+      <div class="topbar-title">@yield('page_title', 'Dashboard')</div>
+      <div class="topbar-breadcrumb">FJB Johor Bulkers Sdn Bhd &rsaquo; @yield('page_title', 'Dashboard')</div>
+    </div>
+    <div class="topbar-right">
+      <span style="font-size:12px;color:var(--muted)" id="liveClock"></span>
+
+      {{-- Bell notification --}}
+      <div style="position:relative" id="notifWrap">
+        <button id="notifBell" onclick="toggleNotifDropdown()"
+          style="position:relative;width:36px;height:36px;border-radius:8px;background:transparent;border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s"
+          onmouseover="this.style.background='var(--body-bg)';this.style.color='var(--navy)'"
+          onmouseout="this.style.background='transparent';this.style.color='var(--muted)'">
+          <i class="bi bi-bell-fill" style="font-size:16px"></i>
+          <span id="notifBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;background:#dc2626;color:#fff;border-radius:9px;font-size:10px;font-weight:700;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff"></span>
+        </button>
+        <div id="notifDropdown" style="display:none;position:absolute;top:calc(100% + 10px);right:0;width:340px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.13);z-index:7000;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+            <div style="font-size:13px;font-weight:700;color:var(--text)">Notifications</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <button onclick="markAllRead()" style="background:none;border:none;cursor:pointer;font-size:11px;font-weight:600;color:var(--accent);font-family:inherit">Mark all read</button>
+              @if($user->isAdmin())
+              <a href="{{ route('it.email-settings.index') }}" style="font-size:11px;font-weight:600;color:var(--muted);text-decoration:none"><i class="bi bi-gear"></i></a>
+              @endif
+            </div>
+          </div>
+          <div id="notifList" style="max-height:360px;overflow-y:auto">
+            <div style="padding:32px 16px;text-align:center;color:var(--muted);font-size:13px">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-user">
+        <span class="topbar-role-badge">{{ $user->roleName() }}</span>
+        <span class="topbar-user-name">{{ $user->full_name }}</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark" onclick="toggleTheme()">
+        <i class="bi bi-sun-fill" id="themeIcon"></i>
+      </button>
+      <form method="POST" action="{{ route('it.logout') }}" style="margin:0">
+        @csrf
+        <button type="submit"
+          style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:8px;color:#dc2626;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+          onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="page-body">
+
+    @include('it.partials.alerts')
+
+    @yield('content')
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+// ── LIVE CLOCK ──
+(function() {
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function pad(n){ return n < 10 ? '0'+n : n; }
+  function tick() {
+    var d = new Date();
+    var str = days[d.getDay()] + ', ' + pad(d.getDate()) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    var el = document.getElementById('liveClock');
+    if (el) el.textContent = str;
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+
+// ── THEME ──
+const DARK_VARS = {
+  '--sidebar-bg':    '#1a2235',
+  '--sidebar-hover': '#243044',
+  '--body-bg':       '#111827',
+  '--surface':       '#1f2937',
+  '--surface2':      '#263042',
+  '--border':        '#374151',
+  '--text':          '#d1d5db',
+  '--muted':         '#6b7280',
+  '--table-hover':   'rgba(255,255,255,.04)',
+  '--form-input-bg': '#263042',
+  '--form-input-border': '#374151',
+  '--form-input-color': '#d1d5db',
+  '--table-head-bg': '#1a2235',
+  '--table-head-color': '#9ca3af',
+};
+const LIGHT_VARS = {
+  '--sidebar-bg':    '#1a2332',
+  '--sidebar-hover': '#243044',
+  '--body-bg':       '#f1f5f9',
+  '--surface':       '#ffffff',
+  '--surface2':      '#f8fafc',
+  '--border':        '#e2e8f0',
+  '--text':          '#1e293b',
+  '--muted':         '#64748b',
+  '--table-hover':   '#f8fafc',
+  '--form-input-bg': '#ffffff',
+  '--form-input-border': '#e2e8f0',
+  '--form-input-color': '#1e293b',
+  '--table-head-bg': '#e2e8f0',
+  '--table-head-color': '#475569',
+};
+function applyTheme(dark) {
+  const vars = dark ? DARK_VARS : LIGHT_VARS;
+  for (const [k,v] of Object.entries(vars))
+    document.documentElement.style.setProperty(k, v);
+  const icon = document.getElementById('themeIcon');
+  if (icon) icon.className = dark ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+  document.querySelectorAll('.form-control, .form-select').forEach(el => {
+    el.style.background = vars['--form-input-bg'];
+    el.style.borderColor = vars['--form-input-border'];
+    el.style.color = vars['--form-input-color'];
+  });
+  document.querySelectorAll('thead th').forEach(el => {
+    el.style.backgroundColor = vars['--table-head-bg'];
+    el.style.color = vars['--table-head-color'];
+  });
+  document.querySelectorAll('table.dataTable tbody tr, tbody tr').forEach(el => {
+    el.style.backgroundColor = vars['--surface'];
+    el.style.color = vars['--text'];
+  });
+  document.body.style.backgroundColor = vars['--body-bg'];
+  document.body.style.color = vars['--text'];
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  if (typeof window._chartThemeUpdate === 'function') window._chartThemeUpdate();
+}
+function toggleTheme() {
+  const isDark = localStorage.getItem('fjb-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  localStorage.setItem('fjb-theme', next);
+  applyTheme(next === 'dark');
+}
+(function(){ applyTheme(localStorage.getItem('fjb-theme') === 'dark'); })();
+
+// ── DATATABLES ──
+$(document).ready(function () {
+  const isInventory = window.location.pathname.includes('inventory');
+  const isEwaste    = window.location.pathname.includes('ewaste');
+  if ($('.data-table').length && !isEwaste && !isInventory) {
+    window._dt = $('.data-table').DataTable({
+      pageLength: 25,
+      responsive: true,
+      columnDefs: [{ orderable: false, targets: 0 }],
+      dom: '<"d-flex align-items-center justify-content-between mb-2"<"dt-len"l><"dt-search"f>><"dt-table"t><"d-flex align-items-center justify-content-between mt-3"<"dt-info"i><"dt-pages"p>>',
+      language: {
+        search: '',
+        searchPlaceholder: 'Search...',
+        lengthMenu: 'Show _MENU_',
+        info: 'Showing _START_–_END_ of _TOTAL_ items',
+        paginate: { previous: '← Previous', next: 'Next →' }
+      },
+      drawCallback: function() {
+        if (typeof window._onDtDraw === 'function') window._onDtDraw();
+      }
+    });
+  }
+  if (typeof window._pageInit === 'function') window._pageInit();
+  setTimeout(() => $('.alert-success-custom, .alert-danger-custom').fadeOut(500), 4000);
+});
+
+// ── BELL NOTIFICATION ──
+(function() {
+  var bellWrap = document.getElementById('notifWrap');
+  if (!bellWrap) return;
+  var badge    = document.getElementById('notifBadge');
+  var dropdown = document.getElementById('notifDropdown');
+  var listEl   = document.getElementById('notifList');
+  var open     = false;
+
+  function typeIcon(type) {
+    var map = {
+      'add_request':    ['#2563eb','bi-box-seam-fill'],
+      'writeoff':       ['#d97706','bi-pen-fill'],
+      'delete_request': ['#dc2626','bi-trash3-fill'],
+      'ewaste':         ['#16a34a','bi-recycle'],
+      'it_request':     ['#0284c7','bi-file-earmark-text-fill'],
+      'general':        ['#0284c7','bi-bell-fill'],
+    };
+    return map[type] || map['general'];
+  }
+
+  function timeAgo(dt) {
+    var diff = Math.floor((Date.now() - new Date(dt.replace(' ','T'))) / 1000);
+    if (diff < 60)   return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+    return Math.floor(diff/86400) + 'd ago';
+  }
+
+  function renderList(items) {
+    if (!items.length) {
+      listEl.innerHTML = '<div style="padding:32px 16px;text-align:center;color:#94a3b8;font-size:13px">No notifications yet.</div>';
+      return;
+    }
+    listEl.innerHTML = items.map(function(n) {
+      var ic   = typeIcon(n.type);
+      var read = n.is_read === '1' || n.is_read === 1;
+      return '<div onclick="openNotif('+n.id+',\''+encodeURIComponent(n.link)+'\')" style="display:flex;gap:12px;align-items:flex-start;padding:12px 18px;border-bottom:1px solid #f8fafc;cursor:pointer;background:'+(read?'#fff':'#f0f9ff')+';transition:background .12s" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\''+(read?'#fff':'#f0f9ff')+'\'">'
+        + '<div style="width:34px;height:34px;border-radius:8px;background:'+ic[0]+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><i class="bi '+ic[1]+'" style="color:'+ic[0]+';font-size:15px"></i></div>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div style="font-size:12px;font-weight:'+(read?'500':'700')+';color:#1e293b;line-height:1.4">'+n.title+'</div>'
+        + '<div style="font-size:11px;color:#64748b;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+n.message+'</div>'
+        + '<div style="font-size:10px;color:#94a3b8;margin-top:4px">'+timeAgo(n.created_at)+'</div>'
+        + '</div>'
+        + (read ? '' : '<div style="width:7px;height:7px;border-radius:50%;background:#0284c7;flex-shrink:0;margin-top:6px"></div>')
+        + '</div>';
+    }).join('');
+  }
+
+  function fetchCount() {
+    fetch('{{ route("it.notifications.ajax") }}?action=count')
+      .then(r => r.json())
+      .then(d => {
+        var c = d.count || 0;
+        if (c > 0) { badge.textContent = c > 99 ? '99+' : c; badge.style.display = 'flex'; }
+        else { badge.style.display = 'none'; }
+      }).catch(function(){});
+  }
+
+  function fetchList() {
+    fetch('{{ route("it.notifications.ajax") }}?action=list')
+      .then(r => r.json())
+      .then(renderList)
+      .catch(function(){ listEl.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px">Could not load notifications.</div>'; });
+  }
+
+  window.toggleNotifDropdown = function() {
+    open = !open;
+    dropdown.style.display = open ? 'block' : 'none';
+    if (open) fetchList();
+  };
+
+  window.openNotif = function(id, link) {
+    fetch('{{ route("it.notifications.mark-read") }}', {
+      method: 'POST',
+      headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Content-Type': 'application/json'},
+      body: JSON.stringify({id: id})
+    }).catch(function(){});
+    var url = decodeURIComponent(link);
+    if (url) { window.location.href = url; }
+    else { fetchList(); fetchCount(); }
+  };
+
+  window.markAllRead = function() {
+    fetch('{{ route("it.notifications.mark-read") }}', {
+      method: 'POST',
+      headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Content-Type': 'application/json'},
+      body: JSON.stringify({all: true})
+    }).then(function(){ fetchList(); fetchCount(); }).catch(function(){});
+  };
+
+  document.addEventListener('click', function(e) {
+    if (open && !document.getElementById('notifWrap').contains(e.target)) {
+      open = false;
+      dropdown.style.display = 'none';
+    }
+  });
+
+  fetchCount();
+  setInterval(fetchCount, 60000);
+})();
+</script>
+
+<!-- EASTER EGG -->
+<div id="eggModal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(10,18,32,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:420px;margin:20px;box-shadow:0 32px 80px rgba(0,0,0,.35);font-family:'DM Sans',sans-serif;overflow:hidden">
+    <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:32px 28px 24px;text-align:center">
+      <div style="width:64px;height:64px;background:rgba(255,255,255,.12);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:1.5px solid rgba(255,255,255,.18)">
+        <i class="bi bi-cpu-fill" style="color:#fff;font-size:28px"></i>
+      </div>
+      <div style="color:#fff;font-size:17px;font-weight:800;letter-spacing:.02em">FJB Inventory System</div>
+      <div style="color:rgba(255,255,255,.55);font-size:12px;margin-top:4px;font-weight:500">Internal Management Platform</div>
+    </div>
+    <div style="padding:26px 28px">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 0;width:22px"><i class="bi bi-tag-fill" style="color:var(--accent)"></i></td>
+          <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600;width:110px">System</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">FJB Inventory System</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 0"><i class="bi bi-patch-check-fill" style="color:#16a34a"></i></td>
+          <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Version</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">v1.0.0</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 0"><i class="bi bi-person-fill" style="color:#7c3aed"></i></td>
+          <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Developed by</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">Muhammad Irfan bin Zuraili</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:9px 0"><i class="bi bi-calendar3" style="color:#0d9488"></i></td>
+          <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Period</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 - 17/07/2026)</td>
+        </tr>
+        <tr>
+          <td style="padding:9px 0"><i class="bi bi-building" style="color:#d97706"></i></td>
+          <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Department</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">ICT Department</td>
+        </tr>
+      </table>
+      <div style="margin-top:22px;padding:14px 16px;background:var(--body-bg);border-radius:10px;border:1px solid var(--border);text-align:center">
+        <div style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.6">
+          &ldquo;Thank you for using this system.<br>Built with care to simplify your workflow.&rdquo;
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 28px 20px;text-align:center">
+      <button onclick="document.getElementById('eggModal').style.display='none'"
+        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 32px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var _eggN = 0, _eggT;
+  window._eggClick = function() {
+    _eggN++;
+    clearTimeout(_eggT);
+    _eggT = setTimeout(function(){ _eggN = 0; }, 1800);
+    if (_eggN >= 5) {
+      _eggN = 0;
+      document.getElementById('eggModal').style.display = 'flex';
+    }
+  };
+  document.getElementById('eggModal').addEventListener('click', function(e){
+    if (e.target === this) this.style.display = 'none';
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') document.getElementById('eggModal').style.display = 'none';
+  });
+})();
+</script>
+
+@stack('scripts')
+</body>
+</html>
+

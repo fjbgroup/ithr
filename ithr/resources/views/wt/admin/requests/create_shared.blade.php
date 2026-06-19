@@ -79,7 +79,7 @@
         color: #724d31 !important;
     }
     .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #8B5E3C !important;
+        background: #0284c7 !important;
         color: #ffffff !important;
     }
     .dark .smart-select + .select2-container .select2-selection--single {
@@ -120,7 +120,7 @@
         color: #ffe7c2 !important;
     }
     .dark .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #8B5E3C !important;
+        background: #0284c7 !important;
         color: #ffffff !important;
     }
     .admin-request-shell {
@@ -253,7 +253,7 @@
         gap: 8px !important;
         margin-bottom: 6px !important;
     }
-    .admin-request-card .bg-\[\#8B5E3C\].text-white,
+    .admin-request-card .bg-\[\#0284c7\].text-white,
     .admin-request-card .bg-red-800.text-white {
         padding: 6px !important;
         border-radius: 7px !important;
@@ -295,7 +295,7 @@
         opacity: 1 !important;
     }
     .corporate-combobox-input:focus {
-        border-color: #8B5E3C !important;
+        border-color: #0284c7 !important;
         box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2) !important;
     }
     .corporate-combobox-toggle {
@@ -396,7 +396,7 @@
 @endphp
 <style>
     .match-report-faulty.admin-request-shell { max-width: 1470px !important; margin-left: auto !important; margin-right: auto !important; }
-    .match-report-faulty .page-header-block { padding: 0.85rem 1rem !important; margin: 0 0 12px !important; background: linear-gradient(90deg, rgba(139, 94, 60, 0.10), rgba(248, 250, 252, 0.92) 42%, #ffffff) !important; border: 0 !important; border-left: 5px solid #8B5E3C !important; border-radius: 10px !important; box-shadow: none !important; }
+    .match-report-faulty .page-header-block { padding: 0.85rem 1rem !important; margin: 0 0 12px !important; background: linear-gradient(90deg, rgba(139, 94, 60, 0.10), rgba(248, 250, 252, 0.92) 42%, #ffffff) !important; border: 0 !important; border-left: 5px solid #0284c7 !important; border-radius: 10px !important; box-shadow: none !important; }
     .match-report-faulty .page-title-standard { font-size: 16px !important; line-height: 1.15 !important; letter-spacing: -0.01em !important; }
     .match-report-faulty .page-subtitle-standard { margin-top: 7px !important; font-size: 9px !important; line-height: 1.35 !important; letter-spacing: 0.18em !important; }
     .match-report-faulty > .mb-3 { margin-bottom: 8px !important; }
@@ -443,7 +443,7 @@
     .longterm-modern .page-header-block {
         margin-bottom: 10px !important;
         border: 0 !important;
-        border-left: 5px solid #8B5E3C !important;
+        border-left: 5px solid #0284c7 !important;
         border-radius: 10px !important;
         background: linear-gradient(90deg, rgba(139, 94, 60, 0.10), rgba(248, 250, 252, 0.92) 42%, #ffffff) !important;
         padding: 0.85rem 1rem !important;
@@ -473,7 +473,7 @@
         color: #f8fafc !important;
     }
     .longterm-modern .admin-request-card h4 {
-        border-left-color: #8B5E3C !important;
+        border-left-color: #0284c7 !important;
         margin-top: 10px !important;
         margin-bottom: 8px !important;
         padding-left: 8px !important;
@@ -529,18 +529,18 @@
         min-height: 28px !important;
         width: 34px !important;
         border-color: rgba(139, 94, 60, 0.16) !important;
-        color: #8B5E3C !important;
+        color: #0284c7 !important;
         background: #fffaf4 !important;
     }
     .dark .longterm-modern .admin-request-card .temporary-quantity-step {
         border-color: rgba(148, 163, 184, 0.22) !important;
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
         background: #111827 !important;
     }
     .longterm-modern #temporaryPicCount {
         border-color: rgba(217, 179, 140, 0.28) !important;
         background: rgba(139, 94, 60, 0.16) !important;
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
         border-radius: 999px !important;
         padding: 4px 10px !important;
     }
@@ -560,7 +560,7 @@
         width: 6px;
         height: 20px;
         border-radius: 999px;
-        background: #8B5E3C;
+        background: #0284c7;
         flex: 0 0 6px;
     }
     .longterm-modern .longterm-owner-card {
@@ -588,7 +588,7 @@
         background: rgba(139, 94, 60, 0.12) !important;
     }
     .dark .longterm-modern .longterm-note-box p:first-child {
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
     }
     .dark .longterm-modern .longterm-note-box p:last-child {
         color: #d8e2ef !important;
@@ -599,12 +599,12 @@
     .longterm-modern .request-submit-btn {
         min-height: 34px !important;
         border-radius: 10px !important;
-        background: #8B5E3C !important;
+        background: #0284c7 !important;
         box-shadow: none !important;
     }
     .dark .longterm-modern .page-header-block,
     .dark .match-report-faulty .page-header-block {
-        border-left-color: #d9b38c !important;
+        border-left-color: #38bdf8 !important;
         background: linear-gradient(90deg, rgba(217, 179, 140, 0.14), rgba(30, 41, 59, 0.96) 46%, #1e293b) !important;
     }
     .dark .longterm-modern .page-title-standard,
@@ -736,23 +736,23 @@
                     : 'Create a long term request with ownership details and send it straight to ICT for approval and follow-up.' }}
             </p>
         </div>
-        <a href="{{ route('wt.admin.all.status', ['view' => 'requests']) }}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#8B5E3C] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">
+        <a href="{{ route('wt.admin.all.status', ['view' => 'requests']) }}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0284c7] px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">
             <i class="fa-solid fa-list-check"></i>
             Status Tracking
         </a>
     </div>
 </div>
 
-<div class="admin-request-card bg-white dark:bg-slate-800/80 rounded-2xl shadow-sm border border-[#8B5E3C]/10 dark:border-slate-700/50 overflow-hidden transition-all duration-300">
+<div class="admin-request-card bg-white dark:bg-slate-800/80 rounded-2xl shadow-sm border border-[#0284c7]/10 dark:border-slate-700/50 overflow-hidden transition-all duration-300">
     <div class="flex items-center gap-2.5 mb-5">
-        <div class="bg-[#8B5E3C] text-white p-2.5 rounded-xl border border-[#A67B5B] shadow-inner">
+        <div class="bg-[#0284c7] text-white p-2.5 rounded-xl border border-[#A67B5B] shadow-inner">
             <i class="fas fa-people-arrows text-sm"></i>
         </div>
-        <h2 class="text-xs font-black text-[#3D2B1F] dark:text-slate-100 uppercase tracking-widest">{{ $isTemporaryRequest ? 'Temporary Request Form' : 'Long Term Request Form' }}</h2>
+        <h2 class="text-xs font-black text-[#142b47] dark:text-slate-100 uppercase tracking-widest">{{ $isTemporaryRequest ? 'Temporary Request Form' : 'Long Term Request Form' }}</h2>
     </div>
 
-    <div class="mb-5 rounded-2xl border border-[#8B5E3C]/15 bg-[#FDFBF7] px-4 py-3 dark:bg-slate-900/70 dark:border-slate-700">
-        <p class="text-[9px] font-black uppercase tracking-[0.18em] text-[#8B5E3C]">Request Review</p>
+    <div class="mb-5 rounded-2xl border border-[#0284c7]/15 bg-[#FDFBF7] px-4 py-3 dark:bg-slate-900/70 dark:border-slate-700">
+        <p class="text-[9px] font-black uppercase tracking-[0.18em] text-[#0284c7]">Request Review</p>
         <p class="mt-1 text-[11px] font-semibold text-stone-600 dark:text-slate-300">
             {{ $isTemporaryRequest
                 ? 'Fill in the temporary request details. ICT will check the request and update the status once it is processed.'
@@ -771,31 +771,31 @@
         <input type="hidden" name="event_name" value="{{ old('event_name', 'General Request') }}">
         @endunless
 
-        <h4 class="text-[10px] font-black text-[#8B5E3C] border-l-4 border-[#8B5E3C] pl-3 uppercase tracking-widest mb-4">1. Executive Details</h4>
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">1. Executive Details</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Name</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive ID</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->staff_id ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ strtoupper(auth('wt')->user()->staff_id ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Department</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->department ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ strtoupper(auth('wt')->user()->department ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
             </div>
         </div>
 
-        <h4 class="text-[10px] font-black text-[#8B5E3C] border-l-4 border-[#8B5E3C] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Long Term Request Details' }}</h4>
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Long Term Request Details' }}</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             @if($isTemporaryRequest)
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
-                <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#8B5E3C]/20 bg-white focus-within:ring-2 focus-within:ring-[#8B5E3C]/15 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#8B5E3C]/15 text-xs font-black hover:bg-[#8B5E3C]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
+                <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
+                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
                     <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-3 py-1.5 text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#8B5E3C]/15 text-xs font-black hover:bg-[#8B5E3C]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
+                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
             <div class="md:col-span-2">
@@ -804,7 +804,7 @@
                         <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
                         <p class="mt-1 text-[9px] font-bold text-stone-500 dark:text-slate-400">1 unit = 1 owner. Add owner and pickup contact for each unit.</p>
                     </div>
-                    <span id="temporaryPicCount" class="rounded-lg border border-[#8B5E3C]/20 bg-[#FDFBF7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#8B5E3C] dark:border-slate-700 dark:bg-slate-900">1 unit</span>
+                    <span id="temporaryPicCount" class="rounded-lg border border-[#0284c7]/20 bg-[#FDFBF7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#0284c7] dark:border-slate-700 dark:bg-slate-900">1 unit</span>
                 </div>
                 <div id="temporaryPicList" class="space-y-3"></div>
                 <datalist id="picOwnershipNameOptions">
@@ -838,25 +838,25 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">How Many Days</label>
-                <div class="flex overflow-hidden rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
+                <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
+                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
                     <input type="number" id="temporary_duration_days" name="duration_days" min="1" max="365" inputmode="numeric" placeholder="Type days" value="{{ old('duration_days', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#8B5E3C]/20 text-sm font-black text-stone-600 hover:bg-[#8B5E3C]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
+                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
                 </div>
                 <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Type the number of days, or use - / +. End date will update automatically.</p>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
-                <input type="date" id="temporary_start_date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="date" id="temporary_start_date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">End Date</label>
-                <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
                 <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Please return the walkie talkie to ICT Department on this end date.</p>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
-                <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
                 <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                 <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                 <input type="hidden" id="request_justification_fallback" name="justifications" value="{{ old('justifications', old('event_name')) }}">
@@ -866,10 +866,10 @@
             @unless($isTemporaryRequest)
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
-                <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#8B5E3C]/20 bg-white focus-within:ring-2 focus-within:ring-[#8B5E3C]/15 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#8B5E3C]/15 text-xs font-black hover:bg-[#8B5E3C]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
+                <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
+                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
                     <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-3 py-1.5 text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#8B5E3C]/15 text-xs font-black hover:bg-[#8B5E3C]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
+                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
             <div class="md:col-span-2">
@@ -878,7 +878,7 @@
                         <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
                         <p class="mt-1 text-[9px] font-bold text-stone-500 dark:text-slate-400">1 unit = 1 owner. Add owner and pickup contact for each unit.</p>
                     </div>
-                    <span id="temporaryPicCount" class="rounded-lg border border-[#8B5E3C]/20 bg-[#FDFBF7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#8B5E3C] dark:border-slate-700 dark:bg-slate-900">1 unit</span>
+                    <span id="temporaryPicCount" class="rounded-lg border border-[#0284c7]/20 bg-[#FDFBF7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#0284c7] dark:border-slate-700 dark:bg-slate-900">1 unit</span>
                 </div>
                 <div id="temporaryPicList" class="space-y-3"></div>
                 <datalist id="picOwnershipNameOptions">
@@ -912,11 +912,11 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
-                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>
+                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark / Purpose</label>
-                <textarea name="justifications" rows="1" placeholder="Example: Long-term usage, department coordination, or shared daily usage" class="w-full px-4 py-2.5 rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#8B5E3C]/20 outline-none transition dark:text-slate-200" required>{{ old('justifications') }}</textarea>
+                <textarea name="justifications" rows="1" placeholder="Example: Long-term usage, department coordination, or shared daily usage" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>{{ old('justifications') }}</textarea>
                 <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                 <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                 <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
@@ -927,7 +927,7 @@
         <input type="hidden" name="pickup_method" value="self">
 
         <div class="request-submit-row pt-8 flex justify-end">
-            <button type="submit" name="submit_action" value="submit" class="request-submit-btn bg-[#8B5E3C] text-white px-10 py-3.5 rounded-2xl font-black text-[11px] tracking-widest uppercase hover:bg-[#724D31] transition shadow-xl shadow-[#8B5E3C]/20 flex items-center gap-3 border border-[#A67B5B]">
+            <button type="submit" name="submit_action" value="submit" class="request-submit-btn bg-[#0284c7] text-white px-10 py-3.5 rounded-2xl font-black text-[11px] tracking-widest uppercase hover:bg-[#724D31] transition shadow-xl shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
                 {{ $isTemporaryRequest ? 'Submit Temporary Request To ICT' : 'Submit Long Term Request To ICT' }} <i class="fas fa-paper-plane"></i>
             </button>
         </div>
@@ -1241,13 +1241,13 @@
                 const saved = existingRows[index] || oldPicDetails[index] || {};
                 const row = document.createElement('div');
                 row.className = isTemporaryRequest
-                    ? 'rounded-2xl border border-[#8B5E3C]/15 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70'
+                    ? 'rounded-2xl border border-[#0284c7]/15 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70'
                     : 'longterm-owner-card';
                 row.setAttribute('data-pic-row', '1');
                 row.innerHTML = `
                     <div class="longterm-owner-heading mb-4 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">${index + 1}. Ownership Information</div>
                     <div class="longterm-note-box mb-4 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-[#8B5E3C] dark:text-[#d9b38c]">Profile Note</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
                         <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
                     </div>
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -1260,7 +1260,7 @@
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Phone No</label>
-                            <input type="text" name="pic_details[${index}][phone_no]" data-pic-phone value="${escapeAttribute(saved.phone_no || '')}" placeholder="Auto-filled if available" class="w-full rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                            <input type="text" name="pic_details[${index}][phone_no]" data-pic-phone value="${escapeAttribute(saved.phone_no || '')}" placeholder="Auto-filled if available" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Use (-) if not applicable.</p>
                         </div>
                         <div>
@@ -1271,13 +1271,13 @@
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Type <span class="text-red-500">*</span></label>
-                            <select name="pic_details[${index}][ownership_type]" data-pic-ownership-type class="w-full rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
+                            <select name="pic_details[${index}][ownership_type]" data-pic-ownership-type class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
                                 ${renderOptions(ownershipTypeOptions, saved.ownership_type || '', 'Select ownership type')}
                             </select>
                         </div>
                         <div data-pic-shared-with-group class="${String(saved.ownership_type || '').toUpperCase() === 'SHARED' ? '' : 'hidden'}">
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Shared With <span class="text-red-500">*</span></label>
-                            <input type="text" data-pic-shared-with value="${escapeAttribute(saved.shared_with || (index === 0 ? oldRequestSharedWith : ''))}" placeholder="E.G. NAME / TEAM / DEPARTMENT" class="w-full rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                            <input type="text" data-pic-shared-with value="${escapeAttribute(saved.shared_with || (index === 0 ? oldRequestSharedWith : ''))}" placeholder="E.G. NAME / TEAM / DEPARTMENT" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Sector <span class="text-red-500">*</span></label>
@@ -1299,7 +1299,7 @@
                             </select>
                         </div>
                         <div class="longterm-note-box rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-950/70 md:col-span-2">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-[#8B5E3C] dark:text-[#d9b38c]">Pickup Info</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
                             <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
                         </div>
                         <div>
@@ -1310,7 +1310,7 @@
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Pickup Phone No <span class="text-red-500">*</span></label>
-                            <input type="text" name="pic_details[${index}][pickup_phone_no]" data-pic-pickup-phone value="${escapeAttribute(saved.pickup_phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full rounded-xl border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#8B5E3C]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
+                            <input type="text" name="pic_details[${index}][pickup_phone_no]" data-pic-pickup-phone value="${escapeAttribute(saved.pickup_phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
                         </div>
                         <div class="md:col-span-2">
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">This name will be shown to ICT for pickup at ICT Department after approval.</p>

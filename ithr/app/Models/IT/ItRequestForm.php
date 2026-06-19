@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ItRequestForm extends Model
 {
-    protected $connection = 'it_mysql';
     protected $fillable = [
         'submitted_by', 'request_type', 'subject', 'status',
         'hw_request_type', 'hw_items', 'hw_pc_laptop_no', 'hw_printer_no',

@@ -37,7 +37,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px">Your Account</div>
     <div class="profile-hero-name">{{ $user->full_name }}</div>
     <div class="profile-hero-meta">
-      <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">{{ ucfirst($user->role) }}</span>
+      <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em">{{ ucfirst($user->it_role ?? '-') }}</span>
       <span style="font-size:12px;color:var(--muted)"><i class="bi bi-person" style="font-size:11px"></i> {{ $user->username }}</span>
       @if($user->department)
       <span style="font-size:12px;color:var(--muted)"><i class="bi bi-tag" style="font-size:11px"></i> {{ $user->department }}</span>
@@ -118,7 +118,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Role <span style="font-size:11px;color:var(--muted);font-weight:400">(set by admin)</span></label>
-              <input type="text" class="form-control" value="{{ ucfirst($user->role) }}" disabled style="opacity:.6;cursor:not-allowed">
+              <input type="text" class="form-control" value="{{ ucfirst($user->it_role ?? '-') }}" disabled style="opacity:.6;cursor:not-allowed">
             </div>
           </div>
 
@@ -270,7 +270,7 @@
         </div>
         <div class="account-row">
           <span class="account-row-label">Role</span>
-          <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase">{{ ucfirst($user->role) }}</span>
+          <span style="background:rgba(2,132,199,.12);color:var(--accent);border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;text-transform:uppercase">{{ ucfirst($user->it_role ?? '-') }}</span>
         </div>
       </div>
     </div>

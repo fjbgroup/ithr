@@ -18,13 +18,13 @@
         </p>
     </div>
 
-    <div class="mb-6 rounded-3xl border border-[#8B5E3C]/15 bg-[#FDFBF7] px-5 py-4 shadow-sm dark:bg-slate-800/70 dark:border-slate-700">
+    <div class="mb-6 rounded-3xl border border-[#0284c7]/15 bg-[#FDFBF7] px-5 py-4 shadow-sm dark:bg-slate-800/70 dark:border-slate-700">
         <div class="flex items-start gap-3">
-            <div class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-[#8B5E3C] text-white">
+            <div class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0284c7] text-white">
                 <i class="fas fa-circle-info text-sm"></i>
             </div>
             <div>
-                <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#8B5E3C]">ICT Assignment Flow</p>
+                <p class="text-[10px] font-black uppercase tracking-[0.18em] text-[#0284c7]">ICT Assignment Flow</p>
                 <p class="mt-1 text-[12px] font-semibold text-stone-600 dark:text-slate-300">
                     {{ $isTemporaryRequest
                         ? 'No need to choose units here. Executive only submits temporary request details, quantity, and usage purpose. ICT will review the quantity and assign available units later.'

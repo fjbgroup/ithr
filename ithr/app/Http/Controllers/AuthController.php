@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\SsoService;
 
 class AuthController extends Controller
 {
@@ -168,6 +169,7 @@ class AuthController extends Controller
 
         if (Auth::attempt(['staff_no' => $credentials['staff_no'], 'password' => $credentials['password']], $request->filled('remember'))) {
             $request->session()->regenerate();
+            SsoService::markAuthenticated(Auth::id());
 
             if ($request->session()->has('pending_booking')) {
                 return redirect()->route('rooms.bookings.process-pending');
@@ -183,8 +185,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        SsoService::clearAuthentication();
         Auth::guard('web')->logout();
+        Auth::guard('it')->logout();
+        Auth::guard('wt')->logout();
 
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect('/');

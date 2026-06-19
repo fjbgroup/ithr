@@ -13,7 +13,7 @@ class EmailSettingController extends Controller
     public function index()
     {
         $settings   = EmailSetting::all_settings();
-        $admins     = User::whereIn('role', ['admin', 'finance_admin'])->where('is_active', 1)->orderByRaw('role, full_name')->get(['full_name', 'email', 'role']);
+        $admins     = User::whereIn('it_role', ['admin', 'finance_admin'])->where('is_active', 1)->orderByRaw('it_role, name')->get(['name', 'email', 'it_role']);
         $configured = !empty($settings['smtp_host']) && !empty($settings['smtp_user']) && !empty($settings['smtp_pass']);
         return view('it.email-settings.index', compact('settings', 'admins', 'configured'));
     }

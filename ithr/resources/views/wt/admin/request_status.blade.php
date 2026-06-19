@@ -201,7 +201,7 @@
 
     $resolveReportedBy = function ($request) {
         $submittedBy = $request->user ?: $request->submitToAdmin;
-        $role = strtolower((string) ($submittedBy->role ?? 'user'));
+        $role = strtolower((string) ($submittedBy->wt_role ?? 'user'));
 
         return [
             'name' => strtoupper((string) (($submittedBy->full_name ?? null) ?: ($submittedBy->username ?? null) ?: ($request->full_name ?? '-'))),
@@ -276,7 +276,7 @@
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex flex-col gap-1">
-                            <span class="inline-flex rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-widest {{ $isSelfIssue ? 'bg-stone-100 text-stone-700 border-stone-200' : 'bg-[#F5EEE6] text-[#8B5E3C] border-[#E3D4C6]' }}">
+                            <span class="inline-flex rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-widest {{ $isSelfIssue ? 'bg-stone-100 text-stone-700 border-stone-200' : 'bg-[#F5EEE6] text-[#0284c7] border-[#E3D4C6]' }}">
                                 {{ $isSelfIssue ? 'Self-Issue' : 'On Behalf' }}
                             </span>
                             @if($isTemporaryRequest)
@@ -342,7 +342,7 @@
                         <div class="request-form-label">Reported By</div>
                         <div class="request-form-value">
                             {{ $reportedBy['name'] }}
-                            <div class="mt-1 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C]">{{ $reportedBy['role'] }}</div>
+                            <div class="mt-1 text-[10px] font-black uppercase tracking-widest text-[#0284c7]">{{ $reportedBy['role'] }}</div>
                         </div>
                     </div>
                     <div class="request-form-field">

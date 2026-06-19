@@ -8,7 +8,7 @@
 #topScrollContainer::-webkit-scrollbar { height: 6px; }
 #topScrollContainer::-webkit-scrollbar-track { background: transparent; }
 #topScrollContainer::-webkit-scrollbar-thumb { background: #E7E5E4; border-radius: 10px; }
-#topScrollContainer::-webkit-scrollbar-thumb:hover { background: #3D2B1F; }
+#topScrollContainer::-webkit-scrollbar-thumb:hover { background: #142b47; }
 #topScrollContainer { scrollbar-width: thin; scrollbar-color: #E7E5E4 transparent; }
 /* Hide scroller if no overflow */
 #topScrollContainer.hidden { display: none !important; }
@@ -542,7 +542,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
         <h3 class="page-title-standard">Special Use Walkie Talkies</h3>
         <p class="page-subtitle-standard">Records marked for special use, temporary, or spares.</p>
     </div>
-    @if(auth('wt')->user()->role === 'admin_it')
+    @if(auth('wt')->user()->wt_role === 'admin_it')
     <div class="flex flex-shrink-0 items-center gap-2">
         <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
@@ -637,7 +637,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
             <td>{{ $record->received_date ?? '-' }}</td>
             <td>{{ $record->repair_date ?? '-' }}</td>
             <td>
-                @if(auth('wt')->user()->role === 'admin_it')
+                @if(auth('wt')->user()->wt_role === 'admin_it')
                     <div class="special-action-buttons">
                         <button type="button" class="btn btn-info btn-sm" title="View Details" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">
                             <i class="fa-solid fa-eye"></i>
@@ -922,7 +922,7 @@ html:not(.dark) body .content-surface .wt-data-scrollbar {
 }
 html:not(.dark) body .content-surface .wt-data-page-hero {
     border: 1px solid #d8e1ed !important;
-    border-left: 4px solid #c28a48 !important;
+    border-left: 4px solid #0284c7 !important;
     box-shadow: none !important;
 }
 html:not(.dark) body .content-surface .wt-data-page-title,
@@ -1284,7 +1284,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
 </div>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
     <div class="modal-box" style="max-width: 500px;">
         <div class="modal-header">
@@ -1306,7 +1306,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <input type="file" name="file" id="import_file" class="hidden" required onchange="updateFileName(this)">
                     <label for="import_file" class="cursor-pointer">
                         <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-4 border border-stone-100">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3D2B1F" viewBox="0 0 16 16">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#142b47" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                 <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
                             </svg>

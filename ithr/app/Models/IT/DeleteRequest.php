@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class DeleteRequest extends Model
 {
-    protected $connection = 'it_mysql';
-    public $timestamps = false;
     protected $fillable = [
         'inventory_id', 'requested_by', 'reason',
         'asset_number', 'asset_class', 'asset_description',

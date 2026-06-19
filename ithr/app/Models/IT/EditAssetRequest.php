@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EditAssetRequest extends Model
 {
-    protected $connection = 'it_mysql';
-    public $timestamps = false;
     protected $fillable = [
         'asset_type', 'asset_id', 'requested_by', 'status',
         'asset_number', 'asset_class', 'fa_code', 'description', 'serial_number',

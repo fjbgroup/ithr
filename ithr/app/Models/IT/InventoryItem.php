@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class InventoryItem extends Model
 {
-    protected $connection = 'it_mysql';
     protected $fillable = [
         'asset_number', 'asset_class', 'description', 'serial_number',
         'brand', 'model', 'location', 'condition_status', 'item_status',

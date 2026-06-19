@@ -5,39 +5,35 @@
 @push('styles')
 <style>
     .approval-history-page {
-        color: var(--text-primary);
+        color: var(--text);
     }
     .approval-history-title {
         font-size: 1.25rem;
         line-height: 1.1;
         font-weight: 800;
-        color: var(--text-primary);
+        color: var(--text);
         letter-spacing: -0.02em;
     }
     .approval-history-subtitle {
         font-size: 9px;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: var(--muted);
         letter-spacing: 0.1em;
         line-height: 1.35;
         text-transform: uppercase;
     }
     .approval-history-card {
-        background: #ffffff;
-        border-color: #e7e5e4;
-    }
-    .dark .approval-history-card {
-        background: #182233;
-        border-color: #334155;
+        background: var(--surface);
+        border-color: var(--border);
     }
     .approval-history-body-title {
         font-size: 10px;
         font-weight: 800;
-        color: var(--text-primary);
+        color: var(--text);
     }
     .approval-history-body-meta {
         font-size: 9px;
-        color: var(--text-secondary);
+        color: var(--muted);
     }
     .approval-history-empty-state {
         display: flex;
@@ -46,14 +42,14 @@
         justify-content: center;
         flex-direction: column;
         gap: 10px;
-        color: var(--text-secondary);
+        color: var(--muted);
         font-size: 11px;
         font-weight: 700;
         text-align: center;
     }
     .approval-history-page table.dataTable tbody td.dataTables_empty {
         padding: 0 !important;
-        color: var(--text-secondary) !important;
+        color: var(--muted) !important;
         background: transparent !important;
     }
     .approval-history-page table.dataTable tbody tr {
@@ -67,11 +63,8 @@
         cursor: pointer;
     }
     .history-form-sheet {
-        background: #ffffff;
-        color: var(--text-primary);
-    }
-    .dark .history-form-sheet {
-        background: #182233;
+        background: var(--surface);
+        color: var(--text);
     }
     .history-form-header {
         background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
@@ -85,13 +78,9 @@
     }
     .history-form-section {
         overflow: hidden;
-        border: 1px solid #e7e5e4;
+        border: 1px solid var(--border);
         border-radius: 14px;
-        background: #ffffff;
-    }
-    .dark .history-form-section {
-        border-color: #334155;
-        background: #0f172a;
+        background: var(--surface);
     }
     .history-form-section-title {
         display: flex;
@@ -100,7 +89,7 @@
         border-bottom: 1px solid #e7e5e4;
         background: #f8fafc;
         padding: 12px 14px;
-        color: #8B5E3C;
+        color: #0284c7;
         font-size: 10px;
         font-weight: 900;
         letter-spacing: 0.13em;
@@ -132,7 +121,7 @@
         border-color: #334155;
     }
     .history-form-label {
-        color: var(--text-secondary);
+        color: var(--muted);
         font-size: 9px;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -140,7 +129,7 @@
     }
     .history-form-value {
         margin-top: 7px;
-        color: var(--text-primary);
+        color: var(--text);
         font-size: 11px;
         font-weight: 800;
         line-height: 1.55;
@@ -158,7 +147,7 @@
         --history-panel: #152033;
         --history-line: rgba(148, 163, 184, 0.16);
         --history-muted: #93a4bd;
-        --history-accent: #8B5E3C;
+        --history-accent: #0284c7;
         --history-accent-soft: rgba(139, 94, 60, 0.16);
     }
     .approval-history-page > .mb-4:first-child {
@@ -201,7 +190,7 @@
         justify-content: center;
         border-radius: 10px;
         background: var(--history-accent-soft);
-        color: #d9b38c !important;
+        color: #38bdf8 !important;
         font-size: 13px !important;
     }
     .approval-history-card > .navy-panel h4 {
@@ -343,7 +332,7 @@
         background: #ffffff !important;
     }
     html:not(.dark) .approval-history-page > .mb-4:first-child {
-        background: linear-gradient(135deg, rgba(139, 94, 60, 0.08), transparent 42%), #ffffff !important;
+        background: var(--surface) !important;
         border-color: #e7e5e4 !important;
     }
     html:not(.dark) .approval-history-title,
@@ -497,7 +486,7 @@
             $submittedBy = $request->submitToAdmin;
         }
 
-        $role = strtolower((string) ($submittedBy->role ?? 'user'));
+        $role = strtolower((string) ($submittedBy->wt_role ?? 'user'));
         $roleLabel = match ($role) {
             'admin' => 'Executive',
             'admin_it' => 'ICT',
@@ -669,7 +658,7 @@
                         <div class="history-form-label">Reported By</div>
                         <div class="history-form-value">
                             {{ $reportedBy['name'] }}
-                            <div class="mt-1 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C]">{{ $reportedBy['role'] }}</div>
+                            <div class="mt-1 text-[10px] font-black uppercase tracking-widest text-[#0284c7]">{{ $reportedBy['role'] }}</div>
                         </div>
                     </div>
                     <div class="history-form-field">
@@ -918,7 +907,7 @@
                         @if(!empty($evidenceFiles))
                         <div class="flex flex-wrap gap-2">
                             @foreach($evidenceFiles as $path)
-                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#8B5E3C] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
+                            <a href="{{ asset('storage/' . $path) }}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 rounded-lg border border-stone-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#0284c7] hover:bg-stone-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800">
                                 <i class="fa-solid fa-paperclip"></i> Evidence {{ $loop->iteration }}
                             </a>
                             @endforeach

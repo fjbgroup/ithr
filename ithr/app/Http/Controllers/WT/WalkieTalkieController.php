@@ -536,7 +536,7 @@ class WalkieTalkieController extends Controller
             'formSubtitle' => 'Complete the form below and save when ready.',
             'backRoute' => route('wt.admin.walkies.index'),
             'submitLabel' => 'Save Unit',
-            'returnRouteName' => 'admin.walkies.index',
+            'returnRouteName' => 'wt.admin.walkies.index',
             'defaults' => [],
             'hiddenFields' => [],
             'formAction' => route('wt.admin.walkies.store'),
@@ -553,7 +553,7 @@ class WalkieTalkieController extends Controller
             'formSubtitle' => 'Only unit details are needed. Status will be UNUSED and ownership will be UNALLOCATED.',
             'backRoute' => route('wt.admin.walkies.index'),
             'submitLabel' => 'Save Stock Unit',
-            'returnRouteName' => 'admin.walkies.index',
+            'returnRouteName' => 'wt.admin.walkies.index',
             'defaults' => [
                 'status' => 'UNUSED',
                 'ownership_type' => 'UNALLOCATED',
@@ -577,7 +577,7 @@ class WalkieTalkieController extends Controller
             'formSubtitle' => 'Register a walkie talkie that is marked for special use.',
             'backRoute' => route('wt.admin.walkies.specialUse'),
             'submitLabel' => 'Add Special Use Unit',
-            'returnRouteName' => 'admin.walkies.specialUse',
+            'returnRouteName' => 'wt.admin.walkies.specialUse',
             'defaults' => [
                 'status' => 'UNUSED',
                 'ownership_type' => 'SPARE',
@@ -602,7 +602,7 @@ class WalkieTalkieController extends Controller
             'formSubtitle' => 'Register a unit that needs an ID change or overlap tracking.',
             'backRoute' => route('wt.admin.walkies.duplicateIds'),
             'submitLabel' => 'Save Duplicate Record',
-            'returnRouteName' => 'admin.walkies.duplicateIds',
+            'returnRouteName' => 'wt.admin.walkies.duplicateIds',
             'defaults' => [
                 'need_to_change_id' => '1',
                 'id_change_done' => '0',
@@ -618,13 +618,13 @@ class WalkieTalkieController extends Controller
     {
         $source = $request->query('source', 'index');
         $routeMap = [
-            'index' => 'admin.walkies.index',
-            'unused' => 'admin.walkies.unused',
-            'special_use' => 'admin.walkies.specialUse',
-            'duplicate' => 'admin.walkies.duplicateIds',
+            'index' => 'wt.admin.walkies.index',
+            'unused' => 'wt.admin.walkies.unused',
+            'special_use' => 'wt.admin.walkies.specialUse',
+            'duplicate' => 'wt.admin.walkies.duplicateIds',
         ];
 
-        $returnRouteName = $routeMap[$source] ?? 'admin.walkies.index';
+        $returnRouteName = $routeMap[$source] ?? 'wt.admin.walkies.index';
 
         return view('wt.admin.walkie_talkies.create', array_merge($this->getFormOptions(), [
             'pageTitle' => 'Edit Walkie Talkie',
@@ -712,7 +712,7 @@ public function repairFaulty()
         $historyRetentionYears = max(1, min(5, (int) env('WT_RETURN_HISTORY_YEARS', 5)));
         $historyCutoff = now()->subYears($historyRetentionYears)->startOfDay();
 
-        if ($user->role === 'admin') {
+        if ($user->wt_role === 'admin') {
             $records = collect();
             $historyRequests = collect();
 
@@ -914,10 +914,10 @@ public function repairFaulty()
 
         $returnRoute = $request->input('return_route');
         $allowedReturnRoutes = [
-            'admin.walkies.index',
-            'admin.walkies.unused',
-            'admin.walkies.specialUse',
-            'admin.walkies.duplicateIds',
+            'wt.admin.walkies.index',
+            'wt.admin.walkies.unused',
+            'wt.admin.walkies.specialUse',
+            'wt.admin.walkies.duplicateIds',
         ];
 
         if (in_array($returnRoute, $allowedReturnRoutes, true)) {
@@ -986,10 +986,10 @@ public function repairFaulty()
 
         $returnRoute = $request->input('return_route');
         $allowedReturnRoutes = [
-            'admin.walkies.index',
-            'admin.walkies.unused',
-            'admin.walkies.specialUse',
-            'admin.walkies.duplicateIds',
+            'wt.admin.walkies.index',
+            'wt.admin.walkies.unused',
+            'wt.admin.walkies.specialUse',
+            'wt.admin.walkies.duplicateIds',
         ];
 
         if (in_array($returnRoute, $allowedReturnRoutes, true)) {

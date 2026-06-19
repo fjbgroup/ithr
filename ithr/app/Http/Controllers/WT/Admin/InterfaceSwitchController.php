@@ -13,7 +13,7 @@ class InterfaceSwitchController extends Controller
     public function switch(Request $request, $role)
     {
         // Only admin_it can switch roles
-        if (Auth::guard('wt')->user()->role !== 'admin_it') {
+        if (Auth::guard('wt')->user()->wt_role !== 'admin_it') {
             return back()->with('error', 'Unauthorized access.');
         }
 
@@ -35,16 +35,16 @@ class InterfaceSwitchController extends Controller
 
     public function impersonateExecutive(Request $request)
     {
-        if (Auth::guard('wt')->user()->role !== 'admin_it') {
+        if (Auth::guard('wt')->user()->wt_role !== 'admin_it') {
             return back()->with('error', 'Unauthorized access.');
         }
 
         $validated = $request->validate([
-            'executive_user_id' => ['required', 'integer', Rule::exists(User::class, 'user_id')],
+            'executive_user_id' => ['required', 'integer', Rule::exists(User::class, 'id')],
         ]);
 
-        $executive = User::where('role', 'admin')
-            ->where('user_id', $validated['executive_user_id'])
+        $executive = User::where('wt_role', 'admin')
+            ->where('id', $validated['executive_user_id'])
             ->firstOrFail();
 
         $ictUserId = Auth::guard('wt')->id();
@@ -69,8 +69,8 @@ class InterfaceSwitchController extends Controller
             return redirect()->route('wt.admin.dashboard');
         }
 
-        $ictUser = User::where('role', 'admin_it')
-            ->where('user_id', $ictUserId)
+        $ictUser = User::where('wt_role', 'admin_it')
+            ->where('id', $ictUserId)
             ->firstOrFail();
 
         Auth::guard('wt')->login($ictUser);

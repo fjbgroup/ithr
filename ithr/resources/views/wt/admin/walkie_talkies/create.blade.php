@@ -45,7 +45,7 @@
         @if(($formMethod ?? 'POST') !== 'POST')
         @method($formMethod)
         @endif
-        <input type="hidden" name="return_route" value="{{ $returnRouteName ?? 'admin.walkies.index' }}">
+        <input type="hidden" name="return_route" value="{{ $returnRouteName ?? 'wt.admin.walkies.index' }}">
         @foreach(($hiddenFields ?? []) as $hiddenName => $hiddenValue)
         <input type="hidden" name="{{ $hiddenName }}" value="{{ $hiddenValue }}">
         @endforeach

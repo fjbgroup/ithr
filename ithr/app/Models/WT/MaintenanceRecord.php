@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class MaintenanceRecord extends Model
 {
     protected $table = 'maintenance_records';
-    protected $connection = 'wt_mysql';
     protected $primaryKey = 'maintenance_id';
     public $timestamps = false; // No timestamps on this table
 
@@ -74,12 +73,12 @@ class MaintenanceRecord extends Model
 
     public function handler()
     {
-        return $this->belongsTo(User::class, 'handled_by', 'user_id');
+        return $this->belongsTo(User::class, 'handled_by', 'id');
     }
 
     public function submitToAdmin()
     {
-        return $this->belongsTo(User::class, 'submit_to_admin_id', 'user_id');
+        return $this->belongsTo(User::class, 'submit_to_admin_id', 'id');
     }
 }
 

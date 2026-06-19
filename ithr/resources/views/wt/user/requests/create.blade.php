@@ -6,8 +6,8 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .form-section-title {
-        color: #8B5E3C;
-        border-left: 4px solid #8B5E3C;
+        color: #0284c7;
+        border-left: 4px solid #0284c7;
         padding-left: 10px;
         font-weight: 800;
         margin-bottom: 16px;
@@ -17,60 +17,59 @@
         font-size: 10px;
     }
     input:focus, select:focus, textarea:focus {
-        border-color: #8B5E3C !important;
-        box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.1) !important;
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 2px rgba(2,132,199,.12) !important;
         outline: none;
     }
-    
+
     .radio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
     .radio-item { position: relative; }
     .radio-item input { position: absolute; opacity: 0; }
-    .radio-item label { 
-        display: block; background: #FDFBF7; border: 1px solid rgba(139, 94, 60, 0.2); 
+    .radio-item label {
+        display: block; background: var(--body-bg); border: 1px solid var(--border);
         padding: 8px 10px; border-radius: 10px; text-align: center; font-size: 11px;
-        cursor: pointer; color: #57534e; font-weight: 600; transition: all 0.2s;
+        cursor: pointer; color: var(--muted); font-weight: 600; transition: all 0.2s;
     }
-    .radio-item input:checked + label { 
-        background: #8B5E3C; border-color: #8B5E3C; color: white;
-        box-shadow: 0 4px 10px rgba(139, 94, 60, 0.2);
+    .radio-item input:checked + label {
+        background: var(--accent); border-color: var(--accent); color: #fff;
+        box-shadow: 0 4px 10px rgba(2,132,199,.25);
     }
     .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
     .checkbox-item {
         display: flex; align-items: center; gap: 10px;
-        background: #FDFBF7; border: 1px solid rgba(139, 94, 60, 0.18);
-        padding: 12px 14px; border-radius: 12px; color: #57534e; font-weight: 600;
+        background: var(--body-bg); border: 1px solid var(--border);
+        padding: 12px 14px; border-radius: 12px; color: var(--muted); font-weight: 600;
     }
-    .checkbox-item input { width: 16px; height: 16px; accent-color: #8B5E3C; }
+    .checkbox-item input { width: 16px; height: 16px; accent-color: var(--accent); }
     .select2-container--default .select2-selection--multiple {
-        border-color: rgba(139, 94, 60, 0.3) !important;
+        border-color: var(--border) !important;
         border-radius: 0.75rem !important;
         padding: 6px !important;
-        background: rgba(253, 251, 247, 0.5) !important;
+        background: var(--surface) !important;
     }
     .select2-container--default.select2-container--focus .select2-selection--multiple {
-        border-color: #8B5E3C !important;
+        border-color: var(--accent) !important;
     }
     .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #8B5E3C !important;
+        background-color: var(--accent) !important;
         border: none !important;
-        color: white !important;
+        color: #fff !important;
         border-radius: 8px !important;
         padding: 4px 10px !important;
     }
-    .smart-select + .select2-container {
-        width: 100% !important;
-    }
+    .smart-select + .select2-container,
+    .dept-select + .select2-container { width: 100% !important; }
     .smart-select + .select2-container .select2-selection--single {
         min-height: 42px;
         border-radius: 0.75rem !important;
-        border: 1px solid rgba(139, 94, 60, 0.3) !important;
-        background: rgba(253, 251, 247, 0.5) !important;
+        border: 1px solid var(--border) !important;
+        background: var(--surface) !important;
         padding: 6px 12px !important;
         display: flex !important;
         align-items: center !important;
     }
     .smart-select + .select2-container .select2-selection__rendered {
-        color: #3f3f46 !important;
+        color: var(--text) !important;
         font-size: 11px !important;
         font-weight: 700 !important;
         padding-left: 0 !important;
@@ -79,32 +78,30 @@
         text-transform: uppercase;
     }
     .smart-select + .select2-container .select2-selection__placeholder {
-        color: #94a3b8 !important;
+        color: var(--muted) !important;
     }
     .smart-select + .select2-container .select2-selection__arrow {
         height: 100% !important;
         right: 12px !important;
     }
     .select2-dropdown {
-        border: 1px solid #cbd5e1 !important;
+        border: 1px solid var(--border) !important;
         border-radius: 0 0 14px 14px !important;
         overflow: hidden;
-        background: #fffaf5 !important;
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+        background: var(--surface) !important;
+        box-shadow: 0 12px 24px rgba(15,23,42,.12);
     }
     .select2-search--dropdown,
     .select2-results,
     .select2-results > .select2-results__options {
-        background: #fffaf5 !important;
+        background: var(--surface) !important;
     }
-    .select2-search--dropdown {
-        padding: 10px !important;
-    }
+    .select2-search--dropdown { padding: 10px !important; }
     .select2-search--dropdown .select2-search__field {
-        border: 2px solid #f59e0b !important;
+        border: 2px solid var(--accent) !important;
         border-radius: 11px !important;
-        background: #ffffff !important;
-        color: #1f2937 !important;
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
         padding: 8px 10px !important;
         font-size: 11px !important;
         font-weight: 800 !important;
@@ -112,18 +109,21 @@
         outline: none !important;
     }
     .select2-results__option {
-        background: #fffaf5 !important;
-        color: #3d2b1f !important;
+        background: var(--surface) !important;
+        color: var(--text) !important;
         padding: 10px 16px !important;
         font-size: 11px !important;
         font-weight: 900 !important;
         text-transform: uppercase;
     }
     .select2-container--default .select2-results__option--selected,
-    .select2-container--default .select2-results__option[aria-selected=true],
+    .select2-container--default .select2-results__option[aria-selected=true] {
+        background: var(--body-bg) !important;
+        color: var(--text) !important;
+    }
     .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #f1e4d5 !important;
-        color: #3d2b1f !important;
+        background: var(--accent) !important;
+        color: #fff !important;
     }
     .request-compact-shell {
         max-width: 980px !important;
@@ -201,11 +201,18 @@
         padding: 5px 8px !important;
         font-size: 9.5px !important;
         line-height: 1.2 !important;
+        border: 1px solid var(--border) !important;
+        background: var(--surface) !important;
+        color: var(--text) !important;
     }
     .request-compact-card textarea {
         min-height: 44px !important;
         height: auto !important;
     }
+    .request-compact-card label,
+    .request-compact-card p,
+    .request-compact-card span { color: var(--text) !important; }
+    .request-compact-card label { color: var(--muted) !important; }
     .request-compact-card .smart-select + .select2-container .select2-selection--single,
     .request-compact-card .dept-select + .select2-container .select2-selection--multiple {
         min-height: 28px !important;
@@ -224,7 +231,7 @@
         gap: 8px !important;
         margin-bottom: 6px !important;
     }
-    .request-compact-card .bg-\[\#8B5E3C\].text-white {
+    .request-compact-card .bg-\[\#0284c7\].text-white {
         padding: 6px !important;
         border-radius: 7px !important;
     }
@@ -256,20 +263,18 @@
     $profileStaffId = old('requestor_staff_id', $currentUser->staff_id);
     $profileDepartments = collect(old('requestor_dept', $currentUser->department ? [$currentUser->department] : []));
 @endphp
-<div class="px-2 request-compact-shell">
-<div class="mb-3">
-    <h3 class="text-sm font-extrabold text-[#3D2B1F] tracking-tight">Request Access</h3>
-    <p class="text-stone-400 font-medium mt-0.5 text-[9px] tracking-widest uppercase">
-        Submit a formal application to borrow communication equipment.
-    </p>
+<div class="request-compact-shell">
+<div style="margin-bottom:18px">
+    <div style="font-size:16px;font-weight:800;color:var(--text)">Request Access</div>
+    <p style="margin-top:4px;font-size:12px;color:var(--muted)">Submit a formal application to borrow communication equipment.</p>
 </div>
 
-<div class="request-compact-card bg-white rounded-2xl shadow-sm border border-[#8B5E3C]/10 overflow-hidden p-5 md:p-6">
-    <div class="flex items-center gap-2.5 mb-2.5">
-        <div class="bg-[#8B5E3C] text-white p-2 rounded-lg border border-[#A67B5B] shadow-inner">
-            <i class="fa-solid fa-hand-holding-hand text-sm"></i>
+<div class="request-compact-card table-card" style="padding:20px 22px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="background:var(--accent);color:#fff;padding:8px;border-radius:8px;display:flex;align-items:center">
+            <i class="fa-solid fa-hand-holding-hand"></i>
         </div>
-        <h2 class="text-xs font-black text-[#3D2B1F]">Walkie Talkie Request Form</h2>
+        <h2 style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin:0">Walkie Talkie Request Form</h2>
     </div>
 
     <form action="{{ route('wt.user.requests.store') }}" method="POST" class="space-y-4">
@@ -278,10 +283,10 @@
 
         <!-- 1. USER INFORMATION -->
         <h4 class="form-section-title">1. User Information</h4>
-        <div class="mb-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3">
-            <p class="text-[10px] font-black uppercase tracking-widest text-sky-700">Profile Note</p>
-            <p class="mt-1 text-[10px] font-bold leading-5 text-sky-800">
-                Your personal details are filled automatically based on <span class="uppercase">My Profile</span>. If you need to update your name, staff ID, or department, please update them in <span class="uppercase">My Profile</span> first.
+        <div style="border:1px solid rgba(2,132,199,.2);background:rgba(2,132,199,.06);border-radius:8px;padding:12px 14px;margin-bottom:12px">
+            <p style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin:0">Profile Note</p>
+            <p style="margin-top:4px;font-size:10px;font-weight:700;line-height:1.6;color:var(--text);margin-bottom:0">
+                Your personal details are filled automatically based on <span style="text-transform:uppercase">My Profile</span>. If you need to update your name, staff ID, or department, please update them in <span style="text-transform:uppercase">My Profile</span> first.
             </p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -295,7 +300,7 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Date</label>
-                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-3 py-2 rounded-lg border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 text-[11px]" required>
+                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px]" required>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Department</label>
@@ -338,7 +343,7 @@
             </div>
             <div id="shared_with_section" class="{{ old('ownership_type') === 'shared' ? '' : 'hidden' }}">
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Shared With <span class="text-red-500">*</span></label>
-                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', '')) }}" placeholder="E.G. USER / TEAM / DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 text-[11px] font-bold uppercase">
+                <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', '')) }}" placeholder="E.G. USER / TEAM / DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px] font-bold uppercase">
                 @error('shared_with')
                     <div class="text-red-600 text-xs font-bold mt-2">{{ $message }}</div>
                 @enderror
@@ -391,7 +396,7 @@
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-2 uppercase tracking-widest">Justifications</label>
-                <textarea name="justification" rows="1" placeholder="Reason for request..." class="w-full px-3 py-2 rounded-lg border border-[#8B5E3C]/30 bg-[#FDFBF7]/50 text-[11px]" required>{{ old('justification') }}</textarea>
+                <textarea name="justification" rows="1" placeholder="Reason for request..." class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px]" required>{{ old('justification') }}</textarea>
             </div>
         </div>
 
@@ -412,15 +417,15 @@
                 </select>
                 
                 <!-- Executive Info Display -->
-                <div id="admin-details" class="mt-4 p-4 bg-[#FDFBF7] border border-[#8B5E3C]/20 rounded-2xl hidden transition-all duration-300">
+                <div id="admin-details" style="display:none;margin-top:12px;padding:14px;background:var(--body-bg);border:1px solid var(--border);border-radius:10px">
                     <div class="flex items-center gap-4">
-                        <div class="bg-white p-2.5 rounded-xl border border-[#8B5E3C]/10 text-[#8B5E3C]">
+                        <div class="bg-white p-2.5 rounded-xl border border-[#0284c7]/10 text-[#0284c7]">
                             <i class="fas fa-user-tie"></i>
                         </div>
                         <div class="grid grid-cols-1 gap-8 flex-1">
                             <div>
                                 <p class="text-[9px] font-black text-stone-400 uppercase tracking-[0.2em] mb-1">Department</p>
-                                <p id="admin-dept-text" class="text-xs font-bold text-[#3D2B1F] uppercase">-</p>
+                                <p id="admin-dept-text" class="text-xs font-bold text-[#142b47] uppercase">-</p>
                             </div>
                         </div>
                     </div>
@@ -433,7 +438,7 @@
         </div>
 
         <div class="pt-6 flex justify-end">
-            <button type="submit" class="bg-[#8B5E3C] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#724D31] transition shadow-lg shadow-[#8B5E3C]/20 flex items-center gap-3 border border-[#A67B5B]">
+            <button type="submit" class="bg-[#0284c7] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#724D31] transition shadow-lg shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
                 SUBMIT REQUEST <i class="fas fa-arrow-right"></i>
             </button>
         </div>

@@ -12,7 +12,7 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard('wt')->check()) {
             $user = Auth::guard('wt')->user();
-            if ($user->role === 'user') {
+            if ($user->wt_role === 'user') {
                 return redirect()->route('wt.user.dashboard');
             }
             return redirect()->route('wt.admin.dashboard');

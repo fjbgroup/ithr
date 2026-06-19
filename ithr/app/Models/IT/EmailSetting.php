@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailSetting extends Model
 {
-    protected $connection = 'it_mysql';
     public $timestamps = false;
     protected $primaryKey = 'setting_key';
     public $incrementing = false;

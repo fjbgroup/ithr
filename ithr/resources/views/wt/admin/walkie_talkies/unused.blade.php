@@ -731,7 +731,7 @@
     html:not(.dark) body .content-surface .unused-page-shell > .page-header-block {
         background: #ffffff !important;
         border: 1px solid #d8e1ed !important;
-        border-left: 4px solid #c28a48 !important;
+        border-left: 4px solid #0284c7 !important;
     }
     html:not(.dark) body .content-surface .unused-page-shell .page-title-standard {
         color: #0f172a !important;
@@ -936,7 +936,7 @@
                             </td>
                         @endforeach
                         <td>
-                            @if(auth('wt')->user()->role === 'admin_it')
+                            @if(auth('wt')->user()->wt_role === 'admin_it')
                                 <div class="unused-actions">
                                     <button
                                         type="button"
@@ -992,7 +992,7 @@
         <form id="unusedUseForm" method="POST">
             @csrf
             <input type="hidden" name="status" value="IN USE">
-            <input type="hidden" name="return_route" value="admin.walkies.unused">
+            <input type="hidden" name="return_route" value="wt.admin.walkies.unused">
             <input type="hidden" name="need_to_change_id" value="0">
             <input type="hidden" name="id_change_done" value="0">
             <input type="hidden" name="is_special_use" value="0">

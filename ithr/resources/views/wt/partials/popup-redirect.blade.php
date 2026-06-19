@@ -24,7 +24,7 @@
         background: #f8fafc;
     }
     #submitSuccessModal .submit-success-ok {
-        background: #8B5E3C;
+        background: #0284c7;
         color: #ffffff;
         box-shadow: 0 10px 22px rgba(139, 94, 60, 0.18);
     }
@@ -62,7 +62,7 @@
     }
     html.dark #submitSuccessModal .submit-success-ok,
     .dark #submitSuccessModal .submit-success-ok {
-        background: #B38A5A;
+        background: #0284c7;
         color: #111827;
         box-shadow: 0 10px 22px rgba(179, 138, 90, 0.18);
     }
@@ -81,7 +81,7 @@
             <p class="submit-success-message mt-3 text-[12px] font-bold leading-6">{{ session('popup_success') }}</p>
         </div>
         <div class="submit-success-footer px-6 py-4">
-            <button type="button" id="submitSuccessOk" class="submit-success-ok w-full rounded-xl px-5 py-3 text-[10px] font-black uppercase tracking-[0.18em] transition focus:outline-none focus:ring-4 focus:ring-[#8B5E3C]/20">
+            <button type="button" id="submitSuccessOk" class="submit-success-ok w-full rounded-xl px-5 py-3 text-[10px] font-black uppercase tracking-[0.18em] transition focus:outline-none focus:ring-4 focus:ring-[#0284c7]/20">
                 OK
             </button>
         </div>

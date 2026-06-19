@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssetGroup extends Model
 {
-    protected $connection = 'it_mysql';
     public $timestamps = false;
     protected $fillable = ['name', 'sort_order'];
 

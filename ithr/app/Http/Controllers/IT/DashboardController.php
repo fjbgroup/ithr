@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $pendingAll = $ewastePending + AddAssetRequest::where('status', 'Pending')->count();
 
         // IT asset class distribution for chart (top 8 by count)
-        $itChartRaw = DB::connection('it_mysql')->table('inventory_items')
+        $itChartRaw = DB::table('inventory_items')
             ->where('item_status', '!=', 'Disposed')
             ->selectRaw('asset_class, COUNT(*) as cnt')
             ->groupBy('asset_class')
@@ -55,7 +55,7 @@ class DashboardController extends Controller
         $itTotal     = $itChartData->sum('value');
 
         // Non-IT class distribution
-        $nitChartRaw = DB::connection('it_mysql')->table('non_it_assets')
+        $nitChartRaw = DB::table('non_it_assets')
             ->selectRaw('asset_class, COUNT(*) as cnt')
             ->groupBy('asset_class')
             ->orderByDesc('cnt')

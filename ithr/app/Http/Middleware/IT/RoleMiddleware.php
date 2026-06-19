@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    // fjb_unified uses admin_it/staff; FJB routes pass admin/user
+    // Route role params use short names; map to it_role column values
     private array $aliases = [
         'admin' => 'admin_it',
-        'user'  => 'staff',
+        'user'  => 'user',
     ];
 
     public function handle(Request $request, Closure $next, string ...$roles)
@@ -20,11 +20,16 @@ class RoleMiddleware
             return redirect()->route('it.login');
         }
 
-        $userRole = Auth::guard('it')->user()->role;
+        $itRole = Auth::guard('it')->user()->it_role;
+
+        if ($itRole === null) {
+            Auth::guard('it')->logout();
+            return redirect()->route('it.login')->with('error', 'You do not have access to the IT system.');
+        }
 
         foreach ($roles as $role) {
             $normalized = $this->aliases[$role] ?? $role;
-            if ($userRole === $normalized || $userRole === $role) {
+            if ($itRole === $normalized || $itRole === $role) {
                 return $next($request);
             }
         }

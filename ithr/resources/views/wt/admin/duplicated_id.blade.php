@@ -685,7 +685,7 @@ body .content-surface .duplicate-hero .wt-btn i {
 html:not(.dark) body .content-surface .duplicate-hero .page-header-block {
     background: #ffffff !important;
     border: 1px solid #d8e1ed !important;
-    border-left: 4px solid #c28a48 !important;
+    border-left: 4px solid #0284c7 !important;
 }
 html:not(.dark) body .content-surface .duplicate-hero .page-title-standard {
     color: #0f172a !important;
@@ -843,7 +843,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
                 <h1 class="page-title-standard">Duplicated ID Management</h1>
                 <p class="page-subtitle-standard">Review units that share a Radio ID or still need an ID change.</p>
             </div>
-            @if(auth('wt')->user()->role === 'admin_it')
+            @if(auth('wt')->user()->wt_role === 'admin_it')
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
                     <i class="fa-solid fa-file-import"></i>
@@ -920,7 +920,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
                 <td>{{ $r->ownership_type_to_be ?: '-' }}</td>
                 <td class="wrap-cell">{{ $r->remark ?: '-' }}</td>
                 <td class="text-center">
-                    @if(auth('wt')->user()->role === 'admin_it')
+                    @if(auth('wt')->user()->wt_role === 'admin_it')
                     <div class="duplicate-action-stack">
                         <button type="button" class="wt-btn wt-btn-sm duplicate-action-view" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
                             <i class="fa-solid fa-eye"></i>
@@ -961,7 +961,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
 </div>
 
 {{-- ===================== ADD RECORD MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="addModal" class="modal-overlay" onclick="closeAddModalOutside(event)">
     <div class="modal-box">
         <div class="modal-header">
@@ -1169,7 +1169,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
 </div>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
     <div class="modal-box" style="max-width: 500px;">
         <div class="modal-header">
@@ -1189,7 +1189,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
                     <input type="file" name="file" id="import_file" class="hidden" required onchange="updateFileName(this)">
                     <label for="import_file" class="cursor-pointer">
                         <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-4 border border-stone-100">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3D2B1F" viewBox="0 0 16 16">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#142b47" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                 <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
                             </svg>
@@ -1323,7 +1323,40 @@ body .content-surface .duplicate-filter-reset {
 }
 
 body .content-surface .duplicate-table-shell #duplicateTable {
-    min-width: 1680px !important;
+    min-width: 1720px !important;
+    table-layout: fixed !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(1) { width: 120px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(2) { width: 110px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(3) { width: 150px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(4) { width: 95px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(5) { width: 150px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(6) { width: 180px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(7) { width: 150px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(8) { width: 165px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(9) { width: 70px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(10) { width: 155px !important; }
+body .content-surface .duplicate-table-shell #duplicateTable th:nth-child(11) { width: 205px !important; }
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    box-sizing: border-box !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(1),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(3),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(6),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(7),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(8),
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(11) {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    text-overflow: clip !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable td:nth-child(11) {
+    line-height: 1.35 !important;
 }
 
 body .content-surface .duplicate-table-shell #duplicateTable th:last-child,
@@ -1553,7 +1586,6 @@ function updateFileName(input) {
 }
 </script>
 @endsection
-
 
 
 

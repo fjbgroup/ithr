@@ -26,7 +26,7 @@ class ItRequestFormController extends Controller
                     $q->where('subject', 'like', "%$search%")
                       ->orWhere('user_name', 'like', "%$search%")
                       ->orWhere('user_department', 'like', "%$search%")
-                      ->orWhereHas('submittedBy', fn($u) => $u->where('full_name', 'like', "%$search%"));
+                      ->orWhereHas('submittedBy', fn($u) => $u->where('name', 'like', "%$search%"));
                 });
             }
             if ($type)   $query->where('request_type', $type);

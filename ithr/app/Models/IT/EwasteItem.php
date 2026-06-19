@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EwasteItem extends Model
 {
-    protected $connection = 'it_mysql';
     protected $fillable = [
         'asset_number', 'asset_class', 'description', 'serial_number', 'brand', 'model',
         'original_inventory_id', 'condition_on_disposal', 'disposal_status',

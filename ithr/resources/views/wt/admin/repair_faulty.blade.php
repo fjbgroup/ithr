@@ -424,7 +424,7 @@
         <h3 class="page-title-standard">Under Repair / Faulty Units</h3>
         <p class="page-subtitle-standard">Records marked as REPAIRING, FAULTY, or B.E.R.</p>
     </div>
-    @if(auth('wt')->user()->role === 'admin_it')
+    @if(auth('wt')->user()->wt_role === 'admin_it')
     <div class="flex flex-shrink-0 items-center gap-2">
         <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
@@ -571,7 +571,7 @@
                         <button type="button" class="wt-btn wt-btn-sm" onclick="openGlobalMaintenanceTimeline('{{ $record->maintenance_id }}')">
                             View
                         </button>
-                        @if(auth('wt')->user()->role === 'admin_it')
+                        @if(auth('wt')->user()->wt_role === 'admin_it')
                         <button type="button" 
                             class="wt-btn wt-btn-sm"
                             onclick="openEditModal(
@@ -985,13 +985,13 @@ function updateFileName(input) {
     align-items: flex-start;
     margin-bottom: 24px;
 }
-.modal-title { font-size: 20px; font-weight: 800; color: #3D2B1F; letter-spacing: -0.02em; }
+.modal-title { font-size: 20px; font-weight: 800; color: #142b47; letter-spacing: -0.02em; }
 .modal-subtitle { font-size: 12px; color: #a8a29e; margin-top: 3px; font-weight: 500; }
 .modal-close-btn {
     background: #f5f5f4; border: none; border-radius: 10px; padding: 8px; cursor: pointer; color: #78716c;
     display: flex; align-items: center; transition: all 0.15s; flex-shrink: 0;
 }
-.modal-close-btn:hover { background: #e7e5e4; color: #3D2B1F; }
+.modal-close-btn:hover { background: #e7e5e4; color: #142b47; }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -1056,7 +1056,7 @@ select.form-input {
 </style>
 
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
-@if(auth('wt')->user()->role === 'admin_it')
+@if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
     <div class="modal-box" style="max-width: 500px;">
         <div class="modal-header">
@@ -1077,7 +1077,7 @@ select.form-input {
                     <input type="file" name="file" id="import_file" class="hidden" required onchange="updateFileName(this)">
                     <label for="import_file" class="cursor-pointer">
                         <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-4 border border-stone-100">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3D2B1F" viewBox="0 0 16 16">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#142b47" viewBox="0 0 16 16">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                 <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
                             </svg>

@@ -28,7 +28,7 @@
     {{ $attributes->merge(['class' => 'inventory-datatable grid gap-3']) }}
     data-inventory-datatable="{{ $safeTableId }}"
 >
-    <div class="flex min-h-[72px] w-full items-center justify-between gap-4 rounded-lg border border-slate-300 border-l-[6px] border-l-[#c28a48] bg-white px-5 py-3 dark:border-slate-700 dark:border-l-[#f2c48d] dark:bg-slate-800">
+    <div class="flex min-h-[72px] w-full items-center justify-between gap-4 rounded-lg border border-slate-300 border-l-[6px] border-l-[#0284c7] bg-white px-5 py-3 dark:border-slate-700 dark:border-l-[#f2c48d] dark:bg-slate-800">
         <div class="min-w-0">
             <h1 class="truncate text-[20px] font-black leading-tight tracking-normal text-slate-950 dark:text-slate-50">
                 {{ $pageTitle }}

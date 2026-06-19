@@ -436,10 +436,10 @@
     <div class="inventory-page-header page-header-block">
         <div class="inventory-header-copy">
             <h1 class="page-title-standard text-slate-100">Inventory List</h1>
-            <p class="page-subtitle-standard text-slate-400">{{ auth('wt')->user()->role === 'admin_it' ? 'Displaying all walkie talkies with full management access.' : 'Displaying all walkie talkies in read-only mode for executive review.' }}</p>
+            <p class="page-subtitle-standard text-slate-400">{{ auth('wt')->user()->wt_role === 'admin_it' ? 'Displaying all walkie talkies with full management access.' : 'Displaying all walkie talkies in read-only mode for executive review.' }}</p>
         </div>
         <div class="inventory-header-actions">
-            @if(auth('wt')->user()->role === 'admin_it')
+            @if(auth('wt')->user()->wt_role === 'admin_it')
             <button onclick="openImportModal()" class="wt-btn wt-btn-soft">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
@@ -449,7 +449,7 @@
             </button>
             @endif
 
-            @if(auth('wt')->user()->role === 'admin_it')
+            @if(auth('wt')->user()->wt_role === 'admin_it')
             <a href="{{ route('wt.admin.walkies.create') }}" class="wt-btn wt-btn-soft">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right:5px;">
                     <path d="M8 1a.5.5 0 0 1 .5.5V7.5H14a.5.5 0 0 1 0 1H8.5V14a.5.5 0 0 1-1 0V8.5H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z"/>
@@ -539,7 +539,7 @@
         </div>
 
         @php
-            $showInventoryBulk = auth('wt')->user()->role === 'admin_it';
+            $showInventoryBulk = auth('wt')->user()->wt_role === 'admin_it';
         @endphp
 
         @if($showInventoryBulk)
@@ -660,7 +660,7 @@
                             <div class="inventory-remark-cell" title="{{ $w->remark ?: '-' }}">{{ $w->remark ?: '-' }}</div>
                         </td>
                         <td class="text-center inventory-action-col">
-                            @if(auth('wt')->user()->role === 'admin_it')
+                            @if(auth('wt')->user()->wt_role === 'admin_it')
                             <div class="inventory-action-buttons">
                                 <button type="button" class="btn btn-info btn-sm" title="View Details" onclick="openGlobalWalkieTimeline('{{ $w->walkie_id }}')">
                                     <i class="fa-solid fa-eye"></i>
@@ -751,7 +751,7 @@
         </div>
     </div>
 
-    @if(auth('wt')->user()->role === 'admin_it')
+    @if(auth('wt')->user()->wt_role === 'admin_it')
     {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
     <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
         <div class="modal-box">
@@ -773,7 +773,7 @@
                         <input type="file" name="file" id="import_file" class="hidden" required onchange="updateFileName(this)">
                         <label for="import_file" class="cursor-pointer">
                             <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-4 border border-stone-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3D2B1F" viewBox="0 0 16 16">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#142b47" viewBox="0 0 16 16">
                                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                                     <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
                                 </svg>
@@ -1953,7 +1953,7 @@
             font-family: inherit;
         }
         .search-input:focus {
-            border-color: #3D2B1F;
+            border-color: #142b47;
             box-shadow: 0 0 0 3px rgba(61,43,31,0.08);
             background: #fff;
         }
@@ -1980,7 +1980,7 @@
         }
         .clear-search-btn:hover {
             background: #e7e5e4;
-            color: #3D2B1F;
+            color: #142b47;
         }
         .filter-group {
             min-width: 140px;
@@ -2004,11 +2004,11 @@
             background-position: right 10px center;
         }
         .filter-select:focus {
-            border-color: #3D2B1F;
+            border-color: #142b47;
             box-shadow: 0 0 0 3px rgba(61,43,31,0.08);
         }
         .filter-select.active-filter {
-            border-color: #3D2B1F;
+            border-color: #142b47;
             background-color: #FDFBF7;
         }
         .reset-filter-btn {
@@ -3441,7 +3441,7 @@
         html:not(.dark) body .content-surface .inventory-page-header {
             background: #ffffff !important;
             border: 1px solid #d8e1ed !important;
-            border-left: 7px solid #c28a48 !important;
+            border-left: 7px solid #0284c7 !important;
             box-shadow: none !important;
         }
         html:not(.dark) body .content-surface .inventory-page-header .page-title-standard {

@@ -33,11 +33,11 @@ class InteractionController extends Controller
     private function managedUsers()
     {
         $users = User::query()
-            ->where('role', 'user')
-            ->orderByRaw("CASE WHEN full_name IS NULL OR full_name = '' THEN 1 ELSE 0 END")
-            ->orderBy('full_name')
-            ->orderBy('username')
-            ->get(['user_id', 'username', 'staff_id', 'full_name', 'department', 'position', 'phone_no']);
+            ->where('wt_role', 'user')
+            ->orderByRaw("CASE WHEN name IS NULL OR name = '' THEN 1 ELSE 0 END")
+            ->orderBy('name')
+            ->orderBy('staff_no')
+            ->get();
 
         $latestDamageRecords = MaintenanceRecord::query()
             ->whereIn('reporter_name', $users->pluck('full_name')->filter()->map(fn ($value) => strtoupper((string) $value))->unique()->values())
@@ -69,8 +69,8 @@ class InteractionController extends Controller
 
         if ($targetUserId > 0) {
             $existingById = User::query()
-                ->where('user_id', $targetUserId)
-                ->where('role', 'user')
+                ->where('id', $targetUserId)
+                ->where('wt_role', 'user')
                 ->first();
 
             if ($existingById) {
@@ -89,11 +89,11 @@ class InteractionController extends Controller
         if ($reporterName !== '') {
             $existingByName = User::query()
                 ->where(function ($query) use ($reporterName) {
-                    $query->where('full_name', $reporterName)
-                        ->orWhere('username', $reporterName);
+                    $query->where('name', $reporterName)
+                        ->orWhere('staff_no', $reporterName);
                 })
                 ->when($department !== '', function ($query) use ($department) {
-                    $query->where('department', $department);
+                    $query->where('dept_name', $department);
                 })
                 ->first();
 
@@ -122,13 +122,13 @@ class InteractionController extends Controller
 
         $username = $usernameBase;
         $suffix = 1;
-        while (User::where('username', $username)->exists()) {
+        while (User::where('staff_no', $username)->exists()) {
             $username = $usernameBase . '.' . $suffix;
             $suffix++;
         }
 
         $generatedContactId = strtoupper('CONTACT-' . Str::random(8));
-        while (User::where('staff_id', $generatedContactId)->exists()) {
+        while (User::where('staff_no', $generatedContactId)->exists()) {
             $generatedContactId = strtoupper('CONTACT-' . Str::random(8));
         }
 
@@ -323,14 +323,14 @@ class InteractionController extends Controller
     // --- REQUEST ACCESS ---
     public function createRequest()
     {
-        $admins = User::where('role', 'admin')->orderBy('username')->get(['user_id', 'username', 'staff_id', 'role', 'full_name', 'department', 'position']);
+        $admins = User::where('wt_role', 'admin')->orderBy('staff_no')->get();
         return view('wt.user.requests.create', compact('admins'));
     }
 
     public function storeRequest(Request $request)
     {
         $validated = $request->validate([
-            'submit_to_admin_id' => ['required', 'integer', Rule::exists(User::class, 'user_id')],
+            'submit_to_admin_id' => ['required', 'integer', Rule::exists(User::class, 'id')],
             'requestor_name' => 'required|string|max:255',
             'requestor_staff_id' => 'required|string|max:255',
             'request_date' => 'required|date',
@@ -346,8 +346,8 @@ class InteractionController extends Controller
             'justification' => 'required|string|max:2000',
         ]);
 
-        $selectedAdmin = User::where('user_id', $validated['submit_to_admin_id'])->first();
-        if (! $selectedAdmin || $selectedAdmin->role !== 'admin') {
+        $selectedAdmin = User::where('id', $validated['submit_to_admin_id'])->first();
+        if (! $selectedAdmin || $selectedAdmin->wt_role !== 'admin') {
             return back()
                 ->withInput()
                 ->withErrors(['submit_to_admin_id' => 'Selected approver must be an Executive account.']);
@@ -417,10 +417,10 @@ class InteractionController extends Controller
     private function returnPeopleOptions(Collection $activeAssets): Collection
     {
         $userOptions = User::query()
-            ->orderByRaw("CASE WHEN full_name IS NULL OR full_name = '' THEN 1 ELSE 0 END")
-            ->orderBy('full_name')
-            ->orderBy('username')
-            ->get(['username', 'full_name', 'department', 'phone_no'])
+            ->orderByRaw("CASE WHEN name IS NULL OR name = '' THEN 1 ELSE 0 END")
+            ->orderBy('name')
+            ->orderBy('staff_no')
+            ->get()
             ->map(fn (User $user) => [
                 'name' => strtoupper((string) ($user->full_name ?: $user->username)),
                 'department' => strtoupper((string) ($user->department ?: '')),
@@ -478,7 +478,7 @@ class InteractionController extends Controller
 
         $senderUser = auth('wt')->user();
         if ($isAdminRoute) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Permintaan Return Baru',
@@ -681,9 +681,9 @@ class InteractionController extends Controller
     {
         $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
         $isAdminRoute = $request->routeIs('admin.*');
-        $admins = User::where('role', 'admin')
-            ->orderBy('username')
-            ->get(['user_id', 'username', 'staff_id', 'role', 'full_name', 'department', 'position']);
+        $admins = User::where('wt_role', 'admin')
+            ->orderBy('staff_no')
+            ->get();
 
         $managedUsers = $isAdminRoute ? $this->managedUsers() : collect();
         $currentUser = auth('wt')->user();
@@ -933,7 +933,7 @@ class InteractionController extends Controller
         );
 
         if ($requested) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Temporary Walkie Requested',
@@ -989,13 +989,13 @@ class InteractionController extends Controller
 
         if ($isAdminRoute) {
             if ($mode === 'staff') {
-                $rules['user_id'] = ['nullable', 'integer', Rule::exists(User::class, 'user_id')];
+                $rules['user_id'] = ['nullable', 'integer', Rule::exists(User::class, 'id')];
                 $rules['reporter_name'] = 'required|string|max:255';
                 $rules['department'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['designation'] = 'nullable|string|max:255';
                 $rules['quantity'] = ($isDraft ? 'nullable' : 'required') . '|integer|min:1|max:999';
                 $rules['recipient_details'] = 'nullable|array';
-                $rules['recipient_details.*.user_id'] = ['nullable', 'integer', Rule::exists(User::class, 'user_id')];
+                $rules['recipient_details.*.user_id'] = ['nullable', 'integer', Rule::exists(User::class, 'id')];
                 $rules['recipient_details.*.reporter_name'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['recipient_details.*.phone_no'] = ($isDraft ? 'nullable' : 'required') . '|string|max:50';
                 $rules['recipient_details.*.department'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
@@ -1010,7 +1010,7 @@ class InteractionController extends Controller
                 $rules['device_details.*.serial_number'] = 'nullable|string|max:100';
             }
         } else {
-            $rules['submit_to_admin_id'] = [($isDraft ? 'nullable' : 'required'), 'integer', Rule::exists(User::class, 'user_id')];
+            $rules['submit_to_admin_id'] = [($isDraft ? 'nullable' : 'required'), 'integer', Rule::exists(User::class, 'id')];
             $rules['reporter_name'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
             $rules['staff_id'] = ($isDraft ? 'nullable' : 'required') . '|string|max:100';
             $rules['designation'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
@@ -1069,8 +1069,8 @@ class InteractionController extends Controller
         }
 
         if (! $isAdminRoute && ! empty($validated['submit_to_admin_id'])) {
-            $selectedAdmin = User::where('user_id', $validated['submit_to_admin_id'])->first();
-            if (! $selectedAdmin || $selectedAdmin->role !== 'admin') {
+            $selectedAdmin = User::where('id', $validated['submit_to_admin_id'])->first();
+            if (! $selectedAdmin || $selectedAdmin->wt_role !== 'admin') {
                 return back()
                     ->withInput()
                     ->withErrors(['submit_to_admin_id' => 'Selected approver must be an Executive account.']);
@@ -1304,7 +1304,7 @@ class InteractionController extends Controller
         }
 
         if ($isAdminRoute) {
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Laporan Kerosakan Baru',

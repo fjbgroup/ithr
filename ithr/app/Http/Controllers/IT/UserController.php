@@ -4,6 +4,7 @@ namespace App\Http\Controllers\IT;
 
 use App\Models\IT\PasswordResetRequest;
 use App\Models\IT\User;
+use App\Models\Staff;
 use App\Services\IT\ActivityLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +16,14 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $roleOrder = ['ceo','gm','hou','admin','finance_admin','user'];
-        $allUsers  = User::orderBy('full_name')->get();
+
+        // Show users who have IT access (it_role is not null)
+        $allUsers = User::whereNotNull('it_role')->orderBy('name')->get();
 
         $grouped = array_fill_keys($roleOrder, []);
         foreach ($allUsers as $u) {
-            if (array_key_exists($u->role, $grouped)) $grouped[$u->role][] = $u;
+            $key = $u->it_role === 'admin_it' ? 'admin' : $u->it_role;
+            if (array_key_exists($key, $grouped)) $grouped[$key][] = $u;
         }
 
         $totalUsers    = $allUsers->count();
@@ -40,51 +44,104 @@ class UserController extends Controller
         ));
     }
 
+    public function staffSearch(Request $request)
+    {
+        $q = trim($request->get('q', ''));
+        if (strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Staff::with('department')
+            ->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('staff_no', 'like', "%{$q}%");
+            })
+            ->where('is_active', 1)
+            ->orderBy('name')
+            ->limit(15)
+            ->get()
+            ->map(fn($s) => [
+                'staff_no'  => $s->staff_no,
+                'name'      => $s->name,
+                'email'     => $s->email ?? '',
+                'dept_name' => $s->department?->name ?? '',
+                'position'  => $s->position ?? '',
+            ]);
+
+        return response()->json($results);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'username'   => ['required', 'string', 'min:3', 'max:50', Rule::unique(User::class, 'username')],
-            'full_name'  => 'required|string|max:100',
-            'password'   => 'required|string|min:6',
-            'email'      => 'nullable|email|max:100',
-            'role'       => 'required|in:admin,finance_admin,hou,gm,ceo,user',
-            'department' => 'nullable|string|max:100',
-            'dept_name'  => 'nullable|string|max:100',
+            'username'  => 'required|string|min:2|max:50',
+            'full_name' => 'required|string|max:100',
+            'email'     => 'nullable|email|max:100',
+            'role'      => 'required|in:admin,admin_it,finance_admin,hou,gm,ceo,user',
+            'dept_name' => 'nullable|string|max:200',
         ]);
+
+        $staffNo  = trim($request->username);
+        $existing = User::whereRaw('TRIM(staff_no) = ?', [$staffNo])->first();
+
+        if ($existing) {
+            if ($existing->it_role !== null) {
+                // Already has IT access — nothing to do
+                return back()
+                    ->withInput()
+                    ->withErrors(['username' => $existing->full_name.' already has IT system access (role: '.$existing->getItRoleLabel().').']);
+            }
+
+            // Staff without IT access — grant it by setting it_role.
+            // Their HR role and WT role remain unchanged.
+            $data = ['it_role' => $request->role];
+            if ($request->filled('dept_name'))  $data['dept_name']  = $request->dept_name;
+            if ($request->filled('email'))       $data['email']      = $request->email;
+            if ($request->filled('password'))    $data['password']   = Hash::make($request->password);
+
+            $existing->update($data);
+            ActivityLogService::log('UPDATE', 'user', $existing->id, 'Granted IT access (it_role: '.$request->role.') to: '.$existing->username);
+
+            $roleTab = $request->role === 'admin_it' ? 'admin' : $request->role;
+            return redirect()->route('it.users.index', ['role_tab' => $roleTab])
+                ->with('success', 'IT access granted to '.$existing->full_name.' as '.$existing->getItRoleLabel().'.');
+        }
+
+        // Brand-new user — password is required
+        $request->validate(['password' => 'required|string|min:6']);
 
         $user = User::create([
-            'username'   => $request->username,
-            'password'   => Hash::make($request->password),
-            'full_name'  => $request->full_name,
-            'email'      => $request->email,
-            'role'       => $request->role,
-            'department' => $request->department,
-            'dept_name'  => $request->dept_name,
-            'is_active'  => 1,
+            'username'  => $staffNo,
+            'password'  => Hash::make($request->password),
+            'full_name' => $request->full_name,
+            'email'     => $request->email,
+            'role'      => 'staff',
+            'it_role'   => $request->role,
+            'dept_name' => $request->dept_name,
+            'is_active' => 1,
         ]);
 
-        ActivityLogService::log('CREATE', 'user', $user->id, 'Created user: '.$user->username);
-        return redirect()->route('it.users.index', ['role_tab' => $request->role])
+        ActivityLogService::log('CREATE', 'user', $user->id, 'Created IT user: '.$user->username);
+        $roleTab = $request->role === 'admin_it' ? 'admin' : $request->role;
+        return redirect()->route('it.users.index', ['role_tab' => $roleTab])
             ->with('success', 'User created successfully.');
     }
 
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'full_name'  => 'required|string|max:100',
-            'email'      => 'nullable|email|max:100',
-            'role'       => 'required|in:admin,finance_admin,hou,gm,ceo,user',
-            'department' => 'nullable|string|max:100',
-            'dept_name'  => 'nullable|string|max:100',
+            'full_name' => 'required|string|max:100',
+            'email'     => 'nullable|email|max:100',
+            'role'      => 'required|in:admin,admin_it,finance_admin,hou,gm,ceo,user',
+            'dept_name' => 'nullable|string|max:200',
         ]);
 
         $user = User::findOrFail($id);
         $data = [
-            'full_name'  => $request->full_name,
-            'email'      => $request->email,
-            'role'       => $request->role,
-            'department' => $request->department,
-            'dept_name'  => $request->dept_name,
+            'full_name' => $request->full_name,
+            'email'     => $request->email,
+            'it_role'   => $request->role,
+            'dept_name' => $request->dept_name,
         ];
 
         if ($request->filled('password')) {

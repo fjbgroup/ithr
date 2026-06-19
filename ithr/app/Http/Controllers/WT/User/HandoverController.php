@@ -36,10 +36,10 @@ class HandoverController extends Controller
     public function index()
     {
         $isIctView = request()->routeIs('admin.*')
-            && auth('wt')->user()->role === 'admin_it'
-            && session('view_mode', auth('wt')->user()->role) === 'admin_it';
+            && auth('wt')->user()->wt_role === 'admin_it'
+            && session('view_mode', auth('wt')->user()->wt_role) === 'admin_it';
 
-        if (request()->routeIs('admin.*') && ! $isIctView && auth('wt')->user()->role === 'admin_it') {
+        if (request()->routeIs('admin.*') && ! $isIctView && auth('wt')->user()->wt_role === 'admin_it') {
             return redirect()
                 ->route('wt.admin.requests.index')
                 ->with('error', 'ICT direct handover is only available in ICT mode.');
@@ -81,13 +81,13 @@ class HandoverController extends Controller
             }
 
             $users = User::query()
-                ->whereIn('role', $directHandoverScope === 'on_behalf' ? ['admin'] : ['admin', 'admin_it'])
+                ->whereIn('wt_role', $directHandoverScope === 'on_behalf' ? ['admin'] : ['admin', 'admin_it'])
                 ->when($directHandoverScope === 'self', function ($query) {
-                    $query->where('user_id', auth('wt')->id());
+                    $query->where('id', auth('wt')->id());
                 })
-                ->orderBy('full_name')
-                ->orderBy('username')
-                ->get(['user_id', 'username', 'staff_id', 'full_name', 'department', 'position', 'role']);
+                ->orderBy('name')
+                ->orderBy('staff_no')
+                ->get();
 
             $availableRadios = WalkieTalkie::query()
                 ->where('status', 'UNUSED')
@@ -141,8 +141,8 @@ class HandoverController extends Controller
     public function store(Request $request)
     {
         $isIctView = $request->routeIs('admin.*')
-            && auth('wt')->user()->role === 'admin_it'
-            && session('view_mode', auth('wt')->user()->role) === 'admin_it';
+            && auth('wt')->user()->wt_role === 'admin_it'
+            && session('view_mode', auth('wt')->user()->wt_role) === 'admin_it';
 
         if ($request->routeIs('admin.*') && ! $isIctView && $request->input('handover_mode') === 'ict_direct') {
             return redirect()
@@ -215,7 +215,7 @@ class HandoverController extends Controller
                     );
                 }
 
-                $itUsers = User::where('role', 'admin_it')->get();
+                $itUsers = User::where('wt_role', 'admin_it')->get();
                 SystemNotifier::notifyUsers(
                     $itUsers,
                     'Recipient Pickup Pending',
@@ -268,7 +268,7 @@ class HandoverController extends Controller
                 'created_at' => now(),
             ]);
 
-            $itUsers = User::where('role', 'admin_it')->get();
+            $itUsers = User::where('wt_role', 'admin_it')->get();
             SystemNotifier::notifyUsers(
                 $itUsers,
                 'Recipient Pickup Confirmed',
@@ -311,7 +311,7 @@ class HandoverController extends Controller
         $validated = $request->validate([
             'direct_handover_scope' => 'nullable|in:self,on_behalf',
             'access_request_id' => 'nullable|integer|exists:access_requests,id',
-            'user_id' => ['nullable', 'required_without:access_request_id', 'integer', Rule::exists(User::class, 'user_id')],
+            'user_id' => ['nullable', 'required_without:access_request_id', 'integer', Rule::exists(User::class, 'id')],
             'walkie_inventory_id' => 'nullable|required_without:access_request_id|integer|exists:walkie_talkies,walkie_id',
             'staff_name' => 'required|string|max:255',
             'staff_no' => 'nullable|string|max:255',
@@ -345,8 +345,8 @@ class HandoverController extends Controller
         }
 
         $targetUser = User::query()
-            ->when(! $accessRequest, fn ($query) => $query->whereIn('role', ['admin', 'admin_it']))
-            ->where('user_id', $validated['user_id'])
+            ->when(! $accessRequest, fn ($query) => $query->whereIn('wt_role', ['admin', 'admin_it']))
+            ->where('id', $validated['user_id'])
             ->firstOrFail();
 
         $walkies = collect();

@@ -118,7 +118,7 @@
     }
     .handover-language-btn.is-active {
         color: #ffffff;
-        background: linear-gradient(135deg, #8B5E3C, #6f4a31);
+        background: linear-gradient(135deg, #0284c7, #6f4a31);
         box-shadow: 0 8px 18px rgba(111, 74, 49, 0.22);
     }
     .handover-language-btn:not(.is-active):hover {
@@ -148,7 +148,7 @@
         padding: 14px 16px;
     }
     .handover-terms-item strong {
-        color: #8B5E3C;
+        color: #0284c7;
     }
     .handover-terms-sublist {
         margin-top: 8px;
@@ -168,7 +168,7 @@
     }
     .dark .handover-language-btn.is-active {
         color: #ffffff;
-        background: linear-gradient(135deg, #8B5E3C, #a16207);
+        background: linear-gradient(135deg, #0284c7, #a16207);
         box-shadow: none;
     }
     .dark .handover-language-btn:not(.is-active):hover {
@@ -204,7 +204,7 @@
     $approvedDepartment = strtoupper((string) ($approvedRequest->department ?? ''));
     $selfName = strtoupper($currentUser->full_name ?: $currentUser->username ?: '');
     $selfStaffId = strtoupper($currentUser->staff_id ?: '');
-    $selfPosition = strtoupper($currentUser->position ?: ($currentUser->role === 'admin' ? 'EXECUTIVE' : 'ICT'));
+    $selfPosition = strtoupper($currentUser->position ?: ($currentUser->wt_role === 'admin' ? 'EXECUTIVE' : 'ICT'));
     $selfDepartment = strtoupper($currentUser->department ?: '');
 @endphp
 <div class="space-y-4">
@@ -268,7 +268,7 @@
                                     <option value="{{ $user->user_id }}"
                                         data-name="{{ $displayName }}"
                                         data-staff-id="{{ strtoupper($user->staff_id ?: '-') }}"
-                                        data-position="{{ strtoupper($user->position ?: ($user->role === 'admin' ? 'EXECUTIVE' : 'ICT')) }}"
+                                        data-position="{{ strtoupper($user->position ?: ($user->wt_role === 'admin' ? 'EXECUTIVE' : 'ICT')) }}"
                                         data-department="{{ $displayDepartment }}"
                                         @selected((string) old('user_id') === (string) $user->user_id)>
                                         {{ $displayName }} - {{ $displayDepartment }}
