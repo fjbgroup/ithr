@@ -355,6 +355,9 @@
   .pub-scroll-hint { display: none; font-size: .7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 0 0 .5rem; text-align: center; }
   @media (max-width: 800px) { .pub-scroll-hint { display: block; } }
 
+  .pub-sys-label { display: inline; }
+  @media (max-width: 480px) { .pub-sys-label { display: none; } }
+
   /* Mobile Adjustments */
   @media (max-width: 640px) {
     .pub-topbar { padding: .75rem 1rem; }
@@ -444,10 +447,18 @@
     </div>
     <span>HR and Administration Management Information System</span>
   </div>
-  <a class="pub-login-btn" href="{{ route('login') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-    Staff Login
-  </a>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <span class="pub-sys-label" style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-right:2px;">System</span>
+      <span style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid #0f172a;font-size:11px;font-weight:700;color:#0f172a;background:#f1f5f9;cursor:default;">HR</span>
+      <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;color:#64748b;text-decoration:none;background:#fff;transition:all .2s;" onmouseover="this.style.background='#f1f5f9';this.style.borderColor='#94a3b8';this.style.color='#0f172a'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0';this.style.color='#64748b'">WT</a>
+      <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:11px;font-weight:600;color:#64748b;text-decoration:none;background:#fff;transition:all .2s;" onmouseover="this.style.background='#f1f5f9';this.style.borderColor='#94a3b8';this.style.color='#0f172a'" onmouseout="this.style.background='#fff';this.style.borderColor='#e2e8f0';this.style.color='#64748b'">IT</a>
+    </div>
+    <a class="pub-login-btn" href="{{ route('login') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Staff Login
+    </a>
+  </div>
 </div>
 
 <div class="pub-notice">
