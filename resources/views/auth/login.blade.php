@@ -26,10 +26,7 @@
     align-items: center;
     justify-content: center;
     padding: 1.25rem;
-    background:
-      radial-gradient(circle at 0% 0%, rgba(56,189,248,.18), transparent 42%),
-      radial-gradient(circle at 100% 100%, rgba(26,75,140,.35), transparent 45%),
-      linear-gradient(135deg, var(--lg-navy) 0%, var(--lg-navy-2) 55%, var(--lg-blue) 100%);
+    background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 55%, #dee2e6 100%);
     background-attachment: fixed;
   }
 

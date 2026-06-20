@@ -10,22 +10,22 @@
   --accent:#38bdf8; --accent-h:#0284c7; --navy:#142b47; --red:#dc2626; --green:#16a34a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:linear-gradient(135deg,#0a1628 0%,#0f2347 50%,#142b5e 100%);font-family:'DM Sans',sans-serif;
+body{min-height:100vh;background:linear-gradient(135deg,#e0f2fe 0%,#bae6fd 50%,#7dd3fc 100%);font-family:'DM Sans',sans-serif;
   display:flex;align-items:center;justify-content:center;padding:20px;
   position:relative;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;
-  background-image:radial-gradient(circle,rgba(56,189,248,0.06) 1px,transparent 1px);
+  background-image:radial-gradient(circle,rgba(14,165,233,0.10) 1px,transparent 1px);
   background-size:28px 28px;z-index:0;opacity:.5}
 body::after{content:'';position:fixed;width:600px;height:600px;
-  background:radial-gradient(circle,rgba(56,189,248,.12) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(14,165,233,.18) 0%,transparent 65%);
   top:-200px;right:-200px;z-index:0;animation:orb 10s ease-in-out infinite alternate}
 @keyframes orb{to{transform:translate(-60px,100px)}}
 .wrap{position:relative;z-index:1;width:100%;max-width:480px}
 .brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
 .brand img{width:48px;height:48px;object-fit:contain;background:transparent}
-.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#fff;
+.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#0c4a6e;
   text-transform:uppercase;letter-spacing:.06em;line-height:1.3}
-.brand-text span{color:#cbd5e1;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
+.brand-text span{color:#0369a1;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
   overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 40px rgba(0,0,0,.07)}
 .form-body{padding:32px 36px}
@@ -116,8 +116,8 @@ input::placeholder{color:#bfc5cc}
     </div>
     <div class="divider">FGV Johor Bulkers Sdn Bhd</div>
   </div>
-  <div style="text-align:center;margin-top:1.25rem;font-size:.8rem;color:#94a3b8">
-    <a href="{{ url('/') }}" style="color:#94a3b8;text-decoration:none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#94a3b8'">
+  <div style="text-align:center;margin-top:1.25rem;font-size:.8rem;color:#475569">
+    <a href="{{ url('/') }}" style="color:#475569;text-decoration:none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#475569'">
       &larr; Back to Portal
     </a>
   </div>
@@ -125,13 +125,13 @@ input::placeholder{color:#bfc5cc}
   <div style="text-align:center;margin-top:12px;">
     <div style="font-size:10px;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
     <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
-      <a href="{{ url('/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
+      <a href="{{ url('/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
         <i class="bi bi-people-fill"></i> HR System
       </a>
-      <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
+      <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
         <i class="bi bi-headphones"></i> WT System
       </a>
-      <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:600;color:#3d4d5c;background:rgba(255,255,255,.03);cursor:default;">
+      <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #e2e5ea;font-size:11px;font-weight:600;color:#bfc5cc;background:#f1f5f9;cursor:default;">
         <i class="bi bi-laptop"></i> IT System
       </span>
     </div>

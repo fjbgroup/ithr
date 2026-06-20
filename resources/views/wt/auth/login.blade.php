@@ -27,7 +27,7 @@
     .hidden { display: none !important; }
     body {
         min-height: 100vh;
-        background: linear-gradient(135deg, #f0f7ff 0%, #dbeafe 50%, #bfdbfe 100%);
+        background: linear-gradient(135deg, #fffde7 0%, #fef9c3 50%, #fef08a 100%);
         font-family: 'DM Sans', sans-serif;
         display: flex;
         align-items: center;
@@ -40,7 +40,7 @@
         content: '';
         position: fixed;
         inset: 0;
-        background-image: radial-gradient(circle, rgba(59,130,246,0.10) 1px, transparent 1px);
+        background-image: radial-gradient(circle, rgba(234,179,8,0.15) 1px, transparent 1px);
         background-size: 28px 28px;
         z-index: 0;
         opacity: .6;
@@ -50,7 +50,7 @@
         position: fixed;
         width: 600px;
         height: 600px;
-        background: radial-gradient(circle, rgba(59,130,246,.18) 0%, transparent 65%);
+        background: radial-gradient(circle, rgba(234,179,8,.20) 0%, transparent 65%);
         top: -200px;
         right: -200px;
         z-index: 0;
