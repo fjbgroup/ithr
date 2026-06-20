@@ -121,6 +121,21 @@ input::placeholder{color:#bfc5cc}
       &larr; Back to Portal
     </a>
   </div>
+
+  <div style="text-align:center;margin-top:12px;">
+    <div style="font-size:10px;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
+    <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
+      <a href="{{ url('/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
+        <i class="bi bi-people-fill"></i> HR System
+      </a>
+      <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
+        <i class="bi bi-headphones"></i> WT System
+      </a>
+      <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:600;color:#3d4d5c;background:rgba(255,255,255,.03);cursor:default;">
+        <i class="bi bi-laptop"></i> IT System
+      </span>
+    </div>
+  </div>
 </div>
 
 <script>

@@ -258,6 +258,21 @@
                 &larr; Back to Portal
             </a>
         </div>
+
+        <div style="text-align:center;margin-top:14px;">
+            <div style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
+            <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
+                <a href="{{ url('/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
+                    <i class="bi bi-people-fill"></i> HR System
+                </a>
+                <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #e2e5ea;font-size:11px;font-weight:600;color:#bfc5cc;background:#f1f5f9;cursor:default;">
+                    <i class="bi bi-headphones"></i> WT System
+                </span>
+                <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
+                    <i class="bi bi-laptop"></i> IT System
+                </a>
+            </div>
+        </div>
     </div>
 
     {{-- Reset Password Modal --}}

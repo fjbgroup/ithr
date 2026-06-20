@@ -358,6 +358,21 @@
           &larr; Back to Portal
         </a>
       </div>
+
+      <div style="text-align:center;margin-top:.75rem;">
+        <div style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
+        <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
+          <span style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:600;color:#3d4d5c;background:rgba(255,255,255,.03);cursor:default;">
+            HR System
+          </span>
+          <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
+            WT System
+          </a>
+          <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
+            IT System
+          </a>
+        </div>
+      </div>
     </main>
 
   </div>
