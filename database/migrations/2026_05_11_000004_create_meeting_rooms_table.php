@@ -22,7 +22,7 @@ return new class extends Migration
             $col->foreignId('room_id')->constrained('meeting_rooms')->onDelete('cascade');
             $col->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $col->tinyInteger('level')->default(1);
-            $col->foreignId('added_by')->nullable()->constrained('users')->onDelete('set null');
+            $col->foreignId('added_by')->nullable()->constrained('users')->onDelete('no action');
             $col->timestamps();
             $col->unique(['room_id', 'user_id']);
         });

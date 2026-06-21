@@ -20,14 +20,14 @@ return new class extends Migration
             $col->integer('attendees')->default(1);
             $col->enum('status', ['Pending', 'Approved', 'Rejected', 'CancelRequested', 'EditRequested'])->default('Pending');
             
-            $col->foreignId('approved_by_id')->nullable()->constrained('users')->onDelete('set null');
+            $col->foreignId('approved_by_id')->nullable()->constrained('users')->onDelete('no action');
             $col->string('approved_by_name', 150)->nullable();
             $col->timestamp('approved_at')->nullable();
             $col->string('rejection_reason', 500)->nullable();
             $col->string('cancel_reason', 500)->nullable();
             
             // Proposed edits
-            $col->foreignId('proposed_room_id')->nullable()->constrained('meeting_rooms')->onDelete('set null');
+            $col->foreignId('proposed_room_id')->nullable()->constrained('meeting_rooms')->onDelete('no action');
             $col->date('proposed_date')->nullable();
             $col->time('proposed_start_time')->nullable();
             $col->time('proposed_end_time')->nullable();

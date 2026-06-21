@@ -26,8 +26,8 @@ return new class extends Migration
             $col->index('staff_id');
 
             $col->foreign('attendance_id')->references('id')->on('training_attendances')->onDelete('cascade');
-            $col->foreign('staff_id')->references('id')->on('staff')->onDelete('cascade');
-            $col->foreign('course_id')->references('id')->on('training_courses')->onDelete('cascade');
+            $col->foreign('staff_id')->references('id')->on('staff')->onDelete('no action');
+            $col->foreign('course_id')->references('id')->on('training_courses')->onDelete('no action');
         });
     }
 
