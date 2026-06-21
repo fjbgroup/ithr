@@ -66,31 +66,21 @@
         }
     @endphp
     @if($totalAll > 0)
-    <div class="card" style="margin-bottom:1.25rem;padding:1.25rem 1.5rem;">
-        <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
-            <canvas id="deptPieChart" width="180" height="180" style="flex-shrink:0;cursor:pointer;"></canvas>
-            <div id="deptPieLegend" style="flex:1;min-width:200px;">
+    <div class="card" style="margin-bottom:1.25rem;padding:1.5rem 2rem;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:3rem;flex-wrap:wrap;">
+            <canvas id="deptPieChart" width="220" height="220" style="flex-shrink:0;cursor:pointer;display:block;"></canvas>
+            <div id="deptPieLegend" style="min-width:180px;">
                 @foreach($allCompanies as $co)
                 @php $cnt = $totals[$co->code] ?? 0; $color = $companyColors[$co->code]; @endphp
                 @if($cnt > 0)
-                <div class="dept-pie-row" data-co="{{ $co->code }}" style="display:flex;align-items:center;gap:.65rem;padding:.45rem .6rem;border-radius:7px;margin-bottom:.3rem;cursor:default;transition:background .15s;">
-                    <span style="width:12px;height:12px;border-radius:50%;background:{{ $color }};flex-shrink:0;"></span>
-                    <span style="font-weight:600;font-size:.88rem;min-width:40px;">{{ $co->code }}</span>
-                    <div style="flex:1;background:var(--border);border-radius:4px;height:7px;overflow:hidden;">
-                        <div style="height:100%;width:{{ round($cnt/$totalAll*100,1) }}%;background:{{ $color }};border-radius:4px;transition:width .4s;"></div>
-                    </div>
-                    <span style="font-size:.85rem;font-weight:700;min-width:26px;text-align:right;">{{ $cnt }}</span>
-                    <span style="font-size:.78rem;color:var(--text-muted);">{{ round($cnt/$totalAll*100,1) }}%</span>
+                <div class="dept-pie-row" data-co="{{ $co->code }}" style="display:flex;align-items:center;gap:.75rem;padding:.5rem .65rem;border-radius:8px;margin-bottom:.4rem;cursor:default;transition:background .15s;">
+                    <span style="width:14px;height:14px;border-radius:50%;background:{{ $color }};flex-shrink:0;"></span>
+                    <span style="font-weight:600;font-size:.9rem;min-width:48px;">{{ $co->code }}</span>
+                    <span style="font-size:.88rem;font-weight:700;">{{ $cnt }}</span>
+                    <span style="font-size:.8rem;color:var(--text-muted);">({{ round($cnt/$totalAll*100,1) }}%)</span>
                 </div>
                 @endif
                 @endforeach
-            </div>
-            <div id="deptPieDetail" style="min-width:160px;text-align:center;display:none;flex-direction:column;align-items:center;gap:.35rem;">
-                <div id="dpd-dot" style="width:18px;height:18px;border-radius:50%;margin-bottom:.2rem;"></div>
-                <div id="dpd-name" style="font-size:1rem;font-weight:700;"></div>
-                <div id="dpd-count" style="font-size:2rem;font-weight:800;line-height:1;"></div>
-                <div id="dpd-pct" style="font-size:.88rem;color:var(--text-muted);"></div>
-                <div id="dpd-label" style="font-size:.78rem;color:var(--text-muted);">departments</div>
             </div>
         </div>
     </div>
@@ -98,11 +88,11 @@
     (function(){
         const totals = @json($totals);
         const colors = @json($companyColors);
-        const entries = Object.entries(totals).filter(([,v])=>v>0);
+        const entries = Object.entries(totals).filter(([,v])=>+v>0).map(([k,v])=>[k,+v]);
         const total = entries.reduce((s,[,v])=>s+v,0);
         const canvas = document.getElementById('deptPieChart');
         const ctx = canvas.getContext('2d');
-        const cx = 90, cy = 90, r = 78, rHover = 84;
+        const cx = 110, cy = 110, r = 96, rHover = 103;
         let slices = [], hovered = -1;
 
         function buildSlices() {
@@ -116,7 +106,7 @@
         }
 
         function draw() {
-            ctx.clearRect(0, 0, 180, 180);
+            ctx.clearRect(0, 0, 220, 220);
             slices.forEach((s, i) => {
                 const rad = i === hovered ? rHover : r;
                 ctx.beginPath();
@@ -127,30 +117,28 @@
                 ctx.fill();
                 if (i === hovered) {
                     ctx.strokeStyle = '#fff';
-                    ctx.lineWidth = 2.5;
+                    ctx.lineWidth = 3;
                     ctx.stroke();
                 }
             });
-            // donut hole
             ctx.beginPath();
-            ctx.arc(cx, cy, 38, 0, 2 * Math.PI);
+            ctx.arc(cx, cy, 44, 0, 2 * Math.PI);
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg') || '#fff';
             ctx.fill();
-            // center label
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text') || '#111';
-            ctx.font = 'bold 22px system-ui,sans-serif';
+            ctx.font = 'bold 26px system-ui,sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(total, cx, cy - 5);
-            ctx.font = '10px system-ui,sans-serif';
+            ctx.fillText(total, cx, cy - 6);
+            ctx.font = '11px system-ui,sans-serif';
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted') || '#888';
-            ctx.fillText('total', cx, cy + 12);
+            ctx.fillText('departments', cx, cy + 14);
         }
 
         function getSliceAt(x, y) {
             const dx = x - cx, dy = y - cy;
             const dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < 38 || dist > rHover) return -1;
+            if (dist < 44 || dist > rHover) return -1;
             let angle = Math.atan2(dy, dx);
             if (angle < -Math.PI/2) angle += 2*Math.PI;
             for (let i = 0; i < slices.length; i++) {
@@ -161,34 +149,23 @@
             return -1;
         }
 
-        function showDetail(i) {
-            const detail = document.getElementById('deptPieDetail');
-            const rows = document.querySelectorAll('.dept-pie-row');
-            if (i < 0) {
-                detail.style.display = 'none';
-                rows.forEach(r => r.style.background = '');
-                return;
-            }
-            const s = slices[i];
-            detail.style.display = 'flex';
-            document.getElementById('dpd-dot').style.background = s.color;
-            document.getElementById('dpd-name').textContent = s.co;
-            document.getElementById('dpd-name').style.color = s.color;
-            document.getElementById('dpd-count').textContent = s.cnt;
-            document.getElementById('dpd-count').style.color = s.color;
-            document.getElementById('dpd-pct').textContent = (s.cnt/total*100).toFixed(1) + '%';
-            rows.forEach(r => r.style.background = r.dataset.co === s.co ? 'var(--hover-bg,#f1f5f9)' : '');
-        }
-
         canvas.addEventListener('mousemove', function(e) {
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX - rect.left) * (canvas.width / rect.width);
             const y = (e.clientY - rect.top) * (canvas.height / rect.height);
             const idx = getSliceAt(x, y);
-            if (idx !== hovered) { hovered = idx; draw(); showDetail(idx); }
+            if (idx !== hovered) {
+                hovered = idx;
+                draw();
+                document.querySelectorAll('.dept-pie-row').forEach(r => {
+                    r.style.background = idx >= 0 && r.dataset.co === slices[idx]?.co ? 'var(--hover-bg,#f1f5f9)' : '';
+                });
+            }
         });
         canvas.addEventListener('mouseleave', function() {
-            hovered = -1; draw(); showDetail(-1);
+            hovered = -1;
+            draw();
+            document.querySelectorAll('.dept-pie-row').forEach(r => r.style.background = '');
         });
 
         buildSlices();
