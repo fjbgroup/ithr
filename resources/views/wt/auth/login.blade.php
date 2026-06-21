@@ -61,18 +61,17 @@
     @keyframes slideUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
     .brand { display: flex; align-items: center; gap: 14px; justify-content: center; margin-bottom: 28px; }
     .brand-logo-box {
-        width: 52px; height: 52px;
-        background: linear-gradient(135deg, #142b47 0%, #254a78 100%);
+        width: 64px; height: 64px;
+        background: #ffffff;
         border-radius: 16px;
         display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 10px 24px rgba(20,43,71,.28);
-        color: white; font-size: 22px;
-        transform: rotate(-3deg);
+        box-shadow: 0 10px 24px rgba(20,43,71,.18);
         transition: transform .3s ease;
         overflow: hidden;
+        border: 1.5px solid rgba(20,43,71,.08);
     }
-    .brand-logo-box:hover { transform: rotate(0deg) scale(1.05); }
-    .brand-logo-box img { width: 32px; height: 32px; object-fit: contain; }
+    .brand-logo-box:hover { transform: scale(1.05); }
+    .brand-logo-box img { width: 52px; height: 52px; object-fit: contain; }
     .brand-text { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 800; color: #000; text-transform: uppercase; letter-spacing: .06em; line-height: 1.3; }
     .brand-text span { color: #000; display: block; font-size: 15px; letter-spacing: .05em; font-weight: 800; }
     .card {
@@ -201,7 +200,7 @@
     <div class="wrap">
         <div class="brand">
             <div class="brand-logo-box">
-                <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=\'fas fa-walkie-talkie\' style=\'font-size:22px;color:#fff\'></i>'">
+                <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB">
             </div>
             <div class="brand-text">WT System<span>Walkie Talkie Management</span></div>
         </div>
