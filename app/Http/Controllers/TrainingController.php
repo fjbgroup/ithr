@@ -83,7 +83,7 @@ class TrainingController extends Controller
             'isAdmin' => $isAdmin,
             'course_id' => $course_id,
             'years' => TrainingCourse::whereNotNull('start_date')
-                        ->selectRaw('YEAR(start_date) as year')
+                        ->selectRaw('DATEPART(year, start_date) as year')
                         ->distinct()
                         ->orderBy('year', 'desc')
                         ->pluck('year'),
