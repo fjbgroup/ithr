@@ -242,9 +242,10 @@ class StaffController extends Controller
      */
     public function generateStaffId()
     {
-        $maxStaffNo = Staff::whereRaw('staff_no REGEXP "^[0-9]+$"')
-            ->selectRaw('MAX(CAST(staff_no AS UNSIGNED)) as max_no')
-            ->first()->max_no;
+        $maxStaffNo = Staff::pluck('staff_no')
+            ->filter(fn($no) => ctype_digit((string)$no))
+            ->map(fn($no) => (int)$no)
+            ->max();
 
         if (!$maxStaffNo) {
             return response()->json(['staff_no' => '0001']);

@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('phone_no', 50)->nullable()->after('signature_img');
         });
 
-        // Expand role enum to cover all module roles
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin_it','admin_hr','finance_admin','hou','gm','ceo','staff','user','admin') NOT NULL DEFAULT 'staff'");
-
-        // Populate dept_name from departments table
-        DB::statement("UPDATE users u LEFT JOIN departments d ON u.department_id = d.id SET u.dept_name = TRIM(d.name) WHERE u.department_id IS NOT NULL AND d.name IS NOT NULL");
-
-        // Populate phone_no from staff table
-        DB::statement("UPDATE users u INNER JOIN staff s ON TRIM(s.staff_no) = TRIM(u.staff_no) SET u.phone_no = s.phone_number WHERE s.phone_number IS NOT NULL AND s.phone_number != ''");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin_it','admin_hr','finance_admin','hou','gm','ceo','staff','user','admin') NOT NULL DEFAULT 'staff'");
+            DB::statement("UPDATE users u LEFT JOIN departments d ON u.department_id = d.id SET u.dept_name = TRIM(d.name) WHERE u.department_id IS NOT NULL AND d.name IS NOT NULL");
+            DB::statement("UPDATE users u INNER JOIN staff s ON TRIM(s.staff_no) = TRIM(u.staff_no) SET u.phone_no = s.phone_number WHERE s.phone_number IS NOT NULL AND s.phone_number != ''");
+        } else {
+            DB::statement("UPDATE u SET u.dept_name = TRIM(d.name) FROM users u LEFT JOIN departments d ON u.department_id = d.id WHERE u.department_id IS NOT NULL AND d.name IS NOT NULL");
+            DB::statement("UPDATE u SET u.phone_no = s.phone_number FROM users u INNER JOIN staff s ON TRIM(s.staff_no) = TRIM(u.staff_no) WHERE s.phone_number IS NOT NULL AND s.phone_number != ''");
+        }
     }
 
     public function down(): void
@@ -35,6 +35,8 @@ return new class extends Migration
             $table->dropColumn(['department', 'dept_name', 'must_change_password', 'last_login', 'avatar', 'signature_img', 'phone_no']);
         });
 
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin_it','admin_hr','staff','ceo') NOT NULL DEFAULT 'staff'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin_it','admin_hr','staff','ceo') NOT NULL DEFAULT 'staff'");
+        }
     }
 };

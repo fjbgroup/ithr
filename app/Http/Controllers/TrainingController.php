@@ -46,8 +46,8 @@ class TrainingController extends Controller
                 ->where('s.staff_no', $user->staff_no)
                 ->select(
                     DB::raw('COUNT(*) as grand_total'),
-                    DB::raw("SUM(ta.training_type = 'External') as ext_total"),
-                    DB::raw("SUM(ta.training_type = 'Internal') as int_total"),
+                    DB::raw("SUM(CASE WHEN ta.training_type = 'External' THEN 1 ELSE 0 END) as ext_total"),
+                    DB::raw("SUM(CASE WHEN ta.training_type = 'Internal' THEN 1 ELSE 0 END) as int_total"),
                     DB::raw('1 as unique_staff'),
                     DB::raw('COUNT(DISTINCT ta.course_id) as unique_courses')
                 )->first();
@@ -55,8 +55,8 @@ class TrainingController extends Controller
             $typeTotals = DB::table('training_attendances as ta')
                 ->select(
                     DB::raw('COUNT(*) as grand_total'),
-                    DB::raw("SUM(ta.training_type = 'External') as ext_total"),
-                    DB::raw("SUM(ta.training_type = 'Internal') as int_total"),
+                    DB::raw("SUM(CASE WHEN ta.training_type = 'External' THEN 1 ELSE 0 END) as ext_total"),
+                    DB::raw("SUM(CASE WHEN ta.training_type = 'Internal' THEN 1 ELSE 0 END) as int_total"),
                     DB::raw('COUNT(DISTINCT ta.staff_id) as unique_staff'),
                     DB::raw('COUNT(DISTINCT ta.course_id) as unique_courses')
                 )->first();
@@ -64,8 +64,8 @@ class TrainingController extends Controller
 
         $courseTypeCounts = DB::table('training_courses')
             ->select(
-                DB::raw("SUM(training_type = 'External') as ext_courses"),
-                DB::raw("SUM(training_type = 'Internal') as int_courses")
+                DB::raw("SUM(CASE WHEN training_type = 'External' THEN 1 ELSE 0 END) as ext_courses"),
+                DB::raw("SUM(CASE WHEN training_type = 'Internal' THEN 1 ELSE 0 END) as int_courses")
             )->first();
 
         $data = [
@@ -97,8 +97,8 @@ class TrainingController extends Controller
                     'd.id', 'd.name', 'd.company',
                     DB::raw('COUNT(DISTINCT s.id) as staff_count'),
                     DB::raw('COUNT(DISTINCT ta.id) as training_count'),
-                    DB::raw("SUM(ta.training_type = 'External') as ext_count"),
-                    DB::raw("SUM(ta.training_type = 'Internal') as int_count"),
+                    DB::raw("SUM(CASE WHEN ta.training_type = 'External' THEN 1 ELSE 0 END) as ext_count"),
+                    DB::raw("SUM(CASE WHEN ta.training_type = 'Internal' THEN 1 ELSE 0 END) as int_count"),
                     DB::raw('COUNT(DISTINCT ta.course_id) as unique_courses')
                 );
 
@@ -204,8 +204,10 @@ class TrainingController extends Controller
         $prefix = $validated['training_type'] === 'Internal' ? 'INT' : 'EXT';
         $maxSeq = DB::table('training_courses')
             ->where('code', 'like', $prefix . '%')
-            ->whereRaw("code REGEXP '^[A-Z]{3}[0-9]+$'")
-            ->max(DB::raw("CAST(SUBSTRING(code, 4) AS UNSIGNED)"));
+            ->pluck('code')
+            ->filter(fn($c) => preg_match('/^[A-Z]{3}[0-9]+$/', $c))
+            ->map(fn($c) => (int)substr($c, 3))
+            ->max();
         $validated['code'] = $prefix . str_pad((int)($maxSeq ?? 0) + 1, 3, '0', STR_PAD_LEFT);
 
         $course = TrainingCourse::create($validated);
@@ -491,8 +493,10 @@ class TrainingController extends Controller
             $missed      = [];
 
             $maxSeq = DB::table('training_courses')
-                ->whereRaw("code REGEXP '^[A-Z]{3}[0-9]+$'")
-                ->max(DB::raw("CAST(SUBSTRING(code, 4) AS UNSIGNED)"));
+                ->pluck('code')
+                ->filter(fn($c) => preg_match('/^[A-Z]{3}[0-9]+$/', $c))
+                ->map(fn($c) => (int)substr($c, 3))
+                ->max();
             $seq = (int)($maxSeq ?? 0);
 
             if ($csvType === 'internal') {

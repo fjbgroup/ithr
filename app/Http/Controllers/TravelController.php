@@ -58,7 +58,8 @@ class TravelController extends Controller
         }
 
         if ($month_filter) {
-            $query->where(DB::raw("DATE_FORMAT(departure_date, '%Y-%m')"), $month_filter);
+            [$yr, $mo] = explode('-', $month_filter);
+            $query->whereYear('departure_date', $yr)->whereMonth('departure_date', $mo);
         }
 
         $travels = $query->orderBy('departure_date', 'DESC')->get();

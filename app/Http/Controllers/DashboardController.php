@@ -30,8 +30,8 @@ class DashboardController extends Controller
             $typeSplit = TrainingAttendance::join('training_courses', 'training_attendances.course_id', '=', 'training_courses.id')
                 ->whereYear('training_courses.start_date', date('Y'))
                 ->select(
-                    DB::raw("SUM(COALESCE(training_attendances.training_type, training_courses.training_type, 'External') = 'External') as ext_cnt"),
-                    DB::raw("SUM(COALESCE(training_attendances.training_type, training_courses.training_type, 'External') = 'Internal') as int_cnt")
+                    DB::raw("SUM(CASE WHEN COALESCE(training_attendances.training_type, training_courses.training_type, 'External') = 'External' THEN 1 ELSE 0 END) as ext_cnt"),
+                    DB::raw("SUM(CASE WHEN COALESCE(training_attendances.training_type, training_courses.training_type, 'External') = 'Internal' THEN 1 ELSE 0 END) as int_cnt")
                 )->first();
             $extCnt = (int)($typeSplit->ext_cnt ?? 0);
             $intCnt = (int)($typeSplit->int_cnt ?? 0);
@@ -41,10 +41,19 @@ class DashboardController extends Controller
                 ->where('training_courses.start_date', '>=', now()->subMonths(5)->startOfMonth())
                 ->where('training_courses.start_date', '<=', now()->endOfMonth())
                 ->select(
-                    DB::raw("DATE_FORMAT(training_courses.start_date, '%b') as lbl"),
-                    DB::raw("DATE_FORMAT(training_courses.start_date, '%Y-%m') as ym"),
+                    DB::raw("YEAR(training_courses.start_date) as yr"),
+                    DB::raw("MONTH(training_courses.start_date) as mo"),
                     DB::raw("COUNT(DISTINCT training_courses.id) as cnt")
-                )->groupBy('ym', 'lbl')->orderBy('ym')->get();
+                )->groupBy(
+                    DB::raw("YEAR(training_courses.start_date)"),
+                    DB::raw("MONTH(training_courses.start_date)")
+                )->orderBy('yr')->orderBy('mo')->get()
+                ->map(function ($row) {
+                    $date = \Carbon\Carbon::createFromDate($row->yr, $row->mo, 1);
+                    $row->lbl = $date->format('M');
+                    $row->ym  = $date->format('Y-m');
+                    return $row;
+                });
 
             // Top 5 departments
             $topDepts = Department::join('staff', 'staff.department_id', '=', 'departments.id')
