@@ -158,13 +158,13 @@ class ReportController extends Controller
         if ($company_f) $monthlyQuery->where('departments.company', $company_f);
 
         $monthlyData = $monthlyQuery->select(
-            DB::raw("MONTH(training_courses.start_date) as mon"),
+            DB::raw("DATEPART(month, training_courses.start_date) as mon"),
             DB::raw("COUNT(*) as total"),
             DB::raw("SUM(CASE WHEN COALESCE(training_attendances.training_type, training_courses.training_type, 'External') = 'External' THEN 1 ELSE 0 END) as ext_cnt"),
             DB::raw("SUM(CASE WHEN COALESCE(training_attendances.training_type, training_courses.training_type, 'External') = 'Internal' THEN 1 ELSE 0 END) as int_cnt"),
             DB::raw("COUNT(DISTINCT training_attendances.staff_id) as unique_staff"),
             DB::raw("COUNT(DISTINCT training_attendances.course_id) as unique_courses")
-        )->groupBy(DB::raw("MONTH(training_courses.start_date)"))->get()->keyBy('mon');
+        )->groupByRaw("DATEPART(month, training_courses.start_date)")->get()->keyBy('mon');
 
         return view('reports.training', compact(
             'reports', 'departments', 'total_attendees', 'unique_courses', 'unique_staff', 

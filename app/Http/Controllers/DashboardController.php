@@ -41,12 +41,12 @@ class DashboardController extends Controller
                 ->where('training_courses.start_date', '>=', now()->subMonths(5)->startOfMonth())
                 ->where('training_courses.start_date', '<=', now()->endOfMonth())
                 ->select(
-                    DB::raw("YEAR(training_courses.start_date) as yr"),
-                    DB::raw("MONTH(training_courses.start_date) as mo"),
+                    DB::raw("DATEPART(year, training_courses.start_date) as yr"),
+                    DB::raw("DATEPART(month, training_courses.start_date) as mo"),
                     DB::raw("COUNT(DISTINCT training_courses.id) as cnt")
                 )->groupBy(
-                    DB::raw("YEAR(training_courses.start_date)"),
-                    DB::raw("MONTH(training_courses.start_date)")
+                    DB::raw("DATEPART(year, training_courses.start_date)"),
+                    DB::raw("DATEPART(month, training_courses.start_date)")
                 )->orderBy('yr')->orderBy('mo')->get()
                 ->map(function ($row) {
                     $date = \Carbon\Carbon::createFromDate($row->yr, $row->mo, 1);
