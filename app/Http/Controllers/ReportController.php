@@ -33,7 +33,7 @@ class ReportController extends Controller
             })
             ->select('departments.id', 'departments.name as dept', 'departments.company', DB::raw('COUNT(staff.id) as headcount'))
             ->groupBy('departments.id', 'departments.name', 'departments.company')
-            ->having('headcount', '>', 0)
+            ->havingRaw('COUNT(staff.id) > 0')
             ->orderBy('departments.company')
             ->orderBy('headcount', 'DESC')
             ->get();
