@@ -53,7 +53,7 @@ body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-seri
   padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);
   display:flex;align-items:center;gap:12px;
 }
-.sidebar-brand img{width:36px;height:36px;object-fit:contain;background:transparent}
+.sidebar-brand img{width:42px;height:42px;object-fit:contain;background:transparent}
 .brand-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;
   text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
 .brand-name span{color:#fff;display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
@@ -106,11 +106,11 @@ button .badge-count{ margin-left:0; }
 .btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
 
 /* ── MAIN ── */
-.main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;padding-top:60px}
 .topbar{
   background:var(--surface);border-bottom:1px solid var(--border);
   padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;
-  position:sticky;top:0;z-index:50;
+  position:fixed;top:0;left:var(--sidebar-w);right:0;z-index:50;
 }
 .topbar-left{flex:1}
 .topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy,var(--text))}
@@ -274,6 +274,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:none}
   .main-content{margin-left:0}
+  .topbar{left:0}
   .sidebar-toggle{display:flex;align-items:center}
 }
 </style>

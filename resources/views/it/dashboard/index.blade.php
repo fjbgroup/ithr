@@ -18,8 +18,8 @@
 .ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
 .ds-lbl{font-size:12px;color:var(--muted);margin-top:5px;font-weight:500}
 
-.ds-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
-.ds-box-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ds-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:clip;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
+.ds-box-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:60px;z-index:5;background:var(--surface)}
 .ds-box-title{font-size:14px;font-weight:700;color:var(--text)}
 .ds-box-sub{font-size:12px;color:var(--muted);margin-top:2px}
 
@@ -50,8 +50,8 @@
 .ds-status-cell:last-child{border-right:none}
 
 /* Industrial chart wrapper — keeps dark canvas but themed frame */
-.ds-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.12)}
-.ds-chart-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ds-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:clip;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+.ds-chart-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:60px;z-index:5;background:var(--surface)}
 .ds-chart-ticker{background:var(--body-bg);border-bottom:1px solid var(--border);padding:7px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
 .ds-chart-footer{padding:0 28px 18px;display:flex;align-items:center;justify-content:flex-end;gap:16px;background:var(--surface)}
 
