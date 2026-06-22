@@ -113,11 +113,15 @@
                 @foreach ($trainings as $t)
                 <tr>
                     <td>
+                        @if($t->course)
                         <a href="{{ route('training.index', ['view' => 'course', 'course_id' => $t->course_id]) }}" style="text-decoration:none;">
                             <code style="font-size:.82rem;color:#6366f1;border-bottom:1px dashed #6366f1;">{{ $t->course->code }}</code>
                         </a>
+                        @else
+                        <span class="text-muted">—</span>
+                        @endif
                     </td>
-                    <td style="font-size:.85rem;">{{ $t->course->title }}</td>
+                    <td style="font-size:.85rem;">{{ $t->course->title ?? '—' }}</td>
                     <td><span class="type-badge type-{{ strtolower($t->training_type ?? 'external') }}">{{ $t->training_type ?? 'External' }}</span></td>
                     <td><span class="status-badge status-{{ strtolower(str_replace(' ','-',$t->status)) }}">{{ $t->status }}</span></td>    
                 </tr>
