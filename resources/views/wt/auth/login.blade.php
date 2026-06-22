@@ -6,209 +6,459 @@
     <title>WT System | Sign In</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
-    :root {
-        --bg: #ffffff;
-        --surface: #fff;
-        --surface2: #f7f8fa;
-        --border: #e2e5ea;
-        --text: #1a1f2e;
-        --muted: #6b7280;
-        --accent: #38bdf8;
-        --accent-h: #0284c7;
-        --navy: #142b47;
-        --red: #dc2626;
-        --green: #16a34a;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    .hidden { display: none !important; }
-    body {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%);
-        font-family: 'DM Sans', sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        position: relative;
-        overflow-x: hidden;
-    }
-    body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background-image: radial-gradient(circle, rgba(34,197,94,0.15) 1px, transparent 1px);
-        background-size: 28px 28px;
-        z-index: 0;
-        opacity: .6;
-    }
-    body::after {
-        content: '';
-        position: fixed;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(34,197,94,.20) 0%, transparent 65%);
-        top: -200px;
-        right: -200px;
-        z-index: 0;
-        animation: orb 10s ease-in-out infinite alternate;
-    }
-    @keyframes orb { to { transform: translate(-60px, 100px); } }
-    .wrap { position: relative; z-index: 1; width: 100%; max-width: 480px; animation: slideUp .6s cubic-bezier(.16,1,.3,1); }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
-    .brand { display: flex; align-items: center; gap: 14px; justify-content: center; margin-bottom: 28px; }
-    .brand-logo-box {
-        width: 64px; height: 64px;
-        background: #ffffff;
-        border-radius: 16px;
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 10px 24px rgba(20,43,71,.18);
-        transition: transform .3s ease;
-        overflow: hidden;
-        border: 1.5px solid rgba(20,43,71,.08);
-    }
-    .brand-logo-box:hover { transform: scale(1.05); }
-    .brand-logo-box img { width: 52px; height: 52px; object-fit: contain; }
-    .brand-text { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 800; color: #000; text-transform: uppercase; letter-spacing: .06em; line-height: 1.3; }
-    .brand-text span { color: #000; display: block; font-size: 15px; letter-spacing: .05em; font-weight: 800; }
-    .card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 20px 40px rgba(0,0,0,.07);
-    }
-    .form-body { padding: 32px 36px; }
-    .form-title { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-    .form-sub { color: var(--muted); font-size: 13px; margin-bottom: 26px; }
-    .field { margin-bottom: 18px; }
-    label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .09em; margin-bottom: 7px; }
-    .input-wrap { position: relative; display: flex; align-items: center; }
-    .input-wrap i.field-icon { position: absolute; left: 14px; color: #9ca3af; font-size: 15px; pointer-events: none; z-index: 1; }
-    input[type="text"], input[type="password"] {
-        width: 100%;
-        background: var(--surface2);
-        border: 1.5px solid var(--border);
-        border-radius: 10px;
-        color: var(--text);
-        padding: 13px 14px 13px 42px;
-        font-size: 14px;
-        font-family: 'DM Sans', sans-serif;
-        transition: border-color .2s, box-shadow .2s;
-        outline: none;
-    }
-    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,.15); background: #fff; }
-    input::placeholder { color: #bfc5cc; }
-    .toggle-pass {
-        position: absolute;
-        right: 14px;
-        color: var(--muted);
-        cursor: pointer;
-        padding: 4px;
-        transition: color .3s;
-        background: none;
-        border: none;
-        font-size: 16px;
-    }
-    .toggle-pass:hover { color: var(--accent-h); }
-    .forgot-link { display: block; text-align: right; margin-top: 8px; font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 600; letter-spacing: .01em; }
-    .forgot-link:hover { color: var(--accent-h); }
-    .btn-submit {
-        width: 100%;
-        margin-top: 6px;
-        background: var(--navy);
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        padding: 14px;
-        font-family: 'DM Sans', sans-serif;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: .04em;
-        cursor: pointer;
-        transition: background .2s, transform .1s, box-shadow .2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        box-shadow: 0 4px 14px rgba(20,43,71,.25);
-    }
-    .btn-submit:hover { background: var(--accent-h); box-shadow: 0 6px 20px rgba(20,43,71,.3); transform: translateY(-1px); }
-    .alert { border-radius: 10px; padding: 12px 16px; font-size: 13px; display: flex; align-items: center; gap: 9px; margin-bottom: 18px; font-weight: 500; }
-    .alert-error { background: #fee2e2; border: 1px solid #fecaca; color: #991b1b; }
-    .alert-success { background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; }
-    .divider { text-align: center; padding: 16px 36px; border-top: 1px solid var(--border); font-size: 11px; color: #94a3b8; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; }
-    .footer-links { text-align: center; margin-top: 20px; font-size: 12px; font-weight: 600; color: var(--muted); }
-    .footer-links a { color: var(--accent); text-decoration: none; transition: color .2s; }
-    .footer-links a:hover { color: var(--accent-h); }
+        :root {
+            --brand: #ee1c25;
+            --brand-dark: #5c1018;
+            --brand-deep: #3f0710;
+            --bg: #eef3f7;
+            --text: #121a2d;
+            --muted: #6c7a91;
+            --line: #dce4ef;
+            --field: #f8fafc;
+            --white: #ffffff;
+        }
 
-    /* Theme toggle */
-    .theme-toggle-floating {
-        position: fixed; top: 24px; right: 24px;
-        width: 44px; height: 44px;
-        background: rgba(255,255,255,.9);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(226,232,240,.8);
-        border-radius: 12px;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        color: var(--muted);
-        box-shadow: 0 4px 14px rgba(0,0,0,.08);
-        transition: all .3s;
-        z-index: 100;
-        font-size: 18px;
-    }
-    .theme-toggle-floating:hover { transform: translateY(-2px); color: var(--accent-h); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+        *, *::before, *::after { box-sizing: border-box; }
 
-    /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); backdrop-filter: blur(12px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal-box { background: var(--surface); width: 100%; max-width: 420px; padding: 32px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 30px 60px rgba(0,0,0,.18); animation: popUp .35s cubic-bezier(.16,1,.3,1); }
-    @keyframes popUp { from { opacity: 0; transform: scale(.92) translateY(16px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .modal-header h3 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--navy); }
-    .modal-close { cursor: pointer; color: var(--muted); font-size: 20px; background: none; border: none; transition: color .2s; }
-    .modal-close:hover { color: #ef4444; }
-    .modal-desc { font-size: 12px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
-    .modal-field { margin-bottom: 16px; }
-    .modal-field label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .09em; margin-bottom: 6px; }
-    .modal-field input, .modal-field textarea {
-        width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px;
-        padding: 10px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: all .2s;
-    }
-    .modal-field textarea { min-height: 90px; resize: vertical; }
-    .modal-field input:focus, .modal-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,.15); }
-    .modal-btn { width: 100%; background: var(--navy); color: #fff; border: none; border-radius: 8px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 8px; }
-    .modal-btn:hover { background: var(--accent-h); }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+        }
 
-    @media (max-width: 480px) {
-        .form-body { padding: 24px 20px; }
-        .divider { padding: 12px 20px; }
-    }
+        .login-shell {
+            width: min(1060px, 100%);
+            min-height: 602px;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            background: var(--white);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 28px 70px rgba(20, 34, 52, .22);
+        }
+
+        .brand-panel {
+            position: relative;
+            padding: 58px 50px;
+            background:
+                radial-gradient(circle at 82% 20%, rgba(238, 28, 37, .22), transparent 34%),
+                linear-gradient(135deg, #7c1f31 0%, var(--brand-deep) 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 40px;
+        }
+
+        .brand-title {
+            max-width: 390px;
+            margin: 0;
+            font-size: 34px;
+            line-height: 1.22;
+            font-weight: 900;
+            letter-spacing: 0;
+        }
+
+        .brand-copy {
+            max-width: 430px;
+            margin: 18px 0 0;
+            color: rgba(255,255,255,.72);
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 16px;
+            margin-top: 58px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: rgba(255,255,255,.82);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .feature-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,.13);
+            color: #ffffff;
+            flex: 0 0 auto;
+        }
+
+        .form-panel {
+            padding: 62px 50px 42px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-card {
+            width: 100%;
+            max-width: 405px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1.15;
+            font-weight: 900;
+            letter-spacing: 0;
+            color: #101827;
+        }
+
+        .form-subtitle {
+            margin: 12px 0 34px;
+            color: var(--muted);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .alert {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .alert-error {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #9f1239;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            margin: 0 0 9px;
+            color: #404a60;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrap .field-icon {
+            position: absolute;
+            left: 16px;
+            color: #94a3b8;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .login-input {
+            width: 100%;
+            min-height: 50px;
+            border: 1.5px solid var(--line);
+            border-radius: 11px;
+            background: var(--field);
+            color: var(--text);
+            padding: 0 46px 0 42px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .login-input::placeholder { color: #94a3b8; font-weight: 600; }
+
+        .login-input:focus {
+            background: #ffffff;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 4px rgba(238, 28, 37, .13);
+        }
+
+        .toggle-pass {
+            position: absolute;
+            right: 14px;
+            width: 30px;
+            height: 30px;
+            border: 0;
+            background: transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 17px;
+        }
+
+        .toggle-pass:hover { color: var(--brand); background: #fff1f2; }
+
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .forgot-link {
+            color: var(--brand-dark);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .forgot-link:hover { color: var(--brand); }
+
+        .btn-submit {
+            width: 100%;
+            min-height: 54px;
+            margin-top: 22px;
+            border: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: .01em;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            box-shadow: 0 13px 24px rgba(238, 28, 37, .24);
+            transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            filter: brightness(.97);
+            box-shadow: 0 16px 28px rgba(238, 28, 37, .28);
+        }
+
+        .login-links {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .back-link {
+            color: #7b8aa2;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .back-link:hover { color: var(--brand); }
+
+        .switch-title {
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .system-switch {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .system-switch a,
+        .system-switch span {
+            color: #6b7890;
+            text-decoration: none;
+        }
+
+        .system-switch a:hover { color: var(--brand); }
+        .system-switch .active { color: var(--brand-dark); }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, .48);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            width: min(430px, 100%);
+            border-radius: 18px;
+            background: #ffffff;
+            border: 1px solid var(--line);
+            box-shadow: 0 30px 70px rgba(15, 23, 42, .28);
+            padding: 28px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #101827;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .modal-close {
+            width: 34px;
+            height: 34px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: #ffffff;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .modal-close:hover { color: var(--brand); border-color: #fecdd3; }
+
+        .modal-desc {
+            margin: 0 0 18px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .modal-field { margin-bottom: 14px; }
+        .modal-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #404a60;
+            font-size: 12px;
+            font-weight: 900;
+        }
+        .modal-field input,
+        .modal-field textarea {
+            width: 100%;
+            border: 1.5px solid var(--line);
+            border-radius: 10px;
+            background: var(--field);
+            padding: 12px;
+            font: 600 14px 'DM Sans', sans-serif;
+            color: var(--text);
+            outline: none;
+        }
+        .modal-field textarea { min-height: 96px; resize: vertical; }
+        .modal-field input:focus,
+        .modal-field textarea:focus {
+            border-color: var(--brand);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(238, 28, 37, .13);
+        }
+        .modal-btn {
+            width: 100%;
+            min-height: 46px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--brand);
+            color: #ffffff;
+            font: 900 14px 'DM Sans', sans-serif;
+            cursor: pointer;
+        }
+
+        @media (max-width: 880px) {
+            body { padding: 18px; align-items: flex-start; }
+            .login-shell { grid-template-columns: 1fr; min-height: 0; }
+            .brand-panel { padding: 34px 28px; }
+            .brand-logo { margin-bottom: 24px; }
+            .brand-title { font-size: 28px; }
+            .feature-list { margin-top: 32px; }
+            .form-panel { padding: 36px 28px; }
+        }
+
+        @media (max-width: 520px) {
+            body { padding: 0; background: #ffffff; }
+            .login-shell { border-radius: 0; box-shadow: none; }
+            .brand-panel { padding: 28px 22px; }
+            .brand-logo { width: 54px; height: 54px; }
+            .brand-title { font-size: 25px; }
+            .brand-copy { font-size: 14px; }
+            .feature-item { font-size: 13px; }
+            .form-panel { padding: 32px 22px; }
+        }
     </style>
 </head>
 <body>
-    {{-- Floating Theme Toggle --}}
-    <div class="theme-toggle-floating" id="theme-toggle" title="Toggle Dark/Light Mode">
-        <i id="theme-toggle-dark-icon" class="hidden bi bi-moon-fill"></i>
-        <i id="theme-toggle-light-icon" class="hidden bi bi-sun-fill"></i>
-    </div>
-
-    <div class="wrap">
-        <div class="brand">
-            <div class="brand-logo-box">
-                <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB">
+    <main class="login-shell">
+        <section class="brand-panel" aria-label="WT System introduction">
+            <div>
+                <img class="brand-logo" src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB">
+                <h1 class="brand-title">Welcome to the Walkie Talkie Management System</h1>
+                <p class="brand-copy">Manage walkie talkie assets, requests and handovers from one secure workspace.</p>
             </div>
-            <div class="brand-text">WT System<span>Walkie Talkie Management</span></div>
-        </div>
 
-        <div class="card">
-            <div class="form-body">
-                <div class="form-title">Welcome Back</div>
-                <div class="form-sub">Sign in to access the WT System portal</div>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon"><i class="bi bi-broadcast-pin"></i></span>
+                    <span>Walkie inventory tracking</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon"><i class="bi bi-clipboard-check"></i></span>
+                    <span>Request management</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon"><i class="bi bi-arrow-left-right"></i></span>
+                    <span>Assignment history and records</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="form-card">
+                <h2 class="form-title">Sign In</h2>
+                <p class="form-subtitle">Enter your credentials to access your account.</p>
 
                 @if(session('error'))
                     <div class="alert alert-error"><i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}</div>
@@ -223,80 +473,73 @@
                 <form method="POST" action="{{ route('wt.login') }}">
                     @csrf
                     <div class="field">
-                        <label>Staff No.</label>
+                        <label for="staff_no">Staff ID</label>
                         <div class="input-wrap">
                             <i class="bi bi-person field-icon"></i>
-                            <input type="text" name="staff_no" placeholder="Enter your Staff No." value="{{ old('staff_no') }}" autocapitalize="off" autocomplete="off" spellcheck="false" required autofocus data-preserve-case="true">
+                            <input id="staff_no" class="login-input" type="text" name="staff_no" placeholder="e.g. 0000001" value="{{ old('staff_no') }}" autocapitalize="off" autocomplete="username" spellcheck="false" required autofocus data-preserve-case="true">
                         </div>
                     </div>
 
                     <div class="field">
-                        <label>Password</label>
+                        <label for="pass">Password</label>
                         <div class="input-wrap">
                             <i class="bi bi-lock field-icon"></i>
-                            <input type="password" name="password" id="pass" placeholder="Enter your password" required>
-                            <button type="button" class="toggle-pass" onclick="togglePassword('pass', this)" title="Show/hide password">
+                            <input id="pass" class="login-input" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+                            <button type="button" class="toggle-pass" onclick="togglePassword('pass', this)" title="Show/hide password" aria-label="Show or hide password">
                                 <i class="bi bi-eye"></i>
                             </button>
                         </div>
-                        <a href="#" class="forgot-link" onclick="openForgotModal(); return false;">
-                            <i class="bi bi-key" style="font-size:11px"></i> Forgot Password?
-                        </a>
+                        <div class="forgot-row">
+                            <a href="#" class="forgot-link" onclick="openForgotModal(); return false;">Forgot password?</a>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn-submit">
-                        Sign In <i class="bi bi-arrow-right"></i>
+                        <span>Sign In</span>
+                        <i class="bi bi-arrow-right"></i>
                     </button>
                 </form>
+
+                <div class="login-links">
+                    <a class="back-link" href="{{ url('/') }}">&larr; Back to Portal</a>
+
+                    <div class="switch-title">Switch System</div>
+                    <div class="system-switch">
+                        <a href="{{ url('/login') }}">HR System</a>
+                        <span>&middot;</span>
+                        <span class="active">WT System</span>
+                        <span>&middot;</span>
+                        <a href="{{ url('/it/login') }}">IT System</a>
+                    </div>
+                </div>
             </div>
-            <div class="divider">FGV Johor Bulkers Sdn Bhd</div>
-        </div>
+        </section>
+    </main>
 
-        <div class="footer-links" style="margin-top:20px">
-            <a href="{{ url('/') }}" style="color:#94a3b8" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#94a3b8'">
-                &larr; Back to Portal
-            </a>
-        </div>
-
-        <div style="text-align:center;margin-top:14px;">
-            <div style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
-            <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
-                <a href="{{ url('/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
-                    <i class="bi bi-people-fill"></i> HR System
-                </a>
-                <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #e2e5ea;font-size:11px;font-weight:600;color:#bfc5cc;background:#f1f5f9;cursor:default;">
-                    <i class="bi bi-headphones"></i> WT System
-                </span>
-                <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
-                    <i class="bi bi-laptop"></i> IT System
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {{-- Reset Password Modal --}}
     <div id="forgotModal" class="modal-overlay" onclick="closeOutside(event,'forgotModal')">
         <div class="modal-box">
             <div class="modal-header">
                 <h3>Reset Request</h3>
-                <button type="button" class="modal-close" onclick="closeForgotModal()"><i class="bi bi-x-lg"></i></button>
+                <button type="button" class="modal-close" onclick="closeForgotModal()" aria-label="Close reset password modal">
+                    <i class="bi bi-x-lg"></i>
+                </button>
             </div>
             <form method="POST" action="{{ route('wt.password.reset') }}">
                 @csrf
                 <p class="modal-desc">
-                    Submit your details. Your request will be forwarded to <strong>ICT</strong> for review. ICT will handle the password reset for your account.
+                    Submit your details. Your request will be forwarded to <strong>ICT</strong> for review.
                 </p>
                 <div class="modal-field">
-                    <label>Name</label>
-                    <input type="text" name="requester_name" placeholder="Enter your name" value="{{ old('requester_name') }}" required>
+                    <label for="requester_name">Name</label>
+                    <input id="requester_name" type="text" name="requester_name" placeholder="Enter your name" value="{{ old('requester_name') }}" required>
                 </div>
                 <div class="modal-field">
-                    <label>Staff ID</label>
-                    <input type="text" name="staff_id" placeholder="Enter your Staff ID" value="{{ old('staff_id') }}" required>
+                    <label for="staff_id">Staff ID</label>
+                    <input id="staff_id" type="text" name="staff_id" placeholder="Enter your Staff ID" value="{{ old('staff_id') }}" required>
                 </div>
                 <div class="modal-field">
-                    <label>Justification</label>
-                    <textarea name="justification" placeholder="State the reason for password reset request" required>{{ old('justification') }}</textarea>
+                    <label for="justification">Justification</label>
+                    <textarea id="justification" name="justification" placeholder="State the reason for password reset request" required>{{ old('justification') }}</textarea>
                 </div>
                 <button type="submit" class="modal-btn">Send Request</button>
             </form>
@@ -315,39 +558,22 @@
                 icon.className = 'bi bi-eye';
             }
         }
-        function openForgotModal()  { document.getElementById('forgotModal').classList.add('active'); }
-        function closeForgotModal() { document.getElementById('forgotModal').classList.remove('active'); }
-        function closeOutside(e, id) { if (e.target === document.getElementById(id)) closeForgotModal(); }
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeForgotModal(); });
 
-        // Theme toggle (syncs with fjb-theme key used by main layouts)
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const darkIcon = document.getElementById('theme-toggle-dark-icon');
-        const lightIcon = document.getElementById('theme-toggle-light-icon');
-
-        function applyLoginTheme(dark) {
-            document.documentElement.classList.toggle('dark', dark);
-            document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-            if (darkIcon && lightIcon) {
-                darkIcon.style.display = dark ? 'none' : 'inline-block';
-                lightIcon.style.display = dark ? 'inline-block' : 'none';
-            }
+        function openForgotModal() {
+            document.getElementById('forgotModal').classList.add('active');
         }
 
-        (function(){
-            const t = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            applyLoginTheme(t === 'dark');
-        })();
-
-        if (themeToggleBtn) {
-            themeToggleBtn.addEventListener('click', function() {
-                const isDark = document.documentElement.classList.contains('dark');
-                const next = isDark ? 'light' : 'dark';
-                localStorage.setItem('fjb-theme', next);
-                localStorage.setItem('color-theme', next);
-                applyLoginTheme(next === 'dark');
-            });
+        function closeForgotModal() {
+            document.getElementById('forgotModal').classList.remove('active');
         }
+
+        function closeOutside(e, id) {
+            if (e.target === document.getElementById(id)) closeForgotModal();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeForgotModal();
+        });
     </script>
 </body>
 </html>
