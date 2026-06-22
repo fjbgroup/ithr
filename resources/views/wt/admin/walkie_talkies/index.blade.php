@@ -517,6 +517,44 @@
         html.dark body .content-surface #walkiesTable tbody tr:hover td {
             background: #172033 !important;
         }
+
+        body .content-surface .inventory-filter-inline,
+        html:not(.dark) body .content-surface .inventory-filter-inline,
+        html.dark body .content-surface .inventory-filter-inline {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 10px !important;
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        body .content-surface .inventory-filter-inline .inventory-filter-field,
+        html:not(.dark) body .content-surface .inventory-filter-inline .inventory-filter-field,
+        html.dark body .content-surface .inventory-filter-inline .inventory-filter-field {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 8px !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+        }
+
+        body .content-surface .inventory-filter-inline .clean-admin-label {
+            margin: 0 !important;
+            line-height: 30px !important;
+            white-space: nowrap !important;
+        }
+
+        @media (max-width: 720px) {
+            body .content-surface #globalSearch.clean-admin-input {
+                width: 180px !important;
+                max-width: calc(100vw - 170px) !important;
+            }
+        }
     </style>
     @endpush
 
@@ -631,17 +669,17 @@
 
         {{-- ===== SEARCH & FILTER BAR ===== --}}
         <div class="clean-admin-filter">
-            <div class="clean-admin-filter-grid">
+            <div class="clean-admin-filter-grid inventory-filter-inline" style="display:flex !important;flex-direction:row !important;flex-wrap:wrap !important;align-items:center !important;justify-content:flex-start !important;gap:10px !important;width:100% !important;">
                 {{-- Search Input --}}
-                <div>
-                    <label class="clean-admin-label" for="globalSearch">Search</label>
-                    <input type="text" id="globalSearch" class="clean-admin-input" placeholder="Keywords">
+                <div class="inventory-filter-field" style="display:flex !important;flex-direction:row !important;align-items:center !important;gap:8px !important;width:auto !important;min-width:0 !important;">
+                    <label class="clean-admin-label" for="globalSearch" style="margin:0 !important;line-height:30px !important;white-space:nowrap !important;">Search</label>
+                    <input type="text" id="globalSearch" class="clean-admin-input" placeholder="Keywords" style="width:220px !important;max-width:32vw !important;">
                 </div>
 
                 {{-- Status Filter --}}
-                <div>
-                    <label class="clean-admin-label" for="filterStatus">Status</label>
-                    <select id="filterStatus" class="clean-admin-select">
+                <div class="inventory-filter-field" style="display:flex !important;flex-direction:row !important;align-items:center !important;gap:8px !important;width:auto !important;min-width:0 !important;">
+                    <label class="clean-admin-label" for="filterStatus" style="margin:0 !important;line-height:30px !important;white-space:nowrap !important;">Status</label>
+                    <select id="filterStatus" class="clean-admin-select" style="width:160px !important;">
                         <option value="">All Status</option>
                         @foreach($statusOptions as $s)
                         <option value="{{ $s }}">{{ $s }}</option>
@@ -650,7 +688,7 @@
                 </div>
 
                 {{-- Reset Button --}}
-                <button type="button" id="resetFilters" class="clean-admin-reset" title="Reset all filters">Reset</button>
+                <button type="button" id="resetFilters" class="clean-admin-reset" title="Reset all filters" style="width:68px !important;min-width:68px !important;">Reset</button>
             </div>
         </div>
 
@@ -6459,6 +6497,57 @@
             border-color: #cbd5e1 !important;
         }
 
+        body .content-surface .inventory-page-shell .clean-admin-filter-grid,
+        html:not(.dark) body .content-surface .inventory-page-shell .clean-admin-filter-grid,
+        html.dark body .content-surface .inventory-page-shell .clean-admin-filter-grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: flex-end !important;
+            justify-content: flex-start !important;
+            gap: 10px !important;
+        }
+
+        body .content-surface .inventory-page-shell .clean-admin-filter-grid > div,
+        html:not(.dark) body .content-surface .inventory-page-shell .clean-admin-filter-grid > div,
+        html.dark body .content-surface .inventory-page-shell .clean-admin-filter-grid > div {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 8px !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+        }
+
+        body .content-surface .inventory-page-shell .clean-admin-label,
+        html:not(.dark) body .content-surface .inventory-page-shell .clean-admin-label,
+        html.dark body .content-surface .inventory-page-shell .clean-admin-label {
+            margin: 0 !important;
+            line-height: 30px !important;
+            white-space: nowrap !important;
+        }
+
+        body .content-surface #globalSearch.clean-admin-input,
+        html:not(.dark) body .content-surface #globalSearch.clean-admin-input,
+        html.dark body .content-surface #globalSearch.clean-admin-input {
+            width: 220px !important;
+            max-width: 32vw !important;
+        }
+
+        body .content-surface #filterStatus.clean-admin-select,
+        html:not(.dark) body .content-surface #filterStatus.clean-admin-select,
+        html.dark body .content-surface #filterStatus.clean-admin-select {
+            width: 160px !important;
+        }
+
+        body .content-surface #resetFilters.clean-admin-reset,
+        html:not(.dark) body .content-surface #resetFilters.clean-admin-reset,
+        html.dark body .content-surface #resetFilters.clean-admin-reset {
+            align-self: flex-end !important;
+            width: 68px !important;
+            min-width: 68px !important;
+        }
+
         html:not(.dark) body .content-surface .clean-admin-input,
         html:not(.dark) body .content-surface .clean-admin-select,
         html:not(.dark) body .content-surface .clean-admin-reset,
@@ -6552,6 +6641,259 @@
 
     @endsection
 
+    @push('final_styles')
+    <style id="inventory-table-theme-authority">
+        html[data-theme="light"] body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="light"] body .content-surface .inventory-page-shell .clean-admin-table-scroll {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
 
+        html[data-theme="light"] body .content-surface #walkiesTable,
+        html[data-theme="light"] body .content-surface #walkiesTable thead,
+        html[data-theme="light"] body .content-surface #walkiesTable tbody,
+        html[data-theme="light"] body .content-surface #walkiesTable tr {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
 
+        html[data-theme="light"] body .content-surface #walkiesTable th,
+        html[data-theme="light"] body .content-surface #walkiesTable thead th,
+        html[data-theme="light"] body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #eef3f8 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
 
+        html[data-theme="light"] body .content-surface #walkiesTable td,
+        html[data-theme="light"] body .content-surface #walkiesTable tbody td,
+        html[data-theme="light"] body .content-surface #walkiesTable td.inventory-action-col {
+            background: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            color: #1f2937 !important;
+        }
+
+        html[data-theme="light"] body .content-surface #walkiesTable tbody tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-item-title,
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-remark-cell {
+            color: #1f2937 !important;
+        }
+
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-id-chip,
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-type-badge {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        html[data-theme="light"] body .content-surface #bulkActionForm.inventory-bulk-bar {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 0 10px !important;
+            padding: 10px 12px !important;
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 10px !important;
+            color: #0f172a !important;
+            box-shadow: none !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-count {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            height: 30px !important;
+            min-height: 30px !important;
+            padding: 0 !important;
+            border: 0 !important;
+            background: transparent !important;
+            color: #0f172a !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            white-space: nowrap !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-controls {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-select,
+        html[data-theme="light"] body .content-surface .inventory-bulk-input,
+        html[data-theme="light"] body .content-surface .inventory-bulk-btn {
+            height: 30px !important;
+            min-height: 30px !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 7px !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            font-size: 12px !important;
+            font-weight: 650 !important;
+            box-shadow: none !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-select {
+            width: 124px !important;
+            padding: 0 28px 0 10px !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-input {
+            width: 150px !important;
+            padding: 0 10px !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-input::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-btn {
+            width: 68px !important;
+            padding: 0 12px !important;
+            border-color: #0f172a !important;
+            background: #0f172a !important;
+            color: #ffffff !important;
+            cursor: pointer !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-btn:disabled,
+        html[data-theme="light"] body .content-surface .inventory-bulk-select:disabled,
+        html[data-theme="light"] body .content-surface .inventory-bulk-input:disabled {
+            opacity: .62 !important;
+            cursor: not-allowed !important;
+        }
+
+        html[data-theme="dark"] body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell .clean-admin-table-scroll {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+        }
+
+        html[data-theme="dark"] body .content-surface #walkiesTable th,
+        html[data-theme="dark"] body .content-surface #walkiesTable thead th,
+        html[data-theme="dark"] body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #111827 !important;
+            border-color: #334155 !important;
+            color: #d7e7fb !important;
+        }
+
+        html[data-theme="dark"] body .content-surface #walkiesTable td,
+        html[data-theme="dark"] body .content-surface #walkiesTable tbody td,
+        html[data-theme="dark"] body .content-surface #walkiesTable td.inventory-action-col {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+            color: #e2e8f0 !important;
+        }
+
+        html[data-theme="dark"] body .content-surface #walkiesTable tbody tr:hover td {
+            background: #172033 !important;
+        }
+
+        html[data-theme="dark"] body .content-surface #bulkActionForm.inventory-bulk-bar {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 0 10px !important;
+            padding: 10px 12px !important;
+            background: #0f172a !important;
+            border: 1px solid #273449 !important;
+            border-radius: 10px !important;
+            color: #e2e8f0 !important;
+            box-shadow: none !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-count {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            height: 30px !important;
+            min-height: 30px !important;
+            padding: 0 !important;
+            border: 0 !important;
+            background: transparent !important;
+            color: #e2e8f0 !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            white-space: nowrap !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-controls {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-select,
+        html[data-theme="dark"] body .content-surface .inventory-bulk-input,
+        html[data-theme="dark"] body .content-surface .inventory-bulk-btn {
+            height: 30px !important;
+            min-height: 30px !important;
+            border: 1px solid #334155 !important;
+            border-radius: 7px !important;
+            background: #111827 !important;
+            color: #e2e8f0 !important;
+            font-size: 12px !important;
+            font-weight: 650 !important;
+            box-shadow: none !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-select {
+            width: 124px !important;
+            padding: 0 28px 0 10px !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-input {
+            width: 150px !important;
+            padding: 0 10px !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-input::placeholder {
+            color: #64748b !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-btn {
+            width: 68px !important;
+            padding: 0 12px !important;
+            border-color: #38bdf8 !important;
+            background: #0ea5e9 !important;
+            color: #ffffff !important;
+            cursor: pointer !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-btn:disabled,
+        html[data-theme="dark"] body .content-surface .inventory-bulk-select:disabled,
+        html[data-theme="dark"] body .content-surface .inventory-bulk-input:disabled {
+            opacity: .55 !important;
+            cursor: not-allowed !important;
+        }
+
+        @media (max-width: 760px) {
+            body .content-surface #bulkActionForm.inventory-bulk-bar,
+            html[data-theme="light"] body .content-surface #bulkActionForm.inventory-bulk-bar,
+            html[data-theme="dark"] body .content-surface #bulkActionForm.inventory-bulk-bar {
+                align-items: flex-start !important;
+                flex-direction: column !important;
+                width: 100% !important;
+            }
+
+            body .content-surface .inventory-bulk-controls,
+            html[data-theme="light"] body .content-surface .inventory-bulk-controls,
+            html[data-theme="dark"] body .content-surface .inventory-bulk-controls {
+                flex-wrap: wrap !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+    @endpush
