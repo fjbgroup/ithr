@@ -4,138 +4,229 @@
 
 @section('content')
 <style>
-:root {
-  --bg:#f0f9ff; --surface:#ffffff; --surface2:#f8fafc;
-  --border:#e2e8f0; --text:#0f172a; --muted:#64748b;
-  --accent:#38bdf8; --accent-h:#0284c7; --navy:#142b47; --red:#dc2626; --green:#16a34a;
-}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:linear-gradient(135deg,#e0f2fe 0%,#bae6fd 50%,#7dd3fc 100%);font-family:'DM Sans',sans-serif;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  position:relative;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;
-  background-image:radial-gradient(circle,rgba(14,165,233,0.10) 1px,transparent 1px);
-  background-size:28px 28px;z-index:0;opacity:.5}
-body::after{content:'';position:fixed;width:600px;height:600px;
-  background:radial-gradient(circle,rgba(14,165,233,.18) 0%,transparent 65%);
-  top:-200px;right:-200px;z-index:0;animation:orb 10s ease-in-out infinite alternate}
-@keyframes orb{to{transform:translate(-60px,100px)}}
-.wrap{position:relative;z-index:1;width:100%;max-width:480px}
-.brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
-.brand img{width:48px;height:48px;object-fit:contain;background:transparent}
-.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#0c4a6e;
-  text-transform:uppercase;letter-spacing:.06em;line-height:1.3}
-.brand-text span{color:#0369a1;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
-  overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,.06),0 20px 40px rgba(0,0,0,.1)}
-.form-body{padding:32px 36px}
-.form-title{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px}
-.form-sub{color:var(--muted);font-size:13px;margin-bottom:26px}
-.field{margin-bottom:18px}
-label{display:block;font-size:11px;font-weight:700;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.09em;margin-bottom:7px}
-.input-wrap{position:relative;display:flex;align-items:center}
-.input-wrap i{position:absolute;left:14px;color:#9ca3af;font-size:15px;pointer-events:none;z-index:1}
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#EEF0F3 0%,#ECEFF1 30%,#EDEFF2 65%,#ECEFF2 100%);
+  background-attachment:fixed;
+  font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+
+/* ── Two-panel card ── */
+.card{
+  width:100%;max-width:940px;
+  display:grid;grid-template-columns:1.05fr .95fr;
+  border-radius:22px;overflow:hidden;
+  box-shadow:0 30px 70px -20px rgba(8,20,40,.55),0 2px 8px rgba(8,20,40,.2);
+  animation:auth-rise .55s cubic-bezier(.16,.84,.44,1) both;
+}
+@keyframes auth-rise{
+  from{opacity:0;transform:translateY(18px) scale(.985);}
+  to{opacity:1;transform:none;}
+}
+
+/* Left panel */
+.card-left{
+  background:linear-gradient(160deg,#6b2030 0%,#41121a 55%,#200810 100%);
+  padding:3rem 2.75rem;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+.card-left::before{
+  content:'';position:absolute;bottom:-120px;left:-80px;
+  width:340px;height:340px;
+  background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 65%);
+  border-radius:50%;
+}
+.card-left::after{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:220px;height:220px;
+  background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 65%);
+  border-radius:50%;
+}
+.left-logo{
+  margin-bottom:32px;flex-shrink:0;
+}
+.left-logo img{width:56px;height:56px;object-fit:contain;}
+.left-title{
+  font-size:1.9rem;font-weight:700;color:#ffffff;
+  line-height:1.2;margin-bottom:12px;
+}
+.left-sub{
+  font-size:13px;color:rgba(255,255,255,.65);
+  line-height:1.6;margin-bottom:36px;
+}
+.left-features{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:auto;}
+.left-features li{
+  display:flex;align-items:center;gap:12px;
+  font-size:13px;color:rgba(255,255,255,.80);font-weight:500;
+}
+.feat-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:rgba(255,255,255,.12);
+}
+.feat-icon i{font-size:15px;color:rgba(255,255,255,.85);}
+
+/* Right panel */
+.card-right{
+  background:#ffffff;
+  padding:3rem 2.75rem;display:flex;flex-direction:column;justify-content:center;
+}
+.form-title{font-size:26px;font-weight:800;color:#0f172a;margin-bottom:4px;}
+.form-sub{font-size:13px;color:#64748b;margin-bottom:28px;}
+.field{margin-bottom:18px;}
+.field label{
+  display:block;font-size:12px;font-weight:600;color:#374151;
+  margin-bottom:7px;
+}
+.input-wrap{position:relative;display:flex;align-items:center;}
+.input-wrap i.input-icon{
+  position:absolute;left:13px;color:#9ca3af;font-size:14px;pointer-events:none;z-index:1;
+}
 input[type="text"],input[type="email"],input[type="password"]{
-  width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
-  color:var(--text);padding:13px 14px 13px 42px;font-size:14px;font-family:'DM Sans',sans-serif;
-  transition:border-color .2s,box-shadow .2s;outline:none}
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15);background:#ffffff}
-input::placeholder{color:#94a3b8}
-.row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.btn-submit{width:100%;margin-top:6px;background:var(--navy);color:#fff;border:none;
-  border-radius:10px;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
-  letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;
+  width:100%;background:#f8fafc;
+  border:1.5px solid #e2e8f0;border-radius:10px;
+  color:#0f172a;padding:12px 40px 12px 38px;
+  font-size:14px;font-family:'DM Sans',sans-serif;
+  transition:border-color .2s,box-shadow .2s;outline:none;
+}
+input:focus{border-color:#41121a;box-shadow:0 0 0 3px rgba(65,18,26,.12);background:#fff;}
+input::placeholder{color:#94a3b8;}
+.pw-toggle{
+  position:absolute;right:12px;
+  background:none;border:none;cursor:pointer;
+  color:#9ca3af;font-size:16px;padding:4px;
+  transition:color .2s;z-index:1;
+}
+.pw-toggle:hover{color:#41121a;}
+.forgot-link{
+  display:block;text-align:right;margin-top:7px;
+  font-size:12px;font-weight:600;color:#41121a;
+  text-decoration:none;
+}
+.forgot-link:hover{text-decoration:underline;}
+.btn-submit{
+  width:100%;margin-top:4px;
+  background:#41121a;color:#fff;border:none;
+  border-radius:10px;padding:14px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:.03em;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 4px 14px rgba(20,43,71,.25)}
-.btn-submit:hover{background:var(--accent-h);box-shadow:0 6px 20px rgba(20,43,71,.3);transform:translateY(-1px)}
-.alert{border-radius:10px;padding:12px 16px;font-size:13px;display:flex;align-items:center;gap:9px;margin-bottom:18px;font-weight:500}
-.alert-error{background:#fee2e2;border:1px solid #fecaca;color:#991b1b}
-.alert-success{background:#dcfce7;border:1px solid #bbf7d0;color:#166534}
-.divider{text-align:center;padding:16px 36px;border-top:1px solid var(--border);font-size:11px;color:#64748b;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:#f8fafc}
+  transition:background .2s,box-shadow .2s,transform .1s;
+  box-shadow:0 4px 14px rgba(65,18,26,.35);
+}
+.btn-submit:hover{background:#5c1a25;box-shadow:0 6px 20px rgba(65,18,26,.4);transform:translateY(-1px);}
+
+.alert{border-radius:10px;padding:11px 14px;font-size:13px;display:flex;align-items:center;gap:9px;margin-bottom:16px;font-weight:500;}
+.alert-error{background:#fee2e2;border:1px solid #fecaca;color:#991b1b;}
+.alert-success{background:#dcfce7;border:1px solid #bbf7d0;color:#166534;}
+
+/* Bottom links inside right panel */
+.card-footer{margin-top:20px;text-align:center;}
+.back-link{
+  font-size:12px;color:#64748b;text-decoration:none;font-weight:500;
+  display:inline-flex;align-items:center;gap:5px;
+  transition:color .2s;
+}
+.back-link:hover{color:#41121a;}
+.switch-label{
+  font-size:10px;font-weight:700;color:#94a3b8;
+  text-transform:uppercase;letter-spacing:.1em;
+  margin:10px 0 6px;
+}
+.switch-links{display:flex;justify-content:center;align-items:center;gap:4px;}
+.switch-links a{
+  font-size:12px;font-weight:600;color:#64748b;
+  text-decoration:none;padding:2px 4px;
+  transition:color .2s;
+}
+.switch-links a:hover{color:#41121a;}
+.switch-links .sep{color:#cbd5e1;font-size:11px;}
+.switch-links .current{color:#41121a;font-weight:700;}
 </style>
 
-<div class="wrap">
-  <div class="brand">
-    <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB Logo">
-    <div class="brand-text">FJB Inventory<span>Management System</span></div>
-  </div>
+<div class="card">
 
-  <div class="card">
-    <div class="form-body">
-
-      <div class="form-title">Welcome Back</div>
-      <div class="form-sub">Sign in to access the inventory portal</div>
-
-      @if(session('error'))
-      <div class="alert alert-error"><i class="bi bi-exclamation-triangle-fill"></i>{{ session('error') }}</div>
-      @endif
-      @if(session('success'))
-      <div class="alert alert-success"><i class="bi bi-check-circle-fill"></i>{{ session('success') }}</div>
-      @endif
-      @if($errors->has('login'))
-      <div class="alert alert-error"><i class="bi bi-exclamation-triangle-fill"></i>{{ $errors->first('login') }}</div>
-      @endif
-      @if(session('timeout'))
-      <div class="alert alert-error"><i class="bi bi-clock-history"></i>Your session expired. Please sign in again.</div>
-      @endif
-
-      <form method="POST" action="{{ route('it.login.submit') }}">
-        @csrf
-        <div class="field">
-          <label>Username</label>
-          <div class="input-wrap">
-            <i class="bi bi-person"></i>
-            <input type="text" name="username" placeholder="Username or Staff ID"
-              value="{{ old('username') }}" required autofocus autocomplete="username">
-          </div>
-        </div>
-        <div class="field">
-          <label>Password</label>
-          <div style="display:flex;align-items:center;gap:10px">
-            <div class="input-wrap" style="flex:1">
-              <i class="bi bi-lock"></i>
-              <input type="password" name="password" id="password-input" placeholder="Enter your password" required>
-            </div>
-            <button type="button" onclick="togglePassword()"
-              style="flex-shrink:0;background:none;border:none;cursor:pointer;color:#9ca3af;font-size:18px;padding:4px;transition:color .2s"
-              onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#9ca3af'">
-              <i class="bi bi-eye" id="eye-icon"></i>
-            </button>
-          </div>
-          <div style="text-align:right;margin-top:8px">
-            <a href="{{ route('it.password.forgot') }}"
-              style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;letter-spacing:.01em">
-              <i class="bi bi-key" style="font-size:11px"></i> Forgot Password?
-            </a>
-          </div>
-        </div>
-        <button type="submit" class="btn-submit">Sign In <i class="bi bi-arrow-right"></i></button>
-      </form>
-
+  {{-- Left panel --}}
+  <div class="card-left">
+    <div class="left-logo">
+      <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB Logo">
     </div>
-    <div class="divider">FGV Johor Bulkers Sdn Bhd</div>
-  </div>
-  <div style="text-align:center;margin-top:1.25rem;font-size:.8rem;color:#475569">
-    <a href="{{ url('/') }}" style="color:#475569;text-decoration:none;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#475569'">
-      &larr; Back to Portal
-    </a>
+    <div class="left-title">Welcome to the<br>Asset Management System</div>
+    <div class="left-sub">Manage IT assets, service requests and more — all from one secure workspace.</div>
+    <ul class="left-features">
+      <li>
+        <div class="feat-icon"><i class="bi bi-laptop"></i></div>
+        Asset &amp; inventory tracking
+      </li>
+      <li>
+        <div class="feat-icon"><i class="bi bi-ticket-detailed"></i></div>
+        IT request management
+      </li>
+      <li>
+        <div class="feat-icon"><i class="bi bi-archive"></i></div>
+        Write-off &amp; disposal records
+      </li>
+    </ul>
   </div>
 
-  <div style="text-align:center;margin-top:12px;">
-    <div style="font-size:10px;color:#475569;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
-    <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
-      <a href="{{ url('/login') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
-        <i class="bi bi-people-fill"></i> HR System
-      </a>
-      <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:11px;font-weight:600;color:#475569;text-decoration:none;background:rgba(255,255,255,.9);transition:all .2s" onmouseover="this.style.background='#142b47';this.style.color='#fff';this.style.borderColor='#142b47'" onmouseout="this.style.background='rgba(255,255,255,.9)';this.style.color='#475569';this.style.borderColor='#cbd5e1'">
-        <i class="bi bi-headphones"></i> WT System
-      </a>
-      <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid #e2e5ea;font-size:11px;font-weight:600;color:#bfc5cc;background:#f1f5f9;cursor:default;">
-        <i class="bi bi-laptop"></i> IT System
-      </span>
+  {{-- Right panel --}}
+  <div class="card-right">
+    <div class="form-title">Sign In</div>
+    <div class="form-sub">Enter your credentials to access your account.</div>
+
+    @if(session('error'))
+    <div class="alert alert-error"><i class="bi bi-exclamation-triangle-fill"></i>{{ session('error') }}</div>
+    @endif
+    @if(session('success'))
+    <div class="alert alert-success"><i class="bi bi-check-circle-fill"></i>{{ session('success') }}</div>
+    @endif
+    @if($errors->has('login'))
+    <div class="alert alert-error"><i class="bi bi-exclamation-triangle-fill"></i>{{ $errors->first('login') }}</div>
+    @endif
+    @if(session('timeout'))
+    <div class="alert alert-error"><i class="bi bi-clock-history"></i>Your session expired. Please sign in again.</div>
+    @endif
+
+    <form method="POST" action="{{ route('it.login.submit') }}">
+      @csrf
+      <div class="field">
+        <label>Staff ID</label>
+        <div class="input-wrap">
+          <i class="bi bi-person input-icon"></i>
+          <input type="text" name="username" placeholder="e.g. 0000001"
+            value="{{ old('username') }}" required autofocus autocomplete="username">
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock input-icon"></i>
+          <input type="password" name="password" id="password-input" placeholder="Enter your password" required>
+          <button type="button" class="pw-toggle" onclick="togglePassword()">
+            <i class="bi bi-eye" id="eye-icon"></i>
+          </button>
+        </div>
+        <a href="{{ route('it.password.forgot') }}" class="forgot-link">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn-submit">Sign In &nbsp;<i class="bi bi-arrow-right"></i></button>
+    </form>
+
+    <div class="card-footer">
+      <a href="{{ url('/') }}" class="back-link"><i class="bi bi-arrow-left"></i> Back to Portal</a>
+      <div class="switch-label">Switch System</div>
+      <div class="switch-links">
+        <a href="{{ url('/login') }}">HR System</a>
+        <span class="sep">·</span>
+        <a href="{{ url('/wt') }}">WT System</a>
+        <span class="sep">·</span>
+        <span class="current">IT System</span>
+      </div>
     </div>
   </div>
+
 </div>
 
 <script>
