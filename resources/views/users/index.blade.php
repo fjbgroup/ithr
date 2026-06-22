@@ -32,6 +32,23 @@
     </div>
 </div>
 
+@if (auth()->user()->isHrUser())
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div style="flex:1;">
+            <span style="font-size:.88rem;font-weight:600;">Microsoft Authenticator</span>
+            @if (auth()->user()->hasTotpSetup())
+                <span class="status-badge status-completed" style="margin-left:.5rem;">Configured</span>
+            @else
+                <span style="font-size:.8rem;color:#92400e;background:#fef3c7;padding:.2rem .5rem;border-radius:.3rem;margin-left:.5rem;">Not set up</span>
+            @endif
+        </div>
+        <a href="{{ route('account.security') }}" class="btn btn-sm btn-outline">Manage</a>
+    </div>
+</div>
+@endif
+
 <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
     <div class="app-search" style="min-width:220px;">
         <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
