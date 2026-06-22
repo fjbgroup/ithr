@@ -51,30 +51,40 @@ class StaffImport
 
             $company = Company::where('code', $companyCode)->orWhere('name', $companyCode)->first();
 
-            $staff = Staff::updateOrCreate(
-                ['staff_no' => $staffNo],
-                [
-                    'name'                => $name,
-                    'position'            => trim($row[$this->col('position')] ?? ''),
-                    'department_id'       => $dept?->id,
-                    'company'             => $company?->code ?? mb_substr($companyCode, 0, 200),
-                    'company_id'          => $company?->id,
-                    'email'               => trim($row[$this->col('email')] ?? ''),
-                    'date_joined'         => $dateJoined,
-                    'date_of_birth'       => $dob,
-                    'ic_number'           => $icNumber,
-                    'employment_status'   => trim($row[$this->col('employment_status')] ?? '') ?: null,
-                    'last_promotion_date' => $this->parseDate($row[$this->col('last_promotion_date')] ?? null),
-                    'gender'              => trim($row[$this->col('gender')] ?? ''),
-                    'location'            => trim($row[$this->col('location')] ?? ''),
-                    'phone_number'        => trim($row[$this->col('phone_number')] ?? ''),
-                    'compensation_grade'  => trim($row[$this->col('compensation_grade')] ?? ''),
-                    'management_level'    => trim($row[$this->col('management_level')] ?? ''),
-                    'job_level'           => trim($row[$this->col('job_level')] ?? ''),
-                    'job_category'        => trim($row[$this->col('job_category')] ?? ''),
-                    'is_active'           => 1,
-                ]
-            );
+            // Always-update fields (required or essential)
+            $updateData = [
+                'name'       => $name,
+                'date_joined' => $dateJoined,
+                'is_active'  => 1,
+            ];
+
+            // Only overwrite optional fields when the imported value is non-empty,
+            // so existing data (email, phone, etc.) is preserved for partial imports.
+            $optional = [
+                'position'            => trim($row[$this->col('position')] ?? ''),
+                'department_id'       => $dept?->id,
+                'company'             => $company?->code ?? (mb_substr($companyCode, 0, 200) ?: null),
+                'company_id'          => $company?->id,
+                'email'               => trim($row[$this->col('email')] ?? ''),
+                'date_of_birth'       => $dob,
+                'ic_number'           => $icNumber,
+                'employment_status'   => trim($row[$this->col('employment_status')] ?? '') ?: null,
+                'last_promotion_date' => $this->parseDate($row[$this->col('last_promotion_date')] ?? null),
+                'gender'              => trim($row[$this->col('gender')] ?? ''),
+                'location'            => trim($row[$this->col('location')] ?? ''),
+                'phone_number'        => trim($row[$this->col('phone_number')] ?? ''),
+                'compensation_grade'  => trim($row[$this->col('compensation_grade')] ?? ''),
+                'management_level'    => trim($row[$this->col('management_level')] ?? ''),
+                'job_level'           => trim($row[$this->col('job_level')] ?? ''),
+                'job_category'        => trim($row[$this->col('job_category')] ?? ''),
+            ];
+            foreach ($optional as $k => $v) {
+                if ($v !== null && $v !== '') {
+                    $updateData[$k] = $v;
+                }
+            }
+
+            $staff = Staff::updateOrCreate(['staff_no' => $staffNo], $updateData);
 
             $email = trim($row[$this->col('email')] ?? '');
             User::updateOrCreate(
