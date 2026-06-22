@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Services\AuditLogger;
+use PragmaRX\Google2FA\Google2FA;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserController extends Controller
 {
@@ -182,6 +184,79 @@ class UserController extends Controller
         );
 
         return redirect()->route('users.index')->with('success', 'User status updated.');
+    }
+
+    public function accountSecurity()
+    {
+        return view('users.account_security');
+    }
+
+    public function totpSetup(Request $request)
+    {
+        $user = auth()->user();
+        $google2fa = new Google2FA();
+
+        $pendingSecret = $google2fa->generateSecretKey();
+        $request->session()->put('totp_pending_secret', $pendingSecret);
+
+        $qrUrl = $google2fa->getQRCodeUrl(
+            config('app.name'),
+            $user->email ?: $user->staff_no,
+            $pendingSecret
+        );
+
+        $qrSvg = (string) QrCode::format('svg')->size(200)->generate($qrUrl);
+
+        return view('users.totp_setup', compact('qrSvg', 'pendingSecret'));
+    }
+
+    public function totpConfirm(Request $request)
+    {
+        $request->validate([
+            'totp_code' => ['required', 'string', 'size:6', 'regex:/^[0-9]{6}$/'],
+        ]);
+
+        $pendingSecret = $request->session()->get('totp_pending_secret');
+
+        if (!$pendingSecret) {
+            return redirect()->route('totp.setup')
+                ->with('error', 'Setup session expired. Please start again.');
+        }
+
+        $google2fa = new Google2FA();
+
+        if (!$google2fa->verifyKey($pendingSecret, $request->totp_code)) {
+            return back()->with('error', 'Invalid code. Check your Authenticator app and try again.');
+        }
+
+        $user = auth()->user();
+        $user->totp_secret = $pendingSecret;
+        $user->save();
+
+        $request->session()->forget('totp_pending_secret');
+
+        AuditLogger::log('update', 'users',
+            'Microsoft Authenticator (TOTP) set up for ' . $user->name . '.',
+            ['user_id' => $user->id]
+        );
+
+        return redirect()->route('account.security')
+            ->with('success', 'Microsoft Authenticator set up successfully. You can now use it to reset your password.');
+    }
+
+    public function totpRemove(Request $request)
+    {
+        $user = auth()->user();
+        $user->totp_secret = null;
+        $user->save();
+
+        AuditLogger::log('update', 'users',
+            'Microsoft Authenticator (TOTP) removed for ' . $user->name . '.',
+            ['user_id' => $user->id]
+        );
+
+        return redirect()->route('account.security')
+            ->with('success', 'Microsoft Authenticator removed.');
     }
 
     public function searchStaff(Request $request)

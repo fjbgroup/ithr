@@ -131,6 +131,7 @@
     $step = session('fp_step', 'request');
     $name = session('fp_user_name', '');
     $maskedEmail = session('fp_email', '');
+    $method = session('fp_method', 'email');
     $steps = ['request' => 1, 'verify' => 2, 'reset' => 3];
     $current_step = $steps[$step] ?? 1;
 @endphp
@@ -167,7 +168,7 @@
                         2
                     @endif
                 </div>
-                <span class="progress-label {{ $current_step === 2 ? 'active' : '' }}">Enter OTP</span>
+                <span class="progress-label {{ $current_step === 2 ? 'active' : '' }}">{{ $method === 'totp' ? 'Authenticator' : 'Enter OTP' }}</span>
             </div>
             <div class="progress-line {{ $current_step > 2 ? 'done' : '' }}"></div>
             <div class="progress-step">
@@ -216,22 +217,36 @@
             </form>
             <a href="{{ route('login') }}" class="back-link">← Back to Login</a>
 
-        {{-- STEP 2: Show OTP + Verify --}}
+        {{-- STEP 2: Verify (TOTP or email OTP) --}}
         @elseif ($step === 'verify')
             <p style="font-size:.88rem;color:#6b7280;margin-bottom:.75rem;text-align:center;">
                 Hello, <strong>{{ $name }}</strong>.
             </p>
-            <div class="otp-display">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" style="margin-bottom:.5rem;"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-                <div style="font-size:.95rem;font-weight:600;color:#4f46e5;margin-bottom:.25rem;">OTP sent to your email</div>
-                @if ($maskedEmail)
-                    <div style="font-size:.82rem;color:#6b7280;">{{ $maskedEmail }}</div>
-                @endif
-                <div class="otp-note" style="margin-top:.5rem;">• Valid for 15 minutes &nbsp;·&nbsp; Check your inbox</div>
-            </div>
-            <p style="font-size:.84rem;color:#6b7280;text-align:center;margin-bottom:.75rem;">
-                Enter the 6-digit code from your email to continue.
-            </p>
+
+            @if ($method === 'totp')
+                <div class="otp-display">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" style="margin-bottom:.5rem;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <div style="font-size:.95rem;font-weight:600;color:#4f46e5;margin-bottom:.25rem;">Open Microsoft Authenticator</div>
+                    <div class="otp-note">Enter the 6-digit code shown in the app for this account.</div>
+                    <div class="otp-note" style="margin-top:.25rem;">• Codes refresh every 30 seconds</div>
+                </div>
+                <p style="font-size:.84rem;color:#6b7280;text-align:center;margin-bottom:.75rem;">
+                    Enter the current code from your Authenticator app to continue.
+                </p>
+            @else
+                <div class="otp-display">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" style="margin-bottom:.5rem;"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+                    <div style="font-size:.95rem;font-weight:600;color:#4f46e5;margin-bottom:.25rem;">OTP sent to your email</div>
+                    @if ($maskedEmail)
+                        <div style="font-size:.82rem;color:#6b7280;">{{ $maskedEmail }}</div>
+                    @endif
+                    <div class="otp-note" style="margin-top:.5rem;">• Valid for 15 minutes &nbsp;·&nbsp; Check your inbox</div>
+                </div>
+                <p style="font-size:.84rem;color:#6b7280;text-align:center;margin-bottom:.75rem;">
+                    Enter the 6-digit code from your email to continue.
+                </p>
+            @endif
+
             <form method="POST" action="{{ route('password.otp.verify') }}" id="otpForm">
                 @csrf
                 <input type="hidden" name="otp" id="otp_hidden" value="">
@@ -241,7 +256,9 @@
                                class="otp-digit" data-index="{{ $i }}" autocomplete="off">
                     @endfor
                 </div>
-                <button type="submit" class="btn btn-primary btn-full" id="verifyBtn" disabled>Verify OTP</button>
+                <button type="submit" class="btn btn-primary btn-full" id="verifyBtn" disabled>
+                    {{ $method === 'totp' ? 'Verify Code' : 'Verify OTP' }}
+                </button>
             </form>
             <a href="{{ route('password.otp.restart') }}" class="back-link" onclick="return confirmRestart()">← Start over</a>
 
@@ -251,7 +268,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <p style="font-size:.88rem;color:#6b7280;margin-bottom:1.25rem;text-align:center;">
-                OTP verified! Set a new password for <strong>{{ $name }}</strong>.
+                {{ $method === 'totp' ? 'Authenticator verified!' : 'OTP verified!' }} Set a new password for <strong>{{ $name }}</strong>.
             </p>
             <form method="POST" action="{{ route('password.otp.reset') }}" id="resetForm">
                 @csrf

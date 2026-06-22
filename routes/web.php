@@ -118,6 +118,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('requests', UpdateRequestController::class);
     Route::resource('master-data', MasterDataController::class);
     Route::get('master-data/staff-list/{deptId}', [MasterDataController::class, 'staffList'])->name('master-data.staff-list');
+    Route::get('account/security',      [UserController::class, 'accountSecurity'])->name('account.security');
+    Route::get('account/totp/setup',    [UserController::class, 'totpSetup'])  ->name('totp.setup');
+    Route::post('account/totp/confirm', [UserController::class, 'totpConfirm'])->name('totp.confirm');
+    Route::post('account/totp/remove',  [UserController::class, 'totpRemove']) ->name('totp.remove');
     Route::get('users/search-staff', [UserController::class, 'searchStaff'])->name('users.search_staff');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
     Route::patch('users/{user}/toggle-staff-status', [UserController::class, 'toggleStaffStatus'])->name('users.toggle_staff_status');

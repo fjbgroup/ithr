@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\SsoService;
+use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
 {
@@ -26,7 +27,7 @@ class AuthController extends Controller
 
     public function restartForgot()
     {
-        session()->forget(['fp_step', 'fp_user_id', 'fp_user_name', 'fp_email']);
+        session()->forget(['fp_step', 'fp_user_id', 'fp_user_name', 'fp_email', 'fp_method']);
         return redirect()->route('password.request');
     }
 
@@ -42,6 +43,27 @@ class AuthController extends Controller
             return back()->with('error', 'Staff ID not found. Please check and try again.')->withInput();
         }
 
+        // ── TOTP path: HR users ──────────────────────────────────────────────
+        if ($user->isHrUser()) {
+            if (!$user->hasTotpSetup()) {
+                return back()->with('error',
+                    'Your account requires Microsoft Authenticator for password reset. ' .
+                    'Please log in and set it up under User Accounts → Account Security.'
+                )->withInput();
+            }
+
+            session([
+                'fp_user_id'   => $user->id,
+                'fp_user_name' => $user->name,
+                'fp_email'     => null,
+                'fp_step'      => 'verify',
+                'fp_method'    => 'totp',
+            ]);
+
+            return redirect()->route('password.request');
+        }
+
+        // ── Email OTP path: non-HR users ─────────────────────────────────────
         if (!$user->email) {
             return back()->with('error', 'No email address found for this Staff ID. Please contact HR to update your email.')->withInput();
         }
@@ -87,6 +109,7 @@ class AuthController extends Controller
             'fp_user_name' => $user->name,
             'fp_email'     => $maskedEmail,
             'fp_step'      => 'verify',
+            'fp_method'    => 'email',
         ]);
 
         return redirect()->route('password.request');
@@ -99,11 +122,34 @@ class AuthController extends Controller
         ]);
 
         $userId = session('fp_user_id');
+        $method = session('fp_method', 'email');
 
         if (!$userId) {
             return redirect()->route('password.request');
         }
 
+        // ── TOTP verification ────────────────────────────────────────────────
+        if ($method === 'totp') {
+            $user = User::find($userId);
+
+            if (!$user || !$user->hasTotpSetup()) {
+                return redirect()->route('password.request')
+                    ->with('error', 'Invalid session. Please start again.');
+            }
+
+            $google2fa = new Google2FA();
+
+            if (!$google2fa->verifyKey($user->totp_secret, $request->otp)) {
+                return back()->with('error',
+                    'Invalid authenticator code. Codes expire every 30 seconds — try again with the current code.'
+                );
+            }
+
+            session(['fp_step' => 'reset']);
+            return redirect()->route('password.request');
+        }
+
+        // ── Email OTP verification ───────────────────────────────────────────
         $record = DB::table('password_resets')
             ->where('user_id', $userId)
             ->where('otp_code', $request->otp)
@@ -147,7 +193,7 @@ class AuthController extends Controller
         $user->save();
 
         // Clear all session reset data
-        session()->forget(['fp_user_id', 'fp_user_name', 'fp_email', 'fp_step']);
+        session()->forget(['fp_user_id', 'fp_user_name', 'fp_email', 'fp_method', 'fp_step']);
 
         return redirect()->route('login')->with('status', 'Your password has been reset successfully. You can now login.');
     }
