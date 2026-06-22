@@ -96,6 +96,18 @@ class EwasteController extends Controller
 
         if (!empty($data['original_inventory_id'])) {
             InventoryItem::where('id', $data['original_inventory_id'])->update(['item_status' => 'Disposed']);
+        } else {
+            $invItem = InventoryItem::create([
+                'asset_number'     => $item->asset_number,
+                'asset_class'      => $item->asset_class,
+                'description'      => $item->description,
+                'serial_number'    => $item->serial_number,
+                'item_status'      => 'Disposed',
+                'condition_status' => $item->condition_on_disposal ?: 'For Disposal',
+                'notes'            => $item->notes,
+                'created_by'       => $user->id,
+            ]);
+            $item->update(['original_inventory_id' => $invItem->id]);
         }
 
         ActivityLogService::log('CREATE', 'ewaste', $item->id, 'Added E-Waste item: '.$item->description);
