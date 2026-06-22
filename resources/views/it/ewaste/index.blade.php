@@ -18,6 +18,9 @@
       class="btn-secondary-custom" style="padding:10px 18px;font-size:13px;gap:7px">
       <i class="bi bi-file-earmark-excel-fill" style="color:#16a34a"></i> Import Excel
     </button>
+    <button onclick="document.getElementById('addEwasteModal').style.display='flex'" class="btn-primary-custom" style="padding:10px 20px;font-size:13px">
+      <i class="bi bi-plus-lg"></i> Add Asset
+    </button>
   </div>
   @endif
 </div>
