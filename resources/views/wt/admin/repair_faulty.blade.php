@@ -292,6 +292,96 @@
 </style>
 @endpush
 
+@push('final_styles')
+<style id="maintenance-light-dark-table-final">
+    html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+    html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+        background: #eef3f8 !important;
+        border-color: #cbd5e1 !important;
+        color: #334155 !important;
+    }
+
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+        background: #ffffff !important;
+        border-color: #e2e8f0 !important;
+        color: #1f2937 !important;
+    }
+
+    html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td {
+        background: #f8fafc !important;
+    }
+
+    html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll {
+        scrollbar-color: #94a3b8 #f1f5f9 !important;
+    }
+
+    html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll::-webkit-scrollbar-track,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9 !important;
+    }
+
+    html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll::-webkit-scrollbar-thumb,
+    html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll::-webkit-scrollbar-thumb {
+        background: #94a3b8 !important;
+        border-color: #f1f5f9 !important;
+    }
+
+    html.dark body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+    html.dark body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr {
+        background: #111827 !important;
+        color: #dbe4f0 !important;
+    }
+
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+        background: #1f2937 !important;
+        border-color: #2f3b4f !important;
+        color: #cbd5e1 !important;
+    }
+
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+        background: #111827 !important;
+        border-color: #263244 !important;
+        color: #dbe4f0 !important;
+    }
+
+    html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td,
+    html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td {
+        background: #172033 !important;
+    }
+</style>
+@endpush
+
 @section('content')
 @include('wt.admin.partials.inventory-management-ui')
 <style>
@@ -1055,6 +1145,195 @@ select.form-input {
 
 </style>
 
+<style id="maintenance-table-mode-override-bottom">
+html:not(.dark) .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html[data-theme="light"] .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html:not(.dark) .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html[data-theme="light"] .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html:not(.dark) body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+    background: #eef3f8 !important;
+    border-color: #d7e1ec !important;
+    color: #334155 !important;
+}
+
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+    background: #ffffff !important;
+    border-color: #e1e8f0 !important;
+    color: #1f2937 !important;
+}
+
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table {
+    border-collapse: collapse !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table th,
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table td,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table th,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table td {
+    border-width: 1px !important;
+    border-style: solid !important;
+}
+
+html:not(.dark) .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td,
+html[data-theme="light"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td,
+html:not(.dark) body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td,
+html[data-theme="light"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td {
+    background: #f8fafc !important;
+}
+
+html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html[data-theme="dark"] .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html.dark .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html[data-theme="dark"] .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+html.dark body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html.dark body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+    background: #1f2937 !important;
+    border-color: #2f3b4f !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col,
+html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table {
+    border-collapse: collapse !important;
+    border: 1px solid #263244 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table th,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table td,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table th,
+html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-table td {
+    border-width: 1px !important;
+    border-style: solid !important;
+}
+</style>
+
+<style id="maintenance-table-bright-default-final">
+.maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+.maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+.maintenance-page-shell #maintenanceTable.clean-admin-table,
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+.maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+    border-color: #cbd5e1 !important;
+}
+
+.maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+    background: #eef3f8 !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+.maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #1f2937 !important;
+}
+
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td {
+    background: #f8fafc !important;
+}
+
+html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html.dark .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr {
+    background: #111827 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+    border-color: #263244 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+    background: #1f2937 !important;
+    border-color: #2f3b4f !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #dbe4f0 !important;
+}
+</style>
+
 {{-- ===================== IMPORT EXCEL MODAL ===================== --}}
 @if(auth('wt')->user()->wt_role === 'admin_it')
 <div id="importModal" class="modal-overlay" onclick="closeImportModalOutside(event)">
@@ -1106,5 +1385,3 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 @endsection
-
-

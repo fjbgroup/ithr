@@ -442,7 +442,7 @@
             <div class="feature-list">
                 <div class="feature-item">
                     <span class="feature-icon"><i class="bi bi-broadcast-pin"></i></span>
-                    <span>Walkie inventory tracking</span>
+                    <span>Walkie Talkie inventory tracking</span>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon"><i class="bi bi-clipboard-check"></i></span>

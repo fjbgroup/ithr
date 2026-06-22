@@ -4,6 +4,33 @@
 
     @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script>
+        (function () {
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+
+            function resetInventoryScroll() {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+
+                var mainContent = document.querySelector('.main-content');
+                if (mainContent) mainContent.scrollTop = 0;
+
+                var tableScroll = document.getElementById('inventoryTableScroll');
+                if (tableScroll) {
+                    tableScroll.scrollTop = 0;
+                    tableScroll.scrollLeft = 0;
+                }
+            }
+
+            resetInventoryScroll();
+            document.addEventListener('DOMContentLoaded', resetInventoryScroll);
+            window.addEventListener('load', resetInventoryScroll);
+            window.addEventListener('pageshow', resetInventoryScroll);
+        })();
+    </script>
     @endpush
 
     @push('final_styles')
@@ -7414,6 +7441,98 @@
                 flex-wrap: wrap !important;
                 width: 100% !important;
             }
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-table-edge-flush-final">
+        body .content-surface #mainTableContainer.inventory-table-shell,
+        html:not(.dark) body .content-surface #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="light"] body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            background: #ffffff !important;
+        }
+
+        html.dark body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface #mainTableContainer.inventory-table-shell {
+            border-color: #273449 !important;
+            background: #0f172a !important;
+        }
+
+        body .content-surface #inventoryTableScroll.clean-admin-table-scroll,
+        html:not(.dark) body .content-surface #inventoryTableScroll.clean-admin-table-scroll,
+        html.dark body .content-surface #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="light"] body .content-surface #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] body .content-surface #inventoryTableScroll.clean-admin-table-scroll {
+            padding: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            border: 0 !important;
+            border-radius: 8px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        body .content-surface #walkiesTable.clean-admin-table,
+        html:not(.dark) body .content-surface #walkiesTable.clean-admin-table,
+        html.dark body .content-surface #walkiesTable.clean-admin-table,
+        html[data-theme="light"] body .content-surface #walkiesTable.clean-admin-table,
+        html[data-theme="dark"] body .content-surface #walkiesTable.clean-admin-table {
+            margin: 0 !important;
+            border-radius: 8px !important;
+            border-left: 0 !important;
+            border-right: 0 !important;
+            width: 100% !important;
+            min-width: 1460px !important;
+        }
+
+        body .content-surface #walkiesTable col.inventory-radio-colgroup,
+        html:not(.dark) body .content-surface #walkiesTable col.inventory-radio-colgroup,
+        html.dark body .content-surface #walkiesTable col.inventory-radio-colgroup,
+        html[data-theme="light"] body .content-surface #walkiesTable col.inventory-radio-colgroup,
+        html[data-theme="dark"] body .content-surface #walkiesTable col.inventory-radio-colgroup {
+            width: 106px !important;
+        }
+
+        body .content-surface #walkiesTable th:first-child,
+        body .content-surface #walkiesTable td:first-child,
+        html:not(.dark) body .content-surface #walkiesTable th:first-child,
+        html:not(.dark) body .content-surface #walkiesTable td:first-child,
+        html.dark body .content-surface #walkiesTable th:first-child,
+        html.dark body .content-surface #walkiesTable td:first-child,
+        html[data-theme="light"] body .content-surface #walkiesTable th:first-child,
+        html[data-theme="light"] body .content-surface #walkiesTable td:first-child,
+        html[data-theme="dark"] body .content-surface #walkiesTable th:first-child,
+        html[data-theme="dark"] body .content-surface #walkiesTable td:first-child {
+            width: 106px !important;
+            min-width: 106px !important;
+            max-width: 106px !important;
+            border-left: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            margin-left: 0 !important;
+            text-align: center !important;
+        }
+
+        body .content-surface #walkiesTable th:last-child,
+        body .content-surface #walkiesTable td:last-child {
+            border-right: 0 !important;
+        }
+
+        body .content-surface #walkiesTable td:first-child .inventory-id-chip {
+            margin-left: 0 !important;
         }
     </style>
     @endpush
