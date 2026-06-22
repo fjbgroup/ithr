@@ -63,140 +63,46 @@
 @php $user = auth('it')->user(); @endphp
 
 <!-- ═══ SYSTEM STATUS BAR ═══ -->
-<div class="ds-status-bar">
-  <div style="display:flex;align-items:stretch;flex-wrap:wrap">
+<div style="background:linear-gradient(135deg,#0f2542,#1a3a5c,#0e3460);border-radius:14px;margin-bottom:24px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.18)">
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:0;padding:22px 28px">
 
-    <div class="ds-status-cell" style="flex:1;min-width:200px">
-      <div style="width:38px;height:38px;border-radius:9px;background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <i class="bi bi-hdd-rack-fill" style="color:#2563eb;font-size:17px"></i>
+    <!-- Greeting -->
+    <div style="flex:1;min-width:220px">
+      <div style="font-size:20px;font-weight:800;color:#fff;font-family:'DM Sans',sans-serif;line-height:1.2" id="dsGreeting">
+        Good Morning, {{ $user->full_name }}
       </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px">FJB Inventory System</div>
-        <div style="font-size:13px;font-weight:700;color:var(--text)">{{ now()->format('d M Y') }} &nbsp;·&nbsp; <span id="dsLiveClock" style="color:#0284c7;font-family:'DM Sans',sans-serif"></span></div>
+      <div style="font-size:12px;color:#93c5fd;margin-top:5px;font-weight:500">
+        {{ now()->format('l, d F Y') }} &nbsp;·&nbsp; {{ $user->isAdmin() ? 'IT Admin' : $user->roleName() }}
       </div>
     </div>
 
-    <div class="ds-status-cell" style="min-width:150px">
-      <div>
-        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Total Assets</div>
-        <div style="font-size:22px;font-weight:800;color:var(--text);font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
+    <!-- Stats -->
+    <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.12);border-right:1px solid rgba(255,255,255,.12);margin:0 28px">
+      <div style="padding:0 28px;text-align:center">
+        <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Total Assets</div>
+        <div style="font-size:26px;font-weight:800;color:#fff;font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
+      </div>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
+      <div style="padding:0 28px;text-align:center">
+        <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Active</div>
+        <div style="font-size:26px;font-weight:800;color:#4ade80;font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
+      </div>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
+      <div style="padding:0 28px;text-align:center">
+        <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Pending</div>
+        <div style="font-size:26px;font-weight:800;color:{{ $pendingAll > 0 ? '#fbbf24' : 'rgba(255,255,255,.35)' }};font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
       </div>
     </div>
 
-    <div class="ds-status-cell" style="min-width:140px">
-      <div style="width:8px;height:8px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.15);flex-shrink:0"></div>
-      <div>
-        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Active</div>
-        <div style="font-size:22px;font-weight:800;color:#16a34a;font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
-      </div>
-    </div>
-
-    <div class="ds-status-cell" style="min-width:140px">
-      @if($pendingAll > 0)
-      <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.15);flex-shrink:0;animation:blink 1.5s ease-in-out infinite"></div>
-      @else
-      <div style="width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0"></div>
-      @endif
-      <div>
-        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Pending</div>
-        <div style="font-size:22px;font-weight:800;color:{{ $pendingAll > 0 ? '#f59e0b' : 'var(--muted)' }};font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
-      </div>
-    </div>
-
-    <div style="padding:18px 24px;display:flex;align-items:center;gap:12px;margin-left:auto">
-      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#142b47,#254a78);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800;flex-shrink:0">
-        {{ strtoupper(substr($user->full_name, 0, 1)) }}
-      </div>
-      <div>
-        <div style="font-size:12px;font-weight:700;color:var(--text)">{{ $user->full_name }}</div>
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:1px">
-          {{ $user->isAdmin() ? 'IT Admin' : $user->roleName() }}
-        </div>
-      </div>
+    <!-- Live Clock -->
+    <div style="text-align:right">
+      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'DM Sans',sans-serif;letter-spacing:.04em;line-height:1"></div>
+      <div style="font-size:10px;color:#93c5fd;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
     </div>
 
   </div>
 </div>
 
-<!-- ═══ STAT CARDS ═══ -->
-@if($user->isAdmin())
-<div class="row g-3 mb-3">
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.inventory.index') }}" class="ds-card" style="border-top:3px solid #2563eb">
-      <div class="ds-icon" style="background:#dbeafe;color:#2563eb"><i class="bi bi-layers-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($totalAll) }}</div><div class="ds-lbl">Total Assets</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.inventory.index') }}" class="ds-card" style="border-top:3px solid #16a34a">
-      <div class="ds-icon" style="background:#dcfce7;color:#16a34a"><i class="bi bi-box-seam-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($totalIT) }}</div><div class="ds-lbl">IT Assets</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.non-it.index') }}" class="ds-card" style="border-top:3px solid #7c3aed">
-      <div class="ds-icon" style="background:#ede9fe;color:#7c3aed"><i class="bi bi-boxes"></i></div>
-      <div><div class="ds-num">{{ number_format($totalNIT) }}</div><div class="ds-lbl">Non-IT Assets</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.ewaste.index') }}" class="ds-card" style="border-top:3px solid #ca8a04">
-      <div class="ds-icon" style="background:#fef9c3;color:#ca8a04"><i class="bi bi-hourglass-split"></i></div>
-      <div><div class="ds-num">{{ number_format($pendingApprovals) }}</div><div class="ds-lbl">E-Waste</div></div>
-    </a>
-  </div>
-</div>
-
-@elseif($user->isFinanceAdmin())
-<div class="row g-3 mb-3">
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.inventory.index') }}" class="ds-card" style="border-top:3px solid #2563eb">
-      <div class="ds-icon" style="background:#dbeafe;color:#2563eb"><i class="bi bi-box-seam-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($totalIT) }}</div><div class="ds-lbl">Total Assets</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.non-it.index') }}" class="ds-card" style="border-top:3px solid #7c3aed">
-      <div class="ds-icon" style="background:#ede9fe;color:#7c3aed"><i class="bi bi-boxes"></i></div>
-      <div><div class="ds-num">{{ number_format($totalNIT) }}</div><div class="ds-lbl">Non-IT Assets</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.inventory.index') }}" class="ds-card" style="border-top:3px solid #16a34a">
-      <div class="ds-icon" style="background:#dcfce7;color:#16a34a"><i class="bi bi-check-circle-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($activeIT) }}</div><div class="ds-lbl">Active IT Assets</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-3">
-    <a href="{{ route('it.disposal.index') }}" class="ds-card" style="border-top:3px solid #dc2626">
-      <div class="ds-icon" style="background:#fee2e2;color:#dc2626"><i class="bi bi-trash3-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($disposalCount) }}</div><div class="ds-lbl">Disposal Items</div></div>
-    </a>
-  </div>
-</div>
-
-@else
-<div class="row g-3 mb-3">
-  <div class="col-6 col-md-4">
-    <a href="{{ route('it.inventory.index') }}?view=my_requests" class="ds-card" style="border-top:3px solid #0284c7">
-      <div class="ds-icon" style="background:#e0f2fe;color:#0284c7"><i class="bi bi-send-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($myItReq) }}</div><div class="ds-lbl">My Requests</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-4">
-    <a href="{{ route('it.writeoff.index') }}" class="ds-card" style="border-top:3px solid #ca8a04">
-      <div class="ds-icon" style="background:#fef9c3;color:#ca8a04"><i class="bi bi-hourglass-split"></i></div>
-      <div><div class="ds-num">{{ number_format($myEwastePending) }}</div><div class="ds-lbl">Pending Write-Offs</div></div>
-    </a>
-  </div>
-  <div class="col-6 col-md-4">
-    <a href="{{ route('it.writeoff.index') }}" class="ds-card" style="border-top:3px solid #16a34a">
-      <div class="ds-icon" style="background:#dcfce7;color:#16a34a"><i class="bi bi-check-circle-fill"></i></div>
-      <div><div class="ds-num">{{ number_format($myEwasteApproved) }}</div><div class="ds-lbl">Approved Write-Offs</div></div>
-    </a>
-  </div>
-</div>
-@endif
 
 <!-- ═══ CHART ROW ═══ -->
 <div class="row g-4 mb-4">
@@ -357,13 +263,19 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-// ── LIVE CLOCK (status bar) ──
+// ── LIVE CLOCK + GREETING ──
 (function(){
   var el = document.getElementById('dsLiveClock');
-  if (!el) return;
+  var gr = document.getElementById('dsGreeting');
+  var name = '{{ $user->full_name }}';
   function tick(){
-    var n=new Date(),h=String(n.getHours()).padStart(2,'0'),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');
-    el.textContent=h+':'+m+':'+s;
+    var n=new Date(),h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0'),s=String(n.getSeconds()).padStart(2,'0');
+    var ampm=h>=12?'PM':'AM',h12=h%12||12;
+    if(el) el.textContent=String(h12).padStart(2,'0')+':'+m+':'+s+' '+ampm;
+    if(gr){
+      var salute = h < 12 ? 'Good Morning' : h < 18 ? 'Good Afternoon' : 'Good Evening';
+      gr.textContent = salute + ', ' + name;
+    }
   }
   tick(); setInterval(tick,1000);
 })();

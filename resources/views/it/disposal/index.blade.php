@@ -16,9 +16,15 @@
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Items sent to disposal by IT Admin or Finance Admin</p>
   </div>
   @if($user->isAdminOrFinance())
-  <button class="btn-primary-custom" style="padding:10px 20px;font-size:13px" onclick="document.getElementById('addDisposalModal').style.display='flex'">
-    <i class="bi bi-plus-lg"></i> Add Item
-  </button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button onclick="document.getElementById('diImportModal').style.display='flex'"
+      class="btn-secondary-custom" style="padding:10px 18px;font-size:13px;gap:7px">
+      <i class="bi bi-file-earmark-excel-fill" style="color:#16a34a"></i> Import Excel
+    </button>
+    <button onclick="document.getElementById('addDisposalModal').style.display='flex'" class="btn-primary-custom" style="padding:10px 20px;font-size:13px">
+      <i class="bi bi-plus-lg"></i> Add Asset
+    </button>
+  </div>
   @endif
 </div>
 
@@ -80,12 +86,7 @@
 <div style="background:var(--surface);border:1.5px dashed var(--border);border-radius:14px;padding:64px 20px;text-align:center">
   <i class="bi bi-box-arrow-right" style="font-size:36px;color:var(--muted);display:block;margin-bottom:14px"></i>
   <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:4px">No disposal items yet</div>
-  <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Add items using the button above</div>
-  @if($user->isAdminOrFinance())
-  <button class="btn-primary-custom" style="font-size:13px" onclick="document.getElementById('addDisposalModal').style.display='flex'">
-    <i class="bi bi-plus-lg"></i> Add Item
-  </button>
-  @endif
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Items disposed from E-Waste will appear here</div>
 </div>
 @else
 <div id="diLiveResults">
@@ -263,11 +264,191 @@
 
 {{-- Edit Disposal Item overlay (populated by JS) --}}
 <div id="editDisposalOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);align-items:center;justify-content:center;padding:20px"></div>
+
+{{-- Import Excel Modal --}}
+<div id="diImportModal" style="display:none;position:fixed;inset:0;z-index:9000;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(3px);padding:1rem">
+  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);display:flex;flex-direction:column">
+    <div style="background:linear-gradient(135deg,var(--navy,#142b47),var(--navy-mid,#254a78));padding:20px 24px;border-radius:16px 16px 0 0;display:flex;align-items:center;gap:14px;flex-shrink:0">
+      <div style="width:42px;height:42px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px">
+        <i class="bi bi-file-earmark-excel-fill" style="color:#22c55e"></i>
+      </div>
+      <div style="flex:1">
+        <div style="color:#fff;font-size:16px;font-weight:700">Import Disposal Items from Excel</div>
+        <div style="color:rgba(255,255,255,.6);font-size:12px;margin-top:2px">Upload an .xlsx, .xls or .csv file to bulk-import items</div>
+      </div>
+      <button onclick="diCloseImport()" style="background:rgba(255,255,255,.12);border:none;border-radius:8px;color:rgba(255,255,255,.8);width:32px;height:32px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center">&times;</button>
+    </div>
+    <div style="padding:24px;flex:1">
+      <div style="background:rgba(2,132,199,.06);border:1.5px solid rgba(2,132,199,.2);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px">
+        <i class="bi bi-info-circle-fill" style="color:var(--accent,#0284c7);font-size:18px;flex-shrink:0"></i>
+        <div style="flex:1;font-size:13px;color:var(--text)"><strong>First time?</strong> Download the template to see the correct column format.</div>
+        <a href="{{ route('it.disposal.import-template') }}" download
+          style="display:inline-flex;align-items:center;gap:6px;background:var(--navy,#142b47);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0">
+          <i class="bi bi-download"></i> Download Template
+        </a>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">Expected Columns</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          @foreach(['Asset Number','Asset Class','Description','Serial Number','Status','Disposal Method','Vendor/Collector','Certificate Number','Date Flagged','Date Disposed','Notes'] as $col)
+          <span style="background:rgba(2,132,199,.08);color:var(--accent,#0284c7);border-radius:5px;padding:3px 10px;font-size:11px;font-weight:600">{{ $col }}</span>
+          @endforeach
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Header row is always skipped &nbsp;·&nbsp; Columns are matched by keyword</div>
+      </div>
+      <div id="diImportDropzone" onclick="document.getElementById('diImportFileInput').click()"
+        style="border:2px dashed var(--border);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px"
+        ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='rgba(2,132,199,.04)'"
+        ondragleave="this.style.borderColor='var(--border)';this.style.background=''"
+        ondrop="event.preventDefault();this.style.borderColor='var(--border)';this.style.background='';diHandleFile(event.dataTransfer.files[0])">
+        <i class="bi bi-cloud-upload-fill" style="font-size:36px;color:var(--muted);display:block;margin-bottom:10px;opacity:.5"></i>
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Drop your file here or click to browse</div>
+        <div style="font-size:12px;color:var(--muted)">.xlsx, .xls, .csv — max 5 000 rows</div>
+        <input type="file" id="diImportFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="diHandleFile(this.files[0])">
+      </div>
+      <div id="diImportPreview" style="display:none">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">Preview (first 5 rows)</div>
+        <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
+          <table id="diImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'DM Sans',sans-serif"></table>
+        </div>
+        <div id="diImportRowCount" style="font-size:12px;color:var(--muted);margin-top:8px"></div>
+      </div>
+      <div id="diImportStatus" style="display:none;margin-top:16px"></div>
+    </div>
+    <div style="background:var(--body-bg,#f1f5f9);border-top:1px solid var(--border);padding:16px 24px;border-radius:0 0 16px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <button id="diImportSubmitBtn" onclick="diSubmitImport()"
+        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;align-items:center;gap:7px">
+        <i class="bi bi-upload"></i> Import Items
+      </button>
+      <button onclick="diCloseImport()"
+        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
 @endif
 
 @endsection
 
 @push('scripts')
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<script>
+// ── Disposal Import ──
+var _diImportRows = [];
+
+function diMapHeader(h) {
+  h = String(h).toLowerCase().trim();
+  if (h.includes('asset') && (h.includes('no') || h.includes('num') || h.includes('#'))) return 'asset_number';
+  if (h.includes('class') || h.includes('categ') || h.includes('type')) return 'asset_class';
+  if (h.includes('desc') || h.includes('name')) return 'description';
+  if (h.includes('serial') || h.includes('s/n')) return 'serial_number';
+  if (h.includes('status')) return 'disposal_status';
+  if (h.includes('method')) return 'disposal_method';
+  if (h.includes('vendor') || h.includes('collector')) return 'vendor_collector';
+  if (h.includes('cert')) return 'certificate_number';
+  if (h.includes('flag') || (h.includes('date') && !h.includes('dispos'))) return 'date_flagged';
+  if (h.includes('dispos') && h.includes('date')) return 'date_disposed';
+  if (h.includes('date')) return 'date_flagged';
+  if (h.includes('note') || h.includes('remark')) return 'notes';
+  return null;
+}
+
+function diHandleFile(file) {
+  if (!file) return;
+  document.getElementById('diImportStatus').style.display = 'none';
+  document.getElementById('diImportPreview').style.display = 'none';
+  document.getElementById('diImportSubmitBtn').style.display = 'none';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+      var ws = wb.Sheets[wb.SheetNames[0]];
+      var rawRows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+      if (rawRows.length < 2) { diShowError('File has no data rows.'); return; }
+      var headerRowIdx = 0;
+      for (var r = 0; r < Math.min(rawRows.length, 15); r++) {
+        var nonEmpty = rawRows[r].filter(function(c){ return c !== '' && c !== null && c !== undefined; });
+        if (nonEmpty.length >= 2 && rawRows[r].some(function(h){ return diMapHeader(String(h)) !== null; })) {
+          headerRowIdx = r; break;
+        }
+      }
+      var headers = rawRows[headerRowIdx].map(function(h){ return String(h).trim(); });
+      var colMap = {};
+      headers.forEach(function(h, i) {
+        var field = diMapHeader(h);
+        if (field && !colMap.hasOwnProperty(field)) colMap[field] = i;
+      });
+      _diImportRows = [];
+      for (var r = headerRowIdx + 1; r < rawRows.length; r++) {
+        var raw = rawRows[r];
+        if (raw.every(function(c){ return c === '' || c === null || c === undefined; })) continue;
+        var obj = {};
+        Object.keys(colMap).forEach(function(key) {
+          var val = raw[colMap[key]];
+          if (val instanceof Date) {
+            obj[key] = val.getFullYear() + '-' + String(val.getMonth()+1).padStart(2,'0') + '-' + String(val.getDate()).padStart(2,'0');
+          } else { obj[key] = val !== undefined ? String(val).trim() : ''; }
+        });
+        _diImportRows.push(obj);
+      }
+      if (!_diImportRows.length) { diShowError('No data rows found after header.'); return; }
+      var tbl = document.getElementById('diImportPreviewTable');
+      var keys = Object.keys(colMap);
+      tbl.innerHTML = '<tr style="background:#f8fafc">' + keys.map(function(k){
+        return '<th style="padding:8px 12px;border-bottom:1px solid #e2e8f0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;white-space:nowrap">' + k.replace(/_/g,' ') + '</th>';
+      }).join('') + '</tr>' + _diImportRows.slice(0, 5).map(function(row){
+        return '<tr>' + keys.map(function(k){
+          return '<td style="padding:8px 12px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#1e293b;white-space:nowrap">' + diEsc(row[k] || '—') + '</td>';
+        }).join('') + '</tr>';
+      }).join('');
+      document.getElementById('diImportRowCount').textContent = _diImportRows.length + ' row' + (_diImportRows.length !== 1 ? 's' : '') + ' ready to import' + (_diImportRows.length > 5 ? ' (showing first 5)' : '');
+      document.getElementById('diImportPreview').style.display = 'block';
+      document.getElementById('diImportSubmitBtn').style.display = 'inline-flex';
+    } catch(err) { diShowError('Could not read file: ' + err.message); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function diSubmitImport() {
+  if (!_diImportRows.length) return;
+  var btn = document.getElementById('diImportSubmitBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Importing...';
+  fetch('{{ route("it.disposal.import-excel") }}', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content},
+    body: JSON.stringify(_diImportRows)
+  }).then(function(r){ return r.json(); }).then(function(res){
+    var html = '';
+    if (res.inserted > 0) html += '<div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:10px"><i class="bi bi-check-circle-fill" style="color:#16a34a;font-size:18px;flex-shrink:0"></i><div><strong style="color:#166534">' + res.inserted + ' item' + (res.inserted !== 1 ? 's' : '') + ' imported successfully!</strong>' + (res.skipped > 0 ? ' <span style="color:#64748b;font-size:12px">(' + res.skipped + ' skipped)</span>' : '') + '</div></div>';
+    if (res.skipped > 0 && res.inserted === 0) html += '<div style="background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:10px"><strong style="color:#991b1b">No items imported.</strong> All ' + res.skipped + ' rows skipped.</div>';
+    if (res.errors && res.errors.length) html += '<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 16px;max-height:160px;overflow-y:auto"><div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px">Issues (' + res.errors.length + ')</div>' + res.errors.map(function(e){ return '<div style="font-size:12px;color:#92400e;padding:2px 0">• ' + diEsc(e) + '</div>'; }).join('') + '</div>';
+    var s = document.getElementById('diImportStatus'); s.innerHTML = html; s.style.display = 'block';
+    btn.disabled = false; btn.innerHTML = '<i class="bi bi-upload"></i> Import Items';
+    if (res.inserted > 0) setTimeout(function(){ location.reload(); }, 2000);
+  }).catch(function(err){
+    diShowError('Request failed: ' + err.message);
+    btn.disabled = false; btn.innerHTML = '<i class="bi bi-upload"></i> Import Items';
+  });
+}
+
+function diCloseImport() {
+  document.getElementById('diImportModal').style.display = 'none';
+  document.getElementById('diImportFileInput').value = '';
+  document.getElementById('diImportPreview').style.display = 'none';
+  document.getElementById('diImportStatus').style.display = 'none';
+  document.getElementById('diImportSubmitBtn').style.display = 'none';
+  _diImportRows = [];
+}
+
+function diShowError(msg) {
+  var s = document.getElementById('diImportStatus');
+  s.innerHTML = '<div style="background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;color:#991b1b;font-size:13px"><i class="bi bi-x-circle-fill me-2"></i>' + diEsc(msg) + '</div>';
+  s.style.display = 'block';
+}
+
+function diEsc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
 <style>
 #diSearchDropdown li {
   padding: 8px 14px;

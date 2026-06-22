@@ -99,6 +99,8 @@ Route::prefix('it')->name('it.')->group(function () {
             Route::get('/ewaste/collection-invoice',      [DisposalController::class, 'collectionInvoice'])->name('ewaste.collection-invoice');
             Route::post('/ewaste',                        [EwasteController::class, 'store'])->name('ewaste.store');
             Route::post('/ewaste/bulk',                   [EwasteController::class, 'bulk'])->name('ewaste.bulk');
+            Route::get('/ewaste/import-template',         [EwasteController::class, 'importTemplate'])->name('ewaste.import-template');
+            Route::post('/ewaste/import-excel',           [EwasteController::class, 'importExcel'])->name('ewaste.import-excel');
             Route::post('/ewaste/{id}',                   [EwasteController::class, 'update'])->name('ewaste.update');
             Route::delete('/ewaste/{id}',                 [EwasteController::class, 'destroy'])->name('ewaste.destroy');
             Route::post('/ewaste/{id}/collect',           [EwasteController::class, 'collect'])->name('ewaste.collect');
@@ -113,6 +115,8 @@ Route::prefix('it')->name('it.')->group(function () {
             Route::get('/disposal/proofs',                [DisposalController::class, 'proofs'])->name('disposal.proofs');
             Route::get('/ewaste/collected-proofs',        [DisposalController::class, 'collected'])->name('ewaste.collected');
             Route::post('/disposal/{id}/disposed',        [DisposalController::class, 'markDisposed'])->name('disposal.disposed');
+            Route::get('/disposal/import-template',       [DisposalController::class, 'importTemplate'])->name('disposal.import-template');
+            Route::post('/disposal/import-excel',         [DisposalController::class, 'importExcel'])->name('disposal.import-excel');
 
             // IT Request Form
             Route::get('/it-request-form/drafts',         [ItRequestFormController::class, 'savedDrafts'])->name('it-request-form.drafts');

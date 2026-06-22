@@ -104,7 +104,12 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
+              <div style="position:relative">
+                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" readonly style="cursor:not-allowed;padding-right:90px">
+                <a href="{{ route('it.email-settings.index') }}" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap">
+                  <i class="bi bi-gear-fill" style="font-size:10px"></i> Settings
+                </a>
+              </div>
             </div>
             <div class="col-md-6">
               <label class="form-label">Staff ID</label>

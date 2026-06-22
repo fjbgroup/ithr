@@ -236,6 +236,66 @@ class EwasteController extends Controller
         return redirect()->route('it.ewaste.index')->with('success', $messages[$action] ?? 'Bulk action applied.');
     }
 
+    public function importTemplate()
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdminOrFinance()) abort(403);
+
+        $csv  = "Asset Number,Asset Class,Description,Serial Number,Date Flagged,Weight (kg),Notes\n";
+        $csv .= "OEPC1401,COMPUTER,HP EliteBook 840 G3,SGH629QBBY,2024-01-15,1.50,Sample row\n";
+
+        return response($csv, 200, [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="ewaste_template.csv"',
+        ]);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdminOrFinance()) abort(403);
+
+        $rows     = $request->json()->all() ?? [];
+        $inserted = 0;
+        $skipped  = 0;
+        $errors   = [];
+
+        foreach ($rows as $i => $row) {
+            $rn            = $i + 2;
+            $asset_number  = trim($row['asset_number']  ?? '');
+            $asset_class   = strtoupper(trim($row['asset_class'] ?? ''));
+            $description   = trim($row['description']   ?? '');
+            $serial_number = trim($row['serial_number']  ?? '');
+            $date_flagged  = trim($row['date_flagged']   ?? '') ?: null;
+            $weight_kg     = !empty($row['weight_kg'])   ? (float)$row['weight_kg'] : null;
+            $notes         = trim($row['notes']          ?? '');
+
+            if (empty($description) && empty($asset_class)) {
+                $skipped++; continue;
+            }
+
+            EwasteItem::create([
+                'asset_number'    => $asset_number  ?: null,
+                'asset_class'     => $asset_class,
+                'description'     => $description,
+                'serial_number'   => $serial_number ?: null,
+                'date_flagged'    => $date_flagged,
+                'weight_kg'       => $weight_kg,
+                'notes'           => $notes         ?: null,
+                'disposal_status' => 'Approved',
+                'hou_status'      => 'Approved',
+                'created_by'      => $user->id,
+            ]);
+            $inserted++;
+        }
+
+        if ($inserted > 0) {
+            ActivityLogService::log('CREATE', 'ewaste', 0, "Excel import: $inserted e-waste items added");
+        }
+
+        return response()->json(['inserted' => $inserted, 'skipped' => $skipped, 'errors' => $errors]);
+    }
+
     public function uncollect(int $id)
     {
         $user = Auth::guard('it')->user();
