@@ -23,7 +23,7 @@ class User extends Authenticatable
         // Extended fields shared across all modules:
         'department', 'dept_name',
         'must_change_password', 'last_login',
-        'avatar', 'signature_img', 'phone_no',
+        'avatar', 'signature_img', 'phone_no', 'totp_secret',
         // Backward-compat aliases — resolved via mutators, not stored directly:
         'username', 'full_name',
     ];
@@ -70,6 +70,16 @@ class User extends Authenticatable
     }
 
     // ── HR role helpers ────────────────────────────────────────────────────
+
+    public function isHrUser(): bool
+    {
+        return in_array($this->role, ['admin_hr', 'admin_it', 'hou', 'gm', 'ceo', 'staff']);
+    }
+
+    public function hasTotpSetup(): bool
+    {
+        return !empty($this->totp_secret);
+    }
 
     public function isAdminIT(): bool        { return $this->role === 'admin_it'; }
     public function isAdminHR(): bool        { return $this->role === 'admin_hr'; }

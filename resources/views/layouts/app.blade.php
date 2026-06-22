@@ -137,6 +137,15 @@
         </a>
         @endif
         @endif
+        @if(Auth::user()->isHrUser())
+        <a href="{{ route('account.security') }}" class="nav-item {{ request()->is('account/security') ? 'active' : '' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Account Security
+            @if(!Auth::user()->hasTotpSetup())
+                <span class="badge-count" style="background:#f59e0b;">!</span>
+            @endif
+        </a>
+        @endif
         <div class="nav-divider" style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
         <a href="{{ route('it.dashboard') }}" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
