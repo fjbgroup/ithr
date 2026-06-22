@@ -80,6 +80,10 @@ class RoomBookingController extends Controller
 
     private function finishBooking(\App\Models\User $user, array $slots)
     {
+        if ($user->isStaff() && $user->staff_id && $user->staff && !$user->staff->is_active) {
+            return redirect()->route('rooms.index')->with('error', 'Your account is currently inactive. You cannot make room bookings. Please contact HR.');
+        }
+
         $result = $this->processSlots($user, $slots);
 
         if ($result['inserted'] === 0) {

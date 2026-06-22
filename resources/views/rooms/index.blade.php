@@ -429,8 +429,9 @@
 </style>
 @endsection
 
+
 @php
-    function toMinutes($t) { 
+    function toMinutes($t) {
         if (!$t) return 0;
         $parts = explode(':', $t);
         return (int)$parts[0] * 60 + (int)$parts[1]; 
@@ -848,7 +849,7 @@
             </button>
             @endif
             @canwrite
-            <button class="btn btn-primary btn-sm" onclick="openRoomBookingModal('', '')">
+            <button class="btn btn-primary btn-sm" data-requires-active onclick="openRoomBookingModal('', '')">
                 + New Booking
             </button>
             @endcanwrite
@@ -1234,7 +1235,7 @@
 
 {{-- FLOATING ACTION BUTTON (hidden on desktop via CSS) --}}
 @canwrite
-<button class="rb-fab" onclick="openRoomBookingModal('', '')" aria-label="New Booking">
+<button class="rb-fab" data-requires-active onclick="openRoomBookingModal('', '')" aria-label="New Booking">
     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2.5"
          stroke-linecap="round" stroke-linejoin="round">

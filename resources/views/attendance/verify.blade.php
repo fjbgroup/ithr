@@ -137,6 +137,24 @@ body {
         </p>
         <a href="{{ route('training.index') }}" class="btn-ghost">Go to My Training</a>
 
+    @elseif(!empty($inactive))
+        {{-- ── Inactive staff state ── --}}
+        <div class="icon icon-err">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+        </div>
+        <h1 class="title">Account Inactive</h1>
+        <p class="sub">
+            Your account is currently <strong>inactive</strong>.<br>
+            You cannot mark attendance for
+            <strong class="course-name">{{ $course->title }}</strong>.<br>
+            Please contact HR for assistance.
+        </p>
+        <a href="{{ route('dashboard') }}" class="btn-ghost">Back to Dashboard</a>
+
     @else
         {{-- ── Login form ── --}}
         <div class="icon icon-ok">
