@@ -11,8 +11,8 @@
     <style>
         :root {
             --brand: #ee1c25;
-            --brand-dark: #5c1018;
-            --brand-deep: #3f0710;
+            --brand-dark: #9f1118;
+            --brand-deep: #6f0d14;
             --bg: #eef3f7;
             --text: #121a2d;
             --muted: #6c7a91;
@@ -50,8 +50,8 @@
             position: relative;
             padding: 58px 50px;
             background:
-                radial-gradient(circle at 82% 20%, rgba(238, 28, 37, .22), transparent 34%),
-                linear-gradient(135deg, #7c1f31 0%, var(--brand-deep) 100%);
+                radial-gradient(circle at 82% 20%, rgba(255, 255, 255, .12), transparent 34%),
+                linear-gradient(135deg, #ee1c25 0%, #c91821 58%, #8f1118 100%);
             color: #ffffff;
             display: flex;
             flex-direction: column;
@@ -249,7 +249,7 @@
             margin-top: 22px;
             border: 0;
             border-radius: 10px;
-            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+            background: var(--brand);
             color: #ffffff;
             font-family: inherit;
             font-size: 15px;
@@ -260,7 +260,7 @@
             align-items: center;
             justify-content: center;
             gap: 14px;
-            box-shadow: 0 13px 24px rgba(238, 28, 37, .24);
+            box-shadow: 0 13px 24px rgba(238, 28, 37, .32);
             transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
         }
 
