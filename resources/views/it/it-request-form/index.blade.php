@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'IT Request Form')
 @section('page_title', 'IT Request Form')
@@ -281,7 +281,7 @@
 .itr-step-line.done { background: var(--accent); }
 
 /* ── Step 1 type cards ── */
-.itr-type-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 8px; }
+.itr-type-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 8px; max-width: 320px; }
 .itr-type-card {
   background: var(--surface); border: 2px solid var(--border);
   border-radius: 14px; padding: 22px 16px; cursor: pointer;
@@ -397,7 +397,6 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-btn-draft:hover { border-color: var(--accent); color: var(--accent); }
 
 @media (max-width: 720px) {
-  .itr-type-grid { grid-template-columns: 1fr 1fr; }
   .g2,.g3,.g4,.itr-subject-row { grid-template-columns: 1fr; }
 }
 </style>
@@ -422,24 +421,6 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         <div class="itr-type-icon hw-icon"><i class="bi bi-laptop"></i></div>
         <div class="itr-type-name">Hardware</div>
         <div class="itr-type-desc">Laptops, desktops, printers, phones &amp; peripherals</div>
-      </div>
-      <div class="itr-type-card" id="card-software" onclick="selectType('software')">
-        <div class="itr-type-check"><i class="bi bi-check"></i></div>
-        <div class="itr-type-icon sw-icon"><i class="bi bi-code-slash"></i></div>
-        <div class="itr-type-name">Software</div>
-        <div class="itr-type-desc">New or amendment to software &amp; applications</div>
-      </div>
-      <div class="itr-type-card" id="card-system" onclick="selectType('system')">
-        <div class="itr-type-check"><i class="bi bi-check"></i></div>
-        <div class="itr-type-icon sys-icon"><i class="bi bi-hdd-network"></i></div>
-        <div class="itr-type-name">System</div>
-        <div class="itr-type-desc">Email, SAP, FGVHub, Procurehere &amp; system access</div>
-      </div>
-      <div class="itr-type-card" id="card-service" onclick="selectType('service')">
-        <div class="itr-type-check"><i class="bi bi-check"></i></div>
-        <div class="itr-type-icon svc-icon"><i class="bi bi-wifi"></i></div>
-        <div class="itr-type-name">Service</div>
-        <div class="itr-type-desc">Network, IP reservation, port &amp; internet access</div>
       </div>
     </div>
     <div class="itr-locked-note" id="locked-note"></div>
@@ -767,403 +748,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         <button type="submit" name="action" value="draft" class="itr-btn-draft" onclick="collectChips('hw-items-grid','hw_items');sessionStorage.removeItem('itr_form_state')"><i class="bi bi-floppy"></i> Save as Draft</button>
       </div>
     </form>
-
-    <!-- ░░ SOFTWARE ░░ -->
-    <form id="form-software" style="display:none" method="POST" action="{{ route('it.it-request-form.store') }}" enctype="multipart/form-data" onsubmit="return validateAndSubmit('software', event)" novalidate>
-      @csrf
-      <input type="hidden" name="request_type" value="software">
-      <input type="hidden" name="sw_request_type" id="sw_request_type_val">
-      <input type="hidden" name="sw_budgeted" id="sw_budgeted_val">
-      <input type="hidden" name="sw_opex_capex" id="sw_opex_capex_val">
-
-      <div class="itr-subject-row">
-        <div class="fg" style="margin-bottom:0">
-          <div class="itr-label">Request Subject <span class="itr-req">*</span></div>
-          <input class="itr-input{{ $errors->has('subject') ? ' is-error' : '' }}" type="text" name="subject" value="{{ old('subject') }}" placeholder="Briefly describe your request…" maxlength="200" required/>
-          @error('subject')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-          <div class="itr-hint">(i) Max 200 characters</div>
-        </div>
-        <div class="fg" style="margin-bottom:0">
-          <div class="itr-label">Status</div>
-          <input class="itr-input" type="text" value="New" readonly/>
-        </div>
-      </div>
-
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">1</div><div class="itr-section-title">Software Request Details</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div>
-              <div class="itr-label">Type of Request <span class="itr-req">*</span></div>
-              <div class="itr-radio-group" id="sw-req-type">
-                <div class="itr-radio-pill" data-group="sw-req-type" onclick="pillSelect(this,'sw_request_type_val','new')"> New</div>
-                <div class="itr-radio-pill" data-group="sw-req-type" onclick="pillSelect(this,'sw_request_type_val','amendment')"> Amendment</div>
-              </div>
-              @error('sw_request_type')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              <div class="itr-field-error itr-js-error" id="err-sw-req-type" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please select a type of request.</div>
-              <div class="itr-hint" style="margin-top:8px">New &amp; Amend - (GIT)</div>
-            </div>
-            <div>
-              <div class="itr-label">Software Name or Suggestions</div>
-              <input class="itr-input" type="text" name="sw_software_name" value="{{ old('sw_software_name') }}"/>
-              <div class="itr-hint">Please provide or suggest software name, if any.</div>
-            </div>
-          </div>
-          <div class="g4">
-            <div class="fg">
-              <div class="itr-label">Budgeted? <span class="itr-req">*</span></div>
-              <div class="itr-radio-group" id="sw-budgeted" style="margin-top:4px">
-                <div class="itr-radio-pill" data-group="sw-budgeted" onclick="pillSelect(this,'sw_budgeted_val','yes'); toggleCostCenter('yes')"> Yes</div>
-                <div class="itr-radio-pill" data-group="sw-budgeted" onclick="pillSelect(this,'sw_budgeted_val','no'); toggleCostCenter('no')"> No</div>
-              </div>
-              @error('sw_budgeted')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              <div class="itr-field-error itr-js-error" id="err-sw-budgeted" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please select Yes or No.</div>
-            </div>
-            <div class="fg">
-              <div class="itr-label">Opex / Capex <span class="itr-req">*</span></div>
-              <div class="itr-radio-group" id="sw-opex" style="margin-top:4px">
-                <div class="itr-radio-pill" data-group="sw-opex" onclick="pillSelect(this,'sw_opex_capex_val','opex')"> Opex</div>
-                <div class="itr-radio-pill" data-group="sw-opex" onclick="pillSelect(this,'sw_opex_capex_val','capex')"> Capex</div>
-              </div>
-              @error('sw_opex_capex')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              <div class="itr-field-error itr-js-error" id="err-sw-opex" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please select Opex or Capex.</div>
-            </div>
-            <div class="fg" id="sw-cost-center-wrap" style="display:none">
-              <div class="itr-label">Cost Center <span class="itr-req">*</span></div>
-              <input id="sw-cost-center-input" class="itr-input{{ $errors->has('sw_cost_center') ? ' is-error' : '' }}" type="text" name="sw_cost_center" value="{{ old('sw_cost_center') }}" placeholder="CC-XXX"/>
-              @error('sw_cost_center')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-            </div>
-            <div class="fg">
-              <div class="itr-label">Expected Product Value <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('sw_expected_value') ? ' is-error' : '' }}" type="text" name="sw_expected_value" value="{{ old('sw_expected_value') }}" placeholder="RM" required/>
-              @error('sw_expected_value')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              <div class="itr-hint">Amount in RM</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">2</div><div class="itr-section-title">Type of User &amp; Justification</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div>
-              <div class="fg">
-                <div class="itr-label">Type of User <span class="itr-req">*</span></div>
-                <select class="itr-input{{ $errors->has('user_type') ? ' is-error' : '' }}" name="user_type" required>
-                  <option value="">-- Select --</option>
-                  <option {{ old('user_type') === 'New Hire' ? 'selected' : '' }}>New Hire</option>
-                  <option {{ old('user_type') === 'Intern' ? 'selected' : '' }}>Intern</option>
-                  <option {{ old('user_type') === 'Resign' ? 'selected' : '' }}>Resign</option>
-                  <option {{ old('user_type') === 'Existing' ? 'selected' : '' }}>Existing</option>
-                  <option {{ old('user_type') === 'Vendor' ? 'selected' : '' }}>Vendor</option>
-                </select>
-                @error('user_type')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              </div>
-              <div class="fg"><div class="itr-label">Join Date</div><input class="itr-input" type="date" name="exit_join_date" value="{{ old('exit_join_date') }}" style="max-width:200px"/><div class="itr-hint">MM/DD/YYYY</div></div>
-            </div>
-            <div>
-              <div class="itr-label">Justification <span class="itr-req">*</span></div>
-              <textarea class="itr-input{{ $errors->has('justification') ? ' is-error' : '' }}" name="justification" placeholder="Describe why this request is needed…" required>{{ old('justification') }}</textarea>
-              @error('justification')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-            </div>
-          </div>
-          <div class="itr-label" style="margin-bottom:10px">Supporting Document</div>
-          <div class="itr-upload-zone"><div class="itr-notice warn"><i class="bi bi-exclamation-triangle-fill"></i><div><strong>(!) Bagi permohonan pertukaran laptop/desktop,</strong> sila sertakan <strong>Report Diagnosis dari Prodata</strong>. Permohonan akan ditolak sekiranya Report Diagnosis tidak disertakan.</div></div><div class="itr-notice info"><i class="bi bi-info-circle-fill"></i><div>Sila pastikan nama lampiran tidak mengandungi simbol berikut: &amp; @ # $ % ^ * ( ) { } [ ] \ / : ' " dan saiz lampiran tidak melebihi <strong>2MB</strong></div></div><div class="itr-upload-row"><div class="itr-filename" id="sw-fname">No file chosen</div><input type="file" id="sw-file" name="document" onchange="setFilename('sw-file','sw-fname')"/><label for="sw-file" class="itr-browse-btn"><i class="bi bi-paperclip"></i> Browse</label></div></div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">3</div><div class="itr-section-title">User Details</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_name') ? ' is-error' : '' }}" type="text" name="user_name" value="{{ old('user_name') }}" required/>@error('user_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Email <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_email') ? ' is-error' : '' }}" type="email" name="user_email" value="{{ old('user_email') }}" required/>@error('user_email')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-          <div class="fg"><div class="itr-label">Address <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_address') ? ' is-error' : '' }}" type="text" name="user_address" value="{{ old('user_address') }}" required/>@error('user_address')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          <div class="g4">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_department') ? ' is-error' : '' }}" type="text" name="user_department" value="{{ old('user_department') }}" required/>@error('user_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_designation') ? ' is-error' : '' }}" type="text" name="user_designation" value="{{ old('user_designation') }}" required/>@error('user_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Staff ID <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_staff_id') ? ' is-error' : '' }}" type="text" name="user_staff_id" value="{{ old('user_staff_id') }}" placeholder="12345678" required/>@error('user_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact No. <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_contact') ? ' is-error' : '' }}" type="text" name="user_contact" value="{{ old('user_contact') }}" required/>@error('user_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">4</div><div class="itr-section-title">Requester Details</div></div>
-        <div class="itr-section-body">
-          <div class="g3 fg">
-            <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_name') ? ' is-error' : '' }}" type="text" name="req_name" value="{{ old('req_name') }}" placeholder="Enter a name or email address…" required/>@error('req_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department') }}" required/>@error('req_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Staff ID <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id') }}" required/>@error('req_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-          <div class="g3">
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation') }}" required/>@error('req_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact') }}" required/>@error('req_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Company <span class="itr-req">*</span></div><select class="itr-input{{ $errors->has('req_company') ? ' is-error' : '' }}" name="req_company" required><option value="">&lt; Select Company &gt;</option><option {{ old('req_company') === 'FGV Bulkers Sdn Bhd' ? 'selected' : '' }}>FGV Bulkers Sdn Bhd</option><option {{ old('req_company') === 'FGV Johor Bulkers' ? 'selected' : '' }}>FGV Johor Bulkers</option><option {{ old('req_company') === 'Langsat Bulkers Sdn Bhd' ? 'selected' : '' }}>Langsat Bulkers Sdn Bhd</option><option {{ old('req_company') === 'FGV Grains Terminal Sdn Bhd' ? 'selected' : '' }}>FGV Grains Terminal Sdn Bhd</option></select>@error('req_company')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">5</div><div class="itr-section-title">Approver Details</div></div>
-        <div class="itr-section-body">
-          <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_name') ? ' is-error' : '' }}" type="text" name="approver_name" value="{{ old('approver_name') }}" placeholder="Enter a name or email address…" required/>@error('approver_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          <div class="g4">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_department') ? ' is-error' : '' }}" type="text" name="approver_department" value="{{ old('approver_department') }}" required/>@error('approver_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_designation') ? ' is-error' : '' }}" type="text" name="approver_designation" value="{{ old('approver_designation') }}" required/>@error('approver_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_contact') ? ' is-error' : '' }}" type="text" name="approver_contact" value="{{ old('approver_contact') }}" required/>@error('approver_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Company <span class="itr-req">*</span></div><select class="itr-input{{ $errors->has('approver_company') ? ' is-error' : '' }}" name="approver_company" required><option value="">&lt; Select Company &gt;</option><option {{ old('approver_company') === 'FGV Bulkers Sdn Bhd' ? 'selected' : '' }}>FGV Bulkers Sdn Bhd</option><option {{ old('approver_company') === 'FGV Johor Bulkers' ? 'selected' : '' }}>FGV Johor Bulkers</option><option {{ old('approver_company') === 'Langsat Bulkers Sdn Bhd' ? 'selected' : '' }}>Langsat Bulkers Sdn Bhd</option><option {{ old('approver_company') === 'FGV Grains Terminal Sdn Bhd' ? 'selected' : '' }}>FGV Grains Terminal Sdn Bhd</option></select>@error('approver_company')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-action-bar">
-        <button type="submit" name="action" value="submit" class="itr-btn-submit"><i class="bi bi-send-fill"></i> Submit Request</button>
-        <button type="submit" name="action" value="draft" class="itr-btn-draft" onclick="sessionStorage.removeItem('itr_form_state')"><i class="bi bi-floppy"></i> Save as Draft</button>
-      </div>
-    </form>
-
-    <!-- ░░ SYSTEM ░░ -->
-    <form id="form-system" style="display:none" method="POST" action="{{ route('it.it-request-form.store') }}" enctype="multipart/form-data" onsubmit="return validateAndSubmit('system', event)" novalidate>
-      @csrf
-      <input type="hidden" name="request_type" value="system">
-      <input type="hidden" name="sys_request_type" id="sys_request_type_val">
-      <!-- sys_items[] injected dynamically -->
-
-      <div class="itr-subject-row">
-        <div class="fg" style="margin-bottom:0">
-          <div class="itr-label">Request Subject <span class="itr-req">*</span></div>
-          <input class="itr-input{{ $errors->has('subject') ? ' is-error' : '' }}" type="text" name="subject" value="{{ old('subject') }}" placeholder="Briefly describe your request…" maxlength="200" required/>
-          @error('subject')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-          <div class="itr-hint">(i) Max 200 characters</div>
-        </div>
-        <div class="fg" style="margin-bottom:0">
-          <div class="itr-label">Status</div>
-          <input class="itr-input" type="text" value="New" readonly/>
-        </div>
-      </div>
-
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">1</div><div class="itr-section-title">System Request Details</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div>
-              <div class="itr-label">Type of Request <span class="itr-req">*</span></div>
-              <div class="itr-radio-group" id="sys-req-type">
-                <div class="itr-radio-pill" data-group="sys-req-type" onclick="pillSelect(this,'sys_request_type_val','new')"> New</div>
-                <div class="itr-radio-pill" data-group="sys-req-type" onclick="pillSelect(this,'sys_request_type_val','amendment')"> Amendment</div>
-              </div>
-              @error('sys_request_type')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              <div class="itr-field-error itr-js-error" id="err-sys-req-type" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please select a type of request.</div>
-            </div>
-            <div>
-              <div class="itr-label" style="margin-bottom:10px">Type of Item <span class="itr-req">*</span></div>
-              <div class="itr-check-grid" id="sys-items-grid">
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Email</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Shared Folder</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>SAP</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>FGVHub</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Procurehere</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>e-Daftar</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>e-CRM (SSC)</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Other</div>
-              </div>
-              @error('sys_items')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              <div class="itr-field-error itr-js-error" id="err-sys-items" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please select at least one item.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">2</div><div class="itr-section-title">Type of User &amp; Justification</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div>
-              <div class="fg">
-                <div class="itr-label">Type of User <span class="itr-req">*</span></div>
-                <select class="itr-input{{ $errors->has('user_type') ? ' is-error' : '' }}" name="user_type" required>
-                  <option value="">-- Select --</option>
-                  <option {{ old('user_type') === 'New Hire' ? 'selected' : '' }}>New Hire</option>
-                  <option {{ old('user_type') === 'Intern' ? 'selected' : '' }}>Intern</option>
-                  <option {{ old('user_type') === 'Resign' ? 'selected' : '' }}>Resign</option>
-                  <option {{ old('user_type') === 'Existing' ? 'selected' : '' }}>Existing</option>
-                  <option {{ old('user_type') === 'Vendor' ? 'selected' : '' }}>Vendor</option>
-                </select>
-                @error('user_type')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              </div>
-              <div class="fg"><div class="itr-label">Join Date</div><input class="itr-input" type="date" name="exit_join_date" value="{{ old('exit_join_date') }}" style="max-width:200px"/><div class="itr-hint">MM/DD/YYYY</div></div>
-            </div>
-            <div>
-              <div class="itr-label">Justification <span class="itr-req">*</span></div>
-              <textarea class="itr-input{{ $errors->has('justification') ? ' is-error' : '' }}" name="justification" placeholder="Describe why this request is needed…" required>{{ old('justification') }}</textarea>
-              @error('justification')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-            </div>
-          </div>
-          <div class="itr-label" style="margin-bottom:10px">Supporting Document</div>
-          <div class="itr-upload-zone"><div class="itr-notice warn"><i class="bi bi-exclamation-triangle-fill"></i><div><strong>(!) Bagi permohonan pertukaran laptop/desktop,</strong> sila sertakan <strong>Report Diagnosis dari Prodata</strong>. Permohonan akan ditolak sekiranya Report Diagnosis tidak disertakan.</div></div><div class="itr-notice info"><i class="bi bi-info-circle-fill"></i><div>Sila pastikan nama lampiran tidak mengandungi simbol berikut: &amp; @ # $ % ^ * ( ) { } [ ] \ / : ' " dan saiz lampiran tidak melebihi <strong>2MB</strong></div></div><div class="itr-upload-row"><div class="itr-filename" id="sys-fname">No file chosen</div><input type="file" id="sys-file" name="document" onchange="setFilename('sys-file','sys-fname')"/><label for="sys-file" class="itr-browse-btn"><i class="bi bi-paperclip"></i> Browse</label></div></div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">3</div><div class="itr-section-title">User Details</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_name') ? ' is-error' : '' }}" type="text" name="user_name" value="{{ old('user_name') }}" required/>@error('user_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Email <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_email') ? ' is-error' : '' }}" type="email" name="user_email" value="{{ old('user_email') }}" required/>@error('user_email')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-          <div class="fg"><div class="itr-label">Address <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_address') ? ' is-error' : '' }}" type="text" name="user_address" value="{{ old('user_address') }}" required/>@error('user_address')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          <div class="g4">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_department') ? ' is-error' : '' }}" type="text" name="user_department" value="{{ old('user_department') }}" required/>@error('user_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_designation') ? ' is-error' : '' }}" type="text" name="user_designation" value="{{ old('user_designation') }}" required/>@error('user_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Staff ID <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_staff_id') ? ' is-error' : '' }}" type="text" name="user_staff_id" value="{{ old('user_staff_id') }}" placeholder="12345678" required/>@error('user_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact No. <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_contact') ? ' is-error' : '' }}" type="text" name="user_contact" value="{{ old('user_contact') }}" required/>@error('user_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">4</div><div class="itr-section-title">Requester Details</div></div>
-        <div class="itr-section-body">
-          <div class="g3 fg">
-            <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_name') ? ' is-error' : '' }}" type="text" name="req_name" value="{{ old('req_name') }}" placeholder="Enter a name or email address…" required/>@error('req_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department') }}" required/>@error('req_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Staff ID <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id') }}" required/>@error('req_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-          <div class="g3">
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation') }}" required/>@error('req_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact') }}" required/>@error('req_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Company <span class="itr-req">*</span></div><select class="itr-input{{ $errors->has('req_company') ? ' is-error' : '' }}" name="req_company" required><option value="">&lt; Select Company &gt;</option><option {{ old('req_company') === 'FGV Bulkers Sdn Bhd' ? 'selected' : '' }}>FGV Bulkers Sdn Bhd</option><option {{ old('req_company') === 'FGV Johor Bulkers' ? 'selected' : '' }}>FGV Johor Bulkers</option><option {{ old('req_company') === 'Langsat Bulkers Sdn Bhd' ? 'selected' : '' }}>Langsat Bulkers Sdn Bhd</option><option {{ old('req_company') === 'FGV Grains Terminal Sdn Bhd' ? 'selected' : '' }}>FGV Grains Terminal Sdn Bhd</option></select>@error('req_company')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">5</div><div class="itr-section-title">Approver Details</div></div>
-        <div class="itr-section-body">
-          <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_name') ? ' is-error' : '' }}" type="text" name="approver_name" value="{{ old('approver_name') }}" placeholder="Enter a name or email address…" required/>@error('approver_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          <div class="g4">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_department') ? ' is-error' : '' }}" type="text" name="approver_department" value="{{ old('approver_department') }}" required/>@error('approver_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_designation') ? ' is-error' : '' }}" type="text" name="approver_designation" value="{{ old('approver_designation') }}" required/>@error('approver_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_contact') ? ' is-error' : '' }}" type="text" name="approver_contact" value="{{ old('approver_contact') }}" required/>@error('approver_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Company <span class="itr-req">*</span></div><select class="itr-input{{ $errors->has('approver_company') ? ' is-error' : '' }}" name="approver_company" required><option value="">&lt; Select Company &gt;</option><option {{ old('approver_company') === 'FGV Bulkers Sdn Bhd' ? 'selected' : '' }}>FGV Bulkers Sdn Bhd</option><option {{ old('approver_company') === 'FGV Johor Bulkers' ? 'selected' : '' }}>FGV Johor Bulkers</option><option {{ old('approver_company') === 'Langsat Bulkers Sdn Bhd' ? 'selected' : '' }}>Langsat Bulkers Sdn Bhd</option><option {{ old('approver_company') === 'FGV Grains Terminal Sdn Bhd' ? 'selected' : '' }}>FGV Grains Terminal Sdn Bhd</option></select>@error('approver_company')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-action-bar">
-        <button type="submit" name="action" value="submit" class="itr-btn-submit"><i class="bi bi-send-fill"></i> Submit Request</button>
-        <button type="submit" name="action" value="draft" class="itr-btn-draft" onclick="collectChips('sys-items-grid','sys_items');sessionStorage.removeItem('itr_form_state')"><i class="bi bi-floppy"></i> Save as Draft</button>
-      </div>
-    </form>
-
-    <!-- ░░ SERVICE ░░ -->
-    <form id="form-service" style="display:none" method="POST" action="{{ route('it.it-request-form.store') }}" enctype="multipart/form-data" onsubmit="return validateAndSubmit('service', event)" novalidate>
-      @csrf
-      <input type="hidden" name="request_type" value="service">
-      <!-- svc_items[] injected dynamically -->
-
-      <div class="itr-subject-row">
-        <div class="fg" style="margin-bottom:0">
-          <div class="itr-label">Request Subject <span class="itr-req">*</span></div>
-          <input class="itr-input{{ $errors->has('subject') ? ' is-error' : '' }}" type="text" name="subject" value="{{ old('subject') }}" placeholder="Briefly describe your request…" maxlength="200" required/>
-          @error('subject')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-          <div class="itr-hint">(i) Max 200 characters</div>
-        </div>
-        <div class="fg" style="margin-bottom:0">
-          <div class="itr-label">Status</div>
-          <input class="itr-input" type="text" value="New" readonly/>
-        </div>
-      </div>
-
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">1</div><div class="itr-section-title">Service Request Type</div></div>
-        <div class="itr-section-body">
-          <div class="itr-label" style="margin-bottom:10px">Type of Request <span class="itr-req">*</span></div>
-          <div class="itr-check-grid" id="svc-items-grid"><div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Network (Reserve IP, Open Port, Internet Access)</div></div>
-          @error('svc_items')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-          <div class="itr-field-error itr-js-error" id="err-svc-items" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please select at least one request type.</div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">2</div><div class="itr-section-title">Type of User &amp; Justification</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div>
-              <div class="fg">
-                <div class="itr-label">Type of User <span class="itr-req">*</span></div>
-                <select class="itr-input{{ $errors->has('user_type') ? ' is-error' : '' }}" name="user_type" required>
-                  <option value="">-- Select --</option>
-                  <option {{ old('user_type') === 'New Hire' ? 'selected' : '' }}>New Hire</option>
-                  <option {{ old('user_type') === 'Intern' ? 'selected' : '' }}>Intern</option>
-                  <option {{ old('user_type') === 'Resign' ? 'selected' : '' }}>Resign</option>
-                  <option {{ old('user_type') === 'Existing' ? 'selected' : '' }}>Existing</option>
-                  <option {{ old('user_type') === 'Vendor' ? 'selected' : '' }}>Vendor</option>
-                </select>
-                @error('user_type')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-              </div>
-              <div class="fg"><div class="itr-label">Join Date</div><input class="itr-input" type="date" name="exit_join_date" value="{{ old('exit_join_date') }}" style="max-width:200px"/><div class="itr-hint">MM/DD/YYYY</div></div>
-            </div>
-            <div>
-              <div class="itr-label">Justification <span class="itr-req">*</span></div>
-              <textarea class="itr-input{{ $errors->has('justification') ? ' is-error' : '' }}" name="justification" placeholder="Describe why this request is needed…" required>{{ old('justification') }}</textarea>
-              @error('justification')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
-            </div>
-          </div>
-          <div class="itr-label" style="margin-bottom:10px">Supporting Document</div>
-          <div class="itr-upload-zone"><div class="itr-notice warn"><i class="bi bi-exclamation-triangle-fill"></i><div><strong>(!) Bagi permohonan pertukaran laptop/desktop,</strong> sila sertakan <strong>Report Diagnosis dari Prodata</strong>. Permohonan akan ditolak sekiranya Report Diagnosis tidak disertakan.</div></div><div class="itr-notice info"><i class="bi bi-info-circle-fill"></i><div>Sila pastikan nama lampiran tidak mengandungi simbol berikut: &amp; @ # $ % ^ * ( ) { } [ ] \ / : ' " dan saiz lampiran tidak melebihi <strong>2MB</strong></div></div><div class="itr-upload-row"><div class="itr-filename" id="svc-fname">No file chosen</div><input type="file" id="svc-file" name="document" onchange="setFilename('svc-file','svc-fname')"/><label for="svc-file" class="itr-browse-btn"><i class="bi bi-paperclip"></i> Browse</label></div></div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">3</div><div class="itr-section-title">User Details</div></div>
-        <div class="itr-section-body">
-          <div class="g2 fg">
-            <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_name') ? ' is-error' : '' }}" type="text" name="user_name" value="{{ old('user_name') }}" required/>@error('user_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Email <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_email') ? ' is-error' : '' }}" type="email" name="user_email" value="{{ old('user_email') }}" required/>@error('user_email')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-          <div class="fg"><div class="itr-label">Address <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_address') ? ' is-error' : '' }}" type="text" name="user_address" value="{{ old('user_address') }}" required/>@error('user_address')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          <div class="g4">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_department') ? ' is-error' : '' }}" type="text" name="user_department" value="{{ old('user_department') }}" required/>@error('user_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_designation') ? ' is-error' : '' }}" type="text" name="user_designation" value="{{ old('user_designation') }}" required/>@error('user_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Staff ID <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_staff_id') ? ' is-error' : '' }}" type="text" name="user_staff_id" value="{{ old('user_staff_id') }}" placeholder="12345678" required/>@error('user_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact No. <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('user_contact') ? ' is-error' : '' }}" type="text" name="user_contact" value="{{ old('user_contact') }}" required/>@error('user_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">4</div><div class="itr-section-title">Requester Details</div></div>
-        <div class="itr-section-body">
-          <div class="g3 fg">
-            <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_name') ? ' is-error' : '' }}" type="text" name="req_name" value="{{ old('req_name') }}" placeholder="Enter a name or email address…" required/>@error('req_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department') }}" required/>@error('req_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Staff ID <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id') }}" required/>@error('req_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-          <div class="g3">
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation') }}" required/>@error('req_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact') }}" required/>@error('req_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Company <span class="itr-req">*</span></div><select class="itr-input{{ $errors->has('req_company') ? ' is-error' : '' }}" name="req_company" required><option value="">&lt; Select Company &gt;</option><option {{ old('req_company') === 'FGV Bulkers Sdn Bhd' ? 'selected' : '' }}>FGV Bulkers Sdn Bhd</option><option {{ old('req_company') === 'FGV Johor Bulkers' ? 'selected' : '' }}>FGV Johor Bulkers</option><option {{ old('req_company') === 'Langsat Bulkers Sdn Bhd' ? 'selected' : '' }}>Langsat Bulkers Sdn Bhd</option><option {{ old('req_company') === 'FGV Grains Terminal Sdn Bhd' ? 'selected' : '' }}>FGV Grains Terminal Sdn Bhd</option></select>@error('req_company')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-section">
-        <div class="itr-section-head"><div class="itr-section-num">5</div><div class="itr-section-title">Approver Details</div></div>
-        <div class="itr-section-body">
-          <div class="fg"><div class="itr-label">Name <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_name') ? ' is-error' : '' }}" type="text" name="approver_name" value="{{ old('approver_name') }}" placeholder="Enter a name or email address…" required/>@error('approver_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          <div class="g4">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_department') ? ' is-error' : '' }}" type="text" name="approver_department" value="{{ old('approver_department') }}" required/>@error('approver_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_designation') ? ' is-error' : '' }}" type="text" name="approver_designation" value="{{ old('approver_designation') }}" required/>@error('approver_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_contact') ? ' is-error' : '' }}" type="text" name="approver_contact" value="{{ old('approver_contact') }}" required/>@error('approver_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Company <span class="itr-req">*</span></div><select class="itr-input{{ $errors->has('approver_company') ? ' is-error' : '' }}" name="approver_company" required><option value="">&lt; Select Company &gt;</option><option {{ old('approver_company') === 'FGV Bulkers Sdn Bhd' ? 'selected' : '' }}>FGV Bulkers Sdn Bhd</option><option {{ old('approver_company') === 'FGV Johor Bulkers' ? 'selected' : '' }}>FGV Johor Bulkers</option><option {{ old('approver_company') === 'Langsat Bulkers Sdn Bhd' ? 'selected' : '' }}>Langsat Bulkers Sdn Bhd</option><option {{ old('approver_company') === 'FGV Grains Terminal Sdn Bhd' ? 'selected' : '' }}>FGV Grains Terminal Sdn Bhd</option></select>@error('approver_company')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-          </div>
-        </div>
-      </div>
-      <div class="itr-action-bar">
-        <button type="submit" name="action" value="submit" class="itr-btn-submit"><i class="bi bi-send-fill"></i> Submit Request</button>
-        <button type="submit" name="action" value="draft" class="itr-btn-draft" onclick="collectChips('svc-items-grid','svc_items');sessionStorage.removeItem('itr_form_state')"><i class="bi bi-floppy"></i> Save as Draft</button>
-      </div>
-    </form>
-
   </div><!-- /step2 -->
 </div><!-- /itr-wrap -->
 
 <script>
 const typeConfig = {
-  hardware: { label: 'Hardware',  icon: 'bi-laptop',      form: 'form-hardware' },
-  software: { label: 'Software',  icon: 'bi-code-slash',  form: 'form-software' },
-  system:   { label: 'System',    icon: 'bi-hdd-network', form: 'form-system'   },
-  service:  { label: 'Service',   icon: 'bi-wifi',        form: 'form-service'  }
+  hardware: { label: 'Hardware',  icon: 'bi-laptop',      form: 'form-hardware' }
 };
 let activeType = null;
 
@@ -1243,18 +833,6 @@ function setFilename(inputId, displayId) {
   document.getElementById(displayId).textContent = f ? f.name : 'No file chosen';
 }
 
-function toggleCostCenter(val) {
-  var wrap  = document.getElementById('sw-cost-center-wrap');
-  var input = document.getElementById('sw-cost-center-input');
-  if (val === 'yes') {
-    wrap.style.display = '';
-    input.required = true;
-  } else {
-    wrap.style.display = 'none';
-    input.required = false;
-    input.value = '';
-  }
-}
 
 function saveFormState() {
   if (!activeType || !typeConfig[activeType]) return;
@@ -1264,12 +842,10 @@ function saveFormState() {
   form.querySelectorAll('input:not([type=file]):not([type=hidden]), select, textarea').forEach(function(el) {
     if (el.name) state.fields[el.name] = el.value;
   });
-  [['hw_request_type_val','hw-req-type'], ['sw_request_type_val','sw-req-type'],
-   ['sw_budgeted_val','sw-budgeted'], ['sw_opex_capex_val','sw-opex'],
-   ['sys_request_type_val','sys-req-type']].forEach(function(p) {
+  [['hw_request_type_val','hw-req-type']].forEach(function(p) {
     var el = document.getElementById(p[0]); if (el) state.pills[p[1]] = el.value;
   });
-  ['hw-items-grid','sys-items-grid','svc-items-grid'].forEach(function(id) {
+  ['hw-items-grid'].forEach(function(id) {
     var g = document.getElementById(id); if (!g) return;
     state.chips[id] = Array.from(g.querySelectorAll('.itr-check-chip.checked'))
                           .map(function(c) { return c.textContent.trim(); });
@@ -1281,7 +857,7 @@ function validateAndSubmit(type, event) {
   // Use event.submitter (which button triggered submit) — immune to onclick order or hidden-input state
   var isDraft = !!(event && event.submitter && event.submitter.value === 'draft');
 
-  var chipMap = { hardware: ['hw-items-grid', 'hw_items'], system: ['sys-items-grid', 'sys_items'], service: ['svc-items-grid', 'svc_items'] };
+  var chipMap = { hardware: ['hw-items-grid', 'hw_items'] };
 
   if (isDraft) {
     // Collect chips so partial selections are saved, but always allow submission
@@ -1305,15 +881,6 @@ function validateAndSubmit(type, event) {
   if (type === 'hardware') {
     if (!document.getElementById('hw_request_type_val').value) showErr('err-hw-req-type');
     if (!document.querySelectorAll('#hw-items-grid .itr-check-chip.checked').length) showErr('err-hw-items');
-  } else if (type === 'software') {
-    if (!document.getElementById('sw_request_type_val').value) showErr('err-sw-req-type');
-    if (!document.getElementById('sw_budgeted_val').value) showErr('err-sw-budgeted');
-    if (!document.getElementById('sw_opex_capex_val').value) showErr('err-sw-opex');
-  } else if (type === 'system') {
-    if (!document.getElementById('sys_request_type_val').value) showErr('err-sys-req-type');
-    if (!document.querySelectorAll('#sys-items-grid .itr-check-chip.checked').length) showErr('err-sys-items');
-  } else if (type === 'service') {
-    if (!document.querySelectorAll('#svc-items-grid .itr-check-chip.checked').length) showErr('err-svc-items');
   }
 
   if (firstErr) {
@@ -1372,15 +939,7 @@ function collectChips(gridId, fieldName) {
   s2.style.opacity = '1';
 
   restoreOldPill('hw-req-type',  'hw_request_type_val', @json(old('hw_request_type')));
-  restoreOldPill('sw-req-type',  'sw_request_type_val', @json(old('sw_request_type')));
-  restoreOldPill('sw-budgeted',  'sw_budgeted_val',     @json(old('sw_budgeted')));
-  if (@json(old('sw_budgeted'))) toggleCostCenter(@json(old('sw_budgeted')));
-  restoreOldPill('sw-opex',      'sw_opex_capex_val',   @json(old('sw_opex_capex')));
-  restoreOldPill('sys-req-type', 'sys_request_type_val',@json(old('sys_request_type')));
-
-  restoreOldChips('hw-items-grid',  @json(old('hw_items',  [])));
-  restoreOldChips('sys-items-grid', @json(old('sys_items', [])));
-  restoreOldChips('svc-items-grid', @json(old('svc_items', [])));
+  restoreOldChips('hw-items-grid', @json(old('hw_items', [])));
 })();
 
 function restoreOldPill(groupId, hiddenId, value) {
@@ -1445,24 +1004,13 @@ function restoreFromSession() {
     });
   });
 
-  var pillMap = [
-    ['hw-req-type','hw_request_type_val'], ['sw-req-type','sw_request_type_val'],
-    ['sw-budgeted','sw_budgeted_val'],     ['sw-opex','sw_opex_capex_val'],
-    ['sys-req-type','sys_request_type_val']
-  ];
-  pillMap.forEach(function(p) { restoreOldPill(p[0], p[1], (state.pills||{})[p[0]]); });
-  if (state.type === 'software' && (state.pills||{})['sw-budgeted']) {
-    toggleCostCenter(state.pills['sw-budgeted']);
-  }
-
-  restoreOldChips('hw-items-grid',  (state.chips||{})['hw-items-grid']  || []);
-  restoreOldChips('sys-items-grid', (state.chips||{})['sys-items-grid'] || []);
-  restoreOldChips('svc-items-grid', (state.chips||{})['svc-items-grid'] || []);
+  restoreOldPill('hw-req-type', 'hw_request_type_val', (state.pills||{})['hw-req-type']);
+  restoreOldChips('hw-items-grid', (state.chips||{})['hw-items-grid'] || []);
 }
 
 restoreFromSession();
 
-['form-hardware','form-software','form-system','form-service'].forEach(function(id) {
+['form-hardware'].forEach(function(id) {
   var f = document.getElementById(id);
   if (f) { f.addEventListener('input', saveFormState); f.addEventListener('change', saveFormState); }
 });
