@@ -106,11 +106,11 @@ button .badge-count{ margin-left:0; }
 .btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
 
 /* ── MAIN ── */
-.main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;padding-top:60px}
 .topbar{
   background:var(--surface);border-bottom:1px solid var(--border);
   padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;
-  position:sticky;top:0;z-index:50;
+  position:fixed;top:0;left:var(--sidebar-w);right:0;z-index:50;
 }
 .topbar-left{flex:1}
 .topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy,var(--text))}
@@ -274,6 +274,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:none}
   .main-content{margin-left:0}
+  .topbar{left:0}
   .sidebar-toggle{display:flex;align-items:center}
 }
 </style>
