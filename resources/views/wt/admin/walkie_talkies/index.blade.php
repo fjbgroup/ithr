@@ -558,6 +558,192 @@
     </style>
     @endpush
 
+    @push('final_styles')
+    <style id="inventory-bulk-toolbar-clean-final">
+        body .content-surface #bulkActionForm.inventory-bulk-bar {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 10px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 0 12px !important;
+            padding: 12px 14px !important;
+            border-radius: 10px !important;
+            box-shadow: none !important;
+        }
+
+        html:not(.dark) body .content-surface #bulkActionForm.inventory-bulk-bar,
+        html[data-theme="light"] body .content-surface #bulkActionForm.inventory-bulk-bar {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        html.dark body .content-surface #bulkActionForm.inventory-bulk-bar,
+        html[data-theme="dark"] body .content-surface #bulkActionForm.inventory-bulk-bar {
+            background: #0f172a !important;
+            border: 1px solid #273449 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-count,
+        body .content-surface #bulkActionForm .inventory-bulk-select,
+        body .content-surface #bulkActionForm .inventory-bulk-input,
+        body .content-surface #bulkActionForm .inventory-bulk-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 34px !important;
+            min-height: 34px !important;
+            margin: 0 !important;
+            border-radius: 8px !important;
+            font-size: 12px !important;
+            font-weight: 750 !important;
+            line-height: 1 !important;
+            box-shadow: none !important;
+            white-space: nowrap !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-count {
+            gap: 4px !important;
+            min-width: 96px !important;
+            padding: 0 12px !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-controls {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            gap: 10px !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-select {
+            width: 136px !important;
+            padding: 0 30px 0 12px !important;
+            justify-content: flex-start !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-input {
+            width: 176px !important;
+            padding: 0 12px !important;
+            justify-content: flex-start !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-btn {
+            width: 72px !important;
+            padding: 0 14px !important;
+            cursor: pointer !important;
+        }
+
+        html:not(.dark) body .content-surface #bulkActionForm .inventory-bulk-count,
+        html:not(.dark) body .content-surface #bulkActionForm .inventory-bulk-select,
+        html:not(.dark) body .content-surface #bulkActionForm .inventory-bulk-input,
+        html:not(.dark) body .content-surface #bulkActionForm .inventory-bulk-btn,
+        html[data-theme="light"] body .content-surface #bulkActionForm .inventory-bulk-count,
+        html[data-theme="light"] body .content-surface #bulkActionForm .inventory-bulk-select,
+        html[data-theme="light"] body .content-surface #bulkActionForm .inventory-bulk-input,
+        html[data-theme="light"] body .content-surface #bulkActionForm .inventory-bulk-btn {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        html.dark body .content-surface #bulkActionForm .inventory-bulk-count,
+        html.dark body .content-surface #bulkActionForm .inventory-bulk-select,
+        html.dark body .content-surface #bulkActionForm .inventory-bulk-input,
+        html.dark body .content-surface #bulkActionForm .inventory-bulk-btn,
+        html[data-theme="dark"] body .content-surface #bulkActionForm .inventory-bulk-count,
+        html[data-theme="dark"] body .content-surface #bulkActionForm .inventory-bulk-select,
+        html[data-theme="dark"] body .content-surface #bulkActionForm .inventory-bulk-input,
+        html[data-theme="dark"] body .content-surface #bulkActionForm .inventory-bulk-btn {
+            background: #111827 !important;
+            border: 1px solid #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body .content-surface #bulkActionForm .inventory-bulk-input::placeholder {
+            opacity: 1 !important;
+        }
+
+        html:not(.dark) body .content-surface #bulkActionForm .inventory-bulk-input::placeholder,
+        html[data-theme="light"] body .content-surface #bulkActionForm .inventory-bulk-input::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        html.dark body .content-surface #bulkActionForm .inventory-bulk-input::placeholder,
+        html[data-theme="dark"] body .content-surface #bulkActionForm .inventory-bulk-input::placeholder {
+            color: #64748b !important;
+        }
+
+        html:not(.dark) body .content-surface #bulkActionForm .inventory-bulk-btn:not(:disabled):hover,
+        html[data-theme="light"] body .content-surface #bulkActionForm .inventory-bulk-btn:not(:disabled):hover {
+            background: #0f172a !important;
+            border-color: #0f172a !important;
+            color: #ffffff !important;
+        }
+
+        html.dark body .content-surface #bulkActionForm .inventory-bulk-btn:not(:disabled):hover,
+        html[data-theme="dark"] body .content-surface #bulkActionForm .inventory-bulk-btn:not(:disabled):hover {
+            background: #0ea5e9 !important;
+            border-color: #38bdf8 !important;
+            color: #ffffff !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge,
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge {
+            border-width: 1px !important;
+            border-style: solid !important;
+            font-weight: 900 !important;
+            opacity: 1 !important;
+            text-shadow: none !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge[data-status="UNUSED"],
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge[data-status="UNUSED"] {
+            background: #dcfce7 !important;
+            border-color: #86efac !important;
+            color: #166534 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge[data-status="IN USE"],
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge[data-status="IN USE"] {
+            background: #dbeafe !important;
+            border-color: #93c5fd !important;
+            color: #1d4ed8 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge[data-status="REPAIRING"],
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge[data-status="FAULTY"],
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge[data-status="B.E.R"],
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge[data-status="REPAIRING"],
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge[data-status="FAULTY"],
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge[data-status="B.E.R"] {
+            background: #fee2e2 !important;
+            border-color: #fca5a5 !important;
+            color: #b91c1c !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-status-badge[data-status="UNKNOWN"],
+        html[data-theme="light"] body .content-surface #walkiesTable .inventory-status-badge[data-status="UNKNOWN"] {
+            background: #f3e8ff !important;
+            border-color: #d8b4fe !important;
+            color: #7e22ce !important;
+        }
+
+        html.dark body .content-surface #walkiesTable .inventory-status-badge,
+        html[data-theme="dark"] body .content-surface #walkiesTable .inventory-status-badge {
+            font-weight: 900 !important;
+            opacity: 1 !important;
+        }
+    </style>
+    @endpush
+
 
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -693,34 +879,8 @@
         </div>
 
         @php
-            $showInventoryBulk = auth('wt')->user()->wt_role === 'admin_it';
+        $showInventoryBulk = false;
         @endphp
-
-        @if($showInventoryBulk)
-        <form id="bulkActionForm" action="{{ route('wt.admin.walkies.bulkAction') }}" method="POST" class="inventory-bulk-bar" data-modern-confirm="Apply this bulk action to the selected units?" data-modern-confirm-title="Confirm Bulk Action" data-modern-confirm-remark="false">
-            @csrf
-            <div id="bulkSelectedInputs"></div>
-            <div class="inventory-bulk-count">
-                <span id="bulkSelectedCount">0</span>
-                <span>selected</span>
-            </div>
-            <div class="inventory-bulk-controls">
-                <select id="bulkActionSelect" name="bulk_action" class="inventory-bulk-select" required>
-                    <option value="">Bulk Action</option>
-                    <option value="set_status">Set Status</option>
-                    <option value="set_unused">Set Unused</option>
-                </select>
-                <select id="bulkStatusSelect" name="bulk_status" class="inventory-bulk-select" disabled>
-                    <option value="">Choose Status</option>
-                    @foreach($statusOptions as $s)
-                    <option value="{{ $s }}">{{ $s }}</option>
-                    @endforeach
-                </select>
-                <input id="bulkRemarkInput" name="bulk_remark" class="inventory-bulk-input" placeholder="Remark optional" disabled>
-                <button type="submit" id="bulkApplyBtn" class="inventory-bulk-btn" disabled>Apply</button>
-            </div>
-        </form>
-        @endif
 
         <div id="mainTableContainer" class="clean-admin-table-shell inventory-table-shell">
             <div id="inventoryTableScroll" class="clean-admin-table-scroll">
@@ -6639,6 +6799,82 @@
         }
     </style>
 
+    <script>
+        (function () {
+            function paintInventoryTableTheme() {
+                var isDark = document.documentElement.classList.contains('dark')
+                    || document.documentElement.getAttribute('data-theme') === 'dark';
+                var tableShell = document.getElementById('mainTableContainer');
+                var table = document.getElementById('walkiesTable');
+                var bulkBar = document.getElementById('bulkActionForm');
+
+                var colors = isDark ? {
+                    shellBg: '#0f172a',
+                    shellBorder: '#273449',
+                    headBg: '#111827',
+                    headText: '#d7e7fb',
+                    rowBg: '#0f172a',
+                    rowText: '#e2e8f0',
+                    rowBorder: '#273449',
+                    chipBg: '#1f2937',
+                    chipBorder: '#334155',
+                    chipText: '#e2e8f0'
+                } : {
+                    shellBg: '#ffffff',
+                    shellBorder: '#cbd5e1',
+                    headBg: '#eef3f8',
+                    headText: '#334155',
+                    rowBg: '#ffffff',
+                    rowText: '#1f2937',
+                    rowBorder: '#e2e8f0',
+                    chipBg: '#f1f5f9',
+                    chipBorder: '#cbd5e1',
+                    chipText: '#334155'
+                };
+
+                [tableShell, bulkBar].forEach(function (element) {
+                    if (!element) return;
+                    element.style.setProperty('background', colors.shellBg, 'important');
+                    element.style.setProperty('border-color', colors.shellBorder, 'important');
+                    element.style.setProperty('color', colors.rowText, 'important');
+                });
+
+                if (!table) return;
+                table.style.setProperty('background', colors.shellBg, 'important');
+                table.querySelectorAll('thead th').forEach(function (cell) {
+                    cell.style.setProperty('background', colors.headBg, 'important');
+                    cell.style.setProperty('border-color', colors.shellBorder, 'important');
+                    cell.style.setProperty('color', colors.headText, 'important');
+                });
+                table.querySelectorAll('tbody tr, tbody, thead').forEach(function (row) {
+                    row.style.setProperty('background', colors.rowBg, 'important');
+                    row.style.setProperty('color', colors.rowText, 'important');
+                });
+                table.querySelectorAll('tbody td').forEach(function (cell) {
+                    cell.style.setProperty('background', colors.rowBg, 'important');
+                    cell.style.setProperty('border-color', colors.rowBorder, 'important');
+                    cell.style.setProperty('color', colors.rowText, 'important');
+                });
+                table.querySelectorAll('.inventory-item-title, .inventory-remark-cell').forEach(function (text) {
+                    text.style.setProperty('color', colors.rowText, 'important');
+                });
+                table.querySelectorAll('.inventory-id-chip, .inventory-type-badge').forEach(function (chip) {
+                    chip.style.setProperty('background', colors.chipBg, 'important');
+                    chip.style.setProperty('border-color', colors.chipBorder, 'important');
+                    chip.style.setProperty('color', colors.chipText, 'important');
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', paintInventoryTableTheme);
+            window.addEventListener('load', paintInventoryTableTheme);
+            new MutationObserver(paintInventoryTableTheme).observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['class', 'data-theme']
+            });
+            window.paintInventoryTableTheme = paintInventoryTableTheme;
+        })();
+    </script>
+
     @endsection
 
     @push('final_styles')
@@ -6752,11 +6988,11 @@
         html[data-theme="light"] body .content-surface #bulkActionForm.inventory-bulk-bar {
             display: flex !important;
             align-items: center !important;
-            gap: 8px !important;
+            gap: 14px !important;
             width: 100% !important;
             max-width: 100% !important;
-            margin: 0 0 10px !important;
-            padding: 10px 12px !important;
+            margin: 0 0 12px !important;
+            padding: 12px 14px !important;
             background: #ffffff !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 10px !important;
@@ -6770,19 +7006,21 @@
             gap: 4px !important;
             height: 30px !important;
             min-height: 30px !important;
-            padding: 0 !important;
-            border: 0 !important;
-            background: transparent !important;
+            padding: 0 12px !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 7px !important;
+            background: #ffffff !important;
             color: #0f172a !important;
             font-size: 13px !important;
             font-weight: 500 !important;
             white-space: nowrap !important;
+            min-width: 92px !important;
         }
 
         html[data-theme="light"] body .content-surface .inventory-bulk-controls {
             display: flex !important;
             align-items: center !important;
-            gap: 6px !important;
+            gap: 10px !important;
             width: auto !important;
             max-width: 100% !important;
         }
@@ -6802,12 +7040,12 @@
         }
 
         html[data-theme="light"] body .content-surface .inventory-bulk-select {
-            width: 124px !important;
+            width: 132px !important;
             padding: 0 28px 0 10px !important;
         }
 
         html[data-theme="light"] body .content-surface .inventory-bulk-input {
-            width: 150px !important;
+            width: 170px !important;
             padding: 0 10px !important;
         }
 
@@ -6818,10 +7056,16 @@
         html[data-theme="light"] body .content-surface .inventory-bulk-btn {
             width: 68px !important;
             padding: 0 12px !important;
+            border-color: #cbd5e1 !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            cursor: pointer !important;
+        }
+
+        html[data-theme="light"] body .content-surface .inventory-bulk-btn:not(:disabled):hover {
             border-color: #0f172a !important;
             background: #0f172a !important;
             color: #ffffff !important;
-            cursor: pointer !important;
         }
 
         html[data-theme="light"] body .content-surface .inventory-bulk-btn:disabled,
@@ -6860,11 +7104,11 @@
         html[data-theme="dark"] body .content-surface #bulkActionForm.inventory-bulk-bar {
             display: flex !important;
             align-items: center !important;
-            gap: 8px !important;
+            gap: 14px !important;
             width: 100% !important;
             max-width: 100% !important;
-            margin: 0 0 10px !important;
-            padding: 10px 12px !important;
+            margin: 0 0 12px !important;
+            padding: 12px 14px !important;
             background: #0f172a !important;
             border: 1px solid #273449 !important;
             border-radius: 10px !important;
@@ -6878,19 +7122,21 @@
             gap: 4px !important;
             height: 30px !important;
             min-height: 30px !important;
-            padding: 0 !important;
-            border: 0 !important;
-            background: transparent !important;
+            padding: 0 12px !important;
+            border: 1px solid #334155 !important;
+            border-radius: 7px !important;
+            background: #111827 !important;
             color: #e2e8f0 !important;
             font-size: 13px !important;
             font-weight: 500 !important;
             white-space: nowrap !important;
+            min-width: 92px !important;
         }
 
         html[data-theme="dark"] body .content-surface .inventory-bulk-controls {
             display: flex !important;
             align-items: center !important;
-            gap: 6px !important;
+            gap: 10px !important;
             width: auto !important;
             max-width: 100% !important;
         }
@@ -6910,12 +7156,12 @@
         }
 
         html[data-theme="dark"] body .content-surface .inventory-bulk-select {
-            width: 124px !important;
+            width: 132px !important;
             padding: 0 28px 0 10px !important;
         }
 
         html[data-theme="dark"] body .content-surface .inventory-bulk-input {
-            width: 150px !important;
+            width: 170px !important;
             padding: 0 10px !important;
         }
 
@@ -6926,10 +7172,16 @@
         html[data-theme="dark"] body .content-surface .inventory-bulk-btn {
             width: 68px !important;
             padding: 0 12px !important;
+            border-color: #334155 !important;
+            background: #111827 !important;
+            color: #e2e8f0 !important;
+            cursor: pointer !important;
+        }
+
+        html[data-theme="dark"] body .content-surface .inventory-bulk-btn:not(:disabled):hover {
             border-color: #38bdf8 !important;
             background: #0ea5e9 !important;
             color: #ffffff !important;
-            cursor: pointer !important;
         }
 
         html[data-theme="dark"] body .content-surface .inventory-bulk-btn:disabled,
