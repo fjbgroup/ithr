@@ -132,7 +132,7 @@ button .badge-count{ margin-left:0; }
   color:var(--muted);cursor:pointer;font-size:16px;transition:all .15s;
 }
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
-.page-body{padding:24px 28px;flex:1}
+.page-body{padding:0 28px;flex:1}
 
 /* ── STAT CARDS ── */
 .stat-card{
