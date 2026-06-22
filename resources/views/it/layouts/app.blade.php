@@ -559,7 +559,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
       <i class="bi bi-clock-history"></i> Activity Log
     </a>
     <a href="{{ route('it.email-settings.index') }}" class="nav-link {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">
-      <i class="bi bi-envelope-gear-fill"></i> Email Settings
+      <i class="bi bi-envelope-fill"></i> Email Settings
     </a>
     @endif
     @endif
