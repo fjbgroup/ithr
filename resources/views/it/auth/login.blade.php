@@ -154,7 +154,7 @@ input::placeholder{color:#94a3b8;}
     <div class="left-logo">
       <img src="{{ asset('assets/images/fjb-logo.png') }}" alt="FJB Logo">
     </div>
-    <div class="left-title">Welcome to the<br>Asset Management System</div>
+    <div class="left-title">Welcome to the<br>Inventory Management System</div>
     <div class="left-sub">Manage IT assets, service requests and more — all from one secure workspace.</div>
     <ul class="left-features">
       <li>
