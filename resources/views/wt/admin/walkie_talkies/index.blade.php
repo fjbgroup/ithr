@@ -6643,6 +6643,66 @@
 
     @push('final_styles')
     <style id="inventory-table-theme-authority">
+        html:not(.dark) body .content-surface .inventory-page-shell {
+            background: #eef3f8 !important;
+        }
+
+        html:not(.dark) body .content-surface #bulkActionForm.inventory-bulk-bar,
+        html[data-theme="light"] body .content-surface #bulkActionForm.inventory-bulk-bar,
+        html:not(.dark) body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="light"] body .content-surface #mainTableContainer.inventory-table-shell {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            box-shadow: none !important;
+        }
+
+        html:not(.dark) body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="light"] body .content-surface #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable,
+        html:not(.dark) body .content-surface #walkiesTable thead,
+        html:not(.dark) body .content-surface #walkiesTable tbody,
+        html:not(.dark) body .content-surface #walkiesTable tr {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable th,
+        html:not(.dark) body .content-surface #walkiesTable thead th,
+        html:not(.dark) body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #eef3f8 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable td,
+        html:not(.dark) body .content-surface #walkiesTable tbody td,
+        html:not(.dark) body .content-surface #walkiesTable td.inventory-action-col {
+            background: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable tbody tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-item-title,
+        html:not(.dark) body .content-surface #walkiesTable .inventory-remark-cell {
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable .inventory-id-chip,
+        html:not(.dark) body .content-surface #walkiesTable .inventory-type-badge {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
         html[data-theme="light"] body .content-surface #mainTableContainer.inventory-table-shell,
         html[data-theme="light"] body .content-surface .inventory-page-shell .clean-admin-table-scroll {
             background: #ffffff !important;
@@ -6877,6 +6937,43 @@
         html[data-theme="dark"] body .content-surface .inventory-bulk-input:disabled {
             opacity: .55 !important;
             cursor: not-allowed !important;
+        }
+
+        html.dark body .content-surface .inventory-page-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell {
+            background: #0f172a !important;
+        }
+
+        html.dark body .content-surface #bulkActionForm.inventory-bulk-bar,
+        html[data-theme="dark"] body .content-surface #bulkActionForm.inventory-bulk-bar,
+        html.dark body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface #mainTableContainer.inventory-table-shell {
+            background: #0f172a !important;
+            border: 1px solid #273449 !important;
+            color: #e2e8f0 !important;
+            box-shadow: none !important;
+        }
+
+        html.dark body .content-surface #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        html.dark body .content-surface #walkiesTable th,
+        html.dark body .content-surface #walkiesTable thead th,
+        html.dark body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #111827 !important;
+            border-color: #334155 !important;
+            color: #d7e7fb !important;
+        }
+
+        html.dark body .content-surface #walkiesTable td,
+        html.dark body .content-surface #walkiesTable tbody td,
+        html.dark body .content-surface #walkiesTable td.inventory-action-col {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+            color: #e2e8f0 !important;
         }
 
         @media (max-width: 760px) {
