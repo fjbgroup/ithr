@@ -402,6 +402,122 @@
             max-width: 96px !important;
         }
     </style>
+    <style id="inventory-theme-final-overrides">
+        html:not(.dark) body {
+            background: #eef3f8 !important;
+            color: #172033 !important;
+        }
+
+        html:not(.dark) body .content-surface:has(.inventory-page-shell) {
+            background: #eef3f8 !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-page-shell {
+            background: transparent !important;
+            border-color: transparent !important;
+            color: #172033 !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-page-header .page-title-standard {
+            color: #0f172a !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-page-header .page-subtitle-standard,
+        html:not(.dark) body .content-surface .clean-admin-label,
+        html:not(.dark) body .content-surface .inventory-bulk-count {
+            color: #526781 !important;
+        }
+
+        html:not(.dark) body .content-surface .clean-admin-filter,
+        html:not(.dark) body .content-surface #mainTableContainer.inventory-table-shell {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        html:not(.dark) body .content-surface .clean-admin-input,
+        html:not(.dark) body .content-surface .clean-admin-select,
+        html:not(.dark) body .content-surface .clean-admin-reset,
+        html:not(.dark) body .content-surface .inventory-bulk-select,
+        html:not(.dark) body .content-surface .inventory-bulk-input,
+        html:not(.dark) body .content-surface .inventory-bulk-btn {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        html:not(.dark) body .content-surface .clean-admin-input::placeholder,
+        html:not(.dark) body .content-surface .inventory-bulk-input::placeholder {
+            color: #94a3b8 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable thead th,
+        html:not(.dark) body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #eef3f8 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable tbody td,
+        html:not(.dark) body .content-surface #walkiesTable td.inventory-action-col {
+            background: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable tbody tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-item-title {
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-id-chip,
+        html:not(.dark) body .content-surface .inventory-type-badge {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        html.dark body {
+            background: #0f172a !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark body .content-surface:has(.inventory-page-shell) {
+            background: #0f172a !important;
+        }
+
+        html.dark body .content-surface .inventory-page-shell {
+            background: transparent !important;
+            border-color: transparent !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark body .content-surface .clean-admin-filter,
+        html.dark body .content-surface #mainTableContainer.inventory-table-shell {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+        }
+
+        html.dark body .content-surface #walkiesTable thead th,
+        html.dark body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #111827 !important;
+            border-color: #334155 !important;
+            color: #d7e7fb !important;
+        }
+
+        html.dark body .content-surface #walkiesTable tbody td,
+        html.dark body .content-surface #walkiesTable td.inventory-action-col {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark body .content-surface #walkiesTable tbody tr:hover td {
+            background: #172033 !important;
+        }
+    </style>
     @endpush
 
 
@@ -6315,10 +6431,126 @@
         });
     </script>
 
+    <style id="inventory-theme-last-word">
+        html:not(.dark) body .content-surface:has(.inventory-page-shell) {
+            background: #eef3f8 !important;
+            color: #172033 !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-page-shell {
+            background: transparent !important;
+            border: 0 !important;
+            color: #172033 !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-page-header .page-title-standard {
+            color: #0f172a !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-page-header .page-subtitle-standard,
+        html:not(.dark) body .content-surface .clean-admin-label,
+        html:not(.dark) body .content-surface #bulkSelectedCount,
+        html:not(.dark) body .content-surface .inventory-bulk-count {
+            color: #334155 !important;
+        }
+
+        html:not(.dark) body .content-surface .clean-admin-filter {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        html:not(.dark) body .content-surface .clean-admin-input,
+        html:not(.dark) body .content-surface .clean-admin-select,
+        html:not(.dark) body .content-surface .clean-admin-reset,
+        html:not(.dark) body .content-surface .inventory-bulk-select,
+        html:not(.dark) body .content-surface .inventory-bulk-input,
+        html:not(.dark) body .content-surface .inventory-bulk-btn {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        html:not(.dark) body .content-surface #mainTableContainer.inventory-table-shell,
+        html:not(.dark) body .content-surface .clean-admin-table-shell {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable,
+        html:not(.dark) body .content-surface #walkiesTable tr,
+        html:not(.dark) body .content-surface #walkiesTable tbody {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable thead th,
+        html:not(.dark) body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #eef3f8 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable tbody td,
+        html:not(.dark) body .content-surface #walkiesTable td.inventory-action-col {
+            background: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface #walkiesTable tbody tr:hover td {
+            background: #f8fafc !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-item-title,
+        html:not(.dark) body .content-surface .inventory-remark-cell {
+            color: #1f2937 !important;
+        }
+
+        html:not(.dark) body .content-surface .inventory-id-chip,
+        html:not(.dark) body .content-surface .inventory-type-badge {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        html.dark body .content-surface:has(.inventory-page-shell) {
+            background: #0f172a !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark body .content-surface .inventory-page-shell {
+            background: transparent !important;
+            border: 0 !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark body .content-surface .clean-admin-filter,
+        html.dark body .content-surface #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .clean-admin-table-shell {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+        }
+
+        html.dark body .content-surface #walkiesTable thead th,
+        html.dark body .content-surface #walkiesTable thead th.inventory-action-col {
+            background: #111827 !important;
+            border-color: #334155 !important;
+            color: #d7e7fb !important;
+        }
+
+        html.dark body .content-surface #walkiesTable tbody td,
+        html.dark body .content-surface #walkiesTable td.inventory-action-col {
+            background: #0f172a !important;
+            border-color: #273449 !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark body .content-surface #walkiesTable tbody tr:hover td {
+            background: #172033 !important;
+        }
+    </style>
 
     @endsection
-
-
 
 
 

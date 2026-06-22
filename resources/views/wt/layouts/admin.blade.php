@@ -522,8 +522,8 @@ function applyTheme(dark) {
   const darkIcon = document.getElementById('theme-toggle-dark-icon');
   const lightIcon = document.getElementById('theme-toggle-light-icon');
   if (darkIcon && lightIcon) {
-    darkIcon.style.display = dark ? 'none' : 'inline-block';
-    lightIcon.style.display = dark ? 'inline-block' : 'none';
+    darkIcon.classList.toggle('hidden', dark);
+    lightIcon.classList.toggle('hidden', !dark);
   }
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
   document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
@@ -950,6 +950,7 @@ document.addEventListener('DOMContentLoaded', function() {
 @include('wt.partials.phone-format-script')
 @include('wt.partials.popup-redirect')
 
+@stack('final_styles')
 @stack('scripts')
 </body>
 </html>
