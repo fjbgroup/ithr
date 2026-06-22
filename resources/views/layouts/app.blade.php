@@ -27,7 +27,7 @@
         </a>
 
         <div class="nav-group" id="navGroupRegistry">
-            <div class="nav-group-toggle {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir']) ? 'open has-active' : '' }}"
+            <div class="nav-group-toggle {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir', 'archived-staff']) ? 'open has-active' : '' }}"
                  onclick="toggleNavGroup('navGroupRegistry')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
@@ -37,7 +37,7 @@
                     <polyline points="9 18 15 12 9 6"/>
                 </svg>
             </div>
-            <div class="nav-group-children {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir']) ? 'open' : '' }}">
+            <div class="nav-group-children {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir', 'archived-staff']) ? 'open' : '' }}">
                 <div class="nav-group-children-inner">
                     <a href="{{ url('/staff') }}" class="nav-child {{ request()->is('staff*') ? 'active' : '' }}">{{ Auth::user()->isStaff() ? 'My Profile' : 'Staff List' }}</a>
                     <a href="{{ url('/family') }}" class="nav-child {{ request()->is('family*') ? 'active' : '' }}">{{ Auth::user()->isStaff() ? 'My Family' : 'Family Info' }}</a>
@@ -46,6 +46,7 @@
                     @endif
                     @if(Auth::user()->isAdmin() || Auth::user()->isCeo())
                     <a href="{{ url('/ir') }}" class="nav-child {{ request()->is('ir*') ? 'active' : '' }}">IR Records</a>
+                    <a href="{{ route('archived-staff.index') }}" class="nav-child {{ request()->is('archived-staff*') ? 'active' : '' }}">Archived Staff</a>
                     @endif
                 </div>
             </div>
@@ -245,6 +246,15 @@
             </div>
         </div>
         @endif
+
+        @auth
+        @if(Auth::user()->isStaff() && Auth::user()->staff && !Auth::user()->staff->is_active)
+        <div style="display:flex;align-items:center;gap:.75rem;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:.85rem 1.25rem;margin-bottom:1.25rem;color:#991b1b;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div><strong>Your account is currently inactive.</strong> You can view your records but cannot make room bookings or mark training attendance. Please contact HR for assistance.</div>
+        </div>
+        @endif
+        @endauth
 
         @yield('content')
 
@@ -453,5 +463,55 @@ function liveSearch(form, resultId, delay) {
     });
 })();
 </script>
+
+@auth
+@if(Auth::user()->isStaff() && Auth::user()->staff && !Auth::user()->staff->is_active)
+<style>
+.ib-wrap { display:inline-block; cursor:not-allowed; }
+.ib-wrap > * { pointer-events:none; opacity:.4; filter:blur(.6px); transition:none; }
+#_ibTip {
+    position:fixed; z-index:99999; pointer-events:none; display:none;
+    background:#1e293b; color:#fff; font-size:.74rem; line-height:1.5;
+    padding:.5rem .85rem; border-radius:8px;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    max-width:230px;
+}
+#_ibTip strong { display:block; margin-bottom:.15rem; font-size:.78rem; }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tip = document.createElement('div');
+    tip.id = '_ibTip';
+    tip.innerHTML = '<strong>Access Blocked</strong>Your account is currently inactive. Please contact HR for assistance.';
+    document.body.appendChild(tip);
+
+    function applyBlock(btn) {
+        if (btn.closest('.ib-wrap')) return;
+        const wrap = document.createElement('span');
+        wrap.className = 'ib-wrap';
+        btn.parentNode.insertBefore(wrap, btn);
+        wrap.appendChild(btn);
+        wrap.addEventListener('mouseenter', () => tip.style.display = 'block');
+        wrap.addEventListener('mousemove', e => {
+            tip.style.left = (e.clientX + 14) + 'px';
+            tip.style.top  = (e.clientY - 50) + 'px';
+        });
+        wrap.addEventListener('mouseleave', () => tip.style.display = 'none');
+    }
+
+    document.querySelectorAll('[data-requires-active]').forEach(applyBlock);
+
+    // Catch dynamically added buttons
+    new MutationObserver(mutations => {
+        mutations.forEach(m => m.addedNodes.forEach(n => {
+            if (n.nodeType !== 1) return;
+            if (n.matches?.('[data-requires-active]')) applyBlock(n);
+            n.querySelectorAll?.('[data-requires-active]').forEach(applyBlock);
+        }));
+    }).observe(document.body, { childList: true, subtree: true });
+});
+</script>
+@endif
+@endauth
 </body>
 </html>

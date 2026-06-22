@@ -67,6 +67,15 @@ class AttendanceController extends Controller
             $user  = auth()->user();
             $staff = Staff::where('staff_no', $user->staff_no)->first();
 
+            if ($staff && !$staff->is_active) {
+                return view('attendance.verify', [
+                    'expired'    => false,
+                    'course'     => $course,
+                    'token'      => $token,
+                    'inactive'   => true,
+                ]);
+            }
+
             if ($staff) {
                 $attendance = TrainingAttendance::updateOrCreate(
                     ['staff_id' => $staff->id, 'course_id' => $id],
@@ -115,6 +124,12 @@ class AttendanceController extends Controller
         if (!$staff) {
             return back()
                 ->withErrors(['staff_no' => 'No staff record found for this Staff ID. Please contact HR.'])
+                ->withInput(['staff_no' => $request->staff_no]);
+        }
+
+        if (!$staff->is_active) {
+            return back()
+                ->withErrors(['staff_no' => 'Your account is currently inactive. You cannot mark training attendance. Please contact HR.'])
                 ->withInput(['staff_no' => $request->staff_no]);
         }
 

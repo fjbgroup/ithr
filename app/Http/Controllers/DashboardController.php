@@ -113,7 +113,7 @@ class DashboardController extends Controller
                 ->where('booking_date', date('Y-m-d'))
                 ->orderBy('start_time')->get();
 
-            return view('dashboard.index', compact('myStats', 'recentTraining', 'todayBookings'));
+            return view('dashboard.index', compact('myStats', 'recentTraining', 'todayBookings', 'myStaff'));
         }
     }
 }

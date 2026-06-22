@@ -93,7 +93,6 @@ class UserController extends Controller
             'staff_no' => 'nullable|string|max:50',
             'department_id' => 'nullable|exists:departments,id',
             'position' => 'nullable|string|max:255',
-            'is_active' => 'nullable|boolean',
         ]);
 
         $staff = null;
@@ -112,7 +111,6 @@ class UserController extends Controller
 
         if (!$isSelf) {
             $userData['role'] = $validated['role'];
-            $userData['is_active'] = $request->has('is_active');
         }
 
         if (!empty($validated['password'])) {
@@ -147,6 +145,25 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function toggleStaffStatus(Request $request, User $user)
+    {
+        if (!$user->staff_id || !$user->staff) {
+            return redirect()->route('users.index')->with('error', 'No staff record linked to this user.');
+        }
+
+        $staff = $user->staff;
+        $staff->is_active = $request->boolean('is_active');
+        $staff->save();
+
+        $status = $staff->is_active ? 'activated' : 'deactivated';
+        AuditLogger::log('toggle', 'staff',
+            'Staff HR status for ' . $user->name . ' was ' . $status . '.',
+            ['user_id' => $user->id, 'staff_id' => $staff->id, 'is_active' => $staff->is_active]
+        );
+
+        return redirect()->route('users.index')->with('success', 'Staff HR status updated.');
     }
 
     public function toggleActive(Request $request, User $user)

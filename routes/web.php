@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::get('archived-staff', [StaffController::class, 'archivedStaff'])->name('archived-staff.index')->middleware('role:admin_it,admin_hr,ceo');
     Route::get('staff/generate-id', [StaffController::class, 'generateStaffId'])->name('staff.generateId');
     Route::post('staff/bulk', [StaffController::class, 'bulkStore'])->name('staff.bulkStore');
     Route::post('staff/bulk-delete', [StaffController::class, 'bulkDestroy'])->name('staff.bulkDestroy');
@@ -119,6 +120,7 @@ Route::middleware('auth')->group(function () {
     Route::get('master-data/staff-list/{deptId}', [MasterDataController::class, 'staffList'])->name('master-data.staff-list');
     Route::get('users/search-staff', [UserController::class, 'searchStaff'])->name('users.search_staff');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
+    Route::patch('users/{user}/toggle-staff-status', [UserController::class, 'toggleStaffStatus'])->name('users.toggle_staff_status');
     Route::resource('users', UserController::class);
     Route::resource('ir', IRController::class)->middleware('role:admin_it,admin_hr,ceo');
 

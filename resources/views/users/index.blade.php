@@ -88,6 +88,9 @@
                         @else
                         <span class="status-badge status-scheduled">Inactive</span>
                         @endif
+                        @if($u->isStaff() && $u->staff && !$u->staff->is_active)
+                        <br><span class="status-badge" style="font-size:.68rem;margin-top:.25rem;background:#fee2e2;color:#991b1b;">HR Inactive</span>
+                        @endif
                     </td>
                     <td class="td-actions">
                         @if ($u->isStaff() && $u->staff_id)
@@ -95,15 +98,6 @@
                         @endif
                         @canwrite
                         <button class="btn btn-sm btn-outline" onclick="editUser({{ json_encode($u) }})">Edit</button>
-
-                        @if ($u->id != auth()->id())
-                            @if ($u->is_active)
-                            <button class="btn btn-sm" style="background:#fef3c7;color:#92400e;" onclick="confirmToggleUser({{ $u->id }}, 0, '{{ addslashes($u->name) }}')">Disable</button>
-                            @else
-                            <button class="btn btn-sm" style="background:#dcfce7;color:#166534;" onclick="confirmToggleUser({{ $u->id }}, 1, '{{ addslashes($u->name) }}')">Enable</button>
-                            @endif
-                            <button class="btn btn-sm btn-danger" onclick="confirmDeleteUser({{ $u->id }})">Delete</button>
-                        @endif
                         @endcanwrite
                     </td>
                 </tr>
@@ -156,22 +150,18 @@
                     <label>Password <span id="pwLabel">(required for new user)</span></label>
                     <input type="password" name="password" id="f_upw" placeholder="Leave blank to keep unchanged">
                 </div>
-                <div class="form-group form-full" id="activeRow" style="display:none;">
-                    <label>Account Access</label>
-                    <label style="display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;margin-top:.25rem;">
-                        <label class="toggle-switch" style="flex-shrink:0;">
-                            <input type="checkbox" name="is_active" id="f_uactive" value="1">
-                            <span class="toggle-slider"></span>
-                        </label>
-                        <span id="activeLabel" style="font-size:.875rem;color:var(--muted);">Active — user can log in</span>
-                    </label>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
                 <button type="submit" class="btn btn-primary">Save User</button>
             </div>
         </form>
+        <div id="editDangerZone" style="display:none;border-top:1px solid var(--border);padding:.9rem 1.5rem;gap:.5rem;align-items:center;flex-wrap:wrap;">
+            <button type="button" id="editDisableBtn" class="btn btn-sm" style="background:#fef3c7;color:#92400e;">Disable</button>
+            <button type="button" id="editStaffBtn" class="btn btn-sm" style="display:none;background:#fce7f3;color:#9d174d;">Set Inactive</button>
+            <div style="flex:1;"></div>
+            <button type="button" id="editDeleteBtn" class="btn btn-sm btn-danger">Delete</button>
+        </div>
     </div>
 </div>
 
@@ -188,6 +178,25 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
                 <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="toggleStaffModal">
+    <div class="modal-box modal-sm">
+        <div class="modal-header">
+            <h3 id="toggleStaffModalTitle">Set Staff Inactive</h3>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <p id="toggleStaffModalBody" style="padding:1rem 0;"></p>
+        <form id="toggleStaffForm" method="POST" action="">
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="is_active" id="toggleStaffActiveValue" value="">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                <button type="submit" id="toggleStaffConfirmBtn" class="btn btn-primary">Confirm</button>
             </div>
         </form>
     </div>
@@ -283,7 +292,7 @@ function prefillFromStaff(s) {
     document.getElementById('f_upos').value = s.position || '';
     document.getElementById('f_upw').required = true;
     document.getElementById('pwLabel').textContent = '(required for new user)';
-    document.getElementById('activeRow').style.display = 'none';
+    document.getElementById('editDangerZone').style.display = 'none';
     openModal('addUserModal');
 }
 
@@ -300,20 +309,40 @@ function editUser(u) {
     document.getElementById('f_upos').value = u.position || '';
     document.getElementById('f_upw').required = false;
     document.getElementById('pwLabel').textContent = '(leave blank to keep current)';
-    
+
     const isSelf = u.id == {{ auth()->id() }};
-    const activeRow = document.getElementById('activeRow');
+    const dz = document.getElementById('editDangerZone');
+
     if (!isSelf) {
-        activeRow.style.display = '';
-        const cb = document.getElementById('f_uactive');
-        cb.checked = !!u.is_active;
-        document.getElementById('activeLabel').textContent = cb.checked ? 'Active — user can log in' : 'Inactive — login blocked';        
-        cb.onchange = function() {
-            document.getElementById('activeLabel').textContent = this.checked ? 'Active — user can log in' : 'Inactive — login blocked';  
-        };
+        dz.style.display = 'flex';
+
+        // Disable / Enable button
+        const disableBtn = document.getElementById('editDisableBtn');
+        disableBtn.textContent = u.is_active ? 'Disable' : 'Enable';
+        disableBtn.style.background = u.is_active ? '#fef3c7' : '#dcfce7';
+        disableBtn.style.color     = u.is_active ? '#92400e' : '#166534';
+        disableBtn.onclick = function() { closeModal(); confirmToggleUser(u.id, u.is_active ? 0 : 1, u.name); };
+
+        // Set Inactive / Set Active button (staff only)
+        const staffBtn = document.getElementById('editStaffBtn');
+        const hasStaff = u.role === 'staff' && u.staff;
+        if (hasStaff) {
+            const staffActive = !!u.staff.is_active;
+            staffBtn.style.display   = '';
+            staffBtn.textContent     = staffActive ? 'Set Inactive' : 'Set Active';
+            staffBtn.style.background = staffActive ? '#fce7f3' : '#d1fae5';
+            staffBtn.style.color     = staffActive ? '#9d174d'  : '#065f46';
+            staffBtn.onclick = function() { closeModal(); confirmToggleStaff(u.id, staffActive ? 0 : 1, u.name); };
+        } else {
+            staffBtn.style.display = 'none';
+        }
+
+        // Delete button
+        document.getElementById('editDeleteBtn').onclick = function() { closeModal(); confirmDeleteUser(u.id); };
     } else {
-        activeRow.style.display = 'none';
+        dz.style.display = 'none';
     }
+
     openModal('addUserModal');
 }
 
@@ -338,6 +367,23 @@ function filterUsers() {
     });
     const countEl = document.getElementById('userFilterCount');
     countEl.textContent = (q || role || status) ? `${visible} of ${rows.length} shown` : '';
+}
+
+function confirmToggleStaff(id, newActive, name) {
+    document.getElementById('toggleStaffForm').action = '{{ url('users') }}/' + id + '/toggle-staff-status';
+    document.getElementById('toggleStaffActiveValue').value = newActive;
+    if (newActive) {
+        document.getElementById('toggleStaffModalTitle').textContent = 'Set Staff Active';
+        document.getElementById('toggleStaffModalBody').textContent = 'Mark ' + name + ' as HR Active? They will be able to make room bookings and attend training.';
+        document.getElementById('toggleStaffConfirmBtn').className = 'btn btn-primary';
+        document.getElementById('toggleStaffConfirmBtn').textContent = 'Set Active';
+    } else {
+        document.getElementById('toggleStaffModalTitle').textContent = 'Set Staff Inactive';
+        document.getElementById('toggleStaffModalBody').textContent = 'Mark ' + name + ' as HR Inactive? They can still log in but cannot make room bookings or attend training.';
+        document.getElementById('toggleStaffConfirmBtn').className = 'btn btn-danger';
+        document.getElementById('toggleStaffConfirmBtn').textContent = 'Set Inactive';
+    }
+    openModal('toggleStaffModal');
 }
 
 function confirmToggleUser(id, newActive, name) {
@@ -369,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('userId').value = editId;
         document.getElementById('f_upw').required = false;
         document.getElementById('pwLabel').textContent = '(leave blank to keep current)';
-        document.getElementById('activeRow').style.display = (editId == {{ auth()->id() }}) ? 'none' : '';
+        document.getElementById('editDangerZone').style.display = (editId == {{ auth()->id() }}) ? 'none' : 'flex';
     } else {
         document.getElementById('userModalTitle').textContent = 'Add User';
         document.getElementById('userForm').action = '{{ route('users.store') }}';
@@ -377,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('userId').value = '';
         document.getElementById('f_upw').required = true;
         document.getElementById('pwLabel').textContent = '(required for new user)';
-        document.getElementById('activeRow').style.display = 'none';
+        document.getElementById('editDangerZone').style.display = 'none';
     }
     document.getElementById('f_uname').value = @json(old('name'));
     document.getElementById('f_uemail').value = @json(old('email'));
@@ -385,7 +431,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('f_ustaffno').value = @json(old('staff_no'));
     document.getElementById('f_udept').value = @json(old('department_id'));
     document.getElementById('f_upos').value = @json(old('position'));
-    if (old('is_active')) document.getElementById('f_uactive').checked = true;
     openModal('addUserModal');
 });
 @endif
