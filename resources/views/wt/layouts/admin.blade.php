@@ -5,6 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title', 'Dashboard') — WT System</title>
+<script>
+  document.documentElement.classList.add('wt-render-lock');
+
+  (function () {
+    try {
+      var savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme');
+      var theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var vars = theme === 'dark' ? {
+        '--body-bg': '#0f172a',
+        '--surface': '#1e293b',
+        '--border': '#334155',
+        '--text': '#e2e8f0',
+        '--muted': '#94a3b8',
+        '--table-hover': 'rgba(255,255,255,.04)',
+        '--form-input-bg': '#0f172a',
+        '--form-input-border': '#334155',
+        '--form-input-color': '#e2e8f0',
+        '--table-head-bg': '#111827',
+        '--table-head-color': '#94a3b8'
+      } : {
+        '--body-bg': '#f0f4f8',
+        '--surface': '#ffffff',
+        '--border': '#e2e8f0',
+        '--text': '#1e293b',
+        '--muted': '#64748b',
+        '--table-hover': '#f0f9ff',
+        '--form-input-bg': '#ffffff',
+        '--form-input-border': '#e2e8f0',
+        '--form-input-color': '#1e293b',
+        '--table-head-bg': '#f8fafc',
+        '--table-head-color': '#475569'
+      };
+
+      Object.keys(vars).forEach(function (key) {
+        document.documentElement.style.setProperty(key, vars[key]);
+      });
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    } catch (error) {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.style.colorScheme = 'light';
+    }
+  })();
+</script>
+<style>
+  html.wt-render-lock body {
+    opacity: 0 !important;
+  }
+
+  html.wt-render-ready body {
+    opacity: 1 !important;
+  }
+
+  body {
+    transition: none !important;
+  }
+</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -19,8 +77,9 @@
 /* wtsystem.css is the single source of truth */
 </style>
 @stack('styles')
+@stack('final_styles')
 </head>
-<body id="main-body" class="transition-opacity duration-500">
+<body id="main-body">
 
 @php
     $actualRole = Auth::guard('wt')->user()->wt_role;
@@ -474,6 +533,26 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
+// ── RENDER LOCK ──
+(function() {
+  var unlocked = false;
+  function unlockRender() {
+    if (unlocked) return;
+    unlocked = true;
+    requestAnimationFrame(function() {
+      document.documentElement.classList.remove('wt-render-lock');
+      document.documentElement.classList.add('wt-render-ready');
+    });
+  }
+
+  if (document.readyState === 'complete') {
+    unlockRender();
+  } else {
+    window.addEventListener('load', unlockRender, { once: true });
+    setTimeout(unlockRender, 1400);
+  }
+})();
+
 // ── LIVE CLOCK ──
 (function() {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -956,7 +1035,6 @@ document.addEventListener('DOMContentLoaded', function() {
 @include('wt.partials.phone-format-script')
 @include('wt.partials.popup-redirect')
 
-@stack('final_styles')
 @stack('scripts')
 </body>
 </html>

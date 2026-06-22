@@ -1314,6 +1314,101 @@ function closeEditOutside(e) { if (e.target === document.getElementById('editMod
 
 </style>
 
+<style id="under-repair-table-bright-final">
+.maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+.maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+.maintenance-page-shell #maintTable.clean-admin-table,
+.maintenance-page-shell #maintTable.clean-admin-table tbody,
+.maintenance-page-shell #maintTable.clean-admin-table tbody tr {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+.maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+    border-color: #cbd5e1 !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table {
+    border-collapse: collapse !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table thead th {
+    background: #eef3f8 !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table tbody td,
+.maintenance-page-shell #maintTable.clean-admin-table .maintenance-action-col {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #1f2937 !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table tbody tr:hover td {
+    background: #f8fafc !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table th,
+.maintenance-page-shell #maintTable.clean-admin-table td {
+    border-width: 1px !important;
+    border-style: solid !important;
+}
+
+.maintenance-page-shell .repair-table-footer {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+}
+
+.maintenance-page-shell .repair-table-info {
+    color: #0f172a !important;
+}
+
+html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html.dark .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html.dark .maintenance-page-shell #maintTable.clean-admin-table,
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody,
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody tr {
+    background: #111827 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+    border-color: #263244 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table {
+    border-color: #263244 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table thead th {
+    background: #1f2937 !important;
+    border-color: #2f3b4f !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody td,
+html.dark .maintenance-page-shell #maintTable.clean-admin-table .maintenance-action-col {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody tr:hover td {
+    background: #172033 !important;
+}
+
+html.dark .maintenance-page-shell .repair-table-footer {
+    background: #111827 !important;
+    border-color: #263244 !important;
+}
+
+html.dark .maintenance-page-shell .repair-table-info {
+    color: #dbeafe !important;
+}
+</style>
+
 <script>
 // ESC key to close
 document.addEventListener('keydown', function(e) {
@@ -1325,4 +1420,3 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 @endsection
-

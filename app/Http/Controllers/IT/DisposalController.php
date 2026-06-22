@@ -184,6 +184,72 @@ class DisposalController extends Controller
         return back()->with('success', 'Disposal item updated successfully.');
     }
 
+    public function importTemplate()
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdminOrFinance()) abort(403);
+
+        $csv  = "Asset Number,Asset Class,Description,Serial Number,Status,Disposal Method,Vendor/Collector,Certificate Number,Date Flagged,Date Disposed,Notes\n";
+        $csv .= "OEPC1401,COMPUTER,HP EliteBook 840 G3,SGH629QBBY,Approved,Recycle,ABC Vendor,CERT-001,2024-01-15,2024-02-01,Sample row\n";
+
+        return response($csv, 200, [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="disposal_template.csv"',
+        ]);
+    }
+
+    public function importExcel(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdminOrFinance()) abort(403);
+
+        $rows     = $request->json()->all() ?? [];
+        $inserted = 0;
+        $skipped  = 0;
+        $errors   = [];
+
+        foreach ($rows as $i => $row) {
+            $rn                 = $i + 2;
+            $asset_number       = trim($row['asset_number']       ?? '');
+            $asset_class        = strtoupper(trim($row['asset_class'] ?? ''));
+            $description        = trim($row['description']        ?? '');
+            $serial_number      = trim($row['serial_number']      ?? '');
+            $disposal_status    = trim($row['disposal_status']    ?? 'Approved');
+            $disposal_method    = trim($row['disposal_method']    ?? '');
+            $vendor_collector   = trim($row['vendor_collector']   ?? '');
+            $certificate_number = trim($row['certificate_number'] ?? '');
+            $date_flagged       = trim($row['date_flagged']       ?? '') ?: null;
+            $date_disposed      = trim($row['date_disposed']      ?? '') ?: null;
+            $notes              = trim($row['notes']              ?? '');
+
+            if (empty($description) && empty($asset_class)) {
+                $skipped++; continue;
+            }
+
+            \App\Models\IT\DisposalItem::create([
+                'asset_number'       => $asset_number       ?: null,
+                'asset_class'        => $asset_class,
+                'description'        => $description,
+                'serial_number'      => $serial_number      ?: null,
+                'disposal_status'    => in_array($disposal_status, ['Approved', 'Disposed']) ? $disposal_status : 'Approved',
+                'disposal_method'    => $disposal_method    ?: null,
+                'vendor_collector'   => $vendor_collector   ?: null,
+                'certificate_number' => $certificate_number ?: null,
+                'date_flagged'       => $date_flagged,
+                'date_disposed'      => $date_disposed,
+                'notes'              => $notes              ?: null,
+                'created_by'         => $user->id,
+            ]);
+            $inserted++;
+        }
+
+        if ($inserted > 0) {
+            ActivityLogService::log('CREATE', 'disposal', 0, "Excel import: $inserted disposal items added");
+        }
+
+        return response()->json(['inserted' => $inserted, 'skipped' => $skipped, 'errors' => $errors]);
+    }
+
     public function collectionInvoice(Request $request)
     {
         $user = Auth::guard('it')->user();

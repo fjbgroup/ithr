@@ -36,19 +36,19 @@
         }
 
         .login-shell {
-            width: min(1060px, 100%);
-            min-height: 602px;
+            width: 100%;
+            max-width: 940px;
             display: grid;
-            grid-template-columns: 1.1fr 1fr;
+            grid-template-columns: 1.05fr .95fr;
             background: var(--white);
             border-radius: 22px;
             overflow: hidden;
-            box-shadow: 0 28px 70px rgba(20, 34, 52, .22);
+            box-shadow: 0 30px 70px -20px rgba(8,20,40,.55), 0 2px 8px rgba(8,20,40,.2);
         }
 
         .brand-panel {
             position: relative;
-            padding: 58px 50px;
+            padding: 3rem 2.75rem;
             background:
                 radial-gradient(circle at 82% 20%, rgba(255, 255, 255, .12), transparent 34%),
                 linear-gradient(135deg, #ee1c25 0%, #c91821 58%, #8f1118 100%);
@@ -59,34 +59,34 @@
         }
 
         .brand-logo {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             object-fit: contain;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
         .brand-title {
             max-width: 390px;
             margin: 0;
-            font-size: 34px;
-            line-height: 1.22;
-            font-weight: 900;
+            font-size: 1.9rem;
+            line-height: 1.2;
+            font-weight: 800;
             letter-spacing: 0;
         }
 
         .brand-copy {
             max-width: 430px;
-            margin: 18px 0 0;
-            color: rgba(255,255,255,.72);
-            font-size: 15px;
+            margin: 12px 0 0;
+            color: rgba(255,255,255,.70);
+            font-size: 13px;
             line-height: 1.6;
             font-weight: 600;
         }
 
         .feature-list {
             display: grid;
-            gap: 16px;
-            margin-top: 58px;
+            gap: 14px;
+            margin-top: 44px;
         }
 
         .feature-item {
@@ -94,13 +94,13 @@
             align-items: center;
             gap: 14px;
             color: rgba(255,255,255,.82);
-            font-size: 14px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .feature-icon {
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             border-radius: 9px;
             display: inline-flex;
             align-items: center;
@@ -111,20 +111,20 @@
         }
 
         .form-panel {
-            padding: 62px 50px 42px;
+            padding: 3rem 2.75rem;
             display: flex;
             align-items: center;
         }
 
         .form-card {
             width: 100%;
-            max-width: 405px;
+            max-width: none;
             margin: 0 auto;
         }
 
         .form-title {
             margin: 0;
-            font-size: 30px;
+            font-size: 26px;
             line-height: 1.15;
             font-weight: 900;
             letter-spacing: 0;
@@ -132,9 +132,9 @@
         }
 
         .form-subtitle {
-            margin: 12px 0 34px;
+            margin: 4px 0 28px;
             color: var(--muted);
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 500;
         }
 
@@ -189,7 +189,7 @@
 
         .login-input {
             width: 100%;
-            min-height: 50px;
+            min-height: 46px;
             border: 1.5px solid var(--line);
             border-radius: 11px;
             background: var(--field);
@@ -245,8 +245,8 @@
 
         .btn-submit {
             width: 100%;
-            min-height: 54px;
-            margin-top: 22px;
+            min-height: 48px;
+            margin-top: 4px;
             border: 0;
             border-radius: 10px;
             background: var(--brand);
@@ -442,7 +442,7 @@
             <div class="feature-list">
                 <div class="feature-item">
                     <span class="feature-icon"><i class="bi bi-broadcast-pin"></i></span>
-                    <span>Walkie inventory tracking</span>
+                    <span>Walkie Talkie inventory tracking</span>
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon"><i class="bi bi-clipboard-check"></i></span>
@@ -450,7 +450,7 @@
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon"><i class="bi bi-arrow-left-right"></i></span>
-                    <span>Assignment history and records</span>
+                    <span>Request, return and faulty reporting</span>
                 </div>
             </div>
         </section>
