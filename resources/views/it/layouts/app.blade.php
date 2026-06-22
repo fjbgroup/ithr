@@ -53,7 +53,7 @@ body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-seri
   padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);
   display:flex;align-items:center;gap:12px;
 }
-.sidebar-brand img{width:36px;height:36px;object-fit:contain;background:transparent}
+.sidebar-brand img{width:42px;height:42px;object-fit:contain;background:transparent}
 .brand-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;
   text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
 .brand-name span{color:#fff;display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
