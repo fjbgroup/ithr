@@ -70,6 +70,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::get('/requests/temporary', [RequestController::class, 'createTemporaryShared'])->name('requests.create.temporary');
         Route::post('/requests/admin-store', [RequestController::class, 'store'])->name('requests.store');
         Route::post('/requests/temporary-store', [RequestController::class, 'storeTemporary'])->name('requests.store.temporary');
+        Route::get('/handover', [HandoverController::class, 'index'])->middleware('wt.role:admin_it')->name('handover.index');
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
         Route::post('/returns', [InteractionController::class, 'storeReturn'])->name('returns.store');

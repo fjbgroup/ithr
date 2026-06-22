@@ -345,7 +345,7 @@
                             <select name="walkie_inventory_id" class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-[10px] font-bold text-slate-700 outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required>
                                 <option value="">Select unused walkie talkie</option>
                                 @foreach($availableRadios as $radio)
-                                    <option value="{{ $radio->walkie_id }}" @selected((string) old('walkie_inventory_id') === (string) $radio->walkie_id)>
+                                    <option value="{{ $radio->walkie_id }}" @selected((string) old('walkie_inventory_id', request('walkie_id')) === (string) $radio->walkie_id)>
                                         RADIO ID: {{ $radio->radio_id }} | SERIAL: {{ $radio->serial_number }} | MODEL: {{ $radio->model }}
                                     </option>
                                 @endforeach
@@ -484,5 +484,4 @@
     });
 </script>
 @endpush
-
 

@@ -54,6 +54,7 @@
                 <h2 class="walkie-form-title">{{ $formTitle ?? 'New Unit Registration' }}</h2>
                 <p class="walkie-form-subtitle">{{ $formSubtitle ?? 'Complete the form below and save when ready.' }}</p>
             </div>
+            @if(($formMethod ?? 'POST') === 'POST')
             <div class="walkie-form-mode-actions">
                 @if($inventoryOnly)
                     <a href="{{ route('wt.admin.walkies.create') }}" class="walkie-mode-link">
@@ -67,6 +68,7 @@
                     </a>
                 @endif
             </div>
+            @endif
         </div>
 
         <div class="walkie-form-body">
@@ -748,4 +750,3 @@
     });
 </script>
 @endsection
-

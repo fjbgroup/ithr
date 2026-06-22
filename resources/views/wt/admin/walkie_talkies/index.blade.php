@@ -559,6 +559,145 @@
     @endpush
 
     @push('final_styles')
+    <style id="inventory-no-left-table-gap">
+        body .content-surface #mainTableContainer.inventory-table-shell,
+        body .content-surface #inventoryTableScroll.clean-admin-table-scroll {
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+        }
+
+        body .content-surface #walkiesTable {
+            margin-left: 0 !important;
+        }
+
+        body .content-surface #walkiesTable col.inventory-radio-colgroup {
+            width: 92px !important;
+        }
+
+        body .content-surface #walkiesTable th:first-child,
+        body .content-surface #walkiesTable td:first-child {
+            width: 92px !important;
+            min-width: 92px !important;
+            max-width: 92px !important;
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+            text-align: center !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-handover-action-final">
+        body .content-surface #walkiesTable col.inventory-action-colgroup {
+            width: 360px !important;
+        }
+
+        body .content-surface #walkiesTable th.inventory-action-col,
+        body .content-surface #walkiesTable td.inventory-action-col {
+            width: 360px !important;
+            min-width: 360px !important;
+            max-width: 360px !important;
+        }
+
+        body .content-surface #walkiesTable .inventory-action-buttons {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 4px !important;
+            flex-wrap: nowrap !important;
+        }
+
+        body .content-surface #walkiesTable .inventory-action-buttons .btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 4px !important;
+            height: 28px !important;
+            min-height: 28px !important;
+            padding: 0 8px !important;
+            border-radius: 6px !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            white-space: nowrap !important;
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script>
+        (function () {
+            function normalizeInventorySearch(value) {
+                return String(value || '').trim().toUpperCase();
+            }
+
+            function applyInventorySearchFilter() {
+                var searchInput = document.getElementById('globalSearch');
+                var statusFilter = document.getElementById('filterStatus');
+                var rows = Array.from(document.querySelectorAll('#walkiesTable tbody tr.inventory-row'));
+                var keyword = normalizeInventorySearch(searchInput ? searchInput.value : '');
+                var status = normalizeInventorySearch(statusFilter ? statusFilter.value : '');
+
+                rows.forEach(function (row) {
+                    var haystack = row.dataset.search || row.textContent || '';
+                    var rowStatus = normalizeInventorySearch(row.dataset.status || '');
+                    var matchesKeyword = !keyword || normalizeInventorySearch(haystack).indexOf(keyword) !== -1;
+                    var matchesStatus = !status || rowStatus === status;
+                    row.style.display = matchesKeyword && matchesStatus ? '' : 'none';
+                });
+
+                var totalItems = document.getElementById('totalItems');
+                if (totalItems) {
+                    totalItems.textContent = rows.filter(function (row) {
+                        return row.style.display !== 'none';
+                    }).length;
+                }
+
+                if (typeof window.paintInventoryTableTheme === 'function') {
+                    window.paintInventoryTableTheme();
+                }
+            }
+
+            function bindInventorySearchFilter() {
+                var searchInput = document.getElementById('globalSearch');
+                var statusFilter = document.getElementById('filterStatus');
+                var resetBtn = document.getElementById('resetFilters');
+
+                if (searchInput && searchInput.dataset.inventorySearchBound !== 'true') {
+                    searchInput.dataset.inventorySearchBound = 'true';
+                    searchInput.addEventListener('input', applyInventorySearchFilter);
+                    searchInput.addEventListener('keyup', applyInventorySearchFilter);
+                    searchInput.addEventListener('keydown', function (event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            applyInventorySearchFilter();
+                        }
+                    });
+                }
+
+                if (statusFilter && statusFilter.dataset.inventorySearchBound !== 'true') {
+                    statusFilter.dataset.inventorySearchBound = 'true';
+                    statusFilter.addEventListener('change', applyInventorySearchFilter);
+                }
+
+                if (resetBtn && resetBtn.dataset.inventorySearchBound !== 'true') {
+                    resetBtn.dataset.inventorySearchBound = 'true';
+                    resetBtn.addEventListener('click', function () {
+                        if (searchInput) searchInput.value = '';
+                        if (statusFilter) statusFilter.value = '';
+                        applyInventorySearchFilter();
+                    });
+                }
+
+                applyInventorySearchFilter();
+            }
+
+            document.addEventListener('DOMContentLoaded', bindInventorySearchFilter);
+            window.addEventListener('load', bindInventorySearchFilter);
+        })();
+    </script>
+    @endpush
+
+    @push('final_styles')
     <style id="inventory-bulk-toolbar-clean-final">
         body .content-surface #bulkActionForm.inventory-bulk-bar {
             display: flex !important;
@@ -986,6 +1125,22 @@
                                     <span>Edit</span>
                                 </a>
 
+                                @if($statusValue === 'IN USE')
+                                <form action="{{ route('wt.admin.walkies.update.status', $w->walkie_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Mark this unit as UNUSED after handover?');">
+                                    @csrf
+                                    <input type="hidden" name="status" value="UNUSED">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fa-solid fa-handshake"></i>
+                                        <span>Handover</span>
+                                    </button>
+                                </form>
+                                @else
+                                <button type="button" class="btn btn-secondary btn-sm" disabled title="Only IN USE units show handover action">
+                                    <i class="fa-solid fa-handshake"></i>
+                                    <span>Handover</span>
+                                </button>
+                                @endif
+
                                 <form action="{{ route('wt.admin.walkies.forceDelete', $w->walkie_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this walkie-talkie record?');">
                                     @csrf
                                     @method('DELETE')
@@ -1009,7 +1164,7 @@
             </div>
             <div id="inventoryPagination" class="inventory-table-footer flex items-center justify-between px-4 py-3 bg-[#111827] border-t border-[#263244]">
                 <div class="inventory-table-info text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
-                    Total: <span id="totalItems">0</span> items
+                    Total: <span id="totalItems">{{ $walkies->count() }}</span> items
                 </div>
             </div>
         </div>
@@ -6323,9 +6478,9 @@
                 actionHeader.style.position = 'static';
                 actionHeader.style.right = 'auto';
                 actionHeader.style.left = 'auto';
-                actionHeader.style.width = '280px';
-                actionHeader.style.minWidth = '280px';
-                actionHeader.style.maxWidth = '280px';
+                actionHeader.style.width = '360px';
+                actionHeader.style.minWidth = '360px';
+                actionHeader.style.maxWidth = '360px';
                 actionHeader.style.overflow = 'visible';
             }
 
@@ -6367,9 +6522,9 @@
                 actionCell.style.position = 'static';
                 actionCell.style.right = 'auto';
                 actionCell.style.left = 'auto';
-                actionCell.style.width = '280px';
-                actionCell.style.minWidth = '280px';
-                actionCell.style.maxWidth = '280px';
+                actionCell.style.width = '360px';
+                actionCell.style.minWidth = '360px';
+                actionCell.style.maxWidth = '360px';
                 actionCell.style.overflow = 'visible';
 
                 const walkieId = row.dataset.walkieId || '';
@@ -6396,6 +6551,22 @@
                             <i class="fa-solid fa-edit"></i>
                             <span>Edit</span>
                         </a>
+
+                        ${action.handover_url ? `
+                            <form action="${escapeInventoryAttribute(action.handover_url)}" method="POST" class="d-inline" onsubmit="return confirm('Mark this unit as UNUSED after handover?');">
+                                @csrf
+                                <input type="hidden" name="status" value="UNUSED">
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="fa-solid fa-handshake"></i>
+                                    <span>Handover</span>
+                                </button>
+                            </form>
+                        ` : `
+                            <button type="button" class="btn btn-secondary btn-sm" disabled title="Only IN USE units show handover action">
+                                <i class="fa-solid fa-handshake"></i>
+                                <span>Handover</span>
+                            </button>
+                        `}
 
                         <form action="${escapeInventoryAttribute(action.delete_url || '#')}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this walkie-talkie record?');">
                             @csrf
@@ -6446,7 +6617,7 @@
                 const paginationContainer = document.querySelector('.inventory-table-pagination');
                 if (paginationContainer) paginationContainer.innerHTML = '';
                 const infoTotal = document.getElementById('totalItems');
-                if (infoTotal) infoTotal.innerText = filteredRows.length;
+                if (infoTotal) infoTotal.innerText = filteredRows.length || rows.filter(row => row.style.display !== 'none').length;
             }
 
             function changePage(page) {

@@ -385,6 +385,9 @@ class WalkieTalkieController extends Controller
                     'walkie_id' => $walkie->walkie_id,
                     'edit_url' => route('wt.admin.walkies.edit', ['walkie' => $walkie->walkie_id, 'source' => 'index']),
                     'delete_url' => route('wt.admin.walkies.forceDelete', $walkie->walkie_id),
+                    'handover_url' => strtoupper((string) $walkie->status) === 'IN USE'
+                        ? route('wt.admin.walkies.update.status', $walkie->walkie_id)
+                        : null,
                     'can_manage' => true,
                 ],
             ])
@@ -1221,5 +1224,3 @@ public function repairFaulty()
         }
     }
 }
-
-
