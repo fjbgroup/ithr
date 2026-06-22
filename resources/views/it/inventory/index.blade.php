@@ -102,7 +102,6 @@
       <option value="E-Waste"               {{ $f_status === 'E-Waste'               ? 'selected' : '' }}>E-Waste</option>
       <option value="Pending"               {{ $f_status === 'Pending'               ? 'selected' : '' }}>Pending</option>
       <option value="Collected"             {{ $f_status === 'Collected'             ? 'selected' : '' }}>Collected</option>
-      <option value="Pending for Write-Off"     {{ $f_status === 'Pending for Write-Off'     ? 'selected' : '' }}>Pending for Write-Off</option>
       <option value="Pending to E-Waste/Disposal" {{ $f_status === 'Pending to E-Waste/Disposal' ? 'selected' : '' }}>Pending to E-Waste/Disposal</option>
     </select>
     <select name="location" onchange="this.form.submit()"

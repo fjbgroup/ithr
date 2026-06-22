@@ -14,9 +14,10 @@ class NonItAssetController extends Controller
 {
     public function index(Request $request)
     {
-        $search = trim($request->nit_search ?? '');
-        $class  = trim($request->nit_class  ?? '');
-        $status = trim($request->nit_status ?? '');
+        $search   = trim($request->nit_search   ?? '');
+        $class    = trim($request->nit_class    ?? '');
+        $status   = trim($request->nit_status   ?? '');
+        $location = trim($request->nit_location ?? '');
 
         $query = NonItAsset::query();
         if ($search) {
@@ -27,8 +28,9 @@ class NonItAssetController extends Controller
                   ->orWhere('location',     'like', "%$search%");
             });
         }
-        if ($class)  $query->where('asset_class', $class);
-        if ($status) $query->where('item_status',  $status);
+        if ($class)    $query->where('asset_class', $class);
+        if ($status)   $query->where('item_status', $status);
+        if ($location) $query->where('location', $location);
 
         $items       = $query->orderByDesc('created_at')->get();
         $nit_total      = NonItAsset::count();
@@ -43,6 +45,7 @@ class NonItAssetController extends Controller
         $assetClasses   = AssetClass::where('type', 'non_it')->orderBy('sort_order')->orderBy('name')->get();
         $nitClassesUsed = NonItAsset::distinct()->orderBy('asset_class')->pluck('asset_class')
                             ->filter()->values();
+        $allLocations   = NonItAsset::whereNotNull('location')->where('location', '!=', '')->distinct()->orderBy('location')->pluck('location');
 
         $pendingEditIds = EditAssetRequest::where('asset_type', 'non_it')
                             ->where('status', 'Pending')
@@ -58,8 +61,8 @@ class NonItAssetController extends Controller
         return view('it.non-it-assets.index', compact(
             'items', 'assetClasses',
             'nit_total', 'nit_active', 'nit_repair', 'nit_disp', 'nit_pending_wo', 'nit_pending_ewaste', 'filtered_total',
-            'nitClassesUsed', 'pendingEditIds',
-            'search', 'class', 'status'
+            'nitClassesUsed', 'pendingEditIds', 'allLocations',
+            'search', 'class', 'status', 'location'
         ));
     }
 

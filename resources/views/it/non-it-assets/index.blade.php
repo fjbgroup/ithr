@@ -166,31 +166,9 @@
 
         <div class="nit-divider"></div>
 
-        <div class="nit-section-label"><i class="bi bi-activity"></i> Status &amp; Condition</div>
+        <div class="nit-section-label"><i class="bi bi-activity"></i> Condition</div>
         <div class="row g-3">
-          <div class="col-md-6 nit-field">
-            <label>Asset Status</label>
-            <input type="hidden" name="item_status" id="add_item_status_val" value="Active">
-            <div class="nit-select-grid" id="addStatusGrid">
-              <div class="nit-select-opt selected" data-color="#16a34a" data-bg="rgba(22,163,74,.1)"
-                onclick="selectOpt(this,'addStatusGrid','add_item_status_val','Active')"
-                style="border-color:#16a34a;background:rgba(22,163,74,.1);color:#16a34a">
-                <i class="bi bi-check-circle-fill" style="color:#16a34a"></i>Active
-              </div>
-              <div class="nit-select-opt" data-color="#d97706" data-bg="rgba(217,119,6,.1)"
-                onclick="selectOpt(this,'addStatusGrid','add_item_status_val','In Repair')">
-                <i class="bi bi-wrench-adjustable"></i>In Repair
-              </div>
-              <div class="nit-select-opt" data-color="#0284c7" data-bg="rgba(2,132,199,.1)"
-                onclick="selectOpt(this,'addStatusGrid','add_item_status_val','Reserved')">
-                <i class="bi bi-lock-fill"></i>Reserved
-              </div>
-              <div class="nit-select-opt" data-color="#dc2626" data-bg="rgba(239,68,68,.1)"
-                onclick="selectOpt(this,'addStatusGrid','add_item_status_val','Disposed')">
-                <i class="bi bi-trash-fill"></i>Disposed
-              </div>
-            </div>
-          </div>
+          <input type="hidden" name="item_status" value="Active">
           <div class="col-md-6 nit-field">
             <label>Condition</label>
             <input type="hidden" name="condition_status" id="add_condition_status_val" value="Good">
@@ -313,30 +291,8 @@
 
         <div class="nit-divider"></div>
 
-        <div class="nit-section-label"><i class="bi bi-activity"></i> Status &amp; Condition</div>
+        <div class="nit-section-label"><i class="bi bi-activity"></i> Condition</div>
         <div class="row g-3">
-          <div class="col-md-6 nit-field">
-            <label>Asset Status</label>
-            <input type="hidden" name="item_status" id="edit_item_status_val" value="Active">
-            <div class="nit-select-grid" id="editStatusGrid">
-              <div class="nit-select-opt" data-color="#16a34a" data-bg="rgba(22,163,74,.1)"
-                onclick="selectOpt(this,'editStatusGrid','edit_item_status_val','Active')">
-                <i class="bi bi-check-circle-fill"></i>Active
-              </div>
-              <div class="nit-select-opt" data-color="#d97706" data-bg="rgba(217,119,6,.1)"
-                onclick="selectOpt(this,'editStatusGrid','edit_item_status_val','In Repair')">
-                <i class="bi bi-wrench-adjustable"></i>In Repair
-              </div>
-              <div class="nit-select-opt" data-color="#0284c7" data-bg="rgba(2,132,199,.1)"
-                onclick="selectOpt(this,'editStatusGrid','edit_item_status_val','Reserved')">
-                <i class="bi bi-lock-fill"></i>Reserved
-              </div>
-              <div class="nit-select-opt" data-color="#dc2626" data-bg="rgba(239,68,68,.1)"
-                onclick="selectOpt(this,'editStatusGrid','edit_item_status_val','Disposed')">
-                <i class="bi bi-trash-fill"></i>Disposed
-              </div>
-            </div>
-          </div>
           <div class="col-md-6 nit-field">
             <label>Condition</label>
             <input type="hidden" name="condition_status" id="edit_condition_status_val" value="Good">
@@ -400,10 +356,10 @@
 {{-- ══ STAT STRIP ══ --}}
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
   @foreach([
-    ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,  'Total Assets', '#0284c7'],
-    ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active, 'Active',       '#16a34a'],
-    ['bi-wrench-adjustable',  'rgba(217,119,6,.12)',   '#d97706', $nit_repair, 'In Repair',    '#d97706'],
-    ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,   'Disposed',     '#dc2626'],
+    ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,                           'Total Assets',     '#0284c7'],
+    ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,                          'Active',           '#16a34a'],
+    ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,                            'Disposed',         '#dc2626'],
+    ['bi-hourglass-split',    'rgba(217,119,6,.12)',   '#d97706', $nit_pending_wo + $nit_pending_ewaste, 'Pending Approval', '#d97706'],
   ] as [$icon,$bg,$color,$val,$lbl,$border])
   <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {{ $border }};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05)">
     <div style="width:44px;height:44px;border-radius:10px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">
@@ -439,18 +395,23 @@
     <select name="nit_status" onchange="this.form.submit()"
       style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
       <option value="">All Status</option>
-      <option value="Active"                    {{ $status === 'Active'                    ? 'selected' : '' }}>Active</option>
-      <option value="In Repair"                 {{ $status === 'In Repair'                 ? 'selected' : '' }}>In Repair</option>
-      <option value="Reserved"                  {{ $status === 'Reserved'                  ? 'selected' : '' }}>Reserved</option>
-      <option value="Disposed"                  {{ $status === 'Disposed'                  ? 'selected' : '' }}>Disposed</option>
-      <option value="Pending for Write-Off"     {{ $status === 'Pending for Write-Off'     ? 'selected' : '' }}>Pending for Write-Off</option>
+      <option value="Active"                      {{ $status === 'Active'                      ? 'selected' : '' }}>Active</option>
+      <option value="Disposed"                    {{ $status === 'Disposed'                    ? 'selected' : '' }}>Disposed</option>
+      <option value="Pending for Write-Off"       {{ $status === 'Pending for Write-Off'       ? 'selected' : '' }}>Pending</option>
       <option value="Pending to E-Waste/Disposal" {{ $status === 'Pending to E-Waste/Disposal' ? 'selected' : '' }}>Pending to E-Waste/Disposal</option>
+    </select>
+    <select name="nit_location" onchange="this.form.submit()"
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      <option value="">All Locations</option>
+      @foreach($allLocations as $loc)
+      <option value="{{ $loc }}" {{ $location === $loc ? 'selected' : '' }}>{{ $loc }}</option>
+      @endforeach
     </select>
     <button type="submit"
       style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
-    @if($search || $class || $status)
+    @if($search || $class || $status || $location)
     <a href="{{ route('it.non-it.index') }}"
       style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
       Clear
@@ -460,7 +421,7 @@
 </div>
 
 {{-- ══ TABLE / EMPTY STATE ══ --}}
-@if($nit_total === 0 && !$search && !$class && !$status)
+@if($nit_total === 0 && !$search && !$class && !$status && !$location)
 <div style="background:var(--surface);border:1.5px dashed var(--border);border-radius:14px;padding:72px 20px;text-align:center">
   <i class="bi bi-boxes" style="font-size:44px;color:var(--muted);display:block;margin-bottom:14px;opacity:.4"></i>
   <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px">No non-IT assets registered yet</div>
@@ -516,7 +477,7 @@
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <span style="font-size:13px;color:var(--muted);font-weight:500">
       <strong style="color:var(--text)">{{ number_format($filtered_total) }}</strong> asset{{ $filtered_total !== 1 ? 's' : '' }}
-      @if($search || $class || $status)
+      @if($search || $class || $status || $location)
         &nbsp;<span style="color:var(--accent)">(filtered)</span>
       @endif
     </span>
@@ -798,7 +759,6 @@ function openNitEditFormById(id) {
     if (acSel.options[i].value === d.asset_class) { acSel.selectedIndex = i; break; }
   }
 
-  nitSetGrid('editStatusGrid', 'edit_item_status_val',     d.item_status      || 'Active');
   nitSetGrid('editCondGrid',   'edit_condition_status_val', d.condition_status || 'Good');
 
   if (!isAdmin) {
