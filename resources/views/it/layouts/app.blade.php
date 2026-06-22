@@ -113,7 +113,7 @@ button .badge-count{ margin-left:0; }
   position:fixed;top:0;left:var(--sidebar-w);right:0;z-index:50;
 }
 .topbar-left{flex:1}
-.topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy,var(--text))}
+.topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
 .topbar-breadcrumb{font-size:11px;color:var(--muted);margin-top:1px}
 .topbar-right{display:flex;align-items:center;gap:12px}
 .topbar-user{
