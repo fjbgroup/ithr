@@ -61,7 +61,7 @@ class ItRequestFormController extends Controller
     {
         $user = Auth::guard('it')->user();
         if ($user->isAdmin()) {
-            return redirect()->route('it-request-form')->with('error', 'Admins manage all forms from the inbox.');
+            return redirect()->route('it.it-request-form')->with('error', 'Admins manage all forms from the inbox.');
         }
         $drafts = ItRequestForm::where('submitted_by', Auth::guard('it')->id())
             ->where('status', 'Draft')
@@ -79,14 +79,14 @@ class ItRequestFormController extends Controller
         }
         ActivityLogService::log('DELETE', 'it_request_form', $form->id, 'Deleted draft IT request: ' . ($form->subject ?? 'Untitled'));
         $form->delete();
-        return redirect()->route('it-request-form.drafts')->with('success', 'Draft deleted successfully.');
+        return redirect()->route('it.it-request-form.drafts')->with('success', 'Draft deleted successfully.');
     }
 
     public function show(int $id)
     {
         $user = Auth::guard('it')->user();
         if (!$user->isAdmin()) {
-            return redirect()->route('it-request-form')->with('error', 'Access denied.');
+            return redirect()->route('it.it-request-form')->with('error', 'Access denied.');
         }
         $form = ItRequestForm::with('submittedBy')->findOrFail($id);
         ActivityLogService::log('VIEW', 'it_request_form', $id, 'Viewed IT request: ' . $form->subject);
@@ -209,15 +209,15 @@ class ItRequestFormController extends Controller
                 'it_request',
                 'New IT Request: ' . $request->subject,
                 Auth::guard('it')->user()->full_name . ' (' . Auth::guard('it')->user()->roleName() . ') submitted a new ' . ucfirst($type) . ' request.',
-                route('it-request-form.show', $form->id)
+                route('it.it-request-form.show', $form->id)
             );
         }
 
         $msg = $isDraft ? 'Draft saved successfully.' : 'IT request submitted successfully.';
         if ($isDraft) {
-            return redirect()->route('it-request-form.drafts')->with('success', $msg);
+            return redirect()->route('it.it-request-form.drafts')->with('success', $msg);
         }
-        return redirect()->route('it-request-form')->with('success', $msg);
+        return redirect()->route('it.it-request-form')->with('success', $msg);
     }
 
     public function edit(int $id)
@@ -352,20 +352,20 @@ class ItRequestFormController extends Controller
                     'it_request',
                     'New IT Request: ' . $form->subject,
                     $user->full_name . ' (' . $user->roleName() . ') submitted a new ' . ucfirst($type) . ' request.',
-                    route('it-request-form.show', $form->id)
+                    route('it.it-request-form.show', $form->id)
                 );
             }
 
             $msg = $isDraft ? 'Draft saved successfully.' : 'IT request submitted successfully.';
             if ($isDraft) {
-                return redirect()->route('it-request-form.drafts')->with('success', $msg);
+                return redirect()->route('it.it-request-form.drafts')->with('success', $msg);
             }
-            return redirect()->route('it-request-form')->with('success', $msg);
+            return redirect()->route('it.it-request-form')->with('success', $msg);
         }
 
         $form->update($updateData);
         ActivityLogService::log('UPDATE', 'it_request_form', $form->id, 'Updated IT request: ' . $form->subject);
-        return redirect()->route('it-request-form.show', $id)->with('success', 'Request updated successfully.');
+        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Request updated successfully.');
     }
 
     public function approve(Request $request, int $id)
@@ -391,13 +391,13 @@ class ItRequestFormController extends Controller
                 'it_request',
                 'IT Request Approved',
                 'Your IT request "' . $form->subject . '" has been approved.',
-                route('it-request-form')
+                route('it.it-request-form')
             );
         }
 
         ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'Approved IT request: ' . $form->subject);
 
-        return redirect()->route('it-request-form.show', $id)->with('success', 'Request approved successfully.');
+        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Request approved successfully.');
     }
 
     public function reject(Request $request, int $id)
@@ -423,13 +423,13 @@ class ItRequestFormController extends Controller
                 'it_request',
                 'IT Request Rejected',
                 'Your IT request "' . $form->subject . '" has been rejected.',
-                route('it-request-form')
+                route('it.it-request-form')
             );
         }
 
         ActivityLogService::log('REJECT', 'it_request_form', $form->id, 'Rejected IT request: ' . $form->subject);
 
-        return redirect()->route('it-request-form.show', $id)->with('success', 'Request rejected.');
+        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Request rejected.');
     }
 
     public function requestUpdate(Request $request, int $id)
@@ -455,13 +455,13 @@ class ItRequestFormController extends Controller
                 'it_request',
                 'IT Request Needs Update',
                 'Your IT request "' . $form->subject . '" requires changes before it can be approved. Please review and resubmit.',
-                route('it-request-form')
+                route('it.it-request-form')
             );
         }
 
         ActivityLogService::log('UPDATE_REQUESTED', 'it_request_form', $form->id, 'Requested update on IT request: ' . $form->subject);
 
-        return redirect()->route('it-request-form.show', $id)->with('success', 'Update requested â€” the user has been notified.');
+        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Update requested â€” the user has been notified.');
     }
 }
 

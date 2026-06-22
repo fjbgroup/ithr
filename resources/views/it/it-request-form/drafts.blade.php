@@ -14,11 +14,18 @@
     <h4 style="font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin:0 0 4px">Saved Drafts</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Your unsubmitted IT request forms. Resume editing or delete drafts you no longer need.</p>
   </div>
-  <a href="{{ route('it.it-request-form') }}"
-    style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--accent);color:#fff;border-radius:10px;padding:9px 18px;text-decoration:none;transition:opacity .15s;flex-shrink:0"
-    onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
-    <i class="bi bi-plus-circle"></i> New Request
-  </a>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <a href="{{ route('it.it-request-form') }}"
+      style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:transparent;color:var(--accent);border:1.5px solid var(--accent);border-radius:10px;padding:9px 18px;text-decoration:none;transition:opacity .15s"
+      onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <a href="{{ route('it.it-request-form') }}"
+      style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;background:var(--accent);color:#fff;border-radius:10px;padding:9px 18px;text-decoration:none;transition:opacity .15s"
+      onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      <i class="bi bi-plus-circle"></i> New Request
+    </a>
+  </div>
 </div>
 
 {{-- Flash messages --}}

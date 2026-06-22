@@ -369,4 +369,35 @@ class StaffController extends Controller
 
         return \Maatwebsite\Excel\Facades\Excel::download($export, 'staff_import_template.xlsx');
     }
+
+    public function archivedStaff(Request $request)
+    {
+        $search = trim($request->query('q', ''));
+        $filter = $request->query('filter', ''); // 'disabled' | 'inactive' | ''
+
+        $query = Staff::with(['department', 'user'])
+            ->where(function ($q) {
+                $q->where('is_active', false)
+                  ->orWhereHas('user', fn($uq) => $uq->where('is_active', false));
+            });
+
+        if ($search) {
+            $like = "%$search%";
+            $query->where(function ($q) use ($like) {
+                $q->where('name', 'like', $like)
+                  ->orWhere('staff_no', 'like', $like)
+                  ->orWhereHas('department', fn($dq) => $dq->where('name', 'like', $like));
+            });
+        }
+
+        if ($filter === 'disabled') {
+            $query->whereHas('user', fn($uq) => $uq->where('is_active', false));
+        } elseif ($filter === 'inactive') {
+            $query->where('is_active', false);
+        }
+
+        $archivedStaff = $query->orderBy('name')->get();
+
+        return view('archived_staff.index', compact('archivedStaff', 'search', 'filter'));
+    }
 }
