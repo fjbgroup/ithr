@@ -28,7 +28,7 @@ body{
 
 /* Left panel */
 .card-left{
-  background:linear-gradient(160deg,#6b2030 0%,#41121a 55%,#200810 100%);
+  background:linear-gradient(160deg,#FFB84D 0%,#F7941D 50%,#C96800 100%);
   padding:3rem 2.75rem;
   display:flex;flex-direction:column;
   position:relative;overflow:hidden;
@@ -92,7 +92,7 @@ input[type="text"],input[type="email"],input[type="password"]{
   font-size:14px;font-family:'DM Sans',sans-serif;
   transition:border-color .2s,box-shadow .2s;outline:none;
 }
-input:focus{border-color:#41121a;box-shadow:0 0 0 3px rgba(65,18,26,.12);background:#fff;}
+input:focus{border-color:#F7941D;box-shadow:0 0 0 3px rgba(247,148,29,.18);background:#fff;}
 input::placeholder{color:#94a3b8;}
 .pw-toggle{
   position:absolute;right:12px;
@@ -100,24 +100,24 @@ input::placeholder{color:#94a3b8;}
   color:#9ca3af;font-size:16px;padding:4px;
   transition:color .2s;z-index:1;
 }
-.pw-toggle:hover{color:#41121a;}
+.pw-toggle:hover{color:#F7941D;}
 .forgot-link{
   display:block;text-align:right;margin-top:7px;
-  font-size:12px;font-weight:600;color:#41121a;
+  font-size:12px;font-weight:600;color:#F7941D;
   text-decoration:none;
 }
 .forgot-link:hover{text-decoration:underline;}
 .btn-submit{
   width:100%;margin-top:4px;
-  background:#41121a;color:#fff;border:none;
+  background:linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%);color:#fff;border:none;
   border-radius:10px;padding:14px;
   font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
   letter-spacing:.03em;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:background .2s,box-shadow .2s,transform .1s;
-  box-shadow:0 4px 14px rgba(65,18,26,.35);
+  transition:filter .2s,box-shadow .2s,transform .1s;
+  box-shadow:0 4px 14px rgba(247,148,29,.4);
 }
-.btn-submit:hover{background:#5c1a25;box-shadow:0 6px 20px rgba(65,18,26,.4);transform:translateY(-1px);}
+.btn-submit:hover{filter:brightness(1.08);box-shadow:0 6px 20px rgba(247,148,29,.5);transform:translateY(-1px);}
 
 .alert{border-radius:10px;padding:11px 14px;font-size:13px;display:flex;align-items:center;gap:9px;margin-bottom:16px;font-weight:500;}
 .alert-error{background:#fee2e2;border:1px solid #fecaca;color:#991b1b;}
@@ -130,7 +130,7 @@ input::placeholder{color:#94a3b8;}
   display:inline-flex;align-items:center;gap:5px;
   transition:color .2s;
 }
-.back-link:hover{color:#41121a;}
+.back-link:hover{color:#F7941D;}
 .switch-label{
   font-size:10px;font-weight:700;color:#94a3b8;
   text-transform:uppercase;letter-spacing:.1em;
@@ -142,9 +142,9 @@ input::placeholder{color:#94a3b8;}
   text-decoration:none;padding:2px 4px;
   transition:color .2s;
 }
-.switch-links a:hover{color:#41121a;}
+.switch-links a:hover{color:#F7941D;}
 .switch-links .sep{color:#cbd5e1;font-size:11px;}
-.switch-links .current{color:#41121a;font-weight:700;}
+.switch-links .current{color:#F7941D;font-weight:700;}
 </style>
 
 <div class="card">
