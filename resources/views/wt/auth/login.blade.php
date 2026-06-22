@@ -450,7 +450,7 @@
                 </div>
                 <div class="feature-item">
                     <span class="feature-icon"><i class="bi bi-arrow-left-right"></i></span>
-                    <span>Assignment history and records</span>
+                    <span>Request, return and faulty reporting</span>
                 </div>
             </div>
         </section>
