@@ -68,11 +68,10 @@
     border-radius: 50%;
   }
   .auth-aside-logo {
-    width: 56px; height: 56px;
+    width: 64px; height: 64px;
     border-radius: 16px;
-    background: rgba(255,255,255,.95);
+    background: transparent;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 22px rgba(0,0,0,.25);
   }
   .auth-aside h2 {
     font-size: 1.9rem;
@@ -247,7 +246,7 @@
     <!-- Showcase -->
     <aside class="auth-aside">
       <div class="auth-aside-logo">
-        <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:38px;height:38px;object-fit:contain;">
+        <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:56px;height:56px;object-fit:contain;">
       </div>
       <h2>Welcome to the<br>HR Admin System</h2>
       <p>Manage staff, training, meeting rooms and more — all from one secure workspace.</p>
@@ -272,7 +271,7 @@
     <main class="auth-main">
       <div class="auth-mobile-brand">
         <div class="auth-aside-logo">
-          <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:38px;height:38px;object-fit:contain;">
+          <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:56px;height:56px;object-fit:contain;">
         </div>
         <h1>HR Admin System</h1>
         <p>Sign in to your account</p>
