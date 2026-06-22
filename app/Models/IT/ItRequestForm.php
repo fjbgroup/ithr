@@ -20,6 +20,8 @@ class ItRequestForm extends Model
     ];
 
     protected $casts = [
+        'submitted_by'   => 'integer',
+        'reviewed_by'    => 'integer',
         'hw_items'       => 'array',
         'sys_items'      => 'array',
         'svc_items'      => 'array',

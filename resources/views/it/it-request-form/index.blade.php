@@ -486,7 +486,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         </span>
         @endif
 
-        {{-- Resume Draft button --}}
+        {{-- Resume Draft / Delete Draft buttons --}}
         @if($mf->status === 'Draft')
         <a href="{{ route('it.it-request-form.edit', $mf->id) }}"
           style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:20px;padding:4px 12px;text-decoration:none;flex-shrink:0;transition:all .15s;background:transparent"
@@ -494,6 +494,17 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           onmouseout="this.style.background='transparent'">
           <i class="bi bi-pencil-square"></i> Resume Draft
         </a>
+        <form method="POST" action="{{ route('it.it-request-form.draft.destroy', $mf->id) }}"
+          onsubmit="return confirm('Delete this draft? This cannot be undone.')" style="display:inline;margin:0">
+          @csrf
+          @method('DELETE')
+          <button type="submit"
+            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#dc2626;border:1.5px solid rgba(220,38,38,.35);border-radius:20px;padding:4px 12px;background:transparent;cursor:pointer;font-family:inherit;transition:all .15s"
+            onmouseover="this.style.background='rgba(220,38,38,.07)'"
+            onmouseout="this.style.background='transparent'">
+            <i class="bi bi-trash3"></i> Delete
+          </button>
+        </form>
         @endif
 
         {{-- Date --}}
