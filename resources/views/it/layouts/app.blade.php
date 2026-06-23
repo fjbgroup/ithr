@@ -899,7 +899,7 @@ $(document).ready(function () {
     {{-- Header --}}
     <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:28px 28px 22px;text-align:center;border-radius:20px 20px 0 0">
       <div style="margin:0 auto 14px;width:72px;height:72px;display:flex;align-items:center;justify-content:center">
-        <img src="{{ request()->getSchemeAndHttpHost() . request()->getBasePath() }}/assets/images/fjb-logo-egg.png" alt="FJB Logo" style="width:68px;height:68px;object-fit:contain">
+        <img id="eggLogoImg" src="" alt="FJB Logo" style="width:68px;height:68px;object-fit:contain">
       </div>
       <div style="color:#fff;font-size:18px;font-weight:800;letter-spacing:.02em">FJB Inventory System</div>
       <div style="color:rgba(255,255,255,.5);font-size:12px;margin-top:5px;font-weight:500">Internal Management Platform</div>
@@ -951,7 +951,7 @@ $(document).ready(function () {
     </div>
 
     {{-- Cutout character — inside card, anchored bottom-right --}}
-    <img src="{{ request()->getSchemeAndHttpHost() . request()->getBasePath() }}/assets/images/dev-irfan-cutout.png" alt="Irfan"
+    <img id="eggCharImg" src="" alt="Irfan"
       style="position:absolute;bottom:0;right:0;height:260px;width:auto;pointer-events:none;user-select:none;display:block">
   </div>
 </div>
@@ -959,6 +959,9 @@ $(document).ready(function () {
 (function(){
   var modal   = document.getElementById('eggModal');
   var _eggN   = 0, _eggT, _closing = false, _closeTimer;
+  var _base   = window.location.origin + '{{ request()->getBasePath() }}';
+  document.getElementById('eggLogoImg').src = _base + '/assets/images/fjb-logo-egg.png';
+  document.getElementById('eggCharImg').src = _base + '/assets/images/dev-irfan-cutout.png';
 
   function openEgg() {
     clearTimeout(_closeTimer);
