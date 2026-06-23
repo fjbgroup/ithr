@@ -159,15 +159,15 @@ input::placeholder{color:#94a3b8;}
     <ul class="left-features">
       <li>
         <div class="feat-icon"><i class="bi bi-laptop"></i></div>
-        Asset &amp; inventory tracking
+        IT &amp; Non-IT Asset Inventory
       </li>
       <li>
         <div class="feat-icon"><i class="bi bi-ticket-detailed"></i></div>
-        IT request management
+        IT Request Management
       </li>
       <li>
         <div class="feat-icon"><i class="bi bi-archive"></i></div>
-        Write-off &amp; disposal records
+        E-Waste &amp; Disposal Records
       </li>
     </ul>
   </div>

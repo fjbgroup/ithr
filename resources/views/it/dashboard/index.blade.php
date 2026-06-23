@@ -96,7 +96,7 @@
 
     <!-- Live Clock -->
     <div style="text-align:right">
-      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'DM Sans',sans-serif;letter-spacing:.04em;line-height:1"></div>
+      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'DM Sans',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
       <div style="font-size:10px;color:#93c5fd;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
     </div>
 

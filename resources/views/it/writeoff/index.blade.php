@@ -1137,15 +1137,9 @@ function woToggleBatch(id) {
           {{-- Recommendation Committee --}}
           <td style="border:1px solid #000;padding:10px 12px;vertical-align:top;width:34%">
             <div style="font-weight:700;margin-bottom:10px">RECOMMENDATION COMMITTEE :</div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <div style="border-bottom:1px solid #000;width:45%;height:40px"></div>
-              <div style="border-bottom:1px solid #000;width:45%;height:40px"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:10px;font-style:italic;margin-bottom:6px">
-              <div style="width:45%"><em>General Manager</em><br>Date : <span style="display:inline-block;border-bottom:1px solid #000;width:60px"></span></div>
-              <div style="width:45%"><em>General Manager</em><br>Date : <span style="display:inline-block;border-bottom:1px solid #000;width:60px"></span></div>
-            </div>
-            <div style="font-size:10px;margin-top:6px;border-top:1px solid #ccc;padding-top:6px">RECOMMENDATION : <strong><u>Sell</u> / Gift / Write-Off</strong></div>
+            <div style="margin-bottom:6px">Signature :<div style="border-bottom:1px solid #000;height:40px;margin-top:6px"></div></div>
+            <div style="margin-bottom:6px;margin-top:4px">Name : <em>General Manager</em></div>
+            <div>Date : <span style="display:inline-block;border-bottom:1px solid #000;width:80px"></span></div>
           </td>
         </tr>
       </table>

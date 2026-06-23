@@ -516,6 +516,29 @@
         </section>
     </main>
 
+    {{-- Access Denied Modal --}}
+    <div id="accessDeniedModal" class="modal-overlay" onclick="closeOutside(event,'accessDeniedModal')">
+        <div class="modal-box" style="text-align:center;">
+            <div style="margin-bottom:18px;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#fff1f2;margin-bottom:12px;">
+                    <i class="bi bi-shield-x" style="font-size:26px;color:#e11d48;"></i>
+                </span>
+                <h3 style="margin:0;font-size:18px;font-weight:900;color:#101827;">Access Denied</h3>
+            </div>
+            <p style="margin:0 0 22px;color:#64748b;font-size:14px;font-weight:600;line-height:1.6;">
+                Your account does not have access to the <strong>Walkie Talkie</strong> system.<br>Please contact ICT to request access.
+            </p>
+            <div style="display:flex;gap:10px;justify-content:center;">
+                <a href="{{ url('/') }}" class="modal-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:10px;padding:0 20px;min-height:44px;background:#0f223b;color:#fff;font:700 14px 'DM Sans',sans-serif;">
+                    <i class="bi bi-arrow-left"></i> Back to Portal
+                </a>
+                <button type="button" class="modal-btn" onclick="document.getElementById('accessDeniedModal').classList.remove('active')" style="background:#f1f5f9;color:#475569;">
+                    Dismiss
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="forgotModal" class="modal-overlay" onclick="closeOutside(event,'forgotModal')">
         <div class="modal-box">
             <div class="modal-header">
@@ -559,6 +582,12 @@
             }
         }
 
+        @if(session('wt_access_denied'))
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('accessDeniedModal').classList.add('active');
+        });
+        @endif
+
         function openForgotModal() {
             document.getElementById('forgotModal').classList.add('active');
         }
@@ -568,7 +597,9 @@
         }
 
         function closeOutside(e, id) {
-            if (e.target === document.getElementById(id)) closeForgotModal();
+            if (e.target === document.getElementById(id)) {
+                document.getElementById(id).classList.remove('active');
+            }
         }
 
         document.addEventListener('keydown', function(e) {

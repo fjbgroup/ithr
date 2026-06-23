@@ -85,6 +85,7 @@ class EwasteController extends Controller
             'condition_on_disposal'=> 'nullable|string',
             'disposal_method'      => 'nullable|string',
             'date_flagged'         => 'nullable|date',
+            'weight_kg'            => 'nullable|numeric',
             'notes'                => 'nullable|string',
         ]);
 
@@ -286,7 +287,7 @@ class EwasteController extends Controller
                 $skipped++; continue;
             }
 
-            EwasteItem::create([
+            $ew = EwasteItem::create([
                 'asset_number'    => $asset_number  ?: null,
                 'asset_class'     => $asset_class,
                 'description'     => $description,
@@ -298,6 +299,19 @@ class EwasteController extends Controller
                 'hou_status'      => 'Approved',
                 'created_by'      => $user->id,
             ]);
+
+            $invItem = InventoryItem::create([
+                'asset_number'     => $ew->asset_number,
+                'asset_class'      => $ew->asset_class,
+                'description'      => $ew->description,
+                'serial_number'    => $ew->serial_number,
+                'item_status'      => 'Disposed',
+                'condition_status' => 'For Disposal',
+                'notes'            => $ew->notes,
+                'created_by'       => $user->id,
+            ]);
+            $ew->update(['original_inventory_id' => $invItem->id]);
+
             $inserted++;
         }
 
