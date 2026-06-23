@@ -603,7 +603,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
     </button>
     <div class="topbar-left">
       <div class="topbar-title">@yield('page_title', 'Dashboard')</div>
-      <div class="topbar-breadcrumb">FJB Johor Bulkers Sdn Bhd &rsaquo; @yield('page_title', 'Dashboard')</div>
+      <div class="topbar-breadcrumb">FGV Johor Bulkers Sdn Bhd &rsaquo; @yield('page_title', 'Dashboard')</div>
     </div>
     <div class="topbar-right">
       <span style="font-size:12px;color:var(--muted)" id="liveClock"></span>
