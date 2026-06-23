@@ -13,12 +13,12 @@
 <body class="app-body">
 <aside class="sidebar" id="sidebar">
     <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
-    <div class="sidebar-brand">
+    <a class="sidebar-brand" href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;cursor:pointer;" title="Go to Dashboard">
         <div class="brand-icon-sm">
             <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:26px;height:26px;object-fit:contain;">
         </div>
         <span>HR Admin</span>
-    </div>
+    </a>
     <nav class="sidebar-nav">
         @auth
         <a href="{{ url('/dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
@@ -166,17 +166,6 @@
         </a>
         @endauth
     </nav>
-    @auth
-    <div class="sidebar-footer">
-        <div class="sidebar-user">
-            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
-            <div class="user-info">
-                <span class="user-name">{{ explode(' ', Auth::user()->name)[0] }}</span>
-                <span class="user-role {{ str_replace('_', '-', Auth::user()->role) }}">{{ Auth::user()->getRoleLabel() }}</span>
-            </div>
-        </div>
-    </div>
-    @endauth
 </aside>
 <div class="main-wrapper">
     <header class="topbar">
