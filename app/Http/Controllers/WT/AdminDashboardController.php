@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WT;
 
 use Illuminate\Http\Request;
 use App\Models\WT\WalkieTalkie;
+use App\Models\WT\UserActivityLog;
 use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
@@ -99,6 +100,10 @@ class AdminDashboardController extends Controller
         $totalWalkie = WalkieTalkie::count();
 
         $recentWalkies = WalkieTalkie::orderBy('walkie_id', 'desc')->take(5)->get();
+        $recentActivities = UserActivityLog::with('user')
+            ->orderByDesc('created_at')
+            ->take(6)
+            ->get();
 
         return view('wt.admin.dashboard', compact(
             'statusCountArray', 
@@ -106,9 +111,9 @@ class AdminDashboardController extends Controller
             'originalValues', 
             'originalColors', 
             'totalWalkie', 
-            'recentWalkies'
+            'recentWalkies',
+            'recentActivities'
         ));
     }
 }
-
 

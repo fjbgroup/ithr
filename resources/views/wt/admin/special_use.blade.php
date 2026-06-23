@@ -1753,5 +1753,141 @@ body .content-surface:has(#specialTable) .wt-data-field label {
 }
 </style>
 
-@endsection
+<style id="special-use-theme-sync-final">
+html:not(.dark) body .content-surface:has(#specialTable),
+html[data-theme="light"] body .content-surface:has(#specialTable) {
+    background: #f5f8fc !important;
+    border-color: #d8e1ed !important;
+    color: #0f172a !important;
+}
 
+html:not(.dark) body .content-surface:has(#specialTable) .special-page-shell,
+html:not(.dark) body .content-surface:has(#specialTable) .special-page-shell + .wt-data,
+html[data-theme="light"] body .content-surface:has(#specialTable) .special-page-shell,
+html[data-theme="light"] body .content-surface:has(#specialTable) .special-page-shell + .wt-data {
+    background: transparent !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-filter,
+html:not(.dark) body .content-surface .special-page-shell + .wt-data .wt-data-filter,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-filter,
+html[data-theme="light"] body .content-surface .special-page-shell + .wt-data .wt-data-filter,
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-table,
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-footer,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-table,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-footer {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-field label,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-field label {
+    color: #64748b !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-input,
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-select,
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-reset,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-input,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-select,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-reset {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) #specialTable,
+html:not(.dark) body .content-surface:has(#specialTable) #specialTable tbody,
+html:not(.dark) body .content-surface:has(#specialTable) #specialTable tbody tr,
+html[data-theme="light"] body .content-surface:has(#specialTable) #specialTable,
+html[data-theme="light"] body .content-surface:has(#specialTable) #specialTable tbody,
+html[data-theme="light"] body .content-surface:has(#specialTable) #specialTable tbody tr {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) #specialTable thead th,
+html[data-theme="light"] body .content-surface:has(#specialTable) #specialTable thead th {
+    background: #eef3f8 !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) #specialTable tbody td,
+html[data-theme="light"] body .content-surface:has(#specialTable) #specialTable tbody td {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #1f2937 !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) #specialTable tbody tr:hover td,
+html[data-theme="light"] body .content-surface:has(#specialTable) #specialTable tbody tr:hover td {
+    background: #f8fafc !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-info,
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data-empty,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-info,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data-empty {
+    color: #334155 !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data .wt-data-page,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data .wt-data-page {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html:not(.dark) body .content-surface:has(#specialTable) .wt-data .wt-data-page.is-active,
+html[data-theme="light"] body .content-surface:has(#specialTable) .wt-data .wt-data-page.is-active {
+    background: #0f3a72 !important;
+    border-color: #0f3a72 !important;
+    color: #ffffff !important;
+}
+
+html.dark body .content-surface:has(#specialTable),
+html[data-theme="dark"] body .content-surface:has(#specialTable) {
+    background: #0b1220 !important;
+    border-color: #273449 !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface:has(#specialTable) .wt-data-filter,
+html.dark body .content-surface .special-page-shell + .wt-data .wt-data-filter,
+html[data-theme="dark"] body .content-surface:has(#specialTable) .wt-data-filter,
+html[data-theme="dark"] body .content-surface .special-page-shell + .wt-data .wt-data-filter {
+    background: #0f172a !important;
+    border-color: rgba(148, 163, 184, .18) !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface:has(#specialTable) .wt-data-input,
+html.dark body .content-surface:has(#specialTable) .wt-data-select,
+html.dark body .content-surface:has(#specialTable) .wt-data-reset,
+html[data-theme="dark"] body .content-surface:has(#specialTable) .wt-data-input,
+html[data-theme="dark"] body .content-surface:has(#specialTable) .wt-data-select,
+html[data-theme="dark"] body .content-surface:has(#specialTable) .wt-data-reset {
+    background: #111827 !important;
+    border-color: rgba(148, 163, 184, .26) !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface:has(#specialTable) #specialTable thead th,
+html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable thead th {
+    background: #111827 !important;
+    border-color: #334155 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark body .content-surface:has(#specialTable) #specialTable tbody td,
+html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable tbody td {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #dbe4f0 !important;
+}
+</style>
+
+@endsection
