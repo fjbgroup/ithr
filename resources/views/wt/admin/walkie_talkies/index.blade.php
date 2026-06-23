@@ -586,6 +586,510 @@
     @endpush
 
     @push('final_styles')
+    <style id="inventory-row-line-to-border-final">
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            overflow: hidden !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            margin-left: -16px !important;
+            width: calc(100% + 16px) !important;
+            min-width: calc(100% + 16px) !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup {
+            width: 120px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup {
+            width: 118px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:nth-child(2),
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:nth-child(2),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:nth-child(2),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:nth-child(2) {
+            width: 118px !important;
+            min-width: 118px !important;
+            text-align: center !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:nth-child(5),
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:nth-child(5),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:nth-child(5),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:nth-child(5) {
+            text-align: center !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
+            padding-left: 26px !important;
+            padding-right: 10px !important;
+            border-left: 1px solid #e2e8f0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            border-left-color: #cbd5e1 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-reference-layout-final">
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            background: #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            width: max-content !important;
+            min-width: 100% !important;
+            margin: 0 !important;
+            margin-left: 0 !important;
+            border: 0 !important;
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            table-layout: auto !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup {
+            width: 104px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup {
+            width: 98px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup {
+            width: 136px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-model-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-model-colgroup {
+            width: 88px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
+            height: 36px !important;
+            padding: 9px 10px !important;
+            background: #eef3f8 !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 0 !important;
+            color: #1e293b !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            line-height: 1.2 !important;
+            letter-spacing: .03em !important;
+            text-align: left !important;
+            text-transform: uppercase !important;
+            white-space: nowrap !important;
+            vertical-align: middle !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
+            height: 42px !important;
+            padding: 8px 10px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 0 !important;
+            color: #0f172a !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            line-height: 1.25 !important;
+            white-space: nowrap !important;
+            vertical-align: middle !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            width: 104px !important;
+            min-width: 104px !important;
+            max-width: 104px !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            text-align: center !important;
+            border-left-width: 1px !important;
+            border-left-style: solid !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            border-left-color: #cbd5e1 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            border-left-color: #e2e8f0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip {
+            margin: 0 !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            border-color: #2f3b4f !important;
+            background: #111827 !important;
+        }
+
+        html.dark .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html.dark body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            background: #111827 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
+            background: #1f2937 !important;
+            border-color: #2f3b4f !important;
+            color: #e5edf7 !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            background: #111827 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            border-left-color: #2f3b4f !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            border-left-color: #263244 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
+            background: #111827 !important;
+            border-color: #263244 !important;
+            color: #e5edf7 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            margin-left: -16px !important;
+            width: calc(100% + 16px) !important;
+            min-width: calc(100% + 16px) !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup {
+            width: 120px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
+            padding-left: 26px !important;
+            padding-right: 10px !important;
+            border-left-width: 1px !important;
+            border-left-style: solid !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            border-left-color: #cbd5e1 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            border-left-color: #e2e8f0 !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-remove-left-corner-spot-final">
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            border-left: 0 !important;
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            border-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            margin-left: 0 !important;
+            width: 100% !important;
+            border-left: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            border-left: 0 !important;
+            border-top-left-radius: 0 !important;
+            padding-left: 26px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-second-picture-edge-final">
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            overflow: hidden !important;
+            border-radius: 8px !important;
+            background: #eef3f8 !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+            border-radius: 8px !important;
+            background: #eef3f8 !important;
+            overflow-x: auto !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            margin: 0 !important;
+            margin-left: 0 !important;
+            width: 100% !important;
+            border-left: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            background: #eef3f8 !important;
+            border-left: 0 !important;
+            border-top-left-radius: 0 !important;
+            padding-left: 26px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            background: #ffffff !important;
+            border-left: 0 !important;
+            padding-left: 26px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            background: #1f2937 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            background: #1f2937 !important;
+            border-left-color: #2f3b4f !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            background: #111827 !important;
+            border-left-color: #263244 !important;
+        }
+
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            border-left: 0 !important;
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            border-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            margin-left: 0 !important;
+            width: 100% !important;
+            border-left: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            border-left: 0 !important;
+            border-top-left-radius: 0 !important;
+            padding-left: 26px !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-left-edge-no-gap-final">
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #eef3f8 !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+            background: #eef3f8 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            margin: 0 !important;
+            border-left: 0 !important;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            border-top-left-radius: 8px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            background: #1f2937 !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
     <style id="inventory-no-left-table-gap">
         body .content-surface #mainTableContainer.inventory-table-shell,
         body .content-surface #inventoryTableScroll.clean-admin-table-scroll {
@@ -1048,9 +1552,9 @@
         $showInventoryBulk = false;
         @endphp
 
-        <div id="mainTableContainer" class="clean-admin-table-shell inventory-table-shell" style="padding:0 !important; margin-left:0 !important; overflow:hidden !important;">
-            <div id="inventoryTableScroll" class="clean-admin-table-scroll" style="padding:0 !important; margin:0 !important; border:0 !important;">
-                <table id="walkiesTable" class="clean-admin-table text-left" style="margin:0 !important; border-left:0 !important;">
+        <div id="mainTableContainer" class="clean-admin-table-shell inventory-table-shell border border-gray-200 rounded-xl overflow-hidden">
+            <div id="inventoryTableScroll" class="clean-admin-table-scroll w-full overflow-x-auto">
+                <table id="walkiesTable" class="clean-admin-table w-full border-collapse text-left">
                 <colgroup>
                     @if($showInventoryBulk)
                     <col class="inventory-select-colgroup">
@@ -7667,12 +8171,12 @@
     <style id="inventory-readable-maintenance-action-final">
         .inventory-page-shell #walkiesTable.clean-admin-table thead th,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
-            height: 34px !important;
-            padding: 8px 12px !important;
+            height: 28px !important;
+            padding: 5px 8px !important;
             background: #eef3f8 !important;
             border: 1px solid #cbd5e1 !important;
             color: #1e293b !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
             font-weight: 900 !important;
             line-height: 1.2 !important;
             letter-spacing: .04em !important;
@@ -7682,12 +8186,12 @@
 
         .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
-            height: 38px !important;
-            padding: 8px 12px !important;
+            height: 30px !important;
+            padding: 5px 8px !important;
             background: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
             color: #0f172a !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
             font-weight: 600 !important;
             line-height: 1.25 !important;
             vertical-align: middle !important;
@@ -7698,12 +8202,12 @@
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            min-width: 62px !important;
-            height: 22px !important;
-            padding: 0 8px !important;
+            min-width: 54px !important;
+            height: 18px !important;
+            padding: 0 6px !important;
             border: 1px solid transparent !important;
             border-radius: 5px !important;
-            font-size: 10px !important;
+            font-size: 9px !important;
             font-weight: 900 !important;
             line-height: 1 !important;
             letter-spacing: .02em !important;
@@ -7757,6 +8261,10 @@
             color: #0f172a !important;
             font-weight: 900 !important;
             opacity: 1 !important;
+            min-height: 18px !important;
+            padding: 1px 6px !important;
+            font-size: 9px !important;
+            line-height: 1 !important;
         }
 
         .inventory-page-shell #walkiesTable .inventory-action-buttons,
@@ -7781,11 +8289,11 @@
             align-items: center !important;
             justify-content: center !important;
             gap: 3px !important;
-            height: 24px !important;
-            min-height: 24px !important;
-            padding: 0 6px !important;
+            height: 20px !important;
+            min-height: 20px !important;
+            padding: 0 5px !important;
             border-radius: 5px !important;
-            font-size: 10px !important;
+            font-size: 9px !important;
             font-weight: 800 !important;
             line-height: 1 !important;
             letter-spacing: 0 !important;
@@ -7908,6 +8416,13 @@
             border-radius: 0 !important;
         }
 
+        .inventory-page-shell #walkiesTable.clean-admin-table th,
+        .inventory-page-shell #walkiesTable.clean-admin-table td,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td {
+            border-radius: 0 !important;
+        }
+
         .inventory-page-shell #walkiesTable.clean-admin-table th:first-child,
         .inventory-page-shell #walkiesTable.clean-admin-table td:first-child,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child,
@@ -7930,6 +8445,374 @@
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child .inventory-id-chip,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip {
             margin-left: 0 !important;
+        }
+
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child {
+            position: relative !important;
+            margin-left: 0 !important;
+            padding-left: 8px !important;
+            border-left: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            content: "" !important;
+            position: absolute !important;
+            top: -1px !important;
+            bottom: -1px !important;
+            left: -18px !important;
+            width: 18px !important;
+            background: inherit !important;
+            border-top: inherit !important;
+            border-bottom: inherit !important;
+            pointer-events: none !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child::before {
+            background: #eef3f8 !important;
+            border-top-color: #cbd5e1 !important;
+            border-bottom-color: #cbd5e1 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child::before,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child::before,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child::before,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child::before {
+            background: #1f2937 !important;
+            border-top-color: #2f3b4f !important;
+            border-bottom-color: #2f3b4f !important;
+        }
+
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            background: #ffffff !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            background: #111827 !important;
+        }
+
+    </style>
+    @endpush
+
+    @push('final_styles')
+    <style id="inventory-true-last-edge-final">
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 12px !important;
+            background: #ffffff !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: #ffffff !important;
+            overflow-x: auto !important;
+            overflow-y: visible !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            margin: 0 !important;
+            margin-left: 0 !important;
+            width: 100% !important;
+            border-left: 0 !important;
+            border-radius: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup {
+            width: 94px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            background: #eef3f8 !important;
+            border: 1px solid #cbd5e1 !important;
+            border-left: 0 !important;
+            border-radius: 0 !important;
+            overflow: visible !important;
+            width: 94px !important;
+            min-width: 94px !important;
+            max-width: 94px !important;
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+            text-align: center !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-left: 0 !important;
+            width: 94px !important;
+            min-width: 94px !important;
+            max-width: 94px !important;
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+            text-align: center !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child {
+            border-left-color: transparent !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            background: #111827 !important;
+        }
+
+        html.dark .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html.dark body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            border-color: #2f3b4f !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            background: #1f2937 !important;
+            border-color: #2f3b4f !important;
+            border-left-color: transparent !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            background: #111827 !important;
+            border-color: #263244 !important;
+            border-left-color: transparent !important;
+        }
+
+        .inventory-page-shell #mainTableContainer.inventory-table-shell,
+        body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            background: #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll,
+        body .content-surface .inventory-page-shell #inventoryTableScroll.clean-admin-table-scroll {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: #ffffff !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            width: max-content !important;
+            min-width: 100% !important;
+            margin: 0 !important;
+            border: 0 !important;
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+            table-layout: auto !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup {
+            width: 104px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup {
+            width: 98px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup {
+            width: 136px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-model-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-model-colgroup {
+            width: 88px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
+            height: 36px !important;
+            padding: 9px 10px !important;
+            background: #eef3f8 !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 0 !important;
+            color: #1e293b !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            line-height: 1.2 !important;
+            letter-spacing: .03em !important;
+            text-align: left !important;
+            text-transform: uppercase !important;
+            white-space: nowrap !important;
+            vertical-align: middle !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
+            height: 42px !important;
+            padding: 8px 10px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 0 !important;
+            color: #0f172a !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            line-height: 1.25 !important;
+            white-space: nowrap !important;
+            vertical-align: middle !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            width: 104px !important;
+            min-width: 104px !important;
+            max-width: 104px !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            text-align: center !important;
+            border-left: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child::before {
+            display: none !important;
+            content: none !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td:first-child .inventory-id-chip {
+            margin: 0 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
+            background: #1f2937 !important;
+            border-color: #2f3b4f !important;
+            color: #e5edf7 !important;
+        }
+
+        html.dark .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        html[data-theme="dark"] .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        html.dark body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td,
+        html[data-theme="dark"] body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
+            background: #111827 !important;
+            border-color: #263244 !important;
+            color: #e5edf7 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            margin-left: -16px !important;
+            width: calc(100% + 16px) !important;
+            min-width: calc(100% + 16px) !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup {
+            width: 120px !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
+            padding-left: 26px !important;
+            padding-right: 10px !important;
+            border-left-width: 1px !important;
+            border-left-style: solid !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            border-left-color: #cbd5e1 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
+            border-left-color: #e2e8f0 !important;
         }
     </style>
     @endpush
