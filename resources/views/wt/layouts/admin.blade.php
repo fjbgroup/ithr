@@ -91,7 +91,7 @@
     $impersonatorAdminItId = session('impersonator_admin_it_id');
     $isExecutiveImpersonation = $actualRole === 'admin' && filled($impersonatorAdminItId);
     $executiveSwitcherAccounts = $actualRole === 'admin_it'
-        ? \App\Models\WT\User::where('role', 'admin')
+        ? \App\Models\WT\User::where('wt_role', 'admin')
             ->orderBy('name')
             ->orderBy('staff_no')
             ->get(['id', 'staff_no', 'name', 'dept_name'])
@@ -358,7 +358,7 @@
             <option value="">Executive Account</option>
             @foreach($executiveSwitcherAccounts as $executiveAccount)
               <option value="{{ $executiveAccount->user_id ?? $executiveAccount->id }}">
-                {{ strtoupper($executiveAccount->full_name ?: ($executiveAccount->username ?? $executiveAccount->name ?? '')) }}{{ isset($executiveAccount->dept_name) && $executiveAccount->dept_name ? ' - ' . strtoupper($executiveAccount->dept_name) : '' }}
+                {{ strtoupper($executiveAccount->full_name ?: ($executiveAccount->staff_id ?? '')) }}{{ $executiveAccount->department ? ' - ' . strtoupper($executiveAccount->department) : '' }}
               </option>
             @endforeach
           </select>
