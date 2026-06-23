@@ -882,16 +882,31 @@ $(document).ready(function () {
 </script>
 
 <!-- EASTER EGG -->
-<div id="eggModal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(10,18,32,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:420px;margin:20px;box-shadow:0 32px 80px rgba(0,0,0,.35);font-family:'DM Sans',sans-serif;overflow:hidden">
-    <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:32px 28px 24px;text-align:center">
-      <div style="width:64px;height:64px;background:rgba(255,255,255,.12);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:1.5px solid rgba(255,255,255,.18)">
-        <i class="bi bi-cpu-fill" style="color:#fff;font-size:28px"></i>
+<style>
+@keyframes egg-bd-in  {from{opacity:0}to{opacity:1}}
+@keyframes egg-bd-out {from{opacity:1}to{opacity:0}}
+@keyframes egg-card-in {from{opacity:0;transform:scale(.9) translateY(30px)}to{opacity:1;transform:none}}
+@keyframes egg-card-out{from{opacity:1;transform:none}to{opacity:0;transform:scale(.9) translateY(30px)}}
+#eggModal.egg-open             {animation:egg-bd-in   .3s ease both}
+#eggModal.egg-open  #eggCard   {animation:egg-card-in .4s cubic-bezier(.16,.84,.44,1) .04s both}
+#eggModal.egg-close            {animation:egg-bd-out  .35s ease both}
+#eggModal.egg-close #eggCard   {animation:egg-card-out .3s cubic-bezier(.55,0,1,.45) both}
+</style>
+
+<div id="eggModal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(10,18,32,.75);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px">
+  <div id="eggCard" style="background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:430px;box-shadow:0 32px 80px rgba(0,0,0,.45);font-family:'DM Sans',sans-serif;position:relative;overflow:hidden">
+
+    {{-- Header --}}
+    <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:28px 28px 22px;text-align:center;border-radius:20px 20px 0 0">
+      <div style="margin:0 auto 14px;width:72px;height:72px;display:flex;align-items:center;justify-content:center">
+        <img src="{{ asset('assets/images/fjb-logo-egg.png') }}" alt="FJB Logo" style="width:68px;height:68px;object-fit:contain">
       </div>
-      <div style="color:#fff;font-size:17px;font-weight:800;letter-spacing:.02em">FJB Inventory System</div>
-      <div style="color:rgba(255,255,255,.55);font-size:12px;margin-top:4px;font-weight:500">Internal Management Platform</div>
+      <div style="color:#fff;font-size:18px;font-weight:800;letter-spacing:.02em">FJB Inventory System</div>
+      <div style="color:rgba(255,255,255,.5);font-size:12px;margin-top:5px;font-weight:500">Internal Management Platform</div>
     </div>
-    <div style="padding:26px 28px">
+
+    {{-- Body --}}
+    <div style="padding:22px 28px 0">
       <table style="width:100%;border-collapse:collapse;font-size:13px">
         <tr style="border-bottom:1px solid var(--border)">
           <td style="padding:9px 0;width:22px"><i class="bi bi-tag-fill" style="color:var(--accent)"></i></td>
@@ -911,7 +926,7 @@ $(document).ready(function () {
         <tr style="border-bottom:1px solid var(--border)">
           <td style="padding:9px 0"><i class="bi bi-calendar3" style="color:#0d9488"></i></td>
           <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Period</td>
-          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 - 17/07/2026)</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 – 17/07/2026)</td>
         </tr>
         <tr>
           <td style="padding:9px 0"><i class="bi bi-building" style="color:#d97706"></i></td>
@@ -919,37 +934,65 @@ $(document).ready(function () {
           <td style="padding:9px 0;color:var(--text);font-weight:700">ICT Department</td>
         </tr>
       </table>
-      <div style="margin-top:22px;padding:14px 16px;background:var(--body-bg);border-radius:10px;border:1px solid var(--border);text-align:center">
+      <div style="margin-top:18px;padding:13px 130px 13px 16px;background:var(--body-bg);border-radius:10px;border:1px solid var(--border)">
         <div style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.6">
-          &ldquo;Thank you for using this system.<br>Built with care to simplify your workflow.&rdquo;
+          &ldquo;Thank you for using this system. Built with care to simplify your workflow.&rdquo;
         </div>
       </div>
     </div>
-    <div style="padding:14px 28px 20px;text-align:center">
-      <button onclick="document.getElementById('eggModal').style.display='none'"
-        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 32px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+
+    {{-- Footer --}}
+    <div style="padding:16px 28px 22px;text-align:center">
+      <button id="eggClose"
+        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 36px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s"
+        onmouseover="this.style.background='#1e3f6e'" onmouseout="this.style.background='#142b47'">
         Close
       </button>
     </div>
+
+    {{-- Cutout character — inside card, anchored bottom-right --}}
+    <img src="{{ asset('assets/images/dev-irfan-cutout.png') }}" alt="Irfan"
+      style="position:absolute;bottom:0;right:0;height:260px;width:auto;pointer-events:none;user-select:none;display:block">
   </div>
 </div>
 <script>
 (function(){
-  var _eggN = 0, _eggT;
+  var modal   = document.getElementById('eggModal');
+  var _eggN   = 0, _eggT, _closing = false, _closeTimer;
+
+  function openEgg() {
+    clearTimeout(_closeTimer);
+    _closing = false;
+    modal.classList.remove('egg-open','egg-close');
+    modal.style.display = 'flex';
+    void modal.offsetWidth;
+    modal.classList.add('egg-open');
+  }
+
+  function closeEgg() {
+    if (_closing) return;
+    _closing = true;
+    modal.classList.remove('egg-open');
+    void modal.offsetWidth;
+    modal.classList.add('egg-close');
+    _closeTimer = setTimeout(function(){
+      modal.style.display = 'none';
+      modal.classList.remove('egg-close');
+      _closing = false;
+    }, 380);
+  }
+
   window._eggClick = function() {
     _eggN++;
     clearTimeout(_eggT);
     _eggT = setTimeout(function(){ _eggN = 0; }, 1800);
-    if (_eggN >= 5) {
-      _eggN = 0;
-      document.getElementById('eggModal').style.display = 'flex';
-    }
+    if (_eggN >= 5) { _eggN = 0; openEgg(); }
   };
-  document.getElementById('eggModal').addEventListener('click', function(e){
-    if (e.target === this) this.style.display = 'none';
-  });
+
+  document.getElementById('eggClose').addEventListener('click', closeEgg);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeEgg(); });
   document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape') document.getElementById('eggModal').style.display = 'none';
+    if (e.key === 'Escape') closeEgg();
   });
 })();
 </script>
