@@ -49,6 +49,36 @@
 </div>
 @endif
 
+@if (auth()->user()->isAdminIT())
+@php $emailOn = \App\Models\IT\EmailSetting::emailEnabled(); @endphp
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $emailOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $emailOn ? '#0284c7' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+        <div style="flex:1;">
+            <span style="font-size:.88rem;font-weight:600;">System Email Sending</span>
+            @if ($emailOn)
+                <span class="status-badge status-completed" style="margin-left:.5rem;">Enabled</span>
+            @else
+                <span style="font-size:.8rem;color:#991b1b;background:#fee2e2;padding:.2rem .5rem;border-radius:.3rem;margin-left:.5rem;">Disabled</span>
+            @endif
+            <div style="font-size:.78rem;color:var(--muted,#64748b);margin-top:.2rem;">
+                {{ $emailOn
+                    ? 'The system can send email (OTP, notifications). Disable to stop all outgoing email temporarily.'
+                    : 'All outgoing email is paused. Authenticator (2FA) users are unaffected.' }}
+            </div>
+        </div>
+        <form method="POST" action="{{ route('system.email.toggle') }}"
+              onsubmit="return confirm('{{ $emailOn ? 'Disable ALL outgoing email? OTP and notification emails will stop until you re-enable this. Authenticator (2FA) users are unaffected.' : 'Re-enable email sending for the whole system?' }}');">
+            @csrf
+            <input type="hidden" name="enable" value="{{ $emailOn ? 0 : 1 }}">
+            <button type="submit" class="btn btn-sm {{ $emailOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $emailOn ? 'Disable' : 'Enable' }}
+            </button>
+        </form>
+    </div>
+</div>
+@endif
+
 <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
     <div class="app-search" style="min-width:220px;">
         <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>

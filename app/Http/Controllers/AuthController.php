@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use App\Models\User;
+use App\Models\IT\EmailSetting;
 use App\Services\AuditLogger;
 use App\Services\SsoService;
 use PragmaRX\Google2FA\Google2FA;
@@ -64,6 +65,14 @@ class AuthController extends Controller
         }
 
         // ── Email OTP path: non-HR users ─────────────────────────────────────
+        // If the global email master switch is OFF, no OTP email can be sent.
+        // Block here so the user isn't told "OTP sent" for an email that never goes out.
+        if (!EmailSetting::emailEnabled()) {
+            return back()->with('error',
+                'Password reset by email is temporarily unavailable. Please contact the administrator to reset your password.'
+            )->withInput();
+        }
+
         if (!$user->email) {
             return back()->with('error', 'No email address found for this Staff ID. Please contact HR to update your email.')->withInput();
         }
