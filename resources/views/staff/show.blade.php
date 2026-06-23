@@ -254,7 +254,7 @@
                     <table class="table">
                         <thead><tr><th>Name</th><th>Relationship</th><th>DOB</th><th>Phone</th></tr></thead>
                         <tbody>
-                            @forelse($staff->familyMembers as $fm)
+                            @forelse($staff->familyMembers->sortBy(fn($fm) => $fm->date_of_birth ? date('Y', strtotime($fm->date_of_birth)) : PHP_INT_MAX) as $fm)
                                 <tr>
                                     <td><strong>{{ $fm->family_member_name }}</strong></td>
                                     <td>{{ $fm->relationship }}</td>
