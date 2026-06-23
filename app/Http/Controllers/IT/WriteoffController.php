@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers\IT;
 
@@ -164,7 +164,7 @@ class WriteoffController extends Controller
             EwasteItem::whereIn('id', $ewIds)->where('checked_by_user_id', $user->id)->where('hou_status', 'Pending')
                 ->update(['hou_status' => 'Rejected', 'disposal_status' => 'Rejected', 'hou_signed_name' => $user->full_name, 'hou_sig_img' => $sigImg, 'hou_signed_at' => now(), 'hou_remark' => $remark]);
             ActivityLogService::log('HOU_REJECTED', 'ewaste', $ewId, 'HOU rejected write-off: ' . $ew->description);
-            if ($ew->created_by) NotificationService::notifyUser($ew->created_by, 'writeoff', 'âŒ Write-Off Rejected by HOU', $user->full_name . ' (HOU) rejected the write-off.', route('it.writeoff.index'));
+            if ($ew->created_by) NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Rejected by HOU', $user->full_name . ' (HOU) rejected the write-off.', route('it.writeoff.index'));
             return redirect()->route('it.writeoff.index')->with('success', 'Write-off rejected.');
         }
 
@@ -200,7 +200,7 @@ class WriteoffController extends Controller
             EwasteItem::whereIn('id', $ewIds)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')
                 ->update(['gm_status' => 'Rejected', 'disposal_status' => 'Rejected', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark]);
             ActivityLogService::log('GM_REJECTED', 'ewaste', $ewId, 'GM rejected write-off: ' . $ew->description);
-            if ($ew->created_by) NotificationService::notifyUser($ew->created_by, 'writeoff', 'âŒ Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off.', route('it.writeoff.index'));
+            if ($ew->created_by) NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off.', route('it.writeoff.index'));
             if ($ew->checked_by_user_id) NotificationService::notifyUser($ew->checked_by_user_id, 'writeoff', 'âŒ Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off that you had checked.', route('it.writeoff.index'));
             return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) rejected.');
         }
@@ -236,7 +236,7 @@ class WriteoffController extends Controller
             }
             EwasteItem::whereIn('id', $ewIds)->update(['ceo_status' => 'Rejected', 'disposal_status' => 'Rejected', 'ceo_signed_name' => $user->full_name, 'ceo_sig_img' => $sigImg, 'ceo_signed_at' => now(), 'ceo_remark' => $remark]);
             ActivityLogService::log('CEO_REJECTED', 'ewaste', $ewId, 'CEO rejected write-off.');
-            if ($ew->created_by) NotificationService::notifyUser($ew->created_by, 'writeoff', 'âŒ Write-Off Rejected by CEO', $user->full_name . ' (CEO) rejected the write-off.', route('it.writeoff.index'));
+            if ($ew->created_by) NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Rejected by CEO', $user->full_name . ' (CEO) rejected the write-off.', route('it.writeoff.index'));
             return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) rejected.');
         }
 
@@ -244,6 +244,9 @@ class WriteoffController extends Controller
         $items = EwasteItem::whereIn('id', $ewIds)->get();
         foreach ($items as $item) { $this->setAssetStatus($item, 'Pending to E-Waste/Disposal'); }
         ActivityLogService::log('CEO_APPROVED', 'ewaste', $ewId, 'CEO approved ' . count($ewIds) . ' write-off item(s).');
+        foreach (array_unique($items->pluck('created_by')->filter()->all()) as $creatorId) {
+            NotificationService::notifyUserWithEmail($creatorId, 'writeoff', 'Write-Off Approved by CEO', $user->full_name . ' (CEO) approved your write-off item(s). It will be forwarded to Finance for processing.', route('it.writeoff.index'));
+        }
         NotificationService::notifyAdmins('writeoff', 'âœ… Write-Off Approved by CEO', 'CEO approved ' . count($ewIds) . ' write-off item(s).', route('it.writeoff.index'));
         return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) approved.');
     }
@@ -435,7 +438,7 @@ class WriteoffController extends Controller
         }
         ActivityLogService::log('CEO_APPROVED', 'ewaste', $id, 'Approved write-off: ' . $ew->description);
         if ($ew->created_by) {
-            NotificationService::notifyUser($ew->created_by, 'writeoff', 'âœ… Write-Off Approved', $user->full_name . ' approved the write-off.', route('it.writeoff.index'));
+            NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Approved', $user->full_name . ' approved your write-off.', route('it.writeoff.index'));
         }
         return redirect()->route('it.writeoff.index')->with('success', 'Write-off approved.');
     }
@@ -458,7 +461,7 @@ class WriteoffController extends Controller
                 InventoryItem::where('id', $ew->original_inventory_id)->update(['location' => 'E-Waste']);
             }
             if ($ew->created_by) {
-                NotificationService::notifyUser($ew->created_by, 'writeoff', 'âœ… Write-Off Approved', $user->full_name . ' approved the write-off.', route('it.writeoff.index'));
+                NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Approved', $user->full_name . ' approved your write-off.', route('it.writeoff.index'));
             }
         }
         ActivityLogService::log('CEO_APPROVE_ALL', 'ewaste', 0, 'Approved all ' . $items->count() . ' pending write-offs.');
@@ -556,4 +559,5 @@ class WriteoffController extends Controller
         return back();
     }
 }
+
 

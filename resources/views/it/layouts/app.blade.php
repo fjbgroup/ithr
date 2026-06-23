@@ -560,11 +560,12 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
     <a href="{{ route('it.activity.index') }}" class="nav-link {{ request()->routeIs('activity.*') ? 'active' : '' }}">
       <i class="bi bi-clock-history"></i> Activity Log
     </a>
+    @endif
+    @endif
+
     <a href="{{ route('it.email-settings.index') }}" class="nav-link {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">
-      <i class="bi bi-envelope-fill"></i> Email Settings
+      <i class="bi bi-envelope-fill"></i> Email {{ $user->isAdmin() ? 'Settings' : 'Notifications' }}
     </a>
-    @endif
-    @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
     <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">

@@ -143,6 +143,9 @@ Route::prefix('it')->name('it.')->group(function () {
             Route::delete('/requests/ewaste/{id}', [RequestController::class, 'retractEwaste'])->name('requests.ewaste.retract');
             Route::delete('/requests/delete/{id}', [RequestController::class, 'retractDelete'])->name('requests.delete.retract');
 
+            // Email settings (read-only for all; write restricted to admin inside the admin group)
+            Route::get('/email-settings', [EmailSettingController::class, 'index'])->name('email-settings.index');
+
             // Admin only
             Route::middleware('it.role:admin')->group(function () {
                 Route::get('/users',                         [UserController::class, 'index'])->name('users.index');
@@ -173,7 +176,6 @@ Route::prefix('it')->name('it.')->group(function () {
 
                 Route::get('/activity',                      [ActivityController::class, 'index'])->name('activity.index');
 
-                Route::get('/email-settings',                [EmailSettingController::class, 'index'])->name('email-settings.index');
                 Route::post('/email-settings',               [EmailSettingController::class, 'update'])->name('email-settings.update');
                 Route::post('/email-settings/test',          [EmailSettingController::class, 'testEmail'])->name('email-settings.test');
 

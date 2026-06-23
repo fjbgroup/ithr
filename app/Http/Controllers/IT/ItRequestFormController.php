@@ -386,7 +386,7 @@ class ItRequestFormController extends Controller
         ]);
 
         if ($form->submitted_by) {
-            NotificationService::notifyUser(
+            NotificationService::notifyUserWithEmail(
                 $form->submitted_by,
                 'it_request',
                 'IT Request Approved',
@@ -418,7 +418,7 @@ class ItRequestFormController extends Controller
         ]);
 
         if ($form->submitted_by) {
-            NotificationService::notifyUser(
+            NotificationService::notifyUserWithEmail(
                 $form->submitted_by,
                 'it_request',
                 'IT Request Rejected',

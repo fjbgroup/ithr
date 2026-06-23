@@ -7,14 +7,21 @@ use App\Models\IT\User;
 use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmailSettingController extends Controller
 {
     public function index()
     {
+        $authUser   = Auth::guard('it')->user();
         $settings   = EmailSetting::all_settings();
-        $admins     = User::whereIn('it_role', ['admin', 'finance_admin'])->where('is_active', 1)->orderByRaw('it_role, name')->get(['name', 'email', 'it_role']);
         $configured = !empty($settings['smtp_host']) && !empty($settings['smtp_user']) && !empty($settings['smtp_pass']);
+
+        if (!$authUser->isAdmin()) {
+            return view('it.email-settings.staff', compact('configured', 'authUser'));
+        }
+
+        $admins = User::whereIn('it_role', ['admin', 'finance_admin'])->where('is_active', 1)->orderByRaw('it_role, name')->get(['name', 'email', 'it_role']);
         return view('it.email-settings.index', compact('settings', 'admins', 'configured'));
     }
 

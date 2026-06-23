@@ -187,6 +187,24 @@
     </div>
   </div>
 
+  <!-- Staff notifications -->
+  <div class="es-card">
+    <div class="es-head">
+      <div class="es-head-icon" style="background:#f0fdf4;color:#16a34a"><i class="bi bi-person-check-fill"></i></div>
+      <div><div style="font-size:14px;font-weight:700;color:#1e293b">Staff Notifications</div><div style="font-size:12px;color:#64748b;margin-top:1px">Email sent to the staff member who submitted a request</div></div>
+    </div>
+    <div style="padding:14px 20px 16px">
+      <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc">
+        <div style="width:28px;height:28px;border-radius:7px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi bi-check-circle-fill" style="color:#16a34a"></i></div>
+        <div style="font-size:12px;color:#334155;line-height:1.6">Staff are automatically emailed when their request is <strong>approved or rejected</strong> — for add, edit, delete, e-waste, write-off, and IT request forms.</div>
+      </div>
+      <div style="display:flex;gap:10px;padding:8px 0">
+        <div style="width:28px;height:28px;border-radius:7px;background:#fff7ed;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi bi-exclamation-circle-fill" style="color:#d97706"></i></div>
+        <div style="font-size:12px;color:#64748b;line-height:1.6">Only staff with an email address on their profile will receive these emails. Others still get the in-app bell notification.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Triggers -->
   <div class="es-card">
     <div class="es-head">
@@ -194,7 +212,15 @@
       <div><div style="font-size:14px;font-weight:700;color:#1e293b">When Emails Are Sent</div></div>
     </div>
     <div style="padding:10px 20px 16px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin-bottom:6px;margin-top:2px">To Admins — on new submissions</div>
       @foreach([['#2563eb','bi-box-seam-fill','New Add Asset Request'],['#d97706','bi-pen-fill','New Write-Off Request'],['#dc2626','bi-trash3-fill','New Delete Request'],['#16a34a','bi-recycle','E-Waste Pending Approval']] as [$tc,$ti,$tt])
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f8fafc">
+        <div style="width:28px;height:28px;border-radius:7px;background:{{ $tc }}18;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi {{ $ti }}" style="color:{{ $tc }}"></i></div>
+        <div style="font-size:12px;font-weight:600;color:#334155">{{ $tt }}</div>
+      </div>
+      @endforeach
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin-top:14px;margin-bottom:6px">To Staff — on request outcomes</div>
+      @foreach([['#16a34a','bi-check-circle-fill','Request Approved (Add / Edit / Delete / E-Waste)'],['#ef4444','bi-x-circle-fill','Request Rejected (Add / Edit / Delete / E-Waste)'],['#16a34a','bi-pen-fill','Write-Off Approved by CEO'],['#ef4444','bi-pen-fill','Write-Off Rejected (HOU / GM / CEO)'],['#16a34a','bi-clipboard-check-fill','IT Request Form Approved'],['#ef4444','bi-clipboard-x-fill','IT Request Form Rejected']] as [$tc,$ti,$tt])
       <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f8fafc">
         <div style="width:28px;height:28px;border-radius:7px;background:{{ $tc }}18;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi {{ $ti }}" style="color:{{ $tc }}"></i></div>
         <div style="font-size:12px;font-weight:600;color:#334155">{{ $tt }}</div>

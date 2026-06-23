@@ -36,7 +36,7 @@ class RequestController extends Controller
         ]);
 
         $req->update(['status' => 'Approved', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_approved', 'Add Request Approved', 'Your asset add request has been approved.', route('it.inventory.index'));
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'Add Request Approved', 'Your asset add request has been approved.', route('it.inventory.index'));
         ActivityLogService::log('APPROVE_ADD', 'inventory', $item->id, 'Approved add request for: '.$item->description);
 
         return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Add request approved.');
@@ -48,7 +48,7 @@ class RequestController extends Controller
         if ($req->status !== 'Pending') return back()->with('error', 'Request is no longer pending.');
 
         $req->update(['status' => 'Rejected', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_rejected', 'Add Request Rejected', 'Your asset add request has been rejected.', route('it.inventory.index'));
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'Add Request Rejected', 'Your asset add request has been rejected.', route('it.inventory.index'));
         ActivityLogService::log('REJECT_ADD', 'inventory', 0, 'Rejected add request for: '.$req->description);
 
         return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Add request rejected.');
@@ -105,7 +105,7 @@ class RequestController extends Controller
         }
 
         $req->update(['status' => 'Approved', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_approved', 'Edit Request Approved', 'Your asset edit request has been approved.', $route);
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'Edit Request Approved', 'Your asset edit request has been approved.', $route);
         ActivityLogService::log('APPROVE_EDIT', $logType, $logId, 'Approved edit request for: '.$req->description);
 
         return redirect($route)->with('success', 'Edit request approved.');
@@ -121,7 +121,7 @@ class RequestController extends Controller
             : route('it.non-it.index');
 
         $req->update(['status' => 'Rejected', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_rejected', 'Edit Request Rejected', 'Your asset edit request has been rejected.', $route);
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'Edit Request Rejected', 'Your asset edit request has been rejected.', $route);
         ActivityLogService::log('REJECT_EDIT', 'inventory', 0, 'Rejected edit request for: '.$req->description);
 
         return redirect($route)->with('success', 'Edit request rejected.');
@@ -140,7 +140,7 @@ class RequestController extends Controller
         }
 
         $req->update(['status' => 'Approved', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_approved', 'Delete Request Approved', 'Your asset delete request has been approved.', route('it.inventory.index'));
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'Delete Request Approved', 'Your asset delete request has been approved.', route('it.inventory.index'));
         ActivityLogService::log('APPROVE_DELETE', 'inventory', (int)$req->inventory_id, 'Approved delete request for: '.$req->asset_description);
 
         return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request approved.');
@@ -152,7 +152,7 @@ class RequestController extends Controller
         if ($req->status !== 'Pending') return back()->with('error', 'Request is no longer pending.');
 
         $req->update(['status' => 'Rejected', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_rejected', 'Delete Request Rejected', 'Your asset delete request has been rejected.', route('it.inventory.index'));
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'Delete Request Rejected', 'Your asset delete request has been rejected.', route('it.inventory.index'));
         ActivityLogService::log('REJECT_DELETE', 'inventory', (int)$req->inventory_id, 'Rejected delete request for: '.$req->asset_description);
 
         return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request rejected.');
@@ -167,7 +167,7 @@ class RequestController extends Controller
 
         $req->update(['status' => 'Approved', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
 
-        NotificationService::notifyUser($req->requested_by, 'request_approved', 'E-Waste Request Approved', 'Your e-waste request has been approved.', route('it.inventory.index'));
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'E-Waste Request Approved', 'Your e-waste request has been approved.', route('it.inventory.index'));
         ActivityLogService::log('APPROVE_EWASTE', 'ewaste', (int)$req->inventory_id, 'Approved e-waste request: '.$req->description);
 
         return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'E-waste request approved.');
@@ -179,7 +179,7 @@ class RequestController extends Controller
         if ($req->status !== 'Pending') return back()->with('error', 'Request is no longer pending.');
 
         $req->update(['status' => 'Rejected', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
-        NotificationService::notifyUser($req->requested_by, 'request_rejected', 'E-Waste Request Rejected', 'Your e-waste request has been rejected.', route('it.inventory.index'));
+        NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'E-Waste Request Rejected', 'Your e-waste request has been rejected.', route('it.inventory.index'));
         ActivityLogService::log('REJECT_EWASTE', 'ewaste', (int)$req->inventory_id, 'Rejected e-waste request: '.$req->description);
 
         return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'E-waste request rejected.');
