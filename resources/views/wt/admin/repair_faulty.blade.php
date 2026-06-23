@@ -1371,9 +1371,9 @@ html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-ta
 
 .maintenance-page-shell #maintenanceTable.clean-admin-table thead th.maintenance-action-col,
 .maintenance-page-shell #maintenanceTable.clean-admin-table thead .maintenance-action-col {
-    width: 150px !important;
-    min-width: 150px !important;
-    max-width: 150px !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
     background: #eef3f8 !important;
     border-color: #cbd5e1 !important;
     color: #334155 !important;
@@ -1395,27 +1395,27 @@ html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-ta
 
 .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td.maintenance-action-col,
 .maintenance-page-shell #maintenanceTable.clean-admin-table tbody .maintenance-action-col {
-    width: 150px !important;
-    min-width: 150px !important;
-    max-width: 150px !important;
-    padding-left: 6px !important;
-    padding-right: 6px !important;
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
 }
 
 .maintenance-page-shell #maintenanceTable .clean-admin-actions {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
+    gap: 8px !important;
     flex-wrap: nowrap !important;
     white-space: nowrap !important;
 }
 
 .maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn {
-    min-width: 62px !important;
+    min-width: 72px !important;
     height: 32px !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
 }
 
 .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td {
@@ -1602,6 +1602,8 @@ html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[dat
     </div>
 </div>
 @endif
+
+@include('wt.admin.partials.inventory-tools-table-skin')
 
 <script>
 // ESC key to close

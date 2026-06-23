@@ -1064,4 +1064,5 @@ document.addEventListener('keydown', e => {
     if(e.key==='Escape'){ closeEditModal(); closeAddModal(); closeImportModal(); }
 });
 </script>
+@include('wt.admin.partials.inventory-tools-table-skin')
 @endsection
