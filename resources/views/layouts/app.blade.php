@@ -207,10 +207,10 @@
                     </div>
                 </div>
             </div>
-            <span class="topbar-user">
+            <a href="{{ route('users.show', Auth::id()) }}" class="topbar-user" style="text-decoration:none;color:inherit;cursor:pointer" title="View my profile">
                 <strong>{{ Auth::user()->name }}</strong>
                 <span class="role-badge {{ str_replace('_', '-', Auth::user()->role) }}">{{ Auth::user()->getRoleLabel() }}</span>
-            </span>
+            </a>
             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                 @csrf
                 <button type="submit" class="btn btn-outline btn-sm">
