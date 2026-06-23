@@ -249,25 +249,55 @@
 
         <!-- Family Tab -->
         <div id="tab-family" class="tab-content" style="display:none;">
-            <div class="card">
-                <div class="table-wrap">
-                    <table class="table">
-                        <thead><tr><th>Name</th><th>Relationship</th><th>DOB</th><th>Phone</th></tr></thead>
-                        <tbody>
-                            @forelse($staff->familyMembers->sortBy(fn($fm) => $fm->date_of_birth ? date('Y', strtotime($fm->date_of_birth)) : PHP_INT_MAX) as $fm)
-                                <tr>
-                                    <td><strong>{{ $fm->family_member_name }}</strong></td>
-                                    <td>{{ $fm->relationship }}</td>
-                                    <td>{{ $fm->date_of_birth ? date('d M Y', strtotime($fm->date_of_birth)) : '—' }}</td>
-                                    <td>{{ $fm->phone_number ?? '—' }}</td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="4" class="text-center p-4 text-muted">No family members recorded.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+            @php
+                $byBirthYear = fn($fm) => $fm->date_of_birth ? (int) date('Y', strtotime($fm->date_of_birth)) : PHP_INT_MAX;
+                $familySorted = $staff->familyMembers->sortBy($byBirthYear);
+                $spouses  = $familySorted->filter(fn($fm) => strtolower($fm->relationship) === 'spouse');
+                $children = $familySorted->filter(fn($fm) => strtolower($fm->relationship) === 'child');
+                $otherFamily = $familySorted->filter(fn($fm) => !in_array(strtolower($fm->relationship), ['spouse', 'child']));
+            @endphp
+
+            @if($staff->familyMembers->isEmpty())
+                <div class="card">
+                    <div class="table-wrap">
+                        <table class="table">
+                            <tbody>
+                                <tr><td class="text-center p-4 text-muted">No family members recorded.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            @else
+                @php
+                    $familyGroups = [
+                        ['title' => 'Spouse',           'members' => $spouses],
+                        ['title' => 'Children',         'members' => $children],
+                        ['title' => 'Other Relatives',  'members' => $otherFamily],
+                    ];
+                @endphp
+                @foreach($familyGroups as $group)
+                    @if($group['members']->isNotEmpty())
+                    <div class="card" style="margin-bottom:1rem;">
+                        <div class="card-header"><h3>{{ $group['title'] }} <span class="md-tab-count">{{ $group['members']->count() }}</span></h3></div>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead><tr><th>Name</th><th>Relationship</th><th>DOB</th><th>Phone</th></tr></thead>
+                                <tbody>
+                                    @foreach($group['members'] as $fm)
+                                        <tr>
+                                            <td><strong>{{ $fm->family_member_name }}</strong></td>
+                                            <td>{{ $fm->relationship }}</td>
+                                            <td>{{ $fm->date_of_birth ? date('d M Y', strtotime($fm->date_of_birth)) : '—' }}</td>
+                                            <td>{{ $fm->phone_number ?? '—' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    @endif
+                @endforeach
+            @endif
         </div>
 
         <!-- Training Tab -->

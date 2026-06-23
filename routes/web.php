@@ -30,7 +30,11 @@ Route::post('rooms/bookings/hold', [RoomBookingController::class, 'holdGuestBook
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
-    
+
+    // Microsoft Authenticator (TOTP) challenge after correct credentials
+    Route::get('two-factor', [AuthController::class, 'showTwoFactor'])->name('login.2fa');
+    Route::post('two-factor', [AuthController::class, 'verifyTwoFactor'])->name('login.2fa.verify');
+
     // Forgot Password OTP flow
     Route::get('forgot-password', [AuthController::class, 'showForgot'])->name('password.request');
     Route::post('forgot-password', [AuthController::class, 'requestOtp'])->name('password.otp.request');
