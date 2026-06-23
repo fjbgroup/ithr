@@ -21,11 +21,26 @@ class ReportController extends Controller
         $totalStaff   = Staff::where('is_active', 1)->count();
         $totalDepts   = Department::count();
 
-        $companyCounts = Staff::where('is_active', 1)
+        // staff.company holds a mix of company codes (e.g. "FGVB") and bare
+        // names (e.g. "FGV Bulkers Sdn Bhd"), while companies.name carries a GL
+        // prefix (e.g. "4300 FGV Bulkers Sdn Bhd"). Map every variant to the
+        // code before tallying — otherwise per-company headcounts won't add up.
+        $codeByLabel = [];
+        foreach ($allCompanies as $co) {
+            $codeByLabel[$co->code] = $co->code;
+            $codeByLabel[trim($co->name)] = $co->code;
+            $codeByLabel[trim(preg_replace('/^\d+\s+/', '', $co->name))] = $co->code;
+        }
+
+        $companyCounts = [];
+        $rawCounts = Staff::where('is_active', 1)
             ->select('company', DB::raw('COUNT(*) as count'))
             ->groupBy('company')
-            ->pluck('count', 'company')
-            ->toArray();
+            ->pluck('count', 'company');
+        foreach ($rawCounts as $label => $count) {
+            $key = $codeByLabel[$label] ?? $label;
+            $companyCounts[$key] = ($companyCounts[$key] ?? 0) + $count;
+        }
 
         $deptRows = Department::leftJoin('staff', function($join) {
                 $join->on('staff.department_id', '=', 'departments.id')
@@ -57,7 +72,15 @@ class ReportController extends Controller
 
     public function companyStaffList($company)
     {
-        $staff = Staff::where('company', $company)
+        // $company is a company code (e.g. "FGVB"), but staff.company may store
+        // either the code or the bare name, so match against every variant.
+        $labels = [$company];
+        foreach (Company::where('code', $company)->pluck('name') as $name) {
+            $labels[] = trim($name);
+            $labels[] = trim(preg_replace('/^\d+\s+/', '', $name));
+        }
+
+        $staff = Staff::whereIn('company', $labels)
             ->where('is_active', 1)
             ->select('name', 'staff_no', 'position')
             ->orderBy('name')

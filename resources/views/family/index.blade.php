@@ -102,9 +102,10 @@
         details.spouse-group summary { outline: none; }
         </style>
         @php
-        $spouses = $members->filter(fn($m) => strtolower($m->relationship) === 'spouse');
-        $children = $members->filter(fn($m) => strtolower($m->relationship) === 'child');
-        $others = $members->filter(fn($m) => !in_array(strtolower($m->relationship), ['spouse', 'child']));
+        $byBirthYear = fn($m) => $m->date_of_birth ? (int) date('Y', strtotime($m->date_of_birth)) : PHP_INT_MAX;
+        $spouses = $members->filter(fn($m) => strtolower($m->relationship) === 'spouse')->sortBy($byBirthYear)->values();
+        $children = $members->filter(fn($m) => strtolower($m->relationship) === 'child')->sortBy($byBirthYear)->values();
+        $others = $members->filter(fn($m) => !in_array(strtolower($m->relationship), ['spouse', 'child']))->sortBy($byBirthYear)->values();
         @endphp
 
         @if($spouses->isNotEmpty())
