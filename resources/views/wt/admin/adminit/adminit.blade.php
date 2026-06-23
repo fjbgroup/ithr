@@ -663,7 +663,7 @@
                     </div>
                     <div class="account-field md:col-span-2">
                         <label>Full Name</label>
-                        <input type="text" id="wt_field_full_name" name="full_name" value="{{ old('full_name') }}" required>
+                        <input type="text" id="wt_field_full_name" name="full_name" value="{{ old('full_name') }}" data-preserve-case="true" required>
                     </div>
                     <div class="account-field">
                         <label>Department</label>
@@ -720,7 +720,7 @@
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Full Name</label>
-                    <input type="text" name="full_name" id="edit_full_name" class="navy-input w-full px-4 py-3 rounded-xl border">
+                    <input type="text" name="full_name" id="edit_full_name" class="navy-input w-full px-4 py-3 rounded-xl border" data-preserve-case="true">
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Department</label>
@@ -1042,7 +1042,6 @@
     });
 </script>
 @endpush
-
 
 
 
