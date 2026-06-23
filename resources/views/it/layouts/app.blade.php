@@ -935,10 +935,10 @@ $(document).ready(function () {
           <td style="padding:9px 0;color:var(--text);font-weight:700">ICT Department</td>
         </tr>
       </table>
-      <div style="margin-top:18px;padding:13px 130px 13px 16px;background:var(--body-bg);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.6">
-          &ldquo;Thank you for using this system. Built with care to simplify your workflow.&rdquo;
-        </div>
+      <div style="margin-top:18px;padding:16px;background:var(--body-bg);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:16px">Built with care to simplify your workflow.</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:4px">Yours truly,</div>
+        <img src="{{ asset('assets/images/irfan-signature.png') }}" alt="Irfan Zuraili Signature" style="max-height:80px;max-width:200px;object-fit:contain;opacity:0.85;display:block">
       </div>
     </div>
 
