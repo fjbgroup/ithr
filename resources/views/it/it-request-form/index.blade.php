@@ -62,8 +62,8 @@
 </div>
 @endif
 
-{{-- Stat cards (5 cards) --}}
-<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
+{{-- Stat cards (4 cards) --}}
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
   <div class="itr-admin-stat">
     <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>
@@ -90,19 +90,6 @@
     <div>
       <div class="itr-admin-stat-val">{{ $countRejected }}</div>
       <div class="itr-admin-stat-lbl">Rejected</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat">
-    <div class="itr-admin-stat-icon" style="background:rgba(100,116,139,.1);color:#64748b"><i class="bi bi-floppy-fill"></i></div>
-    <div>
-      <div class="itr-admin-stat-val">{{ $countDraft }}</div>
-      <div class="itr-admin-stat-lbl">Drafts</div>
-      <div style="display:flex;gap:6px;margin-top:5px;flex-wrap:wrap">
-        <span style="font-size:10.5px;font-weight:600;color:#3b82f6">HW {{ $countHw }}</span>
-        <span style="font-size:10.5px;font-weight:600;color:#8b5cf6">SW {{ $countSw }}</span>
-        <span style="font-size:10.5px;font-weight:600;color:#10b981">Sys {{ $countSys }}</span>
-        <span style="font-size:10.5px;font-weight:600;color:#0284c7">Svc {{ $countSvc }}</span>
-      </div>
     </div>
   </div>
 </div>

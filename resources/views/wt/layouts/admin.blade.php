@@ -139,7 +139,7 @@
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <a href="{{ request()->fullUrl() }}" class="sidebar-brand" title="Refresh page">
-    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)">
+    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.18)">
       <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
     </div>
     <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
@@ -383,10 +383,10 @@
       </button>
 
       {{-- User badge --}}
-      <div class="topbar-user">
+      <a href="{{ route('wt.admin.profile') }}" class="topbar-user" title="My profile">
         <span class="topbar-role-badge">{{ $accountRoleLabel }}</span>
         <span class="topbar-user-name">{{ Auth::guard('wt')->user()->username ?? 'User' }}</span>
-      </div>
+      </a>
 
       {{-- Logout --}}
       <form id="logout-form" action="{{ route('wt.logout') }}" method="POST" class="d-none" style="display:none">@csrf</form>

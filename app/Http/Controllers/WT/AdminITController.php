@@ -129,7 +129,7 @@ class AdminITController extends Controller
             // Staff without WT access — grant it by setting wt_role.
             // Their HR role and IT role remain unchanged.
             $existing->update([
-                'full_name'  => Str::upper(trim($request->full_name)),
+                'full_name'  => trim($request->full_name),
                 'dept_name'  => Str::upper(trim($request->department)),
                 'position'   => Str::upper(trim($request->position)),
                 'wt_role'    => 'admin',
@@ -162,7 +162,7 @@ class AdminITController extends Controller
         $user = User::create([
             'staff_id'  => $staffNo,
             'username'  => $staffNo,
-            'full_name' => Str::upper(trim($request->full_name)),
+            'full_name' => trim($request->full_name),
             'dept_name' => Str::upper(trim($request->department)),
             'position'  => Str::upper(trim($request->position)),
             'password'  => Hash::make($request->password),
@@ -353,6 +353,5 @@ class AdminITController extends Controller
         return back()->with('success', 'Password reset request rejected.');
     }
 }
-
 
 

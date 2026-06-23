@@ -231,7 +231,7 @@ class WriteoffController extends Controller
             foreach ($items as $item) {
                 $this->setAssetStatus($item, 'Active');
                 if ($item->original_inventory_id) {
-                    \App\Models\InventoryItem::where('id', $item->original_inventory_id)->update(['location' => '']);
+                    InventoryItem::where('id', $item->original_inventory_id)->update(['location' => '']);
                 }
             }
             EwasteItem::whereIn('id', $ewIds)->update(['ceo_status' => 'Rejected', 'disposal_status' => 'Rejected', 'ceo_signed_name' => $user->full_name, 'ceo_sig_img' => $sigImg, 'ceo_signed_at' => now(), 'ceo_remark' => $remark]);
@@ -275,7 +275,7 @@ class WriteoffController extends Controller
         if ($item) {
             $this->setAssetStatus($item, 'Active');
             if ($item->original_inventory_id) {
-                \App\Models\InventoryItem::where('id', $item->original_inventory_id)->update(['location' => '']);
+                InventoryItem::where('id', $item->original_inventory_id)->update(['location' => '']);
             }
             ActivityLogService::log('REJECT_WRITEOFF', 'ewaste', $id, 'Rejected write-off: ' . $item->description);
             $item->delete();
@@ -503,7 +503,7 @@ class WriteoffController extends Controller
             if (!$firstItem) $firstItem = $item;
             $item->update(['finance_status' => $finStatus, 'disposal_status' => 'Approved']);
             if ($item->original_inventory_id) {
-                \App\Models\InventoryItem::where('id', $item->original_inventory_id)->update(['location' => $newLoc]);
+                InventoryItem::where('id', $item->original_inventory_id)->update(['location' => $newLoc]);
             }
             ActivityLogService::log('FINANCE_ROUTE', 'ewaste', $item->id, 'Finance routed write-off to ' . $finStatus . ': ' . $item->description);
         }
