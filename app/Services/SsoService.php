@@ -38,6 +38,10 @@ class SsoService
             return false;
         }
 
+        if ($guard === 'wt' && $model->wt_role === null) {
+            return false;
+        }
+
         Auth::guard($guard)->login($model);
 
         return true;

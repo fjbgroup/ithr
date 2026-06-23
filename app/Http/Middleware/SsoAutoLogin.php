@@ -26,7 +26,15 @@ class SsoAutoLogin
         }
 
         if (! Auth::guard($guard)->check()) {
-            SsoService::attemptAutoLogin($guard);
+            $loggedIn = SsoService::attemptAutoLogin($guard);
+
+            if (! $loggedIn && $guard === 'wt') {
+                $userId = session('_sso_user_id');
+                $wtUser = \App\Models\WT\User::find($userId);
+                if ($wtUser && $wtUser->is_active && $wtUser->wt_role === null) {
+                    session()->flash('wt_access_denied', true);
+                }
+            }
         }
 
         return $next($request);

@@ -12,6 +12,13 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard('wt')->check()) {
             $user = Auth::guard('wt')->user();
+
+            if ($user->wt_role === null) {
+                Auth::guard('wt')->logout();
+                session()->flash('wt_access_denied', true);
+                return redirect()->route('wt.login');
+            }
+
             if ($user->wt_role === 'user') {
                 return redirect()->route('wt.user.dashboard');
             }
