@@ -8,9 +8,11 @@ use App\Models\Department;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Services\AuditLogger;
+use App\Models\IT\EmailSetting;
 use PragmaRX\Google2FA\Google2FA;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -259,19 +261,47 @@ class UserController extends Controller
             ->with('success', 'Microsoft Authenticator removed.');
     }
 
+    /**
+     * Admin (IT) only — flip the global "email sending" master switch.
+     * When OFF, the whole HR system stops sending outgoing email until
+     * re-enabled. Users with Microsoft Authenticator (TOTP) are unaffected.
+     */
+    public function toggleEmailSending(Request $request)
+    {
+        if (! Auth::user()->isAdminIT()) {
+            abort(403);
+        }
+
+        $enable = $request->boolean('enable');
+        EmailSetting::setEmailEnabled($enable);
+
+        AuditLogger::log('update', 'settings',
+            'Email sending ' . ($enable ? 'ENABLED' : 'DISABLED') . ' (global master switch).',
+            ['email_enabled' => $enable]
+        );
+
+        return redirect()->back()->with('success',
+            $enable
+                ? 'Email sending has been enabled.'
+                : 'Email sending has been disabled. The system will not send any email until you re-enable it.'
+        );
+    }
+
     public function searchStaff(Request $request)
     {
         $staffId = trim($request->sr_staffid ?? '');
         $name    = trim($request->sr_name ?? '');
         $deptId  = (int)($request->sr_dept ?? 0);
+        // Combined term used by the IR and Travel autocompletes (matches staff no OR name).
+        $term    = trim($request->search_staff ?? '');
 
-        if (!$staffId && !$name && !$deptId) {
+        if (!$staffId && !$name && !$deptId && !$term) {
             return response()->json([]);
         }
 
         $query = Staff::with('department')->where('is_active', 1);
 
-        $query->where(function($q) use ($staffId, $name, $deptId) {
+        $query->where(function($q) use ($staffId, $name, $deptId, $term) {
             if ($staffId) {
                 $q->orWhere('staff_no', 'LIKE', "%{$staffId}%");
             }
@@ -280,6 +310,10 @@ class UserController extends Controller
             }
             if ($deptId) {
                 $q->orWhere('department_id', $deptId);
+            }
+            if ($term) {
+                $q->orWhere('staff_no', 'LIKE', "%{$term}%")
+                  ->orWhere('name', 'LIKE', "%{$term}%");
             }
         });
 

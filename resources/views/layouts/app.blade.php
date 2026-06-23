@@ -13,12 +13,12 @@
 <body class="app-body">
 <aside class="sidebar" id="sidebar">
     <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
-    <div class="sidebar-brand">
+    <a class="sidebar-brand" href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;cursor:pointer;" title="Go to Dashboard">
         <div class="brand-icon-sm">
             <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:26px;height:26px;object-fit:contain;">
         </div>
         <span>HR Admin</span>
-    </div>
+    </a>
     <nav class="sidebar-nav">
         @auth
         <a href="{{ url('/dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
@@ -32,7 +32,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
-                <span>Staffing</span>
+                <span>{{ Auth::user()->isStaff() ? 'My Profile' : 'Staffing' }}</span>
                 <svg class="toggle-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="9 18 15 12 9 6"/>
                 </svg>
@@ -166,17 +166,6 @@
         </a>
         @endauth
     </nav>
-    @auth
-    <div class="sidebar-footer">
-        <div class="sidebar-user">
-            <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
-            <div class="user-info">
-                <span class="user-name">{{ explode(' ', Auth::user()->name)[0] }}</span>
-                <span class="user-role {{ str_replace('_', '-', Auth::user()->role) }}">{{ Auth::user()->getRoleLabel() }}</span>
-            </div>
-        </div>
-    </div>
-    @endauth
 </aside>
 <div class="main-wrapper">
     <header class="topbar">
@@ -271,7 +260,7 @@
             <div style="margin-bottom: 0.5rem;">
                 <img src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain;">
             </div>
-            <div style="font-size: 0.85rem; color: var(--muted, #64748b); font-weight: 500;">
+            <div id="eggFooterText" style="font-size: 0.85rem; color: var(--muted, #64748b); font-weight: 500; cursor: default; user-select: none;">
                 Develop by IT team
             </div>
         </div>
@@ -522,5 +511,142 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 @endif
 @endauth
+
+{{-- ╔═══════════════════════════════════════════════════════════════╗
+     ║  Easter Egg — Creator credit                                  ║
+     ║  Triggers: Konami code (↑↑↓↓←→←→ B A)  ·  footer clicked 5×   ║
+     ╚═══════════════════════════════════════════════════════════════╝ --}}
+<div class="egg-overlay" id="eggOverlay" aria-hidden="true" onclick="if(event.target===this)closeEgg()">
+    <div class="egg-card" role="dialog" aria-label="Creator credit">
+        <button class="egg-close" onclick="closeEgg()" aria-label="Close">&times;</button>
+        <div class="egg-confetti" id="eggConfetti"></div>
+        <div class="egg-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="egg-kicker">✦ You found the secret ✦</div>
+        <div class="egg-name">ALIF&nbsp;TEOH</div>
+        <div class="egg-role">Creator &amp; Developer</div>
+        <div class="egg-divider"></div>
+        <div class="egg-foot">Crafted with care for the FJB HR System</div>
+    </div>
+</div>
+<style>
+.egg-overlay{
+    position:fixed; inset:0; z-index:99999;
+    display:none; align-items:center; justify-content:center;
+    padding:1.25rem;
+    background:rgba(8,20,40,.62); backdrop-filter:blur(6px);
+}
+.egg-overlay.show{ display:flex; animation:eggFade .25s ease both; }
+@keyframes eggFade{ from{opacity:0} to{opacity:1} }
+.egg-card{
+    position:relative; overflow:hidden;
+    width:100%; max-width:380px;
+    background:linear-gradient(160deg,#0f223b 0%,#1a4b8c 100%);
+    border:1px solid rgba(56,189,248,.35);
+    border-radius:22px;
+    padding:2.5rem 2rem 2rem;
+    text-align:center; color:#fff;
+    box-shadow:0 35px 80px -20px rgba(2,132,199,.6), 0 4px 14px rgba(0,0,0,.4);
+    animation:eggPop .5s cubic-bezier(.16,.84,.44,1) both;
+}
+@keyframes eggPop{ from{opacity:0;transform:translateY(20px) scale(.92)} to{opacity:1;transform:none} }
+.egg-close{
+    position:absolute; top:.75rem; right:.9rem;
+    background:none; border:none; color:rgba(255,255,255,.55);
+    font-size:1.6rem; line-height:1; cursor:pointer; transition:color .15s;
+}
+.egg-close:hover{ color:#fff; }
+.egg-badge{
+    width:64px; height:64px; margin:0 auto 1rem;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:18px; color:#0f223b;
+    background:linear-gradient(135deg,#38bdf8,#7dd3fc);
+    box-shadow:0 10px 26px -8px rgba(56,189,248,.8);
+    animation:eggSpin 6s linear infinite;
+}
+@keyframes eggSpin{ to{ transform:rotate(360deg) } }
+.egg-kicker{ font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:#7dd3fc; font-weight:600; }
+.egg-name{
+    margin-top:.55rem; font-size:2.1rem; font-weight:700; letter-spacing:.02em;
+    background:linear-gradient(90deg,#fff,#bae6fd,#fff);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    background-size:200% auto; animation:eggShine 3s linear infinite;
+}
+@keyframes eggShine{ to{ background-position:200% center } }
+.egg-role{ margin-top:.2rem; font-size:.9rem; color:rgba(255,255,255,.75); font-weight:500; }
+.egg-divider{ width:48px; height:3px; margin:1.15rem auto; border-radius:2px; background:linear-gradient(90deg,#38bdf8,transparent); }
+.egg-foot{ font-size:.78rem; color:rgba(255,255,255,.55); }
+.egg-confetti{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.egg-confetti span{
+    position:absolute; top:-12px; width:8px; height:8px; border-radius:2px;
+    animation:eggDrop linear forwards;
+}
+@keyframes eggDrop{ to{ transform:translateY(520px) rotate(540deg); opacity:0; } }
+</style>
+<script>
+(function(){
+    const overlay  = document.getElementById('eggOverlay');
+    if(!overlay) return;
+    const confetti = document.getElementById('eggConfetti');
+    const colors   = ['#38bdf8','#7dd3fc','#fcd34d','#fff','#0284c7'];
+    let open = false;
+
+    window.closeEgg = function(){ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); open = false; };
+
+    function burstConfetti(){
+        if(!confetti) return;
+        confetti.innerHTML = '';
+        for(let i=0;i<60;i++){
+            const s = document.createElement('span');
+            s.style.left = Math.random()*100 + '%';
+            s.style.background = colors[Math.floor(Math.random()*colors.length)];
+            s.style.animationDuration = (1.6 + Math.random()*1.8) + 's';
+            s.style.animationDelay = (Math.random()*0.6) + 's';
+            if(Math.random()>.5) s.style.borderRadius = '50%';
+            confetti.appendChild(s);
+        }
+    }
+
+    function openEgg(){
+        if(open) return;
+        open = true;
+        overlay.classList.add('show');
+        overlay.setAttribute('aria-hidden','false');
+        burstConfetti();
+    }
+
+    // Trigger 1 — Konami code
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let pos = 0;
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && open){ closeEgg(); return; }
+        const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        pos = (k === seq[pos]) ? pos + 1 : (k === seq[0] ? 1 : 0);
+        if(pos === seq.length){ pos = 0; openEgg(); }
+    });
+
+    // Trigger 2 — click the footer text 5 times
+    const foot = document.getElementById('eggFooterText');
+    if(foot){
+        let clicks = 0, timer = null;
+        foot.addEventListener('click', function(){
+            clicks++;
+            clearTimeout(timer);
+            timer = setTimeout(() => { clicks = 0; }, 1200);
+            if(clicks >= 5){ clicks = 0; openEgg(); }
+        });
+    }
+
+    // Signature in the browser console
+    console.log(
+        '%c✦ FJB HR System ✦%c\nCrafted by %cALIF TEOH%c\nPsst… try the Konami code ↑↑↓↓←→←→ B A',
+        'font-size:15px;font-weight:700;color:#38bdf8',
+        'color:#94a3b8',
+        'font-size:14px;font-weight:700;color:#0f223b;background:#7dd3fc;padding:2px 8px;border-radius:4px',
+        'color:#94a3b8'
+    );
+})();
+</script>
 </body>
 </html>

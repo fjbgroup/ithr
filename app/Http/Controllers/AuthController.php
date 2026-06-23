@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
 use App\Models\User;
+use App\Models\IT\EmailSetting;
 use App\Services\AuditLogger;
 use App\Services\SsoService;
 use PragmaRX\Google2FA\Google2FA;
@@ -64,6 +65,14 @@ class AuthController extends Controller
         }
 
         // ── Email OTP path: non-HR users ─────────────────────────────────────
+        // If the global email master switch is OFF, no OTP email can be sent.
+        // Block here so the user isn't told "OTP sent" for an email that never goes out.
+        if (!EmailSetting::emailEnabled()) {
+            return back()->with('error',
+                'Password reset by email is temporarily unavailable. Please contact the administrator to reset your password.'
+            )->withInput();
+        }
+
         if (!$user->email) {
             return back()->with('error', 'No email address found for this Staff ID. Please contact HR to update your email.')->withInput();
         }
@@ -213,20 +222,98 @@ class AuthController extends Controller
             ]);
         }
 
-        if (Auth::attempt(['staff_no' => $credentials['staff_no'], 'password' => $credentials['password']], $request->filled('remember'))) {
-            $request->session()->regenerate();
-            SsoService::markAuthenticated(Auth::id());
-
-            if ($request->session()->has('pending_booking')) {
-                return redirect()->route('rooms.bookings.process-pending');
-            }
-
-            return redirect()->intended('dashboard');
+        // Verify credentials without logging in yet, so we can interpose the
+        // Microsoft Authenticator (TOTP) challenge when the user has it enabled.
+        if (!Auth::validate(['staff_no' => $credentials['staff_no'], 'password' => $credentials['password']])) {
+            return back()->withErrors([
+                'staff_no' => 'Invalid Staff ID or password. Please try again.',
+            ])->onlyInput('staff_no');
         }
 
-        return back()->withErrors([
-            'staff_no' => 'Invalid Staff ID or password. Please try again.',
-        ])->onlyInput('staff_no');
+        // Microsoft Authenticator enabled → require a 6-digit code before login.
+        if ($user->hasTotpSetup()) {
+            $request->session()->put('2fa.user_id', $user->id);
+            $request->session()->put('2fa.remember', $request->filled('remember'));
+            return redirect()->route('login.2fa');
+        }
+
+        return $this->completeLogin($request, $user, $request->filled('remember'));
+    }
+
+    /**
+     * Show the Microsoft Authenticator challenge after correct credentials.
+     */
+    public function showTwoFactor(Request $request)
+    {
+        $userId = $request->session()->get('2fa.user_id');
+        if (!$userId) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($userId);
+        if (!$user || !$user->hasTotpSetup()) {
+            $request->session()->forget(['2fa.user_id', '2fa.remember']);
+            return redirect()->route('login');
+        }
+
+        return view('auth.two-factor', ['userName' => $user->name]);
+    }
+
+    /**
+     * Verify the Microsoft Authenticator code and complete login.
+     */
+    public function verifyTwoFactor(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $userId = $request->session()->get('2fa.user_id');
+        if (!$userId) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($userId);
+        if (!$user || !$user->hasTotpSetup()) {
+            $request->session()->forget(['2fa.user_id', '2fa.remember']);
+            return redirect()->route('login')->with('error', 'Invalid session. Please log in again.');
+        }
+
+        if ($user && !$user->is_active) {
+            $request->session()->forget(['2fa.user_id', '2fa.remember']);
+            return redirect()->route('login')->withErrors([
+                'staff_no' => 'Your account has been disabled. Please contact the administrator.',
+            ]);
+        }
+
+        $google2fa = new Google2FA();
+
+        if (!$google2fa->verifyKey($user->totp_secret, $request->otp)) {
+            return back()->withErrors([
+                'otp' => 'Invalid authenticator code. Codes expire every 30 seconds — try again with the current code.',
+            ]);
+        }
+
+        $remember = (bool) $request->session()->get('2fa.remember', false);
+        $request->session()->forget(['2fa.user_id', '2fa.remember']);
+
+        return $this->completeLogin($request, $user, $remember);
+    }
+
+    /**
+     * Log the user in and redirect to their intended destination.
+     */
+    protected function completeLogin(Request $request, User $user, bool $remember)
+    {
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
+        SsoService::markAuthenticated(Auth::id());
+
+        if ($request->session()->has('pending_booking')) {
+            return redirect()->route('rooms.bookings.process-pending');
+        }
+
+        return redirect()->intended('dashboard');
     }
 
     public function logout(Request $request)

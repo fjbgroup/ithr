@@ -30,7 +30,11 @@ Route::post('rooms/bookings/hold', [RoomBookingController::class, 'holdGuestBook
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
-    
+
+    // Microsoft Authenticator (TOTP) challenge after correct credentials
+    Route::get('two-factor', [AuthController::class, 'showTwoFactor'])->name('login.2fa');
+    Route::post('two-factor', [AuthController::class, 'verifyTwoFactor'])->name('login.2fa.verify');
+
     // Forgot Password OTP flow
     Route::get('forgot-password', [AuthController::class, 'showForgot'])->name('password.request');
     Route::post('forgot-password', [AuthController::class, 'requestOtp'])->name('password.otp.request');
@@ -123,6 +127,7 @@ Route::middleware('auth')->group(function () {
     Route::post('account/totp/confirm', [UserController::class, 'totpConfirm'])->name('totp.confirm');
     Route::post('account/totp/remove',  [UserController::class, 'totpRemove']) ->name('totp.remove');
     Route::get('users/search-staff', [UserController::class, 'searchStaff'])->name('users.search_staff');
+    Route::post('system/email-toggle', [UserController::class, 'toggleEmailSending'])->name('system.email.toggle')->middleware('role:admin_it');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
     Route::patch('users/{user}/toggle-staff-status', [UserController::class, 'toggleStaffStatus'])->name('users.toggle_staff_status');
     Route::resource('users', UserController::class);

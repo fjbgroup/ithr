@@ -19,6 +19,25 @@ class InventoryController extends Controller
     public function index(Request $request)
     {
         $user   = Auth::guard('it')->user();
+
+        // Backfill: create InventoryItems for any EwasteItems that have no linked inventory record
+        $orphans = EwasteItem::whereNull('original_inventory_id')
+            ->where(fn($q) => $q->whereNull('asset_source')->orWhere('asset_source', 'IT'))
+            ->get();
+        foreach ($orphans as $ew) {
+            $inv = InventoryItem::create([
+                'asset_number'     => $ew->asset_number,
+                'asset_class'      => $ew->asset_class,
+                'description'      => $ew->description,
+                'serial_number'    => $ew->serial_number,
+                'item_status'      => 'Disposed',
+                'condition_status' => $ew->condition_on_disposal ?: 'For Disposal',
+                'notes'            => $ew->notes,
+                'created_by'       => $ew->created_by,
+            ]);
+            $ew->update(['original_inventory_id' => $inv->id]);
+        }
+
         $query  = InventoryItem::with(['ewasteItems' => fn($q) => $q->orderByDesc('id')]);
 
         if ($s = $request->search) {

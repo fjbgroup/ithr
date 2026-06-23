@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Failed;
+use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Blade;
 use App\Services\AuditLogger;
+use App\Models\IT\EmailSetting;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +33,16 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Blade::anonymousComponentPath(resource_path('views/wt/components'), 'wt');
+
+        // Global email master switch — when an Admin (IT) disables email sending,
+        // cancel every outgoing message system-wide. Returning false from the
+        // MessageSending event aborts the send. TOTP/2FA never sends email, so
+        // users who use Microsoft Authenticator are unaffected.
+        Event::listen(MessageSending::class, function (MessageSending $event) {
+            if (! EmailSetting::emailEnabled()) {
+                return false;
+            }
+        });
 
         // @canwrite ... @endcanwrite — hides write controls (add/edit/delete/import)
         // from read-only roles (CEO). Backend writes are also blocked by ReadOnlyCeo middleware.

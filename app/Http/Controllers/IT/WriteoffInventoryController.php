@@ -4,6 +4,7 @@ namespace App\Http\Controllers\IT;
 
 use App\Models\IT\DisposalItem;
 use App\Models\IT\EwasteItem;
+use App\Models\IT\InventoryItem;
 use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,7 @@ class WriteoffInventoryController extends Controller
             $item->update(['finance_status' => 'EWaste', 'disposal_status' => 'Approved']);
 
             if ($item->original_inventory_id) {
-                \App\Models\InventoryItem::where('id', $item->original_inventory_id)
+                InventoryItem::where('id', $item->original_inventory_id)
                     ->update(['location' => 'E-Waste']);
             }
 
@@ -101,7 +102,7 @@ class WriteoffInventoryController extends Controller
             $item->update(['finance_status' => 'Disposal', 'disposal_status' => 'Approved']);
 
             if ($item->original_inventory_id) {
-                \App\Models\InventoryItem::where('id', $item->original_inventory_id)
+                InventoryItem::where('id', $item->original_inventory_id)
                     ->update(['location' => 'Disposal']);
             }
 
@@ -134,7 +135,7 @@ class WriteoffInventoryController extends Controller
             $item->update(['finance_status' => 'EWaste', 'disposal_status' => 'Approved']);
 
             if ($item->original_inventory_id) {
-                \App\Models\InventoryItem::where('id', $item->original_inventory_id)
+                InventoryItem::where('id', $item->original_inventory_id)
                     ->update(['location' => 'E-Waste']);
             }
 
@@ -179,7 +180,7 @@ class WriteoffInventoryController extends Controller
             $item->update(['finance_status' => 'Disposal', 'disposal_status' => 'Approved']);
 
             if ($item->original_inventory_id) {
-                \App\Models\InventoryItem::where('id', $item->original_inventory_id)
+                InventoryItem::where('id', $item->original_inventory_id)
                     ->update(['location' => 'Disposal']);
             }
 
