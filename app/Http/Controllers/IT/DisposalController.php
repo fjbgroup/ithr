@@ -4,6 +4,7 @@ namespace App\Http\Controllers\IT;
 
 use App\Models\IT\DisposalItem;
 use App\Models\IT\EwasteItem;
+use App\Models\IT\NonItAsset;
 use App\Services\IT\ActivityLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -155,6 +156,17 @@ class DisposalController extends Controller
         $data['disposal_status'] = $data['disposal_status'] ?? 'Approved';
 
         $item = DisposalItem::create($data);
+
+        NonItAsset::create([
+            'asset_number'  => $item->asset_number,
+            'asset_class'   => $item->asset_class,
+            'description'   => $item->description,
+            'serial_number' => $item->serial_number,
+            'item_status'   => 'Disposed',
+            'notes'         => $item->notes,
+            'created_by'    => $user->id,
+        ]);
+
         ActivityLogService::log('CREATE', 'disposal', $item->id, 'Added disposal item: ' . $item->description);
         return back()->with('success', 'Disposal item added successfully.');
     }

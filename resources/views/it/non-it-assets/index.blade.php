@@ -398,7 +398,6 @@
       <option value="Active"                      {{ $status === 'Active'                      ? 'selected' : '' }}>Active</option>
       <option value="Disposed"                    {{ $status === 'Disposed'                    ? 'selected' : '' }}>Disposed</option>
       <option value="Pending for Write-Off"       {{ $status === 'Pending for Write-Off'       ? 'selected' : '' }}>Pending</option>
-      <option value="Pending to E-Waste/Disposal" {{ $status === 'Pending to E-Waste/Disposal' ? 'selected' : '' }}>Pending to E-Waste/Disposal</option>
     </select>
     <select name="nit_location" onchange="this.form.submit()"
       style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">

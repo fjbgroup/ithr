@@ -45,7 +45,7 @@ class DashboardController extends Controller
 
         // IT asset class distribution for chart (top 8 by count)
         $itChartRaw = DB::table('inventory_items')
-            ->where('item_status', '!=', 'Disposed')
+            ->where(fn($q) => $q->whereNull('item_status')->orWhere('item_status', '!=', 'Disposed'))
             ->selectRaw('asset_class, COUNT(*) as cnt')
             ->groupBy('asset_class')
             ->orderByDesc('cnt')

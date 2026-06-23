@@ -96,7 +96,7 @@
 
     <!-- Live Clock -->
     <div style="text-align:right">
-      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'DM Sans',sans-serif;letter-spacing:.04em;line-height:1"></div>
+      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'DM Sans',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
       <div style="font-size:10px;color:#93c5fd;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
     </div>
 
@@ -198,11 +198,6 @@
     <div class="ds-box">
       <div class="ds-box-head"><div class="ds-box-title">Quick Actions</div></div>
       <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
-        <a href="{{ route('it.inventory.index') }}?action=add" class="ds-qa">
-          <div class="ds-qa-icon" style="background:#dbeafe;color:#2563eb"><i class="bi bi-plus"></i></div>
-          <span class="ds-qa-lbl">Request to Add Asset</span>
-          <i class="bi bi-chevron-right" style="color:var(--border);font-size:11px"></i>
-        </a>
         <a href="{{ route('it.writeoff.index') }}" class="ds-qa">
           <div class="ds-qa-icon" style="background:#fef9c3;color:#ca8a04"><i class="bi bi-pen"></i></div>
           <span class="ds-qa-lbl">Submit Write-Off</span>

@@ -120,7 +120,9 @@ button .badge-count{ margin-left:0; }
   display:flex;align-items:center;gap:8px;
   background:var(--body-bg);border:1px solid var(--border);
   border-radius:8px;padding:6px 12px;
+  text-decoration:none;transition:border-color .15s,box-shadow .15s;
 }
+.topbar-user:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
 .topbar-user-name{font-size:13px;font-weight:600;color:var(--text)}
 .topbar-role-badge{
   background:#dbeafe;color:#1d4ed8;
@@ -287,8 +289,8 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="_eggClick()" style="cursor:default;user-select:none">
-    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
-      <img src="{{ asset('assets/img/logo_transparent.png') }}" alt="FJB Logo" onerror="this.style.display='none'">
+    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;padding:4px">
+      <img src="{{ asset('assets/img/logo_transparent.png') }}" alt="FJB Logo" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
     </div>
     <div class="brand-name">FJB Inventory<span>Management System</span></div>
   </div>
@@ -631,10 +633,10 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
         </div>
       </div>
 
-      <div class="topbar-user">
+      <a href="{{ route('it.profile') }}" class="topbar-user">
         <span class="topbar-role-badge">{{ $user->roleName() }}</span>
         <span class="topbar-user-name">{{ $user->full_name }}</span>
-      </div>
+      </a>
       <button class="theme-toggle" id="themeToggle" title="Toggle light/dark" onclick="toggleTheme()">
         <i class="bi bi-sun-fill" id="themeIcon"></i>
       </button>
