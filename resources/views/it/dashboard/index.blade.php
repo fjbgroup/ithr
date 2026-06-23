@@ -198,11 +198,6 @@
     <div class="ds-box">
       <div class="ds-box-head"><div class="ds-box-title">Quick Actions</div></div>
       <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
-        <a href="{{ route('it.inventory.index') }}?action=add" class="ds-qa">
-          <div class="ds-qa-icon" style="background:#dbeafe;color:#2563eb"><i class="bi bi-plus"></i></div>
-          <span class="ds-qa-lbl">Request to Add Asset</span>
-          <i class="bi bi-chevron-right" style="color:var(--border);font-size:11px"></i>
-        </a>
         <a href="{{ route('it.writeoff.index') }}" class="ds-qa">
           <div class="ds-qa-icon" style="background:#fef9c3;color:#ca8a04"><i class="bi bi-pen"></i></div>
           <span class="ds-qa-lbl">Submit Write-Off</span>
