@@ -472,6 +472,27 @@
                 }
             });
         });
+
+        // Entrance animation — stagger the slices, then play it whenever the
+        // chart scrolls into view (replays each time it is "directed to").
+        slices.forEach(function(s, i) { s.style.animationDelay = (0.06 * i) + 's'; });
+
+        if (window.IntersectionObserver) {
+            var io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting) {
+                        svg.classList.remove('hd-anim-in');
+                        void svg.getBoundingClientRect();   // force reflow so it can replay
+                        svg.classList.add('hd-anim-in');
+                    } else {
+                        svg.classList.remove('hd-anim-in');
+                    }
+                });
+            }, { threshold: 0.35 });
+            io.observe(svg);
+        } else {
+            svg.classList.add('hd-anim-in');
+        }
     });
 })();
 </script>
@@ -589,6 +610,40 @@
 .hd-to-pie-leg-row { display: flex; align-items: center; gap: .35rem; font-size: .74rem; flex: 0 0 auto; }
 .hd-to-pie-leg-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 .hd-to-pie-leg-cnt { font-weight: 700; color: var(--text); }
+
+/* —— Donut entrance animation (plays when scrolled/navigated into view) —— */
+.hd-sv-pie .hd-sv-slice {
+    opacity: 0;
+    transform-box: view-box;
+    transform-origin: 100px 100px;
+}
+.hd-sv-pie.hd-anim-in .hd-sv-slice {
+    animation: hd-slice-in .6s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes hd-slice-in {
+    from { opacity: 0; transform: scale(.35) rotate(-110deg); }
+    60%  { opacity: 1; }
+    to   { opacity: 1; transform: scale(1) rotate(0); }
+}
+.hd-sv-pie .hd-pie-sv,
+.hd-sv-pie .hd-pie-sl { opacity: 0; }
+.hd-sv-pie.hd-anim-in .hd-pie-sv,
+.hd-sv-pie.hd-anim-in .hd-pie-sl {
+    animation: hd-pie-text-in .45s ease .4s both;
+}
+@keyframes hd-pie-text-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hd-sv-pie .hd-sv-slice,
+    .hd-sv-pie .hd-pie-sv,
+    .hd-sv-pie .hd-pie-sl {
+        opacity: 1 !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
 
 /* —— Year badge ————————————————————————————————————————————————————— */
 .hd-year-badge {
