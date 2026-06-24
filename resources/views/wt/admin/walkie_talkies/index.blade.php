@@ -1424,20 +1424,19 @@
     @php
         $walkieRadioIds = $walkies->pluck('radio_id')->filter()->unique()->sort()->values();
         $walkieSerials = $walkies->pluck('serial_number')->filter()->unique()->sort()->values();
-        $walkieModels = $walkies->pluck('model')->filter()->unique()->sort()->values();
         $walkieOwnerships = $walkies->pluck('ownership')->filter()->unique()->sort()->values();
-        $walkieDepartments = $walkies->pluck('department')->filter()->unique()->sort()->values();
-        $walkiePositions = $walkies->pluck('position')->filter()->unique()->sort()->values();
+        // $walkieModels, $walkieDepartments, $walkiePositions come from the
+        // controller (WT master data, merged with existing values).
         $walkieTemporaryIds = $walkies->pluck('temporary_radio_id')->filter()->unique()->sort()->values();
         $walkieTrackingRefs = $walkies->pluck('tracking_ref')->filter()->unique()->sort()->values();
-        $statusOptions = collect(['B.E.R','FAULTY','IN USE','LOST','REPAIRING','UNUSED','UNKNOWN']);
+        // $statusOptions comes from the controller (ALLOWED_STATUSES constant).
         $inventorySummary = [
             'total' => $walkies->count(),
             'in_use' => $walkies->filter(fn ($walkie) => strtoupper((string) $walkie->status) === 'IN USE')->count(),
             'unused' => $walkies->filter(fn ($walkie) => strtoupper((string) $walkie->status) === 'UNUSED')->count(),
             'repair_faulty' => $walkies->filter(fn ($walkie) => in_array(strtoupper((string) $walkie->status), ['REPAIRING', 'FAULTY', 'B.E.R'], true))->count(),
         ];
-        $ownershipTypeOptions = collect(['INDIVIDUAL','SHARED','SPARE','UNALLOCATED']);
+        // $ownershipTypeOptions comes from the controller (WT master data).
         $yesNoOptions = collect([['value' => '0', 'label' => 'NO'], ['value' => '1', 'label' => 'YES']]);
     @endphp
 
@@ -1525,11 +1524,11 @@
 
         {{-- ===== SEARCH & FILTER BAR ===== --}}
         <div class="clean-admin-filter">
-            <div class="clean-admin-filter-grid inventory-filter-inline" style="display:flex !important;flex-direction:row !important;flex-wrap:wrap !important;align-items:center !important;justify-content:flex-start !important;gap:10px !important;width:100% !important;">
+            <div class="clean-admin-filter-grid inventory-filter-inline" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:center !important;justify-content:flex-start !important;gap:10px !important;width:auto !important;">
                 {{-- Search Input --}}
                 <div class="inventory-filter-field" style="display:flex !important;flex-direction:row !important;align-items:center !important;gap:8px !important;width:auto !important;min-width:0 !important;">
                     <label class="clean-admin-label" for="globalSearch" style="margin:0 !important;line-height:30px !important;white-space:nowrap !important;">Search</label>
-                    <input type="text" id="globalSearch" class="clean-admin-input" placeholder="Keywords" style="width:220px !important;max-width:32vw !important;">
+                    <input type="text" id="globalSearch" class="clean-admin-input" placeholder="Keywords" style="width: 250px !important; max-width: 250px !important;">
                 </div>
 
                 {{-- Status Filter --}}
@@ -7548,6 +7547,7 @@
         })();
     </script>
 
+    @include('wt.admin.partials.inventory-tools-unified-ui')
     @endsection
 
     @push('final_styles')

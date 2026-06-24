@@ -560,11 +560,11 @@
 </div>
 @endif
 
-<div class="clean-admin-filter">
-    <div class="clean-admin-filter-grid">
+<div class="clean-admin-filter" style="justify-content: flex-start !important; width: auto !important;">
+    <div class="clean-admin-filter-grid" style="justify-content: flex-start !important; width: auto !important;">
         <div>
             <label class="clean-admin-label" for="maintSearch">Search</label>
-            <input type="text" id="maintSearch" class="clean-admin-input" placeholder="Keywords">
+            <input type="text" id="maintSearch" class="clean-admin-input" placeholder="Keywords" style="width: 250px !important; max-width: 250px !important;">
         </div>
         <div>
             <label class="clean-admin-label" for="maintStatus">Status</label>
@@ -1550,4 +1550,5 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
+@include('wt.admin.partials.inventory-tools-unified-ui')
 @endsection

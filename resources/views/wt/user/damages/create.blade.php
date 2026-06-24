@@ -99,6 +99,72 @@
         margin-top: 2px !important;
         line-height: 1.15 !important;
     }
+    .faulty-accordion {
+        display: grid;
+        gap: 10px;
+    }
+    .damage-form-page .damage-card.table-card {
+        width: min(100%, 1120px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    .faulty-accordion-section {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.18);
+        overflow: hidden;
+    }
+    .faulty-accordion-toggle {
+        width: 100%;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 0;
+        background: rgba(2, 132, 199, 0.08);
+        color: var(--accent);
+        text-align: left;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .faulty-accordion-toggle:hover,
+    .faulty-accordion-toggle[aria-expanded="true"] {
+        background: rgba(2, 132, 199, 0.16);
+    }
+    .faulty-accordion-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+    }
+    .faulty-accordion-title::before {
+        content: "";
+        width: 3px;
+        height: 18px;
+        border-radius: 999px;
+        background: var(--accent);
+        flex: 0 0 auto;
+    }
+    .faulty-accordion-icon {
+        color: var(--muted);
+        transition: transform .18s ease;
+        flex: 0 0 auto;
+    }
+    .faulty-accordion-toggle[aria-expanded="true"] .faulty-accordion-icon {
+        transform: rotate(180deg);
+        color: var(--accent);
+    }
+    .faulty-accordion-panel {
+        padding: 16px 14px 18px;
+    }
+    .faulty-accordion-panel[hidden] {
+        display: none !important;
+    }
     .staff-account-selection,
     .staff-account-option {
         display: flex;
@@ -1504,6 +1570,96 @@
             flowNodes.forEach((node) => {
                 faultyOwnershipSection.parentNode.insertBefore(node, faultyOwnershipSection);
             });
+        }
+
+        const repairForm = document.querySelector('.damage-card form');
+        if (repairForm) {
+            const sectionHeadings = Array.from(repairForm.querySelectorAll(':scope > h3'));
+
+            if (sectionHeadings.length) {
+                const accordion = document.createElement('div');
+                accordion.className = 'faulty-accordion';
+                repairForm.insertBefore(accordion, sectionHeadings[0]);
+
+                const sections = sectionHeadings.map((heading, index) => {
+                    const section = document.createElement('section');
+                    section.className = 'faulty-accordion-section';
+
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'faulty-accordion-toggle';
+                    button.setAttribute('aria-expanded', 'false');
+
+                    const panelId = `faultyAccordionPanel${index + 1}`;
+                    const panel = document.createElement('div');
+                    panel.className = 'faulty-accordion-panel';
+                    panel.id = panelId;
+                    panel.hidden = true;
+                    button.setAttribute('aria-controls', panelId);
+
+                    const title = document.createElement('span');
+                    title.className = 'faulty-accordion-title';
+                    title.innerHTML = heading.innerHTML;
+
+                    const icon = document.createElement('i');
+                    icon.className = 'fa-solid fa-chevron-down faulty-accordion-icon';
+
+                    button.append(title, icon);
+                    section.append(button, panel);
+                    accordion.appendChild(section);
+
+                    let node = heading.nextSibling;
+                    heading.remove();
+
+                    while (node) {
+                        const nextNode = node.nextSibling;
+                        if (node.nodeType === Node.ELEMENT_NODE && node.matches('h3')) {
+                            break;
+                        }
+                        if (node.nodeType === Node.ELEMENT_NODE && node.matches('.pt-4')) {
+                            break;
+                        }
+                        panel.appendChild(node);
+                        node = nextNode;
+                    }
+
+                    return { section, button, panel };
+                });
+
+                const openSection = (targetSection) => {
+                    sections.forEach(({ button, panel }) => {
+                        const isOpen = panel === targetSection.panel;
+                        button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                        panel.hidden = !isOpen;
+                    });
+                };
+
+                const closeAllSections = () => {
+                    sections.forEach(({ button, panel }) => {
+                        button.setAttribute('aria-expanded', 'false');
+                        panel.hidden = true;
+                    });
+                };
+
+                sections.forEach((section) => {
+                    section.button.addEventListener('click', () => {
+                        if (section.button.getAttribute('aria-expanded') === 'true') {
+                            closeAllSections();
+                            return;
+                        }
+
+                        openSection(section);
+                    });
+                });
+
+                repairForm.addEventListener('invalid', (event) => {
+                    const panel = event.target.closest('.faulty-accordion-panel');
+                    const section = sections.find((item) => item.panel === panel);
+                    if (section) {
+                        openSection(section);
+                    }
+                }, true);
+            }
         }
 
         $('.admin-select').not('#managed_user_select').select2({

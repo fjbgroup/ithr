@@ -77,6 +77,31 @@
         </form>
     </div>
 </div>
+
+@php $totpUsers = \App\Models\User::whereNotNull('totp_secret')->count(); @endphp
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $totpUsers > 0 ? '#fca5a5' : 'var(--border)' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $totpUsers > 0 ? '#6366f1' : '#94a3b8' }}" stroke-width="2" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div style="flex:1;">
+            <span style="font-size:.88rem;font-weight:600;">Microsoft Authenticator (2FA)</span>
+            @if ($totpUsers > 0)
+                <span class="status-badge status-completed" style="margin-left:.5rem;">{{ $totpUsers }} active</span>
+            @else
+                <span style="font-size:.8rem;color:#475569;background:#f1f5f9;padding:.2rem .5rem;border-radius:.3rem;margin-left:.5rem;">None active</span>
+            @endif
+            <div style="font-size:.78rem;color:var(--muted,#64748b);margin-top:.2rem;">
+                Disable Microsoft Authenticator for every user at once. Each affected user must set it up again before they can use 2FA for password reset.
+            </div>
+        </div>
+        <form method="POST" action="{{ route('system.totp.disable-all') }}"
+              onsubmit="return confirm('Disable Microsoft Authenticator for ALL users? This clears 2FA for {{ $totpUsers }} user(s). They will need to set it up again. Continue?');">
+            @csrf
+            <button type="submit" class="btn btn-sm btn-danger" {{ $totpUsers > 0 ? '' : 'disabled' }}>
+                Disable for All
+            </button>
+        </form>
+    </div>
+</div>
 @endif
 
 <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">

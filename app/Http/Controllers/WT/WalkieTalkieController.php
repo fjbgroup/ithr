@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\WT\AccessRequest;
 use App\Models\WT\Handover;
 use App\Models\WT\WalkieTalkie;
+use App\Models\WT\MasterData;
 use App\Models\WT\MaintenanceRecord;
 use App\Models\WT\UserActivityLog;
 use App\Services\TemporaryRequestExpiryService;
@@ -53,6 +54,40 @@ class WalkieTalkieController extends Controller
         return strtoupper(trim((string) $value));
     }
 
+    /**
+     * Option lists for the inventory-tool views (special use, unused,
+     * duplicated ID) so their add/edit modals share the same master-data
+     * driven lists as the main inventory form instead of hardcoding them.
+     */
+    private function inventoryToolOptions(): array
+    {
+        return [
+            'walkieModels' => $this->mergeMasterData('model', WalkieTalkie::query()->pluck('model')),
+            'statusOptions' => collect(self::ALLOWED_STATUSES),
+            'ownershipTypeOptions' => $this->mergeMasterData(
+                'ownership_type',
+                WalkieTalkie::query()->pluck('ownership_type')
+                    ->merge(WalkieTalkie::query()->pluck('ownership_type_to_be'))
+            ),
+        ];
+    }
+
+    /**
+     * Build a dropdown option list from the WT master data for a category,
+     * merged with any values already present on existing walkie records so
+     * historical free-text entries never disappear from the form.
+     */
+    private function mergeMasterData(string $category, $existingValues)
+    {
+        return MasterData::valuesFor($category)
+            ->merge($existingValues)
+            ->map(fn ($value) => $this->normalizeValue($value))
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+    }
+
     private function normalizeInventoryStatus(?string $value): string
     {
         $status = $this->normalizeValue($value);
@@ -82,23 +117,19 @@ class WalkieTalkieController extends Controller
             'walkies' => $walkies,
             'walkieRadioIds' => $walkies->pluck('radio_id')->filter()->unique()->sort()->values(),
             'walkieSerials' => $walkies->pluck('serial_number')->filter()->unique()->sort()->values(),
-            'walkieModels' => $walkies->pluck('model')->filter()->unique()->sort()->values(),
+            'walkieModels' => $this->mergeMasterData('model', $walkies->pluck('model')),
             'walkieOwnerships' => $walkies->pluck('ownership')->filter()->unique()->sort()->values(),
-            'walkieDepartments' => $walkies->pluck('department')->filter()->unique()->sort()->values(),
-            'walkiePositions' => $walkies->pluck('position')->filter()->unique()->sort()->values(),
+            'walkieDepartments' => $this->mergeMasterData('department', $walkies->pluck('department')),
+            'walkiePositions' => $this->mergeMasterData('position', $walkies->pluck('position')),
             'walkieTemporaryIds' => $walkies->pluck('temporary_radio_id')->filter()->unique()->sort()->values(),
             'walkieTrackingRefs' => $walkies->pluck('tracking_ref')->filter()->unique()->sort()->values(),
             'statusOptions' => collect(self::ALLOWED_STATUSES),
-            'ownershipTypeOptions' => collect(self::ALLOWED_OWNERSHIP_TYPES)
-                ->merge(
-                    $walkies->pluck('ownership_type')
-                        ->merge($walkies->pluck('ownership_type_to_be'))
-                        ->filter()
-                        ->map(fn ($value) => $this->normalizeValue($value))
-                )
-                ->unique()
-                ->sort()
-                ->values(),
+            'ownershipTypeOptions' => $this->mergeMasterData(
+                'ownership_type',
+                collect(self::ALLOWED_OWNERSHIP_TYPES)
+                    ->merge($walkies->pluck('ownership_type'))
+                    ->merge($walkies->pluck('ownership_type_to_be'))
+            ),
             'yesNoOptions' => collect([
                 ['value' => '0', 'label' => 'NO'],
                 ['value' => '1', 'label' => 'YES'],
@@ -527,7 +558,7 @@ class WalkieTalkieController extends Controller
             ['key' => 'special_use_returned', 'label' => 'returned'],
         ];
 
-        return view('wt.admin.walkie_talkies.unused', compact('records', 'columns'));
+        return view('wt.admin.walkie_talkies.unused', array_merge(compact('records', 'columns'), $this->inventoryToolOptions()));
     }
 
     public function create()
@@ -691,7 +722,7 @@ public function repairFaulty()
             ->orderByDesc('walkie_id')
             ->get();
 
-        return view('wt.admin.duplicated_id', compact('records'));
+        return view('wt.admin.duplicated_id', array_merge(compact('records'), $this->inventoryToolOptions()));
     }
 
     public function specialUse()
@@ -702,7 +733,7 @@ public function repairFaulty()
             ->orderByDesc('walkie_id')
             ->get();
 
-        return view('wt.admin.special_use', compact('records'));
+        return view('wt.admin.special_use', array_merge(compact('records'), $this->inventoryToolOptions()));
     }
 
     public function myInventory()
