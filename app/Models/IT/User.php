@@ -25,6 +25,7 @@ class User extends BaseUser
 
     public function isAdmin(): bool          { return in_array($this->it_role, ['admin_it', 'admin']); }
     public function isAdminOrFinance(): bool { return in_array($this->it_role, ['admin_it', 'admin', 'finance_admin']); }
+    public function isItValidator(): bool    { return (bool) ($this->attributes['is_it_validator'] ?? false); }
 
     // ── IT-specific relationships ─────────────────────────────────────────
 

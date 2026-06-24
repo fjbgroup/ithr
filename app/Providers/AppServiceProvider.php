@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\Failed;
 use Illuminate\Mail\Events\MessageSending;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Pagination\Paginator;
 use App\Services\AuditLogger;
 use App\Models\IT\EmailSetting;
 
@@ -31,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        Paginator::defaultView('vendor.pagination.it-system');
 
         Blade::anonymousComponentPath(resource_path('views/wt/components'), 'wt');
 

@@ -816,7 +816,7 @@ $(document).ready(function () {
     }
     listEl.innerHTML = items.map(function(n) {
       var ic   = typeIcon(n.type);
-      var read = n.is_read === '1' || n.is_read === 1;
+      var read = !!n.is_read;
       return '<div onclick="openNotif('+n.id+',\''+encodeURIComponent(n.link)+'\')" style="display:flex;gap:12px;align-items:flex-start;padding:12px 18px;border-bottom:1px solid #f8fafc;cursor:pointer;background:'+(read?'#fff':'#f0f9ff')+';transition:background .12s" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\''+(read?'#fff':'#f0f9ff')+'\'">'
         + '<div style="width:34px;height:34px;border-radius:8px;background:'+ic[0]+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><i class="bi '+ic[1]+'" style="color:'+ic[0]+';font-size:15px"></i></div>'
         + '<div style="flex:1;min-width:0">'
@@ -998,6 +998,33 @@ $(document).ready(function () {
   modal.addEventListener('click', function(e){ if (e.target === modal) closeEgg(); });
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape') closeEgg();
+  });
+})();
+</script>
+
+<!-- PAGE TRANSITIONS -->
+<style>
+@keyframes fjb-page-in  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fjb-page-out { from{opacity:1;transform:translateY(0)}     to{opacity:0;transform:translateY(-6px)} }
+.page-body { animation: fjb-page-in .22s ease both; }
+.page-leaving .page-body { animation: fjb-page-out .18s ease both; pointer-events:none; }
+</style>
+<script>
+(function(){
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest('a');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href === '#' || href.startsWith('#') || href.startsWith('javascript:')) return;
+    if (a.getAttribute('target') === '_blank') return;
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+    try {
+      var url = new URL(href, window.location.href);
+      if (url.hostname !== window.location.hostname) return;
+    } catch(ex) { return; }
+    e.preventDefault();
+    document.body.classList.add('page-leaving');
+    setTimeout(function(){ window.location.href = href; }, 180);
   });
 })();
 </script>
