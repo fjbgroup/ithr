@@ -951,6 +951,7 @@
         const sectorOptions = @json($sectorOptions);
         const locationOptions = @json($locationOptions);
         const bayOptions = @json($bayOptions);
+        const staffSearchUrl = @json(route('wt.admin.requests.staffSearch'));
         const phoneByName = @json($formOptionLists['phone_by_name'] ?? []);
         const personMetaByName = @json($formOptionLists['person_meta_by_name'] ?? []);
 
@@ -1213,6 +1214,136 @@
             });
         }
 
+        function enhanceStaffSelect(select) {
+            if (!select || select.dataset.staffComboboxReady === '1') return;
+
+            select.dataset.staffComboboxReady = '1';
+            const inputRequired = select.required;
+            select.required = false;
+            select.classList.add('hidden');
+            select.style.display = 'none';
+
+            const row = select.closest('[data-pic-row]');
+            const staffNoField = row?.querySelector('[data-pic-staff-no]');
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'corporate-combobox';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'corporate-combobox-input';
+            input.placeholder = select.dataset.placeholder || 'Search HR staff name or ID...';
+            input.autocomplete = 'off';
+            input.value = select.value || '';
+            input.required = inputRequired;
+
+            const toggle = document.createElement('span');
+            toggle.className = 'corporate-combobox-toggle';
+            toggle.innerHTML = '<i class="fa-solid fa-caret-down"></i>';
+
+            const menu = document.createElement('div');
+            menu.className = 'corporate-combobox-menu';
+
+            select.parentNode.insertBefore(wrapper, select);
+            wrapper.append(input, toggle, menu, select);
+
+            let searchTimer = null;
+            let currentResults = [];
+
+            function fillFromStaff(staff) {
+                input.value = staff.name || '';
+                ensureSelectValue(select, staff.name || '');
+                if (staffNoField) staffNoField.value = staff.staff_no || '';
+
+                if (staff.dept_name) {
+                    const departmentField = row?.querySelector('[data-pic-department]');
+                    setSelectOrFieldValue(departmentField, staff.dept_name);
+                }
+                if (staff.phone) {
+                    const phoneField = row?.querySelector('[data-pic-phone]');
+                    applyPhoneValue(phoneField, staff.phone);
+                }
+                menu.style.display = 'none';
+            }
+
+            function renderMenu(results, loading) {
+                if (loading) {
+                    menu.innerHTML = '<div class="corporate-combobox-name px-4 py-3 text-slate-400">Searching HR staff...</div>';
+                    menu.style.display = 'block';
+                    return;
+                }
+
+                menu.innerHTML = results.length
+                    ? results.map((staff, index) => {
+                        const meta = [staff.staff_no, staff.dept_name, staff.position].filter(Boolean).join(' / ');
+                        return `
+                            <button type="button" class="corporate-combobox-option" data-staff-index="${index}">
+                                <span class="corporate-combobox-name">${escapeHtml(staff.name)}</span>
+                                ${meta ? `<span class="corporate-combobox-meta">${escapeHtml(meta)}</span>` : ''}
+                            </button>
+                        `;
+                    }).join('')
+                    : '<div class="corporate-combobox-name px-4 py-3 text-slate-400">No HR staff match — you can type the name manually.</div>';
+
+                Array.from(menu.querySelectorAll('[data-staff-index]')).forEach((button) => {
+                    button.addEventListener('click', () => {
+                        fillFromStaff(currentResults[Number(button.dataset.staffIndex)]);
+                    });
+                });
+
+                menu.style.display = 'block';
+            }
+
+            function doSearch() {
+                const query = input.value.trim();
+
+                // Free typing is allowed: keep the typed name, but break the HR link.
+                ensureSelectValue(select, input.value);
+                if (staffNoField) staffNoField.value = '';
+
+                if (query.length < 2) {
+                    menu.style.display = 'none';
+                    return;
+                }
+
+                renderMenu([], true);
+
+                fetch(`${staffSearchUrl}?q=${encodeURIComponent(query)}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+                })
+                    .then((response) => (response.ok ? response.json() : []))
+                    .then((data) => {
+                        currentResults = Array.isArray(data) ? data : [];
+                        renderMenu(currentResults, false);
+                    })
+                    .catch(() => {
+                        menu.innerHTML = '<div class="corporate-combobox-name px-4 py-3 text-slate-400">Search unavailable — type the name manually.</div>';
+                        menu.style.display = 'block';
+                    });
+            }
+
+            input.addEventListener('input', () => {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(doSearch, 250);
+            });
+            input.addEventListener('focus', () => {
+                if (input.value.trim().length >= 2) {
+                    doSearch();
+                }
+            });
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    menu.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!wrapper.contains(event.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+        }
+
         function renderTemporaryPicRows() {
             const quantityField = document.querySelector('input[name="quantity"]');
             const list = document.getElementById('temporaryPicList');
@@ -1223,6 +1354,7 @@
             quantityField.value = quantity;
 
             const existingRows = Array.from(list.querySelectorAll('[data-pic-row]')).map((row) => ({
+                staff_no: row.querySelector('[data-pic-staff-no]')?.value || '',
                 name: row.querySelector('[data-pic-name]')?.value || '',
                 phone_no: row.querySelector('[data-pic-phone]')?.value || '',
                 department: row.querySelector('[data-pic-department]')?.value || '',
@@ -1253,10 +1385,11 @@
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Name <span class="text-red-500">*</span></label>
-                            <select name="pic_details[${index}][name]" data-pic-name data-placeholder="Search ownership name..." class="pic-tag-select w-full" required>
-                                ${renderOptions(ownershipNameOptions, saved.name || '', 'Search ownership name...')}
+                            <input type="hidden" name="pic_details[${index}][staff_no]" data-pic-staff-no value="${escapeAttribute(saved.staff_no || '')}">
+                            <select name="pic_details[${index}][name]" data-pic-name data-placeholder="Search HR staff name or ID..." class="pic-tag-select w-full" required>
+                                ${renderOptions(ownershipNameOptions, saved.name || '', 'Search HR staff name or ID...')}
                             </select>
-                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">If the name is not listed yet, type it. The ownership profile will be saved with this request.</p>
+                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search the HR staff record and pick the owner — department &amp; phone auto-fill. If the staff is not listed, you can still type the name manually.</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Phone No</label>
@@ -1444,17 +1577,21 @@
         }
 
         function initTagSelect(selector) {
+            const staffSelects = [];
             const personSelects = [];
             const tagSelects = [];
 
             $(selector).each(function () {
-                if (this.matches('[data-pic-name], [data-pic-pickup-person]')) {
+                if (this.matches('[data-pic-name]')) {
+                    staffSelects.push(this);
+                } else if (this.matches('[data-pic-pickup-person]')) {
                     personSelects.push(this);
                 } else {
                     tagSelects.push(this);
                 }
             });
 
+            staffSelects.forEach(enhanceStaffSelect);
             personSelects.forEach(enhancePersonSelect);
 
             if (!tagSelects.length) {

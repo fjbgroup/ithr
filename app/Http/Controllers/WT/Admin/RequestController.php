@@ -8,11 +8,45 @@ use App\Models\WT\AccessRequest;
 use App\Models\WT\MaintenanceRecord;
 use App\Models\WT\User;
 use App\Models\WT\WalkieTalkie;
+use App\Models\Staff;
 use App\Services\SystemNotifier;
 use App\Services\TemporaryRequestExpiryService;
+use Illuminate\Support\Str;
 
 class RequestController extends Controller
 {
+    /**
+     * HR staff lookup for executives registering ownership on behalf of their
+     * team. Returns active staff records so the owner can be tied to a real HR
+     * staff record instead of being free-typed.
+     */
+    public function staffSearch(Request $request)
+    {
+        $q = trim($request->get('q', ''));
+        if (strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Staff::with('department')
+            ->where('is_active', 1)
+            ->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('staff_no', 'like', "%{$q}%");
+            })
+            ->orderBy('name')
+            ->limit(15)
+            ->get()
+            ->map(fn ($s) => [
+                'staff_no'  => $s->staff_no,
+                'name'      => Str::upper($s->name),
+                'dept_name' => Str::upper($s->department?->name ?? ''),
+                'position'  => Str::upper($s->position ?? ''),
+                'phone'     => $s->phone_number ?? '',
+            ]);
+
+        return response()->json($results);
+    }
+
     private function isSpareWalkie(WalkieTalkie $walkie): bool
     {
         return in_array(strtoupper((string) $walkie->ownership_type), ['SPARE'], true)
@@ -297,6 +331,7 @@ class RequestController extends Controller
                 ? ($isDraft ? 'nullable|integer|min:1|max:999' : 'required|integer|min:1|max:999')
                 : 'nullable|integer|min:1|max:999',
             'pic_details' => 'nullable|array',
+            'pic_details.*.staff_no' => 'nullable|string|max:255',
             'pic_details.*.name' => ! $isSelfRequest && ! $isDraft ? 'required|string|max:255' : 'nullable|string|max:255',
             'pic_details.*.phone_no' => 'nullable|string|max:255',
             'pic_details.*.department' => ! $isSelfRequest && ! $isDraft ? 'required|string|max:255' : 'nullable|string|max:255',
@@ -318,6 +353,7 @@ class RequestController extends Controller
         $picDetails = collect($validated['pic_details'] ?? [])
             ->map(function ($pic) {
                 return [
+                    'staff_no' => trim((string) ($pic['staff_no'] ?? '')),
                     'name' => trim((string) ($pic['name'] ?? '')),
                     'phone_no' => trim((string) ($pic['phone_no'] ?? '')),
                     'department' => trim((string) ($pic['department'] ?? '')),

@@ -66,6 +66,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::get('/requests', [RequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/history', [RequestController::class, 'history'])->middleware('wt.role:admin_it')->name('requests.history');
         Route::get('/requests/create', [RequestController::class, 'createMenu'])->name('requests.create');
+        Route::get('/requests/staff-search', [RequestController::class, 'staffSearch'])->name('requests.staffSearch');
         Route::get('/requests/shared', [RequestController::class, 'createShared'])->name('requests.create.shared');
         Route::get('/requests/individual', fn () => redirect()->route('wt.admin.requests.create.shared'))->name('requests.create.individual');
         Route::get('/requests/temporary', [RequestController::class, 'createTemporaryShared'])->name('requests.create.temporary');
