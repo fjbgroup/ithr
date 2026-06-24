@@ -262,6 +262,31 @@ class UserController extends Controller
     }
 
     /**
+     * Admin (IT) only — disable Microsoft Authenticator (TOTP) for ALL users.
+     * Clears every user's totp_secret in one action, so nobody has 2FA enabled
+     * until they set it up again from Account Security.
+     */
+    public function disableAllTotp(Request $request)
+    {
+        if (! Auth::user()->isAdminIT()) {
+            abort(403);
+        }
+
+        $affected = User::whereNotNull('totp_secret')->update(['totp_secret' => null]);
+
+        AuditLogger::log('update', 'users',
+            'Microsoft Authenticator (TOTP) disabled for ALL users (' . $affected . ' affected).',
+            ['affected' => $affected]
+        );
+
+        return redirect()->back()->with('success',
+            $affected > 0
+                ? "Microsoft Authenticator has been disabled for {$affected} user(s). They will need to set it up again to use it."
+                : 'No users currently had Microsoft Authenticator enabled.'
+        );
+    }
+
+    /**
      * Admin (IT) only — flip the global "email sending" master switch.
      * When OFF, the whole HR system stops sending outgoing email until
      * re-enabled. Users with Microsoft Authenticator (TOTP) are unaffected.

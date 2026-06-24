@@ -286,7 +286,7 @@
     @if($isAdminItView)
     <div class="nav-section-label">Executive Tools (IT)</div>
     @php
-      $sysCtrlOpen = request()->routeIs('admin.users.index') || request()->routeIs('admin.activity.index');
+      $sysCtrlOpen = request()->routeIs('admin.users.index') || request()->routeIs('admin.activity.index') || request()->routeIs('admin.masterData.index');
     @endphp
     <div class="dropdown-wrapper {{ $sysCtrlOpen ? 'open' : '' }}">
       <button class="dropdown-trigger has-info {{ $sysCtrlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
@@ -298,6 +298,9 @@
       <div class="dropdown-content">
         <a href="{{ route('wt.admin.users.index') }}" class="sub-nav-link {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
           <i class="fas fa-users" style="font-size:12px;width:14px"></i> Users Control
+        </a>
+        <a href="{{ route('wt.admin.masterData.index') }}" class="sub-nav-link {{ request()->routeIs('admin.masterData.index') ? 'active' : '' }}">
+          <i class="fas fa-database" style="font-size:12px;width:14px"></i> Master Data
         </a>
         <a href="{{ route('wt.admin.activity.index') }}" class="sub-nav-link {{ request()->routeIs('admin.activity.index') ? 'active' : '' }}">
           <i class="fas fa-clipboard-list" style="font-size:12px;width:14px"></i> System Logs
