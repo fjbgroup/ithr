@@ -113,6 +113,73 @@
         text-transform: uppercase;
         white-space: nowrap;
     }
+    .maintenance-status-pill[data-status="REPAIRING"],
+    .maintenance-status-pill[data-status="UNDER REPAIR"] {
+        background: #fff7ed !important;
+        border-color: #fdba74 !important;
+        color: #c2410c !important;
+    }
+    .maintenance-status-pill[data-status="FAULTY"] {
+        background: #fee2e2 !important;
+        border-color: #fca5a5 !important;
+        color: #b91c1c !important;
+    }
+    .maintenance-status-pill[data-status="B.E.R"] {
+        background: #f3e8ff !important;
+        border-color: #d8b4fe !important;
+        color: #7e22ce !important;
+    }
+    .maintenance-status-pill[data-status="DONE"],
+    .maintenance-status-pill[data-status="ALREADY FIXED"] {
+        background: #dcfce7 !important;
+        border-color: #86efac !important;
+        color: #166534 !important;
+    }
+    .maintenance-status-pill[data-status="READY TO COLLECT"] {
+        background: #e0f2fe !important;
+        border-color: #7dd3fc !important;
+        color: #0369a1 !important;
+    }
+    .maintenance-status-pill[data-status="WAITING FOR ADMIN"],
+    .maintenance-status-pill[data-status="PENDING ADMIN IT"] {
+        background: #fef3c7 !important;
+        border-color: #fcd34d !important;
+        color: #92400e !important;
+    }
+    .maintenance-done-pill[data-done="YES"] {
+        background: #dcfce7 !important;
+        border-color: #86efac !important;
+        color: #166534 !important;
+    }
+    .maintenance-done-pill[data-done="NO"] {
+        background: #fee2e2 !important;
+        border-color: #fca5a5 !important;
+        color: #b91c1c !important;
+    }
+    html.dark .maintenance-status-pill[data-status="REPAIRING"],
+    html.dark .maintenance-status-pill[data-status="UNDER REPAIR"] {
+        background: #431407 !important;
+        border-color: #9a3412 !important;
+        color: #fdba74 !important;
+    }
+    html.dark .maintenance-status-pill[data-status="FAULTY"],
+    html.dark .maintenance-done-pill[data-done="NO"] {
+        background: #450a0a !important;
+        border-color: #991b1b !important;
+        color: #fca5a5 !important;
+    }
+    html.dark .maintenance-status-pill[data-status="B.E.R"] {
+        background: #3b0764 !important;
+        border-color: #7e22ce !important;
+        color: #d8b4fe !important;
+    }
+    html.dark .maintenance-status-pill[data-status="DONE"],
+    html.dark .maintenance-status-pill[data-status="ALREADY FIXED"],
+    html.dark .maintenance-done-pill[data-done="YES"] {
+        background: #052e16 !important;
+        border-color: #15803d !important;
+        color: #86efac !important;
+    }
     .clean-admin-actions {
         display: flex;
         justify-content: center;
@@ -587,7 +654,7 @@
                 <th class="px-3 py-3">Done</th>
                 <th class="px-3 py-3">Finish Date</th>
                 <th class="px-3 py-3">Remarks</th>
-                <th class="px-3 py-3">Repair Progress</th>
+                <th class="px-3 py-3 maintenance-progress-col">Repair Progress</th>
                 <th class="px-3 py-3 maintenance-action-col">Action</th>
             </tr>
         </thead>
@@ -634,23 +701,23 @@
                 </td>
                 <td class="text-center">
                     @if($record->status === 'WAITING FOR ADMIN')
-                    <span class="clean-admin-pill">WAITING</span>
+                    <span class="clean-admin-pill maintenance-status-pill" data-status="WAITING FOR ADMIN">WAITING</span>
                     @elseif($record->status === 'PENDING ADMIN IT')
-                    <span class="clean-admin-pill">PENDING IT</span>
+                    <span class="clean-admin-pill maintenance-status-pill" data-status="PENDING ADMIN IT">PENDING IT</span>
                     @elseif($record->done || $record->status === 'ALREADY FIXED')
-                    <span class="clean-admin-pill">DONE</span>
+                    <span class="clean-admin-pill maintenance-status-pill" data-status="DONE">DONE</span>
                     @else
-                    <span class="clean-admin-pill">{{ $record->status ?: 'WARNING' }}</span>
+                    <span class="clean-admin-pill maintenance-status-pill" data-status="{{ strtoupper((string) ($record->status ?: 'WARNING')) }}">{{ $record->status ?: 'WARNING' }}</span>
                     @endif
                 </td>
                 <td class="text-center">
-                    <span class="clean-admin-pill">{{ $record->done ? 'YES' : 'NO' }}</span>
+                    <span class="clean-admin-pill maintenance-done-pill {{ $record->done ? 'maintenance-done-yes' : 'maintenance-done-no' }}" data-done="{{ $record->done ? 'YES' : 'NO' }}">{{ $record->done ? 'YES' : 'NO' }}</span>
                 </td>
                 <td>{{ $record->finish_date ?? '-' }}</td>
                 <td class="max-w-xs">
                     <div class="line-clamp-1 italic">{{ $record->remarks ?? '-' }}</div>
                 </td>
-                <td>
+                <td class="maintenance-progress-col">
                     <div class="h-1 w-24 rounded-[4px] bg-slate-700/80 overflow-hidden border border-white/5">
                         <div class="h-full rounded-[4px] bg-[#38bdf8]" style="width: {{ $repairProgress }}%;"></div>
                     </div>
@@ -1296,6 +1363,29 @@ html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-ta
     color: #334155 !important;
 }
 
+.maintenance-page-shell #maintenanceTable.clean-admin-table thead th:nth-child(12),
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody td:nth-child(12) {
+    width: 96px !important;
+    max-width: 96px !important;
+}
+
+.maintenance-page-shell #maintenanceTable.clean-admin-table thead th.maintenance-action-col,
+.maintenance-page-shell #maintenanceTable.clean-admin-table thead .maintenance-action-col {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    background: #eef3f8 !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+.maintenance-page-shell #maintenanceTable.clean-admin-table thead th.maintenance-progress-col,
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody td.maintenance-progress-col {
+    width: 132px !important;
+    min-width: 132px !important;
+    max-width: 132px !important;
+}
+
 .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
 .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
     background: #ffffff !important;
@@ -1303,8 +1393,89 @@ html[data-theme="dark"] .maintenance-page-shell #maintenanceTable.clean-admin-ta
     color: #1f2937 !important;
 }
 
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody td.maintenance-action-col,
+.maintenance-page-shell #maintenanceTable.clean-admin-table tbody .maintenance-action-col {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+}
+
+.maintenance-page-shell #maintenanceTable .clean-admin-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+.maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn {
+    min-width: 62px !important;
+    height: 32px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
 .maintenance-page-shell #maintenanceTable.clean-admin-table tbody tr:hover td {
     background: #f8fafc !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill,
+.maintenance-page-shell #maintenanceTable .maintenance-done-pill {
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="REPAIRING"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="UNDER REPAIR"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="FAULTY"],
+.maintenance-page-shell #maintenanceTable .maintenance-done-pill[data-done="NO"],
+.maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-no,
+body .content-surface .maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-no {
+    background: #fee2e2 !important;
+    border-color: #fca5a5 !important;
+    color: #b91c1c !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="UNUSED"] {
+    background: #dcfce7 !important;
+    border-color: #86efac !important;
+    color: #166534 !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="IN USE"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="READY TO COLLECT"] {
+    background: #dbeafe !important;
+    border-color: #93c5fd !important;
+    color: #1d4ed8 !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="B.E.R"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="LOST"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="UNKNOWN"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="CALIBRATING"] {
+    background: #f3e8ff !important;
+    border-color: #d8b4fe !important;
+    color: #7e22ce !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="DONE"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="ALREADY FIXED"],
+.maintenance-page-shell #maintenanceTable .maintenance-done-pill[data-done="YES"],
+.maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-yes,
+body .content-surface .maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-yes {
+    background: #dcfce7 !important;
+    border-color: #86efac !important;
+    color: #166534 !important;
+}
+
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="WAITING FOR ADMIN"],
+.maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="PENDING ADMIN IT"] {
+    background: #fef3c7 !important;
+    border-color: #fcd34d !important;
+    color: #92400e !important;
 }
 
 html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
@@ -1326,11 +1497,68 @@ html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
     color: #cbd5e1 !important;
 }
 
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table thead th.maintenance-action-col,
+html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table thead .maintenance-action-col {
+    background: #1f2937 !important;
+    border-color: #2f3b4f !important;
+    color: #cbd5e1 !important;
+}
+
 html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
 html.dark .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
     background: #111827 !important;
     border-color: #263244 !important;
     color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="REPAIRING"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="UNDER REPAIR"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="FAULTY"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-done-pill[data-done="NO"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-no,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-no {
+    background: #7f1d1d !important;
+    border-color: #ef4444 !important;
+    color: #fecaca !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="UNUSED"] {
+    background: #14532d !important;
+    border-color: #22c55e !important;
+    color: #bbf7d0 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="IN USE"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="READY TO COLLECT"] {
+    background: #1e3a8a !important;
+    border-color: #60a5fa !important;
+    color: #dbeafe !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="B.E.R"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="LOST"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="UNKNOWN"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="CALIBRATING"] {
+    background: #581c87 !important;
+    border-color: #a855f7 !important;
+    color: #f3e8ff !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="DONE"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="ALREADY FIXED"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-done-pill[data-done="YES"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-yes,
+html.dark body .content-surface .maintenance-page-shell #maintenanceTable .maintenance-done-pill.maintenance-done-yes {
+    background: #14532d !important;
+    border-color: #22c55e !important;
+    color: #bbf7d0 !important;
+}
+
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="WAITING FOR ADMIN"],
+html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[data-status="PENDING ADMIN IT"] {
+    background: #78350f !important;
+    border-color: #f59e0b !important;
+    color: #fde68a !important;
 }
 </style>
 

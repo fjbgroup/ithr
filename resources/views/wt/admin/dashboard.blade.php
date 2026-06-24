@@ -116,6 +116,66 @@
     html:not(.dark) .dashboard-shell .total-wt-badge .total-wt-value {
         color: #142b47 !important;
     }
+    .dashboard-shell .activity-list {
+        display: grid;
+        gap: 10px;
+    }
+    .dashboard-shell .activity-item {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+    }
+    .dashboard-shell .activity-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #e0f2fe;
+        color: #0284c7;
+        flex-shrink: 0;
+        font-size: 11px;
+    }
+    .dashboard-shell .activity-user {
+        font-size: 11px;
+        font-weight: 900;
+        color: #142b47;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+    .dashboard-shell .activity-details {
+        margin-top: 3px;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+    .dashboard-shell .activity-time {
+        margin-top: 5px;
+        color: #94a3b8;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+    html.dark .dashboard-shell .activity-item {
+        border-color: #334155;
+        background: #0f172a;
+    }
+    html.dark .dashboard-shell .activity-icon {
+        background: rgba(14, 165, 233, .15);
+        color: #38bdf8;
+    }
+    html.dark .dashboard-shell .activity-user {
+        color: #e5edf7;
+    }
+    html.dark .dashboard-shell .activity-details {
+        color: #94a3b8;
+    }
     @media (max-width: 768px) {
         .dashboard-shell .profile-name {
             font-size: 0.95rem;
@@ -209,7 +269,7 @@
 </div>
 @endif
 
-<div class="grid grid-cols-1 gap-4">
+<div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(320px,0.85fr)]">
     <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-stone-100 dark:border-slate-700/50 transition-colors duration-300">
         <div class="flex flex-col gap-3 mb-6 border-b border-stone-50 dark:border-slate-700/50 pb-3 lg:flex-row lg:items-center lg:justify-between">
             <h4 class="card-title text-stone-800 dark:text-slate-200">Walkie Talkie by Status</h4>
@@ -229,6 +289,42 @@
         <div class="flex h-[120px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-500">
             No status data found.
         </div>
+        @endif
+    </div>
+
+    <div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-stone-100 dark:border-slate-700/50 transition-colors duration-300">
+        <div class="mb-5 border-b border-stone-50 pb-3 dark:border-slate-700/50">
+            <h4 class="card-title text-stone-800 dark:text-slate-200">Recent Activities by User</h4>
+            <p class="mt-1 text-[10px] font-bold text-slate-400">Latest user actions recorded in the system.</p>
+        </div>
+
+        @if(($recentActivities ?? collect())->isNotEmpty())
+            <div class="activity-list">
+                @foreach($recentActivities as $activity)
+                    @php
+                        $activityUser = $activity->user;
+                        $displayUser = $activityUser
+                            ? ($activityUser->full_name ?: $activityUser->username)
+                            : ($activity->username ?: 'System User');
+                    @endphp
+                    <div class="activity-item">
+                        <span class="activity-icon">
+                            <i class="fas fa-user-clock"></i>
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <div class="activity-user">{{ $displayUser }}</div>
+                            <div class="activity-details">{{ $activity->event_details ?: str_replace('_', ' ', $activity->event_action ?: 'Activity recorded') }}</div>
+                            <div class="activity-time">
+                                {{ $activity->created_at ? \Carbon\Carbon::parse($activity->created_at)->format('d M Y H:i') : '-' }}
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="flex h-[120px] items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-500">
+                No recent activities found.
+            </div>
         @endif
     </div>
 </div>
@@ -304,5 +400,3 @@
     });
 </script>
 @endpush
-
-

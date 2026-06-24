@@ -5,61 +5,57 @@
 @push('styles')
 <style>
     .ict-users-control .bg-white {
-        background: #233047 !important;
-        border-color: #3a4a63 !important;
+        background: var(--surface) !important;
+        border-color: var(--border) !important;
     }
     .ict-users-control .bg-stone-50\/70,
     .ict-users-control .bg-stone-50 {
-        background: #314056 !important;
-        border-color: #465a77 !important;
+        background: var(--soft-surface) !important;
+        border-color: var(--border) !important;
     }
     .ict-users-control .page-title-standard,
     .ict-users-control .text-slate-700,
     .ict-users-control .text-stone-700,
     .ict-users-control .text-\[\#142b47\] {
-        color: #f8fafc !important;
+        color: var(--text) !important;
     }
     .ict-users-control .page-subtitle-standard,
     .ict-users-control .text-slate-600,
-    .ict-users-control .text-stone-600 {
-        color: #cbd5e1 !important;
-    }
+    .ict-users-control .text-stone-600,
     .ict-users-control .text-slate-500,
-    .ict-users-control .text-stone-500 {
-        color: #b8c4d6 !important;
-    }
+    .ict-users-control .text-stone-500,
     .ict-users-control .text-slate-400,
     .ict-users-control .text-stone-400 {
-        color: #94a3b8 !important;
+        color: var(--muted) !important;
     }
     .ict-users-control .text-\[\#0284c7\] {
-        color: #f6c177 !important;
+        color: var(--accent) !important;
     }
     .ict-users-control table.dataTable thead th,
     .ict-users-control .dataTables_wrapper table.dataTable thead th {
-        color: #dbe7ff !important;
-        background: #2a374d !important;
-        border-color: #41536d !important;
+        color: var(--table-head-color) !important;
+        background: var(--table-head-bg) !important;
+        border-color: var(--border) !important;
     }
     .ict-users-control table.dataTable tbody td,
     .ict-users-control .dataTables_wrapper table.dataTable tbody td {
-        color: #e5eefc !important;
-        background: #243247 !important;
-        border-color: #34445d !important;
+        color: var(--text) !important;
+        background: var(--row-surface) !important;
+        border-color: var(--border) !important;
     }
     .ict-users-control table.dataTable tbody tr:hover td {
-        background: #2c3d56 !important;
+        background: var(--row-alt) !important;
     }
     .ict-users-control .dataTables_wrapper .dataTables_filter label,
     .ict-users-control .dataTables_wrapper .dataTables_length label,
     .ict-users-control .adminit-table-info {
-        color: #d4deeb !important;
+        color: var(--muted) !important;
     }
     .ict-users-control .dataTables_wrapper .dataTables_filter input,
     .ict-users-control .dataTables_wrapper .dataTables_length select {
-        background: #162033 !important;
-        border-color: #41536d !important;
-        color: #f8fafc !important;
+        background: var(--form-input-bg) !important;
+        border-color: var(--form-input-border) !important;
+        color: var(--form-input-color) !important;
     }
     .adminit-reset-table table.dataTable,
     .adminit-reset-table .dataTables_wrapper {
@@ -77,20 +73,24 @@
         white-space: nowrap;
     }
     .adminit-section-header {
+        background: var(--soft-surface) !important;
+        border-color: var(--border) !important;
+    }
+    html.dark .adminit-section-header {
         background: linear-gradient(135deg, #33445f 0%, #28384f 100%) !important;
         border-color: rgba(129, 151, 181, 0.34) !important;
     }
     .adminit-section-heading {
-        color: #f8fafc !important;
+        color: var(--text) !important;
         font-size: 13px;
         font-weight: 900;
         letter-spacing: 0.18em;
         line-height: 1.15;
         text-transform: uppercase;
-        text-shadow: 0 1px 2px rgba(2, 6, 23, 0.55);
     }
+    html.dark .adminit-section-heading { color: #f8fafc !important; text-shadow: 0 1px 2px rgba(2, 6, 23, 0.55); }
     .adminit-section-copy {
-        color: #cbd5e1 !important;
+        color: var(--muted) !important;
         font-size: 11px;
         line-height: 1.35;
     }
@@ -301,7 +301,12 @@
         max-height: calc(100vh - 48px);
         overflow: hidden;
         border-radius: 22px;
-        border: 1px solid rgba(96, 165, 250, 0.28);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: var(--shadow-lg);
+    }
+    html.dark .account-modal-card {
+        border-color: rgba(96, 165, 250, 0.28);
         background: #182338;
         box-shadow: 0 28px 70px rgba(2, 6, 23, 0.58);
     }
@@ -311,8 +316,21 @@
         justify-content: space-between;
         gap: 16px;
         padding: 18px 22px;
-        border-bottom: 1px solid rgba(96, 165, 250, 0.18);
+        border-bottom: 1px solid var(--border);
+        background: var(--soft-surface);
+    }
+    html.dark .account-modal-header {
+        border-bottom-color: rgba(96, 165, 250, 0.18);
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+    .account-modal-header .text-white {
+        color: var(--text) !important;
+    }
+    html.dark .account-modal-header .text-white {
+        color: #ffffff !important;
+    }
+    .account-modal-header .text-slate-400 {
+        color: var(--muted) !important;
     }
     .account-modal-icon {
         display: inline-flex;
@@ -333,10 +351,14 @@
         height: 38px;
         border-radius: 999px;
         border: 1px solid rgba(148, 163, 184, 0.2);
-        color: #cbd5e1;
+        color: var(--muted);
         transition: all 0.18s ease;
     }
     .account-modal-close:hover {
+        background: var(--soft-surface);
+        color: var(--text);
+    }
+    html.dark .account-modal-close:hover {
         background: rgba(148, 163, 184, 0.12);
         color: #ffffff;
     }
@@ -348,7 +370,7 @@
     .account-field label {
         display: block;
         margin-bottom: 8px;
-        color: #9fb0c8;
+        color: var(--muted);
         font-size: 10px;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -359,9 +381,9 @@
         width: 100%;
         min-height: 42px;
         border-radius: 12px;
-        border: 1px solid #334766;
-        background: #0f172a;
-        color: #f8fafc;
+        border: 1px solid var(--form-input-border);
+        background: var(--form-input-bg);
+        color: var(--form-input-color);
         padding: 0 14px;
         font-size: 12px;
         font-weight: 700;
@@ -378,8 +400,101 @@
         justify-content: flex-end;
         gap: 10px;
         padding: 16px 22px;
-        border-top: 1px solid rgba(96, 165, 250, 0.18);
+        border-top: 1px solid var(--border);
+        background: var(--soft-surface);
+    }
+    html.dark .account-modal-footer {
+        border-top-color: rgba(96, 165, 250, 0.18);
         background: #121c2e;
+    }
+    html:not(.dark) #wtStaffSearchInput,
+    html[data-theme="light"] #wtStaffSearchInput {
+        border-color: #dbe5f2 !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
+        box-shadow: none !important;
+    }
+    html:not(.dark) #wtStaffSearchInput::placeholder,
+    html[data-theme="light"] #wtStaffSearchInput::placeholder {
+        color: #94a3b8 !important;
+        opacity: 1 !important;
+    }
+    html:not(.dark) #wtStaffResults,
+    html[data-theme="light"] #wtStaffResults {
+        border-color: #dbe5f2 !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14) !important;
+    }
+    html:not(.dark) #wtStaffBanner,
+    html[data-theme="light"] #wtStaffBanner {
+        border-color: #bae6fd !important;
+        background: #f0f9ff !important;
+    }
+    html:not(.dark) #wtStaffBannerLabel,
+    html[data-theme="light"] #wtStaffBannerLabel {
+        color: #0f172a !important;
+    }
+    .wt-staff-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 16px;
+        cursor: pointer;
+        border-bottom: 1px solid #e2e8f0;
+        transition: background .12s;
+    }
+    .wt-staff-option:hover {
+        background: #f8fafc;
+    }
+    .wt-staff-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #0ea5e9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 900;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    .wt-staff-name {
+        font-size: 12px;
+        font-weight: 800;
+        color: #1e293b;
+    }
+    .wt-staff-meta {
+        font-size: 10px;
+        color: #64748b;
+        margin-top: 2px;
+    }
+    .wt-staff-count {
+        padding: 7px 14px;
+        font-size: 10px;
+        color: #64748b;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+    }
+    html.dark .wt-staff-option {
+        border-bottom-color: rgba(96,165,250,0.15);
+    }
+    html.dark .wt-staff-option:hover {
+        background: rgba(56,189,248,.08);
+    }
+    html.dark .wt-staff-avatar {
+        background: #0e7490;
+    }
+    html.dark .wt-staff-name {
+        color: #f8fafc;
+    }
+    html.dark .wt-staff-meta,
+    html.dark .wt-staff-count {
+        color: #94a3b8;
+    }
+    html.dark .wt-staff-count {
+        border-top-color: rgba(96,165,250,0.15);
     }
 </style>
 @endpush
@@ -671,10 +786,7 @@
                     </div>
                     <div class="account-field">
                         <label>Position</label>
-                        <select name="position" required>
-                            @php($executivePosition = old('position', 'EXECUTIVE'))
-                            <option value="EXECUTIVE" {{ $executivePosition === 'EXECUTIVE' ? 'selected' : '' }}>EXECUTIVE</option>
-                        </select>
+                        <input type="text" id="wt_field_position" name="position" value="{{ old('position') }}" placeholder="E.G. OPERATOR" required>
                     </div>
                     <div class="account-field">
                         <label>Password <span style="color:#94a3b8;font-weight:400;text-transform:none;letter-spacing:0">(optional if staff exists)</span></label>
@@ -950,21 +1062,20 @@
             }
             results.innerHTML = data.map(s => `
                 <div onclick='wtSelectStaff(${JSON.stringify(s).replace(/'/g, "\\'")})'
-                    style="display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;border-bottom:1px solid rgba(96,165,250,0.15);transition:background .12s"
-                    onmouseenter="this.style.background='rgba(56,189,248,.08)'" onmouseleave="this.style.background=''">
-                    <div style="width:36px;height:36px;border-radius:50%;background:#0e7490;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;flex-shrink:0">
+                    class="wt-staff-option">
+                    <div class="wt-staff-avatar">
                         ${s.name.charAt(0)}
                     </div>
                     <div style="flex:1;min-width:0">
-                        <div style="font-size:12px;font-weight:800;color:#f8fafc">${s.name}</div>
-                        <div style="font-size:10px;color:#94a3b8;margin-top:2px">
+                        <div class="wt-staff-name">${s.name}</div>
+                        <div class="wt-staff-meta">
                             <span>${s.staff_no}</span>
                             ${s.dept_name ? ' · ' + s.dept_name : ''}
                             ${s.position ? ' · ' + s.position : ''}
                         </div>
                     </div>
                 </div>`).join('');
-            results.innerHTML += '<div style="padding:7px 14px;font-size:10px;color:#64748b;text-align:center;border-top:1px solid rgba(96,165,250,0.15)">' + data.length + ' result' + (data.length > 1 ? 's' : '') + '</div>';
+            results.innerHTML += '<div class="wt-staff-count">' + data.length + ' result' + (data.length > 1 ? 's' : '') + '</div>';
             results.style.display = 'block';
         }
 
@@ -972,6 +1083,7 @@
             document.getElementById('wt_field_staff_id').value    = s.staff_no;
             document.getElementById('wt_field_full_name').value   = s.name;
             document.getElementById('wt_field_department').value  = s.dept_name;
+            document.getElementById('wt_field_position').value    = s.position || '';
             // Password becomes optional when granting access to existing HR staff
             document.getElementById('wt_field_password').removeAttribute('required');
             document.getElementById('wt_field_password_confirmation').removeAttribute('required');
@@ -982,7 +1094,7 @@
         };
 
         window.wtClearStaff = function () {
-            ['wt_field_staff_id','wt_field_full_name','wt_field_department'].forEach(function (id) {
+            ['wt_field_staff_id','wt_field_full_name','wt_field_department','wt_field_position'].forEach(function (id) {
                 document.getElementById(id).value = '';
             });
             // Restore password as required
@@ -1042,6 +1154,3 @@
     });
 </script>
 @endpush
-
-
-

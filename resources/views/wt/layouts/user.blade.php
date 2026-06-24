@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title', 'Dashboard') — WT System</title>
+<link rel="icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623" type="image/jpeg">
+<link rel="shortcut icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623" type="image/jpeg">
+<link rel="apple-touch-icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623">
+<script>
+  (function () {
+    try {
+      var savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme');
+      var theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    } catch (error) {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.style.colorScheme = 'light';
+    }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
