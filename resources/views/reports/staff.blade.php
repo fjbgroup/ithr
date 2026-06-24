@@ -67,10 +67,22 @@
     <div class="card">
         <div class="card-header"><h3 class="card-title">Headcount by Company</h3></div>
         <div style="padding:1.25rem;">
+            @php
+                $pieTotals = []; $pieColors = [];
+                foreach ($allCompanies as $i => $co) {
+                    $pieTotals[$co->code] = $companyCounts[$co->code] ?? 0;
+                    $pieColors[$co->code] = $coColors[$i % count($coColors)]['text'];
+                }
+            @endphp
+            @if(array_sum($pieTotals) > 0)
+            <div style="display:flex;justify-content:center;margin-bottom:1.5rem;">
+                <canvas id="companyPieChart" width="200" height="200" style="cursor:pointer;display:block;"></canvas>
+            </div>
+            @endif
             <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:1rem;margin-bottom:1.5rem;">
                 @foreach($allCompanies as $i => $co)
                 @php $clr = $coColors[$i % count($coColors)]; $cnt = $companyCounts[$co->code] ?? 0; @endphp
-                <div class="co-stat-box" onclick="openCompanyStaffModal('{{ $co->code }}', '{{ addslashes($co->name) }}')" style="background:{{ $clr['bg'] }};border:1px solid {{ $clr['text'] }}33;border-radius:8px;padding:1rem;text-align:center;cursor:pointer;">
+                <div class="co-stat-box" data-co="{{ $co->code }}" onclick="openCompanyStaffModal('{{ $co->code }}', '{{ addslashes($co->name) }}')" style="background:{{ $clr['bg'] }};border:1px solid {{ $clr['text'] }}33;border-radius:8px;padding:1rem;text-align:center;cursor:pointer;transition:box-shadow .15s;">
                     <div style="font-size:2rem;font-weight:700;color:{{ $clr['text'] }};">{{ $cnt }}</div>
                     <div style="font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.25rem;">{{ $co->code }}</div>
                 </div>
@@ -152,6 +164,102 @@
 
 @section('scripts')
 <script>
+// Animated company-headcount donut (sweeps in when scrolled into view).
+(function () {
+    const canvas = document.getElementById('companyPieChart');
+    if (!canvas) return;
+    const totals  = @json($pieTotals ?? []);
+    const colors  = @json($pieColors ?? []);
+    const entries = Object.entries(totals).filter(([, v]) => +v > 0).map(([k, v]) => [k, +v]);
+    const total   = entries.reduce((s, [, v]) => s + v, 0);
+    if (!total) return;
+
+    const ctx = canvas.getContext('2d');
+    const cx = 100, cy = 100, r = 88, rHover = 94, rHole = 42;
+    let slices = [], hovered = -1;
+
+    let angle = -Math.PI / 2;
+    entries.forEach(([co, cnt]) => {
+        const sweep = (cnt / total) * 2 * Math.PI;
+        slices.push({ co, cnt, color: colors[co] || '#94a3b8', start: angle, end: angle + sweep });
+        angle += sweep;
+    });
+
+    function draw(prog) {
+        if (prog === undefined) prog = 1;
+        const sweepMax = -Math.PI / 2 + prog * 2 * Math.PI;
+        ctx.clearRect(0, 0, 200, 200);
+        slices.forEach((s, i) => {
+            if (s.start >= sweepMax) return;
+            const end = Math.min(s.end, sweepMax);
+            const rad = i === hovered ? rHover : r;
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, rad, s.start, end); ctx.closePath();
+            ctx.fillStyle = s.color; ctx.fill();
+            if (i === hovered) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke(); }
+        });
+        ctx.beginPath(); ctx.arc(cx, cy, rHole, 0, 2 * Math.PI);
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg') || '#fff';
+        ctx.fill();
+        ctx.save();
+        ctx.globalAlpha = prog;
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text') || '#111';
+        ctx.font = 'bold 26px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(total, cx, cy - 6);
+        ctx.font = '11px system-ui,sans-serif';
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted') || '#888';
+        ctx.fillText('staff', cx, cy + 14);
+        ctx.restore();
+    }
+
+    let animId = null;
+    function animateIn() {
+        if (animId) cancelAnimationFrame(animId);
+        const dur = 750, t0 = performance.now();
+        (function frame(now) {
+            const p = Math.min(1, (now - t0) / dur);
+            draw(1 - Math.pow(1 - p, 3));
+            if (p < 1) animId = requestAnimationFrame(frame);
+        })(t0);
+    }
+
+    function sliceAt(x, y) {
+        const dx = x - cx, dy = y - cy, dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < rHole || dist > rHover) return -1;
+        let a = Math.atan2(dy, dx); if (a < -Math.PI / 2) a += 2 * Math.PI;
+        for (let i = 0; i < slices.length; i++) {
+            let s = slices[i].start, e = slices[i].end;
+            if (s < -Math.PI / 2) { s += 2 * Math.PI; e += 2 * Math.PI; }
+            if (a >= s && a < e) return i;
+        }
+        return -1;
+    }
+    function highlightBoxes(co) {
+        document.querySelectorAll('.co-stat-box').forEach(function (b) {
+            b.style.boxShadow = (co && b.dataset.co === co) ? '0 0 0 2px ' + (colors[co] || '#94a3b8') : '';
+        });
+    }
+
+    canvas.addEventListener('mousemove', function (e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+        const idx = sliceAt(x, y);
+        if (idx !== hovered) { hovered = idx; draw(); highlightBoxes(idx >= 0 ? slices[idx].co : null); }
+    });
+    canvas.addEventListener('mouseleave', function () { hovered = -1; draw(); highlightBoxes(null); });
+
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !window.IntersectionObserver) {
+        draw();
+    } else {
+        draw(0);
+        const io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { if (en.isIntersecting) animateIn(); });
+        }, { threshold: 0.35 });
+        io.observe(canvas);
+    }
+})();
+
 function openCompanyStaffModal(code, name) {
     document.getElementById('companyStaffModalTitle').textContent = 'Active Staff: ' + name;
     document.getElementById('companyStaffBody').innerHTML = 

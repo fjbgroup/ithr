@@ -105,13 +105,17 @@
             });
         }
 
-        function draw() {
+        function draw(prog) {
+            if (prog === undefined) prog = 1;
+            const sweepMax = -Math.PI / 2 + prog * 2 * Math.PI;
             ctx.clearRect(0, 0, 220, 220);
             slices.forEach((s, i) => {
+                if (s.start >= sweepMax) return;          // slice not reached by the sweep yet
+                const end = Math.min(s.end, sweepMax);     // clamp slice to the animated sweep
                 const rad = i === hovered ? rHover : r;
                 ctx.beginPath();
                 ctx.moveTo(cx, cy);
-                ctx.arc(cx, cy, rad, s.start, s.end);
+                ctx.arc(cx, cy, rad, s.start, end);
                 ctx.closePath();
                 ctx.fillStyle = s.color;
                 ctx.fill();
@@ -125,6 +129,8 @@
             ctx.arc(cx, cy, 44, 0, 2 * Math.PI);
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg') || '#fff';
             ctx.fill();
+            ctx.save();
+            ctx.globalAlpha = prog;                        // fade the centre label in
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text') || '#111';
             ctx.font = 'bold 26px system-ui,sans-serif';
             ctx.textAlign = 'center';
@@ -133,6 +139,18 @@
             ctx.font = '11px system-ui,sans-serif';
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted') || '#888';
             ctx.fillText('departments', cx, cy + 14);
+            ctx.restore();
+        }
+
+        let animId = null;
+        function animateIn() {
+            if (animId) cancelAnimationFrame(animId);
+            const dur = 750, t0 = performance.now();
+            (function frame(now) {
+                const p = Math.min(1, (now - t0) / dur);
+                draw(1 - Math.pow(1 - p, 3));              // easeOutCubic sweep
+                if (p < 1) animId = requestAnimationFrame(frame);
+            })(t0);
         }
 
         function getSliceAt(x, y) {
@@ -169,7 +187,18 @@
         });
 
         buildSlices();
-        draw();
+
+        // Play the sweep animation whenever the chart scrolls into view.
+        const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce || !window.IntersectionObserver) {
+            draw();
+        } else {
+            draw(0);
+            const io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) { if (e.isIntersecting) animateIn(); });
+            }, { threshold: 0.35 });
+            io.observe(canvas);
+        }
     })();
     </script>
     @endif
