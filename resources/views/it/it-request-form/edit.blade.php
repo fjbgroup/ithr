@@ -127,7 +127,7 @@
       <div>
         <div class="itr-elabel">Type of Item <span class="itr-ereq">*</span></div>
         <div class="itr-echip-grid" id="hw-items-grid">
-          @foreach(['Laptop','Desktop PC','Printer','Handphone','Tablet','IP Phone','Switch/Hub','UPS','Walkie-Talkie','Allow Install Software','Allow USB Drive','Color Printing Quota','Other'] as $item)
+          @foreach(['Laptop','Desktop PC','Printer','Handphone','Tablet','IP Phone','Switch/Hub','UPS','Allow Install Software','Allow USB Drive','Color Printing Quota','Other'] as $item)
           <div class="itr-echip{{ in_array($item, old('hw_items', $form->hw_items ?? [])) ? ' checked' : '' }}"
             onclick="this.classList.toggle('checked')"><span class="chip-dot"></span>{{ $item }}</div>
           @endforeach

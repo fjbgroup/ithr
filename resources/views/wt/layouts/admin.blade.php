@@ -159,8 +159,8 @@
 
     @if($isAdminItView)
     {{-- Inventory Tools --}}
-    <div class="dropdown-wrapper {{ $inventoryManagementOpen ? 'open' : '' }}">
-      <button class="dropdown-trigger has-info {{ $inventoryManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+    <div class="dropdown-wrapper">
+      <button type="button" class="dropdown-trigger has-info {{ $inventoryManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fas fa-layer-group" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Inventory Tools</span>
         @include('wt.partials.sidebar-info', ['text' => 'Open inventory management tools including inventory list, repair monitoring, duplicate IDs, and special use units.'])
@@ -183,8 +183,8 @@
     </div>
 
     {{-- Approvals --}}
-    <div class="dropdown-wrapper {{ $approvalManagementOpen ? 'open' : '' }}">
-      <button class="dropdown-trigger has-info {{ $approvalManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+    <div class="dropdown-wrapper">
+      <button type="button" class="dropdown-trigger has-info {{ $approvalManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fas fa-inbox" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Approvals
           @if($approvalBadgeCount > 0)
@@ -208,8 +208,8 @@
     </div>
 
     {{-- Faulty Reports --}}
-    <div class="dropdown-wrapper {{ $faultyManagementOpen ? 'open' : '' }}">
-      <button class="dropdown-trigger has-info {{ $faultyManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+    <div class="dropdown-wrapper">
+      <button type="button" class="dropdown-trigger has-info {{ $faultyManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fa-solid fa-triangle-exclamation" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Faulty Reports</span>
         @include('wt.partials.sidebar-info', ['text' => 'Consolidated view for walkie requests, handovers, and faulty reports status.'])
@@ -246,8 +246,8 @@
     @php
       $reqOpen = request()->routeIs('admin.requests.create') || request()->routeIs('admin.requests.create.*') || request()->routeIs('admin.requests.create.temporary*');
     @endphp
-    <div class="dropdown-wrapper {{ $reqOpen ? 'open' : '' }}">
-      <button class="dropdown-trigger has-info {{ $reqOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+    <div class="dropdown-wrapper">
+      <button type="button" class="dropdown-trigger has-info {{ $reqOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fas fa-plus-circle" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Request Walkie Talkie</span>
         @include('wt.partials.sidebar-info', ['text' => 'Submit a walkie talkie request for yourself or on behalf of a recipient. ICT will assign the available unit later.'])
@@ -288,8 +288,8 @@
     @php
       $sysCtrlOpen = request()->routeIs('admin.users.index') || request()->routeIs('admin.activity.index') || request()->routeIs('admin.masterData.index');
     @endphp
-    <div class="dropdown-wrapper {{ $sysCtrlOpen ? 'open' : '' }}">
-      <button class="dropdown-trigger has-info {{ $sysCtrlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+    <div class="dropdown-wrapper">
+      <button type="button" class="dropdown-trigger has-info {{ $sysCtrlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fas fa-sliders-h" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">System Control</span>
         @include('wt.partials.sidebar-info', ['text' => 'Open system management tools for user accounts and activity logs.'])
@@ -652,10 +652,19 @@ function toggleDropdown(trigger) {
   const isOpen = wrapper.classList.contains('open');
   // Close all other dropdowns
   document.querySelectorAll('.dropdown-wrapper.open').forEach(function(dw) {
-    if (dw !== wrapper) dw.classList.remove('open');
+    if (dw !== wrapper) {
+      dw.classList.remove('open');
+      const otherTrigger = dw.querySelector('.dropdown-trigger');
+      if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+    }
   });
-  if (!isOpen) wrapper.classList.add('open');
-  else wrapper.classList.remove('open');
+  if (!isOpen) {
+    wrapper.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+  } else {
+    wrapper.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
 }
 
 // ── LOGOUT ──
