@@ -176,7 +176,7 @@
             <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#22c55e;margin-right:4px;"></span>Internal</span>
         </div>
     </div>
-    <div class="monthly-chart-wrap">
+    <div class="monthly-chart-wrap is-collapsed">
         @foreach (range(1,12) as $m)
             @php
                 $md = $monthlyData->get($m) ?? (object)['total'=>0,'ext_cnt'=>0,'int_cnt'=>0,'unique_staff'=>0,'unique_courses'=>0];
@@ -468,11 +468,17 @@ function printCourse(cid) {
 }
 .month-bar-ext {
     flex:1; background:#f97316; border-radius:3px 3px 0 0;
-    min-height:0; transition:height .5s;
+    min-height:0; transition:height .7s cubic-bezier(.22,1,.36,1);
 }
 .month-bar-int {
     flex:1; background:#22c55e; border-radius:3px 3px 0 0;
-    min-height:0; transition:height .5s;
+    min-height:0; transition:height .7s cubic-bezier(.22,1,.36,1);
+}
+/* Collapsed start state — bars grow up to their inline height when the
+   chart scrolls into view. Skipped entirely for reduced-motion users. */
+@media (prefers-reduced-motion: no-preference) {
+    .monthly-chart-wrap.is-collapsed .month-bar-ext,
+    .monthly-chart-wrap.is-collapsed .month-bar-int { height:0 !important; }
 }
 .month-total { font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.2rem; min-height:1em; }
 .month-name { font-size:.7rem; color:var(--muted); font-weight:600; margin-top:.15rem; }
@@ -530,4 +536,31 @@ function printCourse(cid) {
     .no-print { display:none !important; }
 }
 </style>
+@endsection
+
+@section('scripts')
+<script>
+// Grow the monthly bars up whenever the chart scrolls into view.
+(function () {
+    document.querySelectorAll('.monthly-chart-wrap').forEach(function (wrap) {
+        // Stagger the columns left-to-right.
+        wrap.querySelectorAll('.month-col').forEach(function (col, i) {
+            col.querySelectorAll('.month-bar-ext, .month-bar-int').forEach(function (b) {
+                b.style.transitionDelay = (i * 0.04) + 's';
+            });
+        });
+
+        if (window.IntersectionObserver) {
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    wrap.classList.toggle('is-collapsed', !e.isIntersecting);
+                });
+            }, { threshold: 0.3 });
+            io.observe(wrap);
+        } else {
+            wrap.classList.remove('is-collapsed');
+        }
+    });
+})();
+</script>
 @endsection

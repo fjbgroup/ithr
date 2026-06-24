@@ -53,6 +53,18 @@
     .return-search-input { width:100%;min-height:36px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);padding:8px 12px;color:var(--text);font-size:11px;font-weight:800;outline:none; }
     .return-search-input:focus { border-color:var(--sky-dark);box-shadow:0 0 0 3px rgba(56,189,248,.15); }
     .return-search-empty { display:none;border:1px dashed var(--border);border-radius:7px;padding:14px;text-align:center;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
+    .return-manual-search { display:grid;grid-template-columns:1fr auto;gap:10px; }
+    .return-search-btn { min-height:36px;border:0;border-radius:7px;background:var(--navy);color:#fff;padding:0 16px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
+    .return-search-results { display:none;margin-top:10px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--surface); }
+    .return-search-result { width:100%;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:0;border-bottom:1px solid var(--border);background:transparent;padding:10px 12px;text-align:left;cursor:pointer; }
+    .return-search-result:last-child { border-bottom:0; }
+    .return-search-result:hover { background:var(--body-bg); }
+    .return-search-result strong { display:block;color:var(--text);font-size:10px;font-weight:900;text-transform:uppercase; }
+    .return-search-result span { display:block;margin-top:3px;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.1em;text-transform:uppercase; }
+    .return-found-box { display:none;margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--body-bg);padding:12px; }
+    .return-found-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+    .return-found-field p:first-child { margin:0 0 4px;font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted); }
+    .return-found-field p:last-child { margin:0;font-size:11px;font-weight:900;text-transform:uppercase;color:var(--text); }
     .return-form-alert { display:none;border:1px solid #fecaca;border-radius:7px;background:#fef2f2;padding:10px 12px;color:#b91c1c;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase; }
     .return-person-field { position:relative; }
     .return-person-combobox { position:relative; }
@@ -113,13 +125,81 @@
     @endif
 
     @if($activeAssets->isEmpty())
-        <div class="m-4 return-empty">
-            <div class="return-empty-icon" style="margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(2,132,199,.2);background:rgba(2,132,199,.1);color:#38bdf8">
-                <i class="fa-solid fa-box-open" style="font-size:16px"></i>
+        <form action="{{ $isAdminRoute ? route($routePrefix . '.returns.store', ['mode' => $mode]) : route($routePrefix . '.returns.store') }}" method="POST" class="return-form-grid" style="display:grid;grid-template-columns:1fr;gap:16px;padding:16px" id="returnUnitForm" novalidate>
+            @csrf
+            <div class="return-panel">
+                <h4 class="return-section-title"><i class="fa-solid fa-magnifying-glass"></i> Search Assignment</h4>
+                <div class="return-manual-search">
+                    <input type="search" id="manualReturnSearch" class="return-search-input" placeholder="Enter radio ID, serial no, staff ID, or name...">
+                    <button type="button" id="manualReturnSearchBtn" class="return-search-btn">Search</button>
+                </div>
+                <div id="manualReturnResults" class="return-search-results"></div>
+                <div id="manualReturnEmpty" class="return-search-empty mt-3">No matching active assignment found.</div>
+
+                <div id="manualReturnFound" class="return-found-box">
+                    <div class="return-found-grid">
+                        <div class="return-found-field">
+                            <p>Radio ID</p>
+                            <p id="manualFoundRadio">-</p>
+                        </div>
+                        <div class="return-found-field">
+                            <p>Serial No</p>
+                            <p id="manualFoundSerial">-</p>
+                        </div>
+                        <div class="return-found-field">
+                            <p>Assigned To</p>
+                            <p id="manualFoundName">-</p>
+                        </div>
+                        <div class="return-found-field">
+                            <p>Department</p>
+                            <p id="manualFoundDepartment">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="access_request_id" id="manualAccessRequestId">
+                <input type="hidden" name="selected_walkie_inventory_id" id="selectedWalkieInventoryId">
+                <input type="hidden" name="selected_radio_id" id="selectedRadioId">
+                <input type="hidden" name="selected_serial_number" id="selectedSerialNumber">
             </div>
-            <h4 class="return-empty-title" style="font-weight:900">No Active Units</h4>
-            <p class="return-empty-copy" style="font-weight:700;text-transform:uppercase">There are no active walkie talkie assignments available for return.</p>
-        </div>
+
+            <div class="return-panel h-fit">
+                <h4 class="return-section-title"><i class="fa-solid fa-calendar-check"></i> Return Details</h4>
+                <div>
+                    <label class="form-label">Return Date</label>
+                    <input type="date" name="return_date" value="{{ date('Y-m-d') }}" class="return-date-input" required>
+                </div>
+
+                <div style="margin-top:16px;display:grid;gap:12px">
+                    <div class="return-person-field">
+                        <label class="form-label">Returned By</label>
+                        <div class="return-person-combobox">
+                            <input type="text" name="return_person" id="returnPersonInput" value="{{ old('return_person') }}" class="return-date-input" style="padding-right:32px" placeholder="Search or type returner's name" autocomplete="off" required>
+                            <span class="return-person-toggle"><i class="fa-solid fa-caret-down"></i></span>
+                        </div>
+                        <div id="returnPersonSuggestions" class="return-person-suggestions"></div>
+                    </div>
+                    <div>
+                        <label class="form-label">Department</label>
+                        <input type="text" name="return_department" id="returnDepartmentInput" value="{{ old('return_department') }}" class="return-date-input" placeholder="Department" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Phone No</label>
+                        <input type="text" name="return_phone_no" id="returnPhoneInput" value="{{ old('return_phone_no') }}" class="return-date-input" placeholder="E.g. 012-3456789" required>
+                    </div>
+                </div>
+
+                <div class="return-review-box" style="margin-top:16px">
+                    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:0">Review</p>
+                    <p class="return-muted-copy" style="margin-top:4px;font-size:10px;font-weight:700;line-height:1.5;margin-bottom:0">Search one active assignment, confirm the unit details, then submit it for ICT return confirmation.</p>
+                </div>
+                <div class="return-form-alert mt-3" id="returnFormAlert"></div>
+
+                <button type="submit" class="return-submit-btn mt-4">
+                    Submit Return <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </form>
     @else
         <form action="{{ $isAdminRoute ? route($routePrefix . '.returns.store', ['mode' => $mode]) : route($routePrefix . '.returns.store') }}" method="POST" class="return-form-grid" style="display:grid;grid-template-columns:1fr;gap:16px;padding:16px" id="returnUnitForm" novalidate>
             @csrf
@@ -300,6 +380,17 @@
         const selectedWalkieInventoryId = document.getElementById('selectedWalkieInventoryId');
         const selectedRadioId = document.getElementById('selectedRadioId');
         const selectedSerialNumber = document.getElementById('selectedSerialNumber');
+        const manualAccessRequestId = document.getElementById('manualAccessRequestId');
+        const manualReturnSearch = document.getElementById('manualReturnSearch');
+        const manualReturnSearchBtn = document.getElementById('manualReturnSearchBtn');
+        const manualReturnResults = document.getElementById('manualReturnResults');
+        const manualReturnEmpty = document.getElementById('manualReturnEmpty');
+        const manualReturnFound = document.getElementById('manualReturnFound');
+        const manualFoundRadio = document.getElementById('manualFoundRadio');
+        const manualFoundSerial = document.getElementById('manualFoundSerial');
+        const manualFoundName = document.getElementById('manualFoundName');
+        const manualFoundDepartment = document.getElementById('manualFoundDepartment');
+        const manualReturnSearchUrl = @json($isAdminRoute ? route($routePrefix . '.returns.search', ['mode' => $mode]) : route($routePrefix . '.returns.search'));
 
         function syncSelectedUnit(radio) {
             if (!radio || !selectedWalkieInventoryId || !selectedRadioId || !selectedSerialNumber) {
@@ -334,6 +425,163 @@
 
                 if (searchEmpty) {
                     searchEmpty.style.display = visibleCount === 0 ? 'block' : 'none';
+                }
+            });
+        }
+
+        function selectManualReturnResult(result) {
+            if (!result || !manualAccessRequestId) {
+                return;
+            }
+
+            manualAccessRequestId.value = result.id || '';
+
+            if (selectedWalkieInventoryId) {
+                selectedWalkieInventoryId.value = result.walkie_inventory_id || '';
+            }
+
+            if (selectedRadioId) {
+                selectedRadioId.value = result.radio_id || '';
+            }
+
+            if (selectedSerialNumber) {
+                selectedSerialNumber.value = result.serial_number || '';
+            }
+
+            if (manualFoundRadio) {
+                manualFoundRadio.textContent = result.radio_id || '-';
+            }
+
+            if (manualFoundSerial) {
+                manualFoundSerial.textContent = result.serial_number || '-';
+            }
+
+            if (manualFoundName) {
+                manualFoundName.textContent = result.full_name || '-';
+            }
+
+            if (manualFoundDepartment) {
+                manualFoundDepartment.textContent = result.department || '-';
+            }
+
+            if (manualReturnFound) {
+                manualReturnFound.style.display = 'block';
+            }
+
+            if (manualReturnResults) {
+                manualReturnResults.style.display = 'none';
+                manualReturnResults.innerHTML = '';
+            }
+
+            if (manualReturnEmpty) {
+                manualReturnEmpty.style.display = 'none';
+            }
+
+            if (manualReturnSearch) {
+                manualReturnSearch.value = result.label || result.radio_id || '';
+            }
+
+            if (returnFormAlert) {
+                returnFormAlert.style.display = 'none';
+            }
+        }
+
+        async function runManualReturnSearch() {
+            if (!manualReturnSearch || !manualReturnResults) {
+                return;
+            }
+
+            const query = manualReturnSearch.value.trim();
+
+            manualAccessRequestId && (manualAccessRequestId.value = '');
+            if (manualReturnFound) {
+                manualReturnFound.style.display = 'none';
+            }
+
+            if (query.length < 2) {
+                manualReturnResults.style.display = 'none';
+                if (manualReturnEmpty) {
+                    manualReturnEmpty.textContent = 'Enter at least 2 characters to search.';
+                    manualReturnEmpty.style.display = 'block';
+                }
+                return;
+            }
+
+            manualReturnSearchBtn && (manualReturnSearchBtn.disabled = true);
+            manualReturnSearchBtn && (manualReturnSearchBtn.textContent = 'Searching');
+
+            try {
+                const url = new URL(manualReturnSearchUrl, window.location.origin);
+                url.searchParams.set('q', query);
+
+                const response = await fetch(url.toString(), {
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Search failed');
+                }
+
+                const payload = await response.json();
+                const results = Array.isArray(payload.results) ? payload.results : [];
+
+                if (results.length === 1) {
+                    selectManualReturnResult(results[0]);
+                    return;
+                }
+
+                if (results.length === 0) {
+                    manualReturnResults.style.display = 'none';
+                    if (manualReturnEmpty) {
+                        manualReturnEmpty.textContent = 'No matching active assignment found.';
+                        manualReturnEmpty.style.display = 'block';
+                    }
+                    return;
+                }
+
+                manualReturnResults.innerHTML = results.map((result, index) => `
+                    <button type="button" class="return-search-result" data-manual-return-index="${index}">
+                        <span>
+                            <strong>${result.label || 'Return assignment'}</strong>
+                            <span>${result.staff_id || '-'} / ${result.department || '-'} / ${result.request_date || '-'}</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                `).join('');
+
+                Array.from(manualReturnResults.querySelectorAll('[data-manual-return-index]')).forEach((button) => {
+                    button.addEventListener('click', () => {
+                        selectManualReturnResult(results[Number(button.dataset.manualReturnIndex)]);
+                    });
+                });
+
+                manualReturnResults.style.display = 'block';
+                if (manualReturnEmpty) {
+                    manualReturnEmpty.style.display = 'none';
+                }
+            } catch (error) {
+                manualReturnResults.style.display = 'none';
+                if (manualReturnEmpty) {
+                    manualReturnEmpty.textContent = 'Search failed. Please try again.';
+                    manualReturnEmpty.style.display = 'block';
+                }
+            } finally {
+                manualReturnSearchBtn && (manualReturnSearchBtn.disabled = false);
+                manualReturnSearchBtn && (manualReturnSearchBtn.textContent = 'Search');
+            }
+        }
+
+        if (manualReturnSearchBtn) {
+            manualReturnSearchBtn.addEventListener('click', runManualReturnSearch);
+        }
+
+        if (manualReturnSearch) {
+            manualReturnSearch.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    runManualReturnSearch();
                 }
             });
         }
@@ -418,8 +666,9 @@
         if (returnUnitForm) {
             returnUnitForm.addEventListener('submit', function (event) {
                 const selectedUnit = document.querySelector('.return-unit-radio:checked');
+                const selectedManualUnit = manualAccessRequestId && manualAccessRequestId.value.trim() !== '';
                 const requiredFields = [
-                    { field: selectedUnit, message: 'Please select one walkie talkie unit to return.' },
+                    { field: selectedUnit || (selectedManualUnit ? manualAccessRequestId : null), message: 'Please search and select one walkie talkie unit to return.' },
                     { field: returnUnitForm.querySelector('[name="return_date"]'), message: 'Please enter return date.' },
                     { field: returnPersonInput, message: 'Please enter who returned this unit.' },
                     { field: returnDepartmentInput, message: 'Please enter returner department.' },
@@ -474,4 +723,3 @@
     });
 </script>
 @endpush
-

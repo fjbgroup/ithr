@@ -18,12 +18,12 @@ class InteractionController extends Controller
 {
     private function routePrefix(Request $request): string
     {
-        return $request->routeIs('admin.*') ? 'wt.admin' : 'wt.user';
+        return $request->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
     }
 
     private function managerMode(Request $request): string
     {
-        if (! $request->routeIs('admin.*')) {
+        if (! $request->routeIs('wt.admin.*')) {
             return 'self';
         }
 
@@ -147,7 +147,7 @@ class InteractionController extends Controller
 
     private function damageRecordsForContext(Request $request, string $mode): Collection
     {
-        $isAdminRoute = $request->routeIs('admin.*');
+        $isAdminRoute = $request->routeIs('wt.admin.*');
         $authUser = auth('wt')->user();
 
         if (! $isAdminRoute) {
@@ -263,7 +263,7 @@ class InteractionController extends Controller
 
     private function activeReturnRequestQuery()
     {
-        return AccessRequest::with('user')
+        return AccessRequest::with(['user', 'walkieTalkie'])
             ->where('status', 'Approved')
             ->where(function ($q) {
                 $q->whereNull('return_status')
@@ -280,7 +280,7 @@ class InteractionController extends Controller
     private function applyReturnOwnershipScope($query, Request $request, string $mode)
     {
         $user = auth('wt')->user();
-        $isAdminRoute = $request->routeIs('admin.*');
+        $isAdminRoute = $request->routeIs('wt.admin.*');
 
         if ($isAdminRoute && $mode === 'staff') {
             $managedIds = $this->managedUsers()->pluck('user_id')->filter()->values();
@@ -318,6 +318,17 @@ class InteractionController extends Controller
                 $scope->orWhereIn(\Illuminate\Support\Facades\DB::raw('UPPER(full_name)'), $userNames->all());
             }
         });
+    }
+
+    private function returnLookupQuery(Request $request, string $mode)
+    {
+        $query = $this->activeReturnRequestQuery();
+
+        if ($request->routeIs('wt.admin.*')) {
+            return $query;
+        }
+
+        return $this->applyReturnOwnershipScope($query, $request, $mode);
     }
 
     // --- REQUEST ACCESS ---
@@ -399,7 +410,7 @@ class InteractionController extends Controller
     public function createReturn()
     {
         $mode = $this->managerMode(request());
-        $isAdminRoute = request()->routeIs('admin.*');
+        $isAdminRoute = request()->routeIs('wt.admin.*');
 
         $activeAssets = $this->applyReturnOwnershipScope(
             $this->activeReturnRequestQuery(),
@@ -412,6 +423,111 @@ class InteractionController extends Controller
         $returnPeople = $this->returnPeopleOptions($activeAssets);
 
         return view('wt.user.returns.create', compact('activeAssets', 'mode', 'returnPeople'));
+    }
+
+    public function searchReturn(Request $request)
+    {
+        $validated = $request->validate([
+            'q' => 'required|string|max:120',
+        ]);
+
+        $mode = $this->managerMode($request);
+        $search = strtoupper(trim($validated['q']));
+
+        $assets = $this->returnLookupQuery($request, $mode)
+            ->where(function ($query) use ($search) {
+                $like = '%' . $search . '%';
+
+                $query->whereRaw("UPPER(COALESCE(full_name, '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(staff_id, '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(department, '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(position, '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(radio_id, '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(CAST(assigned_radio_ids AS CHAR), '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(assigned_serial_number, '')) LIKE ?", [$like])
+                    ->orWhereRaw("UPPER(COALESCE(CAST(assigned_serial_numbers AS CHAR), '')) LIKE ?", [$like])
+                    ->orWhereHas('walkieTalkie', function ($walkie) use ($like) {
+                        $walkie->whereRaw("UPPER(COALESCE(radio_id, '')) LIKE ?", [$like])
+                            ->orWhereRaw("UPPER(COALESCE(serial_number, '')) LIKE ?", [$like])
+                            ->orWhereRaw("UPPER(COALESCE(model, '')) LIKE ?", [$like]);
+                    });
+            })
+            ->orderByDesc('request_date')
+            ->orderByDesc('id')
+            ->limit(20)
+            ->get();
+
+        $results = $assets
+            ->flatMap(function (AccessRequest $asset) use ($search) {
+                $walkieIds = collect($asset->assigned_walkie_inventory_ids ?? [])->filter()->values();
+                if ($walkieIds->isEmpty() && $asset->walkie_inventory_id) {
+                    $walkieIds = collect([$asset->walkie_inventory_id]);
+                }
+
+                $radioIds = collect($asset->assigned_radio_ids ?? [])->filter()->values();
+                if ($radioIds->isEmpty() && $asset->radio_id) {
+                    $radioIds = collect(explode(',', (string) $asset->radio_id))
+                        ->map(fn ($id) => trim($id))
+                        ->filter()
+                        ->values();
+                }
+
+                $serials = collect($asset->assigned_serial_numbers ?? [])->filter()->values();
+                if ($serials->isEmpty() && $asset->assigned_serial_number) {
+                    $serials = collect(explode(',', (string) $asset->assigned_serial_number))
+                        ->map(fn ($serial) => trim($serial))
+                        ->filter()
+                        ->values();
+                }
+
+                if ($radioIds->isEmpty() && $asset->walkieTalkie) {
+                    $radioIds = collect([$asset->walkieTalkie->radio_id])->filter()->values();
+                }
+
+                if ($serials->isEmpty() && $asset->walkieTalkie) {
+                    $serials = collect([$asset->walkieTalkie->serial_number])->filter()->values();
+                }
+
+                $unitCount = max($radioIds->count(), $walkieIds->count(), 1);
+
+                return collect(range(0, $unitCount - 1))->map(function ($index) use ($asset, $walkieIds, $radioIds, $serials, $search) {
+                    $radioId = (string) ($radioIds->get($index) ?: $asset->radio_id ?: optional($asset->walkieTalkie)->radio_id ?: '');
+                    $serialNumber = (string) ($serials->get($index) ?: $asset->assigned_serial_number ?: optional($asset->walkieTalkie)->serial_number ?: '');
+                    $haystack = strtoupper(implode(' ', [
+                        $asset->id,
+                        $asset->full_name,
+                        $asset->staff_id,
+                        $asset->department,
+                        $asset->position,
+                        $radioId,
+                        $serialNumber,
+                        optional($asset->walkieTalkie)->model,
+                    ]));
+
+                    if (! str_contains($haystack, $search)) {
+                        return null;
+                    }
+
+                    return [
+                        'id' => $asset->id,
+                        'walkie_inventory_id' => $walkieIds->get($index) ?: $asset->walkie_inventory_id,
+                        'radio_id' => $radioId,
+                        'serial_number' => $serialNumber,
+                        'full_name' => strtoupper((string) ($asset->full_name ?: optional($asset->user)->username ?: '-')),
+                        'staff_id' => strtoupper((string) ($asset->staff_id ?: optional($asset->user)->staff_id ?: '-')),
+                        'department' => strtoupper((string) ($asset->department ?: optional($asset->user)->department ?: '-')),
+                        'position' => strtoupper((string) ($asset->position ?: optional($asset->user)->position ?: '-')),
+                        'request_date' => $asset->request_date ? \Carbon\Carbon::parse($asset->request_date)->format('d M Y') : '-',
+                        'label' => trim('REQ #' . str_pad($asset->id, 5, '0', STR_PAD_LEFT) . ' / ' . ($radioId ?: 'NO RADIO ID') . ' / ' . ($asset->full_name ?: optional($asset->user)->username)),
+                    ];
+                })->filter();
+            })
+            ->take(12)
+            ->values();
+
+        return response()->json([
+            'results' => $results,
+        ]);
     }
 
     private function returnPeopleOptions(Collection $activeAssets): Collection
@@ -456,14 +572,12 @@ class InteractionController extends Controller
             'return_phone_no' => 'required|string|max:50',
         ]);
 
-        $isAdminRoute = $request->routeIs('admin.*');
+        $isAdminRoute = $request->routeIs('wt.admin.*');
         $mode = $this->managerMode($request);
 
-        $access = $this->applyReturnOwnershipScope(
-            $this->activeReturnRequestQuery()->where('id', $request->access_request_id),
-            $request,
-            $mode
-        )->firstOrFail();
+        $access = $this->returnLookupQuery($request, $mode)
+            ->where('id', $request->access_request_id)
+            ->firstOrFail();
 
         $access = $this->singleUnitReturnRequest($access, $request);
 
@@ -523,7 +637,7 @@ class InteractionController extends Controller
             return redirect()->route('wt.admin.all.status')->with('success', $successMessage);
         }
 
-        return redirect()->route('user.requests.status', ['status' => 'history'])->with('success', $successMessage);
+        return redirect()->route('wt.user.requests.status', ['status' => 'history'])->with('success', $successMessage);
     }
 
     private function singleUnitReturnRequest(AccessRequest $access, Request $request): AccessRequest
@@ -650,14 +764,14 @@ class InteractionController extends Controller
     // --- REPORT DAMAGE ---
     public function createDamage(Request $request)
     {
-        $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
+        $mode = $request->routeIs('wt.admin.*') ? 'staff' : $this->managerMode($request);
 
-        return redirect()->route($this->routePrefix($request) . '.damages.form', $request->routeIs('admin.*') ? ['mode' => $mode] : []);
+        return redirect()->route($this->routePrefix($request) . '.damages.form', $request->routeIs('wt.admin.*') ? ['mode' => $mode] : []);
     }
 
     public function createDamageDashboard(Request $request)
     {
-        $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
+        $mode = $request->routeIs('wt.admin.*') ? 'staff' : $this->managerMode($request);
         $records = $this->damageRecordsForContext($request, $mode);
         $buckets = $this->damageStatusBuckets($records);
         $recentDamageRequests = $buckets['pending']
@@ -679,8 +793,8 @@ class InteractionController extends Controller
 
     public function createDamageForm(Request $request)
     {
-        $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
-        $isAdminRoute = $request->routeIs('admin.*');
+        $mode = $request->routeIs('wt.admin.*') ? 'staff' : $this->managerMode($request);
+        $isAdminRoute = $request->routeIs('wt.admin.*');
         $admins = User::where('wt_role', 'admin')
             ->orderBy('staff_no')
             ->get();
@@ -855,7 +969,7 @@ class InteractionController extends Controller
 
     public function damageStatusPage(Request $request, string $bucket)
     {
-        $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
+        $mode = $request->routeIs('wt.admin.*') ? 'staff' : $this->managerMode($request);
         $records = $this->damageRecordsForContext($request, $mode);
         $buckets = $this->damageStatusBuckets($records);
 
@@ -888,7 +1002,7 @@ class InteractionController extends Controller
 
     public function showDamageRecord(Request $request, int $damage)
     {
-        $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
+        $mode = $request->routeIs('wt.admin.*') ? 'staff' : $this->managerMode($request);
         $record = $this->damageRecordsForContext($request, $mode)
             ->first(fn (MaintenanceRecord $item) => (int) $item->maintenance_id === $damage);
 
@@ -902,7 +1016,7 @@ class InteractionController extends Controller
 
     public function requestTemporarySpare(Request $request, int $damage)
     {
-        $mode = $request->routeIs('admin.*') ? 'staff' : $this->managerMode($request);
+        $mode = $request->routeIs('wt.admin.*') ? 'staff' : $this->managerMode($request);
         $record = $this->damageRecordsForContext($request, $mode)
             ->first(fn (MaintenanceRecord $item) => (int) $item->maintenance_id === $damage);
 
@@ -943,7 +1057,7 @@ class InteractionController extends Controller
         }
 
         return redirect()
-            ->route($this->routePrefix($request) . '.damages.form', $request->routeIs('admin.*') ? ['mode' => $mode] : [])
+            ->route($this->routePrefix($request) . '.damages.form', $request->routeIs('wt.admin.*') ? ['mode' => $mode] : [])
             ->with('success', $requested
                 ? 'Temporary walkie request recorded. ICT will review spare availability.'
                 : 'Temporary walkie response recorded.'
@@ -953,7 +1067,7 @@ class InteractionController extends Controller
 
     public function storeDamage(Request $request)
     {
-        $isAdminRoute = $request->routeIs('admin.*');
+        $isAdminRoute = $request->routeIs('wt.admin.*');
         $mode = $isAdminRoute ? 'staff' : $this->managerMode($request);
         $isDraft = false;
 
@@ -1103,7 +1217,7 @@ class InteractionController extends Controller
                             'ownership_type' => $recipient['ownership_type'] ?? '',
                             'shared_with' => $recipient['shared_with'] ?? null,
                             'sector' => $recipient['sector'] ?? '',
-                            'bay_from' => $recipient['bay_from'] ?? '-',
+                            'bay_from' => $recipient['bay_from'] ?? '',
                             'location' => $recipient['location'] ?? '',
                         ]);
 
@@ -1243,13 +1357,12 @@ class InteractionController extends Controller
                 }
 
                 $recipientValidatedForBay = $recipientRow['validated'] ?? [];
-                $bayFrom = trim((string) (($recipientValidatedForBay['bay_from'] ?? null) ?: ($validated['bay_from'] ?? '-')));
-                if ($bayFrom === '') {
-                    $bayFrom = '-';
+                $bayFrom = trim((string) (($recipientValidatedForBay['bay_from'] ?? null) ?: ($validated['bay_from'] ?? '')));
+                if ($bayFrom !== '') {
+                    $payload['remarks'] = trim((string) ($payload['remarks'] ?? '')) !== ''
+                        ? $payload['remarks'] . " | BAY: {$bayFrom}"
+                        : "BAY: {$bayFrom}";
                 }
-                $payload['remarks'] = trim((string) ($payload['remarks'] ?? '')) !== ''
-                    ? $payload['remarks'] . " | BAY: {$bayFrom}"
-                    : "BAY: {$bayFrom}";
 
                 if ($damageQuantity > 1) {
                     $payload['remarks'] = trim((string) ($payload['remarks'] ?? '')) !== ''
@@ -1507,6 +1620,3 @@ class InteractionController extends Controller
         return max(1, min(5, $years));
     }
 }
-
-
-

@@ -11,12 +11,9 @@
 </div>
 
 <div class="table-card">
-  <div style="padding:48px 24px;text-align:center">
-    <i class="fas fa-file-contract" style="font-size:32px;color:var(--border);margin-bottom:16px"></i>
-    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text);margin-bottom:8px">Content Under Development</div>
-    <p style="font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:600;letter-spacing:.1em">This page will be updated with the latest policies soon.</p>
+  <div style="padding:24px">
+    @include('wt.partials.walkie-policy-content')
   </div>
 </div>
 
 @endsection
-

@@ -1288,9 +1288,9 @@
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Bay</label>
                             <select name="pic_details[${index}][bay_from]" data-pic-bay data-placeholder="Type number only, e.g. 3" class="pic-tag-select w-full">
-                                ${renderOptions(['-', ...bayOptions], saved.bay_from || '-', 'Type number only, e.g. 3')}
+                                ${renderOptions(bayOptions, saved.bay_from || '', 'Type number only, e.g. 3')}
                             </select>
-                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Use (-) if not applicable.</p>
+                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Leave blank if not applicable.</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Location <span class="text-red-500">*</span></label>
@@ -1522,4 +1522,3 @@
     });
 </script>
 @endpush
-
