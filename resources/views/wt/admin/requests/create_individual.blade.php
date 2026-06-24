@@ -12,6 +12,78 @@
     .admin-request-card {
         padding: 20px 22px;
     }
+    .request-form-accordion {
+        display: grid;
+        gap: 10px;
+    }
+    .request-form-accordion-section {
+        border: 1px solid rgba(2, 132, 199, 0.18);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(248, 250, 252, 0.58);
+    }
+    .request-form-accordion-toggle {
+        width: 100%;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 16px;
+        border: 0;
+        background: rgba(2, 132, 199, 0.08);
+        color: #0284c7;
+        text-align: left;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .request-form-accordion-toggle:hover,
+    .request-form-accordion-toggle[aria-expanded="true"] {
+        background: rgba(2, 132, 199, 0.15);
+    }
+    .request-form-accordion-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+    .request-form-accordion-title::before {
+        content: "";
+        width: 4px;
+        height: 22px;
+        border-radius: 999px;
+        background: #0284c7;
+        flex: 0 0 auto;
+    }
+    .request-form-accordion-icon {
+        color: #64748b;
+        transition: transform .18s ease;
+        flex: 0 0 auto;
+    }
+    .request-form-accordion-toggle[aria-expanded="true"] .request-form-accordion-icon {
+        transform: rotate(180deg);
+        color: #0284c7;
+    }
+    .request-form-accordion-panel {
+        padding: 16px;
+    }
+    .request-form-accordion-panel[hidden] {
+        display: none !important;
+    }
+    html.dark .request-form-accordion-section {
+        background: rgba(15, 23, 42, 0.35);
+        border-color: rgba(51, 65, 85, 0.9);
+    }
+    html.dark .request-form-accordion-toggle {
+        background: rgba(2, 132, 199, 0.12);
+    }
+    html.dark .request-form-accordion-toggle:hover,
+    html.dark .request-form-accordion-toggle[aria-expanded="true"] {
+        background: rgba(2, 132, 199, 0.2);
+    }
     .smart-select + .select2-container,
     .smart-user-select + .select2-container {
         width: 100% !important;
@@ -567,6 +639,93 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
+        function mountRequestFormAccordion() {
+            const requestForm = document.querySelector('.admin-request-card form');
+            if (!requestForm || requestForm.dataset.accordionMounted === 'true') return;
+
+            const headings = Array.from(requestForm.querySelectorAll(':scope > h4'));
+            if (!headings.length) return;
+
+            requestForm.dataset.accordionMounted = 'true';
+            const accordion = document.createElement('div');
+            accordion.className = 'request-form-accordion';
+            requestForm.insertBefore(accordion, headings[0]);
+
+            const sections = headings.map((heading, index) => {
+                const section = document.createElement('section');
+                section.className = 'request-form-accordion-section';
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'request-form-accordion-toggle';
+                button.setAttribute('aria-expanded', 'false');
+
+                const panel = document.createElement('div');
+                panel.className = 'request-form-accordion-panel';
+                panel.id = `requestAccordionPanel${index + 1}`;
+                panel.hidden = true;
+                button.setAttribute('aria-controls', panel.id);
+
+                const title = document.createElement('span');
+                title.className = 'request-form-accordion-title';
+                title.innerHTML = heading.innerHTML;
+
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-chevron-down request-form-accordion-icon';
+
+                button.append(title, icon);
+                section.append(button, panel);
+                accordion.appendChild(section);
+
+                let node = heading.nextSibling;
+                heading.remove();
+
+                while (node) {
+                    const nextNode = node.nextSibling;
+                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('h4')) break;
+                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('.request-submit-row')) break;
+                    panel.appendChild(node);
+                    node = nextNode;
+                }
+
+                return { button, panel };
+            });
+
+            const closeAllSections = () => {
+                sections.forEach(({ button, panel }) => {
+                    button.setAttribute('aria-expanded', 'false');
+                    panel.hidden = true;
+                });
+            };
+
+            const openSection = (target) => {
+                sections.forEach(({ button, panel }) => {
+                    const isOpen = panel === target.panel;
+                    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    panel.hidden = !isOpen;
+                });
+            };
+
+            sections.forEach((section) => {
+                section.button.addEventListener('click', () => {
+                    if (section.button.getAttribute('aria-expanded') === 'true') {
+                        closeAllSections();
+                        return;
+                    }
+
+                    openSection(section);
+                });
+            });
+
+            requestForm.addEventListener('invalid', (event) => {
+                const panel = event.target.closest('.request-form-accordion-panel');
+                const section = sections.find((item) => item.panel === panel);
+                if (section) openSection(section);
+            }, true);
+        }
+
+        mountRequestFormAccordion();
+
         function parseDate(value) {
             const date = new Date(value + 'T00:00:00');
             return Number.isNaN(date.getTime()) ? null : date;
@@ -680,5 +839,3 @@
     });
 </script>
 @endpush
-
-

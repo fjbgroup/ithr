@@ -12,6 +12,85 @@
     .admin-request-card {
         padding: 20px 22px;
     }
+    .request-form-accordion {
+        display: grid;
+        gap: 10px;
+    }
+    .request-form-accordion-section {
+        border: 1px solid rgba(2, 132, 199, 0.18);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(248, 250, 252, 0.58);
+    }
+    .request-form-accordion-toggle {
+        width: 100%;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 16px;
+        border: 0;
+        background: rgba(2, 132, 199, 0.08);
+        color: #0284c7;
+        text-align: left;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .request-form-accordion-toggle:hover,
+    .request-form-accordion-toggle[aria-expanded="true"] {
+        background: rgba(2, 132, 199, 0.15);
+    }
+    .request-form-accordion-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+    .request-form-accordion-title::before {
+        content: "";
+        width: 4px;
+        height: 22px;
+        border-radius: 999px;
+        background: #0284c7;
+        flex: 0 0 auto;
+    }
+    .request-form-accordion-icon {
+        color: #64748b;
+        transition: transform .18s ease;
+        flex: 0 0 auto;
+    }
+    .request-form-accordion-toggle[aria-expanded="true"] .request-form-accordion-icon {
+        transform: rotate(180deg);
+        color: #0284c7;
+    }
+    .request-form-accordion-panel {
+        padding: 16px;
+    }
+    .request-form-accordion-panel[hidden] {
+        display: none !important;
+    }
+    html.dark .request-form-accordion-section {
+        background: rgba(15, 23, 42, 0.35);
+        border-color: rgba(51, 65, 85, 0.9);
+    }
+    html.dark .request-form-accordion-toggle {
+        background: rgba(2, 132, 199, 0.12);
+    }
+    html.dark .request-form-accordion-toggle:hover,
+    html.dark .request-form-accordion-toggle[aria-expanded="true"] {
+        background: rgba(2, 132, 199, 0.2);
+    }
+    .longterm-owner-toggle {
+        border-radius: 12px;
+        border: 1px solid rgba(2, 132, 199, 0.16);
+    }
+    .longterm-owner-panel {
+        padding: 14px 0 0;
+    }
     .smart-select + .select2-container {
         width: 100% !important;
     }
@@ -941,6 +1020,101 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
+        function mountRequestFormAccordion() {
+            const requestForm = document.querySelector('.admin-request-card form');
+            if (!requestForm || requestForm.dataset.accordionMounted === 'true') return;
+
+            const headings = Array.from(requestForm.querySelectorAll(':scope > h4'));
+            if (!headings.length) return;
+
+            requestForm.dataset.accordionMounted = 'true';
+            const accordion = document.createElement('div');
+            accordion.className = 'request-form-accordion';
+            requestForm.insertBefore(accordion, headings[0]);
+
+            const sections = headings.map((heading, index) => {
+                const section = document.createElement('section');
+                section.className = 'request-form-accordion-section';
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'request-form-accordion-toggle';
+                button.setAttribute('aria-expanded', 'false');
+
+                const panel = document.createElement('div');
+                panel.className = 'request-form-accordion-panel';
+                panel.id = `requestAccordionPanel${index + 1}`;
+                panel.hidden = true;
+                button.setAttribute('aria-controls', panel.id);
+
+                const title = document.createElement('span');
+                title.className = 'request-form-accordion-title';
+                title.innerHTML = heading.innerHTML;
+
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-chevron-down request-form-accordion-icon';
+
+                button.append(title, icon);
+                section.append(button, panel);
+                accordion.appendChild(section);
+
+                let node = heading.nextSibling;
+                heading.remove();
+
+                while (node) {
+                    const nextNode = node.nextSibling;
+                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('h4')) break;
+                    if (node.nodeType === Node.ELEMENT_NODE && node.matches('.request-submit-row')) break;
+                    panel.appendChild(node);
+                    node = nextNode;
+                }
+
+                return { button, panel };
+            });
+
+            const closeAllSections = () => {
+                sections.forEach(({ button, panel }) => {
+                    button.setAttribute('aria-expanded', 'false');
+                    panel.hidden = true;
+                });
+            };
+
+            const openSection = (target) => {
+                sections.forEach(({ button, panel }) => {
+                    const isOpen = panel === target.panel;
+                    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                    panel.hidden = !isOpen;
+                });
+            };
+
+            sections.forEach((section) => {
+                section.button.addEventListener('click', () => {
+                    if (section.button.getAttribute('aria-expanded') === 'true') {
+                        closeAllSections();
+                        return;
+                    }
+
+                    openSection(section);
+                });
+            });
+
+            requestForm.addEventListener('invalid', (event) => {
+                const ownerRow = event.target.closest('[data-pic-row]');
+                const ownerToggle = ownerRow?.querySelector('[data-owner-section-toggle]');
+                const ownerPanel = ownerRow?.querySelector('[data-owner-section-panel]');
+                if (ownerToggle && ownerPanel) {
+                    ownerToggle.setAttribute('aria-expanded', 'true');
+                    ownerPanel.hidden = false;
+                }
+
+                const panel = event.target.closest('.request-form-accordion-panel');
+                const section = sections.find((item) => item.panel === panel);
+                if (section) openSection(section);
+            }, true);
+        }
+
+        mountRequestFormAccordion();
+
         const oldPicDetails = @json($oldPicDetails);
         const oldRequestSharedWith = @json(strtoupper(old('shared_with', '')));
         const isTemporaryRequest = @json($isTemporaryRequest);
@@ -1245,7 +1419,11 @@
                     : 'longterm-owner-card';
                 row.setAttribute('data-pic-row', '1');
                 row.innerHTML = `
-                    <div class="longterm-owner-heading mb-4 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">${index + 1}. Ownership Information</div>
+                    <button type="button" class="request-form-accordion-toggle longterm-owner-toggle" data-owner-section-toggle aria-expanded="false">
+                        <span class="request-form-accordion-title">${index + 1}. Ownership Information</span>
+                        <i class="fa-solid fa-chevron-down request-form-accordion-icon"></i>
+                    </button>
+                    <div class="request-form-accordion-panel longterm-owner-panel" data-owner-section-panel hidden>
                     <div class="longterm-note-box mb-4 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
                         <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
@@ -1315,6 +1493,7 @@
                         <div class="md:col-span-2">
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">This name will be shown to ICT for pickup at ICT Department after approval.</p>
                         </div>
+                    </div>
                     </div>
                 `;
                 list.appendChild(row);
@@ -1511,6 +1690,13 @@
         $('#temporaryPicList').on('change', '[data-pic-ownership-type]', function () {
             syncPicSharedWithRows();
             syncRequestFallbackFields();
+        });
+        $('#temporaryPicList').on('click', '[data-owner-section-toggle]', function () {
+            const row = this.closest('[data-pic-row]');
+            const panel = row?.querySelector('[data-owner-section-panel]');
+            const isOpen = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            if (panel) panel.hidden = isOpen;
         });
         $('#temporary_purpose_usage').on('input change', syncJustificationFallback);
         renderTemporaryPicRows();
