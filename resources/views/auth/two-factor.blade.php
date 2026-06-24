@@ -153,12 +153,30 @@
 
 <script>
   // Keep only digits and auto-submit once 6 digits are entered.
+  // Guard against double-submission: the first request regenerates the session
+  // (new CSRF token), so a second concurrent POST would get a 419 Page Expired.
   (function () {
     var input = document.getElementById('otp');
     if (!input) return;
+    var submitted = false;
+    var form = input.form;
+
+    // Block any subsequent submit events (e.g. Enter key, button click) once
+    // the form has already been submitted programmatically.
+    form.addEventListener('submit', function (e) {
+      if (submitted) { e.preventDefault(); return; }
+      submitted = true;
+    });
+
     input.addEventListener('input', function () {
       this.value = this.value.replace(/\D/g, '').slice(0, 6);
-      if (this.value.length === 6) this.form.submit();
+      if (this.value.length === 6 && !submitted) {
+        submitted = true;
+        // Disable the button so the user can't click it while navigating away.
+        var btn = form.querySelector('button[type="submit"]');
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+        form.submit();
+      }
     });
   })();
 </script>
