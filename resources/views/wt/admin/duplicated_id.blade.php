@@ -512,10 +512,10 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
     </div>
 
     {{-- Filters --}}
-    <div class="duplicate-search-panel" role="search" aria-label="Duplicated ID filters">
+    <div class="duplicate-search-panel" role="search" aria-label="Duplicated ID filters" style="justify-content: flex-start !important; width: auto !important;">
         <div class="duplicate-filter-field">
             <label for="duplicateSearchInput">Search</label>
-            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, ownership…">
+            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, ownership…" style="width: 250px !important; max-width: 250px !important;">
         </div>
         <div class="duplicate-filter-field">
             <label for="duplicateStatusFilter">Status</label>
@@ -1364,5 +1364,274 @@ html.dark body .content-surface .duplicate-filter-reset {
         flex: 1 1 100% !important;
     }
 }
+
+body .content-surface .duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+body .content-surface .duplicate-search-panel > .duplicate-filter-field {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: auto !important;
+}
+
+body .content-surface .duplicate-search-panel > .duplicate-filter-field:has(.duplicate-search) {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search {
+    width: 190px !important;
+    min-width: 190px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-select {
+    width: auto !important;
+    min-width: 100px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 78px !important;
+}
+
+/* Final duplicated-ID layout override: keep filters one-line and make the table a clean grid. */
+body .content-surface .duplicate-search-panel,
+body .content-surface .duplicate-page .duplicate-search-panel {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    min-height: 64px !important;
+    padding: 12px 18px !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    flex-flow: row nowrap !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search {
+    flex: 0 0 235px !important;
+    width: 235px !important;
+    min-width: 235px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-select {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 112px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 78px !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-table-shell {
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+    overflow: auto !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    width: 100% !important;
+    min-width: 1040px !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    height: 50px !important;
+    padding: 10px 12px !important;
+    border: 1px solid #334155 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable thead th {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable tbody td {
+    background: #111827 !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions .btn {
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 9px !important;
+    line-height: 1 !important;
+}
+
+/* Requested final UI contract. Keep this last in the style block. */
+body .content-surface .duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search,
+body .content-surface .duplicate-search-panel .duplicate-filter-select,
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    border-collapse: collapse !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    border: 1px solid #2d3748 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack,
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .5rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack form,
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+/* Actual WT admin layout has no .content-surface wrapper on this page. */
+.duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+.duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+.duplicate-search-panel .duplicate-search,
+.duplicate-search-panel .duplicate-filter-select,
+.duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+}
+
+.duplicate-table-shell #duplicateTable {
+    border-collapse: collapse !important;
+}
+
+.duplicate-table-shell #duplicateTable th,
+.duplicate-table-shell #duplicateTable td {
+    border: 1px solid #2d3748 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.duplicate-table-shell #duplicateTable .duplicate-action-stack,
+.duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .5rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+.duplicate-table-shell #duplicateTable .duplicate-action-stack form,
+.duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
 </style>
+@include('wt.admin.partials.inventory-tools-unified-ui')
 @endsection

@@ -1525,11 +1525,11 @@
 
         {{-- ===== SEARCH & FILTER BAR ===== --}}
         <div class="clean-admin-filter">
-            <div class="clean-admin-filter-grid inventory-filter-inline" style="display:flex !important;flex-direction:row !important;flex-wrap:wrap !important;align-items:center !important;justify-content:flex-start !important;gap:10px !important;width:100% !important;">
+            <div class="clean-admin-filter-grid inventory-filter-inline" style="display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:center !important;justify-content:flex-start !important;gap:10px !important;width:auto !important;">
                 {{-- Search Input --}}
                 <div class="inventory-filter-field" style="display:flex !important;flex-direction:row !important;align-items:center !important;gap:8px !important;width:auto !important;min-width:0 !important;">
                     <label class="clean-admin-label" for="globalSearch" style="margin:0 !important;line-height:30px !important;white-space:nowrap !important;">Search</label>
-                    <input type="text" id="globalSearch" class="clean-admin-input" placeholder="Keywords" style="width:220px !important;max-width:32vw !important;">
+                    <input type="text" id="globalSearch" class="clean-admin-input" placeholder="Keywords" style="width: 250px !important; max-width: 250px !important;">
                 </div>
 
                 {{-- Status Filter --}}
@@ -7548,6 +7548,7 @@
         })();
     </script>
 
+    @include('wt.admin.partials.inventory-tools-unified-ui')
     @endsection
 
     @push('final_styles')

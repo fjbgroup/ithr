@@ -80,10 +80,10 @@
         </div>
 
         @if($showFilters)
-            <div class="mb-6 flex gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 max-[800px]:flex-col">
-                <div class="flex-1">
+            <div class="mb-6 flex gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 max-[800px]:flex-col" style="justify-content: flex-start !important; width: auto !important;">
+                <div class="flex-1" style="flex: 0 0 auto !important;">
                     <label for="{{ $searchId }}" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">Search</label>
-                    <input id="{{ $searchId }}" type="text" placeholder="Keywords" class="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-300 focus:ring-1 focus:ring-slate-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
+                    <input id="{{ $searchId }}" type="text" placeholder="Keywords" class="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm text-slate-900 focus:border-slate-300 focus:ring-1 focus:ring-slate-300 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" style="width: 250px !important; max-width: 250px !important;">
                 </div>
                 <div class="flex-1">
                     <label for="{{ $statusId }}" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">Status</label>
@@ -262,4 +262,3 @@
         </script>
     @endpush
 @endif
-
