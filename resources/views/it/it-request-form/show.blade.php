@@ -68,6 +68,14 @@
   <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.1);color:#d97706;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700">
     <span style="width:7px;height:7px;background:#d97706;border-radius:50%;display:inline-block"></span>New
   </span>
+  @elseif($form->status === 'Pending IT')
+  <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(2,132,199,.1);color:#0284c7;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700">
+    <span style="width:7px;height:7px;background:#0284c7;border-radius:50%;display:inline-block"></span>Pending IT Approval
+  </span>
+  @elseif($form->status === 'Pending Validation')
+  <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700">
+    <span style="width:7px;height:7px;background:#7c3aed;border-radius:50%;display:inline-block"></span>Pending Validation
+  </span>
   @elseif($form->status === 'Approved')
   <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(22,163,74,.1);color:#16a34a;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700">
     <span style="width:7px;height:7px;background:#16a34a;border-radius:50%;display:inline-block"></span>Approved
@@ -95,17 +103,47 @@
   </div>
 </div>
 
-{{-- ── Review Result Card (shown after approval/rejection/update-request) ── --}}
-@if(in_array($form->status, ['Approved', 'Rejected']) || ($form->status === 'Draft' && $form->reviewed_by))
+{{-- ── HOU Review Card (hidden once IT Admin approves onward) ── --}}
+@if($form->hou_reviewed_by && !in_array($form->status, ['Pending Validation', 'Approved']))
 @php
-  $isApproved = $form->status === 'Approved';
+  $houActedApprove = in_array($form->status, ['Pending IT', 'Approved']) || ($form->status === 'Rejected' && $form->reviewed_by);
+  $houResultColor  = $houActedApprove ? '#16a34a' : '#dc2626';
+  $houResultBg     = $houActedApprove ? 'rgba(22,163,74,.06)' : 'rgba(220,38,38,.06)';
+  $houResultBorder = $houActedApprove ? 'rgba(22,163,74,.25)' : 'rgba(220,38,38,.25)';
+  $houResultIcon   = $houActedApprove ? 'bi-check-circle-fill' : 'bi-x-circle-fill';
+  $houResultLabel  = $houActedApprove ? 'Approved by HOU' : 'Rejected by HOU';
+@endphp
+<div style="background:{{ $houResultBg }};border:1.5px solid {{ $houResultBorder }};border-radius:12px;padding:16px 20px;margin-bottom:14px">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <i class="bi {{ $houResultIcon }}" style="font-size:20px;color:{{ $houResultColor }};flex-shrink:0"></i>
+    <div style="flex:1">
+      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:{{ $houResultColor }}">
+        {{ $houResultLabel }} — {{ $form->houReviewedBy?->full_name ?? '—' }}
+        <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
+          {{ $form->hou_reviewed_at ? $form->hou_reviewed_at->format('d M Y, H:i') : '' }}
+        </span>
+      </div>
+      @if($form->hou_remarks)
+      <div style="font-size:13px;color:var(--text);margin-top:6px;padding-top:6px;border-top:1px solid {{ $houResultBorder }}">
+        <span style="font-weight:600;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em">HOU Remarks: </span>{{ $form->hou_remarks }}
+      </div>
+      @endif
+    </div>
+  </div>
+</div>
+@endif
+
+{{-- ── Admin Review Result Card (shown after admin has acted) ── --}}
+@if($form->reviewed_by)
+@php
+  $isApproved    = in_array($form->status, ['Approved', 'Pending Validation']);
   $isNeedsUpdate = $form->status === 'Draft' && $form->reviewed_by;
   if ($isApproved) {
-    $resultColor = '#16a34a'; $resultBg = 'rgba(22,163,74,.06)'; $resultBorder = 'rgba(22,163,74,.25)'; $resultIcon = 'bi-check-circle-fill'; $resultLabel = 'Approved';
+    $resultColor = '#16a34a'; $resultBg = 'rgba(22,163,74,.06)'; $resultBorder = 'rgba(22,163,74,.25)'; $resultIcon = 'bi-check-circle-fill'; $resultLabel = 'Approved by IT Admin';
   } elseif ($isNeedsUpdate) {
-    $resultColor = '#d97706'; $resultBg = 'rgba(217,119,6,.06)'; $resultBorder = 'rgba(217,119,6,.25)'; $resultIcon = 'bi-arrow-clockwise'; $resultLabel = 'Update Requested';
+    $resultColor = '#d97706'; $resultBg = 'rgba(217,119,6,.06)'; $resultBorder = 'rgba(217,119,6,.25)'; $resultIcon = 'bi-arrow-clockwise'; $resultLabel = 'Update Requested by IT Admin';
   } else {
-    $resultColor = '#dc2626'; $resultBg = 'rgba(220,38,38,.06)'; $resultBorder = 'rgba(220,38,38,.25)'; $resultIcon = 'bi-x-circle-fill'; $resultLabel = 'Rejected';
+    $resultColor = '#dc2626'; $resultBg = 'rgba(220,38,38,.06)'; $resultBorder = 'rgba(220,38,38,.25)'; $resultIcon = 'bi-x-circle-fill'; $resultLabel = 'Rejected by IT Admin';
   }
 @endphp
 <div style="background:{{ $resultBg }};border:1.5px solid {{ $resultBorder }};border-radius:12px;padding:16px 20px;margin-bottom:20px">
@@ -113,7 +151,7 @@
     <i class="bi {{ $resultIcon }}" style="font-size:20px;color:{{ $resultColor }};flex-shrink:0"></i>
     <div style="flex:1">
       <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:{{ $resultColor }}">
-        {{ $resultLabel }} by {{ $form->reviewedBy?->full_name ?? '—' }}
+        {{ $resultLabel }} — {{ $form->reviewedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->reviewed_at ? $form->reviewed_at->format('d M Y, H:i') : '' }}
         </span>
@@ -128,28 +166,95 @@
 </div>
 @endif
 
-{{-- ── Action Bar (New requests: admin sees all 3 actions; HOU sees approve + reject) ── --}}
+{{-- ── HOU Action Bar (status=New: assigned HOU reviews) ── --}}
 @php $isHou = $isHou ?? false; @endphp
-@if($form->status === 'New' && ($user->isAdmin() || $isHou))
+@if($isHou && $form->status === 'New')
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
   <div style="flex:1;min-width:0">
     <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Review this Request</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:2px">
-      {{ $isHou ? 'This request from your staff is awaiting your decision.' : 'This request is pending your review. Approve, request an update, or reject it below.' }}
-    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">This request from your staff is awaiting your decision. If approved, it will be forwarded to IT Admin.</div>
   </div>
   <button onclick="openReviewModal('approve')"
     style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
     <i class="bi bi-check-circle-fill"></i> Approve
   </button>
-  @if(!$isHou)
+  <button onclick="openReviewModal('reject')"
+    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
+    <i class="bi bi-x-circle-fill"></i> Reject
+  </button>
+</div>
+@endif
+
+{{-- ── Validator Review Card (shown after Mohd Azrull has acted) ── --}}
+@if($form->validated_by)
+@php
+  $valApproved = $form->status === 'Approved';
+  $valColor    = $valApproved ? '#16a34a' : '#dc2626';
+  $valBg       = $valApproved ? 'rgba(22,163,74,.06)' : 'rgba(220,38,38,.06)';
+  $valBorder   = $valApproved ? 'rgba(22,163,74,.25)' : 'rgba(220,38,38,.25)';
+  $valIcon     = $valApproved ? 'bi-patch-check-fill' : 'bi-x-circle-fill';
+  $valLabel    = $valApproved ? 'Validated & Approved' : 'Rejected by Validator';
+@endphp
+<div style="background:{{ $valBg }};border:1.5px solid {{ $valBorder }};border-radius:12px;padding:16px 20px;margin-bottom:20px">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <i class="bi {{ $valIcon }}" style="font-size:20px;color:{{ $valColor }};flex-shrink:0"></i>
+    <div style="flex:1">
+      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:{{ $valColor }}">
+        {{ $valLabel }} — {{ $form->validatedBy?->full_name ?? '—' }}
+        <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
+          {{ $form->validated_at ? $form->validated_at->format('d M Y, H:i') : '' }}
+        </span>
+      </div>
+      @if($form->validator_remarks)
+      <div style="font-size:13px;color:var(--text);margin-top:6px;padding-top:6px;border-top:1px solid {{ $valBorder }}">
+        <span style="font-weight:600;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em">Validator Remarks: </span>{{ $form->validator_remarks }}
+      </div>
+      @endif
+    </div>
+  </div>
+</div>
+@endif
+
+{{-- ── Admin Action Bar (status=Pending IT: IT Admin gives final decision) ── --}}
+@if($user->isAdmin() && $form->status === 'Pending IT')
+<div style="background:var(--surface);border:1px solid rgba(2,132,199,.3);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+  <div style="flex:1;min-width:0">
+    <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Final Approval Required</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">This request has been approved by the HOU and is now awaiting your final decision.</div>
+  </div>
+  <button onclick="openReviewModal('approve')"
+    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+    <i class="bi bi-check-circle-fill"></i> Approve
+  </button>
   <button onclick="openReviewModal('update')"
     style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#d97706;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b45309'" onmouseout="this.style.background='#d97706'">
     <i class="bi bi-arrow-clockwise"></i> Request Update
   </button>
-  @endif
+  <button onclick="openReviewModal('reject')"
+    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
+    <i class="bi bi-x-circle-fill"></i> Reject
+  </button>
+</div>
+@endif
+
+{{-- ── Validator Action Bar (only Mohd Azrull, status=Pending Validation) ── --}}
+@php $isValidator = $isValidator ?? false; @endphp
+@if($isValidator && $form->status === 'Pending Validation')
+<div style="background:var(--surface);border:1px solid rgba(124,58,237,.3);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+  <div style="flex:1;min-width:0">
+    <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Validation Required</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">This request has been approved by the IT Admin and is awaiting your final validation.</div>
+  </div>
+  <button onclick="openReviewModal('approve')"
+    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+    <i class="bi bi-patch-check-fill"></i> Validate & Approve
+  </button>
   <button onclick="openReviewModal('reject')"
     style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
@@ -281,57 +386,37 @@
   </div>
 </div>
 
-{{-- ── Section 3: User Details ── --}}
+{{-- ── Section 3: Requester Details ── --}}
 <div class="itr-show-section">
-  <div class="itr-show-head"><div class="itr-show-num">3</div><div class="itr-show-title">User Details</div></div>
-  <div class="itr-show-body">
-    <div class="sg2 sf">
-      <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->user_name ?: '—' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Email</div><div class="itr-field-value">{{ $form->user_email ?: '—' }}</div></div>
-    </div>
-    <div class="sf"><div class="itr-field-label">Address</div><div class="itr-field-value">{{ $form->user_address ?: '—' }}</div></div>
-    <div class="sg4">
-      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->user_department ?: '—' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->user_designation ?: '—' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Staff ID</div><div class="itr-field-value">{{ $form->user_staff_id ?: '—' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Contact No.</div><div class="itr-field-value">{{ $form->user_contact ?: '—' }}</div></div>
-    </div>
-  </div>
-</div>
-
-{{-- ── Section 4: Requester Details ── --}}
-<div class="itr-show-section">
-  <div class="itr-show-head"><div class="itr-show-num">4</div><div class="itr-show-title">Requester Details</div></div>
+  <div class="itr-show-head"><div class="itr-show-num">3</div><div class="itr-show-title">Requester Details</div></div>
   <div class="itr-show-body">
     <div class="sg3 sf">
       <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->req_name ?: '—' }}</div></div>
       <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->req_department ?: '—' }}</div></div>
       <div class="sf"><div class="itr-field-label">Staff ID</div><div class="itr-field-value">{{ $form->req_staff_id ?: '—' }}</div></div>
     </div>
-    <div class="sg3">
+    <div class="sg2">
       <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->req_designation ?: '—' }}</div></div>
       <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->req_contact ?: '—' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Company</div><div class="itr-field-value">{{ $form->req_company ?: '—' }}</div></div>
     </div>
   </div>
 </div>
 
-{{-- ── Section 5: Approver Details ── --}}
+{{-- ── Section 4: Approver Details ── --}}
 <div class="itr-show-section">
-  <div class="itr-show-head"><div class="itr-show-num">5</div><div class="itr-show-title">Approver Details</div></div>
+  <div class="itr-show-head"><div class="itr-show-num">4</div><div class="itr-show-title">Approver Details</div></div>
   <div class="itr-show-body">
     <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->approver_name ?: '—' }}</div></div>
-    <div class="sg4">
+    <div class="sg3">
       <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->approver_department ?: '—' }}</div></div>
       <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->approver_designation ?: '—' }}</div></div>
       <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->approver_contact ?: '—' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Company</div><div class="itr-field-value">{{ $form->approver_company ?: '—' }}</div></div>
     </div>
   </div>
 </div>
 
 {{-- ── Review Modal ── --}}
-@if($form->status === 'New')
+@if(($isHou && $form->status === 'New') || ($user->isAdmin() && $form->status === 'Pending IT') || ($isValidator && $form->status === 'Pending Validation'))
 <div id="reviewModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;align-items:center;justify-content:center;padding:20px">
   <div style="background:var(--surface);border-radius:14px;padding:28px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative">
     <button onclick="closeReviewModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1"><i class="bi bi-x-lg"></i></button>
@@ -350,7 +435,7 @@
         <label id="remarksLabel" style="font-size:12px;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:6px">
           Remarks <span id="remarksOptional" style="font-weight:400;color:var(--muted);text-transform:none">(optional)</span>
         </label>
-        <textarea name="approval_remarks" rows="3"
+        <textarea name="{{ ($isValidator ?? false) ? 'validator_remarks' : 'approval_remarks' }}" rows="3"
           placeholder="Add a remark or reason…"
           style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;outline:none;resize:vertical;box-sizing:border-box;transition:border-color .15s"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
@@ -374,6 +459,10 @@
 @if($isHou ?? false)
 var approveUrl = '{{ route("it.it-request-form.hou-approve", $form->id) }}';
 var rejectUrl  = '{{ route("it.it-request-form.hou-reject",  $form->id) }}';
+var updateUrl  = '';
+@elseif($isValidator ?? false)
+var approveUrl = '{{ route("it.it-request-form.validator-approve", $form->id) }}';
+var rejectUrl  = '{{ route("it.it-request-form.validator-reject",  $form->id) }}';
 var updateUrl  = '';
 @else
 var approveUrl = '{{ route("it.it-request-form.approve", $form->id) }}';

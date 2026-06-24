@@ -25,6 +25,17 @@
 .itr-admin-row:last-child { border-bottom:none; }
 .itr-admin-row.is-new { border-left:3px solid #d97706; }
 .itr-admin-row.is-new:not(:hover) { background:rgba(217,119,6,.025); }
+.itr-admin-row.is-pending-it { border-left:3px solid #0284c7; }
+.itr-admin-row.is-pending-it:not(:hover) { background:rgba(2,132,199,.025); }
+.itr-admin-row.is-pending-validation { border-left:3px solid #7c3aed; }
+.itr-admin-row.is-pending-validation:not(:hover) { background:rgba(124,58,237,.025); }
+
+/* Bulk checkbox styles */
+.bulk-cb { width:15px;height:15px;cursor:pointer;accent-color:var(--accent);flex-shrink:0; }
+
+/* Archive */
+.itr-archive-btn { display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:1.5px solid transparent;background:transparent;cursor:pointer;color:var(--muted);font-size:14px;transition:all .15s;flex-shrink:0; }
+.itr-archive-btn:hover { background:rgba(217,119,6,.1);border-color:rgba(217,119,6,.3);color:#d97706; }
 
 @media(max-width:900px){
   .itr-admin-cols { grid-template-columns:1fr 1fr 1fr !important; }
@@ -40,10 +51,10 @@
     <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 3px">IT Request Inbox</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Review and manage all IT service requests from staff</p>
   </div>
-  @if($countNew > 0)
+  @if($countNew > 0 || $countPendingIT > 0)
   <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(217,119,6,.1);border:1.5px solid rgba(217,119,6,.3);border-radius:12px;padding:10px 18px">
     <span style="width:8px;height:8px;background:#d97706;border-radius:50%;display:inline-block;animation:itr-pulse 1.6s infinite"></span>
-    <span style="font-size:13px;font-weight:700;color:#d97706">{{ $countNew }} pending review</span>
+    <span style="font-size:13px;font-weight:700;color:#d97706">{{ $countNew + $countPendingIT }} pending review</span>
   </div>
   @endif
 </div>
@@ -62,8 +73,8 @@
 </div>
 @endif
 
-{{-- Stat cards (4 cards) --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
+{{-- Stat cards (6 cards) --}}
+<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
   <div class="itr-admin-stat">
     <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>
@@ -75,7 +86,21 @@
     <div class="itr-admin-stat-icon" style="background:rgba(217,119,6,.1);color:#d97706"><i class="bi bi-hourglass-split"></i></div>
     <div>
       <div class="itr-admin-stat-val" style="{{ $countNew ? 'color:#d97706' : '' }}">{{ $countNew }}</div>
-      <div class="itr-admin-stat-lbl">Pending Review</div>
+      <div class="itr-admin-stat-lbl">Pending HOU</div>
+    </div>
+  </div>
+  <div class="itr-admin-stat" style="border-color:{{ $countPendingIT ? 'rgba(2,132,199,.35)' : 'var(--border)' }}">
+    <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-person-check-fill"></i></div>
+    <div>
+      <div class="itr-admin-stat-val" style="{{ $countPendingIT ? 'color:#0284c7' : '' }}">{{ $countPendingIT }}</div>
+      <div class="itr-admin-stat-lbl">Pending IT</div>
+    </div>
+  </div>
+  <div class="itr-admin-stat" style="border-color:{{ $countPendingValidation ? 'rgba(124,58,237,.35)' : 'var(--border)' }}">
+    <div class="itr-admin-stat-icon" style="background:rgba(124,58,237,.1);color:#7c3aed"><i class="bi bi-patch-check-fill"></i></div>
+    <div>
+      <div class="itr-admin-stat-val" style="{{ $countPendingValidation ? 'color:#7c3aed' : '' }}">{{ $countPendingValidation }}</div>
+      <div class="itr-admin-stat-lbl">Pending Validation</div>
     </div>
   </div>
   <div class="itr-admin-stat">
@@ -117,10 +142,12 @@
       <select name="itr_status" onchange="this.form.submit()"
         style="font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $status ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
         <option value="">All Status</option>
-        <option value="New"      {{ $status === 'New'      ? 'selected' : '' }}>Pending Review</option>
-        <option value="Approved" {{ $status === 'Approved' ? 'selected' : '' }}>Approved</option>
-        <option value="Rejected" {{ $status === 'Rejected' ? 'selected' : '' }}>Rejected</option>
-        <option value="Draft"    {{ $status === 'Draft'    ? 'selected' : '' }}>Draft</option>
+        <option value="New"        {{ $status === 'New'        ? 'selected' : '' }}>Pending HOU</option>
+        <option value="Pending IT"         {{ $status === 'Pending IT'         ? 'selected' : '' }}>Pending IT Approval</option>
+        <option value="Pending Validation" {{ $status === 'Pending Validation' ? 'selected' : '' }}>Pending Validation</option>
+        <option value="Approved"   {{ $status === 'Approved'   ? 'selected' : '' }}>Approved</option>
+        <option value="Rejected"   {{ $status === 'Rejected'   ? 'selected' : '' }}>Rejected</option>
+        <option value="Draft"      {{ $status === 'Draft'      ? 'selected' : '' }}>Draft</option>
       </select>
       <button type="submit"
         style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s"
@@ -141,8 +168,18 @@
     </form>
   </div>
 
+  {{-- Admin bulk bar --}}
+  <div id="adminBulkBar" style="display:none;padding:10px 20px;background:rgba(2,132,199,.07);border-bottom:1px solid rgba(2,132,199,.2);align-items:center;gap:12px;flex-wrap:wrap">
+    <span id="adminBulkCount" style="font-size:13px;font-weight:700;color:#0284c7;min-width:80px"></span>
+    <button id="adminApproveBtn" onclick="openBulkModal('admin','approve')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-check-circle-fill"></i> Approve Selected</button>
+    <button id="adminRejectBtn"  onclick="openBulkModal('admin','reject')"  style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
+    <button id="adminArchiveBtn" onclick="openBulkModal('admin','archive')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#d97706;color:#fff;border:none;border-radius:8px;cursor:pointer;display:none;align-items:center;gap:6px"><i class="bi bi-archive-fill"></i> Archive Selected</button>
+    <button onclick="clearBulkSelection('admin')" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
+  </div>
+
   {{-- Column headers --}}
-  <div style="display:grid;grid-template-columns:2fr 1fr 1fr 130px 120px;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border)">
+  <div style="display:grid;grid-template-columns:40px 2fr 1fr 1fr 130px 120px;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border);align-items:center">
+    <div style="display:flex;align-items:center"><input type="checkbox" class="bulk-cb" id="adminSelectAll" title="Select all"></div>
     <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Request</div>
     <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Submitted By</div>
     <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Department</div>
@@ -161,9 +198,17 @@
     ];
     $t = $typeMap[$form->request_type] ?? ['label'=>ucfirst($form->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
   @endphp
+  @php $adminCbable = in_array($form->status, ['Pending IT', 'Approved', 'Rejected']); @endphp
   <a href="{{ route('it.it-request-form.show', $form->id) }}"
-    class="itr-admin-row {{ $form->status === 'New' ? 'is-new' : '' }}"
-    style="grid-template-columns:2fr 1fr 1fr 130px 120px;padding:14px 20px;gap:12px">
+    class="itr-admin-row {{ $form->status === 'New' ? 'is-new' : ($form->status === 'Pending IT' ? 'is-pending-it' : ($form->status === 'Pending Validation' ? 'is-pending-validation' : '')) }}"
+    style="grid-template-columns:40px 2fr 1fr 1fr 130px 120px;padding:14px 20px;gap:12px">
+
+    {{-- Checkbox --}}
+    <div style="display:flex;align-items:center" onclick="event.preventDefault();event.stopPropagation()">
+      @if($adminCbable)
+      <input type="checkbox" class="bulk-cb admin-cb" value="{{ $form->id }}" data-status="{{ $form->status }}" onchange="updateBulkBar('admin')">
+      @endif
+    </div>
 
     {{-- Request: subject + type badge + ID --}}
     <div style="min-width:0">
@@ -200,7 +245,15 @@
     <div style="align-self:center">
       @if($form->status === 'New')
       <span class="itr-status-dot" style="background:rgba(217,119,6,.1);color:#d97706">
-        <span style="background:#d97706"></span>Pending
+        <span style="background:#d97706"></span>Pending HOU
+      </span>
+      @elseif($form->status === 'Pending IT')
+      <span class="itr-status-dot" style="background:rgba(2,132,199,.1);color:#0284c7">
+        <span style="background:#0284c7"></span>Pending IT
+      </span>
+      @elseif($form->status === 'Pending Validation')
+      <span class="itr-status-dot" style="background:rgba(124,58,237,.1);color:#7c3aed">
+        <span style="background:#7c3aed"></span>Pending Validation
       </span>
       @elseif($form->status === 'Approved')
       <span class="itr-status-dot" style="background:rgba(22,163,74,.1);color:#16a34a">
@@ -232,6 +285,279 @@
   </div>
   @endif
 </div>
+
+{{-- ══ ARCHIVE SECTION ══ --}}
+<div style="margin-top:32px" id="admin-archive-section">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+        <i class="bi bi-archive-fill" style="color:#d97706;margin-right:7px"></i>Archive
+        @if($archivedForms->total())
+        <span style="font-size:12px;font-weight:600;color:#d97706;background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $archivedForms->total() }}</span>
+        @endif
+      </div>
+      <div style="font-size:12.5px;color:var(--muted)">Decided requests that have been moved out of the active inbox.</div>
+    </div>
+    <button onclick="toggleArchive()" id="archiveToggleBtn"
+      style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
+      onmouseover="this.style.borderColor='#d97706';this.style.color='#d97706'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+      <i class="bi bi-chevron-down" id="archiveToggleIcon"></i> Show Archive
+    </button>
+  </div>
+
+  <div id="archiveList" style="display:{{ request('archive_page') ? 'block' : 'none' }}">
+    @if($archivedForms->total())
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+
+      {{-- Headers --}}
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 130px 120px 80px;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border);align-items:center">
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Request</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Submitted By</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Department</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Date</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Status</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Action</div>
+      </div>
+
+      @foreach($archivedForms as $af)
+      @php
+        $afTypeMap = [
+          'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
+          'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
+          'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)', 'icon'=>'bi-hdd-network'],
+          'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)',  'icon'=>'bi-wifi'],
+        ];
+        $aft = $afTypeMap[$af->request_type] ?? ['label'=>ucfirst($af->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+      @endphp
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 130px 120px 80px;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;gap:12px;opacity:.8">
+
+        {{-- Request --}}
+        <div style="min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="display:inline-flex;align-items:center;gap:5px;background:{{ $aft['bg'] }};color:{{ $aft['color'] }};border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700">
+              <i class="bi {{ $aft['icon'] }}" style="font-size:10px"></i>{{ $aft['label'] }}
+            </span>
+            <span style="font-size:11px;color:var(--muted);font-weight:500">#{{ $af->id }}</span>
+          </div>
+          <a href="{{ route('it.it-request-form.show', $af->id) }}"
+            style="font-size:13px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block"
+            onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text)'">
+            {{ $af->subject }}
+          </a>
+        </div>
+
+        {{-- Submitted by --}}
+        <div style="display:flex;align-items:center;gap:8px;min-width:0">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(100,116,139,.1);color:#64748b;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0"><i class="bi bi-person-fill"></i></div>
+          <div style="min-width:0">
+            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $af->submittedBy?->full_name ?? '—' }}</div>
+          </div>
+        </div>
+
+        {{-- Department --}}
+        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          {{ $af->user_department ?: ($af->submittedBy?->dept_name ?? '—') }}
+        </div>
+
+        {{-- Date --}}
+        <div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text)">{{ $af->created_at->format('d M Y') }}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $af->created_at->format('H:i') }}</div>
+        </div>
+
+        {{-- Status --}}
+        <div>
+          @if($af->status === 'Approved')
+          <span class="itr-status-dot" style="background:rgba(22,163,74,.1);color:#16a34a"><span style="background:#16a34a"></span>Approved</span>
+          @else
+          <span class="itr-status-dot" style="background:rgba(220,38,38,.1);color:#dc2626"><span style="background:#dc2626"></span>Rejected</span>
+          @endif
+        </div>
+
+        {{-- Unarchive --}}
+        <div>
+          <form method="POST" action="{{ route('it.it-request-form.unarchive', $af->id) }}" style="margin:0">
+            @csrf
+            <button type="submit"
+              style="font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:600;padding:5px 10px;background:transparent;border:1.5px solid var(--border);border-radius:7px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap"
+              onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'"
+              title="Move back to inbox">
+              <i class="bi bi-arrow-counterclockwise"></i> Restore
+            </button>
+          </form>
+        </div>
+
+      </div>
+      @endforeach
+
+      @if($archivedForms->hasPages())
+      <div style="padding:14px 20px;border-top:1px solid var(--border)">
+        {{ $archivedForms->withQueryString()->links() }}
+      </div>
+      @endif
+
+    </div>
+    @else
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+      <i class="bi bi-archive" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No archived requests</div>
+      <div style="font-size:12.5px">Decided requests you archive will appear here.</div>
+    </div>
+    @endif
+  </div>
+</div>
+
+{{-- Archive toggle JS --}}
+<script>
+function toggleArchive() {
+  var list = document.getElementById('archiveList');
+  var open = list.style.display !== 'none';
+  list.style.display = open ? 'none' : 'block';
+  document.getElementById('archiveToggleBtn').innerHTML = open
+    ? '<i class="bi bi-chevron-down" id="archiveToggleIcon"></i> Show Archive'
+    : '<i class="bi bi-chevron-up"   id="archiveToggleIcon"></i> Hide Archive';
+}
+// If archive_page param present, update button label to reflect expanded state
+(function(){
+  @if(request('archive_page'))
+  var btn = document.getElementById('archiveToggleBtn');
+  if (btn) btn.innerHTML = '<i class="bi bi-chevron-up" id="archiveToggleIcon"></i> Hide Archive';
+  @endif
+})();
+</script>
+
+{{-- Admin bulk modal + JS --}}
+<div id="bulkModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <div id="bulkModalIcon" style="width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
+      <div id="bulkModalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
+    </div>
+    <div id="bulkModalDesc" style="font-size:13px;color:var(--muted);margin-bottom:16px"></div>
+    <form id="bulkForm" method="POST">
+      @csrf
+      <div id="bulkIdsContainer"></div>
+      <div id="bulkRemarksDiv" style="margin-bottom:16px">
+        <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional — applies to all selected)</span></label>
+        <textarea name="remarks" id="bulkRemarks" rows="3"
+          style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
+          placeholder="Add a remark (optional)…"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="button" onclick="closeBulkModal()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
+        <button type="submit" id="bulkModalSubmit" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer"></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+var _bulkRoutes = {
+  admin: {
+    approve: '{{ route("it.it-request-form.bulk-admin-approve") }}',
+    reject:  '{{ route("it.it-request-form.bulk-admin-reject") }}',
+    archive: '{{ route("it.it-request-form.bulk-admin-archive") }}'
+  }
+};
+
+function updateBulkBar(group) {
+  var cbs    = Array.from(document.querySelectorAll('.' + group + '-cb:checked'));
+  var bar    = document.getElementById(group === 'admin' ? 'adminBulkBar' : (group === 'hou' ? 'houBulkBar' : 'valBulkBar'));
+  var countEl= document.getElementById(group === 'admin' ? 'adminBulkCount' : (group === 'hou' ? 'houBulkCount' : 'valBulkCount'));
+  if (cbs.length > 0) {
+    bar.style.display = 'flex';
+    countEl.textContent = cbs.length + ' selected';
+    if (group === 'admin') {
+      var hasPending = cbs.some(function(cb){ return cb.dataset.status === 'Pending IT'; });
+      var hasDecided = cbs.some(function(cb){ return cb.dataset.status === 'Approved' || cb.dataset.status === 'Rejected'; });
+      document.getElementById('adminApproveBtn').style.display = hasPending ? 'inline-flex' : 'none';
+      document.getElementById('adminRejectBtn').style.display  = hasPending ? 'inline-flex' : 'none';
+      document.getElementById('adminArchiveBtn').style.display = hasDecided ? 'inline-flex' : 'none';
+    }
+  } else {
+    bar.style.display = 'none';
+  }
+  var allCbs = document.querySelectorAll('.' + group + '-cb');
+  var saEl = document.getElementById(group === 'admin' ? 'adminSelectAll' : (group === 'hou' ? 'houSelectAll' : 'valSelectAll'));
+  if (saEl) saEl.checked = allCbs.length > 0 && cbs.length === allCbs.length;
+}
+
+function toggleSelectAll(group) {
+  var saEl   = document.getElementById(group === 'admin' ? 'adminSelectAll' : (group === 'hou' ? 'houSelectAll' : 'valSelectAll'));
+  var allCbs = document.querySelectorAll('.' + group + '-cb');
+  allCbs.forEach(function(cb){ cb.checked = saEl.checked; });
+  updateBulkBar(group);
+}
+
+function clearBulkSelection(group) {
+  document.querySelectorAll('.' + group + '-cb').forEach(function(cb){ cb.checked = false; });
+  var saEl = document.getElementById(group === 'admin' ? 'adminSelectAll' : (group === 'hou' ? 'houSelectAll' : 'valSelectAll'));
+  if (saEl) saEl.checked = false;
+  updateBulkBar(group);
+}
+
+function openBulkModal(group, action) {
+  var allChecked = Array.from(document.querySelectorAll('.' + group + '-cb:checked'));
+  var cbs;
+  if (group === 'admin' && action === 'archive') {
+    cbs = allChecked.filter(function(cb){ return cb.dataset.status === 'Approved' || cb.dataset.status === 'Rejected'; });
+  } else if (group === 'admin' && (action === 'approve' || action === 'reject')) {
+    cbs = allChecked.filter(function(cb){ return cb.dataset.status === 'Pending IT'; });
+  } else {
+    cbs = allChecked;
+  }
+  if (!cbs.length) return;
+  var icon  = document.getElementById('bulkModalIcon');
+  var title = document.getElementById('bulkModalTitle');
+  var desc  = document.getElementById('bulkModalDesc');
+  var sub   = document.getElementById('bulkModalSubmit');
+  var form  = document.getElementById('bulkForm');
+  var cont  = document.getElementById('bulkIdsContainer');
+  var remarksDiv = document.getElementById('bulkRemarksDiv');
+  document.getElementById('bulkRemarks').value = '';
+  cont.innerHTML = '';
+  cbs.forEach(function(cb){
+    var inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = 'ids[]'; inp.value = cb.value;
+    cont.appendChild(inp);
+  });
+  var routeMap = _bulkRoutes[group] || {};
+  form.action = routeMap[action] || '#';
+  var n = cbs.length;
+  if (action === 'approve') {
+    remarksDiv.style.display = '';
+    icon.style.background = 'rgba(22,163,74,.12)'; icon.style.color = '#16a34a';
+    icon.innerHTML = '<i class="bi bi-check-circle-fill"></i>';
+    title.textContent = 'Approve ' + n + ' Request' + (n > 1 ? 's' : '');
+    desc.textContent  = 'This will approve all ' + n + ' selected request' + (n > 1 ? 's' : '') + ' at once. An optional remark applies to all.';
+    sub.textContent = 'Approve All'; sub.style.background = '#16a34a';
+  } else if (action === 'archive') {
+    remarksDiv.style.display = 'none';
+    icon.style.background = 'rgba(217,119,6,.12)'; icon.style.color = '#d97706';
+    icon.innerHTML = '<i class="bi bi-archive-fill"></i>';
+    title.textContent = 'Archive ' + n + ' Request' + (n > 1 ? 's' : '');
+    desc.textContent  = 'Move ' + n + ' decided request' + (n > 1 ? 's' : '') + ' to the archive section. You can restore them at any time.';
+    sub.textContent = 'Archive'; sub.style.background = '#d97706';
+  } else {
+    remarksDiv.style.display = '';
+    icon.style.background = 'rgba(220,38,38,.12)'; icon.style.color = '#dc2626';
+    icon.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
+    title.textContent = 'Reject ' + n + ' Request' + (n > 1 ? 's' : '');
+    desc.textContent  = 'This will reject all ' + n + ' selected request' + (n > 1 ? 's' : '') + '. An optional remark applies to all.';
+    sub.textContent = 'Reject All'; sub.style.background = '#dc2626';
+  }
+  document.getElementById('bulkModal').style.display = 'flex';
+  if (action !== 'archive') setTimeout(function(){ document.getElementById('bulkRemarks').focus(); }, 80);
+}
+
+function closeBulkModal() { document.getElementById('bulkModal').style.display = 'none'; }
+document.getElementById('bulkModal').addEventListener('click', function(e){ if (e.target === this) closeBulkModal(); });
+
+// Wire up admin select-all
+var adminSA = document.getElementById('adminSelectAll');
+if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('admin'); });
+</script>
 
 @else
 {{-- ══════════════════════════════════════════
@@ -422,6 +748,18 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         </div>
         <div style="font-size:12.5px;color:var(--muted)">Track the progress of your IT service requests.</div>
       </div>
+      @php $hasDecided = isset($myForms) && $myForms->whereIn('status', ['Approved','Rejected'])->count() > 0; @endphp
+      @if($hasDecided)
+      <form method="POST" action="{{ route('it.it-request-form.clear-all') }}"
+        onsubmit="return confirm('Clear all decided requests (Approved / Rejected) from your list?')" style="margin:0">
+        @csrf
+        <button type="submit"
+          style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+          onmouseover="this.style.borderColor='rgba(100,116,139,.6)';this.style.color='#334155'" onmouseout="this.style.borderColor='rgba(100,116,139,.3)';this.style.color='#64748b'">
+          <i class="bi bi-x-circle"></i> Clear Decided
+        </button>
+      </form>
+      @endif
     </div>
 
     @if(isset($myForms) && $myForms->count())
@@ -599,8 +937,17 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     @if($pendingApprovals->count())
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
 
+      {{-- HOU bulk bar --}}
+      <div id="houBulkBar" style="display:none;padding:10px 20px;background:rgba(124,58,237,.07);border-bottom:1px solid rgba(124,58,237,.2);align-items:center;gap:12px;flex-wrap:wrap">
+        <span id="houBulkCount" style="font-size:13px;font-weight:700;color:#7c3aed;min-width:80px"></span>
+        <button onclick="openBulkModal('hou','approve')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-check-circle-fill"></i> Approve Selected</button>
+        <button onclick="openBulkModal('hou','reject')"  style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
+        <button onclick="clearBulkSelection('hou')" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
+      </div>
+
       {{-- Column headers --}}
-      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 110px auto;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border)">
+      <div style="display:grid;grid-template-columns:40px 2fr 1fr 1fr 110px auto;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border);align-items:center">
+        <div style="display:flex;align-items:center"><input type="checkbox" class="bulk-cb" id="houSelectAll" onchange="toggleSelectAll('hou')" title="Select all"></div>
         <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Request</div>
         <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Submitted By</div>
         <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Department</div>
@@ -618,8 +965,13 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         ];
         $pt = $paTypeMap[$pa->request_type] ?? ['label'=>ucfirst($pa->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
       @endphp
-      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 110px auto;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;gap:12px;transition:background .12s"
+      <div style="display:grid;grid-template-columns:40px 2fr 1fr 1fr 110px auto;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;gap:12px;transition:background .12s"
            onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background='transparent'">
+
+        {{-- Checkbox --}}
+        <div style="display:flex;align-items:center">
+          <input type="checkbox" class="bulk-cb hou-cb" value="{{ $pa->id }}" onchange="updateBulkBar('hou')">
+        </div>
 
         {{-- Request: type + subject --}}
         <div style="min-width:0">
@@ -727,6 +1079,82 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   </div>
 
   <script>
+  var _bulkRoutes = {
+    hou: {
+      approve: '{{ route("it.it-request-form.bulk-hou-approve") }}',
+      reject:  '{{ route("it.it-request-form.bulk-hou-reject") }}'
+    },
+    val: {
+      approve: '{{ route("it.it-request-form.bulk-validator-approve") }}',
+      reject:  '{{ route("it.it-request-form.bulk-validator-reject") }}'
+    }
+  };
+
+  function updateBulkBar(group) {
+    var cbs    = document.querySelectorAll('.' + group + '-cb:checked');
+    var barId  = group === 'hou' ? 'houBulkBar' : 'valBulkBar';
+    var cntId  = group === 'hou' ? 'houBulkCount' : 'valBulkCount';
+    var saId   = group === 'hou' ? 'houSelectAll' : 'valSelectAll';
+    var bar    = document.getElementById(barId);
+    var cntEl  = document.getElementById(cntId);
+    if (!bar) return;
+    if (cbs.length > 0) { bar.style.display = 'flex'; cntEl.textContent = cbs.length + ' selected'; }
+    else { bar.style.display = 'none'; }
+    var allCbs = document.querySelectorAll('.' + group + '-cb');
+    var saEl   = document.getElementById(saId);
+    if (saEl) saEl.checked = allCbs.length > 0 && cbs.length === allCbs.length;
+  }
+
+  function toggleSelectAll(group) {
+    var saEl   = document.getElementById(group === 'hou' ? 'houSelectAll' : 'valSelectAll');
+    document.querySelectorAll('.' + group + '-cb').forEach(function(cb){ cb.checked = saEl.checked; });
+    updateBulkBar(group);
+  }
+
+  function clearBulkSelection(group) {
+    document.querySelectorAll('.' + group + '-cb').forEach(function(cb){ cb.checked = false; });
+    var saEl = document.getElementById(group === 'hou' ? 'houSelectAll' : 'valSelectAll');
+    if (saEl) saEl.checked = false;
+    updateBulkBar(group);
+  }
+
+  function openBulkModal(group, action) {
+    var cbs = document.querySelectorAll('.' + group + '-cb:checked');
+    if (!cbs.length) return;
+    var icon  = document.getElementById('bulkModalIcon');
+    var title = document.getElementById('bulkModalTitle');
+    var desc  = document.getElementById('bulkModalDesc');
+    var sub   = document.getElementById('bulkModalSubmit');
+    var form  = document.getElementById('bulkForm');
+    var cont  = document.getElementById('bulkIdsContainer');
+    document.getElementById('bulkRemarks').value = '';
+    cont.innerHTML = '';
+    cbs.forEach(function(cb){
+      var inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'ids[]'; inp.value = cb.value;
+      cont.appendChild(inp);
+    });
+    form.action = (_bulkRoutes[group] || {})[action] || '#';
+    var n = cbs.length;
+    if (action === 'approve') {
+      icon.style.background = 'rgba(22,163,74,.12)'; icon.style.color = '#16a34a';
+      icon.innerHTML = '<i class="bi bi-check-circle-fill"></i>';
+      title.textContent = 'Approve ' + n + ' Request' + (n > 1 ? 's' : '');
+      desc.textContent  = 'All ' + n + ' selected request' + (n > 1 ? 's' : '') + ' will be approved. The remark below applies to all.';
+      sub.textContent = 'Approve All'; sub.style.background = '#16a34a';
+    } else {
+      icon.style.background = 'rgba(220,38,38,.12)'; icon.style.color = '#dc2626';
+      icon.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
+      title.textContent = 'Reject ' + n + ' Request' + (n > 1 ? 's' : '');
+      desc.textContent  = 'All ' + n + ' selected request' + (n > 1 ? 's' : '') + ' will be rejected. The remark below applies to all.';
+      sub.textContent = 'Reject All'; sub.style.background = '#dc2626';
+    }
+    document.getElementById('bulkModal').style.display = 'flex';
+    setTimeout(function(){ document.getElementById('bulkRemarks').focus(); }, 80);
+  }
+
+  function closeBulkModal() { document.getElementById('bulkModal').style.display = 'none'; }
+
   var houApproveBase = '{{ url("/it/it-request-form") }}';
   function houAction(id, action) {
     var modal  = document.getElementById('houActionModal');
@@ -758,6 +1186,138 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   function closeHouModal() { document.getElementById('houActionModal').style.display = 'none'; }
   document.getElementById('houActionModal').addEventListener('click', function(e) { if (e.target === this) closeHouModal(); });
   </script>
+  @endif
+
+  {{-- Shared bulk modal (non-admin: HOU + Validator) --}}
+  @if($user->it_role === 'hou' || $user->isItValidator())
+  <div id="bulkModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;align-items:center;justify-content:center">
+    <div style="background:var(--surface);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <div id="bulkModalIcon" style="width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
+        <div id="bulkModalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
+      </div>
+      <div id="bulkModalDesc" style="font-size:13px;color:var(--muted);margin-bottom:16px"></div>
+      <form id="bulkForm" method="POST">
+        @csrf
+        <div id="bulkIdsContainer"></div>
+        <div style="margin-bottom:16px">
+          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional — applies to all selected)</span></label>
+          <textarea name="remarks" id="bulkRemarks" rows="3"
+            style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
+            placeholder="Add a remark (optional)…"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button type="button" onclick="closeBulkModal()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
+          <button type="submit" id="bulkModalSubmit" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+  document.getElementById('bulkModal').addEventListener('click', function(e){ if (e.target === this) closeBulkModal(); });
+  </script>
+  @endif
+
+  {{-- ══ VALIDATOR: PENDING VALIDATION REQUESTS (Mohd Azrull only) ══ --}}
+  @if($user->isItValidator())
+  <div style="margin-top:32px" id="validator-pending-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+          <i class="bi bi-patch-check-fill" style="color:#7c3aed;margin-right:7px"></i>Pending Validation
+        </div>
+        <div style="font-size:12.5px;color:var(--muted)">IT requests approved by IT Admin that are awaiting your final validation.</div>
+      </div>
+      @if($pendingValidations->count())
+      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.25);border-radius:10px;padding:7px 14px">
+        <span style="width:7px;height:7px;background:#7c3aed;border-radius:50%;display:inline-block;animation:itr-pulse 1.6s infinite"></span>
+        <span style="font-size:12.5px;font-weight:700;color:#7c3aed">{{ $pendingValidations->count() }} awaiting validation</span>
+      </div>
+      @endif
+    </div>
+
+    @if($pendingValidations->count())
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+
+      {{-- Validator bulk bar --}}
+      <div id="valBulkBar" style="display:none;padding:10px 20px;background:rgba(124,58,237,.07);border-bottom:1px solid rgba(124,58,237,.2);align-items:center;gap:12px;flex-wrap:wrap">
+        <span id="valBulkCount" style="font-size:13px;font-weight:700;color:#7c3aed;min-width:80px"></span>
+        <button onclick="openBulkModal('val','approve')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-patch-check-fill"></i> Validate &amp; Approve Selected</button>
+        <button onclick="openBulkModal('val','reject')"  style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
+        <button onclick="clearBulkSelection('val')" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:40px 2fr 1fr 1fr 110px auto;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border);align-items:center">
+        <div style="display:flex;align-items:center"><input type="checkbox" class="bulk-cb" id="valSelectAll" onchange="toggleSelectAll('val')" title="Select all"></div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Request</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Submitted By</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Department</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Date</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Actions</div>
+      </div>
+      @foreach($pendingValidations as $pv)
+      @php
+        $pvTypeMap = [
+          'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
+          'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
+          'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
+          'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
+        ];
+        $pvt = $pvTypeMap[$pv->request_type] ?? ['label'=>ucfirst($pv->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+      @endphp
+      <div style="display:grid;grid-template-columns:40px 2fr 1fr 1fr 110px auto;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;gap:12px;transition:background .12s"
+           onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background='transparent'">
+        {{-- Checkbox --}}
+        <div style="display:flex;align-items:center">
+          <input type="checkbox" class="bulk-cb val-cb" value="{{ $pv->id }}" onchange="updateBulkBar('val')">
+        </div>
+        <div style="min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="display:inline-flex;align-items:center;gap:5px;background:{{ $pvt['bg'] }};color:{{ $pvt['color'] }};border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700">
+              <i class="bi {{ $pvt['icon'] }}" style="font-size:10px"></i>{{ $pvt['label'] }}
+            </span>
+            <span style="font-size:11px;color:var(--muted);font-weight:500">#{{ $pv->id }}</span>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->subject ?? '(No subject)' }}</div>
+          @if($pv->justification)
+          <div style="font-size:11.5px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->justification }}</div>
+          @endif
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;min-width:0">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(124,58,237,.1);color:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div style="min-width:0">
+            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+              {{ $pv->req_name ?: ($pv->submittedBy?->full_name ?? '—') }}
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->req_designation ?: '—' }}</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->user_department ?: '—' }}</div>
+        <div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text)">{{ $pv->created_at->format('d M Y') }}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->created_at->format('H:i') }}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap">
+          <a href="{{ route('it.it-request-form.validator-show', $pv->id) }}"
+            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#7c3aed;border:1.5px solid rgba(124,58,237,.3);border-radius:7px;padding:5px 11px;text-decoration:none;background:transparent;transition:all .15s"
+            onmouseover="this.style.background='rgba(124,58,237,.08)'" onmouseout="this.style.background='transparent'">
+            <i class="bi bi-eye-fill"></i> Open
+          </a>
+        </div>
+      </div>
+      @endforeach
+    </div>
+    @else
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+      <i class="bi bi-patch-check" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No pending validations</div>
+      <div style="font-size:12.5px">Requests approved by IT Admin will appear here for your validation.</div>
+    </div>
+    @endif
+  </div>
   @endif
 
   <!-- ══ STEP 2 ══ -->
@@ -947,11 +1507,17 @@ function selectType(type) {
 
   const s1 = document.getElementById('step1');
   const ms = document.getElementById('my-submissions');
+  const houSec = document.getElementById('hou-pending-section');
+  const valSec = document.getElementById('validator-pending-section');
   s1.style.opacity = '0';
   if (ms) ms.style.opacity = '0';
+  if (houSec) houSec.style.opacity = '0';
+  if (valSec) valSec.style.opacity = '0';
   setTimeout(() => {
     s1.style.display = 'none';
     if (ms) ms.style.display = 'none';
+    if (houSec) houSec.style.display = 'none';
+    if (valSec) valSec.style.display = 'none';
     const s2 = document.getElementById('step2');
     s2.style.display = 'block'; s2.style.opacity = '0';
     requestAnimationFrame(() => { s2.style.transition = 'opacity .25s'; s2.style.opacity = '1'; });
@@ -973,11 +1539,17 @@ function changeType() {
     s2.style.display = 'none';
     const s1 = document.getElementById('step1');
     const ms = document.getElementById('my-submissions');
+    const houSec = document.getElementById('hou-pending-section');
+    const valSec = document.getElementById('validator-pending-section');
     s1.style.display = 'block'; s1.style.opacity = '0';
     if (ms) { ms.style.display = 'block'; ms.style.opacity = '0'; }
+    if (houSec) { houSec.style.display = 'block'; houSec.style.opacity = '0'; }
+    if (valSec) { valSec.style.display = 'block'; valSec.style.opacity = '0'; }
     requestAnimationFrame(() => {
       s1.style.transition = 'opacity .25s'; s1.style.opacity = '1';
       if (ms) { ms.style.transition = 'opacity .25s'; ms.style.opacity = '1'; }
+      if (houSec) { houSec.style.transition = 'opacity .25s'; houSec.style.opacity = '1'; }
+      if (valSec) { valSec.style.transition = 'opacity .25s'; valSec.style.opacity = '1'; }
     });
   }, 200);
 }
@@ -1101,6 +1673,10 @@ function collectChips(gridId, fieldName) {
   document.getElementById('step1').style.display = 'none';
   var msEl = document.getElementById('my-submissions');
   if (msEl) msEl.style.display = 'none';
+  var houSecEl = document.getElementById('hou-pending-section');
+  if (houSecEl) houSecEl.style.display = 'none';
+  var valSecEl = document.getElementById('validator-pending-section');
+  if (valSecEl) valSecEl.style.display = 'none';
   var s2 = document.getElementById('step2');
   s2.style.display = 'block';
   s2.style.opacity = '1';
@@ -1161,6 +1737,10 @@ function restoreFromSession() {
   document.getElementById('step1').style.display  = 'none';
   var msEl = document.getElementById('my-submissions');
   if (msEl) msEl.style.display = 'none';
+  var houSecEl = document.getElementById('hou-pending-section');
+  if (houSecEl) houSecEl.style.display = 'none';
+  var valSecEl = document.getElementById('validator-pending-section');
+  if (valSecEl) valSecEl.style.display = 'none';
   var s2 = document.getElementById('step2');
   s2.style.display = 'block'; s2.style.opacity = '1';
 

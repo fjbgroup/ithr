@@ -125,9 +125,22 @@ Route::prefix('it')->name('it.')->group(function () {
             Route::post('/it-request-form',                    [ItRequestFormController::class, 'store'])->name('it-request-form.store');
             Route::get('/it-request-form/{id}/edit',           [ItRequestFormController::class, 'edit'])->name('it-request-form.edit');
             Route::put('/it-request-form/{id}',                [ItRequestFormController::class, 'update'])->name('it-request-form.update');
-            Route::get('/it-request-form/{id}/hou-view',       [ItRequestFormController::class, 'houShow'])->name('it-request-form.hou-show');
-            Route::post('/it-request-form/{id}/hou-approve',   [ItRequestFormController::class, 'houApprove'])->name('it-request-form.hou-approve');
-            Route::post('/it-request-form/{id}/hou-reject',    [ItRequestFormController::class, 'houReject'])->name('it-request-form.hou-reject');
+            Route::get('/it-request-form/{id}/hou-view',           [ItRequestFormController::class, 'houShow'])->name('it-request-form.hou-show');
+            Route::post('/it-request-form/{id}/hou-approve',       [ItRequestFormController::class, 'houApprove'])->name('it-request-form.hou-approve');
+            Route::post('/it-request-form/{id}/hou-reject',        [ItRequestFormController::class, 'houReject'])->name('it-request-form.hou-reject');
+            Route::get('/it-request-form/{id}/validator-view',     [ItRequestFormController::class, 'validatorShow'])->name('it-request-form.validator-show');
+            Route::post('/it-request-form/{id}/validator-approve', [ItRequestFormController::class, 'validatorApprove'])->name('it-request-form.validator-approve');
+            Route::post('/it-request-form/{id}/validator-reject',  [ItRequestFormController::class, 'validatorReject'])->name('it-request-form.validator-reject');
+            Route::post('/it-request-form/clear-all-decided',     [ItRequestFormController::class, 'clearAllDecided'])->name('it-request-form.clear-all');
+            Route::post('/it-request-form/{id}/archive',          [ItRequestFormController::class, 'archiveRequest'])->name('it-request-form.archive');
+            Route::post('/it-request-form/{id}/unarchive',        [ItRequestFormController::class, 'unarchiveRequest'])->name('it-request-form.unarchive');
+            Route::post('/it-request-form/bulk-hou-approve',        [ItRequestFormController::class, 'bulkHouApprove'])->name('it-request-form.bulk-hou-approve');
+            Route::post('/it-request-form/bulk-hou-reject',         [ItRequestFormController::class, 'bulkHouReject'])->name('it-request-form.bulk-hou-reject');
+            Route::post('/it-request-form/bulk-admin-approve',      [ItRequestFormController::class, 'bulkAdminApprove'])->name('it-request-form.bulk-admin-approve');
+            Route::post('/it-request-form/bulk-admin-reject',       [ItRequestFormController::class, 'bulkAdminReject'])->name('it-request-form.bulk-admin-reject');
+            Route::post('/it-request-form/bulk-admin-archive',      [ItRequestFormController::class, 'bulkAdminArchive'])->name('it-request-form.bulk-admin-archive');
+            Route::post('/it-request-form/bulk-validator-approve',  [ItRequestFormController::class, 'bulkValidatorApprove'])->name('it-request-form.bulk-validator-approve');
+            Route::post('/it-request-form/bulk-validator-reject',   [ItRequestFormController::class, 'bulkValidatorReject'])->name('it-request-form.bulk-validator-reject');
 
             // Profile
             Route::get('/profile',                        [ProfileController::class, 'index'])->name('profile');
