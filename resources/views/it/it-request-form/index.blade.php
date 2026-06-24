@@ -73,34 +73,13 @@
 </div>
 @endif
 
-{{-- Stat cards (6 cards) --}}
-<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
+{{-- Stat cards (3 cards) --}}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
   <div class="itr-admin-stat">
     <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>
       <div class="itr-admin-stat-val">{{ $total }}</div>
       <div class="itr-admin-stat-lbl">Total Requests</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat" style="border-color:{{ $countNew ? 'rgba(217,119,6,.35)' : 'var(--border)' }}">
-    <div class="itr-admin-stat-icon" style="background:rgba(217,119,6,.1);color:#d97706"><i class="bi bi-hourglass-split"></i></div>
-    <div>
-      <div class="itr-admin-stat-val" style="{{ $countNew ? 'color:#d97706' : '' }}">{{ $countNew }}</div>
-      <div class="itr-admin-stat-lbl">Pending HOU</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat" style="border-color:{{ $countPendingIT ? 'rgba(2,132,199,.35)' : 'var(--border)' }}">
-    <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-person-check-fill"></i></div>
-    <div>
-      <div class="itr-admin-stat-val" style="{{ $countPendingIT ? 'color:#0284c7' : '' }}">{{ $countPendingIT }}</div>
-      <div class="itr-admin-stat-lbl">Pending IT</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat" style="border-color:{{ $countPendingValidation ? 'rgba(124,58,237,.35)' : 'var(--border)' }}">
-    <div class="itr-admin-stat-icon" style="background:rgba(124,58,237,.1);color:#7c3aed"><i class="bi bi-patch-check-fill"></i></div>
-    <div>
-      <div class="itr-admin-stat-val" style="{{ $countPendingValidation ? 'color:#7c3aed' : '' }}">{{ $countPendingValidation }}</div>
-      <div class="itr-admin-stat-lbl">Pending Validation</div>
     </div>
   </div>
   <div class="itr-admin-stat">
@@ -593,26 +572,22 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-step-line { flex: 1; height: 2px; background: var(--border); margin: 0 10px; border-radius: 2px; transition: background .3s; }
 .itr-step-line.done { background: var(--accent); }
 
-/* ── Step 1 type cards ── */
-.itr-type-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 8px; max-width: 320px; }
-.itr-type-card {
-  background: var(--surface); border: 2px solid var(--border);
-  border-radius: 14px; padding: 22px 16px; cursor: pointer;
-  transition: all .2s; text-align: center; position: relative; user-select: none;
-}
-.itr-type-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(2,132,199,.15); transform: translateY(-2px); }
-.itr-type-card.selected { border-color: var(--accent); background: rgba(2,132,199,.06); box-shadow: 0 4px 20px rgba(2,132,199,.2); }
-.itr-type-card.locked { opacity: .35; cursor: not-allowed; pointer-events: none; filter: grayscale(.4); }
-.itr-type-icon { width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: all .2s; }
-.hw-icon { background: rgba(59,130,246,.1); color: #3b82f6; }
-.sw-icon { background: rgba(139,92,246,.1); color: #8b5cf6; }
-.sys-icon { background: rgba(16,185,129,.1); color: #10b981; }
-.svc-icon { background: rgba(2,132,199,.1); color: var(--accent); }
-.itr-type-card.selected .itr-type-icon { transform: scale(1.08); }
-.itr-type-name { font-family:'DM Sans',sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-.itr-type-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
-.itr-type-check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: white; display: none; align-items: center; justify-content: center; font-size: 11px; }
-.itr-type-card.selected .itr-type-check { display: flex; }
+/* ── Step 1 hardware intro ── */
+.itr-hw-intro { background:var(--surface); border:2px solid var(--border); border-radius:18px; overflow:hidden; }
+.itr-hw-intro-banner { background:linear-gradient(135deg,rgba(59,130,246,.12) 0%,rgba(2,132,199,.08) 100%); border-bottom:1px solid var(--border); padding:36px 40px; display:flex; align-items:center; gap:28px; }
+.itr-hw-intro-icon { width:72px; height:72px; border-radius:18px; background:rgba(59,130,246,.15); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:34px; flex-shrink:0; }
+.itr-hw-intro-title { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:800; color:var(--text); margin-bottom:6px; }
+.itr-hw-intro-sub { font-size:13.5px; color:var(--muted); line-height:1.6; }
+.itr-hw-items-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
+.itr-hw-item { display:flex; align-items:center; gap:12px; padding:16px 20px; border-top:1px solid var(--border); }
+.itr-hw-item:nth-child(3n+2) { border-left:1px solid var(--border); border-right:1px solid var(--border); }
+.itr-hw-item-icon { width:36px; height:36px; border-radius:10px; background:rgba(59,130,246,.1); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.itr-hw-item-name { font-size:13px; font-weight:600; color:var(--text); }
+.itr-hw-item-desc { font-size:11.5px; color:var(--muted); margin-top:1px; }
+.itr-hw-cta { padding:24px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; background:var(--body-bg); border-top:1px solid var(--border); }
+.itr-hw-cta-note { font-size:12.5px; color:var(--muted); }
+.itr-hw-btn { display:inline-flex; align-items:center; gap:8px; padding:11px 28px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; }
+.itr-hw-btn:hover { background:#0272b1; box-shadow:0 4px 16px rgba(2,132,199,.35); transform:translateY(-1px); }
 .itr-locked-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; min-height: 18px; }
 
 /* ── Step 2 ── */
@@ -728,80 +703,92 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
   <!-- ══ STEP 1 ══ -->
   <div id="step1">
-    <div class="itr-type-grid">
-      <div class="itr-type-card" id="card-hardware" onclick="selectType('hardware')">
-        <div class="itr-type-check"><i class="bi bi-check"></i></div>
-        <div class="itr-type-icon hw-icon"><i class="bi bi-laptop"></i></div>
-        <div class="itr-type-name">Hardware</div>
-        <div class="itr-type-desc">Laptops, desktops, printers, phones &amp; peripherals</div>
+    <div class="itr-hw-intro">
+      <div class="itr-hw-intro-banner">
+        <div class="itr-hw-intro-icon"><i class="bi bi-laptop"></i></div>
+        <div>
+          <div class="itr-hw-intro-title">Hardware Request</div>
+          <div class="itr-hw-intro-sub">Submit a request for IT hardware equipment. All requests are reviewed and approved by IT Administration before processing.</div>
+        </div>
+      </div>
+      <div class="itr-hw-items-grid">
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-laptop"></i></div>
+          <div><div class="itr-hw-item-name">Laptop / Desktop</div><div class="itr-hw-item-desc">Workstations &amp; portables</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-printer"></i></div>
+          <div><div class="itr-hw-item-name">Printer</div><div class="itr-hw-item-desc">Office printing devices</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-phone"></i></div>
+          <div><div class="itr-hw-item-name">Mobile &amp; IP Phone</div><div class="itr-hw-item-desc">Handphones &amp; desk phones</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-tablet"></i></div>
+          <div><div class="itr-hw-item-name">Tablet</div><div class="itr-hw-item-desc">Portable tablet devices</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-hdd-network"></i></div>
+          <div><div class="itr-hw-item-name">Network Equipment</div><div class="itr-hw-item-desc">Switch, hub &amp; UPS units</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-three-dots"></i></div>
+          <div><div class="itr-hw-item-name">Other</div><div class="itr-hw-item-desc">Peripherals &amp; accessories</div></div>
+        </div>
+      </div>
+      <div class="itr-hw-cta">
+        <div class="itr-hw-cta-note"><i class="bi bi-info-circle" style="margin-right:5px"></i>Ensure your department head approves this request before submission.</div>
+        <button type="button" class="itr-hw-btn" onclick="selectType('hardware')">
+          <i class="bi bi-arrow-right-circle-fill"></i> Begin Request
+        </button>
       </div>
     </div>
-    <div class="itr-locked-note" id="locked-note"></div>
   </div>
 
-  <!-- ══ STATUS REQUEST ══ -->
+  @php
+    $ongoingForms = isset($myForms) ? $myForms->whereIn('status', ['Draft','New','Pending IT','Pending Validation'])->values() : collect();
+    $decidedForms = isset($myForms) ? $myForms->whereIn('status', ['Approved','Rejected'])->values() : collect();
+
+    // Shared card renderer macro — defined as a PHP closure to avoid duplication
+    $renderCard = function($mf) {
+      $mfTypeMap = [
+        'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
+        'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
+        'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
+        'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
+      ];
+      return $mfTypeMap[$mf->request_type] ?? ['label'=>ucfirst($mf->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+    };
+  @endphp
+
+  {{-- ══ SECTION 1: ACTIVE REQUESTS ══ --}}
   <div style="margin-top:32px" id="my-submissions">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-      <div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
-          <i class="bi bi-clipboard2-pulse-fill" style="color:var(--accent);margin-right:7px"></i>My Request Status
-        </div>
-        <div style="font-size:12.5px;color:var(--muted)">Track the progress of your IT service requests.</div>
+    <div style="margin-bottom:14px">
+      <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+        <i class="bi bi-clipboard2-pulse-fill" style="color:var(--accent);margin-right:7px"></i>Active Requests
+        @if($ongoingForms->count())
+        <span style="font-size:12px;font-weight:600;color:var(--accent);background:rgba(2,132,199,.1);border:1px solid rgba(2,132,199,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $ongoingForms->count() }}</span>
+        @endif
       </div>
-      @php $hasDecided = isset($myForms) && $myForms->whereIn('status', ['Approved','Rejected'])->count() > 0; @endphp
-      @if($hasDecided)
-      <form method="POST" action="{{ route('it.it-request-form.clear-all') }}"
-        onsubmit="return confirm('Clear all decided requests (Approved / Rejected) from your list?')" style="margin:0">
-        @csrf
-        <button type="submit"
-          style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
-          onmouseover="this.style.borderColor='rgba(100,116,139,.6)';this.style.color='#334155'" onmouseout="this.style.borderColor='rgba(100,116,139,.3)';this.style.color='#64748b'">
-          <i class="bi bi-x-circle"></i> Clear Decided
-        </button>
-      </form>
-      @endif
+      <div style="font-size:12.5px;color:var(--muted)">Your drafts and requests currently under review.</div>
     </div>
 
-    @if(isset($myForms) && $myForms->count())
+    @if($ongoingForms->count())
     <div style="display:flex;flex-direction:column;gap:12px">
-      @foreach($myForms as $mf)
+      @foreach($ongoingForms as $mf)
       @php
-        $mfTypeMap = [
-          'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
-          'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
-          'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
-          'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
-        ];
-        $mt = $mfTypeMap[$mf->request_type] ?? ['label'=>ucfirst($mf->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
-
+        $mt = $renderCard($mf);
         $isDraft    = $mf->status === 'Draft';
         $isNew      = $mf->status === 'New';
-        $isApproved = $mf->status === 'Approved';
-        $isRejected = $mf->status === 'Rejected';
-
-        // Step states: 0=pending, 1=active, 2=done
-        // Steps: Submitted → Under Review → Decision
-        if ($isDraft) {
-          $s1='pending'; $s2='pending'; $s3='pending';
-          $borderColor='var(--border)';
-        } elseif ($isNew) {
-          $s1='done'; $s2='active'; $s3='pending';
-          $borderColor='rgba(217,119,6,.4)';
-        } elseif ($isApproved) {
-          $s1='done'; $s2='done'; $s3='approved';
-          $borderColor='rgba(22,163,74,.4)';
-        } elseif ($isRejected) {
-          $s1='done'; $s2='done'; $s3='rejected';
-          $borderColor='rgba(220,38,38,.4)';
-        } else {
-          $s1='done'; $s2='active'; $s3='pending';
-          $borderColor='rgba(217,119,6,.4)';
-        }
+        $isApproved = false;
+        $isRejected = false;
+        if ($isDraft)      { $s1='pending'; $s2='pending'; $s3='pending'; $borderColor='var(--border)'; }
+        elseif ($isNew)    { $s1='done'; $s2='active'; $s3='pending'; $borderColor='rgba(217,119,6,.4)'; }
+        else               { $s1='done'; $s2='active'; $s3='pending'; $borderColor='rgba(217,119,6,.4)'; }
       @endphp
-
       <div style="background:var(--surface);border:1.5px solid {{ $borderColor }};border-radius:14px;overflow:hidden;transition:box-shadow .15s"
            onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.07)'" onmouseout="this.style.boxShadow='none'">
-
         {{-- Card header --}}
         <div style="padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)">
           <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $mt['bg'] }};color:{{ $mt['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
@@ -815,7 +802,6 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
               #{{ $mf->id }} &middot; {{ $isDraft ? 'Saved' : 'Submitted' }} {{ $mf->created_at->format('d M Y, H:i') }}
             </div>
           </div>
-          {{-- Draft actions --}}
           @if($isDraft)
           <a href="{{ route('it.it-request-form.edit', $mf->id) }}"
             style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:20px;padding:4px 12px;text-decoration:none;flex-shrink:0;background:transparent;transition:background .15s"
@@ -833,15 +819,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </form>
           @endif
         </div>
-
         {{-- Status tracker --}}
         <div style="padding:16px 20px">
           <div style="display:flex;align-items:flex-start;gap:0">
-
-            {{-- Step 1: Submitted --}}
             @php
-              $c1 = $s1==='done' ? '#16a34a' : ($s1==='active' ? '#0284c7' : '#cbd5e1');
-              $bg1 = $s1==='done' ? 'rgba(22,163,74,.12)' : ($s1==='active' ? 'rgba(2,132,199,.12)' : 'rgba(203,213,225,.2)');
+              $c1 = $s1==='done' ? '#16a34a' : '#cbd5e1';
+              $bg1 = $s1==='done' ? 'rgba(22,163,74,.12)' : 'rgba(203,213,225,.2)';
             @endphp
             <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
               <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg1 }};border:2px solid {{ $c1 }};display:flex;align-items:center;justify-content:center;font-size:15px;color:{{ $c1 }}">
@@ -849,16 +832,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
               </div>
               <div style="font-size:10.5px;font-weight:700;color:{{ $c1 }};text-align:center;line-height:1.3">Submitted</div>
             </div>
-
-            {{-- Line 1→2 --}}
             @php $line1 = ($s1==='done') ? '#16a34a' : '#e2e8f0'; @endphp
             <div style="flex:1;height:2px;background:{{ $line1 }};margin-top:16px;border-radius:2px"></div>
-
-            {{-- Step 2: Under Review --}}
             @php
-              $c2 = $s2==='done' ? '#16a34a' : ($s2==='active' ? '#d97706' : '#cbd5e1');
-              $bg2 = $s2==='done' ? 'rgba(22,163,74,.12)' : ($s2==='active' ? 'rgba(217,119,6,.12)' : 'rgba(203,213,225,.2)');
-              $i2  = $s2==='done' ? 'bi-check-lg' : ($s2==='active' ? 'bi-hourglass-split' : 'bi-hourglass');
+              $c2 = $s2==='active' ? '#d97706' : '#cbd5e1';
+              $bg2 = $s2==='active' ? 'rgba(217,119,6,.12)' : 'rgba(203,213,225,.2)';
+              $i2  = $s2==='active' ? 'bi-hourglass-split' : 'bi-hourglass';
             @endphp
             <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
               <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg2 }};border:2px solid {{ $c2 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c2 }}">
@@ -866,55 +845,169 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
               </div>
               <div style="font-size:10.5px;font-weight:700;color:{{ $c2 }};text-align:center;line-height:1.3">Under Review</div>
             </div>
-
-            {{-- Line 2→3 --}}
-            @php $line2 = ($s2==='done') ? '#16a34a' : '#e2e8f0'; @endphp
-            <div style="flex:1;height:2px;background:{{ $line2 }};margin-top:16px;border-radius:2px"></div>
-
-            {{-- Step 3: Decision --}}
-            @php
-              if ($s3==='approved') { $c3='#16a34a'; $bg3='rgba(22,163,74,.12)'; $i3='bi-check-circle-fill'; $l3='Approved'; }
-              elseif ($s3==='rejected') { $c3='#dc2626'; $bg3='rgba(220,38,38,.12)'; $i3='bi-x-circle-fill'; $l3='Rejected'; }
-              else { $c3='#cbd5e1'; $bg3='rgba(203,213,225,.2)'; $i3='bi-circle'; $l3='Decision'; }
-            @endphp
+            <div style="flex:1;height:2px;background:#e2e8f0;margin-top:16px;border-radius:2px"></div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
-              <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg3 }};border:2px solid {{ $c3 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c3 }}">
-                <i class="bi {{ $i3 }}"></i>
+              <div style="width:34px;height:34px;border-radius:50%;background:rgba(203,213,225,.2);border:2px solid #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#cbd5e1">
+                <i class="bi bi-circle"></i>
               </div>
-              <div style="font-size:10.5px;font-weight:700;color:{{ $c3 }};text-align:center;line-height:1.3">{{ $l3 }}</div>
-            </div>
-
-          </div>
-
-          {{-- Remarks --}}
-          @if($mf->approval_remarks)
-          <div style="margin-top:14px;padding:10px 14px;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:flex-start;gap:8px">
-            <i class="bi bi-chat-left-text-fill" style="color:var(--muted);font-size:13px;flex-shrink:0;margin-top:1px"></i>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Remarks from IT Admin</div>
-              <div style="font-size:12.5px;color:var(--text)">{{ $mf->approval_remarks }}</div>
+              <div style="font-size:10.5px;font-weight:700;color:#cbd5e1;text-align:center;line-height:1.3">Decision</div>
             </div>
           </div>
-          @endif
-
-          {{-- Review date --}}
-          @if($mf->reviewed_at)
-          <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:right">
-            Reviewed on {{ \Carbon\Carbon::parse($mf->reviewed_at)->format('d M Y, H:i') }}
-          </div>
-          @endif
         </div>
       </div>
       @endforeach
     </div>
     @else
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:40px 20px;text-align:center;color:var(--muted)">
-      <i class="bi bi-clipboard2-x" style="font-size:30px;display:block;margin-bottom:10px;opacity:.35"></i>
-      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No requests yet</div>
-      <div style="font-size:12.5px">Your submitted IT requests will appear here.</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+      <i class="bi bi-inbox" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No active requests</div>
+      <div style="font-size:12.5px">Drafts and requests under review will appear here.</div>
     </div>
     @endif
   </div>
+
+  {{-- ══ SECTION 2: DECIDED REQUESTS ══ --}}
+  <div style="margin-top:28px" id="my-decided">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+          <i class="bi bi-check2-circle" style="color:#16a34a;margin-right:7px"></i>Decided Requests
+          @if($decidedForms->count())
+          <span style="font-size:12px;font-weight:600;color:#64748b;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.2);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $decidedForms->count() }}</span>
+          @endif
+        </div>
+        <div style="font-size:12.5px;color:var(--muted)">Requests that have been approved or rejected.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        @if($decidedForms->count())
+        <form method="POST" action="{{ route('it.it-request-form.clear-all') }}"
+          onsubmit="return confirm('Clear all decided requests (Approved / Rejected) from your list?')" style="margin:0">
+          @csrf
+          <button type="submit"
+            style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+            onmouseover="this.style.borderColor='rgba(100,116,139,.6)';this.style.color='#334155'" onmouseout="this.style.borderColor='rgba(100,116,139,.3)';this.style.color='#64748b'">
+            <i class="bi bi-x-circle"></i> Clear All
+          </button>
+        </form>
+        <button onclick="toggleDecided()" id="decidedToggleBtn"
+          style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
+          onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+          <i class="bi bi-chevron-down" id="decidedToggleIcon"></i> Show
+        </button>
+        @endif
+      </div>
+    </div>
+
+    <div id="decidedList" style="display:none">
+      @if($decidedForms->count())
+      <div style="display:flex;flex-direction:column;gap:12px">
+        @foreach($decidedForms as $mf)
+        @php
+          $mt = $renderCard($mf);
+          $isApproved = $mf->status === 'Approved';
+          $isRejected = $mf->status === 'Rejected';
+          $borderColor = $isApproved ? 'rgba(22,163,74,.4)' : 'rgba(220,38,38,.4)';
+        @endphp
+        <div style="background:var(--surface);border:1.5px solid {{ $borderColor }};border-radius:14px;overflow:hidden;transition:box-shadow .15s"
+             onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.07)'" onmouseout="this.style.boxShadow='none'">
+          {{-- Card header --}}
+          <div style="padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)">
+            <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $mt['bg'] }};color:{{ $mt['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
+              <i class="bi {{ $mt['icon'] }}" style="font-size:11px"></i>{{ $mt['label'] }}
+            </span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                {{ $mf->subject }}
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">
+                #{{ $mf->id }} &middot; Submitted {{ $mf->created_at->format('d M Y, H:i') }}
+              </div>
+            </div>
+            {{-- Status badge --}}
+            @if($isApproved)
+            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(22,163,74,.1);color:#16a34a;border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
+              <i class="bi bi-check-circle-fill"></i> Approved
+            </span>
+            @else
+            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(220,38,38,.1);color:#dc2626;border:1px solid rgba(220,38,38,.3);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
+              <i class="bi bi-x-circle-fill"></i> Rejected
+            </span>
+            @endif
+          </div>
+          {{-- Status tracker --}}
+          <div style="padding:16px 20px">
+            <div style="display:flex;align-items:flex-start;gap:0">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(22,163,74,.12);border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;font-size:15px;color:#16a34a">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#16a34a;text-align:center;line-height:1.3">Submitted</div>
+              </div>
+              <div style="flex:1;height:2px;background:#16a34a;margin-top:16px;border-radius:2px"></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(22,163,74,.12);border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#16a34a">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#16a34a;text-align:center;line-height:1.3">Reviewed</div>
+              </div>
+              <div style="flex:1;height:2px;background:{{ $isApproved ? '#16a34a' : '#dc2626' }};margin-top:16px;border-radius:2px"></div>
+              @if($isApproved)
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(22,163,74,.12);border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#16a34a">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#16a34a;text-align:center;line-height:1.3">Approved</div>
+              </div>
+              @else
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(220,38,38,.12);border:2px solid #dc2626;display:flex;align-items:center;justify-content:center;font-size:14px;color:#dc2626">
+                  <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#dc2626;text-align:center;line-height:1.3">Rejected</div>
+              </div>
+              @endif
+            </div>
+
+            {{-- Remarks --}}
+            @if($mf->approval_remarks)
+            <div style="margin-top:14px;padding:10px 14px;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:flex-start;gap:8px">
+              <i class="bi bi-chat-left-text-fill" style="color:var(--muted);font-size:13px;flex-shrink:0;margin-top:1px"></i>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Remarks from IT Admin</div>
+                <div style="font-size:12.5px;color:var(--text)">{{ $mf->approval_remarks }}</div>
+              </div>
+            </div>
+            @endif
+            {{-- Review date --}}
+            @if($mf->reviewed_at)
+            <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:right">
+              Reviewed on {{ \Carbon\Carbon::parse($mf->reviewed_at)->format('d M Y, H:i') }}
+            </div>
+            @endif
+          </div>
+        </div>
+        @endforeach
+      </div>
+      @else
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+        <i class="bi bi-check2-circle" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+        <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No decided requests</div>
+        <div style="font-size:12.5px">Approved and rejected requests will appear here.</div>
+      </div>
+      @endif
+    </div>
+  </div>
+
+  <script>
+  function toggleDecided() {
+    var list = document.getElementById('decidedList');
+    var open = list.style.display !== 'none';
+    list.style.display = open ? 'none' : 'block';
+    document.getElementById('decidedToggleBtn').innerHTML = open
+      ? '<i class="bi bi-chevron-down" id="decidedToggleIcon"></i> Show'
+      : '<i class="bi bi-chevron-up"   id="decidedToggleIcon"></i> Hide';
+  }
+  </script>
 
   {{-- ══ HOU: PENDING APPROVAL REQUESTS ══ --}}
   @if($user->it_role === 'hou')
@@ -1326,7 +1419,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div class="itr-selected-banner">
       <div class="itr-selected-pill"><i id="banner-icon"></i><span id="banner-label"></span></div>
       <div class="itr-banner-text">Fields marked <strong style="color:var(--red)">*</strong> are required only when submitting to IT Admin. You may <strong>Save as Draft</strong> at any time with incomplete fields.</div>
-      <button type="button" class="itr-change-btn" onclick="changeType()"><i class="bi bi-arrow-left"></i> Change Type</button>
+      <button type="button" class="itr-change-btn" onclick="changeType()"><i class="bi bi-arrow-left"></i> Go Back</button>
     </div>
 
     <!-- Shared subject row (rendered per-form via JS copy, but we place it inside each form below) -->
@@ -1367,7 +1460,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>IP Phone</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Switch/Hub</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>UPS</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Walkie-Talkie</div>
+
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Allow Install Software</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Allow USB Drive</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Color Printing Quota</div>
@@ -1480,19 +1573,13 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
 <script>
 const typeConfig = {
-  hardware: { label: 'Hardware',  icon: 'bi-laptop',      form: 'form-hardware' }
+  hardware: { label: 'Hardware', icon: 'bi-laptop', form: 'form-hardware' },
 };
 let activeType = null;
 
 function selectType(type) {
   activeType = type;
   saveFormState();
-  Object.keys(typeConfig).forEach(t => {
-    const card = document.getElementById('card-' + t);
-    card.classList.toggle('selected', t === type);
-    card.classList.toggle('locked', t !== type);
-  });
-  document.getElementById('locked-note').textContent = 'Other request types are locked. Click "Change Type" to start over.';
 
   const cfg = typeConfig[type];
   document.getElementById('banner-icon').className = 'bi ' + cfg.icon;
@@ -1507,15 +1594,18 @@ function selectType(type) {
 
   const s1 = document.getElementById('step1');
   const ms = document.getElementById('my-submissions');
+  const md = document.getElementById('my-decided');
   const houSec = document.getElementById('hou-pending-section');
   const valSec = document.getElementById('validator-pending-section');
   s1.style.opacity = '0';
   if (ms) ms.style.opacity = '0';
+  if (md) md.style.opacity = '0';
   if (houSec) houSec.style.opacity = '0';
   if (valSec) valSec.style.opacity = '0';
   setTimeout(() => {
     s1.style.display = 'none';
     if (ms) ms.style.display = 'none';
+    if (md) md.style.display = 'none';
     if (houSec) houSec.style.display = 'none';
     if (valSec) valSec.style.display = 'none';
     const s2 = document.getElementById('step2');
@@ -1528,8 +1618,6 @@ function selectType(type) {
 function changeType() {
   sessionStorage.removeItem('itr_form_state');
   activeType = null;
-  Object.keys(typeConfig).forEach(t => { document.getElementById('card-' + t).classList.remove('selected','locked'); });
-  document.getElementById('locked-note').textContent = '';
   document.getElementById('prog-step1').className = 'itr-step active';
   document.getElementById('prog-step2').className = 'itr-step';
   document.getElementById('prog-line').className = 'itr-step-line';
@@ -1541,13 +1629,16 @@ function changeType() {
     const ms = document.getElementById('my-submissions');
     const houSec = document.getElementById('hou-pending-section');
     const valSec = document.getElementById('validator-pending-section');
+    const mdEl = document.getElementById('my-decided');
     s1.style.display = 'block'; s1.style.opacity = '0';
     if (ms) { ms.style.display = 'block'; ms.style.opacity = '0'; }
+    if (mdEl) { mdEl.style.display = 'block'; mdEl.style.opacity = '0'; }
     if (houSec) { houSec.style.display = 'block'; houSec.style.opacity = '0'; }
     if (valSec) { valSec.style.display = 'block'; valSec.style.opacity = '0'; }
     requestAnimationFrame(() => {
       s1.style.transition = 'opacity .25s'; s1.style.opacity = '1';
       if (ms) { ms.style.transition = 'opacity .25s'; ms.style.opacity = '1'; }
+      if (mdEl) { mdEl.style.transition = 'opacity .25s'; mdEl.style.opacity = '1'; }
       if (houSec) { houSec.style.transition = 'opacity .25s'; houSec.style.opacity = '1'; }
       if (valSec) { valSec.style.transition = 'opacity .25s'; valSec.style.opacity = '1'; }
     });
@@ -1596,7 +1687,9 @@ function validateAndSubmit(type, event) {
   // Use event.submitter (which button triggered submit) — immune to onclick order or hidden-input state
   var isDraft = !!(event && event.submitter && event.submitter.value === 'draft');
 
-  var chipMap = { hardware: ['hw-items-grid', 'hw_items'] };
+  var chipMap = {
+    hardware: ['hw-items-grid', 'hw_items'],
+  };
 
   if (isDraft) {
     // Collect chips so partial selections are saved, but always allow submission
@@ -1659,7 +1752,6 @@ function collectChips(gridId, fieldName) {
     card.classList.toggle('selected', t === oldType);
     card.classList.toggle('locked', t !== oldType);
   });
-  document.getElementById('locked-note').textContent = 'Other request types are locked. Click "Change Type" to start over.';
   var cfg = typeConfig[oldType];
   document.getElementById('banner-icon').className = 'bi ' + cfg.icon;
   document.getElementById('banner-label').textContent = cfg.label + ' Request';
@@ -1726,7 +1818,6 @@ function restoreFromSession() {
     document.getElementById('card-' + t).classList.toggle('selected', t === state.type);
     document.getElementById('card-' + t).classList.toggle('locked',   t !== state.type);
   });
-  document.getElementById('locked-note').textContent = 'Other request types are locked. Click "Change Type" to start over.';
   document.getElementById('banner-icon').className   = 'bi ' + cfg.icon;
   document.getElementById('banner-label').textContent = cfg.label + ' Request';
   Object.values(typeConfig).forEach(function(c) { document.getElementById(c.form).style.display = 'none'; });

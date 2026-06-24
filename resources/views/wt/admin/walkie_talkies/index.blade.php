@@ -1424,7 +1424,6 @@
     @php
         $walkieRadioIds = $walkies->pluck('radio_id')->filter()->unique()->sort()->values();
         $walkieSerials = $walkies->pluck('serial_number')->filter()->unique()->sort()->values();
-        $walkieOwnerships = $walkies->pluck('ownership')->filter()->unique()->sort()->values();
         // $walkieModels, $walkieDepartments, $walkiePositions come from the
         // controller (WT master data, merged with existing values).
         $walkieTemporaryIds = $walkies->pluck('temporary_radio_id')->filter()->unique()->sort()->values();
@@ -1857,12 +1856,12 @@
                     {{-- Ownership --}}
                     <div class="form-group">
                         <label class="form-label">Ownership Name</label>
-                        <select name="ownership" id="add_ownership" class="form-input modal-tag-select" data-placeholder="Type or select ownership">
+                        <select name="ownership" id="add_ownership" class="form-input modal-smart-select" data-placeholder="Select staff">
                             <option value=""></option>
-                            @foreach($walkieOwnerships as $ownership)
+                            @foreach($staffOwnerships as $ownership)
                             <option value="{{ $ownership }}" @selected(old('ownership') === $ownership)>{{ $ownership }}</option>
                             @endforeach
-                            @if(old('ownership') && !$walkieOwnerships->contains(old('ownership')))
+                            @if(old('ownership') && !$staffOwnerships->contains(old('ownership')))
                             <option value="{{ old('ownership') }}" selected>{{ old('ownership') }}</option>
                             @endif
                         </select>
@@ -2058,9 +2057,9 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership</label>
-                        <select name="ownership" id="edit_ownership" class="form-input modal-tag-select" data-placeholder="Type or select ownership">
+                        <select name="ownership" id="edit_ownership" class="form-input modal-smart-select" data-placeholder="Select staff">
                             <option value=""></option>
-                            @foreach($walkieOwnerships as $ownership)
+                            @foreach($staffOwnerships as $ownership)
                             <option value="{{ $ownership }}">{{ $ownership }}</option>
                             @endforeach
                         </select>
