@@ -1208,5 +1208,128 @@ html.dark body .content-surface .duplicate-table-shell #duplicateTable tbody tr:
 html.dark body .content-surface .duplicate-table-info {
     color: #dbeafe !important;
 }
+
+body .content-surface .duplicate-search-panel {
+    display: grid !important;
+    grid-template-columns: minmax(260px, 1fr) 160px 160px 78px !important;
+    align-items: end !important;
+    gap: 10px !important;
+    padding: 9px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 9px !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+}
+
+body .content-surface .duplicate-filter-field {
+    display: block !important;
+    min-width: 0 !important;
+}
+
+body .content-surface .duplicate-filter-field label {
+    display: block !important;
+    margin: 0 0 5px !important;
+    color: #526781 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: .14em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+}
+
+body .content-surface .duplicate-search,
+body .content-surface .duplicate-filter-select,
+body .content-surface .duplicate-filter-reset {
+    width: 100% !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 13px !important;
+    font-weight: 650 !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+}
+
+body .content-surface .duplicate-search {
+    padding: 0 12px !important;
+}
+
+body .content-surface .duplicate-filter-select {
+    padding: 0 30px 0 12px !important;
+}
+
+body .content-surface .duplicate-filter-reset {
+    padding: 0 10px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    min-width: 1040px !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable :is(th, td):nth-child(7) {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+}
+
+body .content-surface #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface #duplicateTable .dup-actions .btn,
+body .content-surface #duplicateTable .dup-actions button,
+body .content-surface #duplicateTable .dup-actions a {
+    width: auto !important;
+    min-width: 68px !important;
+    max-width: none !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    letter-spacing: .02em !important;
+    text-transform: none !important;
+}
+
+html.dark body .content-surface .duplicate-search-panel {
+    border-color: #334155 !important;
+    background: #111827 !important;
+}
+
+html.dark body .content-surface .duplicate-filter-field label {
+    color: #94a3b8 !important;
+}
+
+html.dark body .content-surface .duplicate-search,
+html.dark body .content-surface .duplicate-filter-select,
+html.dark body .content-surface .duplicate-filter-reset {
+    border-color: #334155 !important;
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+@media (max-width: 900px) {
+    body .content-surface .duplicate-search-panel {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    body .content-surface .duplicate-filter-reset {
+        grid-column: 1 / -1 !important;
+    }
+}
 </style>
 @endsection
