@@ -1563,13 +1563,7 @@
                     <col class="inventory-status-colgroup">
                     <col class="inventory-serial-colgroup">
                     <col class="inventory-model-colgroup">
-                    <col class="inventory-ownership-type-colgroup">
                     <col class="inventory-ownership-colgroup">
-                    <col class="inventory-position-colgroup">
-                    <col class="inventory-department-colgroup">
-                    <col class="inventory-temporary-colgroup">
-                    <col class="inventory-tracking-colgroup">
-                    <col class="inventory-remarks-colgroup">
                     <col class="inventory-action-colgroup">
                 </colgroup>
                 <thead>
@@ -1581,13 +1575,7 @@
                         <th class="px-3 py-3">STATUS</th>
                         <th class="px-3 py-3">SERIAL NO.</th>
                         <th class="px-3 py-3">MODEL</th>
-                        <th class="px-3 py-3">OWNERSHIP TYPE</th>
-                        <th class="px-3 py-3">OWNERSHIP</th>
-                        <th class="px-3 py-3">POSITION</th>
-                        <th class="px-3 py-3">DEPARTMENT</th>
-                        <th class="px-3 py-3">TEMP / SWAPPED WT ID</th>
-                        <th class="px-3 py-3 inventory-tracking-col">TRACKING REF</th>
-                        <th class="px-3 py-3 inventory-remarks-col">REMARKS</th>
+                        <th class="px-3 py-3">ASSIGNED TO</th>
                         <th class="px-3 py-3 text-center inventory-action-col" data-label="ACTION"><span class="inventory-action-heading">ACTION</span></th>
                     </tr>
                 </thead>
@@ -1623,25 +1611,8 @@
                             <div class="inventory-item-title">{{ $w->model ?: 'NO MODEL' }}</div>
                         </td>
                         <td>
-                            <span class="clean-admin-pill inventory-type-badge">{{ $w->ownership_type ?: '-' }}</span>
-                        </td>
-                        <td>
-                            {{ $w->ownership ?: '-' }}
-                        </td>
-                        <td>
-                            {{ $w->position ?: '-' }}
-                        </td>
-                        <td>
-                            {{ $w->department ?: '-' }}
-                        </td>
-                        <td>
-                            {{ $w->temporary_radio_id ?: '-' }}
-                        </td>
-                        <td class="inventory-tracking-col">
-                            {{ $w->tracking_ref ?: '-' }}
-                        </td>
-                        <td class="inventory-remarks-col">
-                            <div class="inventory-remark-cell" title="{{ $w->remark ?: '-' }}">{{ $w->remark ?: '-' }}</div>
+                            <div class="inventory-item-title">{{ $w->ownership ?: '-' }}</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $w->department ?: '-' }} / {{ $w->ownership_type ?: '-' }}</div>
                         </td>
                         <td class="text-center inventory-action-col">
                             @if(auth('wt')->user()->wt_role === 'admin_it')

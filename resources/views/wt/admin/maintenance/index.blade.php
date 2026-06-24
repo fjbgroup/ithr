@@ -591,15 +591,7 @@
                 <th class="px-3 py-3">Status</th>
                 <th class="px-3 py-3">Serial No.</th>
                 <th class="px-3 py-3">Model</th>
-                <th class="px-3 py-3">Ownership Type</th>
-                <th class="px-3 py-3">Current Ownership</th>
-                <th class="px-3 py-3">Department</th>
-                <th class="px-3 py-3">Received Date</th>
-                <th class="px-3 py-3">Repair Date</th>
-                <th class="px-3 py-3">Done</th>
-                <th class="px-3 py-3">Finish Date</th>
-                <th class="px-3 py-3 maintenance-issue-col">Issue</th>
-                <th class="px-3 py-3 maintenance-remarks-col">Remarks</th>
+                <th class="px-3 py-3">Issue / Received</th>
                 <th class="px-3 py-3 maintenance-action-col">Action</th>
             </tr>
         </thead>
@@ -622,28 +614,8 @@
                 <td>{{ $r->serial_number ?? '-' }}</td>
                 <td>{{ $r->model ?? '-' }}</td>
                 <td>
-                    @php
-                        $ownershipType = strtoupper(trim((string) ($r->walkieTalkie->ownership_type ?? $r->ownership_type ?? '')));
-                    @endphp
-                    {{ in_array($ownershipType, ['INDIVIDUAL', 'SHARED', 'SPARE'], true) ? $ownershipType : '-' }}
-                </td>
-                <td>{{ $r->current_ownership ?? '-' }}</td>
-                <td>{{ $r->department_name ?? '-' }}</td>
-                <td>{{ $r->received_date ?? '-' }}</td>
-                <td>{{ $r->repair_date ?? '-' }}</td>
-                <td class="text-center">
-                    @if($r->done)
-                    <span class="clean-admin-pill">YES</span>
-                    @else
-                    <span class="clean-admin-pill">NO</span>
-                    @endif
-                </td>
-                <td>{{ $r->finish_date ?? '-' }}</td>
-                <td class="maintenance-issue-col">
-                    <div class="line-clamp-1">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
-                </td>
-                <td class="maintenance-remarks-col">
-                    <div class="line-clamp-1 italic">{{ $r->remarks ?? '-' }}</div>
+                    <div class="inventory-item-title">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $r->received_date ?? '-' }}</div>
                 </td>
                 <td class="maintenance-action-col">
                     <div class="maintenance-action-stack">
@@ -1402,6 +1374,165 @@ html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody tr:hover t
 html.dark .maintenance-page-shell .repair-table-footer {
     background: #111827 !important;
     border-color: #263244 !important;
+}
+
+html.dark .maintenance-page-shell .repair-table-info {
+    color: #dbeafe !important;
+}
+</style>
+
+<style id="under-repair-compact-standard-final">
+.maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+}
+
+.maintenance-page-shell #mainTableContainer .clean-admin-table-scroll {
+    background: #ffffff !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table {
+    width: 100% !important;
+    min-width: 860px !important;
+    border: 0 !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table thead th {
+    height: 46px !important;
+    padding: 0 16px !important;
+    border: 1px solid #d8e1ed !important;
+    background: #eef3f8 !important;
+    color: #526781 !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table tbody td {
+    height: 38px !important;
+    padding: 8px 16px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    font-size: 12px !important;
+    font-weight: 650 !important;
+    line-height: 1.25 !important;
+    vertical-align: middle !important;
+}
+
+.maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(1) { width: 12% !important; }
+.maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(2) { width: 14% !important; }
+.maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(3) { width: 16% !important; }
+.maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(4) { width: 14% !important; }
+.maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(5) { width: 24% !important; }
+.maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(6) { width: 20% !important; }
+
+.maintenance-page-shell #maintTable.clean-admin-table tbody tr:hover td {
+    background: #f8fafc !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-col {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    text-align: center !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-stack {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-stack form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-stack .wt-btn {
+    min-width: 64px !important;
+    width: auto !important;
+    max-width: none !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 9px !important;
+    border-radius: 7px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .08em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-view {
+    border-color: #0284c7 !important;
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-edit {
+    border-color: #2563eb !important;
+    background: #2563eb !important;
+    color: #ffffff !important;
+}
+
+.maintenance-page-shell #maintTable .maintenance-action-delete {
+    border-color: #dc2626 !important;
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+.maintenance-page-shell .repair-table-footer {
+    min-height: 54px !important;
+    padding: 10px 16px !important;
+    border-top: 1px solid #d8e1ed !important;
+    background: #ffffff !important;
+}
+
+.maintenance-page-shell .repair-table-info {
+    color: #020617 !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+html.dark .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+html.dark .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+html.dark .maintenance-page-shell #maintTable.clean-admin-table,
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody tr,
+html.dark .maintenance-page-shell .repair-table-footer {
+    border-color: #334155 !important;
+    background: #111827 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table thead th {
+    border-color: #334155 !important;
+    background: #1f2937 !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody td {
+    border-color: #334155 !important;
+    background: #111827 !important;
+    color: #dbe4f0 !important;
+}
+
+html.dark .maintenance-page-shell #maintTable.clean-admin-table tbody tr:hover td {
+    background: #172033 !important;
 }
 
 html.dark .maintenance-page-shell .repair-table-info {

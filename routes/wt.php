@@ -73,6 +73,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::get('/handover', [HandoverController::class, 'index'])->middleware('wt.role:admin_it')->name('handover.index');
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
+        Route::get('/returns/search', [InteractionController::class, 'searchReturn'])->name('returns.search');
         Route::post('/returns', [InteractionController::class, 'storeReturn'])->name('returns.store');
         Route::get('/damages/create', [InteractionController::class, 'createDamage'])->name('damages.create');
         Route::get('/damages/new', [InteractionController::class, 'createDamageForm'])->name('damages.form');
@@ -139,6 +140,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
 
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
+        Route::get('/returns/search', [InteractionController::class, 'searchReturn'])->name('returns.search');
         Route::post('/returns', [InteractionController::class, 'storeReturn'])->name('returns.store');
 
         Route::get('/damages/create', [InteractionController::class, 'createDamage'])->name('damages.create');
