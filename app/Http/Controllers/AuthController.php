@@ -313,7 +313,7 @@ class AuthController extends Controller
             return redirect()->route('rooms.bookings.process-pending');
         }
 
-        return redirect()->intended('dashboard');
+        return redirect()->intended(route('dashboard'));
     }
 
     public function logout(Request $request)

@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Mark Attendance — {{ config('app.name', 'HR System') }}</title>
-<link rel="shortcut icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623" type="image/jpeg">
-<link rel="apple-touch-icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623">
+@include('partials.favicons')
 <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.setAttribute('data-theme', 'dark');

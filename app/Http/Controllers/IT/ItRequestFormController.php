@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\IT;
 
 use App\Models\IT\ItRequestForm;
+use App\Models\Staff;
 use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
 use Illuminate\Http\Request;
@@ -54,7 +55,11 @@ class ItRequestFormController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('it.it-request-form.index', ['user' => $user, 'myForms' => $myForms]);
+        $staffList = Staff::where('is_active', 1)->orderBy('name')->get(['id', 'staff_no', 'name', 'position', 'department_id'])->map(function ($s) {
+            return ['name' => $s->name, 'dept' => optional($s->department)->name ?? ''];
+        });
+
+        return view('it.it-request-form.index', ['user' => $user, 'myForms' => $myForms, 'staffList' => $staffList]);
     }
 
     public function savedDrafts()
@@ -100,7 +105,7 @@ class ItRequestFormController extends Controller
 
         $rules = [
             'request_type' => 'required|in:hardware,software,system,service',
-            'subject'      => $isDraft ? 'nullable|string|max:200' : 'required|string|max:200',
+            'subject'      => 'nullable|string|max:200',
             'document'     => 'nullable|file|max:2048|mimes:pdf,doc,docx,jpg,jpeg,png',
         ];
 
@@ -109,31 +114,20 @@ class ItRequestFormController extends Controller
                 'user_type'         => 'required|string',
                 'exit_join_date'    => 'required|date',
                 'justification'     => 'required|string',
-                'user_name'         => 'required|string',
-                'user_email'        => 'required|email',
-                'user_address'      => 'required|string',
-                'user_department'   => 'required|string',
-                'user_designation'  => 'required|string',
-                'user_staff_id'     => 'required|string',
-                'user_contact'      => 'required|string',
                 'req_name'          => 'required|string',
                 'req_department'    => 'required|string',
                 'req_staff_id'      => 'required|string',
                 'req_designation'   => 'required|string',
                 'req_contact'       => 'required|string',
-                'req_company'       => 'required|string',
                 'approver_name'        => 'required|string',
                 'approver_department'  => 'required|string',
                 'approver_designation' => 'required|string',
                 'approver_contact'     => 'required|string',
-                'approver_company'     => 'required|string',
             ];
 
             if ($type === 'hardware') {
                 $rules['hw_request_type'] = 'required|string';
                 $rules['hw_items']        = 'required|array|min:1';
-                $rules['hw_pc_laptop_no'] = 'required|string';
-                $rules['hw_printer_no']   = 'required|string';
             } elseif ($type === 'software') {
                 $rules['sw_request_type']   = 'required|string';
                 $rules['sw_budgeted']       = 'required|string';
@@ -246,28 +240,19 @@ class ItRequestFormController extends Controller
         $req = $isDraft ? 'nullable' : 'required';
 
         $rules = [
-            'subject'           => "$req|string|max:200",
+            'subject'           => 'nullable|string|max:200',
             'user_type'         => "$req|string",
             'exit_join_date'    => "$req|date",
             'justification'     => "$req|string",
-            'user_name'         => "$req|string",
-            'user_email'        => $isDraft ? 'nullable|email' : 'required|email',
-            'user_address'      => "$req|string",
-            'user_department'   => "$req|string",
-            'user_designation'  => "$req|string",
-            'user_staff_id'     => "$req|string",
-            'user_contact'      => "$req|string",
             'req_name'          => "$req|string",
             'req_department'    => "$req|string",
             'req_staff_id'      => "$req|string",
             'req_designation'   => "$req|string",
             'req_contact'       => "$req|string",
-            'req_company'       => "$req|string",
             'approver_name'        => "$req|string",
             'approver_department'  => "$req|string",
             'approver_designation' => "$req|string",
             'approver_contact'     => "$req|string",
-            'approver_company'     => "$req|string",
             'document'          => 'nullable|file|max:2048|mimes:pdf,doc,docx,jpg,jpeg,png',
         ];
 

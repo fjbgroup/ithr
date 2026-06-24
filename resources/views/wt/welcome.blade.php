@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>WT System</title>
-        <link rel="shortcut icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623" type="image/jpeg">
-        <link rel="apple-touch-icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623">
+        
+<title>WT System</title>
+@include('partials.favicons')
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
