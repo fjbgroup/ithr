@@ -72,7 +72,7 @@
         Good Morning, {{ $user->full_name }}
       </div>
       <div style="font-size:12px;color:#93c5fd;margin-top:5px;font-weight:500">
-        {{ now()->format('l, d F Y') }} &nbsp;·&nbsp; {{ $user->isAdmin() ? 'IT Admin' : $user->roleName() }}
+        {{ now()->format('l, d F Y') }} &nbsp;·&nbsp; {{ $user->isAdmin() ? 'IT Admin' : $user->getItRoleLabel() }}
       </div>
     </div>
 

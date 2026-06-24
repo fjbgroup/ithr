@@ -104,7 +104,7 @@
 
       {{-- Hidden fields populated by the modal on Confirm & Close --}}
       <input type="hidden" name="writeoff_name"        value="{{ $user->full_name }}">
-      <input type="hidden" name="writeoff_designation" value="{{ $user->roleName() ?? 'Staff' }}">
+      <input type="hidden" name="writeoff_designation" value="{{ $user->getItRoleLabel() }}">
       <input type="hidden" name="writeoff_date"        value="{{ now()->toDateString() }}">
       <input type="hidden" name="writeoff_sig_img"     id="woSigImgField"  value="">
       <input type="hidden" name="hou_user_id"          id="houHiddenField" value="">

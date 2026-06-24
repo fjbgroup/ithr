@@ -588,8 +588,8 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
       @endif
       <div class="user-info">
         <div class="user-name">{{ $user->full_name }}</div>
-        <div class="user-role" style="color:{{ $user->isAdmin() ? 'var(--accent)' : ($user->isFinanceAdmin() ? '#38bdf8' : ($user->isCEO() ? '#f59e0b' : ($user->isGM() ? '#2dd4bf' : ($user->isHOU() ? '#a78bfa' : 'rgba(255,255,255,.4)')))) }}">
-          {{ $user->roleName() }}
+        <div class="user-role" style="color:{{ match($user->it_role) { 'admin_it', 'admin' => 'var(--accent)', 'finance_admin' => '#38bdf8', 'ceo' => '#f59e0b', 'gm' => '#2dd4bf', 'hou' => '#a78bfa', default => 'rgba(255,255,255,.4)' } }}">
+          {{ $user->getItRoleLabel() }}
         </div>
       </div>
       <i class="bi bi-gear" style="color:rgba(255,255,255,.3);font-size:13px;flex-shrink:0"></i>
@@ -636,7 +636,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
       </div>
 
       <a href="{{ route('it.profile') }}" class="topbar-user">
-        <span class="topbar-role-badge">{{ $user->roleName() }}</span>
+        <span class="topbar-role-badge">{{ $user->getItRoleLabel() }}</span>
         <span class="topbar-user-name">{{ $user->full_name }}</span>
       </a>
       <button class="theme-toggle" id="themeToggle" title="Toggle light/dark" onclick="toggleTheme()">
