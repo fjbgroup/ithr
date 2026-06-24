@@ -1162,7 +1162,7 @@
                     <p class="text-[10px] font-black text-sky-800 uppercase tracking-widest">ID guide image</p>
                     <p class="mt-2 text-[10px] font-bold text-sky-700 leading-5">Radio ID, Model, and Serial Number are usually shown on the label at the back, inside the walkie talkie.</p>
                     <div class="mt-3 overflow-hidden rounded-xl border border-sky-200 bg-slate-100">
-                        <img src="{{ asset('images/wtid.jpg') }}" alt="Example showing Radio ID, Model, and Serial Number on a walkie talkie label" class="w-full h-auto object-cover">
+                        <img src="{{ asset('wt-images/wtid.jpg') }}" alt="Example showing Radio ID, Model, and Serial Number on a walkie talkie label" class="w-full h-auto object-cover">
                     </div>
                 </div>
             </div>
@@ -1200,7 +1200,7 @@
         <div class="mb-6 flex flex-wrap items-center gap-3">
             <button type="button" id="replacementTrigger" class="replacement-trigger-btn">
                 <i class="fa-solid fa-arrows-rotate"></i>
-                Request Replacement (Optional)
+                Request Replacement Accessories (Optional)
             </button>
             <div id="replacementChip" class="replacement-chip {{ $draftReplacementRequested === '1' ? 'is-visible' : '' }}">
                 <i class="fa-solid fa-circle-check"></i>
@@ -1286,12 +1286,12 @@
             @enderror
         </div>
 
+        <span data-faulty-detail-flow-end></span>
         <div class="pt-4 flex flex-col sm:flex-row sm:justify-end gap-3">
             <button type="submit" name="submit_action" value="submit" class="bg-[#0284c7] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#734C2F] transition shadow-lg shadow-[#0284c7]/10 flex items-center justify-center gap-3">
                 <i class="fas fa-paper-plane"></i> Submit Request
             </button>
         </div>
-        <span data-faulty-detail-flow-end></span>
     </form>
 </div>
 </div>
@@ -2233,5 +2233,3 @@
     });
 </script>
 @endpush
-
-
