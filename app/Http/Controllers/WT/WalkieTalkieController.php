@@ -9,8 +9,10 @@ use App\Models\WT\WalkieTalkie;
 use App\Models\WT\MasterData;
 use App\Models\WT\MaintenanceRecord;
 use App\Models\WT\UserActivityLog;
+use App\Models\Staff;
 use App\Services\TemporaryRequestExpiryService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\WalkieTalkieImport;
@@ -88,6 +90,22 @@ class WalkieTalkieController extends Controller
             ->values();
     }
 
+    /**
+     * Ownership of a walkie must reference an existing staff record, so the
+     * ownership-name dropdowns are sourced from the staff table rather than
+     * free-text. Names are returned as stored on the staff record.
+     */
+    private function staffOwnershipOptions()
+    {
+        return Staff::query()
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->orderBy('name')
+            ->pluck('name')
+            ->unique()
+            ->values();
+    }
+
     private function normalizeInventoryStatus(?string $value): string
     {
         $status = $this->normalizeValue($value);
@@ -119,6 +137,7 @@ class WalkieTalkieController extends Controller
             'walkieSerials' => $walkies->pluck('serial_number')->filter()->unique()->sort()->values(),
             'walkieModels' => $this->mergeMasterData('model', $walkies->pluck('model')),
             'walkieOwnerships' => $walkies->pluck('ownership')->filter()->unique()->sort()->values(),
+            'staffOwnerships' => $this->staffOwnershipOptions(),
             'walkieDepartments' => $this->mergeMasterData('department', $walkies->pluck('department')),
             'walkiePositions' => $this->mergeMasterData('position', $walkies->pluck('position')),
             'walkieTemporaryIds' => $walkies->pluck('temporary_radio_id')->filter()->unique()->sort()->values(),
@@ -853,7 +872,7 @@ public function repairFaulty()
             'model' => 'required|string|max:100',
             'ownership_type' => 'required|string|in:' . implode(',', self::ALLOWED_OWNERSHIP_TYPES),
             'shared_with' => 'nullable|string|max:255|required_if:ownership_type,SHARED',
-            'ownership' => 'nullable|string|max:255',
+            'ownership' => ['nullable', 'string', 'max:255', Rule::exists('staff', 'name')],
             'position' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'has_temporary_radio' => 'nullable|boolean',
@@ -865,6 +884,8 @@ public function repairFaulty()
             'ownership_type_to_be' => 'nullable|string|max:50',
             'is_special_use' => 'nullable|boolean',
             'special_use_returned' => 'nullable|boolean',
+        ], [
+            'ownership.exists' => 'Ownership name must match an existing staff record.',
         ]);
 
         $radioId = $this->normalizeValue($validated['radio_id']);
@@ -970,7 +991,7 @@ public function repairFaulty()
             'model' => 'required|string|max:100',
             'ownership_type' => 'required|string|in:' . implode(',', self::ALLOWED_OWNERSHIP_TYPES),
             'shared_with' => 'nullable|string|max:255|required_if:ownership_type,SHARED',
-            'ownership' => 'nullable|string|max:255',
+            'ownership' => ['nullable', 'string', 'max:255', Rule::exists('staff', 'name')],
             'position' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'has_temporary_radio' => 'nullable|boolean',
@@ -982,6 +1003,8 @@ public function repairFaulty()
             'ownership_type_to_be' => 'nullable|string|max:50',
             'is_special_use' => 'nullable|boolean',
             'special_use_returned' => 'nullable|boolean',
+        ], [
+            'ownership.exists' => 'Ownership name must match an existing staff record.',
         ]);
 
         $walkie->update([
