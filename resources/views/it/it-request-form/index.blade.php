@@ -73,34 +73,13 @@
 </div>
 @endif
 
-{{-- Stat cards (6 cards) --}}
-<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
+{{-- Stat cards (3 cards) --}}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
   <div class="itr-admin-stat">
     <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>
       <div class="itr-admin-stat-val">{{ $total }}</div>
       <div class="itr-admin-stat-lbl">Total Requests</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat" style="border-color:{{ $countNew ? 'rgba(217,119,6,.35)' : 'var(--border)' }}">
-    <div class="itr-admin-stat-icon" style="background:rgba(217,119,6,.1);color:#d97706"><i class="bi bi-hourglass-split"></i></div>
-    <div>
-      <div class="itr-admin-stat-val" style="{{ $countNew ? 'color:#d97706' : '' }}">{{ $countNew }}</div>
-      <div class="itr-admin-stat-lbl">Pending HOU</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat" style="border-color:{{ $countPendingIT ? 'rgba(2,132,199,.35)' : 'var(--border)' }}">
-    <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-person-check-fill"></i></div>
-    <div>
-      <div class="itr-admin-stat-val" style="{{ $countPendingIT ? 'color:#0284c7' : '' }}">{{ $countPendingIT }}</div>
-      <div class="itr-admin-stat-lbl">Pending IT</div>
-    </div>
-  </div>
-  <div class="itr-admin-stat" style="border-color:{{ $countPendingValidation ? 'rgba(124,58,237,.35)' : 'var(--border)' }}">
-    <div class="itr-admin-stat-icon" style="background:rgba(124,58,237,.1);color:#7c3aed"><i class="bi bi-patch-check-fill"></i></div>
-    <div>
-      <div class="itr-admin-stat-val" style="{{ $countPendingValidation ? 'color:#7c3aed' : '' }}">{{ $countPendingValidation }}</div>
-      <div class="itr-admin-stat-lbl">Pending Validation</div>
     </div>
   </div>
   <div class="itr-admin-stat">
@@ -739,69 +718,49 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div class="itr-locked-note" id="locked-note"></div>
   </div>
 
-  <!-- ══ STATUS REQUEST ══ -->
+  @php
+    $ongoingForms = isset($myForms) ? $myForms->whereIn('status', ['Draft','New','Pending IT','Pending Validation'])->values() : collect();
+    $decidedForms = isset($myForms) ? $myForms->whereIn('status', ['Approved','Rejected'])->values() : collect();
+
+    // Shared card renderer macro — defined as a PHP closure to avoid duplication
+    $renderCard = function($mf) {
+      $mfTypeMap = [
+        'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
+        'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
+        'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
+        'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
+      ];
+      return $mfTypeMap[$mf->request_type] ?? ['label'=>ucfirst($mf->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+    };
+  @endphp
+
+  {{-- ══ SECTION 1: ACTIVE REQUESTS ══ --}}
   <div style="margin-top:32px" id="my-submissions">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-      <div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
-          <i class="bi bi-clipboard2-pulse-fill" style="color:var(--accent);margin-right:7px"></i>My Request Status
-        </div>
-        <div style="font-size:12.5px;color:var(--muted)">Track the progress of your IT service requests.</div>
+    <div style="margin-bottom:14px">
+      <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+        <i class="bi bi-clipboard2-pulse-fill" style="color:var(--accent);margin-right:7px"></i>Active Requests
+        @if($ongoingForms->count())
+        <span style="font-size:12px;font-weight:600;color:var(--accent);background:rgba(2,132,199,.1);border:1px solid rgba(2,132,199,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $ongoingForms->count() }}</span>
+        @endif
       </div>
-      @php $hasDecided = isset($myForms) && $myForms->whereIn('status', ['Approved','Rejected'])->count() > 0; @endphp
-      @if($hasDecided)
-      <form method="POST" action="{{ route('it.it-request-form.clear-all') }}"
-        onsubmit="return confirm('Clear all decided requests (Approved / Rejected) from your list?')" style="margin:0">
-        @csrf
-        <button type="submit"
-          style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
-          onmouseover="this.style.borderColor='rgba(100,116,139,.6)';this.style.color='#334155'" onmouseout="this.style.borderColor='rgba(100,116,139,.3)';this.style.color='#64748b'">
-          <i class="bi bi-x-circle"></i> Clear Decided
-        </button>
-      </form>
-      @endif
+      <div style="font-size:12.5px;color:var(--muted)">Your drafts and requests currently under review.</div>
     </div>
 
-    @if(isset($myForms) && $myForms->count())
+    @if($ongoingForms->count())
     <div style="display:flex;flex-direction:column;gap:12px">
-      @foreach($myForms as $mf)
+      @foreach($ongoingForms as $mf)
       @php
-        $mfTypeMap = [
-          'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
-          'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
-          'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
-          'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
-        ];
-        $mt = $mfTypeMap[$mf->request_type] ?? ['label'=>ucfirst($mf->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
-
+        $mt = $renderCard($mf);
         $isDraft    = $mf->status === 'Draft';
         $isNew      = $mf->status === 'New';
-        $isApproved = $mf->status === 'Approved';
-        $isRejected = $mf->status === 'Rejected';
-
-        // Step states: 0=pending, 1=active, 2=done
-        // Steps: Submitted → Under Review → Decision
-        if ($isDraft) {
-          $s1='pending'; $s2='pending'; $s3='pending';
-          $borderColor='var(--border)';
-        } elseif ($isNew) {
-          $s1='done'; $s2='active'; $s3='pending';
-          $borderColor='rgba(217,119,6,.4)';
-        } elseif ($isApproved) {
-          $s1='done'; $s2='done'; $s3='approved';
-          $borderColor='rgba(22,163,74,.4)';
-        } elseif ($isRejected) {
-          $s1='done'; $s2='done'; $s3='rejected';
-          $borderColor='rgba(220,38,38,.4)';
-        } else {
-          $s1='done'; $s2='active'; $s3='pending';
-          $borderColor='rgba(217,119,6,.4)';
-        }
+        $isApproved = false;
+        $isRejected = false;
+        if ($isDraft)      { $s1='pending'; $s2='pending'; $s3='pending'; $borderColor='var(--border)'; }
+        elseif ($isNew)    { $s1='done'; $s2='active'; $s3='pending'; $borderColor='rgba(217,119,6,.4)'; }
+        else               { $s1='done'; $s2='active'; $s3='pending'; $borderColor='rgba(217,119,6,.4)'; }
       @endphp
-
       <div style="background:var(--surface);border:1.5px solid {{ $borderColor }};border-radius:14px;overflow:hidden;transition:box-shadow .15s"
            onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.07)'" onmouseout="this.style.boxShadow='none'">
-
         {{-- Card header --}}
         <div style="padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)">
           <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $mt['bg'] }};color:{{ $mt['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
@@ -815,7 +774,6 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
               #{{ $mf->id }} &middot; {{ $isDraft ? 'Saved' : 'Submitted' }} {{ $mf->created_at->format('d M Y, H:i') }}
             </div>
           </div>
-          {{-- Draft actions --}}
           @if($isDraft)
           <a href="{{ route('it.it-request-form.edit', $mf->id) }}"
             style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:20px;padding:4px 12px;text-decoration:none;flex-shrink:0;background:transparent;transition:background .15s"
@@ -833,15 +791,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </form>
           @endif
         </div>
-
         {{-- Status tracker --}}
         <div style="padding:16px 20px">
           <div style="display:flex;align-items:flex-start;gap:0">
-
-            {{-- Step 1: Submitted --}}
             @php
-              $c1 = $s1==='done' ? '#16a34a' : ($s1==='active' ? '#0284c7' : '#cbd5e1');
-              $bg1 = $s1==='done' ? 'rgba(22,163,74,.12)' : ($s1==='active' ? 'rgba(2,132,199,.12)' : 'rgba(203,213,225,.2)');
+              $c1 = $s1==='done' ? '#16a34a' : '#cbd5e1';
+              $bg1 = $s1==='done' ? 'rgba(22,163,74,.12)' : 'rgba(203,213,225,.2)';
             @endphp
             <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
               <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg1 }};border:2px solid {{ $c1 }};display:flex;align-items:center;justify-content:center;font-size:15px;color:{{ $c1 }}">
@@ -849,16 +804,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
               </div>
               <div style="font-size:10.5px;font-weight:700;color:{{ $c1 }};text-align:center;line-height:1.3">Submitted</div>
             </div>
-
-            {{-- Line 1→2 --}}
             @php $line1 = ($s1==='done') ? '#16a34a' : '#e2e8f0'; @endphp
             <div style="flex:1;height:2px;background:{{ $line1 }};margin-top:16px;border-radius:2px"></div>
-
-            {{-- Step 2: Under Review --}}
             @php
-              $c2 = $s2==='done' ? '#16a34a' : ($s2==='active' ? '#d97706' : '#cbd5e1');
-              $bg2 = $s2==='done' ? 'rgba(22,163,74,.12)' : ($s2==='active' ? 'rgba(217,119,6,.12)' : 'rgba(203,213,225,.2)');
-              $i2  = $s2==='done' ? 'bi-check-lg' : ($s2==='active' ? 'bi-hourglass-split' : 'bi-hourglass');
+              $c2 = $s2==='active' ? '#d97706' : '#cbd5e1';
+              $bg2 = $s2==='active' ? 'rgba(217,119,6,.12)' : 'rgba(203,213,225,.2)';
+              $i2  = $s2==='active' ? 'bi-hourglass-split' : 'bi-hourglass';
             @endphp
             <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
               <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg2 }};border:2px solid {{ $c2 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c2 }}">
@@ -866,55 +817,169 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
               </div>
               <div style="font-size:10.5px;font-weight:700;color:{{ $c2 }};text-align:center;line-height:1.3">Under Review</div>
             </div>
-
-            {{-- Line 2→3 --}}
-            @php $line2 = ($s2==='done') ? '#16a34a' : '#e2e8f0'; @endphp
-            <div style="flex:1;height:2px;background:{{ $line2 }};margin-top:16px;border-radius:2px"></div>
-
-            {{-- Step 3: Decision --}}
-            @php
-              if ($s3==='approved') { $c3='#16a34a'; $bg3='rgba(22,163,74,.12)'; $i3='bi-check-circle-fill'; $l3='Approved'; }
-              elseif ($s3==='rejected') { $c3='#dc2626'; $bg3='rgba(220,38,38,.12)'; $i3='bi-x-circle-fill'; $l3='Rejected'; }
-              else { $c3='#cbd5e1'; $bg3='rgba(203,213,225,.2)'; $i3='bi-circle'; $l3='Decision'; }
-            @endphp
+            <div style="flex:1;height:2px;background:#e2e8f0;margin-top:16px;border-radius:2px"></div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
-              <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg3 }};border:2px solid {{ $c3 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c3 }}">
-                <i class="bi {{ $i3 }}"></i>
+              <div style="width:34px;height:34px;border-radius:50%;background:rgba(203,213,225,.2);border:2px solid #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:14px;color:#cbd5e1">
+                <i class="bi bi-circle"></i>
               </div>
-              <div style="font-size:10.5px;font-weight:700;color:{{ $c3 }};text-align:center;line-height:1.3">{{ $l3 }}</div>
-            </div>
-
-          </div>
-
-          {{-- Remarks --}}
-          @if($mf->approval_remarks)
-          <div style="margin-top:14px;padding:10px 14px;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:flex-start;gap:8px">
-            <i class="bi bi-chat-left-text-fill" style="color:var(--muted);font-size:13px;flex-shrink:0;margin-top:1px"></i>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Remarks from IT Admin</div>
-              <div style="font-size:12.5px;color:var(--text)">{{ $mf->approval_remarks }}</div>
+              <div style="font-size:10.5px;font-weight:700;color:#cbd5e1;text-align:center;line-height:1.3">Decision</div>
             </div>
           </div>
-          @endif
-
-          {{-- Review date --}}
-          @if($mf->reviewed_at)
-          <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:right">
-            Reviewed on {{ \Carbon\Carbon::parse($mf->reviewed_at)->format('d M Y, H:i') }}
-          </div>
-          @endif
         </div>
       </div>
       @endforeach
     </div>
     @else
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:40px 20px;text-align:center;color:var(--muted)">
-      <i class="bi bi-clipboard2-x" style="font-size:30px;display:block;margin-bottom:10px;opacity:.35"></i>
-      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No requests yet</div>
-      <div style="font-size:12.5px">Your submitted IT requests will appear here.</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+      <i class="bi bi-inbox" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No active requests</div>
+      <div style="font-size:12.5px">Drafts and requests under review will appear here.</div>
     </div>
     @endif
   </div>
+
+  {{-- ══ SECTION 2: DECIDED REQUESTS ══ --}}
+  <div style="margin-top:28px" id="my-decided">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+          <i class="bi bi-check2-circle" style="color:#16a34a;margin-right:7px"></i>Decided Requests
+          @if($decidedForms->count())
+          <span style="font-size:12px;font-weight:600;color:#64748b;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.2);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $decidedForms->count() }}</span>
+          @endif
+        </div>
+        <div style="font-size:12.5px;color:var(--muted)">Requests that have been approved or rejected.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        @if($decidedForms->count())
+        <form method="POST" action="{{ route('it.it-request-form.clear-all') }}"
+          onsubmit="return confirm('Clear all decided requests (Approved / Rejected) from your list?')" style="margin:0">
+          @csrf
+          <button type="submit"
+            style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+            onmouseover="this.style.borderColor='rgba(100,116,139,.6)';this.style.color='#334155'" onmouseout="this.style.borderColor='rgba(100,116,139,.3)';this.style.color='#64748b'">
+            <i class="bi bi-x-circle"></i> Clear All
+          </button>
+        </form>
+        <button onclick="toggleDecided()" id="decidedToggleBtn"
+          style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
+          onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+          <i class="bi bi-chevron-down" id="decidedToggleIcon"></i> Show
+        </button>
+        @endif
+      </div>
+    </div>
+
+    <div id="decidedList" style="display:none">
+      @if($decidedForms->count())
+      <div style="display:flex;flex-direction:column;gap:12px">
+        @foreach($decidedForms as $mf)
+        @php
+          $mt = $renderCard($mf);
+          $isApproved = $mf->status === 'Approved';
+          $isRejected = $mf->status === 'Rejected';
+          $borderColor = $isApproved ? 'rgba(22,163,74,.4)' : 'rgba(220,38,38,.4)';
+        @endphp
+        <div style="background:var(--surface);border:1.5px solid {{ $borderColor }};border-radius:14px;overflow:hidden;transition:box-shadow .15s"
+             onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.07)'" onmouseout="this.style.boxShadow='none'">
+          {{-- Card header --}}
+          <div style="padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)">
+            <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $mt['bg'] }};color:{{ $mt['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
+              <i class="bi {{ $mt['icon'] }}" style="font-size:11px"></i>{{ $mt['label'] }}
+            </span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                {{ $mf->subject }}
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">
+                #{{ $mf->id }} &middot; Submitted {{ $mf->created_at->format('d M Y, H:i') }}
+              </div>
+            </div>
+            {{-- Status badge --}}
+            @if($isApproved)
+            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(22,163,74,.1);color:#16a34a;border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
+              <i class="bi bi-check-circle-fill"></i> Approved
+            </span>
+            @else
+            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(220,38,38,.1);color:#dc2626;border:1px solid rgba(220,38,38,.3);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
+              <i class="bi bi-x-circle-fill"></i> Rejected
+            </span>
+            @endif
+          </div>
+          {{-- Status tracker --}}
+          <div style="padding:16px 20px">
+            <div style="display:flex;align-items:flex-start;gap:0">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(22,163,74,.12);border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;font-size:15px;color:#16a34a">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#16a34a;text-align:center;line-height:1.3">Submitted</div>
+              </div>
+              <div style="flex:1;height:2px;background:#16a34a;margin-top:16px;border-radius:2px"></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(22,163,74,.12);border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#16a34a">
+                  <i class="bi bi-check-lg"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#16a34a;text-align:center;line-height:1.3">Reviewed</div>
+              </div>
+              <div style="flex:1;height:2px;background:{{ $isApproved ? '#16a34a' : '#dc2626' }};margin-top:16px;border-radius:2px"></div>
+              @if($isApproved)
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(22,163,74,.12);border:2px solid #16a34a;display:flex;align-items:center;justify-content:center;font-size:14px;color:#16a34a">
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#16a34a;text-align:center;line-height:1.3">Approved</div>
+              </div>
+              @else
+              <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+                <div style="width:34px;height:34px;border-radius:50%;background:rgba(220,38,38,.12);border:2px solid #dc2626;display:flex;align-items:center;justify-content:center;font-size:14px;color:#dc2626">
+                  <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <div style="font-size:10.5px;font-weight:700;color:#dc2626;text-align:center;line-height:1.3">Rejected</div>
+              </div>
+              @endif
+            </div>
+
+            {{-- Remarks --}}
+            @if($mf->approval_remarks)
+            <div style="margin-top:14px;padding:10px 14px;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:flex-start;gap:8px">
+              <i class="bi bi-chat-left-text-fill" style="color:var(--muted);font-size:13px;flex-shrink:0;margin-top:1px"></i>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Remarks from IT Admin</div>
+                <div style="font-size:12.5px;color:var(--text)">{{ $mf->approval_remarks }}</div>
+              </div>
+            </div>
+            @endif
+            {{-- Review date --}}
+            @if($mf->reviewed_at)
+            <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:right">
+              Reviewed on {{ \Carbon\Carbon::parse($mf->reviewed_at)->format('d M Y, H:i') }}
+            </div>
+            @endif
+          </div>
+        </div>
+        @endforeach
+      </div>
+      @else
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+        <i class="bi bi-check2-circle" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+        <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No decided requests</div>
+        <div style="font-size:12.5px">Approved and rejected requests will appear here.</div>
+      </div>
+      @endif
+    </div>
+  </div>
+
+  <script>
+  function toggleDecided() {
+    var list = document.getElementById('decidedList');
+    var open = list.style.display !== 'none';
+    list.style.display = open ? 'none' : 'block';
+    document.getElementById('decidedToggleBtn').innerHTML = open
+      ? '<i class="bi bi-chevron-down" id="decidedToggleIcon"></i> Show'
+      : '<i class="bi bi-chevron-up"   id="decidedToggleIcon"></i> Hide';
+  }
+  </script>
 
   {{-- ══ HOU: PENDING APPROVAL REQUESTS ══ --}}
   @if($user->it_role === 'hou')
@@ -1367,7 +1432,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>IP Phone</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Switch/Hub</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>UPS</div>
-                <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Walkie-Talkie</div>
+
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Allow Install Software</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Allow USB Drive</div>
                 <div class="itr-check-chip" onclick="chipToggle(this)"><span class="chip-dot"></span>Color Printing Quota</div>
