@@ -271,7 +271,7 @@
           <div class="sig-role">Prepared By</div>
           <div class="sig-line"></div>
           <div class="sig-name">{{ auth('it')->user()->full_name }}</div>
-          <div class="sig-title">{{ auth('it')->user()->roleName() ?? 'Finance / Admin' }}</div>
+          <div class="sig-title">{{ auth('it')->user()->getItRoleLabel() }}</div>
         </div>
         <div class="sig-block">
           <div class="sig-role">Approved By</div>

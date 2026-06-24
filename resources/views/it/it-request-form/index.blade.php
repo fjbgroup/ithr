@@ -181,7 +181,7 @@
       <div style="width:30px;height:30px;border-radius:50%;background:rgba(2,132,199,.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi bi-person-fill"></i></div>
       <div style="min-width:0">
         <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $form->submittedBy?->full_name ?? '—' }}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $form->submittedBy?->roleName() ?? '' }}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $form->submittedBy?->getItRoleLabel() ?? '' }}</div>
       </div>
     </div>
 

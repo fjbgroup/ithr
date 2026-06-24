@@ -85,7 +85,7 @@
     <div style="width:32px;height:32px;border-radius:50%;background:rgba(2,132,199,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px"><i class="bi bi-person-fill"></i></div>
     <div>
       <div style="font-size:13px;font-weight:700;color:var(--text)">{{ $form->submittedBy?->full_name ?? 'Unknown' }}</div>
-      <div style="font-size:11px;color:var(--muted)">{{ $form->submittedBy?->roleName() ?? '' }}</div>
+      <div style="font-size:11px;color:var(--muted)">{{ $form->submittedBy?->getItRoleLabel() ?? '' }}</div>
     </div>
   </div>
   <div style="margin-left:auto;text-align:right">
