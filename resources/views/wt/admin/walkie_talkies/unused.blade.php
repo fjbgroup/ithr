@@ -1004,7 +1004,7 @@
                         <label>Model</label>
                         <select name="model" id="used_model" required>
                             <option value="">Select model</option>
-                            @foreach(['R7','P8200','P8268','P8600I','P8660I','P8260'] as $model)
+                            @foreach($walkieModels as $model)
                                 <option value="{{ $model }}">{{ $model }}</option>
                             @endforeach
                         </select>
@@ -1013,9 +1013,9 @@
                         <label>Ownership Type</label>
                         <select name="ownership_type" id="used_ownership_type" required onchange="toggleUsedSharedWith()">
                             <option value="">Select type</option>
-                            <option value="INDIVIDUAL">INDIVIDUAL</option>
-                            <option value="SHARED">SHARED</option>
-                            <option value="SPARE">SPARE</option>
+                            @foreach($ownershipTypeOptions as $ot)
+                            <option value="{{ $ot }}">{{ $ot }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="unused-use-field full" id="used_shared_with_group" style="display:none;">
@@ -1059,9 +1059,9 @@
         document.getElementById('used_serial_number').value = button.dataset.serialNumber || '';
         document.getElementById('used_model').value = button.dataset.model || '';
         const ownershipType = (button.dataset.ownershipType || '').toUpperCase();
-        document.getElementById('used_ownership_type').value = ['INDIVIDUAL', 'SHARED', 'SPARE'].includes(ownershipType)
-            ? ownershipType
-            : '';
+        // The select is populated from master data; assigning a value that
+        // isn't an option simply leaves it unselected.
+        document.getElementById('used_ownership_type').value = ownershipType;
         document.getElementById('used_shared_with').value = button.dataset.sharedWith || '';
         document.getElementById('used_ownership').value = button.dataset.ownership || '';
         document.getElementById('used_position').value = button.dataset.position || '';

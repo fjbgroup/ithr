@@ -1105,7 +1105,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <div class="form-group">
                         <label class="form-label">Model <span class="required">*</span></label>
                         <select name="model" class="form-input" required>
-                            @foreach(['R7','P8200','P8268','P8600I','P8660I','P8260'] as $m)
+                            @foreach($walkieModels as $m)
                             <option value="{{ $m }}">{{ $m }}</option>
                             @endforeach
                         </select>
@@ -1113,19 +1113,17 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <div class="form-group">
                         <label class="form-label">Status <span class="required">*</span></label>
                         <select name="status" class="form-input" required>
-                            <option value="UNUSED" selected>UNUSED</option>
-                            <option value="IN USE">IN USE</option>
-                            <option value="TEMPORARY">TEMPORARY</option>
-                            <option value="REPAIRING">REPAIRING</option>
+                            @foreach($statusOptions as $st)
+                            <option value="{{ $st }}" {{ $st === 'UNUSED' ? 'selected' : '' }}>{{ $st }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership Type <span class="required">*</span></label>
                         <select name="ownership_type" class="form-input ownership-type-control" required>
-                            <option value="SPARE" selected>SPARE</option>
-                            <option value="SHARED">SHARED</option>
-                            <option value="INDIVIDUAL">INDIVIDUAL</option>
-                            <option value="UNALLOCATED">UNALLOCATED</option>
+                            @foreach($ownershipTypeOptions as $ot)
+                            <option value="{{ $ot }}" {{ $ot === 'SPARE' ? 'selected' : '' }}>{{ $ot }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group shared-with-group hidden">
@@ -1184,7 +1182,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <div class="form-group">
                         <label class="form-label">Model <span class="required">*</span></label>
                         <select name="model" id="edit_model" class="form-input" required>
-                            @foreach(['R7','P8200','P8268','P8600I','P8660I','P8260'] as $editModel)
+                            @foreach($walkieModels as $editModel)
                             <option value="{{ $editModel }}">{{ $editModel }}</option>
                             @endforeach
                         </select>
@@ -1192,7 +1190,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <div class="form-group">
                         <label class="form-label">Status <span class="required">*</span></label>
                         <select name="status" id="edit_status" class="form-input" required>
-                            @foreach(['CALIBRATING','UNKNOWN','IN USE','REPAIRING','UNUSED','FAULTY','B.E.R','TEMPORARY','CHANGE ID','LOST'] as $editStatus)
+                            @foreach($statusOptions as $editStatus)
                             <option value="{{ $editStatus }}">{{ $editStatus }}</option>
                             @endforeach
                         </select>
@@ -1200,7 +1198,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <div class="form-group">
                         <label class="form-label">Ownership Type <span class="required">*</span></label>
                         <select name="ownership_type" id="edit_ownership_type" class="form-input ownership-type-control" required>
-                            @foreach(['UNALLOCATED','SHARED','INDIVIDUAL','SPARE'] as $editOwnershipType)
+                            @foreach($ownershipTypeOptions as $editOwnershipType)
                             <option value="{{ $editOwnershipType }}">{{ $editOwnershipType }}</option>
                             @endforeach
                         </select>
@@ -1247,7 +1245,7 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                         <label class="form-label">Ownership Type To Be</label>
                         <select name="ownership_type_to_be" id="edit_ownership_type_to_be" class="form-input">
                             <option value="">Select target ownership type...</option>
-                            @foreach(['UNALLOCATED','SHARED','INDIVIDUAL','SPARE'] as $targetOwnershipType)
+                            @foreach($ownershipTypeOptions as $targetOwnershipType)
                             <option value="{{ $targetOwnershipType }}">{{ $targetOwnershipType }}</option>
                             @endforeach
                         </select>

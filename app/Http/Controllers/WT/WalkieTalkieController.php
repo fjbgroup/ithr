@@ -55,6 +55,24 @@ class WalkieTalkieController extends Controller
     }
 
     /**
+     * Option lists for the inventory-tool views (special use, unused,
+     * duplicated ID) so their add/edit modals share the same master-data
+     * driven lists as the main inventory form instead of hardcoding them.
+     */
+    private function inventoryToolOptions(): array
+    {
+        return [
+            'walkieModels' => $this->mergeMasterData('model', WalkieTalkie::query()->pluck('model')),
+            'statusOptions' => collect(self::ALLOWED_STATUSES),
+            'ownershipTypeOptions' => $this->mergeMasterData(
+                'ownership_type',
+                WalkieTalkie::query()->pluck('ownership_type')
+                    ->merge(WalkieTalkie::query()->pluck('ownership_type_to_be'))
+            ),
+        ];
+    }
+
+    /**
      * Build a dropdown option list from the WT master data for a category,
      * merged with any values already present on existing walkie records so
      * historical free-text entries never disappear from the form.
@@ -540,7 +558,7 @@ class WalkieTalkieController extends Controller
             ['key' => 'special_use_returned', 'label' => 'returned'],
         ];
 
-        return view('wt.admin.walkie_talkies.unused', compact('records', 'columns'));
+        return view('wt.admin.walkie_talkies.unused', array_merge(compact('records', 'columns'), $this->inventoryToolOptions()));
     }
 
     public function create()
@@ -704,7 +722,7 @@ public function repairFaulty()
             ->orderByDesc('walkie_id')
             ->get();
 
-        return view('wt.admin.duplicated_id', compact('records'));
+        return view('wt.admin.duplicated_id', array_merge(compact('records'), $this->inventoryToolOptions()));
     }
 
     public function specialUse()
@@ -715,7 +733,7 @@ public function repairFaulty()
             ->orderByDesc('walkie_id')
             ->get();
 
-        return view('wt.admin.special_use', compact('records'));
+        return view('wt.admin.special_use', array_merge(compact('records'), $this->inventoryToolOptions()));
     }
 
     public function myInventory()

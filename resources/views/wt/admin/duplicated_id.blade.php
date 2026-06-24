@@ -521,7 +521,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
             <label for="duplicateStatusFilter">Status</label>
             <select id="duplicateStatusFilter" class="duplicate-filter-select">
                 <option value="">All Status</option>
-                @foreach(['IN USE', 'REPAIRING', 'UNKNOWN', 'UNUSED', 'CHANGE ID'] as $statusOption)
+                @foreach($statusOptions as $statusOption)
                     <option value="{{ $statusOption }}">{{ $statusOption }}</option>
                 @endforeach
             </select>
@@ -655,7 +655,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <div class="form-group">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-input">
-                            @foreach(['IN USE','REPAIRING','UNKNOWN','UNUSED'] as $s)
+                            @foreach($statusOptions as $s)
                             <option value="{{ $s }}">{{ $s }}</option>
                             @endforeach
                         </select>
@@ -668,7 +668,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         <label class="form-label">Model (MC)</label>
                         <select name="model" class="form-input">
                             <option value="">-- Leave Empty --</option>
-                            @foreach(['R7','P8200','P8268','P8600I','P8660I','P8260'] as $m)
+                            @foreach($walkieModels as $m)
                             <option value="{{ $m }}">{{ $m }}</option>
                             @endforeach
                         </select>
@@ -676,7 +676,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <div class="form-group">
                         <label class="form-label">Current Ownership Type</label>
                         <select name="ownership_type" class="form-input ownership-type-control">
-                            @foreach(['INDIVIDUAL','SPARE','SHARED'] as $ot)
+                            @foreach($ownershipTypeOptions as $ot)
                             <option value="{{ $ot }}">{{ $ot }}</option>
                             @endforeach
                         </select>
@@ -708,7 +708,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         <label class="form-label">Ownership Type To Be</label>
                         <select name="ownership_type_to_be" class="form-input">
                             <option value="">-- None --</option>
-                            @foreach(['SPARE','UNALLOCATED'] as $tot)
+                            @foreach($ownershipTypeOptions as $tot)
                             <option value="{{ $tot }}">{{ $tot }}</option>
                             @endforeach
                         </select>
@@ -750,7 +750,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <div class="form-group">
                         <label class="form-label">Model <span class="required">*</span></label>
                         <select name="model" id="edit_model" class="form-input" required>
-                            @foreach(['R7','P8200','P8268','P8600I','P8660I','P8260'] as $editModel)
+                            @foreach($walkieModels as $editModel)
                             <option value="{{ $editModel }}">{{ $editModel }}</option>
                             @endforeach
                         </select>
@@ -758,7 +758,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <div class="form-group">
                         <label class="form-label">Status <span class="required">*</span></label>
                         <select name="status" id="edit_status" class="form-input" required>
-                            @foreach(['IN USE','REPAIRING','UNKNOWN','UNUSED'] as $editStatus)
+                            @foreach($statusOptions as $editStatus)
                             <option value="{{ $editStatus }}">{{ $editStatus }}</option>
                             @endforeach
                         </select>
@@ -766,7 +766,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <div class="form-group">
                         <label class="form-label">Ownership Type <span class="required">*</span></label>
                         <select name="ownership_type" id="edit_ownership_type" class="form-input ownership-type-control" required>
-                            @foreach(['INDIVIDUAL','SPARE','SHARED'] as $editOwnershipType)
+                            @foreach($ownershipTypeOptions as $editOwnershipType)
                             <option value="{{ $editOwnershipType }}">{{ $editOwnershipType }}</option>
                             @endforeach
                         </select>
@@ -810,7 +810,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         <label class="form-label">Ownership Type To Be</label>
                         <select name="ownership_type_to_be" id="edit_ownership_type_to_be" class="form-input">
                             <option value="">Select target...</option>
-                            @foreach(['SPARE','UNALLOCATED'] as $t)
+                            @foreach($ownershipTypeOptions as $t)
                             <option value="{{ $t }}">{{ $t }}</option>
                             @endforeach
                         </select>
