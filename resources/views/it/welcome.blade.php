@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <link rel="shortcut icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623" type="image/jpeg">
+        <link rel="apple-touch-icon" href="{{ asset('assets/images/footer.jpg') }}?v=it-team-20260623">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

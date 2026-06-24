@@ -297,13 +297,24 @@
         transform: translateY(-1px);
     }
     .account-modal-card {
-        width: min(760px, calc(100vw - 32px));
-        max-height: calc(100vh - 48px);
+        width: min(560px, calc(100vw - 32px));
+        max-height: calc(100vh - 112px);
         overflow: hidden;
-        border-radius: 22px;
+        border-radius: 16px;
         border: 1px solid var(--border);
         background: var(--surface);
         box-shadow: var(--shadow-lg);
+    }
+    #createExecutiveModal {
+        top: 56px;
+        right: 0;
+        bottom: 0;
+        left: var(--sidebar-w);
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        width: auto;
+        height: auto;
     }
     html.dark .account-modal-card {
         border-color: rgba(96, 165, 250, 0.28);
@@ -314,8 +325,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        padding: 18px 22px;
+        gap: 12px;
+        padding: 12px 16px;
         border-bottom: 1px solid var(--border);
         background: var(--soft-surface);
     }
@@ -334,11 +345,11 @@
     }
     .account-modal-icon {
         display: inline-flex;
-        width: 42px;
-        height: 42px;
+        width: 34px;
+        height: 34px;
         align-items: center;
         justify-content: center;
-        border-radius: 14px;
+        border-radius: 10px;
         border: 1px solid rgba(125, 211, 252, 0.35);
         background: rgba(8, 145, 178, 0.18);
         color: #7dd3fc;
@@ -347,8 +358,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 38px;
-        height: 38px;
+        width: 32px;
+        height: 32px;
         border-radius: 999px;
         border: 1px solid rgba(148, 163, 184, 0.2);
         color: var(--muted);
@@ -363,15 +374,15 @@
         color: #ffffff;
     }
     .account-modal-body {
-        max-height: calc(100vh - 210px);
+        max-height: calc(100vh - 178px);
         overflow-y: auto;
-        padding: 22px;
+        padding: 16px;
     }
     .account-field label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         color: var(--muted);
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 900;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -379,13 +390,13 @@
     .account-field input,
     .account-field select {
         width: 100%;
-        min-height: 42px;
-        border-radius: 12px;
+        min-height: 34px;
+        border-radius: 9px;
         border: 1px solid var(--form-input-border);
         background: var(--form-input-bg);
         color: var(--form-input-color);
-        padding: 0 14px;
-        font-size: 12px;
+        padding: 0 11px;
+        font-size: 11px;
         font-weight: 700;
         transition: all 0.18s ease;
     }
@@ -398,10 +409,26 @@
     .account-modal-footer {
         display: flex;
         justify-content: flex-end;
-        gap: 10px;
-        padding: 16px 22px;
+        gap: 8px;
+        padding: 12px 16px;
         border-top: 1px solid var(--border);
         background: var(--soft-surface);
+    }
+    .account-modal-card .grid.gap-4 {
+        gap: 12px !important;
+    }
+    .account-modal-card .navy-btn {
+        min-height: 36px;
+        padding: 0 16px;
+        border-radius: 10px;
+        font-size: 11px;
+    }
+    @media (max-width: 900px) {
+        #createExecutiveModal {
+            top: 56px;
+            left: 0;
+            padding: 16px;
+        }
     }
     html.dark .account-modal-footer {
         border-top-color: rgba(96, 165, 250, 0.18);
@@ -749,26 +776,26 @@
             <div class="account-modal-body">
 
                 {{-- Staff search --}}
-                <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(96,165,250,0.18)">
-                    <label style="display:block;margin-bottom:8px;color:#9fb0c8;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase">
+                <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(96,165,250,0.18)">
+                    <label style="display:block;margin-bottom:6px;color:#9fb0c8;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase">
                         Search HR Staff to Auto-fill
                     </label>
                     <div style="position:relative">
                         <input type="text" id="wtStaffSearchInput" autocomplete="off"
                             placeholder="Type name or staff number…"
-                            style="width:100%;min-height:42px;border-radius:12px;border:1px solid #334766;background:#0f172a;color:#f8fafc;padding:0 40px 0 14px;font-size:12px;font-weight:700;transition:all .18s ease"
+                            style="width:100%;min-height:34px;border-radius:9px;border:1px solid #334766;background:#0f172a;color:#f8fafc;padding:0 34px 0 11px;font-size:11px;font-weight:700;transition:all .18s ease"
                             onfocus="this.style.borderColor='#38bdf8'" onblur="this.style.borderColor='#334766'">
-                        <i class="fas fa-search" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#64748b;font-size:12px;pointer-events:none"></i>
+                        <i class="fas fa-search" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#64748b;font-size:11px;pointer-events:none"></i>
                     </div>
-                    <div id="wtStaffResults" style="display:none;position:absolute;z-index:9999;background:#1e293b;border:1px solid rgba(96,165,250,0.28);border-radius:12px;box-shadow:0 12px 32px rgba(2,6,23,.5);width:min(680px,calc(100vw - 48px));max-height:260px;overflow-y:auto;margin-top:4px"></div>
-                    <div id="wtStaffBanner" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(14,116,144,.15);border:1px solid rgba(14,116,144,.35);border-radius:10px;align-items:center;gap:10px">
+                    <div id="wtStaffResults" style="display:none;position:absolute;z-index:9999;background:#1e293b;border:1px solid rgba(96,165,250,0.28);border-radius:10px;box-shadow:0 12px 32px rgba(2,6,23,.5);width:min(528px,calc(100vw - 48px));max-height:210px;overflow-y:auto;margin-top:4px"></div>
+                    <div id="wtStaffBanner" style="display:none;margin-top:8px;padding:8px 11px;background:rgba(14,116,144,.15);border:1px solid rgba(14,116,144,.35);border-radius:9px;align-items:center;gap:8px">
                         <i class="fas fa-check-circle" style="color:#22d3ee;flex-shrink:0"></i>
-                        <span id="wtStaffBannerLabel" style="font-size:12px;font-weight:700;color:#f8fafc;flex:1"></span>
-                        <button type="button" onclick="wtClearStaff()" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:12px;padding:0">
+                        <span id="wtStaffBannerLabel" style="font-size:11px;font-weight:700;color:#f8fafc;flex:1"></span>
+                        <button type="button" onclick="wtClearStaff()" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:11px;padding:0">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <p style="margin-top:6px;font-size:10px;color:#64748b">Select a staff member to auto-fill the fields below, or fill them in manually.</p>
+                    <p style="margin-top:5px;font-size:9px;color:#64748b">Select a staff member to auto-fill the fields below, or fill them in manually.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
