@@ -145,13 +145,14 @@
                 @unless($inventoryOnly)
                 <div class="form-group">
                     <label class="form-label">Ownership Name</label>
-                    <select name="ownership" class="form-input page-tag-select" data-placeholder="Type or select ownership">
+                    @php($currentOwnership = old('ownership', $defaults['ownership'] ?? null))
+                    <select name="ownership" class="form-input page-smart-select" data-placeholder="Select staff">
                         <option value=""></option>
-                        @foreach($walkieOwnerships as $ownership)
-                        <option value="{{ $ownership }}" @selected(old('ownership', $defaults['ownership'] ?? null) === $ownership)>{{ $ownership }}</option>
+                        @foreach($staffOwnerships as $ownership)
+                        <option value="{{ $ownership }}" @selected($currentOwnership === $ownership)>{{ $ownership }}</option>
                         @endforeach
-                        @if(old('ownership') && !$walkieOwnerships->contains(old('ownership')))
-                        <option value="{{ old('ownership') }}" selected>{{ old('ownership') }}</option>
+                        @if($currentOwnership && !$staffOwnerships->contains($currentOwnership))
+                        <option value="{{ $currentOwnership }}" selected>{{ $currentOwnership }}</option>
                         @endif
                     </select>
                 </div>
