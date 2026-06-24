@@ -512,10 +512,10 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
     </div>
 
     {{-- Filters --}}
-    <div class="duplicate-search-panel">
+    <div class="duplicate-search-panel" role="search" aria-label="Duplicated ID filters" style="justify-content: flex-start !important; width: auto !important;">
         <div class="duplicate-filter-field">
             <label for="duplicateSearchInput">Search</label>
-            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, ownership…">
+            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, ownership…" style="width: 250px !important; max-width: 250px !important;">
         </div>
         <div class="duplicate-filter-field">
             <label for="duplicateStatusFilter">Status</label>
@@ -974,14 +974,18 @@ $(document).ready(function () {
 
     window.dupPage = function (p) { currentPage = p; render(); };
 
+    function normalizeFilterValue(value) {
+        return String(value || '').trim().replace(/\s+/g, ' ').toUpperCase();
+    }
+
     function applyFilter() {
-        const s  = (searchInput?.value  || '').trim().toUpperCase();
-        const st = (statusFilter?.value || '').trim().toUpperCase();
-        const dn = (doneFilter?.value   || '').trim().toUpperCase();
+        const s  = normalizeFilterValue(searchInput?.value);
+        const st = normalizeFilterValue(statusFilter?.value);
+        const dn = normalizeFilterValue(doneFilter?.value);
         filtered = allRows.filter(r =>
-            (!s  || (r.dataset.search || '').includes(s)) &&
-            (!st || r.dataset.status === st) &&
-            (!dn || r.dataset.done   === dn)
+            (!s  || normalizeFilterValue(r.dataset.search).includes(s)) &&
+            (!st || normalizeFilterValue(r.dataset.status) === st) &&
+            (!dn || normalizeFilterValue(r.dataset.done) === dn)
         );
         currentPage = 1;
         render();
@@ -1208,5 +1212,426 @@ html.dark body .content-surface .duplicate-table-shell #duplicateTable tbody tr:
 html.dark body .content-surface .duplicate-table-info {
     color: #dbeafe !important;
 }
+
+body .content-surface .duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 9px !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+}
+
+body .content-surface .duplicate-filter-field {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-width: 0 !important;
+}
+
+body .content-surface .duplicate-filter-field label {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    color: #526781 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: .14em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-search,
+body .content-surface .duplicate-filter-select,
+body .content-surface .duplicate-filter-reset {
+    width: 100% !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 7px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 13px !important;
+    font-weight: 650 !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+}
+
+body .content-surface .duplicate-search {
+    flex: 1 1 260px !important;
+}
+
+body .content-surface .duplicate-filter-field:has(.duplicate-search) {
+    flex: 1 1 360px !important;
+}
+
+body .content-surface .duplicate-filter-field:has(.duplicate-filter-select) {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-search {
+    padding: 0 12px !important;
+    min-width: 190px !important;
+}
+
+body .content-surface .duplicate-filter-select {
+    padding: 0 30px 0 12px !important;
+    width: auto !important;
+    min-width: 100px !important;
+}
+
+body .content-surface .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 78px !important;
+    padding: 0 10px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    min-width: 1040px !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable :is(th, td):nth-child(7) {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+}
+
+body .content-surface #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface #duplicateTable .dup-actions .btn,
+body .content-surface #duplicateTable .dup-actions button,
+body .content-surface #duplicateTable .dup-actions a {
+    width: auto !important;
+    min-width: 68px !important;
+    max-width: none !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    letter-spacing: .02em !important;
+    text-transform: none !important;
+}
+
+html.dark body .content-surface .duplicate-search-panel {
+    border-color: #334155 !important;
+    background: #111827 !important;
+}
+
+html.dark body .content-surface .duplicate-filter-field label {
+    color: #94a3b8 !important;
+}
+
+html.dark body .content-surface .duplicate-search,
+html.dark body .content-surface .duplicate-filter-select,
+html.dark body .content-surface .duplicate-filter-reset {
+    border-color: #334155 !important;
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+@media (max-width: 900px) {
+    body .content-surface .duplicate-search-panel {
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+    }
+
+    body .content-surface .duplicate-filter-field {
+        flex: 1 1 240px !important;
+    }
+
+    body .content-surface .duplicate-filter-reset {
+        flex: 1 1 100% !important;
+    }
+}
+
+body .content-surface .duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+body .content-surface .duplicate-search-panel > .duplicate-filter-field {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: auto !important;
+}
+
+body .content-surface .duplicate-search-panel > .duplicate-filter-field:has(.duplicate-search) {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search {
+    width: 190px !important;
+    min-width: 190px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-select {
+    width: auto !important;
+    min-width: 100px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 78px !important;
+}
+
+/* Final duplicated-ID layout override: keep filters one-line and make the table a clean grid. */
+body .content-surface .duplicate-search-panel,
+body .content-surface .duplicate-page .duplicate-search-panel {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    min-height: 64px !important;
+    padding: 12px 18px !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    flex-flow: row nowrap !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search {
+    flex: 0 0 235px !important;
+    width: 235px !important;
+    min-width: 235px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-select {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 112px !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 78px !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-table-shell {
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+    overflow: auto !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    width: 100% !important;
+    min-width: 1040px !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    table-layout: fixed !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    height: 50px !important;
+    padding: 10px 12px !important;
+    border: 1px solid #334155 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable thead th {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable tbody td {
+    background: #111827 !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions .btn {
+    height: 30px !important;
+    min-height: 30px !important;
+    padding: 0 9px !important;
+    line-height: 1 !important;
+}
+
+/* Requested final UI contract. Keep this last in the style block. */
+body .content-surface .duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search,
+body .content-surface .duplicate-search-panel .duplicate-filter-select,
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    border-collapse: collapse !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    border: 1px solid #2d3748 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack,
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .5rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack form,
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+/* Actual WT admin layout has no .content-surface wrapper on this page. */
+.duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+.duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+.duplicate-search-panel .duplicate-search,
+.duplicate-search-panel .duplicate-filter-select,
+.duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+}
+
+.duplicate-table-shell #duplicateTable {
+    border-collapse: collapse !important;
+}
+
+.duplicate-table-shell #duplicateTable th,
+.duplicate-table-shell #duplicateTable td {
+    border: 1px solid #2d3748 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.duplicate-table-shell #duplicateTable .duplicate-action-stack,
+.duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .5rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+.duplicate-table-shell #duplicateTable .duplicate-action-stack form,
+.duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
 </style>
+@include('wt.admin.partials.inventory-tools-unified-ui')
 @endsection

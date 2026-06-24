@@ -55,11 +55,33 @@ class ItRequestFormController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $staffList = Staff::where('is_active', 1)->orderBy('name')->get(['id', 'staff_no', 'name', 'position', 'department_id'])->map(function ($s) {
-            return ['name' => $s->name, 'dept' => optional($s->department)->name ?? ''];
+        $staffList = Staff::where('is_active', 1)->orderBy('name')->get(['id', 'staff_no', 'name', 'position', 'department_id', 'email'])->map(function ($s) {
+            return [
+                'name'     => $s->name,
+                'dept'     => optional($s->department)->name ?? '',
+                'staff_no' => $s->staff_no ?? '',
+                'email'    => $s->email ?? '',
+            ];
         });
 
-        return view('it.it-request-form.index', ['user' => $user, 'myForms' => $myForms, 'staffList' => $staffList]);
+        $houList = \App\Models\IT\User::where('it_role', 'hou')->where('is_active', 1)->orderBy('name')->get()->map(function ($u) {
+            return [
+                'name'  => $u->full_name,
+                'dept'  => $u->dept_name ?? optional($u->department)->name ?? '',
+                'email' => $u->email ?? '',
+            ];
+        });
+
+        $pendingApprovals = collect();
+        if ($user->it_role === 'hou') {
+            $pendingApprovals = ItRequestForm::with('submittedBy')
+                ->where('approver_name', $user->full_name)
+                ->where('status', 'New')
+                ->orderByDesc('created_at')
+                ->get();
+        }
+
+        return view('it.it-request-form.index', ['user' => $user, 'myForms' => $myForms, 'staffList' => $staffList, 'houList' => $houList, 'pendingApprovals' => $pendingApprovals]);
     }
 
     public function savedDrafts()
@@ -351,6 +373,81 @@ class ItRequestFormController extends Controller
         $form->update($updateData);
         ActivityLogService::log('UPDATE', 'it_request_form', $form->id, 'Updated IT request: ' . $form->subject);
         return redirect()->route('it.it-request-form.show', $id)->with('success', 'Request updated successfully.');
+    }
+
+    public function houShow(int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if ($user->it_role !== 'hou') abort(403);
+
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($form->approver_name !== $user->full_name) abort(403);
+
+        $isHou = true;
+        ActivityLogService::log('VIEW', 'it_request_form', $id, 'HOU viewed IT request: ' . $form->subject);
+        return view('it.it-request-form.show', compact('form', 'user', 'isHou'));
+    }
+
+    public function houApprove(Request $request, int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if ($user->it_role !== 'hou') abort(403);
+
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($form->approver_name !== $user->full_name || $form->status !== 'New') {
+            return back()->with('error', 'This request cannot be approved.');
+        }
+
+        $form->update([
+            'status'           => 'Approved',
+            'reviewed_by'      => $user->id,
+            'reviewed_at'      => now(),
+            'approval_remarks' => $request->input('approval_remarks'),
+        ]);
+
+        if ($form->submitted_by) {
+            NotificationService::notifyUserWithEmail(
+                $form->submitted_by,
+                'it_request',
+                'IT Request Approved',
+                'Your IT request "' . $form->subject . '" has been approved by ' . $user->full_name . '.',
+                route('it.it-request-form')
+            );
+        }
+
+        ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'HOU approved IT request: ' . $form->subject);
+        return redirect()->route('it.it-request-form')->with('success', 'Request approved successfully.');
+    }
+
+    public function houReject(Request $request, int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if ($user->it_role !== 'hou') abort(403);
+
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($form->approver_name !== $user->full_name || $form->status !== 'New') {
+            return back()->with('error', 'This request cannot be rejected.');
+        }
+
+        $form->update([
+            'status'           => 'Rejected',
+            'reviewed_by'      => $user->id,
+            'reviewed_at'      => now(),
+            'approval_remarks' => $request->input('approval_remarks'),
+        ]);
+
+        if ($form->submitted_by) {
+            NotificationService::notifyUserWithEmail(
+                $form->submitted_by,
+                'it_request',
+                'IT Request Rejected',
+                'Your IT request "' . $form->subject . '" has been rejected by ' . $user->full_name . '.',
+                route('it.it-request-form')
+            );
+        }
+
+        ActivityLogService::log('REJECT', 'it_request_form', $form->id, 'HOU rejected IT request: ' . $form->subject);
+        return redirect()->route('it.it-request-form')->with('success', 'Request rejected.');
     }
 
     public function approve(Request $request, int $id)

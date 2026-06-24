@@ -221,10 +221,10 @@
         }
     </style>
 
-    <div class="wt-data-filter">
+    <div class="wt-data-filter" style="justify-content: flex-start !important; width: auto !important;">
         <div class="wt-data-field">
             <label for="{{ $searchId }}">Search</label>
-            <input id="{{ $searchId }}" type="search" placeholder="Keywords" class="wt-data-input">
+            <input id="{{ $searchId }}" type="search" placeholder="Keywords" class="wt-data-input" style="width: 250px !important; max-width: 250px !important;">
         </div>
 
         <div class="wt-data-field">
@@ -366,4 +366,3 @@
         });
     </script>
 @endpush
-

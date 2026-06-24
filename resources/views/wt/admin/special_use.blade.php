@@ -1888,5 +1888,6 @@ html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable t
 </style>
 
 @include('wt.admin.partials.inventory-tools-table-skin')
+@include('wt.admin.partials.inventory-tools-unified-ui')
 
 @endsection

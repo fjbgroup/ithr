@@ -24,10 +24,11 @@
 </style>
 
 {{-- Back link + page header --}}
+@php $isHou = $isHou ?? false; @endphp
 <div style="margin-bottom:20px">
   <div style="margin-bottom:12px">
     <a href="{{ route('it.it-request-form') }}" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);text-decoration:none">
-      <i class="bi bi-arrow-left"></i> Back to IT Requests
+      <i class="bi bi-arrow-left"></i> {{ $isHou ? 'Back to IT Request Form' : 'Back to IT Requests' }}
     </a>
   </div>
   <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
@@ -127,23 +128,28 @@
 </div>
 @endif
 
-{{-- ── Action Bar (only for New requests, admin only) ── --}}
-@if($form->status === 'New')
+{{-- ── Action Bar (New requests: admin sees all 3 actions; HOU sees approve + reject) ── --}}
+@php $isHou = $isHou ?? false; @endphp
+@if($form->status === 'New' && ($user->isAdmin() || $isHou))
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
   <div style="flex:1;min-width:0">
     <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Review this Request</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:2px">This request is pending your review. Approve, request an update, or reject it below.</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">
+      {{ $isHou ? 'This request from your staff is awaiting your decision.' : 'This request is pending your review. Approve, request an update, or reject it below.' }}
+    </div>
   </div>
   <button onclick="openReviewModal('approve')"
     style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
     <i class="bi bi-check-circle-fill"></i> Approve
   </button>
+  @if(!$isHou)
   <button onclick="openReviewModal('update')"
     style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#d97706;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b45309'" onmouseout="this.style.background='#d97706'">
     <i class="bi bi-arrow-clockwise"></i> Request Update
   </button>
+  @endif
   <button onclick="openReviewModal('reject')"
     style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
@@ -365,9 +371,15 @@
 </div>
 
 <script>
+@if($isHou ?? false)
+var approveUrl = '{{ route("it.it-request-form.hou-approve", $form->id) }}';
+var rejectUrl  = '{{ route("it.it-request-form.hou-reject",  $form->id) }}';
+var updateUrl  = '';
+@else
 var approveUrl = '{{ route("it.it-request-form.approve", $form->id) }}';
 var rejectUrl  = '{{ route("it.it-request-form.reject",  $form->id) }}';
 var updateUrl  = '{{ route("it.it-request-form.request-update", $form->id) }}';
+@endif
 
 function openReviewModal(action) {
   var modal = document.getElementById('reviewModal');

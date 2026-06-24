@@ -413,12 +413,19 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div class="itr-locked-note" id="locked-note"></div>
   </div>
 
-  <!-- ══ MY SUBMISSIONS ══ -->
-  @if(isset($myForms) && $myForms->count())
-  <div style="margin-top:28px" id="my-submissions">
-    <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px">My Submissions</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Track the status of your previously submitted IT service requests.</div>
-    <div style="display:flex;flex-direction:column;gap:10px">
+  <!-- ══ STATUS REQUEST ══ -->
+  <div style="margin-top:32px" id="my-submissions">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+          <i class="bi bi-clipboard2-pulse-fill" style="color:var(--accent);margin-right:7px"></i>My Request Status
+        </div>
+        <div style="font-size:12.5px;color:var(--muted)">Track the progress of your IT service requests.</div>
+      </div>
+    </div>
+
+    @if(isset($myForms) && $myForms->count())
+    <div style="display:flex;flex-direction:column;gap:12px">
       @foreach($myForms as $mf)
       @php
         $mfTypeMap = [
@@ -428,80 +435,329 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
         ];
         $mt = $mfTypeMap[$mf->request_type] ?? ['label'=>ucfirst($mf->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+
+        $isDraft    = $mf->status === 'Draft';
+        $isNew      = $mf->status === 'New';
+        $isApproved = $mf->status === 'Approved';
+        $isRejected = $mf->status === 'Rejected';
+
+        // Step states: 0=pending, 1=active, 2=done
+        // Steps: Submitted → Under Review → Decision
+        if ($isDraft) {
+          $s1='pending'; $s2='pending'; $s3='pending';
+          $borderColor='var(--border)';
+        } elseif ($isNew) {
+          $s1='done'; $s2='active'; $s3='pending';
+          $borderColor='rgba(217,119,6,.4)';
+        } elseif ($isApproved) {
+          $s1='done'; $s2='done'; $s3='approved';
+          $borderColor='rgba(22,163,74,.4)';
+        } elseif ($isRejected) {
+          $s1='done'; $s2='done'; $s3='rejected';
+          $borderColor='rgba(220,38,38,.4)';
+        } else {
+          $s1='done'; $s2='active'; $s3='pending';
+          $borderColor='rgba(217,119,6,.4)';
+        }
       @endphp
-      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:border-color .15s"
-        onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
 
-        {{-- Type badge --}}
-        <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $mt['bg'] }};color:{{ $mt['color'] }};border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
-          <i class="bi {{ $mt['icon'] }}"></i>{{ $mt['label'] }}
-        </span>
+      <div style="background:var(--surface);border:1.5px solid {{ $borderColor }};border-radius:14px;overflow:hidden;transition:box-shadow .15s"
+           onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.07)'" onmouseout="this.style.boxShadow='none'">
 
-        {{-- Subject --}}
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $mf->subject ?? 'Untitled Draft' }}</div>
-          <div style="font-size:11.5px;color:var(--muted);margin-top:2px">{{ $mf->status === 'Draft' ? 'Saved' : 'Submitted' }} {{ $mf->created_at->format('d M Y') }}</div>
+        {{-- Card header --}}
+        <div style="padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $mt['bg'] }};color:{{ $mt['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
+            <i class="bi {{ $mt['icon'] }}" style="font-size:11px"></i>{{ $mt['label'] }}
+          </span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+              {{ $mf->subject ?? 'Untitled Draft' }}
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">
+              #{{ $mf->id }} &middot; {{ $isDraft ? 'Saved' : 'Submitted' }} {{ $mf->created_at->format('d M Y, H:i') }}
+            </div>
+          </div>
+          {{-- Draft actions --}}
+          @if($isDraft)
+          <a href="{{ route('it.it-request-form.edit', $mf->id) }}"
+            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:20px;padding:4px 12px;text-decoration:none;flex-shrink:0;background:transparent;transition:background .15s"
+            onmouseover="this.style.background='rgba(2,132,199,.08)'" onmouseout="this.style.background='transparent'">
+            <i class="bi bi-pencil-square"></i> Resume Draft
+          </a>
+          <form method="POST" action="{{ route('it.it-request-form.draft.destroy', $mf->id) }}"
+            onsubmit="return confirm('Delete this draft? This cannot be undone.')" style="display:inline;margin:0">
+            @csrf @method('DELETE')
+            <button type="submit"
+              style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#dc2626;border:1.5px solid rgba(220,38,38,.35);border-radius:20px;padding:4px 12px;background:transparent;cursor:pointer;font-family:inherit;transition:background .15s"
+              onmouseover="this.style.background='rgba(220,38,38,.07)'" onmouseout="this.style.background='transparent'">
+              <i class="bi bi-trash3"></i> Delete
+            </button>
+          </form>
+          @endif
         </div>
 
-        {{-- Remarks preview (if any) --}}
-        @if($mf->approval_remarks)
-        <div style="font-size:12px;color:var(--muted);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0" title="{{ $mf->approval_remarks }}">
-          <i class="bi bi-chat-left-text" style="margin-right:3px"></i>{{ $mf->approval_remarks }}
-        </div>
-        @endif
+        {{-- Status tracker --}}
+        <div style="padding:16px 20px">
+          <div style="display:flex;align-items:flex-start;gap:0">
 
-        {{-- Status badge --}}
-        @if($mf->status === 'Approved')
-        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(22,163,74,.1);color:#16a34a;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
-          <i class="bi bi-check-circle-fill"></i> Approved
-        </span>
-        @elseif($mf->status === 'Rejected')
-        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(220,38,38,.1);color:#dc2626;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
-          <i class="bi bi-x-circle-fill"></i> Rejected
-        </span>
-        @elseif($mf->status === 'New')
-        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(217,119,6,.1);color:#d97706;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
-          <span style="width:7px;height:7px;background:#d97706;border-radius:50%;display:inline-block"></span> Pending Review
-        </span>
-        @elseif($mf->reviewed_by)
-        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(217,119,6,.1);color:#d97706;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
-          <i class="bi bi-arrow-clockwise"></i> Needs Update
-        </span>
-        @else
-        <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(100,116,139,.1);color:#64748b;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;flex-shrink:0">
-          <i class="bi bi-floppy-fill"></i> Draft
-        </span>
-        @endif
+            {{-- Step 1: Submitted --}}
+            @php
+              $c1 = $s1==='done' ? '#16a34a' : ($s1==='active' ? '#0284c7' : '#cbd5e1');
+              $bg1 = $s1==='done' ? 'rgba(22,163,74,.12)' : ($s1==='active' ? 'rgba(2,132,199,.12)' : 'rgba(203,213,225,.2)');
+            @endphp
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+              <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg1 }};border:2px solid {{ $c1 }};display:flex;align-items:center;justify-content:center;font-size:15px;color:{{ $c1 }}">
+                <i class="bi {{ $s1==='done' ? 'bi-check-lg' : 'bi-send-fill' }}"></i>
+              </div>
+              <div style="font-size:10.5px;font-weight:700;color:{{ $c1 }};text-align:center;line-height:1.3">Submitted</div>
+            </div>
 
-        {{-- Resume Draft / Delete Draft buttons --}}
-        @if($mf->status === 'Draft')
-        <a href="{{ route('it.it-request-form.edit', $mf->id) }}"
-          style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:20px;padding:4px 12px;text-decoration:none;flex-shrink:0;transition:all .15s;background:transparent"
-          onmouseover="this.style.background='rgba(2,132,199,.08)'"
-          onmouseout="this.style.background='transparent'">
-          <i class="bi bi-pencil-square"></i> Resume Draft
-        </a>
-        <form method="POST" action="{{ route('it.it-request-form.draft.destroy', $mf->id) }}"
-          onsubmit="return confirm('Delete this draft? This cannot be undone.')" style="display:inline;margin:0">
-          @csrf
-          @method('DELETE')
-          <button type="submit"
-            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#dc2626;border:1.5px solid rgba(220,38,38,.35);border-radius:20px;padding:4px 12px;background:transparent;cursor:pointer;font-family:inherit;transition:all .15s"
-            onmouseover="this.style.background='rgba(220,38,38,.07)'"
-            onmouseout="this.style.background='transparent'">
-            <i class="bi bi-trash3"></i> Delete
-          </button>
-        </form>
-        @endif
+            {{-- Line 1→2 --}}
+            @php $line1 = ($s1==='done') ? '#16a34a' : '#e2e8f0'; @endphp
+            <div style="flex:1;height:2px;background:{{ $line1 }};margin-top:16px;border-radius:2px"></div>
 
-        {{-- Date --}}
-        <div style="font-size:12px;color:var(--muted);text-align:right;flex-shrink:0">
-          {{ $mf->created_at->format('d/m/Y') }}
+            {{-- Step 2: Under Review --}}
+            @php
+              $c2 = $s2==='done' ? '#16a34a' : ($s2==='active' ? '#d97706' : '#cbd5e1');
+              $bg2 = $s2==='done' ? 'rgba(22,163,74,.12)' : ($s2==='active' ? 'rgba(217,119,6,.12)' : 'rgba(203,213,225,.2)');
+              $i2  = $s2==='done' ? 'bi-check-lg' : ($s2==='active' ? 'bi-hourglass-split' : 'bi-hourglass');
+            @endphp
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+              <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg2 }};border:2px solid {{ $c2 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c2 }}">
+                <i class="bi {{ $i2 }}"></i>
+              </div>
+              <div style="font-size:10.5px;font-weight:700;color:{{ $c2 }};text-align:center;line-height:1.3">Under Review</div>
+            </div>
+
+            {{-- Line 2→3 --}}
+            @php $line2 = ($s2==='done') ? '#16a34a' : '#e2e8f0'; @endphp
+            <div style="flex:1;height:2px;background:{{ $line2 }};margin-top:16px;border-radius:2px"></div>
+
+            {{-- Step 3: Decision --}}
+            @php
+              if ($s3==='approved') { $c3='#16a34a'; $bg3='rgba(22,163,74,.12)'; $i3='bi-check-circle-fill'; $l3='Approved'; }
+              elseif ($s3==='rejected') { $c3='#dc2626'; $bg3='rgba(220,38,38,.12)'; $i3='bi-x-circle-fill'; $l3='Rejected'; }
+              else { $c3='#cbd5e1'; $bg3='rgba(203,213,225,.2)'; $i3='bi-circle'; $l3='Decision'; }
+            @endphp
+            <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+              <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg3 }};border:2px solid {{ $c3 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c3 }}">
+                <i class="bi {{ $i3 }}"></i>
+              </div>
+              <div style="font-size:10.5px;font-weight:700;color:{{ $c3 }};text-align:center;line-height:1.3">{{ $l3 }}</div>
+            </div>
+
+          </div>
+
+          {{-- Remarks --}}
+          @if($mf->approval_remarks)
+          <div style="margin-top:14px;padding:10px 14px;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:flex-start;gap:8px">
+            <i class="bi bi-chat-left-text-fill" style="color:var(--muted);font-size:13px;flex-shrink:0;margin-top:1px"></i>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Remarks from IT Admin</div>
+              <div style="font-size:12.5px;color:var(--text)">{{ $mf->approval_remarks }}</div>
+            </div>
+          </div>
+          @endif
+
+          {{-- Review date --}}
+          @if($mf->reviewed_at)
+          <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:right">
+            Reviewed on {{ \Carbon\Carbon::parse($mf->reviewed_at)->format('d M Y, H:i') }}
+          </div>
+          @endif
         </div>
       </div>
       @endforeach
     </div>
+    @else
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:40px 20px;text-align:center;color:var(--muted)">
+      <i class="bi bi-clipboard2-x" style="font-size:30px;display:block;margin-bottom:10px;opacity:.35"></i>
+      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No requests yet</div>
+      <div style="font-size:12.5px">Your submitted IT requests will appear here.</div>
+    </div>
+    @endif
   </div>
+
+  {{-- ══ HOU: PENDING APPROVAL REQUESTS ══ --}}
+  @if($user->it_role === 'hou')
+  <div style="margin-top:32px" id="hou-pending-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+          <i class="bi bi-person-check-fill" style="color:#7c3aed;margin-right:7px"></i>Pending Approval Requests
+        </div>
+        <div style="font-size:12.5px;color:var(--muted)">IT requests from your staff that have listed you as approver.</div>
+      </div>
+      @if($pendingApprovals->count())
+      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.25);border-radius:10px;padding:7px 14px">
+        <span style="width:7px;height:7px;background:#7c3aed;border-radius:50%;display:inline-block;animation:itr-pulse 1.6s infinite"></span>
+        <span style="font-size:12.5px;font-weight:700;color:#7c3aed">{{ $pendingApprovals->count() }} pending</span>
+      </div>
+      @endif
+    </div>
+
+    @if($pendingApprovals->count())
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+
+      {{-- Column headers --}}
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 110px auto;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border)">
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Request</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Submitted By</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Department</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Date</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Actions</div>
+      </div>
+
+      @foreach($pendingApprovals as $pa)
+      @php
+        $paTypeMap = [
+          'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
+          'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
+          'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
+          'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
+        ];
+        $pt = $paTypeMap[$pa->request_type] ?? ['label'=>ucfirst($pa->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+      @endphp
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 110px auto;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;gap:12px;transition:background .12s"
+           onmouseover="this.style.background='var(--body-bg)'" onmouseout="this.style.background='transparent'">
+
+        {{-- Request: type + subject --}}
+        <div style="min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="display:inline-flex;align-items:center;gap:5px;background:{{ $pt['bg'] }};color:{{ $pt['color'] }};border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700">
+              <i class="bi {{ $pt['icon'] }}" style="font-size:10px"></i>{{ $pt['label'] }}
+            </span>
+            <span style="font-size:11px;color:var(--muted);font-weight:500">#{{ $pa->id }}</span>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+            {{ $pa->subject ?? '(No subject)' }}
+          </div>
+          @if($pa->justification)
+          <div style="font-size:11.5px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+            {{ $pa->justification }}
+          </div>
+          @endif
+        </div>
+
+        {{-- Submitted by --}}
+        <div style="display:flex;align-items:center;gap:8px;min-width:0">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(124,58,237,.1);color:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">
+            <i class="bi bi-person-fill"></i>
+          </div>
+          <div style="min-width:0">
+            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+              {{ $pa->req_name ?: ($pa->submittedBy?->full_name ?? '—') }}
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pa->req_designation ?: '—' }}</div>
+          </div>
+        </div>
+
+        {{-- Department --}}
+        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          {{ $pa->req_department ?: '—' }}
+        </div>
+
+        {{-- Date --}}
+        <div>
+          <div style="font-size:12.5px;font-weight:500;color:var(--text)">{{ $pa->created_at->format('d M Y') }}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pa->created_at->format('H:i') }}</div>
+        </div>
+
+        {{-- Actions --}}
+        <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap">
+          <a href="{{ route('it.it-request-form.hou-show', $pa->id) }}"
+            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--accent);border:1.5px solid rgba(2,132,199,.3);border-radius:7px;padding:5px 11px;text-decoration:none;background:transparent;transition:all .15s"
+            onmouseover="this.style.background='rgba(2,132,199,.08)'" onmouseout="this.style.background='transparent'">
+            <i class="bi bi-eye-fill"></i> Open
+          </a>
+          <button onclick="houAction({{ $pa->id }},'approve')"
+            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#16a34a;border:1.5px solid rgba(22,163,74,.3);border-radius:7px;padding:5px 11px;background:transparent;cursor:pointer;font-family:inherit;transition:all .15s"
+            onmouseover="this.style.background='rgba(22,163,74,.08)'" onmouseout="this.style.background='transparent'">
+            <i class="bi bi-check-circle-fill"></i> Approve
+          </button>
+          <button onclick="houAction({{ $pa->id }},'reject')"
+            style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#dc2626;border:1.5px solid rgba(220,38,38,.3);border-radius:7px;padding:5px 11px;background:transparent;cursor:pointer;font-family:inherit;transition:all .15s"
+            onmouseover="this.style.background='rgba(220,38,38,.08)'" onmouseout="this.style.background='transparent'">
+            <i class="bi bi-x-circle-fill"></i> Reject
+          </button>
+        </div>
+
+      </div>
+      @endforeach
+
+    </div>
+    @else
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 20px;text-align:center;color:var(--muted)">
+      <i class="bi bi-inbox" style="font-size:28px;display:block;margin-bottom:10px;opacity:.35"></i>
+      <div style="font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:4px">No pending requests</div>
+      <div style="font-size:12.5px">Requests from your staff will appear here once submitted.</div>
+    </div>
+    @endif
+  </div>
+
+  {{-- HOU inline action modal --}}
+  <div id="houActionModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;align-items:center;justify-content:center">
+    <div style="background:var(--surface);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <div id="houModalIcon" style="width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
+        <div id="houModalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
+      </div>
+      <form id="houActionForm" method="POST">
+        @csrf
+        <div style="margin-bottom:16px">
+          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">
+            Remarks <span id="houRemarksNote" style="font-weight:400;color:var(--muted)"></span>
+          </label>
+          <textarea name="approval_remarks" id="houRemarks" rows="3"
+            style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
+            placeholder="Add a remark (optional)…"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button type="button" onclick="closeHouModal()"
+            style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
+            Cancel
+          </button>
+          <button type="submit" id="houModalSubmit"
+            style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer">
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  var houApproveBase = '{{ url("/it/it-request-form") }}';
+  function houAction(id, action) {
+    var modal  = document.getElementById('houActionModal');
+    var icon   = document.getElementById('houModalIcon');
+    var title  = document.getElementById('houModalTitle');
+    var submit = document.getElementById('houModalSubmit');
+    var note   = document.getElementById('houRemarksNote');
+    var form   = document.getElementById('houActionForm');
+    document.getElementById('houRemarks').value = '';
+
+    if (action === 'approve') {
+      icon.style.background = 'rgba(22,163,74,.12)'; icon.style.color = '#16a34a';
+      icon.innerHTML = '<i class="bi bi-check-circle-fill"></i>';
+      title.textContent = 'Approve Request';
+      submit.textContent = 'Approve'; submit.style.background = '#16a34a';
+      note.textContent = '(optional)';
+      form.action = houApproveBase + '/' + id + '/hou-approve';
+    } else {
+      icon.style.background = 'rgba(220,38,38,.12)'; icon.style.color = '#dc2626';
+      icon.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
+      title.textContent = 'Reject Request';
+      submit.textContent = 'Reject'; submit.style.background = '#dc2626';
+      note.textContent = '(optional)';
+      form.action = houApproveBase + '/' + id + '/hou-reject';
+    }
+    modal.style.display = 'flex';
+    setTimeout(function() { document.getElementById('houRemarks').focus(); }, 80);
+  }
+  function closeHouModal() { document.getElementById('houActionModal').style.display = 'none'; }
+  document.getElementById('houActionModal').addEventListener('click', function(e) { if (e.target === this) closeHouModal(); });
+  </script>
   @endif
 
   <!-- ══ STEP 2 ══ -->
@@ -604,32 +860,32 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           <div class="g3 fg">
             <div class="fg">
               <div class="itr-label">Name <span class="itr-req">*</span></div>
-              <input type="hidden" name="req_name" id="req_name_val" value="{{ old('req_name') }}">
+              <input type="hidden" name="req_name" id="req_name_val" value="{{ old('req_name', $user->full_name) }}">
               <input class="itr-input{{ $errors->has('req_name') ? ' is-error' : '' }}" type="text" id="req_name_search"
-                value="{{ old('req_name') }}" placeholder="Type to search staff name…" autocomplete="off"
+                value="{{ old('req_name', $user->full_name) }}" placeholder="Type to search staff name…" autocomplete="off"
                 oninput="filterStaff(this.value)" onfocus="showStaffDropdown()" onblur="setTimeout(hideStaffDropdown,200)" required/>
               @error('req_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
             </div>
             <div class="fg">
               <div class="itr-label">Department <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department') }}" required/>
+              <input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department', $user->dept_name ?? optional($user->department)->name ?? '') }}" required/>
               @error('req_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
             </div>
             <div class="fg">
               <div class="itr-label">Staff ID <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id') }}" required/>
+              <input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id', $user->department ?? '') }}" required/>
               @error('req_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
             </div>
           </div>
           <div class="g2">
             <div class="fg">
               <div class="itr-label">Designation <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation') }}" required/>
+              <input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation', $user->position ?? '') }}" required/>
               @error('req_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
             </div>
             <div class="fg">
               <div class="itr-label">Contact <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact') }}" required/>
+              <input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact', $user->email ?? '') }}" required/>
               @error('req_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
             </div>
           </div>
@@ -648,9 +904,9 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             @error('approver_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
           <div class="g3">
-            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_department') ? ' is-error' : '' }}" type="text" name="approver_department" value="{{ old('approver_department') }}" required/>@error('approver_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
+            <div class="fg"><div class="itr-label">Department <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_department') ? ' is-error' : '' }}" id="approver_department" type="text" name="approver_department" value="{{ old('approver_department') }}" required/>@error('approver_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
             <div class="fg"><div class="itr-label">Designation <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_designation') ? ' is-error' : '' }}" type="text" name="approver_designation" value="{{ old('approver_designation') }}" required/>@error('approver_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
-            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_contact') ? ' is-error' : '' }}" type="text" name="approver_contact" value="{{ old('approver_contact') }}" required/>@error('approver_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
+            <div class="fg"><div class="itr-label">Contact <span class="itr-req">*</span></div><input class="itr-input{{ $errors->has('approver_contact') ? ' is-error' : '' }}" id="approver_contact" type="text" name="approver_contact" value="{{ old('approver_contact') }}" required/>@error('approver_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror</div>
           </div>
         </div>
       </div>
@@ -928,6 +1184,7 @@ restoreFromSession();
 
 // ── Staff / Approver Autocomplete ─────────────────────────────
 const staffList = @json($staffList ?? []);
+const houList   = @json($houList ?? []);
 
 var ddStyle = [
   'display:none','position:fixed','z-index:9999',
@@ -943,7 +1200,18 @@ document.body.appendChild(houDropdown);
 
 houDropdown.addEventListener('mousedown', function(e) {
   var item = e.target.closest('[data-name]');
-  if (item) { document.getElementById('approver_name_search').value = item.getAttribute('data-name'); document.getElementById('approver_name_val').value = item.getAttribute('data-name'); houDropdown.style.display = 'none'; }
+  if (item) {
+    document.getElementById('approver_name_search').value = item.getAttribute('data-name');
+    document.getElementById('approver_name_val').value = item.getAttribute('data-name');
+    var dept  = item.getAttribute('data-dept')  || '';
+    var email = item.getAttribute('data-email') || '';
+    var deptInput    = document.getElementById('approver_department');
+    var contactInput = document.getElementById('approver_contact');
+    if (deptInput)    deptInput.value    = dept;
+    if (contactInput) contactInput.value = email;
+    houDropdown.style.display = 'none';
+    saveFormState();
+  }
 });
 
 // Requester dropdown
@@ -953,16 +1221,38 @@ document.body.appendChild(staffDropdown);
 
 staffDropdown.addEventListener('mousedown', function(e) {
   var item = e.target.closest('[data-name]');
-  if (item) { document.getElementById('req_name_search').value = item.getAttribute('data-name'); document.getElementById('req_name_val').value = item.getAttribute('data-name'); staffDropdown.style.display = 'none'; }
+  if (item) {
+    document.getElementById('req_name_search').value = item.getAttribute('data-name');
+    document.getElementById('req_name_val').value = item.getAttribute('data-name');
+    var dept    = item.getAttribute('data-dept') || '';
+    var staffNo = item.getAttribute('data-staff-no') || '';
+    var email   = item.getAttribute('data-email') || '';
+    var activeForm = activeType ? document.getElementById('form-' + activeType) : null;
+    if (activeForm) {
+      var deptInput = activeForm.querySelector('[name="req_department"]');
+      if (deptInput) deptInput.value = dept;
+      var idInput = activeForm.querySelector('[name="req_staff_id"]');
+      if (idInput) idInput.value = staffNo;
+      var contactInput = activeForm.querySelector('[name="req_contact"]');
+      if (contactInput) contactInput.value = email;
+    }
+    staffDropdown.style.display = 'none';
+    saveFormState();
+  }
 });
 
 function buildDropdownHTML(items) {
   if (!items.length) return '<div style="padding:12px 16px;font-size:13px;color:#64748b;">No results found</div>';
   return items.map(function(s) {
-    var name    = (s.name || '');
-    var dept    = (s.dept || '');
-    var escaped = name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    return '<div data-name="' + escaped + '" style="padding:10px 16px;cursor:pointer;font-size:13px;border-bottom:1px solid #e2e8f0;" onmouseover="this.style.background=\'#f0f9ff\'" onmouseout="this.style.background=\'#fff\'">'
+    var name     = (s.name || '');
+    var dept     = (s.dept || '');
+    var staffNo  = (s.staff_no || '');
+    var email    = (s.email || '');
+    var escaped  = name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    var deptEsc  = dept.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    var noEsc    = staffNo.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    var emailEsc = email.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    return '<div data-name="' + escaped + '" data-dept="' + deptEsc + '" data-staff-no="' + noEsc + '" data-email="' + emailEsc + '" style="padding:10px 16px;cursor:pointer;font-size:13px;border-bottom:1px solid #e2e8f0;" onmouseover="this.style.background=\'#f0f9ff\'" onmouseout="this.style.background=\'#fff\'">'
       + '<div style="font-weight:600;color:#0f172a;">' + name + '</div>'
       + (dept ? '<div style="font-size:11px;color:#64748b;margin-top:2px;">' + dept + '</div>' : '')
       + '</div>';
@@ -981,8 +1271,17 @@ function positionDD(dd, inputId) {
   dd.style.width = rect.width + 'px';
 }
 
-function filterHou(query)   { document.getElementById('approver_name_val').value = query; houDropdown.innerHTML = buildDropdownHTML(filterList(query)); positionDD(houDropdown,'approver_name_search'); houDropdown.style.display = 'block'; }
-function showHouDropdown()  { houDropdown.innerHTML = buildDropdownHTML(filterList(document.getElementById('approver_name_search').value)); positionDD(houDropdown,'approver_name_search'); houDropdown.style.display = 'block'; }
+function filterHouList(query) {
+  var q = query.trim().toLowerCase();
+  return q ? houList.filter(function(s) { return s.name && s.name.toLowerCase().includes(q); }) : houList;
+}
+function filterHou(query) {
+  document.getElementById('approver_name_val').value = query;
+  houDropdown.innerHTML = buildDropdownHTML(filterHouList(query));
+  positionDD(houDropdown,'approver_name_search');
+  houDropdown.style.display = 'block';
+}
+function showHouDropdown()  { houDropdown.innerHTML = buildDropdownHTML(filterHouList(document.getElementById('approver_name_search').value)); positionDD(houDropdown,'approver_name_search'); houDropdown.style.display = 'block'; }
 function hideHouDropdown()  { houDropdown.style.display = 'none'; }
 
 function filterStaff(query)   { document.getElementById('req_name_val').value = query; staffDropdown.innerHTML = buildDropdownHTML(filterList(query)); positionDD(staffDropdown,'req_name_search'); staffDropdown.style.display = 'block'; }

@@ -2252,5 +2252,67 @@ html:not(.dark) body .content-surface :is(
     background: #ffffff !important;
     color: #1f2937 !important;
 }
-</style>
 
+/* Duplicated ID requested override: force inline filters and clean centered table grid. */
+body .content-surface .duplicate-search-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-filter-field label {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-search-panel .duplicate-search,
+body .content-surface .duplicate-search-panel .duplicate-filter-select,
+body .content-surface .duplicate-search-panel .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable {
+    border-collapse: collapse !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable th,
+body .content-surface .duplicate-table-shell #duplicateTable td {
+    border: 1px solid #2d3748 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack,
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: .5rem !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-stack form,
+body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+</style>

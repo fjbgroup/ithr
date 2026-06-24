@@ -47,7 +47,7 @@
         @endisset
     </div>
 
-    <div class="grid min-h-[86px] grid-cols-[minmax(260px,1fr)_minmax(220px,30%)_92px] items-end gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900 max-[900px]:grid-cols-1">
+    <div class="grid min-h-[86px] grid-cols-[minmax(260px,1fr)_minmax(220px,30%)_92px] items-end gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900 max-[900px]:grid-cols-1" style="justify-content: flex-start !important; width: auto !important;">
         <div>
             <label for="{{ $searchId }}" class="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-300">Search</label>
             <input
@@ -55,6 +55,7 @@
                 type="search"
                 placeholder="Keywords"
                 class="h-[38px] w-full rounded-md border border-slate-300 bg-white px-3 text-[13px] font-bold text-slate-950 outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                style="width: 250px !important; max-width: 250px !important;"
             >
         </div>
 
@@ -228,4 +229,3 @@
         });
     </script>
 @endpush
-
