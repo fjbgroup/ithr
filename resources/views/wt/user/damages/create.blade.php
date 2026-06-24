@@ -409,6 +409,17 @@
         background: var(--body-bg) !important;
         border-color: var(--border) !important;
     }
+    .damage-form-page .theme-note-panel {
+        background: var(--body-bg) !important;
+        border-color: var(--border) !important;
+        color: var(--text) !important;
+    }
+    .damage-form-page .theme-note-panel p {
+        color: var(--text) !important;
+    }
+    .damage-form-page .theme-note-panel p:first-child {
+        color: var(--accent) !important;
+    }
     .damage-form-page input:not([type="checkbox"]):not([type="file"]),
     .damage-form-page select,
     .damage-form-page textarea {
@@ -837,7 +848,7 @@
         <div data-faulty-ownership-section></div>
         {{-- Reporter Details --}}
         <h3 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">{{ $isAdminRoute && $mode === 'staff' ? '3. Ownership Information' : 'Reporter Information' }}</h3>
-        <div class="mb-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3">
+        <div class="theme-note-panel mb-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3">
             <p class="text-[10px] font-black uppercase tracking-widest text-sky-700">Profile Note</p>
             <p class="mt-1 text-[10px] font-bold leading-5 text-sky-800">
                 @if($isAdminRoute && $mode === 'staff')

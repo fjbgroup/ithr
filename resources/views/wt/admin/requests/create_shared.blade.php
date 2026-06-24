@@ -795,6 +795,17 @@
         border-radius: 10px !important;
         margin-bottom: 8px !important;
     }
+    html .match-report-faulty .theme-note-panel {
+        background: var(--body-bg) !important;
+        border-color: var(--border) !important;
+        color: var(--text) !important;
+    }
+    html .match-report-faulty .theme-note-panel p {
+        color: var(--text) !important;
+    }
+    html .match-report-faulty .theme-note-panel p:first-child {
+        color: var(--accent) !important;
+    }
 </style>
 <div class="px-1 sm:px-2 admin-request-shell match-report-faulty {{ $isTemporaryRequest ? '' : 'longterm-modern' }}">
 @if($isTemporaryRequest)
@@ -1406,7 +1417,7 @@
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'corporate-combobox-input';
-            input.placeholder = select.dataset.placeholder || 'Search HR staff name or ID...';
+            input.placeholder = select.dataset.placeholder || 'Search staff name or ID...';
             input.autocomplete = 'off';
             input.value = select.value || '';
             input.required = inputRequired;
@@ -1442,7 +1453,7 @@
 
             function renderMenu(results, loading) {
                 if (loading) {
-                    menu.innerHTML = '<div class="corporate-combobox-name px-4 py-3 text-slate-400">Searching HR staff...</div>';
+                    menu.innerHTML = '<div class="corporate-combobox-name px-4 py-3 text-slate-400">Searching staff...</div>';
                     menu.style.display = 'block';
                     return;
                 }
@@ -1457,7 +1468,7 @@
                             </button>
                         `;
                     }).join('')
-                    : '<div class="corporate-combobox-name px-4 py-3 text-slate-400">No HR staff match — you can type the name manually.</div>';
+                    : '<div class="corporate-combobox-name px-4 py-3 text-slate-400">No staff match - you can type the name manually.</div>';
 
                 Array.from(menu.querySelectorAll('[data-staff-index]')).forEach((button) => {
                     button.addEventListener('click', () => {
@@ -1556,7 +1567,7 @@
                         <i class="fa-solid fa-chevron-down request-form-accordion-icon"></i>
                     </button>
                     <div class="request-form-accordion-panel longterm-owner-panel" data-owner-section-panel hidden>
-                    <div class="longterm-note-box mb-4 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
+                    <div class="theme-note-panel longterm-note-box mb-4 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
                         <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
                     </div>
@@ -1564,10 +1575,10 @@
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Name <span class="text-red-500">*</span></label>
                             <input type="hidden" name="pic_details[${index}][staff_no]" data-pic-staff-no value="${escapeAttribute(saved.staff_no || '')}">
-                            <select name="pic_details[${index}][name]" data-pic-name data-placeholder="Search HR staff name or ID..." class="pic-tag-select w-full" required>
-                                ${renderOptions(ownershipNameOptions, saved.name || '', 'Search HR staff name or ID...')}
+                            <select name="pic_details[${index}][name]" data-pic-name data-placeholder="Search staff name or ID..." class="pic-tag-select w-full" required>
+                                ${renderOptions(ownershipNameOptions, saved.name || '', 'Search staff name or ID...')}
                             </select>
-                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search the HR staff record and pick the owner — department &amp; phone auto-fill. If the staff is not listed, you can still type the name manually.</p>
+                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search the staff record and pick the owner - department &amp; phone auto-fill. If the staff is not listed, you can still type the name manually.</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Phone No</label>

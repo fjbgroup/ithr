@@ -137,7 +137,7 @@
   </div>
 
   <div class="page-body">
-    <div class="content-surface" style="max-width:900px;margin:0 auto">
+    <div class="content-surface">
       @include('wt.partials.flash-alerts')
       @yield('content')
     </div>

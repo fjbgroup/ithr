@@ -29,6 +29,11 @@
   --radius:           10px;
   --radius-lg:        14px;
   --transition:       .16s ease;
+  --content-max-w:    1200px;
+  --form-xs-w:        120px;
+  --form-sm-w:        180px;
+  --form-md-w:        280px;
+  --form-lg-w:        420px;
   --table-hover:      #f0f9ff;
   --form-input-bg:    #ffffff;
   --form-input-border:#e2e8f0;
@@ -72,19 +77,24 @@ html:not(.dark) { color-scheme: light; }
 
 /* ── BASE ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: inherit; }
-html { font-size: 14px; }
+html { font-size: 12px; }
 body {
   background: var(--body-bg);
   color: var(--text);
   font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  font-size: 13px; line-height: 1.5; min-height: 100vh;
+  font-size: 12px; line-height: 1.45; min-height: 100vh;
   margin: 0;
   padding: 0;
 }
 html.dark body { background: var(--body-bg); color: var(--text); }
 
 /* Ensure all form elements inherit DM Sans — browsers default to system font otherwise */
-input, select, textarea, button { font-family: inherit; font-size: inherit; }
+input, select, textarea, button { font-family: inherit; font-size: 12px; }
+
+form,
+form :is(label, input, select, textarea, button, p, span, div, a, option, .form-label, .form-control, .form-select, .select2-container, .select2-selection__rendered, .select2-results__option) {
+  font-size: 12px !important;
+}
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -408,7 +418,13 @@ html.dark .sidebar-toggle { border-color: #374151; color: #e2e8f0; }
    PAGE BODY & CONTENT
 ══════════════════════════════════════════════════════ */
 .page-body { padding: 14px 16px; flex: 1; }
-.content-surface { background: transparent; }
+.content-surface {
+  width: min(100%, var(--content-max-w));
+  max-width: var(--content-max-w);
+  margin-left: auto;
+  margin-right: auto;
+  background: transparent;
+}
 
 .page-header-block {
   display: flex; flex-wrap: wrap; align-items: flex-start;
@@ -721,6 +737,39 @@ html.dark .wt-btn:hover { background: var(--soft-surface); border-color: #60a5fa
 }
 .form-control::placeholder { color: var(--muted); opacity: .7; }
 textarea.form-control { min-height: 88px; resize: vertical; }
+
+/* Global compact form sizing. Fields should match the expected data length instead of filling the page. */
+.content-surface form :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]), select, textarea, .form-control, .form-select),
+.content-surface .select2-container {
+  width: min(100%, var(--form-md-w)) !important;
+  max-width: var(--form-md-w) !important;
+}
+.content-surface form textarea,
+.content-surface form textarea.form-control {
+  width: min(100%, var(--form-lg-w)) !important;
+  max-width: var(--form-lg-w) !important;
+}
+.content-surface form :is(input[type="date"], input[type="time"], input[type="datetime-local"], input[type="number"]),
+.content-surface form :is([name*="id" i], [id*="id" i], [name*="quantity" i], [id*="quantity" i], [name*="bay" i], [id*="bay" i]) {
+  width: min(100%, var(--form-sm-w)) !important;
+  max-width: var(--form-sm-w) !important;
+}
+.content-surface form :is([name*="phone" i], [id*="phone" i], [name*="radio" i], [id*="radio" i], [name*="serial" i], [id*="serial" i], [name*="model" i], [id*="model" i]) {
+  width: min(100%, var(--form-md-w)) !important;
+  max-width: var(--form-md-w) !important;
+}
+.content-surface form :is([name*="name" i], [id*="name" i], [name*="department" i], [id*="department" i], [name*="location" i], [id*="location" i], [name*="sector" i], [name*="purpose" i], [id*="purpose" i], [name*="justification" i], [id*="justification" i]) {
+  width: min(100%, var(--form-lg-w)) !important;
+  max-width: var(--form-lg-w) !important;
+}
+.content-surface form .w-full:not(table):not(thead):not(tbody):not(tr):not(th):not(td),
+.content-surface form .select2-container.w-full {
+  max-width: var(--form-lg-w) !important;
+}
+.content-surface form .grid,
+.content-surface form .row {
+  align-items: start;
+}
 
 input[type="text"]:not([data-preserve-case="true"]):not([name="username"]):not([id="edit_username"]),
 input[type="search"],

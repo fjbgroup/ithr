@@ -401,8 +401,10 @@
   </div>
 
   <div class="page-body">
-    @include('wt.partials.flash-alerts')
-    @yield('content')
+    <div class="content-surface">
+      @include('wt.partials.flash-alerts')
+      @yield('content')
+    </div>
     <div style="text-align:center;margin-top:3rem;padding:2rem 0;border-top:1px solid rgba(255,255,255,.08);clear:both;">
       <div style="margin-bottom:.5rem;">
         <img src="{{ asset('assets/images/footer.jpg') }}" alt="FJB" style="max-height:45px;width:auto;object-fit:contain;display:block;margin:0 auto;">
