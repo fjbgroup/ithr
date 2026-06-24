@@ -85,6 +85,45 @@
         border-color: rgba(148, 163, 184, 0.22);
         background: #152033;
     }
+
+    .my-inventory-search {
+        position: relative;
+        width: min(100%, 360px);
+    }
+
+    .my-inventory-search i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 11px;
+        pointer-events: none;
+    }
+
+    .my-inventory-search input {
+        width: 100%;
+        min-height: 36px;
+        border-radius: 9px;
+        border: 1px solid #dbe3ef;
+        background: #ffffff;
+        padding: 8px 12px 8px 34px;
+        color: #0f172a;
+        font-size: 11px;
+        font-weight: 800;
+        outline: none;
+    }
+
+    .my-inventory-search input:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    .dark .my-inventory-search input {
+        border-color: rgba(148, 163, 184, 0.24);
+        background: rgba(15, 23, 42, 0.48);
+        color: #e2e8f0;
+    }
 </style>
 @endpush
 
@@ -191,15 +230,21 @@
 </div>
 @else
 <div class="bg-white dark:bg-slate-800/50 rounded-2xl shadow-sm border border-stone-100 dark:border-slate-700/50 overflow-hidden transition-all">
-    <div class="px-6 py-4 border-b border-stone-50 dark:border-slate-700/50 flex justify-between items-center">
+    <div class="px-6 py-4 border-b border-stone-50 dark:border-slate-700/50 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <h4 class="card-title text-stone-800 dark:text-slate-200">Assigned Units</h4>
-        <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-[9px] font-black uppercase tracking-widest text-stone-400">Live Status</span>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <label class="my-inventory-search" for="myInventorySearch">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" id="myInventorySearch" placeholder="Search radio ID, serial, owner, department...">
+            </label>
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[9px] font-black uppercase tracking-widest text-stone-400">Live Status</span>
+            </div>
         </div>
     </div>
     <div class="p-4">
-        <div class="space-y-3">
+        <div class="space-y-3" id="myInventoryList">
             @forelse($records as $record)
                     @php
                         $activeRequest = $record->active_request ?? null;
@@ -228,7 +273,19 @@
                             $requestUnits = collect(explode(',', $activeRequest->radio_id))->map(fn ($unit) => trim($unit))->filter()->values();
                         }
                     @endphp
-                    <article class="rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-700/70 dark:bg-slate-900/40">
+                    <article class="rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-700/70 dark:bg-slate-900/40" data-my-inventory-item data-my-inventory-search="{{ strtoupper(implode(' ', [
+                        $record->radio_id,
+                        $record->model,
+                        $record->serial_number,
+                        $record->status,
+                        $record->ownership_type,
+                        $ownerName,
+                        $ownerDept,
+                        $displayRemark,
+                        optional($activeRequest)->event_name,
+                        optional($activeRequest)->staff_id,
+                        optional($activeRequest)->request_type,
+                    ])) }}">
                         <div class="flex flex-col gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-700/70 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <p class="text-[8px] font-black uppercase tracking-[0.16em] text-slate-400">Walkie Talkie Unit</p>
@@ -416,6 +473,14 @@
                     </div>
                     @endforelse
         </div>
+        <div id="myInventorySearchEmpty" class="hidden px-4 py-16 text-center">
+            <div class="flex flex-col items-center gap-3">
+                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-stone-50 text-stone-200 dark:bg-slate-700 dark:text-slate-600">
+                    <i class="fas fa-magnifying-glass text-xl"></i>
+                </div>
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">No matching walkie talkie found</p>
+            </div>
+        </div>
     </div>
 </div>
 @endif
@@ -444,6 +509,33 @@
         modal.classList.remove('flex');
         document.body.style.overflow = '';
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('myInventorySearch');
+        const emptyState = document.getElementById('myInventorySearchEmpty');
+        const items = Array.from(document.querySelectorAll('[data-my-inventory-item]'));
+
+        if (!searchInput) {
+            return;
+        }
+
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.trim().toUpperCase();
+            let visibleCount = 0;
+
+            items.forEach((item) => {
+                const isVisible = query === '' || (item.dataset.myInventorySearch || '').includes(query);
+                item.style.display = isVisible ? '' : 'none';
+
+                if (isVisible) {
+                    visibleCount += 1;
+                }
+            });
+
+            if (emptyState) {
+                emptyState.classList.toggle('hidden', visibleCount > 0 || items.length === 0);
+            }
+        });
+    });
 </script>
 @endpush
-

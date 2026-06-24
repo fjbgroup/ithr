@@ -218,6 +218,7 @@ body .content-surface .wt-data-table {
 }
 
 body .content-surface #walkiesTable thead th,
+body .content-surface #maintTable thead th,
 body .content-surface #maintenanceTable thead th,
 body .content-surface .unused-table th,
 body .content-surface #duplicateTable thead th,
@@ -237,6 +238,7 @@ body .content-surface .wt-data thead th {
 }
 
 body .content-surface #walkiesTable tbody td,
+body .content-surface #maintTable tbody td,
 body .content-surface #maintenanceTable tbody td,
 body .content-surface .unused-table td,
 body .content-surface #duplicateTable tbody td,
@@ -274,6 +276,77 @@ body .content-surface .wt-data table tbody {
     min-height: 0 !important;
 }
 
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table
+) {
+    min-width: 860px !important;
+}
+
+body .content-surface :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .dup-actions,
+    .special-action-buttons,
+    .unused-actions
+) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+}
+
+body .content-surface :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .dup-actions,
+    .special-action-buttons,
+    .unused-actions
+) form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+body .content-surface :is(
+    .inventory-action-buttons .btn,
+    .maintenance-action-stack .wt-btn,
+    .dup-actions .btn,
+    .special-action-buttons .btn,
+    .unused-action-btn
+) {
+    min-width: 64px !important;
+    min-height: 28px !important;
+    height: 28px !important;
+    padding: 0 9px !important;
+    border-radius: 7px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .08em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface :is(
+    .inventory-action-buttons .btn-info,
+    .maintenance-action-view,
+    .dup-actions .btn-info,
+    .special-action-buttons .btn-info,
+    .unused-action-btn:first-child
+) {
+    border-color: #0284c7 !important;
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
 body .content-surface .unused-table tbody tr:has(td[colspan]),
 body .content-surface .duplicate-table-shell tbody tr:has(td[colspan]),
 body .content-surface .special-table-shell tbody tr:has(td[colspan]),
@@ -293,6 +366,7 @@ body .content-surface .wt-data tbody td.dataTables_empty {
 }
 
 body .content-surface #walkiesTable tbody tr:hover td,
+body .content-surface #maintTable tbody tr:hover td,
 body .content-surface #maintenanceTable tbody tr:hover td,
 body .content-surface .unused-table tbody tr:hover td,
 body .content-surface #duplicateTable tbody tr:hover td,
@@ -2002,6 +2076,7 @@ body .content-surface :is(
 
 body .content-surface :is(
     #walkiesTable,
+    #maintTable,
     #maintenanceTable,
     #specialTable,
     #duplicateTable,
@@ -2020,6 +2095,7 @@ body .content-surface :is(
 
 body .content-surface :is(
     #walkiesTable,
+    #maintTable,
     #maintenanceTable,
     #specialTable,
     #duplicateTable,
@@ -2253,4 +2329,3 @@ html:not(.dark) body .content-surface :is(
     color: #1f2937 !important;
 }
 </style>
-

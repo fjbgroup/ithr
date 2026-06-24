@@ -5,32 +5,39 @@
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
-    .profile-page-shell { max-width:980px; }
-    .profile-summary { border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:10px; }
-    .profile-avatar-clean { display:flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:9px;background:var(--accent);color:#fff;font-size:14px;font-weight:900; }
-    .profile-summary-name { color:var(--text);font-size:11px;font-weight:900;text-transform:uppercase; }
-    .profile-summary-role { margin-top:2px;color:var(--muted);font-size:7px;font-weight:900;letter-spacing:.16em;text-transform:uppercase; }
-    .profile-pill { display:inline-flex;align-items:center;gap:5px;border-radius:999px;border:1px solid var(--border);background:var(--body-bg);padding:5px 8px;color:var(--text);font-size:8px;font-weight:900;text-transform:uppercase; }
-    .profile-form-card { margin-top:8px;border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:12px; }
-    .profile-form-title { margin-bottom:10px;color:var(--text);font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase; }
-    .profile-label-clean { margin-bottom:4px;display:block;color:var(--muted);font-size:7px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
-    .profile-input-clean { width:100%;min-height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface);padding:6px 9px;color:var(--text);font-size:9px;font-weight:800;outline:none;transition:border-color .16s ease,box-shadow .16s ease; }
+    .profile-page-shell { width:100%;max-width:1280px;margin:0 auto; }
+    .profile-summary { border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:28px 20px 18px;box-shadow:0 14px 36px rgba(15,23,42,.08); }
+    .profile-summary-name { color:var(--text);font-size:15px;font-weight:900;text-transform:uppercase;line-height:1.2; }
+    .profile-summary-role { margin-top:5px;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase; }
+    .profile-summary-identity { display:flex;flex-direction:column;justify-content:center;align-self:stretch; }
+    .profile-pill { display:inline-flex;min-height:32px;align-items:center;gap:7px;border-radius:999px;border:1px solid var(--border);background:var(--body-bg);padding:7px 12px;color:var(--text);font-size:10px;font-weight:900;text-transform:uppercase; }
+    .profile-form-card { margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:20px;box-shadow:0 14px 36px rgba(15,23,42,.08); }
+    .profile-form-title { margin-bottom:16px;color:var(--text);font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase; }
+    .profile-label-clean { margin-bottom:7px;display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
+    .profile-input-clean { width:100%;min-height:42px;border-radius:10px;border:1px solid var(--border);background:var(--form-input-bg);padding:9px 12px;color:var(--text);font-size:12px;font-weight:800;outline:none;transition:border-color .16s ease,box-shadow .16s ease; }
     .profile-input-clean:focus { border-color:var(--accent) !important;box-shadow:0 0 0 3px rgba(2,132,199,.12) !important; }
     .profile-input-clean[disabled] { background:var(--body-bg);color:var(--muted);cursor:not-allowed; }
-    .profile-save-clean { display:inline-flex;min-height:30px;align-items:center;justify-content:center;gap:6px;border-radius:8px;background:var(--navy);padding:7px 11px;color:#fff;font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer; }
+    .profile-save-clean { display:inline-flex;min-height:40px;align-items:center;justify-content:center;gap:8px;border-radius:10px;background:var(--navy);padding:10px 16px;color:#fff;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer; }
     .profile-save-clean:hover { background:var(--accent); }
     .profile-select + .select2-container { width:100% !important; }
-    .profile-select + .select2-container .select2-selection--single { min-height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface);padding:2px 9px;display:flex;align-items:center; }
-    .profile-select + .select2-container .select2-selection__rendered { line-height:1.4 !important;padding-left:0 !important;padding-right:26px !important;color:var(--text) !important;font-size:9px !important;font-weight:800 !important;text-transform:uppercase !important; }
+    .profile-select + .select2-container .select2-selection--single { min-height:42px;border-radius:10px;border:1px solid var(--border);background:var(--form-input-bg);padding:5px 12px;display:flex;align-items:center; }
+    .profile-select + .select2-container .select2-selection__rendered { line-height:1.4 !important;padding-left:0 !important;padding-right:28px !important;color:var(--text) !important;font-size:12px !important;font-weight:800 !important;text-transform:uppercase !important; }
     .profile-select + .select2-container .select2-selection__placeholder { color:var(--muted) !important; }
     .profile-select + .select2-container .select2-selection__arrow { height:100% !important;right:8px !important; }
     .select2-dropdown { border:1px solid var(--border) !important;border-radius:10px !important;overflow:hidden;box-shadow:0 18px 38px rgba(15,23,42,.16);background:var(--surface) !important; }
     .select2-search--dropdown { padding:6px !important;background:var(--body-bg) !important;border-bottom:1px solid var(--border); }
-    .select2-search--dropdown .select2-search__field { border:1px solid var(--border) !important;border-radius:7px !important;padding:5px 7px !important;font-size:9px !important;font-weight:800 !important;background:var(--surface) !important;color:var(--text) !important;text-transform:uppercase !important; }
-    .select2-results__option { padding:7px 9px;font-size:9px;font-weight:800;background:var(--surface) !important;color:var(--text) !important;text-transform:uppercase !important; }
+    .select2-search--dropdown .select2-search__field { border:1px solid var(--border) !important;border-radius:7px !important;padding:7px 9px !important;font-size:11px !important;font-weight:800 !important;background:var(--surface) !important;color:var(--text) !important;text-transform:uppercase !important; }
+    .select2-results__option { padding:8px 10px;font-size:11px;font-weight:800;background:var(--surface) !important;color:var(--text) !important;text-transform:uppercase !important; }
     .select2-container--default .select2-results__option--selected,
     .select2-container--default .select2-results__option[aria-selected=true] { background:var(--body-bg) !important;color:var(--text) !important; }
     .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable { background:var(--accent) !important;color:#fff !important; }
+    @media (max-width: 768px) {
+        .profile-summary,
+        .profile-form-card { padding:16px; }
+        .profile-summary-name { font-size:13px; }
+        .profile-pill { width:100%;justify-content:flex-start; }
+        .profile-save-clean { width:100%; }
+    }
 </style>
 @endpush
 
@@ -54,9 +61,8 @@
 
     <div class="profile-summary">
         <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div class="flex items-center gap-2">
-                <div class="profile-avatar-clean">{{ strtoupper(substr(Auth::guard('wt')->user()->username, 0, 1)) }}</div>
-                <div>
+            <div class="flex items-center">
+                <div class="profile-summary-identity">
                     <h4 class="profile-summary-name">{{ strtoupper(Auth::guard('wt')->user()->full_name ?: Auth::guard('wt')->user()->username) }}</h4>
                     <p class="profile-summary-role">{{ Auth::guard('wt')->user()->wt_role === 'admin_it' ? 'ICT Department' : 'Executive Account' }}</p>
                 </div>
@@ -73,7 +79,7 @@
         <form action="{{ route('wt.admin.profile.update') }}" method="POST">
             @csrf
             <h4 class="profile-form-title">Personal Details</h4>
-            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                     <label class="profile-label-clean">Staff ID</label>
                     <input type="text" value="{{ Auth::guard('wt')->user()->staff_id }}" class="profile-input-clean" readonly disabled>
@@ -161,5 +167,3 @@
     });
 </script>
 @endpush
-
-

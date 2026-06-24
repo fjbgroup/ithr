@@ -467,33 +467,7 @@
         </button>
       </div>
       <div style="max-height:55vh;overflow-y:auto;padding:20px 24px">
-        <div style="display:flex;flex-direction:column;gap:16px;font-size:13px;color:var(--text)">
-          <div style="display:flex;gap:12px">
-            <div style="min-width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--body-bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--accent)">01</div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Device Responsibility</div>
-              <div style="font-size:12px;line-height:1.6">All users are responsible for the safe keeping of assigned walkie talkie units. Any loss or damage due to negligence must be reported immediately.</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:12px">
-            <div style="min-width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--body-bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--accent)">02</div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Usage Restrictions</div>
-              <div style="font-size:12px;line-height:1.6">Devices are strictly for official FGV Johor Bulkers business use only. Unauthorized modifications or tampering with settings is prohibited.</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:12px">
-            <div style="min-width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--body-bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--accent)">03</div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Return Policy</div>
-              <div style="font-size:12px;line-height:1.6">Temporary units must be returned by the specified end date. Permanent units must be returned upon resignation or transfer from the current department.</div>
-            </div>
-          </div>
-          <div style="padding:12px;border-radius:10px;background:#fef3c7;border:1px solid #fde68a;display:flex;gap:10px">
-            <i class="fas fa-info-circle" style="color:#d97706;margin-top:2px;font-size:13px"></i>
-            <div style="font-size:11px;font-weight:600;color:#92400e;text-transform:uppercase;letter-spacing:.06em;line-height:1.5">Note: Full documentation and detailed legal terms are available upon request from the ICT Department.</div>
-          </div>
-        </div>
+        @include('wt.partials.walkie-policy-content')
       </div>
       <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--body-bg);display:flex;justify-content:flex-end">
         <button onclick="closePoliciesModal()" class="btn-primary-custom">I Understand</button>
@@ -513,10 +487,10 @@
       </div>
       <button type="button" class="modal-close-btn" onclick="closeGlobalWalkieTimeline()"><i class="fas fa-times"></i></button>
     </div>
-    <div class="modal-body" style="padding:24px">
+    <div class="modal-body" style="padding:24px 28px">
       <div id="globalWalkieTimelineSummary" class="global-walkie-summary"></div>
       <div style="margin-top:20px">
-        <p style="margin-bottom:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)">History</p>
+        <p style="margin-bottom:12px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)">History</p>
         <div id="globalWalkieTimelineBody" class="global-walkie-history"></div>
       </div>
     </div>

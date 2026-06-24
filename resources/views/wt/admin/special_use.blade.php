@@ -613,11 +613,8 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
         'STATUS',
         'SERIAL NO.',
         'MODEL',
-        'OWNERSHIP TYPE',
-        'CURRENT OWNERSHIP',
-        'DEPARTMENT',
-        'RECEIVED DATE',
-        'REPAIR DATE',
+        'ASSIGNED TO',
+        'RETURNED',
         'Action',
     ]"
     :status-options="$records->pluck('status')->filter()->unique()->sort()->values()->all()"
@@ -631,11 +628,11 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
             <td><span class="inline-flex rounded border border-slate-600 bg-slate-800 px-2 py-1 text-[10px] font-black uppercase">{{ $record->status ?: '-' }}</span></td>
             <td>{{ $record->serial_number ?: '-' }}</td>
             <td>{{ $record->model ?: '-' }}</td>
-            <td>{{ $record->ownership_type ?: '-' }}</td>
-            <td>{{ $record->ownership ?: '-' }}</td>
-            <td>{{ $record->department ?: '-' }}</td>
-            <td>{{ $record->received_date ?? '-' }}</td>
-            <td>{{ $record->repair_date ?? '-' }}</td>
+            <td>
+                <div class="font-black text-slate-900 dark:text-slate-100">{{ $record->ownership ?: '-' }}</div>
+                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $record->department ?: '-' }} / {{ $record->ownership_type ?: '-' }}</div>
+            </td>
+            <td>{{ (int) ($record->special_use_returned ?? 0) === 1 ? 'YES' : 'NO' }}</td>
             <td>
                 @if(auth('wt')->user()->wt_role === 'admin_it')
                     <div class="special-action-buttons">

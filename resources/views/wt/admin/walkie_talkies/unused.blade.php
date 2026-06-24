@@ -861,6 +861,9 @@
         'is_special_use' => 'Is Special Use',
         'special_use_returned' => 'Returned',
     ];
+    $compactColumns = collect($columns)
+        ->filter(fn ($column) => in_array($column['key'], ['radio_id', 'status', 'serial_number', 'model', 'ownership'], true))
+        ->values();
 @endphp
 
 <div class="unused-page-shell">
@@ -894,27 +897,15 @@
         <table class="unused-table" id="unusedTable">
             <colgroup>
                 <col class="col-radio-id">
+                <col class="col-status">
                 <col class="col-serial-no">
                 <col class="col-model">
-                <col class="col-status">
-                <col class="col-ownership-type">
-                <col class="col-shared-with">
                 <col class="col-ownership">
-                <col class="col-department">
-                <col class="col-position">
-                <col class="col-temporary">
-                <col class="col-tracking">
-                <col class="col-remarks">
-                <col class="col-change-into">
-                <col class="col-done">
-                <col class="col-ownership-to-be">
-                <col class="col-special-use">
-                <col class="col-returned">
                 <col class="col-action">
             </colgroup>
             <thead>
                 <tr>
-                    @foreach($columns as $column)
+                    @foreach($compactColumns as $column)
                         <th>{{ strtoupper($columnLabels[$column['key']] ?? str_replace('_', ' ', $column['label'])) }}</th>
                     @endforeach
                     <th>ACTION</th>
@@ -923,7 +914,7 @@
             <tbody>
                 @forelse($records as $record)
                     <tr data-status="{{ strtoupper($record->status ?? 'UNUSED') }}">
-                        @foreach($columns as $column)
+                        @foreach($compactColumns as $column)
                             @php
                                 $key = $column['key'];
                                 $value = $record->getAttribute($key);
@@ -938,6 +929,7 @@
                         <td>
                             @if(auth('wt')->user()->wt_role === 'admin_it')
                                 <div class="unused-actions">
+                                    <button type="button" class="unused-action-btn" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">View</button>
                                     <button
                                         type="button"
                                         class="unused-action-btn used"
@@ -961,13 +953,13 @@
                                     </form>
                                 </div>
                             @else
-                                -
+                                <button type="button" class="unused-action-btn" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">View</button>
                             @endif
                         </td>
                     </tr>
                 @empty
                     <tr class="unused-empty-row">
-                        <td colspan="{{ count($columns) + 1 }}" class="text-center dataTables_empty">NO ITEMS FOUND</td>
+                        <td colspan="{{ $compactColumns->count() + 1 }}" class="text-center dataTables_empty">NO ITEMS FOUND</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -1177,4 +1169,3 @@
     });
 </script>
 @endsection
-

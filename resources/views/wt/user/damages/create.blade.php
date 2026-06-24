@@ -890,9 +890,9 @@
             <div>
                 <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
                 <select name="bay_from" id="bay_from" class="smart-select w-full" data-placeholder="Type number only, e.g. 3">
-                    <option value="-">-</option>
+                    <option value=""></option>
                     @foreach($bayOptions as $bay)
-                    <option value="{{ $bay }}" @selected(strtoupper((string) old('bay_from', $draftRecord->bay_from ?? ($prefillBayFrom ?: '-'))) === $bay)>{{ $bay }}</option>
+                    <option value="{{ $bay }}" @selected(strtoupper((string) old('bay_from', $draftRecord->bay_from ?? $prefillBayFrom)) === $bay)>{{ $bay }}</option>
                     @endforeach
                     @if(old('bay_from', $draftRecord->bay_from ?? $prefillBayFrom) && !in_array(strtoupper((string) old('bay_from', $draftRecord->bay_from ?? $prefillBayFrom)), $bayOptions, true))
                     <option value="{{ strtoupper((string) old('bay_from', $draftRecord->bay_from ?? $prefillBayFrom)) }}" selected>{{ strtoupper((string) old('bay_from', $draftRecord->bay_from ?? $prefillBayFrom)) }}</option>
@@ -955,9 +955,9 @@
             <div>
                 <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
                 <select name="bay_from" id="bay_from" class="smart-select w-full" data-placeholder="Type number only, e.g. 3">
-                    <option value="-">-</option>
+                    <option value=""></option>
                     @foreach($bayOptions as $bay)
-                    <option value="{{ $bay }}" @selected(strtoupper((string) old('bay_from', '-')) === $bay)>{{ $bay }}</option>
+                    <option value="{{ $bay }}" @selected(strtoupper((string) old('bay_from')) === $bay)>{{ $bay }}</option>
                     @endforeach
                     @if(old('bay_from') && !in_array(strtoupper((string) old('bay_from')), $bayOptions, true))
                     <option value="{{ strtoupper((string) old('bay_from')) }}" selected>{{ strtoupper((string) old('bay_from')) }}</option>
@@ -2117,7 +2117,7 @@
                         <div>
                             <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
                             <select name="recipient_details[${index}][bay_from]" data-recipient-bay class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
-                                ${optionRows(['-', ...bayOptions], saved.bay_from || '-', 'Type number only, e.g. 3')}
+                                ${optionRows(bayOptions, saved.bay_from || '', 'Type number only, e.g. 3')}
                             </select>
                         </div>
                         <div>
