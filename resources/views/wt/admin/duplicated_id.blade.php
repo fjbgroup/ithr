@@ -512,7 +512,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
     </div>
 
     {{-- Filters --}}
-    <div class="duplicate-search-panel">
+    <div class="duplicate-search-panel" role="search" aria-label="Duplicated ID filters">
         <div class="duplicate-filter-field">
             <label for="duplicateSearchInput">Search</label>
             <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, ownership…">
@@ -974,14 +974,18 @@ $(document).ready(function () {
 
     window.dupPage = function (p) { currentPage = p; render(); };
 
+    function normalizeFilterValue(value) {
+        return String(value || '').trim().replace(/\s+/g, ' ').toUpperCase();
+    }
+
     function applyFilter() {
-        const s  = (searchInput?.value  || '').trim().toUpperCase();
-        const st = (statusFilter?.value || '').trim().toUpperCase();
-        const dn = (doneFilter?.value   || '').trim().toUpperCase();
+        const s  = normalizeFilterValue(searchInput?.value);
+        const st = normalizeFilterValue(statusFilter?.value);
+        const dn = normalizeFilterValue(doneFilter?.value);
         filtered = allRows.filter(r =>
-            (!s  || (r.dataset.search || '').includes(s)) &&
-            (!st || r.dataset.status === st) &&
-            (!dn || r.dataset.done   === dn)
+            (!s  || normalizeFilterValue(r.dataset.search).includes(s)) &&
+            (!st || normalizeFilterValue(r.dataset.status) === st) &&
+            (!dn || normalizeFilterValue(r.dataset.done) === dn)
         );
         currentPage = 1;
         render();
@@ -1210,11 +1214,12 @@ html.dark body .content-surface .duplicate-table-info {
 }
 
 body .content-surface .duplicate-search-panel {
-    display: grid !important;
-    grid-template-columns: minmax(260px, 1fr) 160px 160px 78px !important;
-    align-items: end !important;
-    gap: 10px !important;
-    padding: 9px 12px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 12px !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 9px !important;
     background: #ffffff !important;
@@ -1222,19 +1227,24 @@ body .content-surface .duplicate-search-panel {
 }
 
 body .content-surface .duplicate-filter-field {
-    display: block !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 7px !important;
     min-width: 0 !important;
 }
 
 body .content-surface .duplicate-filter-field label {
-    display: block !important;
-    margin: 0 0 5px !important;
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
     color: #526781 !important;
     font-size: 11px !important;
     font-weight: 800 !important;
     letter-spacing: .14em !important;
     line-height: 1 !important;
     text-transform: uppercase !important;
+    white-space: nowrap !important;
 }
 
 body .content-surface .duplicate-search,
@@ -1254,14 +1264,32 @@ body .content-surface .duplicate-filter-reset {
 }
 
 body .content-surface .duplicate-search {
+    flex: 1 1 260px !important;
+}
+
+body .content-surface .duplicate-filter-field:has(.duplicate-search) {
+    flex: 1 1 360px !important;
+}
+
+body .content-surface .duplicate-filter-field:has(.duplicate-filter-select) {
+    flex: 0 0 auto !important;
+}
+
+body .content-surface .duplicate-search {
     padding: 0 12px !important;
+    min-width: 190px !important;
 }
 
 body .content-surface .duplicate-filter-select {
     padding: 0 30px 0 12px !important;
+    width: auto !important;
+    min-width: 100px !important;
 }
 
 body .content-surface .duplicate-filter-reset {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 78px !important;
     padding: 0 10px !important;
     font-size: 12px !important;
     font-weight: 900 !important;
@@ -1324,11 +1352,16 @@ html.dark body .content-surface .duplicate-filter-reset {
 
 @media (max-width: 900px) {
     body .content-surface .duplicate-search-panel {
-        grid-template-columns: 1fr 1fr !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+    }
+
+    body .content-surface .duplicate-filter-field {
+        flex: 1 1 240px !important;
     }
 
     body .content-surface .duplicate-filter-reset {
-        grid-column: 1 / -1 !important;
+        flex: 1 1 100% !important;
     }
 }
 </style>

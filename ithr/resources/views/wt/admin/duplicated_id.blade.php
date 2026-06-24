@@ -724,10 +724,11 @@ html:not(.dark) body .content-surface:has(.duplicate-page) {
 
 <style>
 body .content-surface .duplicate-search-panel {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 360px 82px !important;
-    gap: 5px !important;
-    align-items: end !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 12px !important;
     width: 100% !important;
     max-width: none !important;
     margin: 0 0 10px !important;
@@ -858,10 +859,10 @@ body .content-surface .duplicate-hero .wt-btn svg {
         </div>
     </div>
 
-    <div class="duplicate-search-panel">
+    <div class="duplicate-search-panel" role="search" aria-label="Duplicated ID filters">
         <div class="duplicate-filter-field">
             <label for="duplicateSearchInput">Search</label>
-            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Keywords">
+            <input id="duplicateSearchInput" type="search" class="duplicate-search" placeholder="Radio ID, serial, own">
         </div>
         <div class="duplicate-filter-field">
             <label for="duplicateStatusFilter">Status</label>
@@ -870,6 +871,14 @@ body .content-surface .duplicate-hero .wt-btn svg {
                 @foreach(['IN USE', 'REPAIRING', 'UNKNOWN', 'UNUSED'] as $statusOption)
                     <option value="{{ $statusOption }}">{{ $statusOption }}</option>
                 @endforeach
+            </select>
+        </div>
+        <div class="duplicate-filter-field">
+            <label for="duplicateDoneFilter">ID Change Done</label>
+            <select id="duplicateDoneFilter" class="duplicate-filter-select">
+                <option value="">All</option>
+                <option value="YES">Done</option>
+                <option value="NO">Pending</option>
             </select>
         </div>
         <button type="button" id="duplicateResetFilters" class="duplicate-filter-reset">Reset</button>
@@ -907,6 +916,7 @@ body .content-surface .duplicate-hero .wt-btn svg {
             @foreach($records as $r)
             <tr class="duplicate-row"
                 data-status="{{ strtoupper((string) ($r->status ?: '')) }}"
+                data-done="{{ (int) ($r->id_change_done ?? 0) === 1 ? 'YES' : 'NO' }}"
                 data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->ownership_type ?? '') . ' ' . ($r->shared_with ?? '') . ' ' . ($r->ownership ?? '') . ' ' . ($r->department ?? '') . ' ' . ($r->position ?? '') . ' ' . ($r->temporary_radio_id ?? '') . ' ' . ($r->tracking_ref ?? '') . ' ' . ($r->remark ?? '') . ' ' . ($r->need_to_change_id ?? '') . ' ' . ($r->ownership_type_to_be ?? ''))) }}">
                 <td>{{ $r->radio_id ?: '-' }}</td>
                 <td>{{ $r->status ?: '-' }}</td>
@@ -1278,16 +1288,22 @@ body .content-surface .duplicate-search-panel {
 }
 
 body .content-surface .duplicate-search-panel > .duplicate-filter-field {
-    width: 100% !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
 }
 
 body .content-surface .duplicate-filter-field label {
-    margin: 0 0 6px !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
     color: #8ea0b8 !important;
     font-size: 9px !important;
     letter-spacing: .12em !important;
+    white-space: nowrap !important;
 }
 
 body .content-surface .duplicate-search,
@@ -1304,20 +1320,32 @@ body .content-surface .duplicate-filter-reset {
 }
 
 body .content-surface .duplicate-search {
-    width: 100% !important;
+    flex: 1 1 260px !important;
+    width: auto !important;
+    min-width: 190px !important;
     max-width: none !important;
     padding: 0 14px !important;
 }
 
+body .content-surface .duplicate-search-panel > .duplicate-filter-field:has(.duplicate-search) {
+    flex: 1 1 360px !important;
+}
+
+body .content-surface .duplicate-search-panel > .duplicate-filter-field:has(.duplicate-filter-select) {
+    flex: 0 0 auto !important;
+}
+
 body .content-surface .duplicate-filter-select {
-    width: 100% !important;
+    width: auto !important;
+    min-width: 100px !important;
     padding: 0 30px 0 14px !important;
 }
 
 body .content-surface .duplicate-filter-reset {
-    width: 82px !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
     min-width: 82px !important;
-    padding: 0 !important;
+    padding: 0 10px !important;
     background: transparent !important;
     color: #dbeafe !important;
 }
@@ -1437,7 +1465,16 @@ body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-d
 
 @media (max-width: 1250px) {
     body .content-surface .duplicate-search-panel {
-        grid-template-columns: minmax(240px, 1fr) 360px 82px !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+    }
+
+    body .content-surface .duplicate-search-panel > .duplicate-filter-field {
+        flex: 1 1 240px !important;
+    }
+
+    body .content-surface .duplicate-filter-reset {
+        flex: 1 1 100% !important;
     }
 }
 </style>
@@ -1446,6 +1483,7 @@ body .content-surface .duplicate-table-shell #duplicateTable .duplicate-action-d
 $(document).ready(function() {
     const duplicateSearchInput = document.getElementById('duplicateSearchInput');
     const duplicateStatusFilter = document.getElementById('duplicateStatusFilter');
+    const duplicateDoneFilter = document.getElementById('duplicateDoneFilter');
     const duplicateResetFilters = document.getElementById('duplicateResetFilters');
     const rows = Array.from(document.querySelectorAll('#duplicateTable tbody .duplicate-row'));
     const paginationContainer = document.querySelector('.duplicate-table-pagination');
@@ -1471,13 +1509,19 @@ $(document).ready(function() {
         renderDuplicatePagination();
     }
 
+    function normalizeDuplicateFilter(value) {
+        return String(value || '').trim().replace(/\s+/g, ' ').toUpperCase();
+    }
+
     function applyDuplicateFilters() {
-        const searchValue = (duplicateSearchInput?.value || '').trim().toUpperCase();
-        const statusValue = (duplicateStatusFilter?.value || '').trim().toUpperCase();
+        const searchValue = normalizeDuplicateFilter(duplicateSearchInput?.value);
+        const statusValue = normalizeDuplicateFilter(duplicateStatusFilter?.value);
+        const doneValue = normalizeDuplicateFilter(duplicateDoneFilter?.value);
         filteredRows = rows.filter((row) => {
-            const matchesSearch = !searchValue || (row.dataset.search || '').includes(searchValue);
-            const matchesStatus = !statusValue || row.dataset.status === statusValue;
-            return matchesSearch && matchesStatus;
+            const matchesSearch = !searchValue || normalizeDuplicateFilter(row.dataset.search).includes(searchValue);
+            const matchesStatus = !statusValue || normalizeDuplicateFilter(row.dataset.status) === statusValue;
+            const matchesDone = !doneValue || normalizeDuplicateFilter(row.dataset.done) === doneValue;
+            return matchesSearch && matchesStatus && matchesDone;
         });
         currentPage = 1;
         updateDuplicateTableDisplay();
@@ -1486,10 +1530,12 @@ $(document).ready(function() {
 
     if (duplicateSearchInput) duplicateSearchInput.addEventListener('input', applyDuplicateFilters);
     if (duplicateStatusFilter) duplicateStatusFilter.addEventListener('change', applyDuplicateFilters);
+    if (duplicateDoneFilter) duplicateDoneFilter.addEventListener('change', applyDuplicateFilters);
     if (duplicateResetFilters) {
         duplicateResetFilters.addEventListener('click', function() {
             if (duplicateSearchInput) duplicateSearchInput.value = '';
             if (duplicateStatusFilter) duplicateStatusFilter.value = '';
+            if (duplicateDoneFilter) duplicateDoneFilter.value = '';
             applyDuplicateFilters();
         });
     }
@@ -1586,6 +1632,3 @@ function updateFileName(input) {
 }
 </script>
 @endsection
-
-
-
