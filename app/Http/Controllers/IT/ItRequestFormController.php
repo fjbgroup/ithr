@@ -20,7 +20,10 @@ class ItRequestFormController extends Controller
             $type   = trim($request->input('itr_type', ''));
             $status = trim($request->input('itr_status', ''));
 
-            $query = ItRequestForm::with('submittedBy')->orderByDesc('created_at');
+            $query = ItRequestForm::with('submittedBy')
+                ->where('status', '!=', 'New')
+                ->where('is_archived', false)
+                ->orderByDesc('created_at');
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
@@ -34,24 +37,32 @@ class ItRequestFormController extends Controller
             if ($status) $query->where('status', $status);
 
             $forms         = $query->paginate(25)->withQueryString();
-            $total         = ItRequestForm::count();
-            $countNew      = ItRequestForm::where('status', 'New')->count();
-            $countDraft    = ItRequestForm::where('status', 'Draft')->count();
-            $countApproved = ItRequestForm::where('status', 'Approved')->count();
-            $countRejected = ItRequestForm::where('status', 'Rejected')->count();
-            $countHw       = ItRequestForm::where('request_type', 'hardware')->count();
-            $countSw       = ItRequestForm::where('request_type', 'software')->count();
-            $countSys      = ItRequestForm::where('request_type', 'system')->count();
-            $countSvc      = ItRequestForm::where('request_type', 'service')->count();
+            $total         = ItRequestForm::where('is_archived', false)->count();
+            $countNew              = ItRequestForm::where('status', 'New')->where('is_archived', false)->count();
+            $countPendingIT        = ItRequestForm::where('status', 'Pending IT')->where('is_archived', false)->count();
+            $countPendingValidation= ItRequestForm::where('status', 'Pending Validation')->where('is_archived', false)->count();
+            $countDraft            = ItRequestForm::where('status', 'Draft')->where('is_archived', false)->count();
+            $countApproved         = ItRequestForm::where('status', 'Approved')->where('is_archived', false)->count();
+            $countRejected         = ItRequestForm::where('status', 'Rejected')->where('is_archived', false)->count();
+            $countHw       = ItRequestForm::where('request_type', 'hardware')->where('is_archived', false)->count();
+            $countSw       = ItRequestForm::where('request_type', 'software')->where('is_archived', false)->count();
+            $countSys      = ItRequestForm::where('request_type', 'system')->where('is_archived', false)->count();
+            $countSvc      = ItRequestForm::where('request_type', 'service')->where('is_archived', false)->count();
+
+            $archivedForms = ItRequestForm::with('submittedBy')
+                ->where('is_archived', true)
+                ->orderByDesc('updated_at')
+                ->paginate(5, ['*'], 'archive_page');
 
             return view('it.it-request-form.index', compact(
-                'user', 'forms', 'total', 'countNew', 'countDraft', 'countApproved', 'countRejected',
+                'user', 'forms', 'total', 'countNew', 'countPendingIT', 'countPendingValidation', 'countDraft', 'countApproved', 'countRejected',
                 'countHw', 'countSw', 'countSys', 'countSvc',
-                'search', 'type', 'status'
+                'search', 'type', 'status', 'archivedForms'
             ));
         }
 
         $myForms = ItRequestForm::where('submitted_by', Auth::guard('it')->id())
+            ->where('cleared_by_submitter', false)
             ->orderByDesc('created_at')
             ->get();
 
@@ -81,7 +92,15 @@ class ItRequestFormController extends Controller
                 ->get();
         }
 
-        return view('it.it-request-form.index', ['user' => $user, 'myForms' => $myForms, 'staffList' => $staffList, 'houList' => $houList, 'pendingApprovals' => $pendingApprovals]);
+        $pendingValidations = collect();
+        if ($user->isItValidator()) {
+            $pendingValidations = ItRequestForm::with('submittedBy')
+                ->where('status', 'Pending Validation')
+                ->orderByDesc('created_at')
+                ->get();
+        }
+
+        return view('it.it-request-form.index', ['user' => $user, 'myForms' => $myForms, 'staffList' => $staffList, 'houList' => $houList, 'pendingApprovals' => $pendingApprovals, 'pendingValidations' => $pendingValidations]);
     }
 
     public function savedDrafts()
@@ -116,6 +135,9 @@ class ItRequestFormController extends Controller
             return redirect()->route('it.it-request-form')->with('error', 'Access denied.');
         }
         $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($form->status === 'New') {
+            return redirect()->route('it.it-request-form')->with('error', 'This request is still pending HOU approval and is not yet available for review.');
+        }
         ActivityLogService::log('VIEW', 'it_request_form', $id, 'Viewed IT request: ' . $form->subject);
         return view('it.it-request-form.show', compact('form', 'user'));
     }
@@ -221,12 +243,19 @@ class ItRequestFormController extends Controller
         );
 
         if (!$isDraft) {
-            NotificationService::notifyAdmins(
-                'it_request',
-                'New IT Request: ' . $request->subject,
-                Auth::guard('it')->user()->full_name . ' (' . Auth::guard('it')->user()->roleName() . ') submitted a new ' . ucfirst($type) . ' request.',
-                route('it.it-request-form.show', $form->id)
-            );
+            $houUser = \App\Models\IT\User::where('it_role', 'hou')
+                ->where('is_active', 1)
+                ->where('name', $request->approver_name)
+                ->first();
+            if ($houUser) {
+                NotificationService::notifyUserWithEmail(
+                    $houUser->id,
+                    'it_request',
+                    'New IT Request Awaiting Your Approval: ' . $request->subject,
+                    Auth::guard('it')->user()->full_name . ' submitted a new ' . ucfirst($type) . ' IT request and selected you as the approver.',
+                    route('it.it-request-form.hou-show', $form->id)
+                );
+            }
         }
 
         $msg = $isDraft ? 'Draft saved successfully.' : 'IT request submitted successfully.';
@@ -355,12 +384,19 @@ class ItRequestFormController extends Controller
             );
 
             if (!$isDraft) {
-                NotificationService::notifyAdmins(
-                    'it_request',
-                    'New IT Request: ' . $form->subject,
-                    $user->full_name . ' (' . $user->roleName() . ') submitted a new ' . ucfirst($type) . ' request.',
-                    route('it.it-request-form.show', $form->id)
-                );
+                $houUser = \App\Models\IT\User::where('it_role', 'hou')
+                    ->where('is_active', 1)
+                    ->where('name', $request->approver_name)
+                    ->first();
+                if ($houUser) {
+                    NotificationService::notifyUserWithEmail(
+                        $houUser->id,
+                        'it_request',
+                        'New IT Request Awaiting Your Approval: ' . $form->subject,
+                        $user->full_name . ' submitted a new ' . ucfirst($type) . ' IT request and selected you as the approver.',
+                        route('it.it-request-form.hou-show', $form->id)
+                    );
+                }
             }
 
             $msg = $isDraft ? 'Draft saved successfully.' : 'IT request submitted successfully.';
@@ -399,24 +435,21 @@ class ItRequestFormController extends Controller
         }
 
         $form->update([
-            'status'           => 'Approved',
-            'reviewed_by'      => $user->id,
-            'reviewed_at'      => now(),
-            'approval_remarks' => $request->input('approval_remarks'),
+            'status'          => 'Pending IT',
+            'hou_reviewed_by' => $user->id,
+            'hou_reviewed_at' => now(),
+            'hou_remarks'     => $request->input('approval_remarks'),
         ]);
 
-        if ($form->submitted_by) {
-            NotificationService::notifyUserWithEmail(
-                $form->submitted_by,
-                'it_request',
-                'IT Request Approved',
-                'Your IT request "' . $form->subject . '" has been approved by ' . $user->full_name . '.',
-                route('it.it-request-form')
-            );
-        }
+        NotificationService::notifyAdmins(
+            'it_request',
+            'IT Request Pending Admin Approval: ' . $form->subject,
+            $user->full_name . ' (HOU) has approved the request from ' . ($form->submittedBy?->full_name ?? 'staff') . '. It now requires your approval.',
+            route('it.it-request-form.show', $form->id)
+        );
 
         ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'HOU approved IT request: ' . $form->subject);
-        return redirect()->route('it.it-request-form')->with('success', 'Request approved successfully.');
+        return redirect()->route('it.it-request-form')->with('success', 'Request approved and forwarded to IT Admin.');
     }
 
     public function houReject(Request $request, int $id)
@@ -430,10 +463,10 @@ class ItRequestFormController extends Controller
         }
 
         $form->update([
-            'status'           => 'Rejected',
-            'reviewed_by'      => $user->id,
-            'reviewed_at'      => now(),
-            'approval_remarks' => $request->input('approval_remarks'),
+            'status'          => 'Rejected',
+            'hou_reviewed_by' => $user->id,
+            'hou_reviewed_at' => now(),
+            'hou_remarks'     => $request->input('approval_remarks'),
         ]);
 
         if ($form->submitted_by) {
@@ -441,7 +474,7 @@ class ItRequestFormController extends Controller
                 $form->submitted_by,
                 'it_request',
                 'IT Request Rejected',
-                'Your IT request "' . $form->subject . '" has been rejected by ' . $user->full_name . '.',
+                'Your IT request "' . $form->subject . '" has been rejected by ' . $user->full_name . ' (HOU).',
                 route('it.it-request-form')
             );
         }
@@ -456,30 +489,31 @@ class ItRequestFormController extends Controller
         if (!$user->isAdmin()) abort(403);
 
         $form = ItRequestForm::with('submittedBy')->findOrFail($id);
-        if ($form->status !== 'New') {
-            return back()->with('error', 'This request has already been reviewed.');
+        if ($form->status !== 'Pending IT') {
+            return back()->with('error', 'This request cannot be approved at this stage.');
         }
 
         $form->update([
-            'status'           => 'Approved',
+            'status'           => 'Pending Validation',
             'reviewed_by'      => $user->id,
             'reviewed_at'      => now(),
             'approval_remarks' => $request->input('approval_remarks'),
         ]);
 
-        if ($form->submitted_by) {
+        $validator = \App\Models\IT\User::where('is_it_validator', true)->where('is_active', 1)->first();
+        if ($validator) {
             NotificationService::notifyUserWithEmail(
-                $form->submitted_by,
+                $validator->id,
                 'it_request',
-                'IT Request Approved',
-                'Your IT request "' . $form->subject . '" has been approved.',
-                route('it.it-request-form')
+                'IT Request Awaiting Your Validation: ' . $form->subject,
+                'An IT request from ' . ($form->submittedBy?->full_name ?? 'staff') . ' has been approved by IT Admin and is now awaiting your validation.',
+                route('it.it-request-form.validator-show', $form->id)
             );
         }
 
-        ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'Approved IT request: ' . $form->subject);
+        ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'IT Admin approved IT request: ' . $form->subject);
 
-        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Request approved successfully.');
+        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Request approved and forwarded to validator.');
     }
 
     public function reject(Request $request, int $id)
@@ -488,8 +522,8 @@ class ItRequestFormController extends Controller
         if (!$user->isAdmin()) abort(403);
 
         $form = ItRequestForm::with('submittedBy')->findOrFail($id);
-        if ($form->status !== 'New') {
-            return back()->with('error', 'This request has already been reviewed.');
+        if ($form->status !== 'Pending IT') {
+            return back()->with('error', 'This request cannot be rejected at this stage.');
         }
 
         $form->update([
@@ -520,8 +554,8 @@ class ItRequestFormController extends Controller
         if (!$user->isAdmin()) abort(403);
 
         $form = ItRequestForm::with('submittedBy')->findOrFail($id);
-        if ($form->status !== 'New') {
-            return back()->with('error', 'This request has already been reviewed.');
+        if ($form->status !== 'Pending IT') {
+            return back()->with('error', 'This request cannot be updated at this stage.');
         }
 
         $form->update([
@@ -543,7 +577,259 @@ class ItRequestFormController extends Controller
 
         ActivityLogService::log('UPDATE_REQUESTED', 'it_request_form', $form->id, 'Requested update on IT request: ' . $form->subject);
 
-        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Update requested â€” the user has been notified.');
+        return redirect()->route('it.it-request-form.show', $id)->with('success', 'Update requested — the user has been notified.');
+    }
+
+    public function validatorShow(int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isItValidator()) abort(403);
+
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        $isValidator = true;
+        ActivityLogService::log('VIEW', 'it_request_form', $id, 'Validator viewed IT request: ' . $form->subject);
+        return view('it.it-request-form.show', compact('form', 'user', 'isValidator'));
+    }
+
+    public function validatorApprove(Request $request, int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isItValidator()) abort(403);
+
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($form->status !== 'Pending Validation') {
+            return back()->with('error', 'This request cannot be validated at this stage.');
+        }
+
+        $form->update([
+            'status'            => 'Approved',
+            'validated_by'      => $user->id,
+            'validated_at'      => now(),
+            'validator_remarks' => $request->input('validator_remarks'),
+        ]);
+
+        if ($form->submitted_by) {
+            NotificationService::notifyUserWithEmail(
+                $form->submitted_by,
+                'it_request',
+                'IT Request Approved',
+                'Your IT request “' . $form->subject . '” has been fully approved.',
+                route('it.it-request-form')
+            );
+        }
+
+        ActivityLogService::log('VALIDATE', 'it_request_form', $form->id, 'Validator approved IT request: ' . $form->subject);
+        return redirect()->route('it.it-request-form')->with('success', 'Request validated and approved successfully.');
+    }
+
+    public function validatorReject(Request $request, int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isItValidator()) abort(403);
+
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($form->status !== 'Pending Validation') {
+            return back()->with('error', 'This request cannot be rejected at this stage.');
+        }
+
+        $form->update([
+            'status'            => 'Rejected',
+            'validated_by'      => $user->id,
+            'validated_at'      => now(),
+            'validator_remarks' => $request->input('validator_remarks'),
+        ]);
+
+        if ($form->submitted_by) {
+            NotificationService::notifyUserWithEmail(
+                $form->submitted_by,
+                'it_request',
+                'IT Request Rejected',
+                'Your IT request “' . $form->subject . '” has been rejected during final validation.',
+                route('it.it-request-form')
+            );
+        }
+
+        ActivityLogService::log('REJECT', 'it_request_form', $form->id, 'Validator rejected IT request: ' . $form->subject);
+        return redirect()->route('it.it-request-form')->with('success', 'Request rejected.');
+    }
+
+    public function bulkHouApprove(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if ($user->it_role !== 'hou') abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $remarks = $request->input('remarks');
+        $count = 0;
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || $form->status !== 'New') continue;
+            $form->update(['status' => 'Pending IT', 'hou_reviewed_by' => $user->id, 'hou_reviewed_at' => now(), 'hou_remarks' => $remarks]);
+            NotificationService::notifyAdmins('it_request', 'IT Request Pending Admin Approval: ' . $form->subject, $user->full_name . ' approved a request from ' . ($form->submittedBy?->full_name ?? 'staff') . '.', route('it.it-request-form.show', $form->id));
+            ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'HOU bulk approved IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) approved successfully.');
+    }
+
+    public function bulkHouReject(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if ($user->it_role !== 'hou') abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $remarks = $request->input('remarks');
+        $count = 0;
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || $form->status !== 'New') continue;
+            $form->update(['status' => 'Rejected', 'hou_reviewed_by' => $user->id, 'hou_reviewed_at' => now(), 'hou_remarks' => $remarks]);
+            if ($form->submitted_by) {
+                NotificationService::notifyUserWithEmail($form->submitted_by, 'it_request', 'IT Request Rejected', 'Your IT request "' . $form->subject . '" was rejected by the HOU.', route('it.it-request-form'));
+            }
+            ActivityLogService::log('REJECT', 'it_request_form', $form->id, 'HOU bulk rejected IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) rejected.');
+    }
+
+    public function bulkAdminApprove(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdmin()) abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $remarks = $request->input('remarks');
+        $count = 0;
+        $validator = \App\Models\IT\User::where('is_it_validator', true)->where('is_active', 1)->first();
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || $form->status !== 'Pending IT') continue;
+            $form->update(['status' => 'Pending Validation', 'reviewed_by' => $user->id, 'reviewed_at' => now(), 'approval_remarks' => $remarks]);
+            if ($validator) {
+                NotificationService::notifyUserWithEmail($validator->id, 'it_request', 'IT Request Awaiting Your Validation: ' . $form->subject, 'An IT request has been approved by IT Admin and is now awaiting your validation.', route('it.it-request-form.validator-show', $form->id));
+            }
+            ActivityLogService::log('APPROVE', 'it_request_form', $form->id, 'IT Admin bulk approved IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) approved and forwarded to validator.');
+    }
+
+    public function bulkAdminReject(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdmin()) abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $remarks = $request->input('remarks');
+        $count = 0;
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || $form->status !== 'Pending IT') continue;
+            $form->update(['status' => 'Rejected', 'reviewed_by' => $user->id, 'reviewed_at' => now(), 'approval_remarks' => $remarks]);
+            if ($form->submitted_by) {
+                NotificationService::notifyUserWithEmail($form->submitted_by, 'it_request', 'IT Request Rejected', 'Your IT request "' . $form->subject . '" has been rejected by IT Admin.', route('it.it-request-form'));
+            }
+            ActivityLogService::log('REJECT', 'it_request_form', $form->id, 'IT Admin bulk rejected IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) rejected.');
+    }
+
+    public function bulkAdminArchive(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdmin()) abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $count = 0;
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || !in_array($form->status, ['Approved', 'Rejected'])) continue;
+            $form->update(['is_archived' => true]);
+            ActivityLogService::log('ARCHIVE', 'it_request_form', $form->id, 'Bulk archived IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) archived.');
+    }
+
+    public function bulkValidatorApprove(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isItValidator()) abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $remarks = $request->input('remarks');
+        $count = 0;
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || $form->status !== 'Pending Validation') continue;
+            $form->update(['status' => 'Approved', 'validated_by' => $user->id, 'validated_at' => now(), 'validator_remarks' => $remarks]);
+            if ($form->submitted_by) {
+                NotificationService::notifyUserWithEmail($form->submitted_by, 'it_request', 'IT Request Approved', 'Your IT request "' . $form->subject . '" has been fully approved.', route('it.it-request-form'));
+            }
+            ActivityLogService::log('VALIDATE', 'it_request_form', $form->id, 'Validator bulk approved IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) validated and approved.');
+    }
+
+    public function bulkValidatorReject(Request $request)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isItValidator()) abort(403);
+
+        $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
+        $remarks = $request->input('remarks');
+        $count = 0;
+        foreach ($ids as $id) {
+            $form = ItRequestForm::find($id);
+            if (!$form || $form->status !== 'Pending Validation') continue;
+            $form->update(['status' => 'Rejected', 'validated_by' => $user->id, 'validated_at' => now(), 'validator_remarks' => $remarks]);
+            if ($form->submitted_by) {
+                NotificationService::notifyUserWithEmail($form->submitted_by, 'it_request', 'IT Request Rejected', 'Your IT request "' . $form->subject . '" has been rejected during final validation.', route('it.it-request-form'));
+            }
+            ActivityLogService::log('REJECT', 'it_request_form', $form->id, 'Validator bulk rejected IT request: ' . $form->subject);
+            $count++;
+        }
+        return redirect()->route('it.it-request-form')->with('success', $count . ' request(s) rejected.');
+    }
+
+    public function archiveRequest(int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdmin()) abort(403);
+
+        $form = ItRequestForm::findOrFail($id);
+        if (!in_array($form->status, ['Approved', 'Rejected'])) {
+            return back()->with('error', 'Only decided requests (Approved or Rejected) can be archived.');
+        }
+
+        $form->update(['is_archived' => true]);
+        ActivityLogService::log('ARCHIVE', 'it_request_form', $form->id, 'Archived IT request: ' . $form->subject);
+        return back()->with('success', 'Request archived.');
+    }
+
+    public function unarchiveRequest(int $id)
+    {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdmin()) abort(403);
+
+        $form = ItRequestForm::findOrFail($id);
+        $form->update(['is_archived' => false]);
+        ActivityLogService::log('UNARCHIVE', 'it_request_form', $form->id, 'Unarchived IT request: ' . $form->subject);
+        return back()->with('success', 'Request moved back to inbox.');
+    }
+
+    public function clearAllDecided()
+    {
+        $user = Auth::guard('it')->user();
+
+        ItRequestForm::where('submitted_by', $user->id)
+            ->whereIn('status', ['Approved', 'Rejected'])
+            ->update(['cleared_by_submitter' => true]);
+
+        return back()->with('success', 'All decided requests have been cleared from your list.');
     }
 }
 
