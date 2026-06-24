@@ -572,26 +572,22 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-step-line { flex: 1; height: 2px; background: var(--border); margin: 0 10px; border-radius: 2px; transition: background .3s; }
 .itr-step-line.done { background: var(--accent); }
 
-/* ── Step 1 type cards ── */
-.itr-type-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 8px; max-width: 320px; }
-.itr-type-card {
-  background: var(--surface); border: 2px solid var(--border);
-  border-radius: 14px; padding: 22px 16px; cursor: pointer;
-  transition: all .2s; text-align: center; position: relative; user-select: none;
-}
-.itr-type-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(2,132,199,.15); transform: translateY(-2px); }
-.itr-type-card.selected { border-color: var(--accent); background: rgba(2,132,199,.06); box-shadow: 0 4px 20px rgba(2,132,199,.2); }
-.itr-type-card.locked { opacity: .35; cursor: not-allowed; pointer-events: none; filter: grayscale(.4); }
-.itr-type-icon { width: 52px; height: 52px; border-radius: 14px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: all .2s; }
-.hw-icon { background: rgba(59,130,246,.1); color: #3b82f6; }
-.sw-icon { background: rgba(139,92,246,.1); color: #8b5cf6; }
-.sys-icon { background: rgba(16,185,129,.1); color: #10b981; }
-.svc-icon { background: rgba(2,132,199,.1); color: var(--accent); }
-.itr-type-card.selected .itr-type-icon { transform: scale(1.08); }
-.itr-type-name { font-family:'DM Sans',sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-.itr-type-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
-.itr-type-check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: white; display: none; align-items: center; justify-content: center; font-size: 11px; }
-.itr-type-card.selected .itr-type-check { display: flex; }
+/* ── Step 1 hardware intro ── */
+.itr-hw-intro { background:var(--surface); border:2px solid var(--border); border-radius:18px; overflow:hidden; }
+.itr-hw-intro-banner { background:linear-gradient(135deg,rgba(59,130,246,.12) 0%,rgba(2,132,199,.08) 100%); border-bottom:1px solid var(--border); padding:36px 40px; display:flex; align-items:center; gap:28px; }
+.itr-hw-intro-icon { width:72px; height:72px; border-radius:18px; background:rgba(59,130,246,.15); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:34px; flex-shrink:0; }
+.itr-hw-intro-title { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:800; color:var(--text); margin-bottom:6px; }
+.itr-hw-intro-sub { font-size:13.5px; color:var(--muted); line-height:1.6; }
+.itr-hw-items-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
+.itr-hw-item { display:flex; align-items:center; gap:12px; padding:16px 20px; border-top:1px solid var(--border); }
+.itr-hw-item:nth-child(3n+2) { border-left:1px solid var(--border); border-right:1px solid var(--border); }
+.itr-hw-item-icon { width:36px; height:36px; border-radius:10px; background:rgba(59,130,246,.1); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.itr-hw-item-name { font-size:13px; font-weight:600; color:var(--text); }
+.itr-hw-item-desc { font-size:11.5px; color:var(--muted); margin-top:1px; }
+.itr-hw-cta { padding:24px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; background:var(--body-bg); border-top:1px solid var(--border); }
+.itr-hw-cta-note { font-size:12.5px; color:var(--muted); }
+.itr-hw-btn { display:inline-flex; align-items:center; gap:8px; padding:11px 28px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; }
+.itr-hw-btn:hover { background:#0272b1; box-shadow:0 4px 16px rgba(2,132,199,.35); transform:translateY(-1px); }
 .itr-locked-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; min-height: 18px; }
 
 /* ── Step 2 ── */
@@ -707,15 +703,47 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
   <!-- ══ STEP 1 ══ -->
   <div id="step1">
-    <div class="itr-type-grid">
-      <div class="itr-type-card" id="card-hardware" onclick="selectType('hardware')">
-        <div class="itr-type-check"><i class="bi bi-check"></i></div>
-        <div class="itr-type-icon hw-icon"><i class="bi bi-laptop"></i></div>
-        <div class="itr-type-name">Hardware</div>
-        <div class="itr-type-desc">Laptops, desktops, printers, phones &amp; peripherals</div>
+    <div class="itr-hw-intro">
+      <div class="itr-hw-intro-banner">
+        <div class="itr-hw-intro-icon"><i class="bi bi-laptop"></i></div>
+        <div>
+          <div class="itr-hw-intro-title">Hardware Request</div>
+          <div class="itr-hw-intro-sub">Submit a request for IT hardware equipment. All requests are reviewed and approved by IT Administration before processing.</div>
+        </div>
+      </div>
+      <div class="itr-hw-items-grid">
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-laptop"></i></div>
+          <div><div class="itr-hw-item-name">Laptop / Desktop</div><div class="itr-hw-item-desc">Workstations &amp; portables</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-printer"></i></div>
+          <div><div class="itr-hw-item-name">Printer</div><div class="itr-hw-item-desc">Office printing devices</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-phone"></i></div>
+          <div><div class="itr-hw-item-name">Mobile &amp; IP Phone</div><div class="itr-hw-item-desc">Handphones &amp; desk phones</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-tablet"></i></div>
+          <div><div class="itr-hw-item-name">Tablet</div><div class="itr-hw-item-desc">Portable tablet devices</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-hdd-network"></i></div>
+          <div><div class="itr-hw-item-name">Network Equipment</div><div class="itr-hw-item-desc">Switch, hub &amp; UPS units</div></div>
+        </div>
+        <div class="itr-hw-item">
+          <div class="itr-hw-item-icon"><i class="bi bi-three-dots"></i></div>
+          <div><div class="itr-hw-item-name">Other</div><div class="itr-hw-item-desc">Peripherals &amp; accessories</div></div>
+        </div>
+      </div>
+      <div class="itr-hw-cta">
+        <div class="itr-hw-cta-note"><i class="bi bi-info-circle" style="margin-right:5px"></i>Ensure your department head approves this request before submission.</div>
+        <button type="button" class="itr-hw-btn" onclick="selectType('hardware')">
+          <i class="bi bi-arrow-right-circle-fill"></i> Begin Request
+        </button>
       </div>
     </div>
-    <div class="itr-locked-note" id="locked-note"></div>
   </div>
 
   @php
@@ -1391,7 +1419,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div class="itr-selected-banner">
       <div class="itr-selected-pill"><i id="banner-icon"></i><span id="banner-label"></span></div>
       <div class="itr-banner-text">Fields marked <strong style="color:var(--red)">*</strong> are required only when submitting to IT Admin. You may <strong>Save as Draft</strong> at any time with incomplete fields.</div>
-      <button type="button" class="itr-change-btn" onclick="changeType()"><i class="bi bi-arrow-left"></i> Change Type</button>
+      <button type="button" class="itr-change-btn" onclick="changeType()"><i class="bi bi-arrow-left"></i> Go Back</button>
     </div>
 
     <!-- Shared subject row (rendered per-form via JS copy, but we place it inside each form below) -->
@@ -1545,19 +1573,13 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
 <script>
 const typeConfig = {
-  hardware: { label: 'Hardware',  icon: 'bi-laptop',      form: 'form-hardware' }
+  hardware: { label: 'Hardware', icon: 'bi-laptop', form: 'form-hardware' },
 };
 let activeType = null;
 
 function selectType(type) {
   activeType = type;
   saveFormState();
-  Object.keys(typeConfig).forEach(t => {
-    const card = document.getElementById('card-' + t);
-    card.classList.toggle('selected', t === type);
-    card.classList.toggle('locked', t !== type);
-  });
-  document.getElementById('locked-note').textContent = 'Other request types are locked. Click "Change Type" to start over.';
 
   const cfg = typeConfig[type];
   document.getElementById('banner-icon').className = 'bi ' + cfg.icon;
@@ -1572,15 +1594,18 @@ function selectType(type) {
 
   const s1 = document.getElementById('step1');
   const ms = document.getElementById('my-submissions');
+  const md = document.getElementById('my-decided');
   const houSec = document.getElementById('hou-pending-section');
   const valSec = document.getElementById('validator-pending-section');
   s1.style.opacity = '0';
   if (ms) ms.style.opacity = '0';
+  if (md) md.style.opacity = '0';
   if (houSec) houSec.style.opacity = '0';
   if (valSec) valSec.style.opacity = '0';
   setTimeout(() => {
     s1.style.display = 'none';
     if (ms) ms.style.display = 'none';
+    if (md) md.style.display = 'none';
     if (houSec) houSec.style.display = 'none';
     if (valSec) valSec.style.display = 'none';
     const s2 = document.getElementById('step2');
@@ -1593,8 +1618,6 @@ function selectType(type) {
 function changeType() {
   sessionStorage.removeItem('itr_form_state');
   activeType = null;
-  Object.keys(typeConfig).forEach(t => { document.getElementById('card-' + t).classList.remove('selected','locked'); });
-  document.getElementById('locked-note').textContent = '';
   document.getElementById('prog-step1').className = 'itr-step active';
   document.getElementById('prog-step2').className = 'itr-step';
   document.getElementById('prog-line').className = 'itr-step-line';
@@ -1606,13 +1629,16 @@ function changeType() {
     const ms = document.getElementById('my-submissions');
     const houSec = document.getElementById('hou-pending-section');
     const valSec = document.getElementById('validator-pending-section');
+    const mdEl = document.getElementById('my-decided');
     s1.style.display = 'block'; s1.style.opacity = '0';
     if (ms) { ms.style.display = 'block'; ms.style.opacity = '0'; }
+    if (mdEl) { mdEl.style.display = 'block'; mdEl.style.opacity = '0'; }
     if (houSec) { houSec.style.display = 'block'; houSec.style.opacity = '0'; }
     if (valSec) { valSec.style.display = 'block'; valSec.style.opacity = '0'; }
     requestAnimationFrame(() => {
       s1.style.transition = 'opacity .25s'; s1.style.opacity = '1';
       if (ms) { ms.style.transition = 'opacity .25s'; ms.style.opacity = '1'; }
+      if (mdEl) { mdEl.style.transition = 'opacity .25s'; mdEl.style.opacity = '1'; }
       if (houSec) { houSec.style.transition = 'opacity .25s'; houSec.style.opacity = '1'; }
       if (valSec) { valSec.style.transition = 'opacity .25s'; valSec.style.opacity = '1'; }
     });
@@ -1661,7 +1687,9 @@ function validateAndSubmit(type, event) {
   // Use event.submitter (which button triggered submit) — immune to onclick order or hidden-input state
   var isDraft = !!(event && event.submitter && event.submitter.value === 'draft');
 
-  var chipMap = { hardware: ['hw-items-grid', 'hw_items'] };
+  var chipMap = {
+    hardware: ['hw-items-grid', 'hw_items'],
+  };
 
   if (isDraft) {
     // Collect chips so partial selections are saved, but always allow submission
@@ -1724,7 +1752,6 @@ function collectChips(gridId, fieldName) {
     card.classList.toggle('selected', t === oldType);
     card.classList.toggle('locked', t !== oldType);
   });
-  document.getElementById('locked-note').textContent = 'Other request types are locked. Click "Change Type" to start over.';
   var cfg = typeConfig[oldType];
   document.getElementById('banner-icon').className = 'bi ' + cfg.icon;
   document.getElementById('banner-label').textContent = cfg.label + ' Request';
@@ -1791,7 +1818,6 @@ function restoreFromSession() {
     document.getElementById('card-' + t).classList.toggle('selected', t === state.type);
     document.getElementById('card-' + t).classList.toggle('locked',   t !== state.type);
   });
-  document.getElementById('locked-note').textContent = 'Other request types are locked. Click "Change Type" to start over.';
   document.getElementById('banner-icon').className   = 'bi ' + cfg.icon;
   document.getElementById('banner-label').textContent = cfg.label + ' Request';
   Object.values(typeConfig).forEach(function(c) { document.getElementById(c.form).style.display = 'none'; });
