@@ -28,7 +28,7 @@
   $stat_ewaste  = \App\Models\IT\EwasteItem::whereIn('disposal_status', ['Approved','Collected'])->count();
   $stat_pending = \App\Models\IT\EwasteItem::where('disposal_status', 'Pending')->count();
 
-  $all_locations = \App\Models\IT\InventoryItem::whereNotNull('location')->where('location', '!=', '')->distinct()->orderBy('location')->pluck('location');
+  $all_locations = $locations->pluck('name');
 @endphp
 
 @if(request('view') !== 'pending_requests')
@@ -395,18 +395,31 @@
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Location</label>
-            <input type="text" name="location" placeholder="e.g. Server Room 1"
+            <select name="location"
               style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="">— Select Location —</option>
+              @foreach($locations as $loc)
+              <option value="{{ $loc->name }}">{{ $loc->name }}</option>
+              @endforeach
+            </select>
+            @if($locations->isEmpty())
+            <div style="font-size:11px;color:#dc2626;margin-top:4px"><i class="bi bi-exclamation-triangle-fill"></i> No locations yet. Add them in <a href="{{ route('it.locations.index') }}" style="color:#0284c7">Masterdata &rsaquo; Locations</a>.</div>
+            @endif
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Brand</label>
-            <div style="position:relative">
-              <input type="text" id="addBrandInput" name="brand" placeholder="e.g. HP, LENOVO, DELL..." autocomplete="off"
-                style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
-                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-              <div id="brandSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
-            </div>
+            <select name="brand"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="">— Select Brand —</option>
+              @foreach($brands as $brand)
+              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+              @endforeach
+            </select>
+            @if($brands->isEmpty())
+            <div style="font-size:11px;color:#dc2626;margin-top:4px"><i class="bi bi-exclamation-triangle-fill"></i> No brands yet. Add them in <a href="{{ route('it.brands.index') }}" style="color:#0284c7">Masterdata &rsaquo; Brands</a>.</div>
+            @endif
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Model</label>
@@ -505,7 +518,9 @@
 <script>
 function openAddModal() { document.getElementById('addModal').style.display = 'flex'; }
 
-var _editData = @json($items->keyBy('id'));
+var _editData     = @json($items->keyBy('id'));
+var _brandOpts    = @json($brands->pluck('name'));
+var _locationOpts = @json($locations->pluck('name'));
 
 function openEditModal(id) {
   var d = _editData[id];
@@ -528,9 +543,9 @@ function openEditModal(id) {
     + field('FA Code','fa_code','text',d.fa_code)
     + field('Purchase Price (RM)','purchase_price','number',d.purchase_price)
     + field('Serial Number','serial_number','text',d.serial_number)
-    + field('Brand','brand','text',d.brand)
+    + selectField('Brand','brand',d.brand,_brandOpts)
     + field('Model','model','text',d.model)
-    + field('Location','location','text',d.location)
+    + selectField('Location','location',d.location,_locationOpts)
     + field('Years of Purchase','years_purchase','number',d.years_purchase)
     + field('Total Cost (RM)','total_cost','number',d.total_cost)
     + field('Accumulated (RM)','accumulated','number',d.accumulated)
@@ -549,6 +564,12 @@ function openEditModal(id) {
 function field(lbl,name,type,val,span) {
   var s = span ? 'grid-column:'+span+';' : '';
   return '<div style="'+s+'"><label class="form-label">'+lbl+'</label><input type="'+type+'" name="'+name+'" class="form-control" value="'+esc(val||'')+'"></div>';
+}
+function selectField(lbl,name,val,opts) {
+  var html = '<div><label class="form-label">'+lbl+'</label><select name="'+name+'" class="form-select"><option value="">— Select —</option>';
+  opts.forEach(function(o){ html += '<option value="'+esc(o)+'"'+(val===o?' selected':'')+'>'+esc(o)+'</option>'; });
+  html += '</select></div>';
+  return html;
 }
 function statusSel(name,lbl,val,opts) {
   return '<div><label class="form-label">'+lbl+'</label><select name="'+name+'" class="form-select">'

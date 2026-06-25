@@ -76,6 +76,10 @@
 <link href="{{ asset('assets/css/wtsystem.css') }}" rel="stylesheet">
 <style>
 /* wtsystem.css is the single source of truth */
+.sidebar-brand-row { min-width: 0; overflow: hidden; }
+.sidebar-brand { min-width: 0; overflow: hidden; }
+.brand-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.brand-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 </style>
 @stack('styles')
 @stack('final_styles')
@@ -329,7 +333,6 @@
     </div>
   </div>
 </aside>
-
 <!-- MAIN -->
 <div class="main-content">
   <div class="topbar">

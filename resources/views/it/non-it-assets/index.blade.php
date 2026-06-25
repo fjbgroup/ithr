@@ -152,13 +152,33 @@
 
         <div class="nit-divider"></div>
 
-        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Location &amp; Notes</div>
+        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Brand, Location &amp; Notes</div>
         <div class="row g-3 mb-4">
-          <div class="col-md-6 nit-field">
-            <label>Location</label>
-            <input type="text" name="location" placeholder="e.g. Meeting Room A, Level 2">
+          <div class="col-md-4 nit-field">
+            <label>Brand</label>
+            <select name="brand">
+              <option value="">— Select Brand —</option>
+              @foreach($brands as $brand)
+              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+              @endforeach
+            </select>
+            @if($brands->isEmpty())
+            <div class="field-hint" style="color:#dc2626"><i class="bi bi-exclamation-triangle-fill"></i> No brands yet. Add in <a href="{{ route('it.brands.index') }}" style="color:#0284c7">Masterdata &rsaquo; Brands</a>.</div>
+            @endif
           </div>
-          <div class="col-md-6 nit-field">
+          <div class="col-md-4 nit-field">
+            <label>Location</label>
+            <select name="location">
+              <option value="">— Select Location —</option>
+              @foreach($locations as $loc)
+              <option value="{{ $loc->name }}">{{ $loc->name }}</option>
+              @endforeach
+            </select>
+            @if($locations->isEmpty())
+            <div class="field-hint" style="color:#dc2626"><i class="bi bi-exclamation-triangle-fill"></i> No locations yet. Add in <a href="{{ route('it.locations.index') }}" style="color:#0284c7">Masterdata &rsaquo; Locations</a>.</div>
+            @endif
+          </div>
+          <div class="col-md-4 nit-field">
             <label>Notes</label>
             <input type="text" name="notes" placeholder="Any additional remarks...">
           </div>
@@ -277,13 +297,27 @@
 
         <div class="nit-divider"></div>
 
-        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Location &amp; Notes</div>
+        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Brand, Location &amp; Notes</div>
         <div class="row g-3 mb-4">
-          <div class="col-md-6 nit-field">
-            <label>Location</label>
-            <input type="text" name="location" id="nef_location" placeholder="e.g. Meeting Room A, Level 2">
+          <div class="col-md-4 nit-field">
+            <label>Brand</label>
+            <select name="brand" id="nef_brand">
+              <option value="">— Select Brand —</option>
+              @foreach($brands as $brand)
+              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+              @endforeach
+            </select>
           </div>
-          <div class="col-md-6 nit-field">
+          <div class="col-md-4 nit-field">
+            <label>Location</label>
+            <select name="location" id="nef_location">
+              <option value="">— Select Location —</option>
+              @foreach($locations as $loc)
+              <option value="{{ $loc->name }}">{{ $loc->name }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-md-4 nit-field">
             <label>Notes</label>
             <input type="text" name="notes" id="nef_notes" placeholder="Any additional remarks...">
           </div>
@@ -743,6 +777,7 @@ function openNitEditFormById(id) {
   document.getElementById('nef_asset_number').value    = d.asset_number  || '';
   document.getElementById('nef_fa_code').value         = d.fa_code       || '';
   document.getElementById('nef_description').value     = d.description   || '';
+  document.getElementById('nef_brand').value           = d.brand         || '';
   document.getElementById('nef_location').value        = d.location      || '';
   document.getElementById('nef_notes').value           = d.notes         || '';
   document.getElementById('nef_years_purchase').value  = d.years_purchase || '';

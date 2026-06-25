@@ -5,6 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ config('app.name', 'HR Admin System') }}</title>
 @include('partials.favicons')
+<style>
+/* ── HR COLLAPSIBLE SIDEBAR ── */
+.menu-toggle { display: none !important; }
+@media(max-width:768px){ .menu-toggle { display: flex !important; } }
+.sidebar { transition: width .3s ease !important; overflow: hidden !important; }
+.main-wrapper { transition: margin-left .3s ease; }
+html.sidebar-collapsed .sidebar { width: 64px !important; transform: none !important; }
+html.sidebar-collapsed .main-wrapper { margin-left: 64px !important; }
+
+/* Sidebar close button — expanded state only */
+.sb-close-btn {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,.08); border: none; border-radius: 6px;
+  color: rgba(255,255,255,.5); cursor: pointer; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.sb-close-btn:hover { background: rgba(255,255,255,.18); color: #fff; }
+html.sidebar-collapsed .sb-close-btn { display: none !important; }
+
+/* Logo becomes open button in collapsed state */
+.sb-open-icon { display: none; }
+html.sidebar-collapsed .sb-logo-btn { cursor: pointer !important; position: relative !important; }
+html.sidebar-collapsed .sb-logo-btn img { transition: opacity .15s; }
+html.sidebar-collapsed .sb-logo-btn .sb-open-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .15s; color: #1e293b; pointer-events: none;
+}
+html.sidebar-collapsed .sb-logo-btn .sb-open-icon svg { display: block; }
+html.sidebar-collapsed .sb-logo-btn:hover img { opacity: 0; }
+html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon { opacity: 1; }
+
+/* ── ICON RAIL ── */
+html.sidebar-collapsed .sidebar-nav { padding: .75rem 0 !important; }
+
+/* Brand row: show only logo, centered */
+html.sidebar-collapsed .sidebar > div:first-child {
+  display: flex !important; padding: .75rem 0 !important;
+  justify-content: center !important; gap: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+html.sidebar-collapsed .sidebar > div:first-child > a { display: none !important; }
+
+/* Nav direct links — icon only */
+html.sidebar-collapsed .nav-item {
+  font-size: 0 !important; padding: .6rem 0 !important;
+  justify-content: center !important; gap: 0 !important;
+}
+html.sidebar-collapsed .nav-item > svg { display: block !important; flex-shrink: 0; }
+html.sidebar-collapsed .nav-item .badge-count { display: none !important; }
+
+/* Nav groups — icon only, sub-items hidden */
+html.sidebar-collapsed .nav-group-toggle {
+  font-size: 0 !important; padding: .6rem 0 !important;
+  justify-content: center !important; gap: 0 !important;
+}
+html.sidebar-collapsed .nav-group-toggle > svg:first-child { display: block !important; flex-shrink: 0; }
+html.sidebar-collapsed .nav-group-toggle > span { display: none !important; }
+html.sidebar-collapsed .nav-group-toggle .toggle-arrow { display: none !important; }
+html.sidebar-collapsed .nav-group-children { display: none !important; }
+
+/* Hide dividers and any section labels */
+html.sidebar-collapsed .nav-divider { display: none !important; }
+html.sidebar-collapsed .nav-label,
+html.sidebar-collapsed .sidebar-section-label { display: none !important; }
+
+/* Mobile: full-width overlay */
+@media(max-width:768px){
+  .sidebar { width: var(--sidebar-w, 240px) !important; overflow-y: auto !important;
+    transform: translateX(-100%) !important; }
+  .sidebar.open { transform: translateX(0) !important; }
+  .main-wrapper { margin-left: 0 !important; }
+}
+</style>
+<script>
+(function() {
+  if (localStorage.getItem('fjb-sb-collapsed') === '1' && window.innerWidth > 768)
+    document.documentElement.classList.add('sidebar-collapsed');
+})();
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,13 +95,22 @@
 </head>
 <body class="app-body">
 <aside class="sidebar" id="sidebar">
-    <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
-    <a class="sidebar-brand" href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;cursor:pointer;" title="Go to Dashboard">
-        <div class="brand-icon-sm">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:26px;height:26px;object-fit:contain;">
+    <div style="display:flex;align-items:center;padding:1.1rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);gap:.75rem">
+        <div class="brand-icon-sm sb-logo-btn"
+             onclick="if(document.documentElement.classList.contains('sidebar-collapsed'))toggleSidebar();"
+             title="Open sidebar" style="cursor:default;flex-shrink:0;transition:opacity .15s;width:44px;height:44px;border-radius:10px;overflow:hidden;padding:4px">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:100%;height:100%;object-fit:contain;">
+            <span class="sb-open-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="13 8 17 12 13 16"/></svg>
+            </span>
         </div>
-        <span>HR Admin</span>
-    </a>
+        <a href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;display:flex;align-items:center;flex:1;font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;" title="Go to Dashboard">
+            HR Admin
+        </a>
+        <button class="sb-close-btn" onclick="toggleSidebar()" title="Close sidebar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="5 8 1 12 5 16"/></svg>
+        </button>
+    </div>
     <nav class="sidebar-nav">
         @auth
         <a href="{{ url('/dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
@@ -275,6 +366,20 @@
 
 @include('partials.chatbot')
 <script src="{{ asset('assets/js/app.js') }}"></script>
+<script>
+// Override to add desktop collapse support
+function toggleSidebar() {
+  if (window.innerWidth <= 768) {
+    var sb = document.getElementById('sidebar');
+    var ov = document.getElementById('sidebarOverlay');
+    if (sb) sb.classList.toggle('open');
+    if (ov) ov.classList.toggle('active');
+  } else {
+    var c = document.documentElement.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('fjb-sb-collapsed', c ? '1' : '0');
+  }
+}
+</script>
 
 <script>
 
