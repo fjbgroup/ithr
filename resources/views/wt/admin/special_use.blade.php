@@ -607,12 +607,13 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
     status-id="specialStatusFilter"
     reset-id="specialResetFilters"
     :items-per-page="10"
-    min-width="1900px"
+    min-width="0"
     :columns="[
         'RADIO ID',
         'STATUS',
         'SERIAL NO.',
         'MODEL',
+        'LOCATION',
         'ASSIGNED TO',
         'RETURNED',
         'Action',
@@ -623,11 +624,12 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
     @foreach($records as $record)
         <tr class="special-row {{ $record->is_special_use ? 'border-l-4 border-violet-400' : '' }}"
             data-status="{{ strtoupper((string) ($record->status ?: '')) }}"
-            data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->status ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->ownership ?? '') . ' ' . ($record->department ?? '') . ' ' . ($record->remark ?? '') . ' ' . ((int) ($record->special_use_returned ?? 0) === 1 ? 'YES RETURNED' : 'NO NOT RETURNED'))) }}">
+            data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->status ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->location ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->ownership ?? '') . ' ' . ($record->department ?? '') . ' ' . ($record->remark ?? '') . ' ' . ((int) ($record->special_use_returned ?? 0) === 1 ? 'YES RETURNED' : 'NO NOT RETURNED'))) }}">
             <td>{{ $record->radio_id ?: '-' }}</td>
             <td><span class="inline-flex rounded border border-slate-600 bg-slate-800 px-2 py-1 text-[10px] font-black uppercase">{{ $record->status ?: '-' }}</span></td>
             <td>{{ $record->serial_number ?: '-' }}</td>
             <td>{{ $record->model ?: '-' }}</td>
+            <td>{{ $record->location ?: '-' }}</td>
             <td>
                 <div class="font-black text-slate-900 dark:text-slate-100">{{ $record->ownership ?: '-' }}</div>
                 <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $record->department ?: '-' }} / {{ $record->ownership_type ?: '-' }}</div>
@@ -682,6 +684,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
                     'Status' => $record->status ?: '-',
                     'Serial No.' => $record->serial_number ?: '-',
                     'Model' => $record->model ?: '-',
+                    'Location' => $record->location ?: '-',
                     'Ownership Type' => $record->ownership_type ?: '-',
                     'Current Ownership' => $record->ownership ?: '-',
                     'Department' => $record->department ?: '-',
@@ -1138,6 +1141,15 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                         <label class="form-label">Department</label>
                         <input type="text" name="department" list="department-options" class="form-input" placeholder="Department">
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select name="location" class="form-input">
+                            <option value="">-- None --</option>
+                            @foreach($locationOptions as $location)
+                            <option value="{{ $location }}">{{ $location }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-group col-span-2">
                         <label class="form-label">Remark</label>
                         <textarea name="remark" class="form-input" placeholder="Remarks / Purpose"></textarea>
@@ -1218,6 +1230,15 @@ body .content-surface:has(.special-page-shell) .wt-data-reset {
                     <div class="form-group" style="grid-column: span 2;">
                         <label class="form-label">Department</label>
                         <input type="text" name="department" id="edit_department" list="department-options" class="form-input" placeholder="Department">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select name="location" id="edit_location" class="form-input">
+                            <option value="">-- None --</option>
+                            @foreach($locationOptions as $location)
+                            <option value="{{ $location }}">{{ $location }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Temporary / Swapped WT Radio ID</label>
@@ -1476,7 +1497,7 @@ function updateFileName(input) {
     }
 }
 
-function openEditModal(id, radio, serialNumber, model, status, ownershipType, ownership, position, department, temporaryRadioId, trackingRef, remark, needToChangeId, idChangeDone, ownershipTypeToBe, isSpecialUse, specialUseReturned) {
+function openEditModal(id, radio, serialNumber, model, status, ownershipType, ownership, position, department, location, temporaryRadioId, trackingRef, remark, needToChangeId, idChangeDone, ownershipTypeToBe, isSpecialUse, specialUseReturned) {
     const form = document.getElementById('editWalkieForm');
     form.action = "{{ route('wt.admin.walkies.updateMeta', ['walkie' => '__ID__']) }}".replace('__ID__', id);
     document.getElementById('editModalSubtitle').innerText = `Updating unit ${radio}`;
@@ -1488,6 +1509,7 @@ function openEditModal(id, radio, serialNumber, model, status, ownershipType, ow
     document.getElementById('edit_ownership').value = ownership || '';
     document.getElementById('edit_position').value = position || '';
     document.getElementById('edit_department').value = department || '';
+    document.getElementById('edit_location').value = location || '';
     document.getElementById('edit_temporary_radio_id').value = temporaryRadioId || '';
     document.getElementById('edit_tracking_ref').value = trackingRef || '';
     document.getElementById('edit_remark').value = remark || '';
@@ -1887,5 +1909,53 @@ html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable t
 
 @include('wt.admin.partials.inventory-tools-table-skin')
 @include('wt.admin.partials.inventory-tools-unified-ui')
+<style id="special-compact-final-override">
+    body .content-surface:has(#specialTable),
+    body .content-surface:has(#specialTable) .wt-data,
+    body .content-surface:has(#specialTable) .wt-data-table,
+    body .content-surface:has(#specialTable) .wt-data-scroll {
+        overflow: hidden !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: auto !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable thead th {
+        height: 28px !important;
+        padding: 4px 6px !important;
+        text-align: center !important;
+        font-size: 9px !important;
+        line-height: 1.05 !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable tbody td {
+        height: 26px !important;
+        padding: 3px 6px !important;
+        text-align: left !important;
+        font-size: 10px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable tbody td:last-child {
+        text-align: center !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons {
+        gap: 4px !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn {
+        width: 54px !important;
+        min-width: 54px !important;
+        max-width: 54px !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        padding: 0 5px !important;
+        border-radius: 5px !important;
+        font-size: 8px !important;
+        gap: 3px !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-info { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-primary { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-danger { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
+</style>
 
 @endsection

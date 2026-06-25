@@ -171,6 +171,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <select name="location" class="form-input page-tag-select" data-placeholder="Type or select location">
+                        <option value=""></option>
+                        @foreach($walkieLocations as $location)
+                        <option value="{{ $location }}" @selected(old('location', $defaults['location'] ?? null) === $location)>{{ $location }}</option>
+                        @endforeach
+                        @if(old('location') && !$walkieLocations->contains(old('location')))
+                        <option value="{{ old('location') }}" selected>{{ old('location') }}</option>
+                        @endif
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Position</label>
                     <select name="position" class="form-input page-tag-select" data-placeholder="Type or select position">
                         <option value=""></option>

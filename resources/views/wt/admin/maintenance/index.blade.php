@@ -587,19 +587,20 @@
     <table id="maintTable" class="clean-admin-table text-left">
         <thead>
             <tr>
-                <th class="px-3 py-3">Radio ID</th>
-                <th class="px-3 py-3">Status</th>
-                <th class="px-3 py-3">Serial No.</th>
-                <th class="px-3 py-3">Model</th>
-                <th class="px-3 py-3">Issue / Received</th>
-                <th class="px-3 py-3 maintenance-action-col">Action</th>
+                <th class="px-2 py-1 text-center">Radio ID</th>
+                <th class="px-2 py-1 text-center">Status</th>
+                <th class="px-2 py-1 text-center">Serial No.</th>
+                <th class="px-2 py-1 text-center">Model</th>
+                <th class="px-2 py-1 text-center">Location</th>
+                <th class="px-2 py-1 text-center">Issue / Received</th>
+                <th class="px-2 py-1 text-center maintenance-action-col">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($records as $r)
             <tr class="maint-row"
                 data-status="{{ strtoupper((string) $r->status) }}"
-                data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->walkieTalkie->ownership_type ?? $r->ownership_type ?? '') . ' ' . ($r->current_ownership ?? '') . ' ' . ($r->department_name ?? '') . ' ' . ($r->received_date ?? '') . ' ' . ($r->repair_date ?? '') . ' ' . ($r->finish_date ?? '') . ' ' . ($r->issue ?? '') . ' ' . ($r->issue_description ?? '') . ' ' . ($r->remarks ?? ''))) }}">
+                data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->walkieTalkie->ownership_type ?? $r->ownership_type ?? '') . ' ' . ($r->current_ownership ?? '') . ' ' . ($r->department_name ?? '') . ' ' . ($r->location ?? $r->walkieTalkie->location ?? '') . ' ' . ($r->received_date ?? '') . ' ' . ($r->repair_date ?? '') . ' ' . ($r->finish_date ?? '') . ' ' . ($r->issue ?? '') . ' ' . ($r->issue_description ?? '') . ' ' . ($r->remarks ?? ''))) }}">
                 <td>{{ $r->radio_id ?? '-' }}</td>
                 <td>
                     @php
@@ -613,6 +614,7 @@
                 </td>
                 <td>{{ $r->serial_number ?? '-' }}</td>
                 <td>{{ $r->model ?? '-' }}</td>
+                <td>{{ $r->location ?? $r->walkieTalkie->location ?? '-' }}</td>
                 <td>
                     <div class="inventory-item-title">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $r->received_date ?? '-' }}</div>
@@ -1551,4 +1553,51 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 @include('wt.admin.partials.inventory-tools-unified-ui')
+<style id="maintenance-compact-final-override">
+    body .content-surface .maintenance-page-shell .clean-admin-table-shell,
+    body .content-surface .maintenance-page-shell .clean-admin-table-scroll {
+        overflow: hidden !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: auto !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable thead th {
+        height: 28px !important;
+        padding: 4px 6px !important;
+        text-align: center !important;
+        font-size: 9px !important;
+        line-height: 1.05 !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable tbody td {
+        height: 26px !important;
+        padding: 3px 6px !important;
+        text-align: left !important;
+        font-size: 10px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable tbody td.maintenance-action-col,
+    body .content-surface .maintenance-page-shell #maintTable tbody td:has(.clean-admin-pill) {
+        text-align: center !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable .maintenance-action-stack {
+        gap: 4px !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable .maintenance-action-stack .wt-btn {
+        width: 54px !important;
+        min-width: 54px !important;
+        max-width: 54px !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        padding: 0 5px !important;
+        border-radius: 5px !important;
+        font-size: 8px !important;
+        gap: 3px !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable .maintenance-action-view { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
+    body .content-surface .maintenance-page-shell #maintTable .maintenance-action-edit { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
+    body .content-surface .maintenance-page-shell #maintTable .maintenance-action-delete { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
+</style>
 @endsection
