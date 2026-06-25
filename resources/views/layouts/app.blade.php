@@ -27,8 +27,17 @@ html.sidebar-collapsed .main-wrapper { margin-left: 64px !important; }
 html.sidebar-collapsed .sb-close-btn { display: none !important; }
 
 /* Logo becomes open button in collapsed state */
-html.sidebar-collapsed .sb-logo-btn { cursor: pointer !important; }
-html.sidebar-collapsed .sb-logo-btn:hover { opacity: .75; }
+.sb-open-icon { display: none; }
+html.sidebar-collapsed .sb-logo-btn { cursor: pointer !important; position: relative !important; }
+html.sidebar-collapsed .sb-logo-btn img { transition: opacity .15s; }
+html.sidebar-collapsed .sb-logo-btn .sb-open-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .15s; color: #1e293b; pointer-events: none;
+}
+html.sidebar-collapsed .sb-logo-btn .sb-open-icon svg { display: block; }
+html.sidebar-collapsed .sb-logo-btn:hover img { opacity: 0; }
+html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon { opacity: 1; }
 
 /* ── ICON RAIL ── */
 html.sidebar-collapsed .sidebar-nav { padding: .75rem 0 !important; }
@@ -89,8 +98,11 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
     <div style="display:flex;align-items:center;padding:1.1rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);gap:.75rem">
         <div class="brand-icon-sm sb-logo-btn"
              onclick="if(document.documentElement.classList.contains('sidebar-collapsed'))toggleSidebar();"
-             title="Open sidebar" style="cursor:default;flex-shrink:0;transition:opacity .15s">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:26px;height:26px;object-fit:contain;">
+             title="Open sidebar" style="cursor:default;flex-shrink:0;transition:opacity .15s;width:44px;height:44px;border-radius:10px;overflow:hidden;padding:4px">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:100%;height:100%;object-fit:contain;">
+            <span class="sb-open-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="13 8 17 12 13 16"/></svg>
+            </span>
         </div>
         <a href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;display:flex;align-items:center;flex:1;font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;" title="Go to Dashboard">
             HR Admin

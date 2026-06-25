@@ -283,14 +283,21 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
   background:rgba(255,255,255,.08);border:none;border-radius:6px;
   color:rgba(255,255,255,.5);cursor:pointer;font-size:15px;
   display:flex;align-items:center;justify-content:center;
-  transition:background .15s,color .15s;
+  transition:background .15s,color .15s,font-size .15s;
 }
-.sb-close-btn:hover{background:rgba(255,255,255,.18);color:#fff}
+.sb-close-btn:hover{background:rgba(255,255,255,.18);color:#fff;font-size:12px}
 html.sidebar-collapsed .sb-close-btn{display:none!important}
 
 /* ── LOGO AS OPEN BUTTON (collapsed state) ── */
-html.sidebar-collapsed .sb-logo-btn{cursor:pointer!important}
-html.sidebar-collapsed .sb-logo-btn:hover{opacity:.75}
+.sb-open-icon{display:none}
+html.sidebar-collapsed .sb-logo-btn{cursor:pointer!important;position:relative!important}
+html.sidebar-collapsed .sb-logo-btn img{transition:opacity .15s}
+html.sidebar-collapsed .sb-logo-btn .sb-open-icon{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .15s;font-size:16px;color:#1e2433;pointer-events:none
+}
+html.sidebar-collapsed .sb-logo-btn:hover img{opacity:0}
+html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon{opacity:1}
 
 /* ── COLLAPSE TRANSITIONS ── */
 .main-content{transition:margin-left .3s ease}
@@ -317,6 +324,7 @@ html.sidebar-collapsed .sidebar-nav>div>div{display:none!important}
 html.sidebar-collapsed .sidebar-footer .user-card{justify-content:center!important;padding:10px 0!important}
 html.sidebar-collapsed .sidebar-footer .user-info{display:none!important}
 html.sidebar-collapsed .sidebar-footer .user-avatar{margin:0!important}
+html.sidebar-collapsed .sidebar-footer .user-card i{display:none!important}
 html.sidebar-collapsed .btn-logout{font-size:0!important;padding:10px 0!important;justify-content:center!important;gap:0!important}
 html.sidebar-collapsed .btn-logout i{font-size:15px!important}
 
@@ -347,6 +355,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     <div class="sb-logo-btn" onclick="event.stopPropagation();if(document.documentElement.classList.contains('sidebar-collapsed'))toggleSidebar();"
       style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;padding:4px;transition:opacity .15s">
       <img src="{{ asset('assets/img/logo_transparent.png') }}" alt="FJB Logo" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
+      <i class="bi bi-layout-sidebar sb-open-icon"></i>
     </div>
     <div class="brand-name">FJB Inventory<span>Management System</span></div>
     <button class="sb-close-btn" onclick="event.stopPropagation();toggleSidebar()" title="Close sidebar">

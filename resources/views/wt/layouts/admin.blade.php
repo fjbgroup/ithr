@@ -99,8 +99,16 @@ html.sidebar-collapsed .topbar { left: 64px !important; }
 html.sidebar-collapsed .sb-close-btn { display: none !important; }
 
 /* Logo as open button */
-html.sidebar-collapsed .sb-logo-btn { cursor: pointer !important; }
-html.sidebar-collapsed .sb-logo-btn:hover { opacity: .75; }
+.sb-open-icon { display: none; }
+html.sidebar-collapsed .sb-logo-btn { cursor: pointer !important; position: relative !important; }
+html.sidebar-collapsed .sb-logo-btn img { transition: opacity .15s; }
+html.sidebar-collapsed .sb-logo-btn .sb-open-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .15s; font-size: 16px; color: #1e2433; pointer-events: none;
+}
+html.sidebar-collapsed .sb-logo-btn:hover img { opacity: 0; }
+html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon { opacity: 1; }
 
 /* ── ICON RAIL STYLES ── */
 html.sidebar-collapsed .sidebar-nav { padding: 16px 0 !important; }
@@ -113,9 +121,12 @@ html.sidebar-collapsed .dropdown-trigger { font-size: 0 !important; padding: 10p
 html.sidebar-collapsed .dropdown-trigger i:first-child { font-size: 15px !important; width: auto !important; margin: 0 !important; }
 html.sidebar-collapsed .dropdown-trigger span { display: none !important; }
 html.sidebar-collapsed .dropdown-trigger .dropdown-chevron { display: none !important; }
-html.sidebar-collapsed .dropdown-trigger .sidebar-info-icon { display: none !important; }
+html.sidebar-collapsed .nav-info-slot { display: none !important; }
 html.sidebar-collapsed .dropdown-content { display: none !important; }
-html.sidebar-collapsed .sidebar-nav-user { display: none !important; }
+html.sidebar-collapsed .sidebar-footer { padding: 12px 0 !important; }
+html.sidebar-collapsed .sidebar-footer .user-card { justify-content: center !important; padding: 8px 0 !important; gap: 0 !important; background: none !important; }
+html.sidebar-collapsed .sidebar-footer .user-info { display: none !important; }
+html.sidebar-collapsed .sidebar-footer .user-avatar { margin: 0 !important; flex-shrink: 0; }
 
 /* mobile: restore full sidebar */
 @media(max-width:768px){
@@ -199,6 +210,7 @@ html.sidebar-collapsed .sidebar-nav-user { display: none !important; }
          title="Open sidebar"
          style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.18);cursor:default;transition:opacity .15s">
       <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
+      <i class="bi bi-layout-sidebar sb-open-icon"></i>
     </div>
     <a href="{{ request()->fullUrl() }}" title="Refresh page" style="display:flex;align-items:center;gap:.9rem;flex:1;text-decoration:none;color:#fff;padding-left:.9rem">
       <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
