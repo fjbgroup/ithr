@@ -835,6 +835,11 @@
     .dark body .content-surface .unused-table tbody tr:hover td {
         background: #172033 !important;
     }
+    body .content-surface .unused-table th,
+    html:not(.dark) body .content-surface .unused-table th,
+    .dark body .content-surface .unused-table th {
+        padding: 14px 16px !important;
+    }
 </style>
 
 @include('wt.admin.partials.inventory-management-ui')
@@ -908,7 +913,7 @@
                     @foreach($compactColumns as $column)
                         <th>{{ strtoupper($columnLabels[$column['key']] ?? str_replace('_', ' ', $column['label'])) }}</th>
                     @endforeach
-                    <th>ACTION</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

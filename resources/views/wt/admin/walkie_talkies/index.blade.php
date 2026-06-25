@@ -586,6 +586,38 @@
     @endpush
 
     @push('final_styles')
+    <style id="inventory-compact-final-override">
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col {
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
+            height: 28px !important;
+            padding: 4px 6px !important;
+            text-align: center !important;
+            font-size: 9px !important;
+            line-height: 1.05 !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
+            height: 26px !important;
+            padding: 3px 6px !important;
+            text-align: left !important;
+            font-size: 10px !important;
+            line-height: 1.1 !important;
+            white-space: nowrap !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-action-col {
+            text-align: center !important;
+        }
+        body .content-surface .inventory-page-shell #inventoryTableScroll {
+            overflow: hidden !important;
+        }
+    </style>
+    @endpush
+
+    @push('final_styles')
     <style id="inventory-row-line-to-border-final">
         .inventory-page-shell #mainTableContainer.inventory-table-shell,
         body .content-surface .inventory-page-shell #mainTableContainer.inventory-table-shell {
@@ -597,6 +629,16 @@
             margin-left: -16px !important;
             width: calc(100% + 16px) !important;
             min-width: calc(100% + 16px) !important;
+        }
+
+        body .content-surface .inventory-page-shell .inventory-page-header.page-header-block {
+            padding: 16px 20px !important;
+            min-height: 60px !important;
+            align-items: center !important;
+        }
+
+        body .content-surface .inventory-page-shell .inventory-header-copy {
+            padding-left: 2px !important;
         }
 
         .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
@@ -715,7 +757,7 @@
         .inventory-page-shell #walkiesTable.clean-admin-table thead th,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
             height: 36px !important;
-            padding: 9px 10px !important;
+            padding: 14px 16px !important;
             background: #eef3f8 !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 0 !important;
@@ -1561,6 +1603,7 @@
                     <col class="inventory-status-colgroup">
                     <col class="inventory-serial-colgroup">
                     <col class="inventory-model-colgroup">
+                    <col class="inventory-location-colgroup">
                     <col class="inventory-ownership-colgroup">
                     <col class="inventory-action-colgroup">
                 </colgroup>
@@ -1569,12 +1612,13 @@
                         @if($showInventoryBulk)
                         <th class="px-3 py-3 text-center inventory-select-col"></th>
                         @endif
-                        <th class="px-3 py-3">RADIO ID</th>
-                        <th class="px-3 py-3">STATUS</th>
-                        <th class="px-3 py-3">SERIAL NO.</th>
-                        <th class="px-3 py-3">MODEL</th>
-                        <th class="px-3 py-3">ASSIGNED TO</th>
-                        <th class="px-3 py-3 text-center inventory-action-col" data-label="ACTION"><span class="inventory-action-heading">ACTION</span></th>
+                        <th class="px-2 py-1 text-center">RADIO ID</th>
+                        <th class="px-2 py-1 text-center">STATUS</th>
+                        <th class="px-2 py-1 text-center">SERIAL NO.</th>
+                        <th class="px-2 py-1 text-center">MODEL</th>
+                        <th class="px-2 py-1 text-center">LOCATION</th>
+                        <th class="px-2 py-1 text-center">ASSIGNED TO</th>
+                        <th class="px-3 py-3 text-center inventory-action-col"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-700/40 text-[11px]">
@@ -1587,7 +1631,7 @@
                         data-status="{{ $statusValue }}"
                         data-model="{{ strtoupper((string) ($w->model ?: 'NO MODEL')) }}"
                         data-ownership-type="{{ strtoupper((string) ($w->ownership_type ?: '-')) }}"
-                        data-search="{{ strtoupper(trim(($w->radio_id ?? '') . ' ' . ($w->model ?? '') . ' ' . ($w->serial_number ?? '') . ' ' . ($w->ownership_type ?? '') . ' ' . ($w->shared_with ?? '') . ' ' . ($w->ownership ?? '') . ' ' . ($w->department ?? '') . ' ' . ($w->position ?? '') . ' ' . ($w->status ?? '') . ' ' . ($w->temporary_radio_id ?? '') . ' ' . ($w->tracking_ref ?? '') . ' ' . ($w->remark ?? '') . ' ' . ($w->need_to_change_id ?? '') . ' ' . ($w->ownership_type_to_be ?? ''))) }}">
+                        data-search="{{ strtoupper(trim(($w->radio_id ?? '') . ' ' . ($w->model ?? '') . ' ' . ($w->serial_number ?? '') . ' ' . ($w->ownership_type ?? '') . ' ' . ($w->shared_with ?? '') . ' ' . ($w->ownership ?? '') . ' ' . ($w->department ?? '') . ' ' . ($w->location ?? '') . ' ' . ($w->position ?? '') . ' ' . ($w->status ?? '') . ' ' . ($w->temporary_radio_id ?? '') . ' ' . ($w->tracking_ref ?? '') . ' ' . ($w->remark ?? '') . ' ' . ($w->need_to_change_id ?? '') . ' ' . ($w->ownership_type_to_be ?? ''))) }}">
                         @if($showInventoryBulk)
                         <td class="text-center inventory-select-col">
                             <input type="checkbox" class="inventory-row-checkbox inventory-bulk-checkbox" value="{{ $w->walkie_id }}" data-label="{{ $w->radio_id ?: $w->serial_number ?: $w->walkie_id }}">
@@ -1608,6 +1652,7 @@
                         <td>
                             <div class="inventory-item-title">{{ $w->model ?: 'NO MODEL' }}</div>
                         </td>
+                        <td>{{ $w->location ?: '-' }}</td>
                         <td>
                             <div class="inventory-item-title">{{ $w->ownership ?: '-' }}</div>
                             <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $w->department ?: '-' }} / {{ $w->ownership_type ?: '-' }}</div>
@@ -1881,6 +1926,20 @@
                         </select>
                     </div>
 
+                    {{-- Location --}}
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select name="location" id="add_location" class="form-input modal-tag-select" data-placeholder="Type or select location">
+                            <option value=""></option>
+                            @foreach($walkieLocations as $location)
+                            <option value="{{ $location }}" @selected(old('location') === $location)>{{ $location }}</option>
+                            @endforeach
+                            @if(old('location') && !$walkieLocations->contains(old('location')))
+                            <option value="{{ old('location') }}" selected>{{ old('location') }}</option>
+                            @endif
+                        </select>
+                    </div>
+
                     {{-- Position --}}
                     <div class="form-group">
                         <label class="form-label">Position</label>
@@ -2079,6 +2138,15 @@
                             <option value=""></option>
                             @foreach($walkieDepartments as $department)
                             <option value="{{ $department }}">{{ $department }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select name="location" id="edit_location" class="form-input modal-tag-select" data-placeholder="Type or select location">
+                            <option value=""></option>
+                            @foreach($walkieLocations as $location)
+                            <option value="{{ $location }}">{{ $location }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -6490,6 +6558,7 @@
             const summaryItems = [
                 ['Owner', summary.ownership || '-'],
                 ['Department', summary.department || '-'],
+                ['Location', summary.location || '-'],
                 ['Status', summary.status || 'UNKNOWN'],
             ];
 
@@ -6619,6 +6688,7 @@
                 `Ownership Type: ${walkie.ownership_type || '-'}`,
                 `Owner: ${walkie.owner || '-'}`,
                 `Department: ${walkie.department || '-'}`,
+                `Location: ${walkie.location || '-'}`,
                 `URL: ${walkie.url || window.location.href}`,
             ].join('\n');
         }
@@ -6971,10 +7041,10 @@
             if (!table) return;
 
             const actionHeader = table.querySelector('thead th.inventory-action-col');
-            table.style.minWidth = '1460px';
+            table.style.minWidth = '0';
             if (actionHeader) {
-                actionHeader.dataset.label = 'ACTION';
-                actionHeader.innerHTML = '<span class="inventory-action-heading">ACTION</span>';
+                actionHeader.removeAttribute('data-label');
+                actionHeader.innerHTML = '';
                 actionHeader.style.position = 'static';
                 actionHeader.style.right = 'auto';
                 actionHeader.style.left = 'auto';
@@ -7234,7 +7304,7 @@
             }
         }
 
-        function openEditModal(id, radio, serialNumber, model, status, ownershipType, ownership, position, department, temporaryRadioId, trackingRef, remark, needToChangeId, idChangeDone, ownershipTypeToBe, isSpecialUse, specialUseReturned, sharedWith) {
+        function openEditModal(id, radio, serialNumber, model, status, ownershipType, ownership, position, department, location, temporaryRadioId, trackingRef, remark, needToChangeId, idChangeDone, ownershipTypeToBe, isSpecialUse, specialUseReturned, sharedWith) {
             const form = document.getElementById('editWalkieForm');
             form.action = "{{ route('wt.admin.walkies.updateMeta', ['walkie' => '__ID__']) }}".replace('__ID__', id);
             document.getElementById('editModalSubtitle').innerText = `Updating unit ${radio}`;
@@ -7247,6 +7317,7 @@
             ensureSelectOption('edit_ownership', ownership || '');
             ensureSelectOption('edit_position', position || '');
             ensureSelectOption('edit_department', department || '');
+            ensureSelectOption('edit_location', location || '');
             ensureSelectOption('edit_temporary_radio_id', temporaryRadioId || '');
             ensureSelectOption('edit_tracking_ref', trackingRef || '');
             document.getElementById('edit_remark').value = remark || '';
@@ -8717,6 +8788,12 @@
             padding-right: 10px !important;
             text-align: center !important;
             border-left: 0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
         }
 
         .inventory-page-shell #walkiesTable.clean-admin-table th:first-child::before,

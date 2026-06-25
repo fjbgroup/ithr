@@ -642,20 +642,21 @@
     <table id="maintenanceTable" class="clean-admin-table text-left">
         <thead>
             <tr>
-                <th class="px-3 py-3">Radio ID</th>
-                <th class="px-3 py-3">Serial No</th>
-                <th class="px-3 py-3">Model</th>
-                <th class="px-3 py-3">Ownership Type</th>
-                <th class="px-3 py-3">Department</th>
-                <th class="px-3 py-3">Date Received</th>
-                <th class="px-3 py-3">Reporter</th>
-                <th class="px-3 py-3">Issue</th>
-                <th class="px-3 py-3">Status</th>
-                <th class="px-3 py-3">Done</th>
-                <th class="px-3 py-3">Finish Date</th>
-                <th class="px-3 py-3">Remarks</th>
-                <th class="px-3 py-3 maintenance-progress-col">Repair Progress</th>
-                <th class="px-3 py-3 maintenance-action-col">Action</th>
+                <th class="px-2 py-1 text-center">Radio ID</th>
+                <th class="px-2 py-1 text-center">Serial No</th>
+                <th class="px-2 py-1 text-center">Model</th>
+                <th class="px-2 py-1 text-center">Ownership Type</th>
+                <th class="px-2 py-1 text-center">Department</th>
+                <th class="px-2 py-1 text-center">Location</th>
+                <th class="px-2 py-1 text-center">Date Received</th>
+                <th class="px-2 py-1 text-center">Reporter</th>
+                <th class="px-2 py-1 text-center">Issue</th>
+                <th class="px-2 py-1 text-center">Status</th>
+                <th class="px-2 py-1 text-center">Done</th>
+                <th class="px-2 py-1 text-center">Finish Date</th>
+                <th class="px-2 py-1 text-center">Remarks</th>
+                <th class="px-2 py-1 text-center maintenance-progress-col">Repair Progress</th>
+                <th class="px-2 py-1 text-center maintenance-action-col">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -674,7 +675,7 @@
             @endphp
             <tr class="maintenance-row"
                 data-status="{{ $record->done ? 'DONE' : strtoupper((string) $record->status) }}"
-                data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->walkieTalkie->ownership_type ?? '') . ' ' . ($record->department_name ?? '') . ' ' . ($record->received_date ?? '') . ' ' . ($record->reporter_name ?? '') . ' ' . ($record->reporter_staff_id ?? '') . ' ' . ($record->issue ?? '') . ' ' . ($record->issue_description ?? '') . ' ' . ($record->finish_date ?? '') . ' ' . ($record->remarks ?? '') . ' ' . ($record->status ?? ''))) }}">
+                data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->walkieTalkie->ownership_type ?? '') . ' ' . ($record->department_name ?? '') . ' ' . ($record->location ?? $record->walkieTalkie->location ?? '') . ' ' . ($record->received_date ?? '') . ' ' . ($record->reporter_name ?? '') . ' ' . ($record->reporter_staff_id ?? '') . ' ' . ($record->issue ?? '') . ' ' . ($record->issue_description ?? '') . ' ' . ($record->finish_date ?? '') . ' ' . ($record->remarks ?? '') . ' ' . ($record->status ?? ''))) }}">
                 <td>{{ $record->radio_id ?? '-' }}</td>
                 <td>{{ $record->serial_number ?? '-' }}</td>
                 <td>{{ $record->model ?? '-' }}</td>
@@ -685,6 +686,7 @@
                     {{ in_array($ownershipType, ['INDIVIDUAL', 'SHARED', 'SPARE'], true) ? $ownershipType : '-' }}
                 </td>
                 <td>{{ $record->department_name ?? '-' }}</td>
+                <td>{{ $record->location ?? $record->walkieTalkie->location ?? '-' }}</td>
                 <td>{{ $record->received_date ?? '-' }}</td>
                 <td>
                     @if($record->request_source === 'user')
@@ -1604,6 +1606,36 @@ html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[dat
 @endif
 
 @include('wt.admin.partials.inventory-tools-table-skin')
+<style id="repair-faulty-compact-final-override">
+    body .content-surface .maintenance-page-shell .clean-admin-table-shell,
+    body .content-surface .maintenance-page-shell .clean-admin-table-scroll {
+        overflow: hidden !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: auto !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable thead th {
+        height: 28px !important;
+        padding: 4px 6px !important;
+        text-align: center !important;
+        font-size: 9px !important;
+        line-height: 1.05 !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable tbody td {
+        height: 26px !important;
+        padding: 3px 6px !important;
+        text-align: left !important;
+        font-size: 10px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable tbody td.maintenance-action-col,
+    body .content-surface .maintenance-page-shell #maintenanceTable tbody td:has(.clean-admin-pill) {
+        text-align: center !important;
+    }
+</style>
 
 <script>
 // ESC key to close

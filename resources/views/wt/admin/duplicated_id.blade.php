@@ -548,13 +548,14 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
         <div id="duplicateTableScroll" class="duplicate-table-scroll">
             <table id="duplicateTable">
                 <colgroup>
-                    <col style="width:75px">
-                    <col style="width:100px">
-                    <col style="width:130px">
-                    <col style="width:80px">
-                    <col style="width:110px">
                     <col style="width:70px">
-                    <col style="width:200px">
+                    <col style="width:86px">
+                    <col style="width:112px">
+                    <col style="width:72px">
+                    <col style="width:76px">
+                    <col style="width:96px">
+                    <col style="width:54px">
+                    <col style="width:160px">
                 </colgroup>
                 <thead>
                     <tr>
@@ -562,7 +563,8 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         <th>Status</th>
                         <th class="sortable" data-col="2" data-type="text">Serial No. <i class="dup-sort-icon">↕</i></th>
                         <th class="sortable" data-col="3" data-type="text">Model <i class="dup-sort-icon">↕</i></th>
-                        <th class="sortable" data-col="4" data-type="num">Change ID To <i class="dup-sort-icon">&#8597;</i></th>
+                        <th>Location</th>
+                        <th class="sortable" data-col="5" data-type="num">Change ID To <i class="dup-sort-icon">&#8597;</i></th>
                         <th>Done</th>
                         <th>Action</th>
                     </tr>
@@ -583,13 +585,14 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <tr class="duplicate-row{{ $done ? ' is-done-row' : '' }}"
                         data-status="{{ strtoupper((string)($r->status ?? '')) }}"
                         data-done="{{ $done ? 'YES' : 'NO' }}"
-                        data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->ownership_type ?? '') . ' ' . ($r->shared_with ?? '') . ' ' . ($r->ownership ?? '') . ' ' . ($r->department ?? '') . ' ' . ($r->remark ?? '') . ' ' . ($r->need_to_change_id ?? '') . ' ' . ($r->ownership_type_to_be ?? ''))) }}">
+                        data-search="{{ strtoupper(trim(($r->radio_id ?? '') . ' ' . ($r->serial_number ?? '') . ' ' . ($r->model ?? '') . ' ' . ($r->status ?? '') . ' ' . ($r->ownership_type ?? '') . ' ' . ($r->shared_with ?? '') . ' ' . ($r->ownership ?? '') . ' ' . ($r->department ?? '') . ' ' . ($r->location ?? '') . ' ' . ($r->remark ?? '') . ' ' . ($r->need_to_change_id ?? '') . ' ' . ($r->ownership_type_to_be ?? ''))) }}">
                         <td style="font-weight:700;">{{ $r->radio_id ?: '-' }}</td>
                         <td>
                             <span class="dup-status-badge {{ $statusClass }}">{{ $r->status ?: '-' }}</span>
                         </td>
                         <td>{{ $r->serial_number ?: '-' }}</td>
                         <td>{{ $r->model ?: '-' }}</td>
+                        <td>{{ $r->location ?: '-' }}</td>
                         <td>
                             @if($r->need_to_change_id)
                                 <span class="dup-change-id-val">{{ $r->need_to_change_id }}</span>
@@ -694,6 +697,15 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         <input type="text" name="department" list="department-options" class="form-input" placeholder="Department">
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select name="location" class="form-input">
+                            <option value="">-- None --</option>
+                            @foreach($locationOptions as $location)
+                            <option value="{{ $location }}">{{ $location }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Need To Change Into</label>
                         <input type="text" name="need_to_change_id" class="form-input" placeholder="Target Radio ID e.g. 2220">
                     </div>
@@ -786,6 +798,15 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                     <div class="form-group" style="grid-column:span 2;">
                         <label class="form-label">Department</label>
                         <input type="text" name="department" id="edit_department" list="department-options" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select name="location" id="edit_location" class="form-input">
+                            <option value="">-- None --</option>
+                            @foreach($locationOptions as $location)
+                            <option value="{{ $location }}">{{ $location }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Temp / Swapped Radio ID</label>
@@ -1006,7 +1027,7 @@ $(document).ready(function () {
     applyFilter();
 });
 
-function openEditModal(id,radio,serialNumber,model,status,ownershipType,ownership,position,department,temporaryRadioId,trackingRef,remark,needToChangeId,idChangeDone,ownershipTypeToBe){
+function openEditModal(id,radio,serialNumber,model,status,ownershipType,ownership,position,department,location,temporaryRadioId,trackingRef,remark,needToChangeId,idChangeDone,ownershipTypeToBe){
     const form=document.getElementById('editWalkieForm');
     form.action="{{ route('wt.admin.walkies.updateMeta',['walkie'=>'__ID__']) }}".replace('__ID__',id);
     document.getElementById('edit_radio_id').value=radio||'';
@@ -1017,6 +1038,7 @@ function openEditModal(id,radio,serialNumber,model,status,ownershipType,ownershi
     document.getElementById('edit_ownership').value=ownership||'';
     document.getElementById('edit_position').value=position||'';
     document.getElementById('edit_department').value=department||'';
+    document.getElementById('edit_location').value=location||'';
     document.getElementById('edit_temporary_radio_id').value=temporaryRadioId||'';
     document.getElementById('edit_tracking_ref').value=trackingRef||'';
     document.getElementById('edit_remark').value=remark||'';
@@ -1634,4 +1656,35 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
 }
 </style>
 @include('wt.admin.partials.inventory-tools-unified-ui')
+<style id="duplicate-compact-final-override">
+    body .content-surface .duplicate-table-shell,
+    body .content-surface .duplicate-table-scroll {
+        overflow: hidden !important;
+    }
+    body .content-surface #duplicateTable {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: auto !important;
+    }
+    body .content-surface #duplicateTable thead th {
+        height: 28px !important;
+        padding: 4px 6px !important;
+        text-align: center !important;
+        font-size: 9px !important;
+        line-height: 1.05 !important;
+    }
+    body .content-surface #duplicateTable tbody td {
+        height: 26px !important;
+        padding: 3px 6px !important;
+        text-align: left !important;
+        font-size: 10px !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+    }
+    body .content-surface #duplicateTable tbody td:last-child,
+    body .content-surface #duplicateTable tbody td:has(.dup-status-badge),
+    body .content-surface #duplicateTable tbody td:has(.dup-done-badge) {
+        text-align: center !important;
+    }
+</style>
 @endsection

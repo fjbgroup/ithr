@@ -20,6 +20,7 @@ class WalkieTalkie extends Model
         'ownership',
         'position',
         'department',
+        'location',
         'temporary_radio_id',
         'remark',
         'tracking_ref',
@@ -36,4 +37,3 @@ class WalkieTalkie extends Model
         return $this->hasMany(MaintenanceRecord::class, 'walkie_id', 'walkie_id');
     }
 }
-

@@ -2369,9 +2369,16 @@ body .content-surface .duplicate-table-shell #duplicateTable {
 }
 
 body .content-surface .duplicate-table-shell #duplicateTable th,
-body .content-surface .duplicate-table-shell #duplicateTable td {
+.duplicate-table-shell #duplicateTable th {
     border: 1px solid #2d3748 !important;
     text-align: center !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface .duplicate-table-shell #duplicateTable td,
+.duplicate-table-shell #duplicateTable td {
+    border: 1px solid #2d3748 !important;
+    text-align: left !important;
     vertical-align: middle !important;
 }
 
@@ -2432,13 +2439,6 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
     border-collapse: collapse !important;
 }
 
-.duplicate-table-shell #duplicateTable th,
-.duplicate-table-shell #duplicateTable td {
-    border: 1px solid #2d3748 !important;
-    text-align: center !important;
-    vertical-align: middle !important;
-}
-
 .duplicate-table-shell #duplicateTable .duplicate-action-stack,
 .duplicate-table-shell #duplicateTable .dup-actions {
     display: inline-flex !important;
@@ -2454,5 +2454,173 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
 .duplicate-table-shell #duplicateTable .dup-actions form {
     display: inline-flex !important;
     margin: 0 !important;
+}
+
+/* Final compact inventory table baseline across Inventory List, Under Repair/Faulty, Duplicated ID, and Special Use. */
+body .content-surface :is(
+    .inventory-page-shell,
+    .maintenance-page-shell,
+    .unused-page-shell,
+    .duplicate-page,
+    .special-page-shell,
+    .wt-data
+) {
+    gap: 6px !important;
+}
+
+body .content-surface :is(
+    .inventory-page-header,
+    .maintenance-page-shell > .page-header-block,
+    .unused-page-shell > .page-header-block,
+    .duplicate-hero .page-header-block,
+    .special-page-shell > .page-header-block,
+    .wt-data-page-hero
+) {
+    min-height: 0 !important;
+    padding: 6px 8px !important;
+    margin: 0 !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .wt-data table
+) {
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: auto !important;
+    border-collapse: collapse !important;
+}
+
+body .content-surface :is(
+    .clean-admin-table-scroll,
+    .unused-scroll,
+    .duplicate-table-scroll,
+    .special-table-scroll,
+    .wt-data-scroll,
+    .dataTables_scrollBody
+) {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .wt-data table
+) thead th {
+    height: 28px !important;
+    padding: 4px 6px !important;
+    background: #eef3f8 !important;
+    border: 1px solid #d8e1ed !important;
+    color: #334155 !important;
+    font-size: 9px !important;
+    font-weight: 900 !important;
+    letter-spacing: .04em !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .wt-data table
+) tbody td {
+    height: 26px !important;
+    min-height: 26px !important;
+    padding: 3px 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
+    font-size: 10px !important;
+    font-weight: 650 !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .wt-data table
+) tbody td :is(.clean-admin-pill, .dup-status-badge, .dup-done-badge) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 18px !important;
+    padding: 2px 6px !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+}
+
+body .content-surface :is(
+    #walkiesTable td.inventory-action-col,
+    #maintTable td.maintenance-action-col,
+    #maintenanceTable td.maintenance-action-col,
+    #duplicateTable td:last-child,
+    #specialTable td:last-child,
+    .unused-table td:last-child
+) {
+    text-align: center !important;
+}
+
+body .content-surface :is(
+    .inventory-table-footer,
+    .repair-table-footer,
+    .unused-pagination-bar,
+    .duplicate-table-footer,
+    .special-table-footer,
+    .adminit-table-footer,
+    .wt-data-footer
+) {
+    min-height: 34px !important;
+    padding: 5px 8px !important;
+}
+
+html.dark body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .wt-data table
+) thead th {
+    background: #1f2937 !important;
+    border-color: #2f3b4f !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .wt-data table
+) tbody td {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #e5edf7 !important;
 }
 </style>

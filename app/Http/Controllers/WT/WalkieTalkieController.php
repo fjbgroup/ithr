@@ -71,6 +71,7 @@ class WalkieTalkieController extends Controller
                 WalkieTalkie::query()->pluck('ownership_type')
                     ->merge(WalkieTalkie::query()->pluck('ownership_type_to_be'))
             ),
+            'locationOptions' => $this->mergeMasterData('location', WalkieTalkie::query()->pluck('location')->merge(collect(['T4', 'T5', 'GT', 'LBSB']))),
         ];
     }
 
@@ -139,6 +140,7 @@ class WalkieTalkieController extends Controller
             'walkieOwnerships' => $walkies->pluck('ownership')->filter()->unique()->sort()->values(),
             'staffOwnerships' => $this->staffOwnershipOptions(),
             'walkieDepartments' => $this->mergeMasterData('department', $walkies->pluck('department')),
+            'walkieLocations' => $this->mergeMasterData('location', $walkies->pluck('location')->merge(collect(['T4', 'T5', 'GT', 'LBSB']))),
             'walkiePositions' => $this->mergeMasterData('position', $walkies->pluck('position')),
             'walkieTemporaryIds' => $walkies->pluck('temporary_radio_id')->filter()->unique()->sort()->values(),
             'walkieTrackingRefs' => $walkies->pluck('tracking_ref')->filter()->unique()->sort()->values(),
@@ -356,6 +358,7 @@ class WalkieTalkieController extends Controller
                         'status' => $walkie->status ?: 'UNKNOWN',
                         'ownership' => $walkie->ownership ?: '-',
                         'department' => $walkie->department ?: '-',
+                        'location' => $walkie->location ?: '-',
                     ],
                     'events' => $events,
                 ],
@@ -371,6 +374,7 @@ class WalkieTalkieController extends Controller
             'serial_number' => $walkie->serial_number,
             'model' => $walkie->model,
             'status' => $walkie->status,
+            'location' => $walkie->location,
             'label' => 'SERIAL: ' . $walkie->serial_number . ' | RADIO ID: ' . $walkie->radio_id . ' | MODEL: ' . $walkie->model,
         ];
     }
@@ -386,6 +390,7 @@ class WalkieTalkieController extends Controller
             'ownership' => '',
             'position' => '',
             'department' => '',
+            'location' => '',
             'temporary_radio_id' => '',
             'remark' => $remark ?? '',
             'tracking_ref' => '',
@@ -566,6 +571,7 @@ class WalkieTalkieController extends Controller
             ['key' => 'shared_with', 'label' => 'shared_with'],
             ['key' => 'ownership', 'label' => 'current_ownership'],
             ['key' => 'department', 'label' => 'department'],
+            ['key' => 'location', 'label' => 'location'],
             ['key' => 'position', 'label' => 'position'],
             ['key' => 'temporary_radio_id', 'label' => 'temporary_swapped_wt_radio_id'],
             ['key' => 'tracking_ref', 'label' => 'tracking_ref'],
@@ -697,6 +703,7 @@ class WalkieTalkieController extends Controller
                 'ownership' => $walkie->ownership,
                 'position' => $walkie->position,
                 'department' => $walkie->department,
+                'location' => $walkie->location,
                 'temporary_radio_id' => $walkie->temporary_radio_id,
                 'tracking_ref' => $walkie->tracking_ref,
                 'remark' => $walkie->remark,
@@ -875,6 +882,7 @@ public function repairFaulty()
             'ownership' => ['nullable', 'string', 'max:255', Rule::exists('staff', 'name')],
             'position' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:50',
             'has_temporary_radio' => 'nullable|boolean',
             'temporary_radio_id' => 'nullable|string|max:100',
             'remark' => 'nullable|string|max:2000',
@@ -919,6 +927,7 @@ public function repairFaulty()
             'ownership' => $validated['ownership'] ?? '',
             'position' => $validated['position'] ?? '',
             'department' => $validated['department'] ?? '',
+            'location' => $this->normalizeValue($validated['location'] ?? ''),
             'temporary_radio_id' => $validated['temporary_radio_id'] ?? '',
             'remark' => $validated['remark'] ?? '',
             'tracking_ref' => $validated['tracking_ref'] ?? '',
@@ -939,6 +948,7 @@ public function repairFaulty()
                 'model' => $walkie->model,
                 'current_ownership' => $walkie->ownership,
                 'department_name' => $walkie->department,
+                'location' => $walkie->location,
                 'received_date' => now()->toDateString(),
                 'repair_date' => now()->toDateString(),
                 'issue_description' => $walkie->remark ?: 'NO ISSUE SPECIFIED',
@@ -994,6 +1004,7 @@ public function repairFaulty()
             'ownership' => ['nullable', 'string', 'max:255', Rule::exists('staff', 'name')],
             'position' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:50',
             'has_temporary_radio' => 'nullable|boolean',
             'temporary_radio_id' => 'nullable|string|max:100',
             'remark' => 'nullable|string|max:2000',
@@ -1019,6 +1030,7 @@ public function repairFaulty()
             'ownership' => $validated['ownership'] ?? '',
             'position' => $validated['position'] ?? '',
             'department' => $validated['department'] ?? '',
+            'location' => $this->normalizeValue($validated['location'] ?? ''),
             'temporary_radio_id' => $validated['temporary_radio_id'] ?? '',
             'remark' => $validated['remark'] ?? '',
             'tracking_ref' => $validated['tracking_ref'] ?? '',
