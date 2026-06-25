@@ -133,6 +133,12 @@ class AttendanceController extends Controller
                 ->withInput(['staff_no' => $request->staff_no]);
         }
 
+        // The staff just proved their credentials on the QR verify form, so log
+        // them in. This keeps the session authenticated for the success page so
+        // "View My Training" goes straight to the training page without a second login.
+        auth()->login($user);
+        $request->session()->regenerate();
+
         $attendance = TrainingAttendance::updateOrCreate(
             ['staff_id' => $staff->id, 'course_id' => $id],
             [

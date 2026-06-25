@@ -80,6 +80,34 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
   .sidebar.open { transform: translateX(0) !important; }
   .main-wrapper { margin-left: 0 !important; }
 }
+
+/* ── COLLAPSED SIDEBAR HOVER TOOLTIPS ── */
+.sb-tooltip {
+  position: fixed;
+  transform: translateY(-50%);
+  background: #1e293b;
+  color: #fff;
+  padding: .4rem .65rem;
+  border-radius: 7px;
+  font-size: .75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .12s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,.22);
+}
+.sb-tooltip.show { opacity: 1; }
+.sb-tooltip::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #1e293b;
+}
 </style>
 <script>
 (function() {
@@ -379,6 +407,46 @@ function toggleSidebar() {
     localStorage.setItem('fjb-sb-collapsed', c ? '1' : '0');
   }
 }
+
+// Collapsed-sidebar hover tooltips: show each item's label when the rail is collapsed
+(function () {
+  var tip = null;
+  function ensureTip() {
+    if (!tip) { tip = document.createElement('div'); tip.className = 'sb-tooltip'; document.body.appendChild(tip); }
+    return tip;
+  }
+  function isCollapsed() {
+    return document.documentElement.classList.contains('sidebar-collapsed') && window.innerWidth > 768;
+  }
+  function showTip(el) {
+    if (!isCollapsed()) return;
+    var label = el.getAttribute('data-tooltip');
+    if (!label) return;
+    var t = ensureTip();
+    t.textContent = label;
+    var r = el.getBoundingClientRect();
+    t.style.top = (r.top + r.height / 2) + 'px';
+    t.style.left = (r.right + 12) + 'px';
+    t.classList.add('show');
+  }
+  function hideTip() { if (tip) tip.classList.remove('show'); }
+
+  document.querySelectorAll('.sidebar .nav-item, .sidebar .nav-group-toggle').forEach(function (el) {
+    var label = Array.from(el.childNodes)
+      .filter(function (n) { return n.nodeType === 3; })
+      .map(function (n) { return n.textContent; })
+      .join('').replace(/\s+/g, ' ').trim();
+    if (!label) {
+      var span = el.querySelector(':scope > span:not(.badge-count):not(.toggle-arrow)');
+      if (span) label = span.textContent.replace(/\s+/g, ' ').trim();
+    }
+    if (!label) return;
+    el.setAttribute('data-tooltip', label);
+    el.addEventListener('mouseenter', function () { showTip(el); });
+    el.addEventListener('mouseleave', hideTip);
+    el.addEventListener('click', hideTip);
+  });
+})();
 </script>
 
 <script>
