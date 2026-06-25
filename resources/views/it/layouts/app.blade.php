@@ -1076,7 +1076,7 @@ $(document).ready(function () {
 
 <!-- PAGE TRANSITIONS -->
 <style>
-@keyframes fjb-page-in  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fjb-page-in  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 @keyframes fjb-page-out { from{opacity:1;transform:translateY(0)}     to{opacity:0;transform:translateY(-6px)} }
 .page-body { animation: fjb-page-in .22s ease both; }
 .page-leaving .page-body { animation: fjb-page-out .18s ease both; pointer-events:none; }

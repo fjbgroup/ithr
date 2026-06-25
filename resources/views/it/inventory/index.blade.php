@@ -166,6 +166,14 @@
 {{-- TABLE --}}
 <div id="inventoryLiveResults">
 <div class="table-card">
+  <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+    <span style="font-size:13px;color:var(--muted);font-weight:500">
+      <strong style="color:var(--text)">{{ number_format($items->total()) }}</strong> asset{{ $items->total() !== 1 ? 's' : '' }}
+      @if($f_search || $f_class || $f_status || $f_location)
+        &nbsp;<span style="color:var(--accent)">(filtered)</span>
+      @endif
+    </span>
+  </div>
   <div>
     <table class="table table-hover data-table" style="font-family:'DM Sans',sans-serif">
       <thead><tr>
