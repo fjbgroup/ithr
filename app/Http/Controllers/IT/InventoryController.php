@@ -4,11 +4,13 @@ namespace App\Http\Controllers\IT;
 
 use App\Models\IT\AddAssetRequest;
 use App\Models\IT\AssetClass;
+use App\Models\IT\Brand;
 use App\Models\IT\DeleteRequest;
 use App\Models\IT\EditAssetRequest;
 use App\Models\IT\EwasteItem;
 use App\Models\IT\EwasteRequest;
 use App\Models\IT\InventoryItem;
+use App\Models\IT\Location;
 use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
 use Illuminate\Http\Request;
@@ -61,8 +63,10 @@ class InventoryController extends Controller
         }
         if ($loc = $request->get('location')) $query->where('location', $loc);
 
-        $items       = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
+        $items        = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
         $assetClasses = AssetClass::where('type', 'it')->orderBy('sort_order')->get();
+        $brands       = Brand::orderBy('sort_order')->orderBy('name')->get();
+        $locations    = Location::orderBy('sort_order')->orderBy('name')->get();
 
         if ($request->boolean('partial')) {
             return response(view('it.inventory.partials.live-table', compact('items', 'user'))->render());
@@ -112,7 +116,7 @@ class InventoryController extends Controller
         }
 
         return view('it.inventory.index', compact(
-            'items', 'assetClasses',
+            'items', 'assetClasses', 'brands', 'locations',
             'pendingAdds', 'pendingEw', 'pendingDeletes', 'pendingEdits',
             'pendingAddCount', 'pendingEwCount', 'pendingDelCount', 'pendingEditCount', 'totalPending',
             'myAdds', 'myEw', 'myDeletes', 'myEdits', 'myDisposals', 'myPending', 'totalMy'

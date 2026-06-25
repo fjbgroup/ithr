@@ -76,7 +76,61 @@
 <link href="{{ asset('assets/css/wtsystem.css') }}" rel="stylesheet">
 <style>
 /* wtsystem.css is the single source of truth */
+/* ── WT COLLAPSIBLE SIDEBAR ── */
+.sidebar-toggle { display: none !important; }
+@media(max-width:768px){ .sidebar-toggle { display: flex !important; } }
+.sidebar { transition: width .3s ease !important; overflow: hidden !important; }
+.main-content { transition: margin-left .3s ease; }
+.topbar { transition: left .3s ease; }
+html.sidebar-collapsed .sidebar { width: 64px !important; transform: none !important; }
+html.sidebar-collapsed .main-content { margin-left: 64px !important; }
+html.sidebar-collapsed .topbar { left: 64px !important; }
+
+/* Sidebar close button (expanded state only) */
+.sb-close-btn {
+  flex-shrink: 0; margin-left: auto;
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,.08); border: none; border-radius: 6px;
+  color: rgba(255,255,255,.5); cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.sb-close-btn:hover { background: rgba(255,255,255,.18); color: #fff; }
+html.sidebar-collapsed .sb-close-btn { display: none !important; }
+
+/* Logo as open button */
+html.sidebar-collapsed .sb-logo-btn { cursor: pointer !important; }
+html.sidebar-collapsed .sb-logo-btn:hover { opacity: .75; }
+
+/* ── ICON RAIL STYLES ── */
+html.sidebar-collapsed .sidebar-nav { padding: 16px 0 !important; }
+html.sidebar-collapsed .sidebar > div:first-child { padding: 12px 10px !important; justify-content: center; }
+html.sidebar-collapsed .sidebar > div:first-child > a { display: none !important; }
+html.sidebar-collapsed .nav-section-label { display: none !important; }
+html.sidebar-collapsed .nav-link { font-size: 0 !important; padding: 10px 0 !important; justify-content: center !important; gap: 0 !important; }
+html.sidebar-collapsed .nav-link i { font-size: 16px !important; width: auto !important; margin: 0 !important; }
+html.sidebar-collapsed .dropdown-trigger { font-size: 0 !important; padding: 10px 0 !important; justify-content: center !important; gap: 0 !important; }
+html.sidebar-collapsed .dropdown-trigger i:first-child { font-size: 15px !important; width: auto !important; margin: 0 !important; }
+html.sidebar-collapsed .dropdown-trigger span { display: none !important; }
+html.sidebar-collapsed .dropdown-trigger .dropdown-chevron { display: none !important; }
+html.sidebar-collapsed .dropdown-trigger .sidebar-info-icon { display: none !important; }
+html.sidebar-collapsed .dropdown-content { display: none !important; }
+html.sidebar-collapsed .sidebar-nav-user { display: none !important; }
+
+/* mobile: restore full sidebar */
+@media(max-width:768px){
+  .sidebar { width: var(--sidebar-w, 260px) !important; overflow-y: auto !important; transform: translateX(-100%) !important; }
+  .sidebar.open { transform: translateX(0) !important; }
+  .main-content { margin-left: 0 !important; }
+  .topbar { left: 0 !important; }
+}
 </style>
+<script>
+(function(){
+  if(localStorage.getItem('fjb-sb-collapsed')==='1'&&window.innerWidth>768)
+    document.documentElement.classList.add('sidebar-collapsed');
+})();
+</script>
 @stack('styles')
 @stack('final_styles')
 </head>
@@ -139,12 +193,20 @@
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <a href="{{ request()->fullUrl() }}" class="sidebar-brand" title="Refresh page">
-    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.18)">
+  <div style="display:flex;align-items:center;padding:20px 16px 18px 20px;border-bottom:1px solid rgba(255,255,255,.08)">
+    <div class="sb-logo-btn"
+         onclick="if(document.documentElement.classList.contains('sidebar-collapsed'))toggleMobileSidebar();"
+         title="Open sidebar"
+         style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.18);cursor:default;transition:opacity .15s">
       <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
     </div>
-    <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
-  </a>
+    <a href="{{ request()->fullUrl() }}" title="Refresh page" style="display:flex;align-items:center;gap:.9rem;flex:1;text-decoration:none;color:#fff;padding-left:.9rem">
+      <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
+    </a>
+    <button class="sb-close-btn" onclick="toggleMobileSidebar()" title="Close sidebar">
+      <i class="bi bi-layout-sidebar-reverse"></i>
+    </button>
+  </div>
 
   <nav class="sidebar-nav">
     {{-- Dashboard (ICT only) --}}
@@ -328,7 +390,6 @@
     </div>
   </div>
 </aside>
-
 <!-- MAIN -->
 <div class="main-content">
   <div class="topbar">
@@ -623,18 +684,23 @@ if (themeToggleBtn) {
   applyTheme(theme === 'dark');
 })();
 
-// ── SIDEBAR TOGGLE (mobile) ──
+// ── SIDEBAR TOGGLE ──
 function toggleMobileSidebar() {
-  const sb = document.getElementById('sidebar');
-  const ov = document.getElementById('mobileSidebarOverlay');
-  if (sb.classList.contains('open')) {
-    sb.classList.remove('open');
-    ov.style.display = 'none';
-    document.body.style.overflow = '';
+  if (window.innerWidth <= 768) {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('mobileSidebarOverlay');
+    if (sb.classList.contains('open')) {
+      sb.classList.remove('open');
+      ov.style.display = 'none';
+      document.body.style.overflow = '';
+    } else {
+      sb.classList.add('open');
+      ov.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
   } else {
-    sb.classList.add('open');
-    ov.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+    var c = document.documentElement.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('fjb-sb-collapsed', c ? '1' : '0');
   }
 }
 function closeMobileSidebar() {

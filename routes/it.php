@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IT\ActivityController;
 use App\Http\Controllers\IT\AssetClassController;
+use App\Http\Controllers\IT\BrandController;
+use App\Http\Controllers\IT\LocationController;
+use App\Http\Controllers\IT\MasterdataController;
 use App\Http\Controllers\IT\RequestController;
 use App\Http\Controllers\IT\AssetController;
 use App\Http\Controllers\IT\Auth\ChangePasswordController;
@@ -176,10 +179,22 @@ Route::prefix('it')->name('it.')->group(function () {
                 Route::post('/disposal/{id}/restore',        [DisposalController::class, 'restore'])->name('disposal.restore');
                 Route::delete('/disposal/{id}',              [DisposalController::class, 'destroy'])->name('disposal.destroy');
 
+                Route::get('/masterdata',                    [MasterdataController::class, 'index'])->name('masterdata.index');
+
                 Route::get('/asset-classes',                 [AssetClassController::class, 'index'])->name('asset-classes.index');
                 Route::post('/asset-classes',                [AssetClassController::class, 'store'])->name('asset-classes.store');
                 Route::post('/asset-classes/{id}',           [AssetClassController::class, 'update'])->name('asset-classes.update');
                 Route::delete('/asset-classes/{id}',         [AssetClassController::class, 'destroy'])->name('asset-classes.destroy');
+
+                Route::get('/brands',                        [BrandController::class, 'index'])->name('brands.index');
+                Route::post('/brands',                       [BrandController::class, 'store'])->name('brands.store');
+                Route::post('/brands/{id}',                  [BrandController::class, 'update'])->name('brands.update');
+                Route::delete('/brands/{id}',                [BrandController::class, 'destroy'])->name('brands.destroy');
+
+                Route::get('/locations',                     [LocationController::class, 'index'])->name('locations.index');
+                Route::post('/locations',                    [LocationController::class, 'store'])->name('locations.store');
+                Route::post('/locations/{id}',               [LocationController::class, 'update'])->name('locations.update');
+                Route::delete('/locations/{id}',             [LocationController::class, 'destroy'])->name('locations.destroy');
 
                 Route::post('/requests/add/{id}/approve',    [RequestController::class, 'approveAdd'])->name('requests.add.approve');
                 Route::post('/requests/add/{id}/reject',     [RequestController::class, 'rejectAdd'])->name('requests.add.reject');

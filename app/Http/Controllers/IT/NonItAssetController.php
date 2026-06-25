@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\IT;
 
 use App\Models\IT\AssetClass;
+use App\Models\IT\Brand;
 use App\Models\IT\EditAssetRequest;
+use App\Models\IT\Location;
 use App\Models\IT\NonItAsset;
 use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
@@ -43,9 +45,11 @@ class NonItAssetController extends Controller
         $filtered_total = $items->count();
 
         $assetClasses   = AssetClass::where('type', 'non_it')->orderBy('sort_order')->orderBy('name')->get();
+        $brands         = Brand::orderBy('sort_order')->orderBy('name')->get();
+        $locations      = Location::orderBy('sort_order')->orderBy('name')->get();
         $nitClassesUsed = NonItAsset::distinct()->orderBy('asset_class')->pluck('asset_class')
                             ->filter()->values();
-        $allLocations   = NonItAsset::whereNotNull('location')->where('location', '!=', '')->distinct()->orderBy('location')->pluck('location');
+        $allLocations   = $locations->pluck('name');
 
         $pendingEditIds = EditAssetRequest::where('asset_type', 'non_it')
                             ->where('status', 'Pending')
@@ -59,7 +63,7 @@ class NonItAssetController extends Controller
         }
 
         return view('it.non-it-assets.index', compact(
-            'items', 'assetClasses',
+            'items', 'assetClasses', 'brands', 'locations',
             'nit_total', 'nit_active', 'nit_repair', 'nit_disp', 'nit_pending_wo', 'nit_pending_ewaste', 'filtered_total',
             'nitClassesUsed', 'pendingEditIds', 'allLocations',
             'search', 'class', 'status', 'location'
@@ -100,6 +104,7 @@ class NonItAssetController extends Controller
             'asset_class'      => 'required|string|max:100',
             'fa_code'          => 'nullable|string|max:100',
             'description'      => 'required|string|max:255',
+            'brand'            => 'nullable|string|max:100',
             'location'         => 'nullable|string|max:100',
             'item_status'      => 'nullable|in:Active,In Repair,Disposed,Reserved',
             'condition_status' => 'nullable|string|max:50',
@@ -136,6 +141,7 @@ class NonItAssetController extends Controller
             'asset_class'      => 'required|string|max:100',
             'fa_code'          => 'nullable|string|max:100',
             'description'      => 'required|string|max:255',
+            'brand'            => 'nullable|string|max:100',
             'location'         => 'nullable|string|max:100',
             'item_status'      => 'nullable|in:Active,In Repair,Disposed,Reserved',
             'condition_status' => 'nullable|string|max:50',

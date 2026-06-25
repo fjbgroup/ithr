@@ -48,7 +48,7 @@ body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-seri
 .sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
   background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:100;
-  transition:transform .3s;
+  transition:width .3s ease;overflow:hidden;
 }
 .sidebar-brand{
   padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);
@@ -270,17 +270,71 @@ table.dataTable tbody tr.even:hover{background-color:var(--table-hover) !importa
 table.dataTable tbody td{color:var(--text) !important}
 code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-radius:4px;font-size:12px}
 
+/* ── TOPBAR TOGGLE — mobile only ── */
+.sidebar-toggle{display:none;align-items:center;background:none;border:1.5px solid var(--border);
+  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'DM Sans',sans-serif;
+  transition:border-color .15s,color .15s}
+.sidebar-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── SIDEBAR CLOSE BUTTON (inside sidebar, expanded state only) ── */
+.sb-close-btn{
+  flex-shrink:0;margin-left:auto;
+  width:28px;height:28px;
+  background:rgba(255,255,255,.08);border:none;border-radius:6px;
+  color:rgba(255,255,255,.5);cursor:pointer;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;
+}
+.sb-close-btn:hover{background:rgba(255,255,255,.18);color:#fff}
+html.sidebar-collapsed .sb-close-btn{display:none!important}
+
+/* ── LOGO AS OPEN BUTTON (collapsed state) ── */
+html.sidebar-collapsed .sb-logo-btn{cursor:pointer!important}
+html.sidebar-collapsed .sb-logo-btn:hover{opacity:.75}
+
+/* ── COLLAPSE TRANSITIONS ── */
+.main-content{transition:margin-left .3s ease}
+.topbar{transition:left .3s ease}
+
+/* ── DESKTOP COLLAPSED (icon rail) ── */
+html.sidebar-collapsed .sidebar{width:64px}
+html.sidebar-collapsed .main-content{margin-left:64px}
+html.sidebar-collapsed .topbar{left:64px}
+
+/* ── ICON RAIL STYLES ── */
+html.sidebar-collapsed .sidebar-nav{padding:16px 0}
+html.sidebar-collapsed .sidebar-brand{padding:14px 8px;justify-content:center}
+html.sidebar-collapsed .sidebar-brand .brand-name{display:none!important}
+html.sidebar-collapsed .sidebar-brand .sb-logo-btn{display:flex!important}
+html.sidebar-collapsed .nav-section-label{display:none}
+html.sidebar-collapsed .sidebar-nav .nav-link{font-size:0!important;padding:10px 0!important;justify-content:center!important;gap:0!important;border-radius:0!important}
+html.sidebar-collapsed .sidebar-nav .nav-link i{font-size:16px!important;width:auto!important;margin:0!important;text-align:center}
+html.sidebar-collapsed .sidebar-nav .nav-link .badge-count{display:none!important}
+html.sidebar-collapsed .sidebar-nav>div>button{padding:10px 0!important;justify-content:center!important;gap:0!important;border-radius:0!important;background:none!important}
+html.sidebar-collapsed .sidebar-nav>div>button span{display:none!important}
+html.sidebar-collapsed .sidebar-nav>div>button .bi-chevron-down,.sidebar-nav>div>button .badge-count{display:none!important}
+html.sidebar-collapsed .sidebar-nav>div>div{display:none!important}
+html.sidebar-collapsed .sidebar-footer .user-card{justify-content:center!important;padding:10px 0!important}
+html.sidebar-collapsed .sidebar-footer .user-info{display:none!important}
+html.sidebar-collapsed .sidebar-footer .user-avatar{margin:0!important}
+html.sidebar-collapsed .btn-logout{font-size:0!important;padding:10px 0!important;justify-content:center!important;gap:0!important}
+html.sidebar-collapsed .btn-logout i{font-size:15px!important}
+
 /* ── MOBILE ── */
-.sidebar-toggle{display:none;background:none;border:1.5px solid var(--border);
-  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'DM Sans',sans-serif}
 @media(max-width:768px){
-  .sidebar{transform:translateX(-100%)}
+  .sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important;overflow-y:auto}
   .sidebar.open{transform:none}
   .main-content{margin-left:0}
   .topbar{left:0}
-  .sidebar-toggle{display:flex;align-items:center}
+  .sidebar-toggle{display:flex}
 }
 </style>
+<script>
+(function(){
+  if(localStorage.getItem('fjb-sb-collapsed')==='1'&&window.innerWidth>768)
+    document.documentElement.classList.add('sidebar-collapsed');
+})();
+</script>
 @stack('styles')
 </head>
 <body>
@@ -290,10 +344,14 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand" onclick="_eggClick()" style="cursor:default;user-select:none">
-    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;padding:4px">
+    <div class="sb-logo-btn" onclick="event.stopPropagation();if(document.documentElement.classList.contains('sidebar-collapsed'))toggleSidebar();"
+      style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;padding:4px;transition:opacity .15s">
       <img src="{{ asset('assets/img/logo_transparent.png') }}" alt="FJB Logo" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">
     </div>
     <div class="brand-name">FJB Inventory<span>Management System</span></div>
+    <button class="sb-close-btn" onclick="event.stopPropagation();toggleSidebar()" title="Close sidebar">
+      <i class="bi bi-layout-sidebar-reverse"></i>
+    </button>
   </div>
 
   <nav class="sidebar-nav">
@@ -462,6 +520,41 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
       chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
     }
     </script>
+
+    {{-- Reports — Admin + Finance only --}}
+    @php $rptActive = request()->routeIs('reports.*'); @endphp
+    <div>
+      <button onclick="toggleReports()" id="reportsToggle"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $rptActive ? 'rgba(2,132,199,.15)' : 'none' }};
+          color:{{ $rptActive ? 'var(--accent)' : '#94a3b8' }};
+          border:none;font-size:13.5px;font-weight:{{ $rptActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-bar-chart-line-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">Reports</span>
+        <i class="bi bi-chevron-down" id="reportsChevron"
+          style="font-size:11px;transition:transform .2s;{{ $rptActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="reportsMenu" style="{{ $rptActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.reports.it') }}" class="nav-link {{ request()->routeIs('reports.it') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
+        </a>
+        <a href="{{ route('it.reports.non-it') }}" class="nav-link {{ request()->routeIs('reports.non-it') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-archive" style="font-size:14px"></i> Non-IT Assets
+        </a>
+      </div>
+    </div>
+    <script>
+    function toggleReports() {
+      const menu = document.getElementById('reportsMenu');
+      const chevron = document.getElementById('reportsChevron');
+      const open = menu.style.display !== 'none';
+      menu.style.display = open ? 'none' : 'block';
+      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+    </script>
     @endif
 
     {{-- Request Form — all users --}}
@@ -519,54 +612,25 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
     </a>
     @endif
 
-    <a href="{{ route('it.asset-classes.index') }}" class="nav-link {{ request()->routeIs('asset-classes.*') ? 'active' : '' }}">
-      <i class="bi bi-tags-fill"></i> Asset Classes
-    </a>
-
-    @php $rptActive = request()->routeIs('reports.*'); @endphp
-    <div>
-      <button onclick="toggleReports()" id="reportsToggle"
-        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $rptActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $rptActive ? 'var(--accent)' : '#94a3b8' }};
-          border:none;font-size:13.5px;font-weight:{{ $rptActive ? '600' : '500' }};
-          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
-        <i class="bi bi-bar-chart-line-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
-        <span style="flex:1">Reports</span>
-        <i class="bi bi-chevron-down" id="reportsChevron"
-          style="font-size:11px;transition:transform .2s;{{ $rptActive ? 'transform:rotate(180deg)' : '' }}"></i>
-      </button>
-      <div id="reportsMenu" style="{{ $rptActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.reports.it') }}" class="nav-link {{ request()->routeIs('reports.it') ? 'active' : '' }}"
-          style="padding:7px 12px;font-size:13px">
-          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
-        </a>
-        <a href="{{ route('it.reports.non-it') }}" class="nav-link {{ request()->routeIs('reports.non-it') ? 'active' : '' }}"
-          style="padding:7px 12px;font-size:13px">
-          <i class="bi bi-archive" style="font-size:14px"></i> Non-IT Assets
-        </a>
-      </div>
-    </div>
-    <script>
-    function toggleReports() {
-      const menu = document.getElementById('reportsMenu');
-      const chevron = document.getElementById('reportsChevron');
-      const open = menu.style.display !== 'none';
-      menu.style.display = open ? 'none' : 'block';
-      chevron.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
-    }
-    </script>
-
     @if($user->isAdmin())
     <a href="{{ route('it.activity.index') }}" class="nav-link {{ request()->routeIs('activity.*') ? 'active' : '' }}">
       <i class="bi bi-clock-history"></i> Activity Log
     </a>
     @endif
-    @endif
 
     <a href="{{ route('it.email-settings.index') }}" class="nav-link {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">
       <i class="bi bi-envelope-fill"></i> Email {{ $user->isAdmin() ? 'Settings' : 'Notifications' }}
     </a>
+    @endif
+
+    {{-- Masterdata section --}}
+    @if($user->isAdminOrFinance())
+    <div class="nav-section-label">Masterdata</div>
+    @php $mdActive = request()->routeIs('masterdata.*') || request()->routeIs('asset-classes.*') || request()->routeIs('brands.*') || request()->routeIs('locations.*'); @endphp
+    <a href="{{ route('it.masterdata.index') }}" class="nav-link {{ $mdActive ? 'active' : '' }}">
+      <i class="bi bi-collection-fill"></i> Masterdata
+    </a>
+    @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
     <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">
@@ -596,11 +660,10 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
     </a>
   </div>
 </aside>
-
 <!-- MAIN -->
 <div class="main-content">
   <div class="topbar">
-    <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
       <i class="bi bi-list"></i>
     </button>
     <div class="topbar-left">
@@ -1029,6 +1092,17 @@ $(document).ready(function () {
 })();
 </script>
 
+<script>
+// ── SIDEBAR COLLAPSE ──
+function toggleSidebar() {
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.toggle('open');
+  } else {
+    var c = document.documentElement.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('fjb-sb-collapsed', c ? '1' : '0');
+  }
+}
+</script>
 @stack('scripts')
 </body>
 </html>
