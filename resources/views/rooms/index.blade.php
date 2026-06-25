@@ -11,8 +11,11 @@
     .pvt-btn { padding:.32rem .85rem; border-radius:6px; font-size:.8rem; font-weight:600; color:#64748b; text-decoration:none; transition:background .15s,color .15s; }
     .pvt-active { background:#fff !important; color:#003b95 !important; box-shadow:0 1px 3px rgba(0,0,0,.1); }
     .pub-date-nav { display:flex; align-items:center; gap:.5rem; }
-    .pub-datepicker-lbl { display:flex; align-items:center; gap:.3rem; cursor:pointer; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .6rem; background:#fff; }
-    .pub-datepicker-lbl input[type=date] { font-size:.8rem; font-weight:600; color:#334155; border:none; background:transparent; cursor:pointer; outline:none; padding:0; }
+    .pub-datepicker-lbl { position:relative; display:flex; align-items:center; gap:.35rem; cursor:pointer; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .6rem; background:#fff; }
+    .pub-datepicker-lbl .pub-cal-ico { color:#64748b; flex-shrink:0; }
+    .pub-datepicker-lbl .pub-date-text { font-size:.85rem; font-weight:700; color:#1e293b; white-space:nowrap; }
+    /* native input kept for the picker, but visually hidden so only one date label shows */
+    .pub-datepicker-lbl input[type=date] { position:absolute; left:0; top:0; width:1px; height:1px; opacity:0; padding:0; margin:0; border:0; pointer-events:none; }
 
     .pub-day-stats { display:flex; align-items:stretch; background:#fff; border-radius:10px; box-shadow:var(--shadow); margin-bottom:.75rem; overflow:hidden; border:1px solid var(--border); }
     .pub-dstat { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.7rem .35rem; gap:.1rem; border-right:1px solid #f1f5f9; }
@@ -298,8 +301,7 @@
         .pub-controls > div:last-child { display: none !important; }
         .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; }
         .pub-datepicker-lbl { flex: 1; justify-content: center; }
-        .pub-datepicker-lbl span { display: none; }
-        .pub-datepicker-lbl input[type=date] { font-size: .82rem; flex: 1; text-align: center; }
+        .pub-datepicker-lbl .pub-date-text { font-size: .82rem; }
         .rb-today-btn { padding: .28rem .6rem; font-size: .78rem; white-space: nowrap; }
 
         /* 3. FLOATING ACTION BUTTON */
@@ -834,9 +836,10 @@
 
         <div class="pub-date-nav">
             <a href="{{ $prevNav }}" class="rb-today-btn" title="Previous">&larr;</a>
-            <label class="pub-datepicker-lbl">
+            <label class="pub-datepicker-lbl" onclick="rbOpenDatePicker(event)">
+                <svg class="pub-cal-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span class="pub-date-text">{{ $navLabel }}</span>
                 <input type="date" value="{{ $viewDate }}" onchange="window.location.href='{{ route('rooms.index') }}?view={{ $viewMode }}&date=' + this.value">
-                <span style="font-size:.85rem; font-weight:700; color:#1e293b; margin-left:.25rem;">{{ $navLabel }}</span>
             </label>
             <a href="{{ $nextNav }}" class="rb-today-btn" title="Next">&rarr;</a>
             <a href="{{ route('rooms.index', ['view' => $viewMode, 'date' => date('Y-m-d')]) }}" class="rb-today-btn">Today</a>
@@ -1752,6 +1755,15 @@
     let dashRoomId = null;
     let clockState = { start:{h:null,m:null}, end:{h:null,m:null} };
     let dashCart = [];
+
+    // Open the native date picker when the date label is clicked.
+    function rbOpenDatePicker(e) {
+        const input = e.currentTarget.querySelector('input[type=date]');
+        if (input && typeof input.showPicker === 'function') {
+            e.preventDefault();
+            input.showPicker();
+        }
+    }
 
     function gToMin(t) { if(!t) return 0; const [h,m]=t.substring(0,5).split(':').map(Number); return h*60+m; }
     function gGetNowMin() { const n=new Date(); return n.getHours()*60+n.getMinutes(); }
