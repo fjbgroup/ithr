@@ -594,87 +594,135 @@
             max-width: none !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
-            table-layout: fixed !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            table-layout: auto !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-radio-colgroup {
-            width: 64px !important;
+            width: 10% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-status-colgroup {
-            width: 74px !important;
+            width: 12% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-serial-colgroup {
-            width: 112px !important;
+            width: 18% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-model-colgroup {
-            width: 72px !important;
+            width: 12% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-location-colgroup {
-            width: 64px !important;
+            width: 12% !important;
+            min-width: 100px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-ownership-colgroup {
+            width: 28% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-action-colgroup {
-            width: 58px !important;
+            width: 8% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
-            height: 22px !important;
-            padding: 2px 4px !important;
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 1px 3px !important;
             text-align: center !important;
             font-size: 8px !important;
-            line-height: 1.05 !important;
+            line-height: 1 !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
-            height: 22px !important;
-            padding: 2px 4px !important;
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 1px 3px !important;
             text-align: left !important;
-            font-size: 9px !important;
-            line-height: 1.1 !important;
+            font-size: 8.5px !important;
+            line-height: 1 !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
-            width: 64px !important;
-            min-width: 64px !important;
-            max-width: 64px !important;
-            padding-left: 4px !important;
-            padding-right: 4px !important;
+            width: 1% !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(1),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(2),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(3),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(4),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(5),
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(7) {
+            white-space: nowrap !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(1) { width: 10% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(2) { width: 12% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(3) { width: 18% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(4) { width: 12% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(5) {
+            width: 12% !important;
+            min-width: 100px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(6) {
+            width: 28% !important;
+            max-width: 30% !important;
+            min-width: 140px !important;
+            white-space: normal !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(7) { width: 8% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable .inventory-id-chip,
         body .content-surface .inventory-page-shell #walkiesTable .inventory-status-badge {
-            min-height: 16px !important;
-            padding: 1px 5px !important;
-            font-size: 8px !important;
+            min-height: 12px !important;
+            padding: 0 4px !important;
+            font-size: 7px !important;
             line-height: 1 !important;
+            border-radius: 4px !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable .inventory-item-title,
         body .content-surface .inventory-page-shell #walkiesTable td div {
-            font-size: 9px !important;
-            line-height: 1.08 !important;
+            font-size: 8.5px !important;
+            line-height: 1 !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-action-col {
             text-align: center !important;
-            width: 58px !important;
-            min-width: 58px !important;
-            max-width: 58px !important;
-            padding-left: 2px !important;
-            padding-right: 2px !important;
+            width: 1% !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            padding: 0 !important;
         }
         body .content-surface .inventory-page-shell #inventoryTableScroll {
             overflow: hidden !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons {
-            gap: 4px !important;
+            gap: 2px !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn {
-            width: 46px !important;
-            min-width: 46px !important;
-            max-width: 46px !important;
-            height: 18px !important;
-            min-height: 18px !important;
-            padding: 0 3px !important;
-            border-radius: 5px !important;
-            font-size: 8px !important;
-            gap: 2px !important;
+            width: 18px !important;
+            min-width: 18px !important;
+            max-width: 18px !important;
+            height: 16px !important;
+            min-height: 16px !important;
+            padding: 0 !important;
+            border-radius: 4px !important;
+            font-size: 0 !important;
+            gap: 0 !important;
+            border-width: 0 !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn i {
+            margin: 0 !important;
+            width: auto !important;
+            min-width: 0 !important;
+            font-size: 9px !important;
+            line-height: 1 !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn span {
+            display: none !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn-info { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
         body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn-primary { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
@@ -1659,7 +1707,7 @@
 
         <div id="mainTableContainer" class="clean-admin-table-shell inventory-table-shell border border-gray-200 rounded-xl overflow-hidden">
             <div id="inventoryTableScroll" class="clean-admin-table-scroll w-full overflow-x-auto">
-                <table id="walkiesTable" class="clean-admin-table w-full border-collapse text-left">
+                <table id="walkiesTable" class="clean-admin-table table-auto w-full border-collapse text-left">
                 <colgroup>
                     @if($showInventoryBulk)
                     <col class="inventory-select-colgroup">

@@ -1921,6 +1921,36 @@ html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable t
         min-width: 0 !important;
         table-layout: auto !important;
     }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(1),
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(2),
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(3),
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(4),
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(5),
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(7),
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(8) {
+        white-space: nowrap !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(1) { width: 10% !important; }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(2) { width: 12% !important; }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(3) { width: 18% !important; }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(4) { width: 12% !important; }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(5) {
+        width: 12% !important;
+        min-width: 100px !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(6) {
+        width: 28% !important;
+        max-width: 30% !important;
+        min-width: 140px !important;
+        white-space: normal !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(7) { width: 6% !important; }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(8) { width: 8% !important; }
+    body .content-surface:has(#specialTable) #specialTable thead th {
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
     body .content-surface:has(#specialTable) #specialTable thead th {
         height: 28px !important;
         padding: 4px 6px !important;

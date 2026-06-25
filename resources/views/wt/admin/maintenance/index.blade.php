@@ -584,7 +584,7 @@
 </div>
 <div class="clean-admin-table-shell" id="mainTableContainer">
     <div class="clean-admin-table-scroll">
-    <table id="maintTable" class="clean-admin-table text-left">
+    <table id="maintTable" class="clean-admin-table table-auto w-full text-left">
         <thead>
             <tr>
                 <th class="px-2 py-1 text-center">Radio ID</th>
@@ -1562,6 +1562,34 @@ document.addEventListener('keydown', function(e) {
         width: 100% !important;
         min-width: 0 !important;
         table-layout: auto !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(1),
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(2),
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(3),
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(4),
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(5),
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(7) {
+        white-space: nowrap !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(1) { width: 10% !important; }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(2) { width: 12% !important; }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(3) { width: 18% !important; }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(4) { width: 12% !important; }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(5) {
+        width: 12% !important;
+        min-width: 100px !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(6) {
+        width: 28% !important;
+        max-width: 30% !important;
+        min-width: 160px !important;
+        white-space: normal !important;
+    }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(7) { width: 8% !important; }
+    body .content-surface .maintenance-page-shell #maintTable thead th {
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
     }
     body .content-surface .maintenance-page-shell #maintTable thead th {
         height: 28px !important;

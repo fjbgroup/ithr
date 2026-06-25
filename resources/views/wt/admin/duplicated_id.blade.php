@@ -546,7 +546,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
     {{-- Table --}}
     <div id="mainTableContainer" class="duplicate-table-shell">
         <div id="duplicateTableScroll" class="duplicate-table-scroll">
-            <table id="duplicateTable">
+            <table id="duplicateTable" class="table-auto w-full">
                 <colgroup>
                     <col style="width:70px">
                     <col style="width:86px">
@@ -1665,6 +1665,28 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
         width: 100% !important;
         min-width: 0 !important;
         table-layout: auto !important;
+    }
+    body .content-surface #duplicateTable :is(th, td):not(:last-child) {
+        white-space: nowrap !important;
+    }
+    body .content-surface #duplicateTable :is(th, td):last-child {
+        width: 8% !important;
+        white-space: nowrap !important;
+    }
+    body .content-surface #duplicateTable :is(th, td):nth-child(1) { width: 10% !important; }
+    body .content-surface #duplicateTable :is(th, td):nth-child(2) { width: 12% !important; }
+    body .content-surface #duplicateTable :is(th, td):nth-child(3) { width: 18% !important; }
+    body .content-surface #duplicateTable :is(th, td):nth-child(4) { width: 12% !important; }
+    body .content-surface #duplicateTable :is(th, td):nth-child(5) {
+        width: 12% !important;
+        min-width: 100px !important;
+    }
+    body .content-surface #duplicateTable :is(th, td):nth-child(6) { width: 20% !important; }
+    body .content-surface #duplicateTable :is(th, td):nth-child(7) { width: 8% !important; }
+    body .content-surface #duplicateTable thead th {
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
     }
     body .content-surface #duplicateTable thead th {
         height: 28px !important;
