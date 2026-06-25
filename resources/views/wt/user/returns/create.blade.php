@@ -75,6 +75,11 @@
     .return-person-option:hover, .return-person-option:focus { background:var(--body-bg);outline:none; }
     .return-person-option-name { display:block;color:var(--text);font-size:11px;font-weight:900;text-transform:uppercase; }
     .return-person-option-meta { margin-top:3px;display:block;color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase; }
+    .return-signature-pad { border:1px solid var(--border);border-radius:7px;background:var(--surface);overflow:hidden; }
+    .return-signature-pad canvas { display:block;width:100%;height:136px;background:#fff;touch-action:none; }
+    .return-signature-actions { display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--border);background:var(--body-bg);padding:8px 10px; }
+    .return-signature-hint { font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted); }
+    .return-signature-clear { border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;padding:6px 10px; }
     @media (max-width: 640px) {
         .return-assignment-cell { grid-template-columns:1fr;gap:3px; }
     }
@@ -187,6 +192,18 @@
                         <label class="form-label">Phone No</label>
                         <input type="text" name="return_phone_no" id="returnPhoneInput" value="{{ old('return_phone_no') }}" class="return-date-input" placeholder="E.g. 012-3456789" required>
                     </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <label class="form-label">Returner Signature</label>
+                    <div class="return-signature-pad" data-return-signature-pad>
+                        <canvas></canvas>
+                        <div class="return-signature-actions">
+                            <span class="return-signature-hint">Sign inside the box</span>
+                            <button type="button" class="return-signature-clear" data-return-signature-clear>Clear</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="return_signature" data-return-signature-input required>
                 </div>
 
                 <div class="return-review-box" style="margin-top:16px">
@@ -351,6 +368,18 @@
                     </div>
                 </div>
 
+                <div style="margin-top:16px">
+                    <label class="form-label">Returner Signature</label>
+                    <div class="return-signature-pad" data-return-signature-pad>
+                        <canvas></canvas>
+                        <div class="return-signature-actions">
+                            <span class="return-signature-hint">Sign inside the box</span>
+                            <button type="button" class="return-signature-clear" data-return-signature-clear>Clear</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="return_signature" data-return-signature-input required>
+                </div>
+
                 <div class="return-review-box" style="margin-top:16px">
                     <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:0">Review</p>
                     <p class="return-muted-copy" style="margin-top:4px;font-size:10px;font-weight:700;line-height:1.5;margin-bottom:0">Select one active assignment and submit it for ICT return confirmation.</p>
@@ -377,6 +406,7 @@
         const returnPhoneInput = document.getElementById('returnPhoneInput');
         const returnUnitForm = document.getElementById('returnUnitForm');
         const returnFormAlert = document.getElementById('returnFormAlert');
+        const returnSignatureInput = document.querySelector('[data-return-signature-input]');
         const selectedWalkieInventoryId = document.getElementById('selectedWalkieInventoryId');
         const selectedRadioId = document.getElementById('selectedRadioId');
         const selectedSerialNumber = document.getElementById('selectedSerialNumber');
@@ -391,6 +421,85 @@
         const manualFoundName = document.getElementById('manualFoundName');
         const manualFoundDepartment = document.getElementById('manualFoundDepartment');
         const manualReturnSearchUrl = @json($isAdminRoute ? route($routePrefix . '.returns.search', ['mode' => $mode]) : route($routePrefix . '.returns.search'));
+
+        function setupReturnSignaturePad(container) {
+            const canvas = container.querySelector('canvas');
+            const input = container.parentElement.querySelector('[data-return-signature-input]');
+            const clearButton = container.querySelector('[data-return-signature-clear]');
+            const context = canvas.getContext('2d');
+            let drawing = false;
+            let hasSignature = false;
+
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                const rect = canvas.getBoundingClientRect();
+                const image = hasSignature ? canvas.toDataURL('image/png') : null;
+
+                canvas.width = rect.width * ratio;
+                canvas.height = rect.height * ratio;
+                context.setTransform(ratio, 0, 0, ratio, 0, 0);
+                context.lineWidth = 2;
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+                context.strokeStyle = '#111827';
+
+                if (image) {
+                    const img = new Image();
+                    img.onload = () => context.drawImage(img, 0, 0, rect.width, rect.height);
+                    img.src = image;
+                }
+            }
+
+            function point(event) {
+                const rect = canvas.getBoundingClientRect();
+                const source = event.touches ? event.touches[0] : event;
+                return { x: source.clientX - rect.left, y: source.clientY - rect.top };
+            }
+
+            function updateInput() {
+                input.value = hasSignature ? canvas.toDataURL('image/png') : '';
+            }
+
+            function start(event) {
+                event.preventDefault();
+                drawing = true;
+                const pos = point(event);
+                context.beginPath();
+                context.moveTo(pos.x, pos.y);
+            }
+
+            function move(event) {
+                if (!drawing) return;
+                event.preventDefault();
+                const pos = point(event);
+                context.lineTo(pos.x, pos.y);
+                context.stroke();
+                hasSignature = true;
+                updateInput();
+            }
+
+            function stop() {
+                drawing = false;
+                updateInput();
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', move);
+            canvas.addEventListener('mouseup', stop);
+            canvas.addEventListener('mouseleave', stop);
+            canvas.addEventListener('touchstart', start, { passive: false });
+            canvas.addEventListener('touchmove', move, { passive: false });
+            canvas.addEventListener('touchend', stop);
+            clearButton.addEventListener('click', function () {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                hasSignature = false;
+                updateInput();
+            });
+        }
+
+        document.querySelectorAll('[data-return-signature-pad]').forEach(setupReturnSignaturePad);
 
         function syncSelectedUnit(radio) {
             if (!radio || !selectedWalkieInventoryId || !selectedRadioId || !selectedSerialNumber) {
@@ -673,6 +782,7 @@
                     { field: returnPersonInput, message: 'Please enter who returned this unit.' },
                     { field: returnDepartmentInput, message: 'Please enter returner department.' },
                     { field: returnPhoneInput, message: 'Please enter returner phone no.' },
+                    { field: returnSignatureInput, message: 'Please sign before submitting the return.' },
                 ];
 
                 const missing = requiredFields.find((item) => {

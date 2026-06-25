@@ -248,6 +248,39 @@
         width: 12px !important;
         height: 12px !important;
     }
+    .signature-pad {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        overflow: hidden;
+    }
+    .signature-pad canvas {
+        display: block;
+        width: 100%;
+        height: 140px;
+        background: #fff;
+        touch-action: none;
+    }
+    .signature-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-top: 1px solid var(--border);
+        padding: 8px 10px;
+        background: var(--body-bg);
+    }
+    .signature-clear {
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: var(--surface);
+        color: var(--text);
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        padding: 6px 10px;
+    }
 </style>
 @endpush
 
@@ -277,7 +310,7 @@
         <h2 style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin:0">Walkie Talkie Request Form</h2>
     </div>
 
-    <form action="{{ route('wt.user.requests.store') }}" method="POST" class="space-y-4">
+    <form action="{{ route('wt.user.requests.store') }}" method="POST" class="space-y-4" id="walkieRequestForm">
         @csrf
         <input type="hidden" name="event_name" value="{{ old('event_name', 'General Request') }}">
 
@@ -437,6 +470,23 @@
             </div>
         </div>
 
+        <!-- 5. SIGNATURE -->
+        <h4 class="form-section-title">5. Signature</h4>
+        <div class="mb-4">
+            <label class="block text-[10px] font-bold text-stone-600 mb-2 uppercase tracking-widest">Applicant Signature</label>
+            <div class="signature-pad" data-signature-pad>
+                <canvas></canvas>
+                <div class="signature-actions">
+                    <span style="font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.12em">Sign inside the box</span>
+                    <button type="button" class="signature-clear" data-signature-clear>Clear</button>
+                </div>
+            </div>
+            <input type="hidden" name="request_signature" data-signature-input required>
+            @error('request_signature')
+                <div class="text-red-600 text-xs font-bold mt-2">{{ $message }}</div>
+            @enderror
+        </div>
+
         <div class="pt-6 flex justify-end">
             <button type="submit" class="bg-[#0284c7] text-white px-8 py-3 rounded-xl font-black text-[11px] tracking-widest hover:bg-[#724D31] transition shadow-lg shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
                 SUBMIT REQUEST <i class="fas fa-arrow-right"></i>
@@ -474,6 +524,100 @@
         });
         $('.admin-select').select2({ placeholder: "Select an Executive", allowClear: true });
 
+        function setupSignaturePad(container) {
+            const canvas = container.querySelector('canvas');
+            const input = container.parentElement.querySelector('[data-signature-input]');
+            const clearButton = container.querySelector('[data-signature-clear]');
+            const context = canvas.getContext('2d');
+            let drawing = false;
+            let hasSignature = false;
+
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                const rect = canvas.getBoundingClientRect();
+                const image = hasSignature ? canvas.toDataURL('image/png') : null;
+
+                canvas.width = rect.width * ratio;
+                canvas.height = rect.height * ratio;
+                context.setTransform(ratio, 0, 0, ratio, 0, 0);
+                context.lineWidth = 2;
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+                context.strokeStyle = '#111827';
+
+                if (image) {
+                    const img = new Image();
+                    img.onload = () => context.drawImage(img, 0, 0, rect.width, rect.height);
+                    img.src = image;
+                }
+            }
+
+            function point(event) {
+                const rect = canvas.getBoundingClientRect();
+                const source = event.touches ? event.touches[0] : event;
+                return { x: source.clientX - rect.left, y: source.clientY - rect.top };
+            }
+
+            function updateInput() {
+                input.value = hasSignature ? canvas.toDataURL('image/png') : '';
+            }
+
+            function start(event) {
+                event.preventDefault();
+                drawing = true;
+                const pos = point(event);
+                context.beginPath();
+                context.moveTo(pos.x, pos.y);
+            }
+
+            function move(event) {
+                if (!drawing) return;
+                event.preventDefault();
+                const pos = point(event);
+                context.lineTo(pos.x, pos.y);
+                context.stroke();
+                hasSignature = true;
+                updateInput();
+            }
+
+            function stop() {
+                drawing = false;
+                updateInput();
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', move);
+            canvas.addEventListener('mouseup', stop);
+            canvas.addEventListener('mouseleave', stop);
+            canvas.addEventListener('touchstart', start, { passive: false });
+            canvas.addEventListener('touchmove', move, { passive: false });
+            canvas.addEventListener('touchend', stop);
+            clearButton.addEventListener('click', function () {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                hasSignature = false;
+                updateInput();
+            });
+        }
+
+        document.querySelectorAll('[data-signature-pad]').forEach(setupSignaturePad);
+
+        const walkieRequestForm = document.getElementById('walkieRequestForm');
+        const requestSignatureInput = document.querySelector('[data-signature-input]');
+
+        if (walkieRequestForm && requestSignatureInput) {
+            walkieRequestForm.addEventListener('submit', function (event) {
+                if (requestSignatureInput.value.trim() !== '') {
+                    return;
+                }
+
+                event.preventDefault();
+                alert('Please sign before submitting the request.');
+                requestSignatureInput.closest('.mb-4')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+
         function syncSharedWithVisibility() {
             const ownershipType = $('input[name="ownership_type"]:checked').val();
             const shouldShowSharedWith = ownershipType === 'shared';
@@ -503,5 +647,3 @@
     });
 </script>
 @endpush
-
-
