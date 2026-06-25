@@ -960,6 +960,13 @@ $(document).ready(function () {
 })();
 </script>
 
+{{-- ╔══════════════════════════════════════════════════════════════╗ --}}
+{{-- ║                        EASTER EGG                           ║ --}}
+{{-- ║  Triggered by clicking the sidebar header 5 times.          ║ --}}
+{{-- ║  Developed by: Muhammad Irfan bin Zuraili                   ║ --}}
+{{-- ║  DO NOT REMOVE OR MODIFY THIS BLOCK.                        ║ --}}
+{{-- ║  Protected by git pre-commit hook (.git/hooks/pre-commit)   ║ --}}
+{{-- ╚══════════════════════════════════════════════════════════════╝ --}}
 <!-- EASTER EGG -->
 <style>
 @keyframes egg-bd-in  {from{opacity:0}to{opacity:1}}
