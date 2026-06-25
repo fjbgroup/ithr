@@ -1939,6 +1939,23 @@ html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable t
     body .content-surface:has(#specialTable) #specialTable tbody td:last-child {
         text-align: center !important;
     }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons {
+        gap: 4px !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn {
+        width: 54px !important;
+        min-width: 54px !important;
+        max-width: 54px !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        padding: 0 5px !important;
+        border-radius: 5px !important;
+        font-size: 8px !important;
+        gap: 3px !important;
+    }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-info { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-primary { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
+    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-danger { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
 </style>
 
 @endsection

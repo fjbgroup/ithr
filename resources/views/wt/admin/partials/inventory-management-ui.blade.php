@@ -2623,4 +2623,246 @@ html.dark body .content-surface :is(
     border-color: #263244 !important;
     color: #e5edf7 !important;
 }
+
+/* Unified final contract: one compact visual language for every inventory module. */
+body .content-surface :is(
+    .inventory-page-shell,
+    .maintenance-page-shell,
+    .duplicate-page,
+    .special-page-shell,
+    .wt-data
+),
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .clean-admin-table,
+    .wt-data table
+) {
+    font-family: Inter, "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+    font-size: 11px !important;
+    line-height: 1.1 !important;
+}
+
+body .content-surface :is(
+    .inventory-table-shell,
+    .clean-admin-table-shell,
+    .duplicate-table-shell,
+    .special-table-shell,
+    .wt-data-table,
+    #mainTableContainer
+) {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .clean-admin-table,
+    .wt-data table
+) {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    table-layout: auto !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .clean-admin-table,
+    .wt-data table
+) thead th {
+    height: 26px !important;
+    padding: 3px 6px !important;
+    background: #eef3f8 !important;
+    border: 1px solid #d8e1ed !important;
+    color: #334155 !important;
+    font-size: 9px !important;
+    font-weight: 900 !important;
+    letter-spacing: .04em !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .clean-admin-table,
+    .wt-data table
+) tbody td {
+    height: 24px !important;
+    min-height: 24px !important;
+    padding: 2px 6px !important;
+    color: #0f172a !important;
+    font-size: 10px !important;
+    font-weight: 650 !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    vertical-align: middle !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .dup-actions,
+    .special-action-buttons
+) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .dup-actions,
+    .special-action-buttons
+) form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(
+    .inventory-action-buttons .btn,
+    .maintenance-action-stack .wt-btn,
+    .clean-admin-actions .wt-btn,
+    .dup-actions .btn,
+    .special-action-buttons .btn
+) {
+    width: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 5px !important;
+    border-radius: 5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    font-size: 8px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    letter-spacing: .02em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(.btn-info, .maintenance-action-view) {
+    border-color: #0284c7 !important;
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(.btn-primary, .maintenance-action-edit) {
+    border-color: #2563eb !important;
+    background: #2563eb !important;
+    color: #ffffff !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(.btn-danger, .wt-btn-danger, .maintenance-action-delete) {
+    border-color: #dc2626 !important;
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable
+) :is(.btn i, .wt-btn i) {
+    width: 8px !important;
+    min-width: 8px !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+}
+
+html.dark body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .clean-admin-table,
+    .wt-data table
+) thead th {
+    background: #1f2937 !important;
+    border-color: #2f3b4f !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .clean-admin-table,
+    .wt-data table
+) tbody td {
+    background: #111827 !important;
+    border-color: #263244 !important;
+    color: #e5edf7 !important;
+}
 </style>

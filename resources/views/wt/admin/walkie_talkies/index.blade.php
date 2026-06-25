@@ -593,27 +593,92 @@
             min-width: 0 !important;
             max-width: none !important;
         }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
+            table-layout: fixed !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-radio-colgroup {
+            width: 64px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-status-colgroup {
+            width: 74px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-serial-colgroup {
+            width: 112px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-model-colgroup {
+            width: 72px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-location-colgroup {
+            width: 64px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable col.inventory-action-colgroup {
+            width: 58px !important;
+        }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
-            height: 28px !important;
-            padding: 4px 6px !important;
+            height: 22px !important;
+            padding: 2px 4px !important;
             text-align: center !important;
-            font-size: 9px !important;
+            font-size: 8px !important;
             line-height: 1.05 !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td {
-            height: 26px !important;
-            padding: 3px 6px !important;
+            height: 22px !important;
+            padding: 2px 4px !important;
             text-align: left !important;
-            font-size: 10px !important;
+            font-size: 9px !important;
             line-height: 1.1 !important;
             white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th:first-child {
+            width: 64px !important;
+            min-width: 64px !important;
+            max-width: 64px !important;
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-id-chip,
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-status-badge {
+            min-height: 16px !important;
+            padding: 1px 5px !important;
+            font-size: 8px !important;
+            line-height: 1 !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-item-title,
+        body .content-surface .inventory-page-shell #walkiesTable td div {
+            font-size: 9px !important;
+            line-height: 1.08 !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-action-col {
             text-align: center !important;
+            width: 58px !important;
+            min-width: 58px !important;
+            max-width: 58px !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
         }
         body .content-surface .inventory-page-shell #inventoryTableScroll {
             overflow: hidden !important;
         }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons {
+            gap: 4px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn {
+            width: 46px !important;
+            min-width: 46px !important;
+            max-width: 46px !important;
+            height: 18px !important;
+            min-height: 18px !important;
+            padding: 0 3px !important;
+            border-radius: 5px !important;
+            font-size: 8px !important;
+            gap: 2px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn-info { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn-primary { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
+        body .content-surface .inventory-page-shell #walkiesTable .inventory-action-buttons .btn-danger { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
     </style>
     @endpush
 
