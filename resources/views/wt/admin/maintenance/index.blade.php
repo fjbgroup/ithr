@@ -1580,12 +1580,16 @@ document.addEventListener('keydown', function(e) {
         min-width: 100px !important;
     }
     body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(6) {
-        width: 28% !important;
-        max-width: 30% !important;
-        min-width: 160px !important;
+        width: 24% !important;
+        max-width: 220px !important;
+        min-width: 0 !important;
         white-space: normal !important;
+        overflow-wrap: anywhere !important;
     }
-    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(7) { width: 8% !important; }
+    body .content-surface .maintenance-page-shell #maintTable :is(th, td):nth-child(7) {
+        width: 12% !important;
+        min-width: 70px !important;
+    }
     body .content-surface .maintenance-page-shell #maintTable thead th {
         white-space: nowrap !important;
         overflow: visible !important;

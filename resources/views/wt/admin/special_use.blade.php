@@ -1939,13 +1939,17 @@ html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable t
         min-width: 100px !important;
     }
     body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(6) {
-        width: 28% !important;
-        max-width: 30% !important;
-        min-width: 140px !important;
+        width: 24% !important;
+        max-width: 220px !important;
+        min-width: 0 !important;
         white-space: normal !important;
+        overflow-wrap: anywhere !important;
     }
     body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(7) { width: 6% !important; }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(8) { width: 8% !important; }
+    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(8) {
+        width: 12% !important;
+        min-width: 70px !important;
+    }
     body .content-surface:has(#specialTable) #specialTable thead th {
         white-space: nowrap !important;
         overflow: visible !important;

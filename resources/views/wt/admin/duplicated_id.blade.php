@@ -1670,7 +1670,8 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
         white-space: nowrap !important;
     }
     body .content-surface #duplicateTable :is(th, td):last-child {
-        width: 8% !important;
+        width: 12% !important;
+        min-width: 70px !important;
         white-space: nowrap !important;
     }
     body .content-surface #duplicateTable :is(th, td):nth-child(1) { width: 10% !important; }
@@ -1681,7 +1682,12 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
         width: 12% !important;
         min-width: 100px !important;
     }
-    body .content-surface #duplicateTable :is(th, td):nth-child(6) { width: 20% !important; }
+    body .content-surface #duplicateTable :is(th, td):nth-child(6) {
+        width: 16% !important;
+        max-width: 220px !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+    }
     body .content-surface #duplicateTable :is(th, td):nth-child(7) { width: 8% !important; }
     body .content-surface #duplicateTable thead th {
         white-space: nowrap !important;

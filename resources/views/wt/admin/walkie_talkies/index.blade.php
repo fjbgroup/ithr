@@ -600,26 +600,27 @@
             table-layout: auto !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-radio-colgroup {
-            width: 10% !important;
+            width: 1% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-status-colgroup {
-            width: 12% !important;
+            width: 1% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-serial-colgroup {
-            width: 18% !important;
+            width: 1% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-model-colgroup {
-            width: 12% !important;
+            width: 10% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-location-colgroup {
             width: 12% !important;
             min-width: 100px !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-ownership-colgroup {
-            width: 28% !important;
+            width: 20% !important;
+            max-width: 180px !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-action-colgroup {
-            width: 8% !important;
+            width: 12% !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
             height: auto !important;
@@ -656,21 +657,65 @@
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(7) {
             white-space: nowrap !important;
         }
-        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(1) { width: 10% !important; }
-        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(2) { width: 12% !important; }
-        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(3) { width: 18% !important; }
-        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(4) { width: 12% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(1) {
+            width: 1% !important;
+            max-width: 48px !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
+            text-align: center !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(2) {
+            width: 1% !important;
+            max-width: 62px !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
+            text-align: center !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(3) {
+            width: 14% !important;
+            max-width: 120px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(4) { width: 10% !important; }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(5) {
             width: 12% !important;
             min-width: 100px !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(6) {
-            width: 28% !important;
-            max-width: 30% !important;
-            min-width: 140px !important;
+            width: 20% !important;
+            max-width: 180px !important;
+            min-width: 0 !important;
             white-space: normal !important;
+            overflow-wrap: anywhere !important;
         }
-        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(7) { width: 8% !important; }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td):nth-child(7) {
+            width: 12% !important;
+            min-width: 70px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-radio-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-status-col {
+            width: 1% !important;
+            min-width: max-content !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            text-align: center !important;
+            padding-left: 2px !important;
+            padding-right: 2px !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-radio-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-status-col {
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table .inventory-serial-col {
+            width: 1% !important;
+            min-width: max-content !important;
+            max-width: none !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+        }
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table .inventory-expand-col {
+            width: auto !important;
+        }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table thead th {
             white-space: nowrap !important;
             overflow: visible !important;
@@ -691,9 +736,9 @@
         }
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-action-col {
             text-align: center !important;
-            width: 1% !important;
-            min-width: 0 !important;
-            max-width: none !important;
+            width: 12% !important;
+            min-width: 70px !important;
+            max-width: 90px !important;
             padding: 0 !important;
         }
         body .content-surface .inventory-page-shell #inventoryTableScroll {
@@ -1026,6 +1071,37 @@
         .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
             border-left-color: #e2e8f0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup {
+            width: 1% !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-radio-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-radio-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-status-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-status-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-serial-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-serial-col {
+            width: 1% !important;
+            min-width: max-content !important;
+            max-width: none !important;
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-serial-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-serial-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-expand-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-expand-col {
+            width: auto !important;
         }
     </style>
     @endpush
@@ -1725,13 +1801,13 @@
                         @if($showInventoryBulk)
                         <th class="px-3 py-3 text-center inventory-select-col"></th>
                         @endif
-                        <th class="px-2 py-1 text-center">RADIO ID</th>
-                        <th class="px-2 py-1 text-center">STATUS</th>
-                        <th class="px-2 py-1 text-center">SERIAL NO.</th>
-                        <th class="px-2 py-1 text-center">MODEL</th>
-                        <th class="px-2 py-1 text-center">LOCATION</th>
-                        <th class="px-2 py-1 text-center">ASSIGNED TO</th>
-                        <th class="px-3 py-3 text-center inventory-action-col"></th>
+                        <th class="inventory-radio-col w-px whitespace-nowrap px-2 py-1 text-center">RADIO ID</th>
+                        <th class="inventory-status-col w-px whitespace-nowrap px-2 py-1 text-center">STATUS</th>
+                        <th class="inventory-serial-col w-px whitespace-nowrap px-2 py-1 text-center">SERIAL NO.</th>
+                        <th class="inventory-expand-col px-2 py-1 text-center">MODEL</th>
+                        <th class="inventory-expand-col px-2 py-1 text-center">LOCATION</th>
+                        <th class="inventory-expand-col px-2 py-1 text-center">ASSIGNED TO</th>
+                        <th class="px-2 py-1 text-center inventory-action-col">ACTION</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-700/40 text-[11px]">
@@ -1750,23 +1826,23 @@
                             <input type="checkbox" class="inventory-row-checkbox inventory-bulk-checkbox" value="{{ $w->walkie_id }}" data-label="{{ $w->radio_id ?: $w->serial_number ?: $w->walkie_id }}">
                         </td>
                         @endif
-                        <td>
+                        <td class="inventory-radio-col w-px whitespace-nowrap text-center align-middle">
                             <span class="clean-admin-pill inventory-id-chip">{{ $w->radio_id ?: '-' }}</span>
                             @if($w->need_to_change_id)
                             <span class="ml-1 text-yellow-300" title="DUPLICATE ID: Need to change">ðŸš©</span>
                             @endif
                         </td>
-                        <td>
+                        <td class="inventory-status-col w-px whitespace-nowrap text-center align-middle">
                             <span class="clean-admin-pill inventory-status-badge" data-status="{{ $statusValue }}">{{ $statusValue }}</span>
                         </td>
-                        <td>
+                        <td class="inventory-serial-col w-px whitespace-nowrap text-center align-middle">
                             {{ $w->serial_number ?: '-' }}
                         </td>
-                        <td>
+                        <td class="inventory-expand-col">
                             <div class="inventory-item-title">{{ $w->model ?: 'NO MODEL' }}</div>
                         </td>
-                        <td>{{ $w->location ?: '-' }}</td>
-                        <td>
+                        <td class="inventory-expand-col">{{ $w->location ?: '-' }}</td>
+                        <td class="inventory-expand-col">
                             <div class="inventory-item-title">{{ $w->ownership ?: '-' }}</div>
                             <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $w->department ?: '-' }} / {{ $w->ownership_type ?: '-' }}</div>
                         </td>
@@ -8973,6 +9049,45 @@
         .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table tbody td:first-child {
             border-left-color: #e2e8f0 !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-status-colgroup,
+        .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-serial-colgroup {
+            width: 1% !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-radio-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-radio-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-status-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-status-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-serial-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-serial-col {
+            width: 1% !important;
+            min-width: max-content !important;
+            max-width: none !important;
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-radio-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-radio-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-status-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-status-col,
+        .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-serial-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table td.inventory-serial-col {
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+
+        .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-expand-col,
+        body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table :is(th, td).inventory-expand-col {
+            width: auto !important;
         }
     </style>
     @endpush

@@ -132,6 +132,8 @@
     $faultyNavOnUserReports = request()->routeIs('wt.admin.faultyReports.*');
     $faultyNavOnThreeMonths = request()->routeIs('wt.admin.reports.faulty3Months');
     $faultyManagementOpen = $faultyNavOnUserReports || $faultyNavOnThreeMonths;
+    $requestCreateOpen = request()->routeIs('wt.admin.requests.create') || request()->routeIs('wt.admin.requests.create.*');
+    $systemControlOpen = request()->routeIs('wt.admin.users.*') || request()->routeIs('wt.admin.activity.*') || request()->routeIs('wt.admin.masterData.*');
 @endphp
 
 {{-- Mobile overlay --}}
@@ -139,18 +141,23 @@
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <a href="{{ request()->fullUrl() }}" class="sidebar-brand" title="Refresh page">
-    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.18)">
-      <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
-    </div>
-    <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
-  </a>
+  <div class="sidebar-brand-row flex items-center justify-between gap-x-3 pl-4 pr-3">
+    <a href="{{ request()->fullUrl() }}" class="sidebar-brand flex min-w-0 flex-1 items-center gap-x-3" title="Refresh page">
+      <div class="sidebar-logo-shell flex shrink-0 items-center justify-center">
+        <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
+      </div>
+      <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
+    </a>
+    <button type="button" class="sidebar-collapse-toggle" id="sidebarCollapseToggle" aria-label="Toggle sidebar" aria-expanded="true">
+      <i class="fas fa-angles-left"></i>
+    </button>
+  </div>
 
   <nav class="sidebar-nav">
     {{-- Dashboard (ICT only) --}}
     @if($isAdminItView)
     <div class="nav-section-label" style="margin-top:4px">Main</div>
-    <a href="{{ route('wt.admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.dashboard') }}" class="nav-link {{ request()->routeIs('wt.admin.dashboard') ? 'active-sidebar' : '' }}" title="Dashboard">
       <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
     @endif
@@ -227,43 +234,40 @@
 
     @else
     {{-- Executive/Admin view personal assets --}}
-    <a href="{{ route('wt.admin.walkies.myInventory') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.walkies.myInventory') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.walkies.myInventory') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.walkies.myInventory') ? 'active-sidebar' : '' }}" title="My Inventory">
       <i class="fa-solid fa-box" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Inventory</span>
       @include('wt.partials.sidebar-info', ['text' => 'View walkie talkies currently assigned to you.'])
     </a>
 
     <div class="nav-section-label">Asset Interactive</div>
-    <a href="{{ route('wt.admin.returns.create', ['mode' => 'self']) }}" class="nav-link has-info {{ request()->routeIs('admin.returns.*') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.returns.create', ['mode' => 'self']) }}" class="nav-link has-info {{ request()->routeIs('wt.admin.returns.*') ? 'active-sidebar' : '' }}" title="Return Unit">
       <i class="fa-solid fa-rotate-left" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Return Unit</span>
       @include('wt.partials.sidebar-info', ['text' => 'Submit walkie return records for your own assigned unit.'])
     </a>
-    <a href="{{ route('wt.admin.damages.form', ['mode' => 'staff']) }}" class="nav-link has-info {{ request()->routeIs('admin.damages.*') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.damages.form', ['mode' => 'staff']) }}" class="nav-link has-info {{ request()->routeIs('wt.admin.damages.*') ? 'active-sidebar' : '' }}" title="Report Faulty">
       <i class="fa-solid fa-triangle-exclamation" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Report Faulty</span>
       @include('wt.partials.sidebar-info', ['text' => 'Report damaged, faulty, missing, or problem units for yourself or on behalf of a recipient.'])
     </a>
 
     {{-- Request Walkie Talkie --}}
-    @php
-      $reqOpen = request()->routeIs('admin.requests.create') || request()->routeIs('admin.requests.create.*') || request()->routeIs('admin.requests.create.temporary*');
-    @endphp
     <div class="dropdown-wrapper">
-      <button type="button" class="dropdown-trigger has-info {{ $reqOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+      <button type="button" class="dropdown-trigger has-info {{ $requestCreateOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Request Walkie Talkie">
         <i class="fas fa-plus-circle" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Request Walkie Talkie</span>
         @include('wt.partials.sidebar-info', ['text' => 'Submit a walkie talkie request for yourself or on behalf of a recipient. ICT will assign the available unit later.'])
         <i class="fas fa-chevron-right dropdown-chevron"></i>
       </button>
       <div class="dropdown-content">
-        <a href="{{ route('wt.admin.requests.create') }}" class="sub-nav-link {{ (request()->routeIs('admin.requests.create') || request()->routeIs('admin.requests.create.individual') || request()->routeIs('admin.requests.create.shared')) ? 'active' : '' }}">
+        <a href="{{ route('wt.admin.requests.create') }}" class="sub-nav-link {{ (request()->routeIs('wt.admin.requests.create') || request()->routeIs('wt.admin.requests.create.individual') || request()->routeIs('wt.admin.requests.create.shared')) ? 'active' : '' }}">
           <i class="fas fa-file-alt" style="font-size:12px;width:14px"></i> Long Term Request
         </a>
-        <a href="{{ route('wt.admin.requests.create.temporary') }}" class="sub-nav-link {{ request()->routeIs('admin.requests.create.temporary*') ? 'active' : '' }}">
+        <a href="{{ route('wt.admin.requests.create.temporary') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.requests.create.temporary*') ? 'active' : '' }}">
           <i class="fas fa-clock" style="font-size:12px;width:14px"></i> Temporary Request
         </a>
       </div>
     </div>
 
-    <a href="{{ route('wt.admin.all.status') }}" class="nav-link has-info {{ request()->routeIs('admin.all.status') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.all.status') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.all.status') ? 'active-sidebar' : '' }}" title="All Status">
       <i class="fa-solid fa-list-check" style="width:20px;text-align:center;flex-shrink:0"></i> <span>All Status</span>
       @include('wt.partials.sidebar-info', ['text' => 'Consolidated view for walkie requests, handovers, and faulty reports status.'])
     </a>
@@ -271,12 +275,12 @@
 
     {{-- My Account --}}
     <div class="nav-section-label">My Account</div>
-    <a href="{{ route('wt.admin.profile') }}" class="nav-link has-info {{ request()->routeIs('admin.profile') ? 'active-sidebar' : '' }}">
+    <a href="{{ route('wt.admin.profile') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.profile') ? 'active-sidebar' : '' }}" title="My Profile">
       <i class="fas fa-user-circle" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Profile</span>
       @include('wt.partials.sidebar-info', ['text' => 'View and update your account profile information.'])
     </a>
     @if(!$isAdminItView)
-    <a href="javascript:void(0)" onclick="openPoliciesModal()" class="nav-link has-info">
+    <a href="javascript:void(0)" onclick="openPoliciesModal()" class="nav-link has-info" title="Policies">
       <i class="fa-solid fa-file-contract" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Policies</span>
       @include('wt.partials.sidebar-info', ['text' => 'Read the policies and rules for walkie talkie usage.'])
     </a>
@@ -285,24 +289,21 @@
     {{-- Executive Tools (IT only) --}}
     @if($isAdminItView)
     <div class="nav-section-label">Executive Tools (IT)</div>
-    @php
-      $sysCtrlOpen = request()->routeIs('admin.users.index') || request()->routeIs('admin.activity.index') || request()->routeIs('admin.masterData.index');
-    @endphp
     <div class="dropdown-wrapper">
-      <button type="button" class="dropdown-trigger has-info {{ $sysCtrlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+      <button type="button" class="dropdown-trigger has-info {{ $systemControlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="System Control">
         <i class="fas fa-sliders-h" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">System Control</span>
         @include('wt.partials.sidebar-info', ['text' => 'Open system management tools for user accounts and activity logs.'])
         <i class="fas fa-chevron-right dropdown-chevron"></i>
       </button>
       <div class="dropdown-content">
-        <a href="{{ route('wt.admin.users.index') }}" class="sub-nav-link {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
+        <a href="{{ route('wt.admin.users.index') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.users.*') ? 'active' : '' }}">
           <i class="fas fa-users" style="font-size:12px;width:14px"></i> Users Control
         </a>
-        <a href="{{ route('wt.admin.masterData.index') }}" class="sub-nav-link {{ request()->routeIs('admin.masterData.index') ? 'active' : '' }}">
+        <a href="{{ route('wt.admin.masterData.index') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.masterData.*') ? 'active' : '' }}">
           <i class="fas fa-database" style="font-size:12px;width:14px"></i> Master Data
         </a>
-        <a href="{{ route('wt.admin.activity.index') }}" class="sub-nav-link {{ request()->routeIs('admin.activity.index') ? 'active' : '' }}">
+        <a href="{{ route('wt.admin.activity.index') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.activity.*') ? 'active' : '' }}">
           <i class="fas fa-clipboard-list" style="font-size:12px;width:14px"></i> System Logs
         </a>
       </div>
@@ -310,10 +311,10 @@
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
-    <a href="{{ route('it.dashboard') }}" class="nav-link">
+    <a href="{{ route('it.dashboard') }}" class="nav-link" title="IT System">
       <i class="fas fa-desktop" style="width:20px;text-align:center;flex-shrink:0"></i> <span>IT System</span>
     </a>
-    <a href="{{ route('dashboard') }}" class="nav-link">
+    <a href="{{ route('dashboard') }}" class="nav-link" title="HR Portal">
       <i class="fas fa-building" style="width:20px;text-align:center;flex-shrink:0"></i> <span>HR Portal</span>
     </a>
   </nav>
@@ -647,6 +648,31 @@ function closeMobileSidebar() {
 // Mobile sidebar overlay also closes it
 var sidebarOv = document.getElementById('mobileSidebarOverlay');
 if (sidebarOv) sidebarOv.onclick = closeMobileSidebar;
+
+// -- SIDEBAR COLLAPSE (desktop) --
+(function () {
+  var body = document.body;
+  var toggle = document.getElementById('sidebarCollapseToggle');
+  if (!body || !toggle) return;
+
+  function syncSidebarCollapse(collapsed) {
+    body.classList.toggle('sidebar-collapsed', collapsed);
+    toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    toggle.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+  }
+
+  var saved = localStorage.getItem('wt-sidebar-collapsed') === '1';
+  syncSidebarCollapse(saved);
+
+  toggle.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    var collapsed = !body.classList.contains('sidebar-collapsed');
+    syncSidebarCollapse(collapsed);
+    localStorage.setItem('wt-sidebar-collapsed', collapsed ? '1' : '0');
+    closeSidebarInfoPopovers();
+  });
+})();
 
 // ── DROPDOWN TOGGLE ──
 function toggleDropdown(trigger) {

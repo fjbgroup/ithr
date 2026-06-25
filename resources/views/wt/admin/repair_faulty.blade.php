@@ -1647,9 +1647,15 @@ html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[dat
     }
     body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(9),
     body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(13) {
-        width: 12% !important;
-        min-width: 120px !important;
+        width: 10% !important;
+        max-width: 220px !important;
+        min-width: 0 !important;
         white-space: normal !important;
+        overflow-wrap: anywhere !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
+        width: 10% !important;
+        min-width: 70px !important;
     }
     body .content-surface .maintenance-page-shell #maintenanceTable thead th {
         white-space: nowrap !important;
