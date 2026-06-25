@@ -23,7 +23,7 @@ return new class extends Migration
             DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin_it','admin_hr','finance_admin','hou','gm','ceo','staff','user','admin') NOT NULL DEFAULT 'staff'");
             DB::statement("UPDATE users u LEFT JOIN departments d ON u.department_id = d.id SET u.dept_name = TRIM(d.name) WHERE u.department_id IS NOT NULL AND d.name IS NOT NULL");
             DB::statement("UPDATE users u INNER JOIN staff s ON TRIM(s.staff_no) = TRIM(u.staff_no) SET u.phone_no = s.phone_number WHERE s.phone_number IS NOT NULL AND s.phone_number != ''");
-        } else {
+        } elseif (DB::getDriverName() === 'sqlsrv') {
             DB::statement("UPDATE u SET u.dept_name = TRIM(d.name) FROM users u LEFT JOIN departments d ON u.department_id = d.id WHERE u.department_id IS NOT NULL AND d.name IS NOT NULL");
             DB::statement("UPDATE u SET u.phone_no = s.phone_number FROM users u INNER JOIN staff s ON TRIM(s.staff_no) = TRIM(u.staff_no) WHERE s.phone_number IS NOT NULL AND s.phone_number != ''");
         }
