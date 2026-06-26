@@ -280,54 +280,100 @@ $action      = request('action', 'list');
 @endif
 
 <!-- EDIT USER MODAL -->
-<div id="mu-edit-overlay" style="display:none;position:fixed;inset:0;z-index:1050;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px">
-  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.35);position:relative">
-    <div class="mu-form-hdr" style="border-radius:16px 16px 0 0">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center">
-          <i class="bi bi-person-gear" style="color:#fff;font-size:15px"></i>
+<div id="mu-edit-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:1050;background:rgba(0,0,0,.5);align-items:flex-start;justify-content:center;padding:70px 20px 20px;overflow-y:auto">
+  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:720px;min-height:70vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.35);position:relative;display:flex;flex-direction:column">
+
+    {{-- Header --}}
+    <div class="mu-form-hdr" style="border-radius:16px 16px 0 0;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:38px;height:38px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i class="bi bi-person-gear" style="color:#fff;font-size:18px"></i>
         </div>
-        <span id="mu-edit-modal-title" style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff">Edit User</span>
+        <div>
+          <div id="mu-edit-modal-title" style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;color:#fff;line-height:1">Edit User</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:3px">Update account details below</div>
+        </div>
       </div>
-      <button type="button" onclick="closeMuEditModal()" style="display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,.7);font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 12px;cursor:pointer">
-        <i class="bi bi-x"></i> Close
+      <button type="button" onclick="closeMuEditModal()" style="display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,.7);font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:6px 14px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+        <i class="bi bi-x-lg"></i> Close
       </button>
     </div>
-    <div style="padding:22px">
+
+    {{-- Body --}}
+    <div style="padding:28px 28px 24px;flex:1">
       <form id="mu-edit-form" method="POST" action="">
         @csrf
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label class="form-label">Username</label>
-            <input type="text" id="mu-edit-username" name="username" class="form-control" readonly>
+
+        {{-- Identity section --}}
+        <div style="margin-bottom:24px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <i class="bi bi-person-fill" style="font-size:12px"></i> Identity
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Full Name <span style="color:var(--red)">*</span></label>
-            <input type="text" id="mu-edit-full-name" name="full_name" class="form-control" required>
+          <div class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">
+                <i class="bi bi-at" style="color:var(--accent)"></i> Username (Staff No.)
+              </label>
+              <input type="text" id="mu-edit-username" name="username" class="form-control" readonly
+                style="background:var(--body-bg);color:var(--muted);cursor:not-allowed;font-family:monospace;font-size:13px">
+            </div>
+            <div class="col-md-7">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">
+                <i class="bi bi-person-fill" style="color:var(--accent)"></i> Full Name <span style="color:var(--red)">*</span>
+              </label>
+              <input type="text" id="mu-edit-full-name" name="full_name" class="form-control" required style="font-size:13px">
+            </div>
+            <div class="col-12">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">
+                <i class="bi bi-envelope-fill" style="color:var(--accent)"></i> Email Address
+              </label>
+              <input type="email" id="mu-edit-email" name="email" class="form-control" style="font-size:13px" placeholder="user@example.com">
+            </div>
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Email</label>
-            <input type="email" id="mu-edit-email" name="email" class="form-control">
+        </div>
+
+        <div style="border-top:1px solid var(--border);margin-bottom:24px"></div>
+
+        {{-- Access section --}}
+        <div style="margin-bottom:24px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <i class="bi bi-shield-lock-fill" style="font-size:12px"></i> Access & Role
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Password <span style="color:var(--muted);font-weight:400">(leave blank to keep)</span></label>
-            <input type="password" id="mu-edit-password" name="password" class="form-control" placeholder="Leave blank to keep current">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">
+                <i class="bi bi-shield-fill" style="color:var(--accent)"></i> Role
+              </label>
+              <select id="mu-edit-role" name="role" class="form-select" style="font-size:13px">
+                @foreach(['ceo'=>'Chief Executive Officer (C.E.O)','gm'=>'General Manager (G.M)','hou'=>'Head Of Unit (H.O.U)','admin'=>'IT Admin','finance_admin'=>'Finance Admin','user'=>'Staff'] as $rv => $rl)
+                <option value="{{ $rv }}">{{ $rl }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">
+                <i class="bi bi-building" style="color:var(--accent)"></i> Department
+              </label>
+              <input type="text" id="mu-edit-dept" name="dept_name" class="form-control" style="font-size:13px" placeholder="e.g. IT Department">
+            </div>
+            <div class="col-12">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px">
+                <i class="bi bi-key-fill" style="color:var(--accent)"></i> Password
+                <span style="font-weight:400;color:var(--muted)"> — leave blank to keep current</span>
+              </label>
+              <input type="password" id="mu-edit-password" name="password" class="form-control" style="font-size:13px" placeholder="Enter new password to change…">
+            </div>
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Role</label>
-            <select id="mu-edit-role" name="role" class="form-select">
-              @foreach(['ceo'=>'Chief Executive Officer (C.E.O)','gm'=>'General Manager (G.M)','hou'=>'Head Of Unit (H.O.U)','admin'=>'IT Admin','finance_admin'=>'Finance Admin','user'=>'Staff'] as $rv => $rl)
-              <option value="{{ $rv }}">{{ $rl }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Department</label>
-            <input type="text" id="mu-edit-dept" name="dept_name" class="form-control" placeholder="e.g. IT Department">
-          </div>
-          <div class="col-12">
-            <button type="submit" class="btn-primary-custom"><i class="bi bi-check-lg"></i> Update User</button>
-          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border);padding-top:20px;display:flex;align-items:center;justify-content:flex-end;gap:10px">
+          <button type="button" onclick="closeMuEditModal()"
+            style="padding:9px 20px;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary-custom" style="padding:9px 24px">
+            <i class="bi bi-check-lg"></i> Save Changes
+          </button>
         </div>
       </form>
     </div>
@@ -597,12 +643,10 @@ function openMuEditModal(data) {
   document.getElementById('mu-edit-dept').value            = data.dept;
   document.getElementById('mu-edit-password').value        = '';
   overlay.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
 }
 
 function closeMuEditModal() {
   document.getElementById('mu-edit-overlay').style.display = 'none';
-  document.body.style.overflow = '';
 }
 
 // Backdrop click closes modal
