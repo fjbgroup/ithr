@@ -144,6 +144,7 @@ class InventoryController extends Controller
             'total_cost'       => 'nullable|numeric',
             'accumulated'      => 'nullable|numeric',
             'nbv_at'           => 'nullable|numeric',
+            'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
 
@@ -175,14 +176,13 @@ class InventoryController extends Controller
             'brand'            => 'nullable|string|max:100',
             'model'            => 'nullable|string|max:100',
             'location'         => 'nullable|string|max:100',
-            'condition_status' => 'nullable|in:Good,Fair,Poor,For Disposal',
-            'item_status'      => 'nullable|in:Active,In Repair,Disposed,Reserved,Collected',
             'purchase_date'    => 'nullable|date',
             'purchase_price'   => 'nullable|numeric',
             'years_purchase'   => 'nullable|integer',
             'total_cost'       => 'nullable|numeric',
             'accumulated'      => 'nullable|numeric',
             'nbv_at'           => 'nullable|numeric',
+            'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
 

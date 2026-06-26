@@ -10,11 +10,12 @@ class InventoryItem extends Model
         'asset_number', 'asset_class', 'description', 'serial_number',
         'brand', 'model', 'location', 'condition_status', 'item_status',
         'purchase_date', 'purchase_price', 'notes', 'created_by',
-        'fa_code', 'years_purchase', 'total_cost', 'accumulated', 'nbv_at',
+        'fa_code', 'years_purchase', 'total_cost', 'accumulated', 'nbv_at', 'warranty_date',
     ];
 
     protected $casts = [
         'purchase_date'  => 'date',
+        'warranty_date'  => 'date',
         'purchase_price' => 'decimal:2',
         'total_cost'     => 'decimal:2',
         'accumulated'    => 'decimal:2',

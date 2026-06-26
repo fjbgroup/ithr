@@ -113,6 +113,7 @@ class NonItAssetController extends Controller
             'total_cost'       => 'nullable|numeric',
             'accumulated'      => 'nullable|numeric',
             'nbv_at'           => 'nullable|numeric',
+            'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
 
@@ -150,6 +151,7 @@ class NonItAssetController extends Controller
             'total_cost'       => 'nullable|numeric',
             'accumulated'      => 'nullable|numeric',
             'nbv_at'           => 'nullable|numeric',
+            'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
 
