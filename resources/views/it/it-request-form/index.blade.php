@@ -539,6 +539,144 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 </script>
 
 @else
+@if($user->isStaff())
+{{-- ══════════════════════════════════════════
+     STAFF — READ-ONLY VIEW
+══════════════════════════════════════════ --}}
+<div style="margin-bottom:10px">
+  <div style="font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px">IT Request Form</div>
+  <div style="font-size:13px;color:var(--muted)">View IT requests that have been submitted on your behalf.</div>
+</div>
+
+@if(session('success'))
+<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:9px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#166534;display:flex;align-items:center;gap:8px">
+  <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
+</div>
+@endif
+@if(session('error'))
+<div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:9px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#991b1b;display:flex;align-items:center;gap:8px">
+  <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
+</div>
+@endif
+
+@php
+  $sfTypeMap = [
+    'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
+    'software' => ['label'=>'Software','color'=>'#8b5cf6','bg'=>'rgba(139,92,246,.1)','icon'=>'bi-code-slash'],
+    'system'   => ['label'=>'System',  'color'=>'#10b981','bg'=>'rgba(16,185,129,.1)','icon'=>'bi-hdd-network'],
+    'service'  => ['label'=>'Service', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)', 'icon'=>'bi-wifi'],
+  ];
+  $sfStatusMap = [
+    'New'                => ['label'=>'Pending HOU Approval','color'=>'#d97706','bg'=>'rgba(217,119,6,.1)'],
+    'Pending IT'         => ['label'=>'Pending IT Approval', 'color'=>'#0284c7','bg'=>'rgba(2,132,199,.1)'],
+    'Pending Validation' => ['label'=>'Pending Validation',  'color'=>'#7c3aed','bg'=>'rgba(124,58,237,.1)'],
+    'Approved'           => ['label'=>'Approved',            'color'=>'#16a34a','bg'=>'rgba(22,163,74,.1)'],
+    'Rejected'           => ['label'=>'Rejected',            'color'=>'#dc2626','bg'=>'rgba(220,38,38,.1)'],
+    'Draft'              => ['label'=>'Draft',               'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)'],
+  ];
+@endphp
+
+<div style="margin-top:24px">
+  <div style="margin-bottom:14px">
+    <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+      <i class="bi bi-clipboard2-check-fill" style="color:var(--accent);margin-right:7px"></i>My IT Requests
+      @if(isset($staffForms) && $staffForms->count())
+      <span style="font-size:12px;font-weight:600;color:var(--accent);background:rgba(2,132,199,.1);border:1px solid rgba(2,132,199,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $staffForms->count() }}</span>
+      @endif
+    </div>
+    <div style="font-size:12.5px;color:var(--muted)">IT requests submitted on your behalf by your manager or department head.</div>
+  </div>
+
+  @if(isset($staffForms) && $staffForms->count())
+  <div style="display:flex;flex-direction:column;gap:12px">
+    @foreach($staffForms as $sf)
+    @php
+      $sft = $sfTypeMap[$sf->request_type] ?? ['label'=>ucfirst($sf->request_type),'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)','icon'=>'bi-question-circle'];
+      $sfs = $sfStatusMap[$sf->status] ?? ['label'=>$sf->status,'color'=>'#64748b','bg'=>'rgba(100,116,139,.1)'];
+      $sfBorder = in_array($sf->status, ['Approved']) ? 'rgba(22,163,74,.35)' :
+                  (in_array($sf->status, ['Rejected']) ? 'rgba(220,38,38,.35)' :
+                  (in_array($sf->status, ['New','Pending IT','Pending Validation']) ? 'rgba(217,119,6,.35)' : 'var(--border)'));
+    @endphp
+    <div style="background:var(--surface);border:1.5px solid {{ $sfBorder }};border-radius:14px;overflow:hidden;transition:box-shadow .15s"
+         onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.07)'" onmouseout="this.style.boxShadow='none'">
+      <div style="padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)">
+        <span style="display:inline-flex;align-items:center;gap:6px;background:{{ $sft['bg'] }};color:{{ $sft['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
+          <i class="bi {{ $sft['icon'] }}" style="font-size:11px"></i>{{ $sft['label'] }}
+        </span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+            {{ $sf->subject ?? 'Untitled Request' }}
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">
+            #{{ $sf->id }} &middot; Submitted {{ $sf->created_at->format('d M Y, H:i') }}
+            @if($sf->submittedBy) &middot; By {{ $sf->submittedBy->full_name }} @endif
+          </div>
+        </div>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:{{ $sfs['bg'] }};color:{{ $sfs['color'] }};border-radius:20px;padding:3px 11px;font-size:11.5px;font-weight:700;flex-shrink:0">
+          <span style="width:6px;height:6px;border-radius:50%;background:{{ $sfs['color'] }};display:inline-block"></span>{{ $sfs['label'] }}
+        </span>
+        <a href="{{ route('it.it-request-form.staff-show', $sf->id) }}"
+          style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--accent);border:1.5px solid var(--accent);border-radius:20px;padding:4px 14px;text-decoration:none;flex-shrink:0;background:transparent;transition:background .15s"
+          onmouseover="this.style.background='rgba(2,132,199,.08)'" onmouseout="this.style.background='transparent'">
+          <i class="bi bi-eye"></i> View
+        </a>
+      </div>
+      {{-- Status tracker --}}
+      @php
+        $sfS1 = 'done';
+        $sfS2 = in_array($sf->status, ['New','Pending IT','Pending Validation']) ? 'active' : ($sf->status === 'Draft' ? 'pending' : 'done');
+        $sfS3 = in_array($sf->status, ['Approved','Rejected']) ? ($sf->status === 'Approved' ? 'approved' : 'rejected') : 'pending';
+        if ($sf->status === 'Draft') { $sfS1 = 'pending'; $sfS2 = 'pending'; }
+      @endphp
+      <div style="padding:16px 20px">
+        <div style="display:flex;align-items:flex-start;gap:0">
+          @php $c1 = $sfS1==='done' ? '#16a34a' : '#cbd5e1'; $bg1 = $sfS1==='done' ? 'rgba(22,163,74,.12)' : 'rgba(203,213,225,.2)'; @endphp
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+            <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg1 }};border:2px solid {{ $c1 }};display:flex;align-items:center;justify-content:center;font-size:15px;color:{{ $c1 }}">
+              <i class="bi {{ $sfS1==='done' ? 'bi-check-lg' : 'bi-send-fill' }}"></i>
+            </div>
+            <div style="font-size:10.5px;font-weight:700;color:{{ $c1 }};text-align:center;line-height:1.3">Submitted</div>
+          </div>
+          @php $line1 = $sfS1==='done' ? '#16a34a' : '#e2e8f0'; @endphp
+          <div style="flex:1;height:2px;background:{{ $line1 }};margin-top:16px;border-radius:2px"></div>
+          @php
+            $c2 = $sfS2==='active' ? '#d97706' : ($sfS2==='done' ? '#16a34a' : '#cbd5e1');
+            $bg2 = $sfS2==='active' ? 'rgba(217,119,6,.12)' : ($sfS2==='done' ? 'rgba(22,163,74,.12)' : 'rgba(203,213,225,.2)');
+            $i2  = $sfS2==='active' ? 'bi-hourglass-split' : ($sfS2==='done' ? 'bi-check-lg' : 'bi-hourglass');
+          @endphp
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+            <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg2 }};border:2px solid {{ $c2 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c2 }}">
+              <i class="bi {{ $i2 }}"></i>
+            </div>
+            <div style="font-size:10.5px;font-weight:700;color:{{ $c2 }};text-align:center;line-height:1.3">Under Review</div>
+          </div>
+          @php $line2 = ($sfS3==='approved' || $sfS3==='rejected') ? '#16a34a' : '#e2e8f0'; @endphp
+          <div style="flex:1;height:2px;background:{{ $line2 }};margin-top:16px;border-radius:2px"></div>
+          @php
+            $c3 = $sfS3==='approved' ? '#16a34a' : ($sfS3==='rejected' ? '#dc2626' : '#cbd5e1');
+            $bg3 = $sfS3==='approved' ? 'rgba(22,163,74,.12)' : ($sfS3==='rejected' ? 'rgba(220,38,38,.12)' : 'rgba(203,213,225,.2)');
+            $i3  = $sfS3==='approved' ? 'bi-check-circle-fill' : ($sfS3==='rejected' ? 'bi-x-circle-fill' : 'bi-circle');
+          @endphp
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:80px">
+            <div style="width:34px;height:34px;border-radius:50%;background:{{ $bg3 }};border:2px solid {{ $c3 }};display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ $c3 }}">
+              <i class="bi {{ $i3 }}"></i>
+            </div>
+            <div style="font-size:10.5px;font-weight:700;color:{{ $c3 }};text-align:center;line-height:1.3">Decision</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    @endforeach
+  </div>
+  @else
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:48px 20px;text-align:center;color:var(--muted)">
+    <i class="bi bi-inbox" style="font-size:32px;display:block;margin-bottom:12px;opacity:.35"></i>
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px">No IT requests yet</div>
+    <div style="font-size:13px">When your manager submits an IT request on your behalf, it will appear here.</div>
+  </div>
+  @endif
+</div>
+@else
 {{-- ══════════════════════════════════════════
      NON-ADMIN — EXISTING 2-STEP WIZARD
 ══════════════════════════════════════════ --}}
@@ -2063,6 +2201,7 @@ window.addEventListener('scroll', function() {
   if (staffDropdown.style.display !== 'none') positionDD(staffDropdown,'req_name_search');
 }, true);
 </script>
+@endif {{-- end isStaff else --}}
 @endif
 @endsection
 

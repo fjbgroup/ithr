@@ -61,6 +61,13 @@ class ItRequestFormController extends Controller
             ));
         }
 
+        if ($user->isStaff()) {
+            $staffForms = ItRequestForm::where('user_email', $user->email)
+                ->orderByDesc('created_at')
+                ->get();
+            return view('it.it-request-form.index', compact('user', 'staffForms'));
+        }
+
         $myForms = ItRequestForm::where('submitted_by', Auth::guard('it')->id())
             ->where('cleared_by_submitter', false)
             ->orderByDesc('created_at')
@@ -109,6 +116,9 @@ class ItRequestFormController extends Controller
         if ($user->isAdmin()) {
             return redirect()->route('it.it-request-form')->with('error', 'Admins manage all forms from the inbox.');
         }
+        if ($user->isStaff()) {
+            return redirect()->route('it.dashboard')->with('error', 'Access denied. IT Request Form is only available to management roles.');
+        }
         $drafts = ItRequestForm::where('submitted_by', Auth::guard('it')->id())
             ->where('status', 'Draft')
             ->orderByDesc('updated_at')
@@ -119,6 +129,7 @@ class ItRequestFormController extends Controller
     public function destroyDraft(int $id)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isStaff()) abort(403);
         $form = ItRequestForm::findOrFail($id);
         if ($user->isAdmin() || $form->submitted_by !== $user->id || $form->status !== 'Draft') {
             abort(403);
@@ -142,8 +153,21 @@ class ItRequestFormController extends Controller
         return view('it.it-request-form.show', compact('form', 'user'));
     }
 
+    public function staffShow(int $id)
+    {
+        $user = Auth::guard('it')->user();
+        $form = ItRequestForm::with('submittedBy')->findOrFail($id);
+        if ($user->email !== $form->user_email) abort(403);
+        return view('it.it-request-form.staff-view', compact('form', 'user'));
+    }
+
     public function store(Request $request)
     {
+        $user = Auth::guard('it')->user();
+        if ($user->isStaff()) {
+            abort(403);
+        }
+
         $isDraft = $request->input('action') === 'draft';
         $type    = $request->input('request_type');
 
@@ -256,6 +280,21 @@ class ItRequestFormController extends Controller
                     route('it.it-request-form.hou-show', $form->id)
                 );
             }
+
+            if ($request->filled('user_email')) {
+                $staffUser = \App\Models\IT\User::where('email', $request->user_email)
+                    ->where('is_active', 1)
+                    ->first();
+                if ($staffUser) {
+                    NotificationService::notifyUserWithEmail(
+                        $staffUser->id,
+                        'it_request',
+                        'An IT Request Has Been Submitted On Your Behalf: ' . ($request->subject ?? 'IT Request'),
+                        $user->full_name . ' has submitted an IT request for you. You can track the progress below.',
+                        route('it.it-request-form.staff-show', $form->id)
+                    );
+                }
+            }
         }
 
         $msg = $isDraft ? 'Draft saved successfully.' : 'IT request submitted successfully.';
@@ -268,6 +307,7 @@ class ItRequestFormController extends Controller
     public function edit(int $id)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isStaff()) abort(403);
         $form = ItRequestForm::with('submittedBy')->findOrFail($id);
 
         $isAdmin = $user->isAdmin();
@@ -280,6 +320,7 @@ class ItRequestFormController extends Controller
     public function update(Request $request, int $id)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isStaff()) abort(403);
         $form = ItRequestForm::findOrFail($id);
 
         $isAdmin = $user->isAdmin();

@@ -128,6 +128,7 @@ Route::prefix('it')->name('it.')->group(function () {
             Route::post('/it-request-form',                    [ItRequestFormController::class, 'store'])->name('it-request-form.store');
             Route::get('/it-request-form/{id}/edit',           [ItRequestFormController::class, 'edit'])->name('it-request-form.edit');
             Route::put('/it-request-form/{id}',                [ItRequestFormController::class, 'update'])->name('it-request-form.update');
+            Route::get('/it-request-form/{id}/staff-view',         [ItRequestFormController::class, 'staffShow'])->name('it-request-form.staff-show');
             Route::get('/it-request-form/{id}/hou-view',           [ItRequestFormController::class, 'houShow'])->name('it-request-form.hou-show');
             Route::post('/it-request-form/{id}/hou-approve',       [ItRequestFormController::class, 'houApprove'])->name('it-request-form.hou-approve');
             Route::post('/it-request-form/{id}/hou-reject',        [ItRequestFormController::class, 'houReject'])->name('it-request-form.hou-reject');
