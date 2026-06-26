@@ -15,20 +15,47 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $roleOrder = ['ceo','gm','hou','admin','finance_admin','user'];
+        $roleOrder  = ['ceo','gm','hou','admin','finance_admin','user'];
+        $activeRole = $request->get('role_tab', 'ceo');
+        $search     = trim($request->get('search', ''));
 
-        // Show users who have IT access (it_role is not null)
-        $allUsers = User::whereNotNull('it_role')->orderBy('name')->get();
-
-        $grouped = array_fill_keys($roleOrder, []);
-        foreach ($allUsers as $u) {
-            $key = $u->it_role === 'admin_it' ? 'admin' : $u->it_role;
-            if (array_key_exists($key, $grouped)) $grouped[$key][] = $u;
-        }
-
+        // All IT users — for stats chips and rail counts
+        $allUsers      = User::whereNotNull('it_role')->get();
         $totalUsers    = $allUsers->count();
         $activeCount   = $allUsers->where('is_active', true)->count();
         $inactiveCount = $totalUsers - $activeCount;
+
+        $roleCounts = array_fill_keys($roleOrder, 0);
+        foreach ($allUsers as $u) {
+            $key = $u->it_role === 'admin_it' ? 'admin' : $u->it_role;
+            if (array_key_exists($key, $roleCounts)) $roleCounts[$key]++;
+        }
+
+        // Paginated query for the active role panel
+        $query = User::whereNotNull('it_role');
+        if ($activeRole === 'admin') {
+            $query->whereIn('it_role', ['admin_it', 'admin']);
+        } else {
+            $query->where('it_role', $activeRole);
+        }
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name',      'like', "%$search%")
+                  ->orWhere('staff_no', 'like', "%$search%")
+                  ->orWhere('email',    'like', "%$search%")
+                  ->orWhere('dept_name','like', "%$search%");
+            });
+        }
+        $users = $query->orderBy('name')->paginate(8)->withQueryString();
+
+        if ($request->boolean('partial')) {
+            $html = view('it.users.partials.user-list', [
+                'users'      => $users,
+                'activeRole' => $activeRole,
+                'search'     => $search,
+            ])->render();
+            return response()->json(['html' => $html, 'total' => $users->total()]);
+        }
 
         $resetRequests = PasswordResetRequest::orderBy('requested_at', 'desc')->limit(50)->get();
         $pendingCount  = $resetRequests->where('status', 'pending')->count();
@@ -39,8 +66,9 @@ class UserController extends Controller
         }
 
         return view('it.users.index', compact(
-            'grouped', 'totalUsers', 'activeCount', 'inactiveCount',
-            'resetRequests', 'pendingCount', 'editUser'
+            'roleCounts', 'totalUsers', 'activeCount', 'inactiveCount',
+            'resetRequests', 'pendingCount', 'editUser',
+            'users', 'activeRole', 'search'
         ));
     }
 

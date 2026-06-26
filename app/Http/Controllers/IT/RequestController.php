@@ -39,7 +39,7 @@ class RequestController extends Controller
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'Add Request Approved', 'Your asset add request has been approved.', route('it.inventory.index'));
         ActivityLogService::log('APPROVE_ADD', 'inventory', $item->id, 'Approved add request for: '.$item->description);
 
-        return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Add request approved.');
+        return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'Add request approved.');
     }
 
     public function rejectAdd(int $id)
@@ -51,7 +51,7 @@ class RequestController extends Controller
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'Add Request Rejected', 'Your asset add request has been rejected.', route('it.inventory.index'));
         ActivityLogService::log('REJECT_ADD', 'inventory', 0, 'Rejected add request for: '.$req->description);
 
-        return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Add request rejected.');
+        return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'Add request rejected.');
     }
 
     // â”€â”€ Edit requests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -81,11 +81,11 @@ class RequestController extends Controller
                 'nbv_at'           => $req->nbv_at,
                 'notes'            => $req->notes,
             ]);
-            $route = route('inventory.index', ['view' => 'pending_requests']);
+            $route = route('it.inventory.index', ['view' => 'pending_requests']);
             $logType = 'inventory';
             $logId = $item->id;
         } else {
-            $item = \App\Models\NonItAsset::findOrFail($req->asset_id);
+            $item = \App\Models\IT\NonItAsset::findOrFail($req->asset_id);
             $item->update([
                 'asset_number'     => $req->asset_number,
                 'asset_class'      => $req->asset_class,
@@ -99,7 +99,7 @@ class RequestController extends Controller
                 'nbv_at'           => $req->nbv_at,
                 'notes'            => $req->notes,
             ]);
-            $route = route('it.non-it.index');
+            $route = route('it.inventory.index', ['view' => 'pending_requests']);
             $logType = 'non_it_asset';
             $logId = $item->id;
         }
@@ -116,9 +116,7 @@ class RequestController extends Controller
         $req = EditAssetRequest::findOrFail($id);
         if ($req->status !== 'Pending') return back()->with('error', 'Request is no longer pending.');
 
-        $route = $req->asset_type === 'it'
-            ? route('inventory.index', ['view' => 'pending_requests'])
-            : route('it.non-it.index');
+        $route = route('it.inventory.index', ['view' => 'pending_requests']);
 
         $req->update(['status' => 'Rejected', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'Edit Request Rejected', 'Your asset edit request has been rejected.', $route);
@@ -143,7 +141,7 @@ class RequestController extends Controller
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'Delete Request Approved', 'Your asset delete request has been approved.', route('it.inventory.index'));
         ActivityLogService::log('APPROVE_DELETE', 'inventory', (int)$req->inventory_id, 'Approved delete request for: '.$req->asset_description);
 
-        return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request approved.');
+        return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request approved.');
     }
 
     public function rejectDelete(int $id)
@@ -155,7 +153,7 @@ class RequestController extends Controller
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'Delete Request Rejected', 'Your asset delete request has been rejected.', route('it.inventory.index'));
         ActivityLogService::log('REJECT_DELETE', 'inventory', (int)$req->inventory_id, 'Rejected delete request for: '.$req->asset_description);
 
-        return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request rejected.');
+        return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request rejected.');
     }
 
     // â”€â”€ E-Waste requests â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -170,7 +168,7 @@ class RequestController extends Controller
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'E-Waste Request Approved', 'Your e-waste request has been approved.', route('it.inventory.index'));
         ActivityLogService::log('APPROVE_EWASTE', 'ewaste', (int)$req->inventory_id, 'Approved e-waste request: '.$req->description);
 
-        return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'E-waste request approved.');
+        return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'E-waste request approved.');
     }
 
     public function rejectEwaste(int $id)
@@ -182,7 +180,7 @@ class RequestController extends Controller
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_rejected', 'E-Waste Request Rejected', 'Your e-waste request has been rejected.', route('it.inventory.index'));
         ActivityLogService::log('REJECT_EWASTE', 'ewaste', (int)$req->inventory_id, 'Rejected e-waste request: '.$req->description);
 
-        return redirect()->route('inventory.index', ['view' => 'pending_requests'])->with('success', 'E-waste request rejected.');
+        return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'E-waste request rejected.');
     }
 
     // â”€â”€ Retract own pending requests (staff) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -192,7 +190,7 @@ class RequestController extends Controller
         $req = AddAssetRequest::where('id', $id)->where('requested_by', Auth::guard('it')->id())->where('status', 'Pending')->firstOrFail();
         ActivityLogService::log('RETRACT_ADD', 'inventory', 0, 'Retracted add request: '.$req->description);
         $req->delete();
-        return redirect()->route('inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
+        return redirect()->route('it.inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
     }
 
     public function retractEwaste(int $id)
@@ -200,7 +198,7 @@ class RequestController extends Controller
         $req = EwasteRequest::where('id', $id)->where('requested_by', Auth::guard('it')->id())->where('status', 'Pending')->firstOrFail();
         ActivityLogService::log('RETRACT_EWASTE', 'ewaste', 0, 'Retracted e-waste request: '.$req->description);
         $req->delete();
-        return redirect()->route('inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
+        return redirect()->route('it.inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
     }
 
     public function retractDelete(int $id)
@@ -208,7 +206,7 @@ class RequestController extends Controller
         $req = DeleteRequest::where('id', $id)->where('requested_by', Auth::guard('it')->id())->where('status', 'Pending')->firstOrFail();
         ActivityLogService::log('RETRACT_DELETE', 'inventory', 0, 'Retracted delete request');
         $req->delete();
-        return redirect()->route('inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
+        return redirect()->route('it.inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
     }
 }
 

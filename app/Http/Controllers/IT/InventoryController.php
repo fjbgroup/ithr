@@ -83,7 +83,7 @@ class InventoryController extends Controller
             $pendingAdds    = AddAssetRequest::where('status', 'Pending')->with('requester')->orderByDesc('created_at')->get();
             $pendingEw      = EwasteRequest::where('status', 'Pending')->with('requester')->orderByDesc('created_at')->get();
             $pendingDeletes = DeleteRequest::where('status', 'Pending')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
-            $pendingEdits   = EditAssetRequest::where('status', 'Pending')->where('asset_type', 'it')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
+            $pendingEdits   = EditAssetRequest::where('status', 'Pending')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
 
             $pendingAddCount  = $pendingAdds->count();
             $pendingEwCount   = $pendingEw->count();
@@ -105,7 +105,7 @@ class InventoryController extends Controller
             $myAdds    = AddAssetRequest::where('requested_by', $user->id)->orderByDesc('created_at')->get();
             $myEw      = EwasteRequest::where('requested_by', $user->id)->orderByDesc('created_at')->get();
             $myDeletes = DeleteRequest::where('requested_by', $user->id)->with('inventoryItem')->orderByDesc('created_at')->get();
-            $myEdits   = EditAssetRequest::where('requested_by', $user->id)->where('asset_type', 'it')->with('inventoryItem')->orderByDesc('created_at')->get();
+            $myEdits   = EditAssetRequest::where('requested_by', $user->id)->with('inventoryItem')->orderByDesc('created_at')->get();
             $myDisposals = EwasteItem::where('created_by', $user->id)->orderByDesc('created_at')->get();
 
             $myPending = $myAdds->where('status', 'Pending')->count()
