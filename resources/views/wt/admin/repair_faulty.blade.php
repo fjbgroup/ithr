@@ -647,7 +647,6 @@
                 <th class="px-2 py-1 text-center">Model</th>
                 <th class="px-2 py-1 text-center">Ownership Type</th>
                 <th class="px-2 py-1 text-center">Department</th>
-                <th class="px-2 py-1 text-center">Location</th>
                 <th class="px-2 py-1 text-center">Date Received</th>
                 <th class="px-2 py-1 text-center">Reporter</th>
                 <th class="px-2 py-1 text-center">Issue</th>
@@ -686,7 +685,6 @@
                     {{ in_array($ownershipType, ['INDIVIDUAL', 'SHARED', 'SPARE'], true) ? $ownershipType : '-' }}
                 </td>
                 <td>{{ $record->department_name ?? '-' }}</td>
-                <td>{{ $record->location ?? $record->walkieTalkie->location ?? '-' }}</td>
                 <td>{{ $record->received_date ?? '-' }}</td>
                 <td>
                     @if($record->request_source === 'user')
@@ -1606,101 +1604,8 @@ html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[dat
 @endif
 
 @include('wt.admin.partials.inventory-tools-table-skin')
-<style id="repair-faulty-compact-final-override">
-    body .content-surface .maintenance-page-shell .clean-admin-table-shell,
-    body .content-surface .maintenance-page-shell .clean-admin-table-scroll {
-        overflow: hidden !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: auto !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(1),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(2),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(3),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(4),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(5),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(6),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(7),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(8),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(10),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(11),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(14),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
-        white-space: nowrap !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(1) { width: 7% !important; }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(2) { width: 10% !important; }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(3) { width: 8% !important; }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(4) { width: 8% !important; }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(5) { width: 8% !important; }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(6) {
-        width: 8% !important;
-        min-width: 100px !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(10),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(11),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(14),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
-        width: 6% !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(9),
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(13) {
-        width: 10% !important;
-        max-width: 220px !important;
-        min-width: 0 !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
-        width: 10% !important;
-        min-width: 70px !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable thead th {
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable thead th {
-        height: 28px !important;
-        padding: 4px 6px !important;
-        text-align: center !important;
-        font-size: 9px !important;
-        line-height: 1.05 !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable tbody td {
-        height: 26px !important;
-        padding: 3px 6px !important;
-        text-align: left !important;
-        font-size: 10px !important;
-        line-height: 1.1 !important;
-        white-space: nowrap !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable tbody td.maintenance-action-col,
-    body .content-surface .maintenance-page-shell #maintenanceTable tbody td:has(.clean-admin-pill) {
-        text-align: center !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions {
-        gap: 4px !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn {
-        width: 54px !important;
-        min-width: 54px !important;
-        max-width: 54px !important;
-        height: 22px !important;
-        min-height: 22px !important;
-        padding: 0 5px !important;
-        border-radius: 5px !important;
-        font-size: 8px !important;
-        gap: 3px !important;
-    }
-    body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn:not(.wt-btn-danger) { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
-    body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn-danger { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
-</style>
 
 <script>
-// ESC key to close
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeEditModal();
@@ -1708,4 +1613,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
+
+@include('wt.admin.partials.wt-unified-styles')
 @endsection

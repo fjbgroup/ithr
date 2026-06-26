@@ -283,6 +283,29 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="form-section-title form-group-full">Warranty Information</div>
+
+                <div class="form-group">
+                    <label class="form-label">WT Warranty Start Date</label>
+                    <input type="date" name="wt_warranty_start_date" class="form-input" value="{{ old('wt_warranty_start_date', $defaults['wt_warranty_start_date'] ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">WT Warranty End Date</label>
+                    <input type="date" name="wt_warranty_end_date" class="form-input" value="{{ old('wt_warranty_end_date', $defaults['wt_warranty_end_date'] ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Battery Warranty Start Date</label>
+                    <input type="date" name="battery_warranty_start_date" class="form-input" value="{{ old('battery_warranty_start_date', $defaults['battery_warranty_start_date'] ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Battery Warranty End Date</label>
+                    <input type="date" name="battery_warranty_end_date" class="form-input" value="{{ old('battery_warranty_end_date', $defaults['battery_warranty_end_date'] ?? '') }}">
+                </div>
+
                 <div class="form-group form-group-full">
                     <label class="form-label">Remark</label>
                     <textarea name="remark" class="form-input form-textarea" placeholder="Additional notes...">{{ old('remark', $defaults['remark'] ?? '') }}</textarea>
@@ -420,6 +443,23 @@
 
     .form-group-full {
         grid-column: 1 / -1;
+    }
+
+    .form-section-title {
+        margin-top: 4px;
+        padding-top: 18px;
+        border-top: 1px solid #e2e8f0;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+
+    .dark .form-section-title {
+        border-top-color: #334155;
+        color: #cbd5e1;
     }
 
     .form-label {

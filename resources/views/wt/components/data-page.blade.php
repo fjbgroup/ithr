@@ -18,7 +18,7 @@
             gap: 18px !important;
             min-height: 96px !important;
             padding: 18px 24px !important;
-            border-left: 7px solid #f2c48d !important;
+            border-left: 0 !important;
             border-radius: 13px !important;
             background: linear-gradient(90deg, rgba(31, 41, 55, 0.98), rgba(30, 41, 59, 0.98)) !important;
         }
@@ -89,4 +89,3 @@
 
     {{ $slot }}
 </section>
-

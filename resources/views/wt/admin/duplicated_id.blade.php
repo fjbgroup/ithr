@@ -548,14 +548,13 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
         <div id="duplicateTableScroll" class="duplicate-table-scroll">
             <table id="duplicateTable" class="table-auto w-full">
                 <colgroup>
-                    <col style="width:70px">
-                    <col style="width:86px">
-                    <col style="width:112px">
-                    <col style="width:72px">
-                    <col style="width:76px">
-                    <col style="width:96px">
-                    <col style="width:54px">
-                    <col style="width:160px">
+                    <col style="width:9%">
+                    <col style="width:10%">
+                    <col style="width:15%">
+                    <col style="width:12%">
+                    <col style="width:15%">
+                    <col style="width:8%">
+                    <col style="width:31%">
                 </colgroup>
                 <thead>
                     <tr>
@@ -563,8 +562,7 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         <th>Status</th>
                         <th class="sortable" data-col="2" data-type="text">Serial No. <i class="dup-sort-icon">↕</i></th>
                         <th class="sortable" data-col="3" data-type="text">Model <i class="dup-sort-icon">↕</i></th>
-                        <th>Location</th>
-                        <th class="sortable" data-col="5" data-type="num">Change ID To <i class="dup-sort-icon">&#8597;</i></th>
+                        <th class="sortable" data-col="4" data-type="num">Change ID To <i class="dup-sort-icon">&#8597;</i></th>
                         <th>Done</th>
                         <th>Action</th>
                     </tr>
@@ -592,7 +590,6 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
                         </td>
                         <td>{{ $r->serial_number ?: '-' }}</td>
                         <td>{{ $r->model ?: '-' }}</td>
-                        <td>{{ $r->location ?: '-' }}</td>
                         <td>
                             @if($r->need_to_change_id)
                                 <span class="dup-change-id-val">{{ $r->need_to_change_id }}</span>
@@ -631,7 +628,13 @@ body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb { backgro
             </table>
         </div>
         <div class="duplicate-table-footer">
-            <div class="duplicate-table-info">Showing <span id="duplicateTotalItems">0</span> records</div>
+            <div class="duplicate-table-info" id="duplicateTableInfo">
+                @if($totalRecords > 0)
+                    Showing <span id="duplicateTotalItems">{{ $totalRecords }}</span> {{ \Illuminate\Support\Str::plural('record', $totalRecords) }}
+                @else
+                    No records found
+                @endif
+            </div>
             <div class="duplicate-table-pagination" id="dupPaginationBar"></div>
         </div>
     </div>
@@ -887,6 +890,7 @@ $(document).ready(function () {
     const doneFilter   = document.getElementById('duplicateDoneFilter');
     const resetBtn     = document.getElementById('duplicateResetFilters');
     const allRows      = Array.from(document.querySelectorAll('#duplicateTable tbody .duplicate-row'));
+    const infoEl       = document.getElementById('duplicateTableInfo');
     const totalEl      = document.getElementById('duplicateTotalItems');
     const paginationEl = document.getElementById('dupPaginationBar');
     const statVisible  = document.getElementById('statVisible');
@@ -970,7 +974,13 @@ $(document).ready(function () {
         const pending = filtered.filter(r => r.dataset.done === 'NO').length;
         const done    = filtered.filter(r => r.dataset.done === 'YES').length;
 
-        if (totalEl)   totalEl.textContent  = filtered.length;
+        if (infoEl) {
+            infoEl.textContent = filtered.length
+                ? `Showing ${filtered.length} ${filtered.length === 1 ? 'record' : 'records'}`
+                : 'No records found';
+        } else if (totalEl) {
+            totalEl.textContent = filtered.length;
+        }
         if (statVisible) statVisible.textContent = filtered.length;
         if (statPending) statPending.textContent  = pending;
         if (statDone)    statDone.textContent     = done;
@@ -1656,80 +1666,5 @@ body .content-surface .duplicate-table-shell #duplicateTable .dup-actions form {
 }
 </style>
 @include('wt.admin.partials.inventory-tools-unified-ui')
-<style id="duplicate-compact-final-override">
-    body .content-surface .duplicate-table-shell,
-    body .content-surface .duplicate-table-scroll {
-        overflow: hidden !important;
-    }
-    body .content-surface #duplicateTable {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: auto !important;
-    }
-    body .content-surface #duplicateTable :is(th, td):not(:last-child) {
-        white-space: nowrap !important;
-    }
-    body .content-surface #duplicateTable :is(th, td):last-child {
-        width: 12% !important;
-        min-width: 70px !important;
-        white-space: nowrap !important;
-    }
-    body .content-surface #duplicateTable :is(th, td):nth-child(1) { width: 10% !important; }
-    body .content-surface #duplicateTable :is(th, td):nth-child(2) { width: 12% !important; }
-    body .content-surface #duplicateTable :is(th, td):nth-child(3) { width: 18% !important; }
-    body .content-surface #duplicateTable :is(th, td):nth-child(4) { width: 12% !important; }
-    body .content-surface #duplicateTable :is(th, td):nth-child(5) {
-        width: 12% !important;
-        min-width: 100px !important;
-    }
-    body .content-surface #duplicateTable :is(th, td):nth-child(6) {
-        width: 16% !important;
-        max-width: 220px !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
-    }
-    body .content-surface #duplicateTable :is(th, td):nth-child(7) { width: 8% !important; }
-    body .content-surface #duplicateTable thead th {
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-    }
-    body .content-surface #duplicateTable thead th {
-        height: 28px !important;
-        padding: 4px 6px !important;
-        text-align: center !important;
-        font-size: 9px !important;
-        line-height: 1.05 !important;
-    }
-    body .content-surface #duplicateTable tbody td {
-        height: 26px !important;
-        padding: 3px 6px !important;
-        text-align: left !important;
-        font-size: 10px !important;
-        line-height: 1.1 !important;
-        white-space: nowrap !important;
-    }
-    body .content-surface #duplicateTable tbody td:last-child,
-    body .content-surface #duplicateTable tbody td:has(.dup-status-badge),
-    body .content-surface #duplicateTable tbody td:has(.dup-done-badge) {
-        text-align: center !important;
-    }
-    body .content-surface #duplicateTable .dup-actions {
-        gap: 4px !important;
-    }
-    body .content-surface #duplicateTable .dup-actions .btn {
-        width: 54px !important;
-        min-width: 54px !important;
-        max-width: 54px !important;
-        height: 22px !important;
-        min-height: 22px !important;
-        padding: 0 5px !important;
-        border-radius: 5px !important;
-        font-size: 8px !important;
-        gap: 3px !important;
-    }
-    body .content-surface #duplicateTable .dup-actions .btn-info { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
-    body .content-surface #duplicateTable .dup-actions .btn-primary { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
-    body .content-surface #duplicateTable .dup-actions .btn-danger { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
-</style>
+@include('wt.admin.partials.wt-unified-styles')
 @endsection

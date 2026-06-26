@@ -83,6 +83,18 @@
 .sb-tooltip{position:fixed;transform:translateY(-50%);background:#1e293b;color:#fff;padding:.4rem .65rem;border-radius:7px;font-size:.75rem;font-weight:600;white-space:nowrap;z-index:2000;pointer-events:none;opacity:0;transition:opacity .12s ease;box-shadow:0 6px 16px rgba(0,0,0,.22)}
 .sb-tooltip.show{opacity:1}
 .sb-tooltip::before{content:'';position:absolute;right:100%;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:#1e293b}
+.global-walkie-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden}
+.global-walkie-summary-item{display:grid;grid-template-columns:minmax(120px,38%) minmax(0,1fr);align-items:center;min-width:0;padding:11px 14px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.global-walkie-summary-item:nth-child(even){border-right:0}
+.global-walkie-summary-label,.global-walkie-warranty-label{color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.12em;line-height:1.25;text-transform:uppercase}
+.global-walkie-summary-value,.global-walkie-warranty-value{min-width:0;color:var(--text);font-size:12px;font-weight:900;line-height:1.35;overflow-wrap:anywhere}
+.global-walkie-muted{color:var(--muted)!important;font-weight:800!important}
+.global-walkie-warranty-section{grid-column:1/-1;padding:14px;background:var(--surface)}
+.global-walkie-section-title{margin:0 0 10px;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.16em;line-height:1.25;text-transform:uppercase}
+.global-walkie-warranty-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.global-walkie-warranty-item{display:grid;grid-template-columns:minmax(112px,34%) minmax(0,1fr);align-items:center;min-width:0;padding:11px 14px;border-right:1px solid var(--border);background:var(--surface)}
+.global-walkie-warranty-item:last-child{border-right:0}
+@media (max-width:640px){.global-walkie-summary,.global-walkie-warranty-grid{grid-template-columns:1fr}.global-walkie-summary-item,.global-walkie-warranty-item{grid-template-columns:1fr;gap:4px;padding:10px 12px;border-right:0}.global-walkie-summary-item:nth-child(even){border-right:0}.global-walkie-warranty-item{border-bottom:1px solid var(--border)}.global-walkie-warranty-item:last-child{border-bottom:0}}
 </style>
 @stack('styles')
 @stack('final_styles')
@@ -128,19 +140,19 @@
 @endphp
 
 @php
-    $inventoryNavOnInventory = request()->routeIs('wt.admin.walkies.index') || request()->routeIs('wt.admin.walkies.create');
-    $inventoryNavOnMaintenance = request()->routeIs('wt.admin.maintenance.index') || request()->routeIs('wt.admin.maintenance.create');
     $inventoryNavOnDuplicate = request()->routeIs('wt.admin.walkies.duplicateIds') || request()->routeIs('wt.admin.walkies.create.duplicate');
     $inventoryNavOnSpecialUse = request()->routeIs('wt.admin.walkies.specialUse') || request()->routeIs('wt.admin.walkies.create.specialUse');
+    $inventoryNavOnMaintenance = request()->routeIs('wt.admin.maintenance.*') || request()->routeIs('wt.admin.walkies.repairFaulty');
+    $inventoryNavOnInventory = request()->routeIs('wt.admin.walkies.*') && !($inventoryNavOnDuplicate || $inventoryNavOnSpecialUse || $inventoryNavOnMaintenance || request()->routeIs('wt.admin.walkies.myInventory'));
     $inventoryManagementOpen = $inventoryNavOnInventory || $inventoryNavOnMaintenance || $inventoryNavOnDuplicate || $inventoryNavOnSpecialUse;
-    $approvalNavOnPending = request()->routeIs('wt.admin.requests.index');
+    $approvalNavOnPending = request()->routeIs('wt.admin.requests.index') || request()->routeIs('wt.admin.requests.approve') || request()->routeIs('wt.admin.requests.reject') || request()->routeIs('wt.admin.requests.forwardToIT') || request()->routeIs('wt.admin.requests.confirmReturn') || request()->routeIs('wt.admin.damageReports.*');
     $approvalNavOnHistory = request()->routeIs('wt.admin.requests.history');
     $approvalManagementOpen = $approvalNavOnPending || $approvalNavOnHistory;
     $faultyNavOnUserReports = request()->routeIs('wt.admin.faultyReports.*');
     $faultyNavOnThreeMonths = request()->routeIs('wt.admin.reports.faulty3Months');
     $faultyManagementOpen = $faultyNavOnUserReports || $faultyNavOnThreeMonths;
-    $requestCreateOpen = request()->routeIs('wt.admin.requests.create') || request()->routeIs('wt.admin.requests.create.*');
-    $systemControlOpen = request()->routeIs('wt.admin.users.*') || request()->routeIs('wt.admin.activity.*') || request()->routeIs('wt.admin.masterData.*');
+    $requestCreateOpen = request()->routeIs('wt.admin.requests.create') || request()->routeIs('wt.admin.requests.create.*') || request()->routeIs('wt.admin.requests.store') || request()->routeIs('wt.admin.requests.store.*') || request()->routeIs('wt.admin.requests.staffSearch');
+    $systemControlOpen = request()->routeIs('wt.admin.users.*') || request()->routeIs('wt.admin.passwordResetRequests.*') || request()->routeIs('wt.admin.activity.*') || request()->routeIs('wt.admin.masterData.*') || request()->routeIs('wt.admin.database.backup') || request()->routeIs('wt.admin.it.index');
 @endphp
 
 {{-- Mobile overlay --}}
@@ -173,7 +185,7 @@
 
     @if($isAdminItView)
     {{-- Inventory Tools --}}
-    <div class="dropdown-wrapper">
+    <div class="dropdown-wrapper {{ $inventoryManagementOpen ? 'open' : '' }}">
       <button type="button" class="dropdown-trigger has-info {{ $inventoryManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fas fa-layer-group" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Inventory Tools</span>
@@ -197,7 +209,7 @@
     </div>
 
     {{-- Approvals --}}
-    <div class="dropdown-wrapper">
+    <div class="dropdown-wrapper {{ $approvalManagementOpen ? 'open' : '' }}">
       <button type="button" class="dropdown-trigger has-info {{ $approvalManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fas fa-inbox" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Approvals
@@ -222,7 +234,7 @@
     </div>
 
     {{-- Faulty Reports --}}
-    <div class="dropdown-wrapper">
+    <div class="dropdown-wrapper {{ $faultyManagementOpen ? 'open' : '' }}">
       <button type="button" class="dropdown-trigger has-info {{ $faultyManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
         <i class="fa-solid fa-triangle-exclamation" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Faulty Reports</span>
@@ -257,7 +269,7 @@
     </a>
 
     {{-- Request Walkie Talkie --}}
-    <div class="dropdown-wrapper">
+    <div class="dropdown-wrapper {{ $requestCreateOpen ? 'open' : '' }}">
       <button type="button" class="dropdown-trigger has-info {{ $requestCreateOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Request Walkie Talkie">
         <i class="fas fa-plus-circle" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Request Walkie Talkie</span>
@@ -296,7 +308,7 @@
     {{-- Executive Tools (IT only) --}}
     @if($isAdminItView)
     <div class="nav-section-label">Executive Tools (IT)</div>
-    <div class="dropdown-wrapper">
+    <div class="dropdown-wrapper {{ $systemControlOpen ? 'open' : '' }}">
       <button type="button" class="dropdown-trigger has-info {{ $systemControlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="System Control">
         <i class="fas fa-sliders-h" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">System Control</span>
@@ -411,9 +423,496 @@
   </div>
 
   <div class="page-body">
-    <div class="content-surface">
+      <div class="content-surface">
       @include('wt.partials.flash-alerts')
       @yield('content')
+      @include('components.ui.standardizer')
+      <style>
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) {
+          width: 100% !important;
+          min-width: 100% !important;
+          table-layout: fixed !important;
+          border-collapse: collapse !important;
+          margin: 0 !important;
+          background: #ffffff !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) thead th {
+          height: 36px !important;
+          padding: 9px 10px !important;
+          background: #eef3f8 !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 0 !important;
+          color: #1e293b !important;
+          font-size: 12px !important;
+          font-weight: 900 !important;
+          letter-spacing: .03em !important;
+          line-height: 1.2 !important;
+          text-align: center !important;
+          text-transform: uppercase !important;
+          vertical-align: middle !important;
+          white-space: nowrap !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) tbody td {
+          height: 42px !important;
+          max-width: 1px !important;
+          padding: 8px 10px !important;
+          background: #ffffff !important;
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 0 !important;
+          color: #0f172a !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          line-height: 1.25 !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          vertical-align: middle !important;
+          white-space: nowrap !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) tbody tr:hover td {
+          background: #f8fafc !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):nth-child(1) {
+          width: 12% !important;
+          text-align: center !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):nth-child(2) {
+          width: 12% !important;
+          text-align: center !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):nth-child(3) {
+          width: 14% !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):nth-child(4) {
+          width: 14% !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):last-child {
+          width: 15% !important;
+          text-align: center !important;
+        }
+        body .content-surface :is(.clean-admin-table-shell, .inventory-table-shell, .special-table-shell, .duplicate-table-shell, #mainTableContainer) {
+          overflow: hidden !important;
+          border: 1px solid #cbd5e1 !important;
+          border-radius: 8px !important;
+          background: #ffffff !important;
+        }
+        body .content-surface :is(.clean-admin-table-scroll, #inventoryTableScroll) {
+          overflow-x: hidden !important;
+          background: #ffffff !important;
+        }
+        body .content-surface :is(.clean-admin-pill, .maintenance-status-pill, .maintenance-done-pill) {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          min-height: 28px !important;
+          padding: 0 12px !important;
+          border-radius: 7px !important;
+          font-size: 11px !important;
+          font-weight: 900 !important;
+          letter-spacing: .02em !important;
+          line-height: 1 !important;
+          text-transform: uppercase !important;
+        }
+        html.dark body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table),
+        html[data-theme="dark"] body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) {
+          background: #111827 !important;
+        }
+        html.dark body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) thead th,
+        html[data-theme="dark"] body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) thead th {
+          background: #1f2937 !important;
+          border-color: #2f3b4f !important;
+          color: #e5edf7 !important;
+        }
+        html.dark body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) tbody td,
+        html[data-theme="dark"] body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) tbody td {
+          background: #111827 !important;
+          border-color: #263244 !important;
+          color: #e5edf7 !important;
+        }
+        html.dark body .content-surface :is(.clean-admin-table-shell, .inventory-table-shell, .special-table-shell, .duplicate-table-shell, #mainTableContainer),
+        html[data-theme="dark"] body .content-surface :is(.clean-admin-table-shell, .inventory-table-shell, .special-table-shell, .duplicate-table-shell, #mainTableContainer),
+        html.dark body .content-surface :is(.clean-admin-table-scroll, #inventoryTableScroll),
+        html[data-theme="dark"] body .content-surface :is(.clean-admin-table-scroll, #inventoryTableScroll) {
+          background: #111827 !important;
+          border-color: #263244 !important;
+        }
+        body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+        body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll {
+          max-width: 100% !important;
+          overflow-x: hidden !important;
+          overflow-y: hidden !important;
+          padding-bottom: 0 !important;
+          cursor: default !important;
+          scrollbar-width: none !important;
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+        }
+        body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table {
+          width: 100% !important;
+          min-width: 100% !important;
+          max-width: 100% !important;
+          table-layout: fixed !important;
+          margin: 0 !important;
+          background: #ffffff !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
+          height: 36px !important;
+          padding: 9px 10px !important;
+          background: #eef3f8 !important;
+          border: 1px solid #cbd5e1 !important;
+          color: #1e293b !important;
+          font-size: 12px !important;
+          font-weight: 900 !important;
+          letter-spacing: .03em !important;
+          line-height: 1.2 !important;
+          text-align: center !important;
+          text-transform: uppercase !important;
+          vertical-align: middle !important;
+          white-space: nowrap !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table .maintenance-action-col,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+          height: 42px !important;
+          min-width: 0 !important;
+          max-width: none !important;
+          padding: 8px 10px !important;
+          background: #ffffff !important;
+          border: 1px solid #e2e8f0 !important;
+          color: #0f172a !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          line-height: 1.25 !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          vertical-align: middle !important;
+          white-space: nowrap !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(1),
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(1) { width: 12% !important; text-align: center !important; }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(2),
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(2) { width: 12% !important; text-align: center !important; }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(3),
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(3) { width: 16% !important; text-align: left !important; }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(4),
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(4) { width: 16% !important; text-align: left !important; }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(5),
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(5) { width: 29% !important; text-align: left !important; }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(6),
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(6),
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table .maintenance-action-col,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+          width: 15% !important;
+          min-width: 0 !important;
+          max-width: none !important;
+          text-align: center !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable .maintenance-action-stack,
+        body .content-surface .maintenance-page-shell #maintenanceTable .maintenance-action-stack,
+        body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 4px !important;
+          width: auto !important;
+          max-width: 100% !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable .maintenance-action-stack .wt-btn,
+        body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn {
+          width: 28px !important;
+          min-width: 28px !important;
+          max-width: 28px !important;
+          height: 28px !important;
+          min-height: 28px !important;
+          padding: 0 !important;
+          border-radius: 6px !important;
+          font-size: 0 !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable .maintenance-action-stack .wt-btn i,
+        body .content-surface .maintenance-page-shell #maintenanceTable .clean-admin-actions .wt-btn i {
+          font-size: 12px !important;
+          margin: 0 !important;
+        }
+        html.dark body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+        html.dark body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+        html.dark body .content-surface .maintenance-page-shell #maintTable.clean-admin-table,
+        html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table,
+        html[data-theme="dark"] body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell,
+        html[data-theme="dark"] body .content-surface .maintenance-page-shell #mainTableContainer .clean-admin-table-scroll,
+        html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintTable.clean-admin-table,
+        html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table {
+          background: #111827 !important;
+          border-color: #263244 !important;
+        }
+        html.dark body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td,
+        html.dark body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
+        html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td,
+        html[data-theme="dark"] body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td {
+          background: #111827 !important;
+          border-color: #263244 !important;
+          color: #e5edf7 !important;
+        }
+        body .content-surface .page-header-block,
+        body .content-surface .inventory-page-header,
+        body .content-surface .maintenance-page-shell > .page-header-block,
+        body .content-surface .unused-page-shell > .page-header-block,
+        body .content-surface .special-page-shell > .page-header-block,
+        body .content-surface .duplicate-hero .page-header-block,
+        body .content-surface .adminit-section-header {
+          background: transparent !important;
+          background-color: transparent !important;
+          border: 0 !important;
+          border-left: 0 !important;
+          box-shadow: none !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(
+          .inventory-action-buttons,
+          .maintenance-action-stack,
+          .clean-admin-actions,
+          .dup-actions,
+          .special-action-buttons
+        ) {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 6px !important;
+          width: auto !important;
+          max-width: 100% !important;
+          margin: 0 !important;
+          white-space: nowrap !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(
+          .inventory-action-buttons form,
+          .maintenance-action-stack form,
+          .clean-admin-actions form,
+          .dup-actions form,
+          .special-action-buttons form
+        ) {
+          display: inline-flex !important;
+          align-items: center !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          line-height: 1 !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(
+          .inventory-action-buttons .btn,
+          .inventory-action-buttons .wt-btn,
+          .maintenance-action-stack .btn,
+          .maintenance-action-stack .wt-btn,
+          .clean-admin-actions .btn,
+          .clean-admin-actions .wt-btn,
+          .dup-actions .btn,
+          .dup-actions .wt-btn,
+          .special-action-buttons .btn,
+          .special-action-buttons .wt-btn
+        ) {
+          position: static !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 5px !important;
+          width: 66px !important;
+          min-width: 66px !important;
+          max-width: 66px !important;
+          height: 28px !important;
+          min-height: 28px !important;
+          padding: 0 7px !important;
+          border: 1px solid transparent !important;
+          border-radius: 7px !important;
+          box-shadow: none !important;
+          color: #ffffff !important;
+          font-size: 10px !important;
+          font-weight: 900 !important;
+          letter-spacing: 0 !important;
+          line-height: 1 !important;
+          text-align: center !important;
+          text-decoration: none !important;
+          text-transform: uppercase !important;
+          vertical-align: middle !important;
+          white-space: nowrap !important;
+          overflow: hidden !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(
+          .inventory-action-buttons .btn i,
+          .inventory-action-buttons .wt-btn i,
+          .maintenance-action-stack .btn i,
+          .maintenance-action-stack .wt-btn i,
+          .clean-admin-actions .btn i,
+          .clean-admin-actions .wt-btn i,
+          .dup-actions .btn i,
+          .dup-actions .wt-btn i,
+          .special-action-buttons .btn i,
+          .special-action-buttons .wt-btn i
+        ) {
+          position: static !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 12px !important;
+          min-width: 12px !important;
+          height: 12px !important;
+          margin: 0 !important;
+          font-size: 11px !important;
+          line-height: 1 !important;
+          transform: none !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(
+          .inventory-action-buttons .btn span,
+          .inventory-action-buttons .wt-btn span,
+          .maintenance-action-stack .btn span,
+          .maintenance-action-stack .wt-btn span,
+          .clean-admin-actions .btn span,
+          .clean-admin-actions .wt-btn span,
+          .dup-actions .btn span,
+          .dup-actions .wt-btn span,
+          .special-action-buttons .btn span,
+          .special-action-buttons .wt-btn span
+        ) {
+          display: inline-block !important;
+          min-width: 0 !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          line-height: 1 !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(.btn-info, .maintenance-action-view) {
+          border-color: #0284c7 !important;
+          background: #0284c7 !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(.btn-primary, .maintenance-action-edit) {
+          border-color: #2563eb !important;
+          background: #2563eb !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(.btn-danger, .wt-btn-danger, .maintenance-action-delete) {
+          border-color: #dc2626 !important;
+          background: #dc2626 !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(.btn-success) {
+          border-color: #16a34a !important;
+          background: #16a34a !important;
+        }
+        body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable) :is(.btn-secondary, .btn:disabled, .wt-btn:disabled) {
+          border-color: #94a3b8 !important;
+          background: #94a3b8 !important;
+          color: #ffffff !important;
+          opacity: .75 !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(1) {
+          width: 9% !important;
+          text-align: center !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(2) {
+          width: 10% !important;
+          text-align: center !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(3) {
+          width: 15% !important;
+          text-align: left !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(4) {
+          width: 12% !important;
+          text-align: left !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(5) {
+          width: 31% !important;
+          text-align: left !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(6) {
+          width: 8% !important;
+          text-align: center !important;
+        }
+        body .content-surface #specialTable :is(th, td):nth-child(7) {
+          width: 15% !important;
+          text-align: center !important;
+        }
+        body .content-surface :is(
+          .page-header-block,
+          .inventory-page-header,
+          .adminit-section-header,
+          .wt-data-page-header,
+          .clean-admin-filter,
+          .inventory-table-shell,
+          .clean-admin-table-shell,
+          .duplicate-table-shell,
+          .special-table-shell,
+          #mainTableContainer,
+          #walkiesTable,
+          #maintTable,
+          #maintenanceTable,
+          #duplicateTable,
+          #specialTable
+        ),
+        body .content-surface :is(
+          .inventory-page-shell,
+          .maintenance-page-shell,
+          .unused-page-shell,
+          .special-page-shell,
+          .duplicate-hero
+        ) :is([class*="border-l-"], [class*="border-left"], tr, th:first-child, td:first-child) {
+          border-left: 0 !important;
+          border-left-width: 0 !important;
+          border-left-color: transparent !important;
+        }
+        body .content-surface :is(
+          #walkiesTable,
+          #maintTable,
+          #maintenanceTable,
+          #duplicateTable,
+          #specialTable
+        ) :is(th:first-child, td:first-child)::before,
+        body .content-surface :is(
+          .page-header-block,
+          .inventory-page-header,
+          .adminit-section-header,
+          .wt-data-page-header
+        )::before {
+          display: none !important;
+          width: 0 !important;
+          content: none !important;
+        }
+        body .content-surface :is(.wt-data-scrollbar, .wt-data-scrollbar-thumb) {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+          background: transparent !important;
+          border: 0 !important;
+          opacity: 0 !important;
+        }
+        body .content-surface .clean-admin-table-scroll::-webkit-scrollbar,
+        body .content-surface .clean-admin-table-scroll::-webkit-scrollbar-thumb,
+        body .content-surface .duplicate-table-scroll::-webkit-scrollbar,
+        body .content-surface .duplicate-table-scroll::-webkit-scrollbar-thumb,
+        body .content-surface .special-table-scroll::-webkit-scrollbar,
+        body .content-surface .special-table-scroll::-webkit-scrollbar-thumb,
+        body .content-surface .wt-data-scroll::-webkit-scrollbar,
+        body .content-surface .wt-data-scroll::-webkit-scrollbar-thumb,
+        body .content-surface .dataTables_scrollBody::-webkit-scrollbar,
+        body .content-surface .dataTables_scrollBody::-webkit-scrollbar-thumb {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+          background: transparent !important;
+          border: 0 !important;
+        }
+        body .content-surface :is(
+          .clean-admin-table-scroll,
+          .duplicate-table-scroll,
+          .special-table-scroll,
+          .wt-data-scroll,
+          .dataTables_scrollBody
+        ) {
+          scrollbar-width: none !important;
+          scrollbar-color: transparent transparent !important;
+        }
+      </style>
     </div>
     <div style="text-align:center;margin-top:3rem;padding:2rem 0;border-top:1px solid rgba(255,255,255,.08);clear:both;">
       <div style="margin-bottom:.5rem;">
@@ -610,11 +1109,12 @@ function applyTheme(dark) {
 }
 
 function toggleTheme() {
-  const isDark = localStorage.getItem('fjb-theme') === 'dark';
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const next = isDark ? 'light' : 'dark';
   localStorage.setItem('fjb-theme', next);
   // Also keep color-theme in sync for WT partials that read it
   localStorage.setItem('color-theme', next);
+  localStorage.setItem('theme', next);
   applyTheme(next === 'dark');
 }
 
@@ -628,8 +1128,11 @@ if (themeToggleBtn) {
 (function(){
   const fjbTheme = localStorage.getItem('fjb-theme');
   const colorTheme = localStorage.getItem('color-theme');
-  const theme = fjbTheme || colorTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const legacyTheme = localStorage.getItem('theme');
+  const theme = fjbTheme || colorTheme || legacyTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   if (!fjbTheme) localStorage.setItem('fjb-theme', theme);
+  localStorage.setItem('color-theme', theme);
+  localStorage.setItem('theme', theme);
   applyTheme(theme === 'dark');
 })();
 
@@ -935,6 +1438,26 @@ function globalTimelineEscape(value) {
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];
   });
 }
+function globalTimelineHasValue(value) {
+  var normalized = String(value ?? '').trim();
+  return normalized !== '' && normalized !== '-' && normalized.toUpperCase() !== 'N/A';
+}
+function globalTimelineValueHtml(value, fallback) {
+  var display = globalTimelineHasValue(value) ? value : (fallback || 'N/A');
+  var muted = globalTimelineHasValue(value) ? '' : ' global-walkie-muted';
+  return '<div class="global-walkie-summary-value'+muted+'">'+globalTimelineEscape(display)+'</div>';
+}
+function globalTimelineWarrantyRange(start, end) {
+  var hasStart = globalTimelineHasValue(start);
+  var hasEnd = globalTimelineHasValue(end);
+  if (!hasStart && !hasEnd) return 'No Warranty Data';
+  return (hasStart ? start : 'N/A') + ' - ' + (hasEnd ? end : 'N/A');
+}
+function globalTimelineWarrantyItem(label, start, end) {
+  var value = globalTimelineWarrantyRange(start, end);
+  var muted = value === 'No Warranty Data' ? ' global-walkie-muted' : '';
+  return '<div class="global-walkie-warranty-item"><div class="global-walkie-warranty-label">'+globalTimelineEscape(label)+'</div><div class="global-walkie-warranty-value'+muted+'">'+globalTimelineEscape(value)+'</div></div>';
+}
 async function openGlobalWalkieTimeline(walkieId) {
   var url = @json(route('wt.admin.walkies.timeline', ['walkie' => '__WALKIE__'])).replace('__WALKIE__', encodeURIComponent(walkieId));
   await openGlobalWalkieTimelineUrl(url);
@@ -973,8 +1496,14 @@ async function openGlobalWalkieTimelineUrl(url) {
       ['Returned', summary.special_use_returned||'-'],['Remarks', summary.remark||'-'],
     ];
     summaryHost.innerHTML = summaryItems.map(function(item) {
-      return '<div class="global-walkie-summary-item"><div class="global-walkie-summary-label">'+globalTimelineEscape(item[0])+'</div><div class="global-walkie-summary-value">'+globalTimelineEscape(item[1])+'</div></div>';
-    }).join('');
+      return '<div class="global-walkie-summary-item"><div class="global-walkie-summary-label">'+globalTimelineEscape(item[0])+'</div>'+globalTimelineValueHtml(item[1], '-')+'</div>';
+    }).join('')
+    + '<div class="global-walkie-warranty-section">'
+    + '<p class="global-walkie-section-title">Warranty Information</p>'
+    + '<div class="global-walkie-warranty-grid">'
+    + globalTimelineWarrantyItem('WT Warranty', summary.wt_warranty_start_date, summary.wt_warranty_end_date)
+    + globalTimelineWarrantyItem('Battery Warranty', summary.battery_warranty_start_date, summary.battery_warranty_end_date)
+    + '</div></div>';
     bodyHost.innerHTML = events.length
       ? events.map(function(event) {
           return '<div class="global-walkie-history-row"><div class="global-walkie-history-date">'+globalTimelineEscape(event.date||'-')+'<span class="global-walkie-history-time">'+globalTimelineEscape(event.time||'')+'</span></div><div><p class="global-walkie-history-title">'+globalTimelineEscape(event.title||'Activity')+'</p><p class="global-walkie-history-detail">'+globalTimelineEscape(event.detail||'-')+'</p></div></div>';

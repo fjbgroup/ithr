@@ -10,6 +10,8 @@
 .data-table td, .data-table th { vertical-align:middle !important; padding:8px 10px !important; white-space:nowrap; }
 /* Description column: allow wrapping so it absorbs spare space */
 .data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; min-width:100px; }
+/* Status column: center the header and badge */
+.data-table td:nth-child(6), .data-table th:nth-child(6) { text-align:center; }
 /* Actions column: never wrap, just enough for the buttons */
 .data-table td:last-child, .data-table th:last-child { white-space:nowrap; width:1%; }
 </style>
@@ -694,4 +696,3 @@ function startImport() {
 }
 </script>
 @endpush
-

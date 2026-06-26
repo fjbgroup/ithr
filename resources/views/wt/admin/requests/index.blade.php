@@ -2900,7 +2900,7 @@
         min-height: 74px !important;
         padding: 14px 22px !important;
         border-radius: 12px !important;
-        border-left: 7px solid #f2c48d !important;
+        border-left: 0 !important;
         background: linear-gradient(90deg, rgba(31, 41, 55, 0.98), rgba(30, 41, 59, 0.98)) !important;
         display: flex !important;
         align-items: center !important;
@@ -5264,5 +5264,4 @@
 
 </script>
 @endpush
-
 

@@ -485,7 +485,7 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
     margin: 0 !important;
     padding: 18px 28px !important;
     border: 1px solid rgba(148, 163, 184, 0.08) !important;
-    border-left: 7px solid #f2c48d !important;
+    border-left: 0 !important;
     border-radius: 14px !important;
     background: linear-gradient(90deg, rgba(31, 41, 55, 0.95), rgba(30, 41, 59, 0.95)) !important;
     box-shadow: none !important;
@@ -613,7 +613,6 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
         'STATUS',
         'SERIAL NO.',
         'MODEL',
-        'LOCATION',
         'ASSIGNED TO',
         'RETURNED',
         'Action',
@@ -622,14 +621,13 @@ html:not(.dark) body .content-surface .special-table-shell #specialTable tbody t
     row-selector="tbody .special-row"
 >
     @foreach($records as $record)
-        <tr class="special-row {{ $record->is_special_use ? 'border-l-4 border-violet-400' : '' }}"
+        <tr class="special-row"
             data-status="{{ strtoupper((string) ($record->status ?: '')) }}"
             data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->status ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->location ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->ownership ?? '') . ' ' . ($record->department ?? '') . ' ' . ($record->remark ?? '') . ' ' . ((int) ($record->special_use_returned ?? 0) === 1 ? 'YES RETURNED' : 'NO NOT RETURNED'))) }}">
             <td>{{ $record->radio_id ?: '-' }}</td>
             <td><span class="inline-flex rounded border border-slate-600 bg-slate-800 px-2 py-1 text-[10px] font-black uppercase">{{ $record->status ?: '-' }}</span></td>
             <td>{{ $record->serial_number ?: '-' }}</td>
             <td>{{ $record->model ?: '-' }}</td>
-            <td>{{ $record->location ?: '-' }}</td>
             <td>
                 <div class="font-black text-slate-900 dark:text-slate-100">{{ $record->ownership ?: '-' }}</div>
                 <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $record->department ?: '-' }} / {{ $record->ownership_type ?: '-' }}</div>
@@ -1638,9 +1636,9 @@ document.addEventListener('keydown', function(e) {
 /* Absolute final Special Use action buttons: match inventory action styling. */
 body .content-surface:has(#specialTable) #specialTable th:last-child,
 body .content-surface:has(#specialTable) #specialTable td:last-child {
-    width: 280px !important;
-    min-width: 280px !important;
-    max-width: 280px !important;
+    width: 15% !important;
+    min-width: 210px !important;
+    max-width: none !important;
     text-align: center !important;
 }
 
@@ -1909,87 +1907,5 @@ html[data-theme="dark"] body .content-surface:has(#specialTable) #specialTable t
 
 @include('wt.admin.partials.inventory-tools-table-skin')
 @include('wt.admin.partials.inventory-tools-unified-ui')
-<style id="special-compact-final-override">
-    body .content-surface:has(#specialTable),
-    body .content-surface:has(#specialTable) .wt-data,
-    body .content-surface:has(#specialTable) .wt-data-table,
-    body .content-surface:has(#specialTable) .wt-data-scroll {
-        overflow: hidden !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: auto !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(1),
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(2),
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(3),
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(4),
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(5),
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(7),
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(8) {
-        white-space: nowrap !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(1) { width: 10% !important; }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(2) { width: 12% !important; }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(3) { width: 18% !important; }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(4) { width: 12% !important; }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(5) {
-        width: 12% !important;
-        min-width: 100px !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(6) {
-        width: 24% !important;
-        max-width: 220px !important;
-        min-width: 0 !important;
-        white-space: normal !important;
-        overflow-wrap: anywhere !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(7) { width: 6% !important; }
-    body .content-surface:has(#specialTable) #specialTable :is(th, td):nth-child(8) {
-        width: 12% !important;
-        min-width: 70px !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable thead th {
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable thead th {
-        height: 28px !important;
-        padding: 4px 6px !important;
-        text-align: center !important;
-        font-size: 9px !important;
-        line-height: 1.05 !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable tbody td {
-        height: 26px !important;
-        padding: 3px 6px !important;
-        text-align: left !important;
-        font-size: 10px !important;
-        line-height: 1.1 !important;
-        white-space: nowrap !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable tbody td:last-child {
-        text-align: center !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable .special-action-buttons {
-        gap: 4px !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn {
-        width: 54px !important;
-        min-width: 54px !important;
-        max-width: 54px !important;
-        height: 22px !important;
-        min-height: 22px !important;
-        padding: 0 5px !important;
-        border-radius: 5px !important;
-        font-size: 8px !important;
-        gap: 3px !important;
-    }
-    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-info { border-color: #0284c7 !important; background: #0284c7 !important; color: #fff !important; }
-    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-primary { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
-    body .content-surface:has(#specialTable) #specialTable .special-action-buttons .btn-danger { border-color: #dc2626 !important; background: #dc2626 !important; color: #fff !important; }
-</style>
-
+@include('wt.admin.partials.wt-unified-styles')
 @endsection

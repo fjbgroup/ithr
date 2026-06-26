@@ -606,7 +606,7 @@
         margin: 0 !important;
         padding: 18px 28px !important;
         border: 1px solid rgba(148, 163, 184, 0.08) !important;
-        border-left: 7px solid #f2c48d !important;
+        border-left: 0 !important;
         border-radius: 14px !important;
         background: linear-gradient(90deg, rgba(31, 41, 55, 0.95), rgba(30, 41, 59, 0.95)) !important;
         box-shadow: none !important;

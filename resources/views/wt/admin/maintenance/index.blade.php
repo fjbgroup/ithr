@@ -328,7 +328,7 @@
         margin: 0 !important;
         padding: 18px 28px !important;
         border: 1px solid rgba(148, 163, 184, 0.08) !important;
-        border-left: 7px solid #f2c48d !important;
+        border-left: 0 !important;
         border-radius: 14px !important;
         background: linear-gradient(90deg, rgba(31, 41, 55, 0.95), rgba(30, 41, 59, 0.95)) !important;
         box-shadow: none !important;
@@ -591,7 +591,6 @@
                 <th class="px-2 py-1 text-center">Status</th>
                 <th class="px-2 py-1 text-center">Serial No.</th>
                 <th class="px-2 py-1 text-center">Model</th>
-                <th class="px-2 py-1 text-center">Location</th>
                 <th class="px-2 py-1 text-center">Issue / Received</th>
                 <th class="px-2 py-1 text-center maintenance-action-col">Action</th>
             </tr>
@@ -614,7 +613,6 @@
                 </td>
                 <td>{{ $r->serial_number ?? '-' }}</td>
                 <td>{{ $r->model ?? '-' }}</td>
-                <td>{{ $r->location ?? $r->walkieTalkie->location ?? '-' }}</td>
                 <td>
                     <div class="inventory-item-title">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $r->received_date ?? '-' }}</div>
