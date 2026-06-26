@@ -64,25 +64,25 @@
 
   <nav class="sidebar-nav">
     <div class="nav-section-label" style="margin-top:4px">Asset Interactive</div>
-    <a href="{{ route('wt.user.returns.create') }}" class="nav-link has-info {{ request()->routeIs('user.returns.create') ? 'sidebar-active' : '' }}">
+    <a href="{{ route('wt.user.returns.create') }}" class="nav-link has-info {{ request()->routeIs('wt.user.returns.*') ? 'sidebar-active' : '' }}">
       <i class="fa-solid fa-rotate-left" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Return Unit</span>
       @include('wt.partials.sidebar-info', ['text' => 'Submit a return request when a walkie unit is no longer being used.'])
     </a>
-    <a href="{{ route('wt.user.damages.create') }}" class="nav-link has-info {{ request()->routeIs('user.damages.*') ? 'sidebar-active' : '' }}">
+    <a href="{{ route('wt.user.damages.create') }}" class="nav-link has-info {{ request()->routeIs('wt.user.damages.*') ? 'sidebar-active' : '' }}">
       <i class="fa-solid fa-triangle-exclamation" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Report Faulty</span>
       @include('wt.partials.sidebar-info', ['text' => 'Report faulty, damaged, missing, or problem walkie talkie units.'])
     </a>
-    <a href="{{ route('wt.user.requests.status') }}" class="nav-link has-info {{ request()->routeIs('user.requests.status') ? 'sidebar-active' : '' }}">
+    <a href="{{ route('wt.user.requests.status') }}" class="nav-link has-info {{ request()->routeIs('wt.user.requests.*') ? 'sidebar-active' : '' }}">
       <i class="fa-solid fa-list-ul" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Request Status</span>
       @include('wt.partials.sidebar-info', ['text' => 'Check the latest status of your walkie talkie requests.'])
     </a>
 
     <div class="nav-section-label">My Account</div>
-    <a href="{{ route('wt.user.profile') }}" class="nav-link has-info {{ request()->routeIs('user.profile') ? 'sidebar-active' : '' }}">
+    <a href="{{ route('wt.user.profile') }}" class="nav-link has-info {{ request()->routeIs('wt.user.profile*') ? 'sidebar-active' : '' }}">
       <i class="fa-solid fa-user-circle" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Profile</span>
       @include('wt.partials.sidebar-info', ['text' => 'View and update your account profile information.'])
     </a>
-    <a href="{{ route('wt.user.policies') }}" class="nav-link has-info {{ request()->routeIs('user.policies') ? 'sidebar-active' : '' }}">
+    <a href="{{ route('wt.user.policies') }}" class="nav-link has-info {{ request()->routeIs('wt.user.policies') ? 'sidebar-active' : '' }}">
       <i class="fa-solid fa-file-contract" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Policies</span>
       @include('wt.partials.sidebar-info', ['text' => 'Read the rules and guidelines for using company walkie talkies.'])
     </a>
@@ -140,6 +140,24 @@
     <div class="content-surface">
       @include('wt.partials.flash-alerts')
       @yield('content')
+      @include('components.ui.standardizer')
+      <style>
+        body .content-surface .page-header-block,
+        body .content-surface .inventory-page-header,
+        body .content-surface .maintenance-page-shell > .page-header-block,
+        body .content-surface .unused-page-shell > .page-header-block,
+        body .content-surface .special-page-shell > .page-header-block,
+        body .content-surface .duplicate-hero .page-header-block,
+        body .content-surface .adminit-section-header {
+          background: transparent !important;
+          background-color: transparent !important;
+          border: 0 !important;
+          border-left: 0 !important;
+          box-shadow: none !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+      </style>
     </div>
     <div style="text-align:center;margin-top:3rem;padding:2rem 0;border-top:1px solid rgba(255,255,255,.08);clear:both;">
       <div style="margin-bottom:.5rem;">
@@ -204,16 +222,20 @@ function applyTheme(dark) {
 const themeToggleBtn = document.getElementById('theme-toggle');
 if (themeToggleBtn) {
   themeToggleBtn.addEventListener('click', function() {
-    const isDark = localStorage.getItem('fjb-theme') === 'dark';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const next = isDark ? 'light' : 'dark';
     localStorage.setItem('fjb-theme', next);
     localStorage.setItem('color-theme', next);
+    localStorage.setItem('theme', next);
     applyTheme(next === 'dark');
   });
 }
 
 (function(){
-  const t = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const t = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  localStorage.setItem('fjb-theme', t);
+  localStorage.setItem('color-theme', t);
+  localStorage.setItem('theme', t);
   applyTheme(t === 'dark');
 })();
 

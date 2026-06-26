@@ -28,7 +28,7 @@
     {{ $attributes->merge(['class' => 'inventory-datatable grid gap-3']) }}
     data-inventory-datatable="{{ $safeTableId }}"
 >
-    <div class="flex min-h-[72px] w-full items-center justify-between gap-4 rounded-lg border border-slate-300 border-l-[6px] border-l-[#0284c7] bg-white px-5 py-3 dark:border-slate-700 dark:border-l-[#f2c48d] dark:bg-slate-800">
+    <div class="flex min-h-[72px] w-full items-center justify-between gap-4 rounded-lg border border-slate-300 bg-white px-5 py-3 dark:border-slate-700 dark:bg-slate-800">
         <div class="min-w-0">
             <h1 class="truncate text-[20px] font-black leading-tight tracking-normal text-slate-950 dark:text-slate-50">
                 {{ $pageTitle }}
@@ -47,24 +47,23 @@
         @endisset
     </div>
 
-    <div class="grid min-h-[86px] grid-cols-[minmax(260px,1fr)_minmax(220px,30%)_92px] items-end gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900 max-[900px]:grid-cols-1" style="justify-content: flex-start !important; width: auto !important;">
+    <div class="grid min-h-[0] w-fit max-w-full grid-cols-[250px_160px_68px] items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900 max-[900px]:grid-cols-1" style="justify-content: flex-start !important;">
         <div>
-            <label for="{{ $searchId }}" class="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-300">Search</label>
+            <label for="{{ $searchId }}" class="mb-1 block text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-300">Search</label>
             <input
                 id="{{ $searchId }}"
                 type="search"
                 placeholder="Keywords"
-                class="h-[38px] w-full rounded-md border border-slate-300 bg-white px-3 text-[13px] font-bold text-slate-950 outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
-                style="width: 250px !important; max-width: 250px !important;"
+                class="h-[34px] w-full rounded-md border border-slate-300 bg-white px-3 text-[12px] font-bold text-slate-950 outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             >
         </div>
 
         @if($showStatusFilter)
             <div>
-                <label for="{{ $statusId }}" class="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-300">Status</label>
+                <label for="{{ $statusId }}" class="mb-1 block text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-300">Status</label>
                 <select
                     id="{{ $statusId }}"
-                    class="h-[38px] w-full rounded-md border border-slate-300 bg-white px-3 text-[13px] font-bold text-slate-950 outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                    class="h-[34px] w-full rounded-md border border-slate-300 bg-white px-3 text-[12px] font-bold text-slate-950 outline-none focus:border-sky-400 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                 >
                     <option value="">All Status</option>
                     @foreach($statusOptions as $value => $label)
@@ -80,7 +79,7 @@
         <button
             id="{{ $resetId }}"
             type="button"
-            class="h-[38px] rounded-md border border-slate-300 bg-white px-3 text-[12px] font-black text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+            class="h-[34px] rounded-md border border-slate-300 bg-white px-3 text-[12px] font-black text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
         >
             Reset
         </button>

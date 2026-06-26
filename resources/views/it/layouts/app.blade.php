@@ -6,6 +6,20 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title', 'Dashboard') — FJB Inventory System</title>
 @include('partials.favicons')
+<script>
+(function () {
+  try {
+    var stored = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+  } catch (error) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.documentElement.style.colorScheme = 'light';
+  }
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -734,6 +748,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     @include('it.partials.alerts')
 
     @yield('content')
+    @include('components.ui.standardizer')
 
     <div class="app-footer" style="text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border, rgba(0,0,0,0.05)); clear: both;">
         <div style="margin-bottom: 0.5rem;">
@@ -770,7 +785,9 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
 const DARK_VARS = {
   '--sidebar-bg':    '#1a2235',
   '--sidebar-hover': '#243044',
+  '--bg':            '#111827',
   '--body-bg':       '#111827',
+  '--white':         '#1f2937',
   '--surface':       '#1f2937',
   '--surface2':      '#263042',
   '--border':        '#374151',
@@ -786,7 +803,9 @@ const DARK_VARS = {
 const LIGHT_VARS = {
   '--sidebar-bg':    '#1a2332',
   '--sidebar-hover': '#243044',
+  '--bg':            '#f1f5f9',
   '--body-bg':       '#f1f5f9',
+  '--white':         '#ffffff',
   '--surface':       '#ffffff',
   '--surface2':      '#f8fafc',
   '--border':        '#e2e8f0',
@@ -804,7 +823,7 @@ function applyTheme(dark) {
   for (const [k,v] of Object.entries(vars))
     document.documentElement.style.setProperty(k, v);
   const icon = document.getElementById('themeIcon');
-  if (icon) icon.className = dark ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+  if (icon) icon.className = dark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
   document.querySelectorAll('.form-control, .form-select').forEach(el => {
     el.style.background = vars['--form-input-bg'];
     el.style.borderColor = vars['--form-input-border'];
@@ -821,15 +840,23 @@ function applyTheme(dark) {
   document.body.style.backgroundColor = vars['--body-bg'];
   document.body.style.color = vars['--text'];
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.documentElement.classList.toggle('dark', dark);
+  document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
   if (typeof window._chartThemeUpdate === 'function') window._chartThemeUpdate();
 }
 function toggleTheme() {
-  const isDark = localStorage.getItem('fjb-theme') === 'dark';
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const next = isDark ? 'light' : 'dark';
   localStorage.setItem('fjb-theme', next);
+  localStorage.setItem('color-theme', next);
+  localStorage.setItem('theme', next);
   applyTheme(next === 'dark');
 }
-(function(){ applyTheme(localStorage.getItem('fjb-theme') === 'dark'); })();
+(function(){
+  const saved = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
+  const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(theme === 'dark');
+})();
 
 // ── DATATABLES ──
 $(document).ready(function () {

@@ -195,6 +195,19 @@ class WalkieTalkieController extends Controller
         ];
     }
 
+    private function timelineDisplayDate($value): string
+    {
+        if (blank($value)) {
+            return 'N/A';
+        }
+
+        try {
+            return \Carbon\Carbon::parse($value)->format('d M Y');
+        } catch (\Throwable $exception) {
+            return (string) $value;
+        }
+    }
+
     private function buildWalkieTimelineData($walkies): array
     {
         $walkieIds = $walkies->pluck('walkie_id')->filter()->values();
@@ -479,6 +492,10 @@ class WalkieTalkieController extends Controller
             'ownership_type_to_be' => $walkie->ownership_type_to_be ?: '-',
             'is_special_use' => (int) ($walkie->is_special_use ?? 0) === 1 ? 'YES' : 'NO',
             'special_use_returned' => (int) ($walkie->special_use_returned ?? 0) === 1 ? 'YES' : 'NO',
+            'wt_warranty_start_date' => $this->timelineDisplayDate($walkie->wt_warranty_start_date),
+            'wt_warranty_end_date' => $this->timelineDisplayDate($walkie->wt_warranty_end_date),
+            'battery_warranty_start_date' => $this->timelineDisplayDate($walkie->battery_warranty_start_date),
+            'battery_warranty_end_date' => $this->timelineDisplayDate($walkie->battery_warranty_end_date),
         ], $timeline['summary'] ?? []);
 
         return response()->json($timeline);
@@ -531,6 +548,10 @@ class WalkieTalkieController extends Controller
                 'ownership_type_to_be' => '-',
                 'is_special_use' => '-',
                 'special_use_returned' => '-',
+                'wt_warranty_start_date' => 'N/A',
+                'wt_warranty_end_date' => 'N/A',
+                'battery_warranty_start_date' => 'N/A',
+                'battery_warranty_end_date' => 'N/A',
             ],
             'events' => collect([
                 $this->timelineEvent(
@@ -712,6 +733,10 @@ class WalkieTalkieController extends Controller
                 'ownership_type_to_be' => $walkie->ownership_type_to_be,
                 'is_special_use' => $walkie->is_special_use ? '1' : '0',
                 'special_use_returned' => $walkie->special_use_returned ? '1' : '0',
+                'wt_warranty_start_date' => $walkie->wt_warranty_start_date,
+                'wt_warranty_end_date' => $walkie->wt_warranty_end_date,
+                'battery_warranty_start_date' => $walkie->battery_warranty_start_date,
+                'battery_warranty_end_date' => $walkie->battery_warranty_end_date,
             ],
             'hiddenFields' => [],
             'formAction' => route('wt.admin.walkies.updateMeta', $walkie),
@@ -892,6 +917,10 @@ public function repairFaulty()
             'ownership_type_to_be' => 'nullable|string|max:50',
             'is_special_use' => 'nullable|boolean',
             'special_use_returned' => 'nullable|boolean',
+            'wt_warranty_start_date' => 'nullable|date',
+            'wt_warranty_end_date' => 'nullable|date|after_or_equal:wt_warranty_start_date',
+            'battery_warranty_start_date' => 'nullable|date',
+            'battery_warranty_end_date' => 'nullable|date|after_or_equal:battery_warranty_start_date',
         ], [
             'ownership.exists' => 'Ownership name must match an existing staff record.',
         ]);
@@ -938,6 +967,10 @@ public function repairFaulty()
                 : null,
             'is_special_use' => (bool) ($validated['is_special_use'] ?? false),
             'special_use_returned' => (bool) ($validated['special_use_returned'] ?? false),
+            'wt_warranty_start_date' => $validated['wt_warranty_start_date'] ?? null,
+            'wt_warranty_end_date' => $validated['wt_warranty_end_date'] ?? null,
+            'battery_warranty_start_date' => $validated['battery_warranty_start_date'] ?? null,
+            'battery_warranty_end_date' => $validated['battery_warranty_end_date'] ?? null,
         ]);
 
         if (in_array($walkie->status, ['REPAIRING', 'FAULTY', 'B.E.R'], true)) {
@@ -1014,6 +1047,10 @@ public function repairFaulty()
             'ownership_type_to_be' => 'nullable|string|max:50',
             'is_special_use' => 'nullable|boolean',
             'special_use_returned' => 'nullable|boolean',
+            'wt_warranty_start_date' => 'nullable|date',
+            'wt_warranty_end_date' => 'nullable|date|after_or_equal:wt_warranty_start_date',
+            'battery_warranty_start_date' => 'nullable|date',
+            'battery_warranty_end_date' => 'nullable|date|after_or_equal:battery_warranty_start_date',
         ], [
             'ownership.exists' => 'Ownership name must match an existing staff record.',
         ]);
@@ -1041,6 +1078,10 @@ public function repairFaulty()
                 : null,
             'is_special_use' => (bool) ($validated['is_special_use'] ?? false),
             'special_use_returned' => (bool) ($validated['special_use_returned'] ?? false),
+            'wt_warranty_start_date' => $validated['wt_warranty_start_date'] ?? null,
+            'wt_warranty_end_date' => $validated['wt_warranty_end_date'] ?? null,
+            'battery_warranty_start_date' => $validated['battery_warranty_start_date'] ?? null,
+            'battery_warranty_end_date' => $validated['battery_warranty_end_date'] ?? null,
         ]);
 
         UserActivityLog::create([

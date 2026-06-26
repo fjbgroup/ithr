@@ -29,6 +29,10 @@ class WalkieTalkie extends Model
         'ownership_type_to_be',
         'is_special_use',
         'special_use_returned',
+        'wt_warranty_start_date',
+        'wt_warranty_end_date',
+        'battery_warranty_start_date',
+        'battery_warranty_end_date',
         'created_at'
     ];
 

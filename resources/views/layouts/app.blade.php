@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ config('app.name', 'HR Admin System') }}</title>
 @include('partials.favicons')
+<script>
+(function () {
+  try {
+    var stored = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+  } catch (error) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.documentElement.style.colorScheme = 'light';
+  }
+})();
+</script>
 <style>
 /* ── HR COLLAPSIBLE SIDEBAR ── */
 .menu-toggle { display: none !important; }
@@ -298,6 +312,10 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
         <div class="topbar-right">
 
             @auth
+            <button id="theme-toggle" type="button" class="theme-toggle" title="Toggle light/dark" aria-label="Toggle light or dark mode">
+                <svg id="theme-toggle-dark-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <svg id="theme-toggle-light-icon" class="theme-icon hidden" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            </button>
             <div class="notif-wrap" id="notifBellWrap">
                 <button class="notif-bell-btn" id="notifBellBtn" onclick="toggleNotifDropdown()" aria-label="Notifications">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -375,6 +393,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
         @endauth
 
         @yield('content')
+        @include('components.ui.standardizer')
 
         <div class="app-footer" style="text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border, rgba(0,0,0,0.05)); clear: both;">
             <div style="margin-bottom: 0.5rem;">
@@ -395,6 +414,70 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
 @include('partials.chatbot')
 <script src="{{ asset('assets/js/app.js') }}"></script>
 <script>
+const HR_DARK_VARS = {
+  '--bg': '#0f172a',
+  '--body-bg': '#0f172a',
+  '--surface': '#1e293b',
+  '--white': '#1e293b',
+  '--border': '#334155',
+  '--text': '#e2e8f0',
+  '--muted': '#94a3b8',
+  '--navy': '#e2e8f0',
+  '--table-hover': 'rgba(255,255,255,.04)',
+  '--table-head-bg': '#111827',
+  '--table-row-alt': '#172033',
+  '--form-input-bg': '#0f172a',
+  '--form-input-color': '#e2e8f0'
+};
+const HR_LIGHT_VARS = {
+  '--bg': '#f1f5f9',
+  '--body-bg': '#f1f5f9',
+  '--surface': '#ffffff',
+  '--white': '#ffffff',
+  '--border': '#e2e8f0',
+  '--text': '#1e293b',
+  '--muted': '#64748b',
+  '--navy': '#142b47',
+  '--table-hover': '#e0f2fe',
+  '--table-head-bg': '#f8fafc',
+  '--table-row-alt': '#fafbfc',
+  '--form-input-bg': '#ffffff',
+  '--form-input-color': '#1e293b'
+};
+
+function applyTheme(dark) {
+  const vars = dark ? HR_DARK_VARS : HR_LIGHT_VARS;
+  Object.entries(vars).forEach(([key, value]) => document.documentElement.style.setProperty(key, value));
+  document.documentElement.classList.toggle('dark', dark);
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+  document.body.style.backgroundColor = vars['--bg'];
+  document.body.style.color = vars['--text'];
+
+  const darkIcon = document.getElementById('theme-toggle-dark-icon');
+  const lightIcon = document.getElementById('theme-toggle-light-icon');
+  if (darkIcon && lightIcon) {
+    darkIcon.classList.toggle('hidden', dark);
+    lightIcon.classList.toggle('hidden', !dark);
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  localStorage.setItem('fjb-theme', next);
+  localStorage.setItem('color-theme', next);
+  localStorage.setItem('theme', next);
+  applyTheme(next === 'dark');
+}
+
+document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+(function () {
+  const saved = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
+  const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(theme === 'dark');
+})();
+
 // Override to add desktop collapse support
 function toggleSidebar() {
   if (window.innerWidth <= 768) {
