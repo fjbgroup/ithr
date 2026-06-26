@@ -1579,22 +1579,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, true);
 
-  // Scroll controls
+  // Scroll controls — targets .main-content (flex layout: body overflow:hidden, page scrolls inside .main-content)
   var mainContent = document.querySelector('.main-content');
   var scrollControls = document.getElementById('systemScrollControls');
   var scrollTopBtn = scrollControls && scrollControls.querySelector('[data-scroll-target="top"]');
   var scrollBottomBtn = scrollControls && scrollControls.querySelector('[data-scroll-target="bottom"]');
   function updateScrollControls() {
     if (!scrollControls) return;
-    var scrollEl = document.documentElement;
-    var maxScroll = Math.max(0, document.body.scrollHeight - window.innerHeight);
+    var scrollEl = mainContent || document.documentElement;
+    var maxScroll = Math.max(0, scrollEl.scrollHeight - scrollEl.clientHeight);
     var hasScroll = maxScroll > 24;
     scrollControls.classList.toggle('is-visible', hasScroll);
-    if (scrollTopBtn) scrollTopBtn.disabled = !hasScroll || window.scrollY <= 8;
-    if (scrollBottomBtn) scrollBottomBtn.disabled = !hasScroll || window.scrollY >= maxScroll - 8;
+    var currentScroll = scrollEl.scrollTop;
+    if (scrollTopBtn) scrollTopBtn.disabled = !hasScroll || currentScroll <= 8;
+    if (scrollBottomBtn) scrollBottomBtn.disabled = !hasScroll || currentScroll >= maxScroll - 8;
   }
-  if (scrollTopBtn) scrollTopBtn.addEventListener('click', function() { window.scrollTo({top:0,behavior:'smooth'}); });
-  if (scrollBottomBtn) scrollBottomBtn.addEventListener('click', function() { window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); });
+  if (scrollTopBtn) scrollTopBtn.addEventListener('click', function() { (mainContent || window).scrollTo({top:0,behavior:'smooth'}); });
+  if (scrollBottomBtn) scrollBottomBtn.addEventListener('click', function() {
+    var el = mainContent || document.documentElement;
+    el.scrollTo({top:el.scrollHeight,behavior:'smooth'});
+  });
+  if (mainContent) mainContent.addEventListener('scroll', updateScrollControls, {passive:true});
   window.addEventListener('scroll', updateScrollControls, {passive:true});
   window.addEventListener('resize', function() { updateScrollControls(); closeSidebarInfoPopovers(); });
   document.addEventListener('scroll', closeSidebarInfoPopovers, true);

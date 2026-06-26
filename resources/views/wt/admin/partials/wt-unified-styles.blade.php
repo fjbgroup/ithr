@@ -372,7 +372,7 @@ html.dark {
 .inventory-page-shell #walkiesTable.clean-admin-table :is(th,td):nth-child(4) { width: 13% !important; }
 .inventory-page-shell #walkiesTable.clean-admin-table :is(th,td):nth-child(5) { width: 10% !important; }
 .inventory-page-shell #walkiesTable.clean-admin-table :is(th,td):nth-child(6) { width: auto !important; }  /* Assigned To: takes remaining */
-.inventory-page-shell #walkiesTable.clean-admin-table :is(th,td):nth-child(7) { width: 24% !important; }   /* Action */
+.inventory-page-shell #walkiesTable.clean-admin-table :is(th,td):nth-child(7) { width: 22% !important; }   /* Action */
 
 /* ── REPAIR/FAULTY column widths ──
    14 cols: Radio ID | Serial | Model | Ownership | Dept | Date | Reporter | Issue | Status | Done | FinishDate | Remarks | Progress | Action
