@@ -1,17 +1,26 @@
-﻿<style>
+<style>
 /* ══ My Requests ══ */
 .myr-wrap{max-width:860px;margin:0 auto}
-.myr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:16px;padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.myr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:16px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .myr-hero-title{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
 .myr-hero-sub{font-size:13px;color:rgba(255,255,255,.55);margin:0}
 .myr-hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 20px;text-align:center;flex-shrink:0}
 .myr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'DM Sans',sans-serif}
 .myr-hero-badge-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
-.myr-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:28px}
-.myr-tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
-.myr-tile-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
-.myr-tile-num{font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
-.myr-tile-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+
+/* Tab bar */
+.myr-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.myr-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .15s;white-space:nowrap}
+.myr-tab:hover{border-color:currentColor;opacity:.85}
+.myr-tab .myr-tab-icon{font-size:14px;flex-shrink:0}
+.myr-tab .myr-tab-badge{font-size:11px;font-weight:800;border-radius:20px;padding:2px 8px;background:rgba(0,0,0,.06);color:inherit;transition:background .15s}
+.myr-tab.active .myr-tab-badge{background:rgba(255,255,255,.25);color:#fff}
+
+/* Tab panels */
+.myr-tab-panel{display:none}
+.myr-tab-panel.active{display:block}
+
+/* Section cards */
 .myr-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
 .myr-section-hdr{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--body-bg)}
 .myr-section-hdr-accent{width:4px;height:20px;border-radius:3px;flex-shrink:0}
@@ -39,9 +48,6 @@
 .myr-detail-kv{font-size:11px;color:var(--muted)}
 .myr-detail-kv strong{color:var(--text);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1px}
 .myr-progress-bar{border-top:1px solid var(--border);padding:12px 18px;background:var(--body-bg);display:flex;align-items:center;overflow-x:auto}
-.myr-bulk-drop{display:none;border-top:1px solid var(--border);background:var(--body-bg)}
-.myr-bulk-row{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 72px;border-bottom:1px solid var(--border);font-size:12px}
-.myr-bulk-row:last-child{border-bottom:none}
 .myr-pager{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--border);background:var(--body-bg)}
 .myr-pager-info{font-size:11px;color:var(--muted);font-weight:600}
 .myr-pager-btns{display:flex;gap:6px}
@@ -84,6 +90,7 @@
 
 <div class="myr-wrap">
 
+{{-- Hero --}}
 <div class="myr-hero">
   <div>
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:6px">IT Assets</div>
@@ -104,55 +111,28 @@
   </div>
 </div>
 
-<div class="myr-tiles">
+{{-- Tab buttons --}}
+<div class="myr-tabs">
   @foreach([
-    ['#16a34a','bi-plus-circle-fill', $myAddCount,  'Add Asset'],
-    ['#d97706','bi-recycle',          $myEwCount,   'E-Waste'],
-    ['#7c3aed','bi-pen-fill',         $myDispCount, 'Disposal'],
-    ['#dc2626','bi-trash-fill',       $myDelCount,  'Delete'],
-    ['#2563eb','bi-pencil-square',    $myEditCount, 'Edit'],
-  ] as [$clr,$ico,$n,$lbl])
-  <div class="myr-tile" style="border-top:3px solid {{ $clr }}">
-    <div class="myr-tile-icon" style="background:{{ $clr }}1a;color:{{ $clr }}"><i class="bi {{ $ico }}"></i></div>
-    <div class="myr-tile-num">{{ $n }}</div>
-    <div class="myr-tile-lbl">{{ $lbl }}</div>
-  </div>
+    ['add',  '#16a34a', 'bi-plus-circle-fill', $myAddCount,  'Add Asset'],
+    ['ew',   '#d97706', 'bi-recycle',          $myEwCount,   'E-Waste'],
+    ['disp', '#7c3aed', 'bi-pen-fill',         $myDispCount, 'Disposal'],
+    ['del',  '#dc2626', 'bi-trash-fill',        $myDelCount,  'Delete'],
+    ['edit', '#2563eb', 'bi-pencil-square',    $myEditCount, 'Edit'],
+  ] as [$tid, $clr, $ico, $n, $lbl])
+  <button
+    class="myr-tab{{ $loop->first ? ' active' : '' }}"
+    id="myrtab-{{ $tid }}"
+    data-clr="{{ $clr }}"
+    onclick="myrSwitchTab('{{ $tid }}')"
+    style="{{ $loop->first ? 'background:'.$clr.';border-color:'.$clr.';color:#fff' : 'color:'.$clr.';border-color:var(--border)' }}"
+  >
+    <i class="bi {{ $ico }} myr-tab-icon"></i>
+    {{ $lbl }}
+    <span class="myr-tab-badge">{{ $n }}</span>
+  </button>
   @endforeach
 </div>
-
-{{-- ── SECTION 1: ADD ASSET ── --}}
-@php
-  $addRows = [];
-  foreach ($myAdds as $req) {
-    $resolved = $req->status !== 'Pending';
-    $row  = '<div class="myr-row">';
-    $row .= '<div class="myr-row-top">';
-    $row .= '<div class="myr-row-icon" style="background:rgba(22,163,74,.1)"><i class="bi bi-plus-circle" style="color:#16a34a"></i></div>';
-    $row .= '<div class="myr-row-body">';
-    $row .= '<div class="myr-row-title">'.e($req->description).'</div>';
-    $row .= '<div class="myr-row-meta">';
-    if ($req->asset_class)  $row .= '<span class="myr-tag">'.e($req->asset_class).'</span>';
-    if ($req->asset_number) $row .= '<span class="myr-tag-muted" style="color:var(--accent);font-weight:600">'.e($req->asset_number).'</span>';
-    if ($req->serial_number)$row .= '<span class="myr-tag-muted">S/N '.e($req->serial_number).'</span>';
-    if ($req->brand || $req->model) $row .= '<span class="myr-tag-muted">'.e(trim(($req->brand??'').' '.($req->model??''))).'</span>';
-    $row .= '</div></div>';
-    $row .= '<div class="myr-row-right">';
-    $row .= '<div class="myr-row-date">'.\Carbon\Carbon::parse($req->created_at)->format('d M Y').'<br>'.\Carbon\Carbon::parse($req->created_at)->format('H:i').'</div>';
-    $row .= myrBadge($req->status);
-    if ($req->status === 'Pending') {
-      $row .= '<form method="POST" action="'.route('it.requests.add.retract', $req->id).'" style="display:inline" onsubmit="return confirm(\'Retract this add request?\')"><input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"><button type="submit" class="myr-retract"><i class="bi bi-arrow-counterclockwise"></i> Retract</button></form>';
-    }
-    $row .= '</div></div>';
-    if ($resolved) $row .= myrDetailBlock($req->status, [
-      'Description' => $req->description,
-      'Asset Class'  => $req->asset_class ?? '',
-      'Location'     => $req->location ?? '',
-      'Reviewed'     => $req->reviewed_at ? \Carbon\Carbon::parse($req->reviewed_at)->format('d M Y, H:i') : '',
-    ]);
-    $row .= '</div>';
-    $addRows[] = $row;
-  }
-@endphp
 
 @php
   function myrSection($id, $title, $icon, $color, $bgAlpha, $rows, $emptyIcon, $emptyTitle, $emptySub, $perPage = 5) {
@@ -186,6 +166,40 @@
     }
     $html .= '</div>';
     return $html;
+  }
+@endphp
+
+{{-- ── SECTION 1: ADD ASSET ── --}}
+@php
+  $addRows = [];
+  foreach ($myAdds as $req) {
+    $resolved = $req->status !== 'Pending';
+    $row  = '<div class="myr-row">';
+    $row .= '<div class="myr-row-top">';
+    $row .= '<div class="myr-row-icon" style="background:rgba(22,163,74,.1)"><i class="bi bi-plus-circle" style="color:#16a34a"></i></div>';
+    $row .= '<div class="myr-row-body">';
+    $row .= '<div class="myr-row-title">'.e($req->description).'</div>';
+    $row .= '<div class="myr-row-meta">';
+    if ($req->asset_class)  $row .= '<span class="myr-tag">'.e($req->asset_class).'</span>';
+    if ($req->asset_number) $row .= '<span class="myr-tag-muted" style="color:var(--accent);font-weight:600">'.e($req->asset_number).'</span>';
+    if ($req->serial_number)$row .= '<span class="myr-tag-muted">S/N '.e($req->serial_number).'</span>';
+    if ($req->brand || $req->model) $row .= '<span class="myr-tag-muted">'.e(trim(($req->brand??'').' '.($req->model??''))).'</span>';
+    $row .= '</div></div>';
+    $row .= '<div class="myr-row-right">';
+    $row .= '<div class="myr-row-date">'.\Carbon\Carbon::parse($req->created_at)->format('d M Y').'<br>'.\Carbon\Carbon::parse($req->created_at)->format('H:i').'</div>';
+    $row .= myrBadge($req->status);
+    if ($req->status === 'Pending') {
+      $row .= '<form method="POST" action="'.route('it.requests.add.retract', $req->id).'" style="display:inline" onsubmit="return confirm(\'Retract this add request?\')"><input type="hidden" name="_token" value="'.csrf_token().'"><input type="hidden" name="_method" value="DELETE"><button type="submit" class="myr-retract"><i class="bi bi-arrow-counterclockwise"></i> Retract</button></form>';
+    }
+    $row .= '</div></div>';
+    if ($resolved) $row .= myrDetailBlock($req->status, [
+      'Description' => $req->description,
+      'Asset Class'  => $req->asset_class ?? '',
+      'Location'     => $req->location ?? '',
+      'Reviewed'     => $req->reviewed_at ? \Carbon\Carbon::parse($req->reviewed_at)->format('d M Y, H:i') : '',
+    ]);
+    $row .= '</div>';
+    $addRows[] = $row;
   }
 @endphp
 
@@ -258,7 +272,6 @@
     $row .= '<div class="myr-row-date">'.\Carbon\Carbon::parse($dateFlagged)->format('d M Y').'<br>'.\Carbon\Carbon::parse($req->created_at)->format('H:i').'</div>';
     $row .= myrBadge($ob);
     $row .= '</div></div>';
-    // Progress bar
     $row .= '<div class="myr-progress-bar">';
     foreach ([[$b1,$c1,$i1,'HOU'],[$b2,$c2,$i2,'GM'],[$b3,$c3,$i3,'CEO'],[$b4,$c4,$i4,'Finance']] as $k => [$bg,$clr,$ico,$lbl]) {
       $row .= '<div style="display:flex;align-items:center;flex-shrink:0">';
@@ -354,15 +367,51 @@
   }
 @endphp
 
-{!! myrSection('add',  'Add Asset Requests',  'bi-plus-circle-fill','#16a34a','rgba(22,163,74,.1)',  $addRows,  'bi-box-seam',     'No add asset requests yet',  'When you request a new asset, it will appear here') !!}
-{!! myrSection('ew',   'E-Waste Requests',    'bi-recycle',         '#d97706','rgba(217,119,6,.1)', $ewRows,   'bi-recycle',      'No e-waste requests yet',    'E-waste requests will appear here') !!}
-{!! myrSection('disp', 'Disposal Requests',   'bi-pen-fill',        '#7c3aed','rgba(124,58,237,.1)',$dispRows, 'bi-pen',          'No disposal requests yet',   'Write-off forms you submit will appear here') !!}
-{!! myrSection('del',  'Delete Requests',     'bi-trash-fill',      '#dc2626','rgba(220,38,38,.1)', $delRows,  'bi-trash',        'No delete requests yet',     'Asset deletion requests will appear here') !!}
-{!! myrSection('edit', 'Edit Asset Requests', 'bi-pencil-square',   '#2563eb','rgba(37,99,235,.1)', $editRows, 'bi-pencil-square','No edit requests yet',       'Your IT asset edit requests will appear here') !!}
+{{-- Tab panels --}}
+<div class="myr-tab-panel active" id="myrpanel-add">
+  {!! myrSection('add', 'Add Asset Requests', 'bi-plus-circle-fill','#16a34a','rgba(22,163,74,.1)',  $addRows,  'bi-box-seam',     'No add asset requests yet',  'When you request a new asset, it will appear here') !!}
+</div>
+<div class="myr-tab-panel" id="myrpanel-ew">
+  {!! myrSection('ew',  'E-Waste Requests',   'bi-recycle',         '#d97706','rgba(217,119,6,.1)', $ewRows,   'bi-recycle',      'No e-waste requests yet',    'E-waste requests will appear here') !!}
+</div>
+<div class="myr-tab-panel" id="myrpanel-disp">
+  {!! myrSection('disp','Disposal Requests',  'bi-pen-fill',        '#7c3aed','rgba(124,58,237,.1)',$dispRows, 'bi-pen',          'No disposal requests yet',   'Write-off forms you submit will appear here') !!}
+</div>
+<div class="myr-tab-panel" id="myrpanel-del">
+  {!! myrSection('del', 'Delete Requests',    'bi-trash-fill',      '#dc2626','rgba(220,38,38,.1)', $delRows,  'bi-trash',        'No delete requests yet',     'Asset deletion requests will appear here') !!}
+</div>
+<div class="myr-tab-panel" id="myrpanel-edit">
+  {!! myrSection('edit','Edit Asset Requests','bi-pencil-square',   '#2563eb','rgba(37,99,235,.1)', $editRows, 'bi-pencil-square','No edit requests yet',       'Your IT asset edit requests will appear here') !!}
+</div>
 
 </div>{{-- /myr-wrap --}}
 
 <script>
+function myrSwitchTab(id) {
+  var tabIds = ['add','ew','disp','del','edit'];
+  var colors = {add:'#16a34a',ew:'#d97706',disp:'#7c3aed',del:'#dc2626',edit:'#2563eb'};
+
+  tabIds.forEach(function(tid) {
+    var tab   = document.getElementById('myrtab-' + tid);
+    var panel = document.getElementById('myrpanel-' + tid);
+    if (!tab || !panel) return;
+    var clr = colors[tid];
+    if (tid === id) {
+      tab.classList.add('active');
+      tab.style.background    = clr;
+      tab.style.borderColor   = clr;
+      tab.style.color         = '#fff';
+      panel.classList.add('active');
+    } else {
+      tab.classList.remove('active');
+      tab.style.background    = '';
+      tab.style.borderColor   = 'var(--border)';
+      tab.style.color         = clr;
+      panel.classList.remove('active');
+    }
+  });
+}
+
 function myrPage(id, dir) {
   var pager = document.getElementById('pager-'+id);
   if (!pager) return;
@@ -381,4 +430,3 @@ function myrPage(id, dir) {
   document.getElementById('pnext-'+id).disabled = np>=pages-1;
 }
 </script>
-

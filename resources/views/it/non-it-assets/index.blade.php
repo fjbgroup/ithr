@@ -141,6 +141,12 @@
               style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Warranty Until</label>
+            <input type="date" name="warranty_date"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
@@ -284,7 +290,95 @@
   </div>
 </div>
 
-{{-- ══ EDIT FORM (shown inline when Edit clicked) ══ --}}
+{{-- ══ PAGE HEADER ══ --}}
+<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+  <div>
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
+      All Assets &rsaquo; <span style="color:var(--accent)">Non-IT Assets</span>
+    </div>
+    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets</h4>
+    <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Furniture, equipment, vehicles and other non-IT assets</p>
+  </div>
+  @if($user->isAdminOrFinance())
+  <div id="nitHeaderBtns" style="display:flex;gap:8px;align-items:center">
+    <button onclick="document.getElementById('nitImportModal').style.display='flex'"
+      class="btn-secondary-custom" style="padding:10px 18px;font-size:13px;gap:7px">
+      <i class="bi bi-file-earmark-excel-fill" style="color:#16a34a"></i> Import Excel
+    </button>
+    <a href="#" onclick="openNitAddForm();return false" class="btn-primary-custom" style="padding:10px 20px;font-size:13px">
+      <i class="bi bi-plus-lg"></i> Add Asset
+    </a>
+  </div>
+  @endif
+</div>
+
+{{-- ══ STAT STRIP ══ --}}
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
+  @foreach([
+    ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,                           'Total Assets',     '#0284c7'],
+    ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,                          'Active',           '#16a34a'],
+    ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,                            'Disposed',         '#dc2626'],
+    ['bi-hourglass-split',    'rgba(217,119,6,.12)',   '#d97706', $nit_pending_wo + $nit_pending_ewaste, 'Pending Approval', '#d97706'],
+  ] as [$icon,$bg,$color,$val,$lbl,$border])
+  <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {{ $border }};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05)">
+    <div style="width:44px;height:44px;border-radius:10px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">
+      <i class="bi {{ $icon }}" style="color:{{ $color }}"></i>
+    </div>
+    <div>
+      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif">{{ number_format($val) }}</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px">{{ $lbl }}</div>
+    </div>
+  </div>
+  @endforeach
+</div>
+
+{{-- ══ FILTER BAR ══ --}}
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+  <form method="GET" action="{{ route('it.non-it.index') }}" id="nitFilterForm" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%">
+    <div style="position:relative;flex:1;min-width:220px">
+      <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px"></i>
+      <input type="text" name="nit_search" id="nitSearchInput" value="{{ $search }}"
+        placeholder="Search asset no., class, description, location..."
+        autocomplete="off"
+        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
+        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+      <div id="nitSearchSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
+    </div>
+    <select name="nit_class" onchange="this.form.submit()"
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      <option value="">All Classes</option>
+      @foreach($nitClassesUsed->sort() as $cl)
+      <option value="{{ $cl }}" {{ $class === $cl ? 'selected' : '' }}>{{ $cl }}</option>
+      @endforeach
+    </select>
+    <select name="nit_status" onchange="this.form.submit()"
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
+      <option value="">All Status</option>
+      <option value="Active"                      {{ $status === 'Active'                      ? 'selected' : '' }}>Active</option>
+      <option value="Disposed"                    {{ $status === 'Disposed'                    ? 'selected' : '' }}>Disposed</option>
+      <option value="Pending for Write-Off"       {{ $status === 'Pending for Write-Off'       ? 'selected' : '' }}>Pending</option>
+    </select>
+    <select name="nit_location" onchange="this.form.submit()"
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      <option value="">All Locations</option>
+      @foreach($allLocations as $loc)
+      <option value="{{ $loc }}" {{ $location === $loc ? 'selected' : '' }}>{{ $loc }}</option>
+      @endforeach
+    </select>
+    <button type="submit"
+      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      <i class="bi bi-funnel-fill"></i> Filter
+    </button>
+    @if($search || $class || $status || $location)
+    <a href="{{ route('it.non-it.index') }}"
+      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
+      Clear
+    </a>
+    @endif
+  </form>
+</div>
+
+{{-- ══ EDIT FORM (shown inline above table when Edit clicked) ══ --}}
 <div id="nitEditFormSection" style="display:none">
   <div class="nit-form-card">
     <div class="nit-form-header">
@@ -323,6 +417,10 @@
           <div class="col-md-3 nit-field">
             <label>Date Registered</label>
             <input type="date" name="date_registered" id="nef_date_registered">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Warranty Until</label>
+            <input type="date" name="warranty_date" id="nef_warranty_date">
           </div>
           <div class="col-12 nit-field">
             <label>Description <span class="req">*</span></label>
@@ -420,94 +518,6 @@
       </div>
     </form>
   </div>
-</div>
-
-{{-- ══ PAGE HEADER ══ --}}
-<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-  <div>
-    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
-      All Assets &rsaquo; <span style="color:var(--accent)">Non-IT Assets</span>
-    </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets</h4>
-    <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Furniture, equipment, vehicles and other non-IT assets</p>
-  </div>
-  @if($user->isAdminOrFinance())
-  <div id="nitHeaderBtns" style="display:flex;gap:8px;align-items:center">
-    <button onclick="document.getElementById('nitImportModal').style.display='flex'"
-      class="btn-secondary-custom" style="padding:10px 18px;font-size:13px;gap:7px">
-      <i class="bi bi-file-earmark-excel-fill" style="color:#16a34a"></i> Import Excel
-    </button>
-    <a href="#" onclick="openNitAddForm();return false" class="btn-primary-custom" style="padding:10px 20px;font-size:13px">
-      <i class="bi bi-plus-lg"></i> Add Asset
-    </a>
-  </div>
-  @endif
-</div>
-
-{{-- ══ STAT STRIP ══ --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
-  @foreach([
-    ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,                           'Total Assets',     '#0284c7'],
-    ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,                          'Active',           '#16a34a'],
-    ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,                            'Disposed',         '#dc2626'],
-    ['bi-hourglass-split',    'rgba(217,119,6,.12)',   '#d97706', $nit_pending_wo + $nit_pending_ewaste, 'Pending Approval', '#d97706'],
-  ] as [$icon,$bg,$color,$val,$lbl,$border])
-  <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {{ $border }};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05)">
-    <div style="width:44px;height:44px;border-radius:10px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">
-      <i class="bi {{ $icon }}" style="color:{{ $color }}"></i>
-    </div>
-    <div>
-      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif">{{ number_format($val) }}</div>
-      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px">{{ $lbl }}</div>
-    </div>
-  </div>
-  @endforeach
-</div>
-
-{{-- ══ FILTER BAR ══ --}}
-<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px">
-  <form method="GET" action="{{ route('it.non-it.index') }}" id="nitFilterForm" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%">
-    <div style="position:relative;flex:1;min-width:220px">
-      <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px"></i>
-      <input type="text" name="nit_search" id="nitSearchInput" value="{{ $search }}"
-        placeholder="Search asset no., class, description, location..."
-        autocomplete="off"
-        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
-        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-      <div id="nitSearchSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
-    </div>
-    <select name="nit_class" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
-      <option value="">All Classes</option>
-      @foreach($nitClassesUsed->sort() as $cl)
-      <option value="{{ $cl }}" {{ $class === $cl ? 'selected' : '' }}>{{ $cl }}</option>
-      @endforeach
-    </select>
-    <select name="nit_status" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
-      <option value="">All Status</option>
-      <option value="Active"                      {{ $status === 'Active'                      ? 'selected' : '' }}>Active</option>
-      <option value="Disposed"                    {{ $status === 'Disposed'                    ? 'selected' : '' }}>Disposed</option>
-      <option value="Pending for Write-Off"       {{ $status === 'Pending for Write-Off'       ? 'selected' : '' }}>Pending</option>
-    </select>
-    <select name="nit_location" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
-      <option value="">All Locations</option>
-      @foreach($allLocations as $loc)
-      <option value="{{ $loc }}" {{ $location === $loc ? 'selected' : '' }}>{{ $loc }}</option>
-      @endforeach
-    </select>
-    <button type="submit"
-      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
-      <i class="bi bi-funnel-fill"></i> Filter
-    </button>
-    @if($search || $class || $status || $location)
-    <a href="{{ route('it.non-it.index') }}"
-      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
-      Clear
-    </a>
-    @endif
-  </form>
 </div>
 
 {{-- ══ TABLE / EMPTY STATE ══ --}}
@@ -827,13 +837,14 @@ function openNitEditFormById(id) {
   var d = _nitItems[id]; if (!d) return;
   var isAdmin = {{ $user->isAdminOrFinance() ? 'true' : 'false' }};
 
-  document.getElementById('nitEditFormEl').action = '/non-it-assets/' + id;
+  document.getElementById('nitEditFormEl').action = '{{ url("it/non-it-assets") }}/' + id;
   document.getElementById('nef_asset_number').value    = d.asset_number  || '';
   document.getElementById('nef_fa_code').value         = d.fa_code       || '';
   document.getElementById('nef_description').value     = d.description   || '';
   document.getElementById('nef_brand').value           = d.brand         || '';
   document.getElementById('nef_location').value        = d.location      || '';
   document.getElementById('nef_notes').value           = d.notes         || '';
+  document.getElementById('nef_warranty_date').value   = d.warranty_date ? d.warranty_date.substring(0,10) : '';
   document.getElementById('nef_years_purchase').value  = d.years_purchase || '';
   document.getElementById('nef_total_cost').value      = d.total_cost    !== null ? d.total_cost    : '';
   document.getElementById('nef_accumulated').value     = d.accumulated   !== null ? d.accumulated   : '';
@@ -989,7 +1000,7 @@ function nitSubmitBulkDispose() {
 var _nitQrAssetURL = '';
 
 function openNitQRModal(id, assetNo, desc, faCode, location) {
-  _nitQrAssetURL = window.location.origin + '/non-it-assets/' + id;
+  _nitQrAssetURL = '{{ url("it/non-it-assets") }}/' + id;
   document.getElementById('nitQrModalAssetId').textContent = assetNo + (faCode ? ' · ' + faCode : '');
   document.getElementById('nitQrModalDesc').textContent    = desc;
   document.getElementById('nitQrOpenBtn').onclick = function(){ window.open(_nitQrAssetURL, '_blank'); };
