@@ -13,6 +13,11 @@
 .itr-field-label { font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px; }
 .itr-field-value { font-size:13.5px;color:var(--text);font-weight:500;word-break:break-word; }
 .itr-field-value.empty { color:var(--muted);font-style:italic; }
+.itr-rich-text p { margin:0 0 6px; }
+.itr-rich-text p:last-child { margin-bottom:0; }
+.itr-rich-text ul,.itr-rich-text ol { margin:0 0 6px;padding-left:20px; }
+.itr-rich-text strong { font-weight:700; }
+.itr-rich-text em { font-style:italic; }
 .itr-chip-list { display:flex;flex-wrap:wrap;gap:6px;margin-top:2px; }
 .itr-chip-ro { display:inline-flex;align-items:center;background:rgba(2,132,199,.08);color:var(--accent);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;border:1px solid rgba(2,132,199,.2); }
 .sg2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
@@ -371,7 +376,7 @@
       </div>
       <div>
         <div class="itr-field-label">Justification</div>
-        <div class="itr-field-value" style="white-space:pre-wrap;line-height:1.6">{{ $form->justification ?: '—' }}</div>
+        <div class="itr-field-value itr-rich-text" style="line-height:1.6">{!! $form->justification ?: '—' !!}</div>
       </div>
     </div>
     @if($form->document_path)
