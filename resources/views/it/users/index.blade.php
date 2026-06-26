@@ -419,15 +419,17 @@ $action      = request('action', 'list');
               </button>
             </form>
             @endif
+            @if($row->it_role !== 'user')
             <form method="POST" action="{{ route('it.users.destroy', $row->id) }}" style="display:contents"
-              onsubmit="return confirm('Delete {{ $row->full_name }} permanently?')">
+              onsubmit="return confirm('Reset {{ $row->full_name }} to the default Staff role?')">
               @csrf
               @method('DELETE')
               <button type="submit" class="mu-btn"
-                style="background:rgba(239,68,68,.08);color:#dc2626;border-color:rgba(239,68,68,.2)" title="Delete">
-                <i class="bi bi-trash-fill"></i>
+                style="background:rgba(239,68,68,.08);color:#dc2626;border-color:rgba(239,68,68,.2)" title="Reset to Staff role">
+                <i class="bi bi-arrow-counterclockwise"></i>
               </button>
             </form>
+            @endif
             @endif
           </div>
         </div>
