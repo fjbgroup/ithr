@@ -345,8 +345,13 @@
     $row .= '<div class="myr-row-icon" style="background:rgba(37,99,235,.1)"><i class="bi bi-pencil-square" style="color:#2563eb"></i></div>';
     $row .= '<div class="myr-row-body">';
     $row .= '<div class="myr-row-title">'.e($req->description).'</div>';
-    $currentDesc = $req->inventoryItem?->description ?? '—';
-    $row .= '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>'.e($currentDesc).'</em></div>';
+    if ($req->asset_type === 'non_it') {
+      $row .= '<div style="margin-bottom:4px"><span style="display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><i class=\"bi bi-box-seam\"></i> Non-IT Asset</span></div>';
+      $currentDesc = null;
+    } else {
+      $currentDesc = $req->inventoryItem?->description ?? '—';
+      $row .= '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>'.e($currentDesc).'</em></div>';
+    }
     $row .= '<div class="myr-row-meta">';
     if ($req->asset_class)   $row .= '<span class="myr-tag">'.e($req->asset_class).'</span>';
     if ($req->serial_number) $row .= '<span class="myr-tag-muted">S/N '.e($req->serial_number).'</span>';
@@ -358,7 +363,7 @@
     $row .= '</div></div>';
     if ($resolved) {
       $kv = ['Asset Class'=>$req->asset_class??'','Location'=>$req->location??''];
-      if ($req->description !== $currentDesc) $kv['New Description'] = $req->description;
+      if ($currentDesc !== null && $req->description !== $currentDesc) $kv['New Description'] = $req->description;
       if ($req->reviewed_at) $kv['Reviewed'] = \Carbon\Carbon::parse($req->reviewed_at)->format('d M Y, H:i');
       $row .= myrDetailBlock($req->status, $kv);
     }
