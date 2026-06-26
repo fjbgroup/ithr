@@ -342,6 +342,22 @@ html.sidebar-collapsed .sidebar-footer .user-card i{display:none!important}
 html.sidebar-collapsed .btn-logout{font-size:0!important;padding:10px 0!important;justify-content:center!important;gap:0!important}
 html.sidebar-collapsed .btn-logout i{font-size:15px!important}
 
+/* ── COLLAPSED ACTIVE STATE ── */
+html.sidebar-collapsed .sidebar-nav .nav-link.active {
+  background: rgba(56,189,248,.18) !important;
+  border-left: 3px solid var(--sky) !important;
+}
+html.sidebar-collapsed .sidebar-nav .nav-link.active i {
+  color: var(--sky) !important;
+}
+html.sidebar-collapsed .sidebar-nav > div > button.sb-active {
+  background: rgba(2,132,199,.25) !important;
+  border-left: 3px solid var(--sky) !important;
+}
+html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
+  color: var(--sky) !important;
+}
+
 /* ── MOBILE ── */
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important;overflow-y:auto}
@@ -398,7 +414,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     @if($user->isAdmin())
     {{-- Admin: All Assets with sub-nav --}}
     <div>
-      <button onclick="toggleITAssets()" id="itAssetsToggle"
+      <button onclick="toggleITAssets()" id="itAssetsToggle" class="{{ $itActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
           background:{{ $itActive ? 'rgba(2,132,199,.15)' : 'none' }};
           color:{{ $itActive ? 'var(--accent)' : '#94a3b8' }};
@@ -427,7 +443,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     @else
     {{-- Non-admin: IT + Non-IT + My Requests --}}
     <div>
-      <button onclick="toggleITAssets()" id="itAssetsToggle"
+      <button onclick="toggleITAssets()" id="itAssetsToggle" class="{{ $itActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
           background:{{ $itActive ? 'rgba(2,132,199,.15)' : 'none' }};
           color:{{ $itActive ? 'var(--accent)' : '#94a3b8' }};
@@ -482,7 +498,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     @if($user->isAdminOrFinance())
     @php $ewActive = request()->routeIs('ewaste.*') || request()->routeIs('ewaste.collected'); @endphp
     <div>
-      <button onclick="toggleEwaste()" id="ewasteToggle"
+      <button onclick="toggleEwaste()" id="ewasteToggle" class="{{ $ewActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
           background:{{ $ewActive ? 'rgba(2,132,199,.15)' : 'none' }};
           color:{{ $ewActive ? 'var(--accent)' : '#94a3b8' }};
@@ -517,7 +533,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     {{-- Disposal — Admin + Finance only --}}
     @php $dispActive = request()->routeIs('disposal.*'); @endphp
     <div>
-      <button onclick="toggleDisposal()" id="disposalToggle"
+      <button onclick="toggleDisposal()" id="disposalToggle" class="{{ $dispActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
           background:{{ $dispActive ? 'rgba(2,132,199,.15)' : 'none' }};
           color:{{ $dispActive ? 'var(--accent)' : '#94a3b8' }};
@@ -552,7 +568,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     {{-- Reports — Admin + Finance only --}}
     @php $rptActive = request()->routeIs('reports.*'); @endphp
     <div>
-      <button onclick="toggleReports()" id="reportsToggle"
+      <button onclick="toggleReports()" id="reportsToggle" class="{{ $rptActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
           background:{{ $rptActive ? 'rgba(2,132,199,.15)' : 'none' }};
           color:{{ $rptActive ? 'var(--accent)' : '#94a3b8' }};
@@ -592,7 +608,7 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     @endphp
     @if(!$user->isAdmin() && $itDraftCount > 0)
     <div>
-      <button onclick="toggleITRequestForm()" id="itrToggle"
+      <button onclick="toggleITRequestForm()" id="itrToggle" class="{{ $itrActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
           background:{{ $itrActive ? 'rgba(2,132,199,.15)' : 'none' }};
           color:{{ $itrActive ? 'var(--accent)' : '#94a3b8' }};

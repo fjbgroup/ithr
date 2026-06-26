@@ -342,6 +342,24 @@ body.sidebar-collapsed .user-card { justify-content: center !important; padding:
 body.sidebar-collapsed .user-info { display: none !important; }
 body.sidebar-collapsed .user-avatar { margin: 0 !important; width: 32px !important; height: 32px !important; }
 
+/* Active page indicator in collapsed mode */
+body.sidebar-collapsed .nav-link.active-sidebar,
+body.sidebar-collapsed .nav-link.sidebar-active,
+body.sidebar-collapsed .nav-link.active {
+  background: rgba(2,132,199,.25) !important;
+  border-left: 3px solid #38bdf8 !important;
+}
+body.sidebar-collapsed .dropdown-trigger.active-sidebar {
+  background: rgba(2,132,199,.25) !important;
+  border-left: 3px solid #38bdf8 !important;
+}
+body.sidebar-collapsed .nav-link.active-sidebar i,
+body.sidebar-collapsed .nav-link.sidebar-active i,
+body.sidebar-collapsed .nav-link.active i,
+body.sidebar-collapsed .dropdown-trigger.active-sidebar i:not(.dropdown-chevron) {
+  color: #38bdf8 !important;
+}
+
 /* Sidebar info popovers */
 .has-info { position: relative; overflow: visible; }
 .nav-info-slot {
