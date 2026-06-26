@@ -660,6 +660,11 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
     </a>
     @endif
 
+    {{-- Documentation section --}}
+    @if($user->isAdmin())
+    <div class="nav-section-label">Documentation</div>
+    @endif
+
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal

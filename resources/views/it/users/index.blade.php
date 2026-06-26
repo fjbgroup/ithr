@@ -15,7 +15,7 @@ $roleMeta = [
 ];
 $roleOrder   = ['ceo','gm','hou','admin','finance_admin','user'];
 $avatarColor = fn($name) => ['#0284c7','#2563eb','#16a34a','#7c3aed','#0891b2','#dc2626','#d97706'][ord(strtoupper($name[0] ?? 'A')) % 7];
-$activeRole  = request('role_tab', 'ceo');
+$activeRole  = $activeRole ?? request('role_tab', 'ceo');
 $action      = request('action', 'list');
 ?>
 
@@ -37,8 +37,6 @@ $action      = request('action', 'list');
 
 /* Right panel */
 .mu-panel{display:flex;flex-direction:column;gap:16px}
-.mu-role-section{display:none}
-.mu-role-section.active{display:flex;flex-direction:column;gap:16px}
 
 /* Panel header */
 .mu-panel-hdr{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;display:flex;align-items:center;gap:16px}
@@ -108,30 +106,23 @@ $action      = request('action', 'list');
   @endforeach
 </div>
 
-<!-- ADD / EDIT FORM -->
-@if($action === 'add' || $action === 'edit')
+<!-- ADD FORM -->
+@if($action === 'add')
 <div class="mu-form-wrap">
   <div class="mu-form-hdr">
     <div style="display:flex;align-items:center;gap:10px">
       <div style="width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center">
-        <i class="bi bi-person-{{ $editUser ? 'gear' : 'plus-fill' }}" style="color:#fff;font-size:15px"></i>
+        <i class="bi bi-person-plus-fill" style="color:#fff;font-size:15px"></i>
       </div>
-      <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff">
-        {{ $editUser ? 'Edit User — '.$editUser->full_name : 'Create New User' }}
-      </span>
+      <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff">Create New User</span>
     </div>
     <a href="{{ route('it.users.index') }}" style="display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,.7);font-size:13px;text-decoration:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 12px">
       <i class="bi bi-x"></i> Cancel
     </a>
   </div>
   <div style="padding:22px">
-    @if($editUser)
-    <form method="POST" action="{{ route('it.users.update', $editUser->id) }}">
-      @csrf
-    @else
     <form method="POST" action="{{ route('it.users.store') }}">
       @csrf
-    @endif
       @if($errors->any())
       <div class="alert-danger-custom" style="margin-bottom:16px">
         <i class="bi bi-exclamation-circle-fill"></i>
@@ -143,8 +134,7 @@ $action      = request('action', 'list');
       </div>
       @endif
 
-      @if(!$editUser)
-      {{-- Staff search — only shown on create --}}
+      {{-- Staff search --}}
       <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
         <label class="form-label" style="font-weight:700">
           <i class="bi bi-search" style="color:var(--accent)"></i>
@@ -157,7 +147,7 @@ $action      = request('action', 'list');
           <i class="bi bi-search" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none"></i>
         </div>
         <div id="staffSearchResults" style="display:none;position:absolute;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);width:100%;max-width:520px;max-height:280px;overflow-y:auto;margin-top:4px"></div>
-        <div id="staffSelectedBanner" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(2,132,199,.07);border:1px solid rgba(2,132,199,.2);border-radius:8px;display:flex;align-items:center;gap:10px">
+        <div id="staffSelectedBanner" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(2,132,199,.07);border:1px solid rgba(2,132,199,.2);border-radius:8px;align-items:center;gap:10px">
           <i class="bi bi-check-circle-fill" style="color:var(--accent);flex-shrink:0"></i>
           <span id="staffSelectedLabel" style="font-size:13px;font-weight:600;color:var(--text);flex:1"></span>
           <button type="button" onclick="clearStaffSelection()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0">
@@ -168,30 +158,29 @@ $action      = request('action', 'list');
           Select a staff member to auto-fill the fields below, or fill them in manually.
         </div>
       </div>
-      @endif
 
       <div class="row g-3">
         <div class="col-md-4">
           <label class="form-label">Username (Staff No.) <span style="color:var(--red)">*</span></label>
-          <input type="text" id="field_username" name="username" class="form-control" required value="{{ old('username', $editUser->username ?? '') }}"{{ $editUser ? ' readonly' : '' }}>
+          <input type="text" id="field_username" name="username" class="form-control" required value="{{ old('username') }}">
         </div>
         <div class="col-md-4">
           <label class="form-label">Full Name <span style="color:var(--red)">*</span></label>
-          <input type="text" id="field_full_name" name="full_name" class="form-control" required value="{{ old('full_name', $editUser->full_name ?? '') }}">
+          <input type="text" id="field_full_name" name="full_name" class="form-control" required value="{{ old('full_name') }}">
         </div>
         <div class="col-md-4">
           <label class="form-label">Email</label>
-          <input type="email" id="field_email" name="email" class="form-control" value="{{ old('email', $editUser->email ?? '') }}">
+          <input type="email" id="field_email" name="email" class="form-control" value="{{ old('email') }}">
         </div>
         <div class="col-md-4">
-          <label class="form-label">Password {!! $editUser ? '<span style="color:var(--muted);font-weight:400">(leave blank to keep)</span>' : '<span style="color:var(--red)">*</span>' !!}</label>
-          <input type="password" name="password" class="form-control" {{ $editUser ? '' : 'required' }} placeholder="{{ $editUser ? 'Leave blank to keep current' : 'Set password' }}">
+          <label class="form-label">Password <span style="color:var(--red)">*</span></label>
+          <input type="password" name="password" class="form-control" required placeholder="Set password">
         </div>
         <div class="col-md-4">
           <label class="form-label">Role</label>
           <select name="role" class="form-select">
             @php
-            $defaultRole = old('role', request('default_role', $editUser->it_role ?? 'user'));
+            $defaultRole = old('role', request('default_role', 'user'));
             $roleOpts = ['ceo'=>'Chief Executive Officer (C.E.O)','gm'=>'General Manager (G.M)','hou'=>'Head Of Unit (H.O.U)','admin'=>'IT Admin','finance_admin'=>'Finance Admin','user'=>'Staff'];
             @endphp
             @foreach($roleOpts as $rv => $rl)
@@ -201,15 +190,13 @@ $action      = request('action', 'list');
         </div>
         <div class="col-md-4">
           <label class="form-label">Department</label>
-          <input type="text" id="field_dept_name" name="dept_name" class="form-control" value="{{ old('dept_name', $editUser->dept_name ?? '') }}" placeholder="e.g. IT Department">
+          <input type="text" id="field_dept_name" name="dept_name" class="form-control" value="{{ old('dept_name') }}" placeholder="e.g. IT Department">
         </div>
         <div class="col-12">
-          <button type="submit" class="btn-primary-custom"><i class="bi bi-check-lg"></i> {{ $editUser ? 'Update User' : 'Create User' }}</button>
+          <button type="submit" class="btn-primary-custom"><i class="bi bi-check-lg"></i> Create User</button>
         </div>
       </div>
     </form>
-
-    @if(!$editUser)
     <script>
     (function () {
       const input   = document.getElementById('staffSearchInput');
@@ -288,10 +275,64 @@ $action      = request('action', 'list');
       };
     })();
     </script>
-    @endif
   </div>
 </div>
 @endif
+
+<!-- EDIT USER MODAL -->
+<div id="mu-edit-overlay" style="display:none;position:fixed;inset:0;z-index:1050;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.35);position:relative">
+    <div class="mu-form-hdr" style="border-radius:16px 16px 0 0">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <i class="bi bi-person-gear" style="color:#fff;font-size:15px"></i>
+        </div>
+        <span id="mu-edit-modal-title" style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff">Edit User</span>
+      </div>
+      <button type="button" onclick="closeMuEditModal()" style="display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,.7);font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 12px;cursor:pointer">
+        <i class="bi bi-x"></i> Close
+      </button>
+    </div>
+    <div style="padding:22px">
+      <form id="mu-edit-form" method="POST" action="">
+        @csrf
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Username</label>
+            <input type="text" id="mu-edit-username" name="username" class="form-control" readonly>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Full Name <span style="color:var(--red)">*</span></label>
+            <input type="text" id="mu-edit-full-name" name="full_name" class="form-control" required>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Email</label>
+            <input type="email" id="mu-edit-email" name="email" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Password <span style="color:var(--muted);font-weight:400">(leave blank to keep)</span></label>
+            <input type="password" id="mu-edit-password" name="password" class="form-control" placeholder="Leave blank to keep current">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Role</label>
+            <select id="mu-edit-role" name="role" class="form-select">
+              @foreach(['ceo'=>'Chief Executive Officer (C.E.O)','gm'=>'General Manager (G.M)','hou'=>'Head Of Unit (H.O.U)','admin'=>'IT Admin','finance_admin'=>'Finance Admin','user'=>'Staff'] as $rv => $rl)
+              <option value="{{ $rv }}">{{ $rl }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Department</label>
+            <input type="text" id="mu-edit-dept" name="dept_name" class="form-control" placeholder="e.g. IT Department">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn-primary-custom"><i class="bi bi-check-lg"></i> Update User</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- TWO-PANEL: RAIL + TABLE -->
 <div class="mu-layout">
@@ -300,7 +341,7 @@ $action      = request('action', 'list');
   <div class="mu-rail">
     <div class="mu-rail-header">Roles</div>
     @foreach($roleOrder as $r)
-    @php [$label,$icon,$color,$bg,$border] = $roleMeta[$r]; $cnt = count($grouped[$r]); $isAct = $activeRole === $r; @endphp
+    @php [$label,$icon,$color,$bg,$border] = $roleMeta[$r]; $cnt = $roleCounts[$r]; $isAct = $activeRole === $r; @endphp
     <a href="{{ route('it.users.index', ['role_tab' => $r]) }}"
        class="mu-rail-item {{ $isAct ? 'active' : '' }}"
        style="--rail-color:{{ $color }};--rail-bg:{{ $bg }}">
@@ -315,129 +356,160 @@ $action      = request('action', 'list');
 
   <!-- RIGHT PANEL -->
   <div class="mu-panel">
-    @foreach($roleOrder as $r)
-    @php [$label,$icon,$color,$bg,$border] = $roleMeta[$r]; $members = $grouped[$r]; $isAct = $activeRole === $r; @endphp
-    <div class="mu-role-section {{ $isAct ? 'active' : '' }}">
+    @php [$label,$icon,$color,$bg,$border] = $roleMeta[$activeRole]; @endphp
 
-      <!-- Panel header -->
-      <div class="mu-panel-hdr">
-        <div class="mu-panel-hdr-icon" style="background:{{ $bg }}">
-          <i class="bi {{ $icon }}" style="color:{{ $color }};font-size:22px"></i>
-        </div>
-        <div style="flex:1">
-          <div class="mu-panel-hdr-title">{{ $label }}</div>
-          <div class="mu-panel-hdr-sub">{{ count($members) }} account{{ count($members) !== 1 ? 's' : '' }}</div>
-        </div>
-        <a href="{{ route('it.users.index', ['action'=>'add','default_role'=>$r,'role_tab'=>$r]) }}"
-          style="display:inline-flex;align-items:center;gap:6px;background:{{ $color }};color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap">
-          <i class="bi bi-plus-lg"></i> Add {{ $label }}
-        </a>
+    <!-- Search bar -->
+    <form method="GET" action="{{ route('it.users.index') }}" style="display:flex;gap:8px;align-items:center">
+      <input type="hidden" name="role_tab" value="{{ $activeRole }}">
+      <div style="flex:1;position:relative">
+        <input type="text" id="mu-search-input" name="search" value="{{ $search }}"
+          placeholder="Search name, username, email, department…"
+          autocomplete="off"
+          style="width:100%;padding:9px 36px 9px 14px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font-size:13px;outline:none">
+        <i class="bi bi-search" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none"></i>
       </div>
+      <a id="mu-clear-btn" href="{{ route('it.users.index', ['role_tab' => $activeRole]) }}"
+        style="padding:9px 14px;border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--muted);text-decoration:none;white-space:nowrap;background:var(--surface);display:{{ $search ? 'inline-flex' : 'none' }};align-items:center;gap:5px"><i class="bi bi-x-lg"></i> Clear</a>
+    </form>
 
-      <!-- Users table -->
-      <div class="mu-table-wrap">
-        @if(empty($members))
-        <div class="mu-empty">
-          <i class="bi {{ $icon }} mu-empty-icon" style="color:{{ $color }}"></i>
-          <div class="mu-empty-title">No {{ strtolower($label) }} accounts</div>
-          <div class="mu-empty-sub">
-            <a href="{{ route('it.users.index', ['action'=>'add','default_role'=>$r,'role_tab'=>$r]) }}"
-              style="color:{{ $color }};font-weight:700;text-decoration:none">Create the first one</a>
-          </div>
-        </div>
-        @else
-        @foreach($members as $row)
-        @php
-          $aColor = $avatarColor($row->full_name);
-          $isMe   = $row->id == auth()->id();
-        @endphp
-        <div class="mu-user-row">
-          <!-- Avatar -->
-          @if($row->avatar)
-          <img src="{{ Storage::url($row->avatar) }}" class="mu-avatar">
-          @else
-          <div class="mu-avatar" style="background:{{ $aColor }}">{{ strtoupper(substr($row->full_name,0,1)) }}</div>
-          @endif
-
-          <!-- Info -->
-          <div class="mu-user-info">
-            <div class="mu-user-name">
-              {{ $row->full_name }}
-              @if($isMe)
-              <span style="font-size:9px;background:rgba(2,132,199,.15);color:var(--accent);border-radius:4px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px">YOU</span>
-              @endif
-              @if($row->must_change_password)
-              <span style="font-size:9px;background:rgba(220,38,38,.1);color:#dc2626;border-radius:4px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px"><i class="bi bi-key-fill"></i> Temp PW</span>
-              @endif
-            </div>
-            <div class="mu-user-sub">
-              <span class="mu-user-meta"><i class="bi bi-person-fill"></i>{{ $row->username }}</span>
-              @if($row->email)
-              <span class="mu-user-meta"><i class="bi bi-envelope-fill"></i>{{ $row->email }}</span>
-              @endif
-              @if($row->department)
-              <span class="mu-user-meta"><i class="bi bi-person-badge-fill"></i>{{ $row->department }}</span>
-              @endif
-              <span class="mu-user-meta"><i class="bi bi-clock-history"></i>{{ $row->last_login ? $row->last_login->format('d/m/Y H:i') : 'Never logged in' }}</span>
-            </div>
-          </div>
-
-          <!-- Status -->
-          @if($row->is_active)
-          <span class="mu-status" style="background:rgba(22,163,74,.1);color:#16a34a">
-            <span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block"></span> Active
-          </span>
-          @else
-          <span class="mu-status" style="background:rgba(239,68,68,.1);color:#dc2626">
-            <span style="width:6px;height:6px;border-radius:50%;background:#dc2626;display:inline-block"></span> Inactive
-          </span>
-          @endif
-
-          <!-- Actions -->
-          <div class="mu-actions">
-            <a href="{{ route('it.users.index', ['action'=>'edit','id'=>$row->id,'role_tab'=>$r]) }}" class="mu-btn"
-              style="background:rgba(2,132,199,.08);color:var(--accent);border-color:rgba(2,132,199,.2)" title="Edit">
-              <i class="bi bi-pencil-fill"></i>
-            </a>
-            @if(!$isMe)
-            <form method="POST" action="{{ route('it.users.toggle', $row->id) }}" style="display:contents"
-              onsubmit="return confirm('{{ $row->is_active ? 'Deactivate' : 'Activate' }} {{ $row->full_name }}?')">
-              @csrf
-              <button type="submit" class="mu-btn"
-                style="background:{{ $row->is_active ? 'rgba(22,163,74,.08)' : 'rgba(239,68,68,.08)' }};color:{{ $row->is_active ? '#16a34a' : '#dc2626' }};border-color:{{ $row->is_active ? 'rgba(22,163,74,.2)' : 'rgba(239,68,68,.2)' }}"
-                title="{{ $row->is_active ? 'Deactivate' : 'Activate' }}">
-                <i class="bi bi-toggle-{{ $row->is_active ? 'on' : 'off' }}"></i>
-              </button>
-            </form>
-            @if($row->it_role !== 'admin_it' && $row->it_role !== 'admin')
-            <form method="POST" action="{{ route('it.users.reset-password', $row->id) }}" style="display:contents"
-              onsubmit="return confirm('Reset password for {{ $row->full_name }} to default?')">
-              @csrf
-              <button type="submit" class="mu-btn"
-                style="background:rgba(245,158,11,.08);color:#d97706;border-color:rgba(245,158,11,.2)" title="Reset Password">
-                <i class="bi bi-key-fill"></i>
-              </button>
-            </form>
-            @endif
-            @if($row->it_role !== 'user')
-            <form method="POST" action="{{ route('it.users.destroy', $row->id) }}" style="display:contents"
-              onsubmit="return confirm('Reset {{ $row->full_name }} to the default Staff role?')">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="mu-btn"
-                style="background:rgba(239,68,68,.08);color:#dc2626;border-color:rgba(239,68,68,.2)" title="Reset to Staff role">
-                <i class="bi bi-arrow-counterclockwise"></i>
-              </button>
-            </form>
-            @endif
-            @endif
-          </div>
-        </div>
-        @endforeach
-        @endif
+    <!-- Panel header -->
+    <div class="mu-panel-hdr">
+      <div class="mu-panel-hdr-icon" style="background:{{ $bg }}">
+        <i class="bi {{ $icon }}" style="color:{{ $color }};font-size:22px"></i>
       </div>
+      <div style="flex:1">
+        <div class="mu-panel-hdr-title">{{ $label }}</div>
+        <div class="mu-panel-hdr-sub" id="mu-users-count">
+          {{ $users->total() }} account{{ $users->total() !== 1 ? 's' : '' }}{{ $search ? ' matching "'.e($search).'"' : '' }}
+        </div>
+      </div>
+      <a href="{{ route('it.users.index', ['action'=>'add','default_role'=>$activeRole,'role_tab'=>$activeRole]) }}"
+        style="display:inline-flex;align-items:center;gap:6px;background:{{ $color }};color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap">
+        <i class="bi bi-plus-lg"></i> Add {{ $label }}
+      </a>
     </div>
-    @endforeach
+
+    <!-- Users table + pagination (swapped by live search) -->
+    <div id="mu-users-list">
+    <div class="mu-table-wrap">
+      @forelse($users as $row)
+      @php
+        $aColor = $avatarColor($row->full_name);
+        $isMe   = $row->id == auth()->id();
+      @endphp
+      <div class="mu-user-row">
+        <!-- Avatar -->
+        @if($row->avatar)
+        <img src="{{ Storage::url($row->avatar) }}" class="mu-avatar">
+        @else
+        <div class="mu-avatar" style="background:{{ $aColor }}">{{ strtoupper(substr($row->full_name,0,1)) }}</div>
+        @endif
+
+        <!-- Info -->
+        <div class="mu-user-info">
+          <div class="mu-user-name">
+            {{ $row->full_name }}
+            @if($isMe)
+            <span style="font-size:9px;background:rgba(2,132,199,.15);color:var(--accent);border-radius:4px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px">YOU</span>
+            @endif
+            @if($row->must_change_password)
+            <span style="font-size:9px;background:rgba(220,38,38,.1);color:#dc2626;border-radius:4px;padding:1px 6px;font-weight:700;vertical-align:middle;margin-left:4px"><i class="bi bi-key-fill"></i> Temp PW</span>
+            @endif
+          </div>
+          <div class="mu-user-sub">
+            <span class="mu-user-meta"><i class="bi bi-person-fill"></i>{{ $row->username }}</span>
+            @if($row->email)
+            <span class="mu-user-meta"><i class="bi bi-envelope-fill"></i>{{ $row->email }}</span>
+            @endif
+            @if($row->department)
+            <span class="mu-user-meta"><i class="bi bi-person-badge-fill"></i>{{ $row->department }}</span>
+            @endif
+            <span class="mu-user-meta"><i class="bi bi-clock-history"></i>{{ $row->last_login ? $row->last_login->format('d/m/Y H:i') : 'Never logged in' }}</span>
+          </div>
+        </div>
+
+        <!-- Status -->
+        @if($row->is_active)
+        <span class="mu-status" style="background:rgba(22,163,74,.1);color:#16a34a">
+          <span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block"></span> Active
+        </span>
+        @else
+        <span class="mu-status" style="background:rgba(239,68,68,.1);color:#dc2626">
+          <span style="width:6px;height:6px;border-radius:50%;background:#dc2626;display:inline-block"></span> Inactive
+        </span>
+        @endif
+
+        <!-- Actions -->
+        <div class="mu-actions">
+          <button type="button" class="mu-btn mu-edit-trigger"
+            style="background:rgba(2,132,199,.08);color:var(--accent);border-color:rgba(2,132,199,.2)" title="Edit"
+            data-action="{{ route('it.users.update', $row->id) }}"
+            data-name="{{ e($row->full_name) }}"
+            data-username="{{ e($row->username) }}"
+            data-full-name="{{ e($row->full_name) }}"
+            data-email="{{ e($row->email ?? '') }}"
+            data-role="{{ $row->it_role === 'admin_it' ? 'admin' : $row->it_role }}"
+            data-dept="{{ e($row->dept_name ?? '') }}">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          @if(!$isMe)
+          <form method="POST" action="{{ route('it.users.toggle', $row->id) }}" style="display:contents"
+            onsubmit="return confirm('{{ $row->is_active ? 'Deactivate' : 'Activate' }} {{ $row->full_name }}?')">
+            @csrf
+            <button type="submit" class="mu-btn"
+              style="background:{{ $row->is_active ? 'rgba(22,163,74,.08)' : 'rgba(239,68,68,.08)' }};color:{{ $row->is_active ? '#16a34a' : '#dc2626' }};border-color:{{ $row->is_active ? 'rgba(22,163,74,.2)' : 'rgba(239,68,68,.2)' }}"
+              title="{{ $row->is_active ? 'Deactivate' : 'Activate' }}">
+              <i class="bi bi-toggle-{{ $row->is_active ? 'on' : 'off' }}"></i>
+            </button>
+          </form>
+          @if($row->it_role !== 'admin_it' && $row->it_role !== 'admin')
+          <form method="POST" action="{{ route('it.users.reset-password', $row->id) }}" style="display:contents"
+            onsubmit="return confirm('Reset password for {{ $row->full_name }} to default?')">
+            @csrf
+            <button type="submit" class="mu-btn"
+              style="background:rgba(245,158,11,.08);color:#d97706;border-color:rgba(245,158,11,.2)" title="Reset Password">
+              <i class="bi bi-key-fill"></i>
+            </button>
+          </form>
+          @endif
+          @if($row->it_role !== 'user')
+          <form method="POST" action="{{ route('it.users.destroy', $row->id) }}" style="display:contents"
+            onsubmit="return confirm('Reset {{ $row->full_name }} to the default Staff role?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="mu-btn"
+              style="background:rgba(239,68,68,.08);color:#dc2626;border-color:rgba(239,68,68,.2)" title="Reset to Staff role">
+              <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+          </form>
+          @endif
+          @endif
+        </div>
+      </div>
+      @empty
+      <div class="mu-empty">
+        <i class="bi {{ $icon }} mu-empty-icon" style="color:{{ $color }}"></i>
+        <div class="mu-empty-title">{{ $search ? 'No results for "'.e($search).'"' : 'No '.$label.' accounts' }}</div>
+        <div class="mu-empty-sub">
+          @if($search)
+          <a href="{{ route('it.users.index', ['role_tab' => $activeRole]) }}" style="color:{{ $color }};font-weight:700;text-decoration:none">Clear search</a>
+          @else
+          <a href="{{ route('it.users.index', ['action'=>'add','default_role'=>$activeRole,'role_tab'=>$activeRole]) }}"
+            style="color:{{ $color }};font-weight:700;text-decoration:none">Create the first one</a>
+          @endif
+        </div>
+      </div>
+      @endforelse
+    </div>
+
+    <!-- Pagination -->
+    @if($users->hasPages())
+    <div style="padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px">
+      {{ $users->links() }}
+    </div>
+    @endif
+    </div>{{-- #mu-users-list --}}
+
   </div>
 </div>
 
@@ -511,6 +583,111 @@ $action      = request('action', 'list');
   @endforeach
   @endif
 </div>
+
+<script>
+// ── Edit User Modal ───────────────────────────────────────────────────────────
+function openMuEditModal(data) {
+  const overlay = document.getElementById('mu-edit-overlay');
+  document.getElementById('mu-edit-form').action           = data.action;
+  document.getElementById('mu-edit-modal-title').textContent = 'Edit User — ' + data.name;
+  document.getElementById('mu-edit-username').value        = data.username;
+  document.getElementById('mu-edit-full-name').value       = data.fullName;
+  document.getElementById('mu-edit-email').value           = data.email;
+  document.getElementById('mu-edit-role').value            = data.role;
+  document.getElementById('mu-edit-dept').value            = data.dept;
+  document.getElementById('mu-edit-password').value        = '';
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMuEditModal() {
+  document.getElementById('mu-edit-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Backdrop click closes modal
+document.getElementById('mu-edit-overlay').addEventListener('click', function (e) {
+  if (e.target === this) closeMuEditModal();
+});
+
+// Escape key closes modal
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && document.getElementById('mu-edit-overlay').style.display === 'flex') {
+    closeMuEditModal();
+  }
+});
+
+// Event delegation — works for both initial render and AJAX-swapped partials
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.mu-edit-trigger');
+  if (!btn) return;
+  e.preventDefault();
+  openMuEditModal({
+    action:   btn.dataset.action,
+    name:     btn.dataset.name,
+    username: btn.dataset.username,
+    fullName: btn.dataset.fullName,
+    email:    btn.dataset.email,
+    role:     btn.dataset.role,
+    dept:     btn.dataset.dept,
+  });
+});
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Live Search ───────────────────────────────────────────────────────────────
+(function () {
+  const input    = document.getElementById('mu-search-input');
+  const listWrap = document.getElementById('mu-users-list');
+  const countEl  = document.getElementById('mu-users-count');
+  const clearBtn = document.getElementById('mu-clear-btn');
+  const roleTab  = @json($activeRole);
+  const baseUrl  = '{{ route('it.users.index') }}';
+  let timer;
+
+  function updateCount(total, q) {
+    const s = total !== 1 ? 's' : '';
+    const m = q ? ` matching "${q}"` : '';
+    countEl.textContent = `${total} account${s}${m}`;
+  }
+
+  function doSearch(q) {
+    const fetchUrl = new URL(baseUrl);
+    fetchUrl.searchParams.set('role_tab', roleTab);
+    fetchUrl.searchParams.set('partial', '1');
+    if (q) fetchUrl.searchParams.set('search', q);
+
+    const histUrl = new URL(baseUrl);
+    histUrl.searchParams.set('role_tab', roleTab);
+    if (q) histUrl.searchParams.set('search', q);
+    history.replaceState(null, '', histUrl.toString());
+
+    if (clearBtn) clearBtn.style.display = q ? 'inline-flex' : 'none';
+
+    fetch(fetchUrl.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(r => r.json())
+      .then(data => {
+        listWrap.innerHTML = data.html;
+        updateCount(data.total, q);
+      });
+  }
+
+  if (input) {
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(() => doSearch(this.value.trim()), 300);
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (input) input.value = '';
+      doSearch('');
+    });
+  }
+})();
+// ─────────────────────────────────────────────────────────────────────────────
+</script>
 
 @endsection
 
