@@ -49,10 +49,16 @@
       <div class="fg">
         <div class="itr-label">Name <span class="itr-req">*</span></div>
         <input type="hidden" name="req_name" id="{{ $formPrefix }}_req_name_val" value="{{ old('req_name', $user->full_name) }}">
-        <input class="itr-input{{ $errors->has('req_name') ? ' is-error' : '' }}" type="text" id="{{ $formPrefix }}_req_name_search"
-          value="{{ old('req_name', $user->full_name) }}" placeholder="Type to search staff name…" autocomplete="off"
-          oninput="filterStaff(this.value,'{{ $formPrefix }}_req_name_val','{{ $formPrefix }}_req_department','{{ $formPrefix }}_req_staff_id','{{ $formPrefix }}_req_designation')"
-          onfocus="showStaffDropdown('{{ $formPrefix }}_req_name_search')" onblur="setTimeout(hideStaffDropdown,200)" required/>
+        <div class="itr-name-dd{{ $errors->has('req_name') ? ' is-error' : '' }}" id="{{ $formPrefix }}_req_name_wrap">
+          <div class="itr-name-trigger" id="{{ $formPrefix }}_req_name_trigger" onclick="toggleStaffDD('{{ $formPrefix }}_req_name')">
+            <span class="itr-name-display{{ old('req_name', $user->full_name) ? '' : ' is-placeholder' }}" id="{{ $formPrefix }}_req_name_display">{{ old('req_name', $user->full_name) ?: '-- Select staff name --' }}</span>
+            <i class="bi bi-chevron-down itr-name-arrow"></i>
+          </div>
+          <div class="itr-name-panel" id="{{ $formPrefix }}_req_name_panel" style="display:none">
+            <input class="itr-name-search-input" type="text" id="{{ $formPrefix }}_req_name_search" placeholder="Filter by name…" oninput="filterStaffDD('{{ $formPrefix }}_req_name',this.value)" autocomplete="off">
+            <div class="itr-name-list" id="{{ $formPrefix }}_req_name_list"></div>
+          </div>
+        </div>
         @error('req_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
       </div>
       <div class="fg">
@@ -87,10 +93,16 @@
     <div class="fg">
       <div class="itr-label">Name <span class="itr-req">*</span></div>
       <input type="hidden" name="approver_name" id="{{ $formPrefix }}_approver_name_val" value="{{ old('approver_name') }}">
-      <input class="itr-input{{ $errors->has('approver_name') ? ' is-error' : '' }}" type="text" id="{{ $formPrefix }}_approver_name_search"
-        value="{{ old('approver_name') }}" placeholder="Type to search approver name…" autocomplete="off"
-        oninput="filterHou(this.value,'{{ $formPrefix }}_approver_name_val','{{ $formPrefix }}_approver_department','{{ $formPrefix }}_approver_contact')"
-        onfocus="showHouDropdown('{{ $formPrefix }}_approver_name_search')" onblur="setTimeout(hideHouDropdown,200)" required/>
+      <div class="itr-name-dd{{ $errors->has('approver_name') ? ' is-error' : '' }}" id="{{ $formPrefix }}_approver_name_wrap">
+        <div class="itr-name-trigger" id="{{ $formPrefix }}_approver_name_trigger" onclick="toggleHouDD('{{ $formPrefix }}_approver_name')">
+          <span class="itr-name-display{{ old('approver_name') ? '' : ' is-placeholder' }}" id="{{ $formPrefix }}_approver_name_display">{{ old('approver_name') ?: '-- Select approver name --' }}</span>
+          <i class="bi bi-chevron-down itr-name-arrow"></i>
+        </div>
+        <div class="itr-name-panel" id="{{ $formPrefix }}_approver_name_panel" style="display:none">
+          <input class="itr-name-search-input" type="text" id="{{ $formPrefix }}_approver_name_search" placeholder="Filter by name…" oninput="filterHouDD('{{ $formPrefix }}_approver_name',this.value)" autocomplete="off">
+          <div class="itr-name-list" id="{{ $formPrefix }}_approver_name_list"></div>
+        </div>
+      </div>
       @error('approver_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
     </div>
     <div class="g3">

@@ -79,6 +79,8 @@ class ItRequestFormController extends Controller
                 'dept'     => optional($s->department)->name ?? '',
                 'staff_no' => $s->staff_no ?? '',
                 'email'    => $s->email ?? '',
+                'position' => $s->position ?? '',
+                'phone'    => $s->phone_number ?? '',
             ];
         });
 

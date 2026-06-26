@@ -815,6 +815,24 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-field-error i { font-size: 12px; flex-shrink: 0; }
 .itr-input.is-error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.1) !important; }
 
+/* ── Name Searchable Dropdown ── */
+.itr-name-dd { position:relative; }
+.itr-name-trigger { display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;background:var(--surface);font-size:13px;transition:border-color .15s,box-shadow .15s;min-height:40px;user-select:none; }
+.itr-name-trigger:hover { border-color:var(--accent); }
+.itr-name-trigger.is-open { border-color:var(--accent);box-shadow:0 0 0 3px rgba(2,132,199,.12); }
+.itr-name-display { color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+.itr-name-display.is-placeholder { color:var(--muted);opacity:.6; }
+.itr-name-arrow { color:var(--muted);font-size:11px;flex-shrink:0;margin-left:8px;transition:transform .2s; }
+.itr-name-trigger.is-open .itr-name-arrow { transform:rotate(180deg); }
+.itr-name-panel { position:fixed;z-index:9999;background:#fff;border:1.5px solid #0284c7;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.15);overflow:hidden; }
+.itr-name-search-input { width:100%;border:none;border-bottom:1px solid #e2e8f0;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;font-family:'DM Sans',sans-serif; }
+.itr-name-list { max-height:220px;overflow-y:auto; }
+.itr-name-item { padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid #f1f5f9; }
+.itr-name-item:hover { background:#f0f9ff; }
+.itr-name-item-name { font-weight:600;color:#0f172a; }
+.itr-name-item-dept { font-size:11px;color:#64748b;margin-top:2px; }
+.itr-name-noresult { padding:12px 14px;font-size:13px;color:#64748b; }
+
 /* ── Actions ── */
 .itr-action-bar { display: flex; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
 .itr-btn-submit { font-family:'DM Sans',sans-serif; font-size: 13.5px; font-weight: 700; padding: 11px 28px; background: var(--accent); color: white; border: none; border-radius: 9px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
@@ -1693,7 +1711,17 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           <div class="g2">
             <div class="fg">
               <div class="itr-label">Name <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('user_name') ? ' is-error' : '' }}" type="text" name="user_name" value="{{ old('user_name') }}" required/>
+              <input type="hidden" name="user_name" id="user_name_val" value="{{ old('user_name') }}">
+              <div class="itr-name-dd{{ $errors->has('user_name') ? ' is-error' : '' }}" id="user_name_wrap">
+                <div class="itr-name-trigger" id="user_name_trigger" onclick="toggleStaffDD('user_name')">
+                  <span class="itr-name-display{{ old('user_name') ? '' : ' is-placeholder' }}" id="user_name_display">{{ old('user_name') ?: '-- Select user name --' }}</span>
+                  <i class="bi bi-chevron-down itr-name-arrow"></i>
+                </div>
+                <div class="itr-name-panel" id="user_name_panel" style="display:none">
+                  <input class="itr-name-search-input" type="text" id="user_name_search" placeholder="Filter by name…" oninput="filterStaffDD('user_name',this.value)" autocomplete="off">
+                  <div class="itr-name-list" id="user_name_list"></div>
+                </div>
+              </div>
               @error('user_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
             </div>
             <div class="fg">
@@ -1747,9 +1775,16 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           <div class="fg">
             <div class="itr-label">Name <span class="itr-req">*</span></div>
             <input type="hidden" name="req_name" id="req_name_val" value="{{ old('req_name', $user->full_name) }}">
-            <input class="itr-input{{ $errors->has('req_name') ? ' is-error' : '' }}" type="text" id="req_name_search"
-              value="{{ old('req_name', $user->full_name) }}" placeholder="Type to search staff name…" autocomplete="off"
-              oninput="filterStaff(this.value)" onfocus="showStaffDropdown()" onblur="setTimeout(hideStaffDropdown,200)" required/>
+            <div class="itr-name-dd{{ $errors->has('req_name') ? ' is-error' : '' }}" id="req_name_wrap">
+              <div class="itr-name-trigger" id="req_name_trigger" onclick="toggleStaffDD('req_name')">
+                <span class="itr-name-display{{ old('req_name', $user->full_name) ? '' : ' is-placeholder' }}" id="req_name_display">{{ old('req_name', $user->full_name) ?: '-- Select staff name --' }}</span>
+                <i class="bi bi-chevron-down itr-name-arrow"></i>
+              </div>
+              <div class="itr-name-panel" id="req_name_panel" style="display:none">
+                <input class="itr-name-search-input" type="text" id="req_name_search" placeholder="Filter by name…" oninput="filterStaffDD('req_name',this.value)" autocomplete="off">
+                <div class="itr-name-list" id="req_name_list"></div>
+              </div>
+            </div>
             @error('req_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
           <div class="fg">
@@ -1786,9 +1821,16 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           <div class="fg">
             <div class="itr-label">Name <span class="itr-req">*</span></div>
             <input type="hidden" name="approver_name" id="approver_name_val" value="{{ old('approver_name') }}">
-            <input class="itr-input{{ $errors->has('approver_name') ? ' is-error' : '' }}" type="text" id="approver_name_search"
-              value="{{ old('approver_name') }}" placeholder="Type to search approver name…" autocomplete="off"
-              oninput="filterHou(this.value)" onfocus="showHouDropdown()" onblur="setTimeout(hideHouDropdown,200)" required/>
+            <div class="itr-name-dd{{ $errors->has('approver_name') ? ' is-error' : '' }}" id="approver_name_wrap">
+              <div class="itr-name-trigger" id="approver_name_trigger" onclick="toggleHouDD('approver_name')">
+                <span class="itr-name-display{{ old('approver_name') ? '' : ' is-placeholder' }}" id="approver_name_display">{{ old('approver_name') ?: '-- Select approver name --' }}</span>
+                <i class="bi bi-chevron-down itr-name-arrow"></i>
+              </div>
+              <div class="itr-name-panel" id="approver_name_panel" style="display:none">
+                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by name…" oninput="filterHouDD('approver_name',this.value)" autocomplete="off">
+                <div class="itr-name-list" id="approver_name_list"></div>
+              </div>
+            </div>
             @error('approver_name')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
           <div class="fg">
@@ -1988,8 +2030,10 @@ function collectChips(gridId, fieldName) {
   activeType = oldType;
   Object.keys(typeConfig).forEach(function(t) {
     var card = document.getElementById('card-' + t);
-    card.classList.toggle('selected', t === oldType);
-    card.classList.toggle('locked', t !== oldType);
+    if (card) {
+      card.classList.toggle('selected', t === oldType);
+      card.classList.toggle('locked', t !== oldType);
+    }
   });
   var cfg = typeConfig[oldType];
   document.getElementById('banner-icon').className = 'bi ' + cfg.icon;
@@ -2053,8 +2097,11 @@ function restoreFromSession() {
   var cfg = typeConfig[state.type];
   activeType = state.type;
   Object.keys(typeConfig).forEach(function(t) {
-    document.getElementById('card-' + t).classList.toggle('selected', t === state.type);
-    document.getElementById('card-' + t).classList.toggle('locked',   t !== state.type);
+    var card = document.getElementById('card-' + t);
+    if (card) {
+      card.classList.toggle('selected', t === state.type);
+      card.classList.toggle('locked',   t !== state.type);
+    }
   });
   document.getElementById('banner-icon').className   = 'bi ' + cfg.icon;
   document.getElementById('banner-label').textContent = cfg.label + ' Request';
@@ -2090,116 +2137,215 @@ restoreFromSession();
   if (f) { f.addEventListener('input', saveFormState); f.addEventListener('change', saveFormState); }
 });
 
-// ── Staff / Approver Autocomplete ─────────────────────────────
+// ── Staff / Approver Searchable Dropdowns ─────────────────────
 const staffList = @json($staffList ?? []);
 const houList   = @json($houList ?? []);
 
-var ddStyle = [
-  'display:none','position:fixed','z-index:9999',
-  'background:#fff','border:1.5px solid #0284c7',
-  'border-radius:8px','box-shadow:0 6px 24px rgba(0,0,0,.15)',
-  'max-height:220px','overflow-y:auto','font-family:DM Sans,sans-serif'
-].join(';');
+function _esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
-// Approver dropdown
-var houDropdown = document.createElement('div');
-houDropdown.style.cssText = ddStyle;
-document.body.appendChild(houDropdown);
-
-houDropdown.addEventListener('mousedown', function(e) {
-  var item = e.target.closest('[data-name]');
-  if (item) {
-    document.getElementById('approver_name_search').value = item.getAttribute('data-name');
-    document.getElementById('approver_name_val').value = item.getAttribute('data-name');
-    var dept  = item.getAttribute('data-dept')  || '';
-    var email = item.getAttribute('data-email') || '';
-    var deptInput    = document.getElementById('approver_department');
-    var contactInput = document.getElementById('approver_contact');
-    if (deptInput)    deptInput.value    = dept;
-    if (contactInput) contactInput.value = email;
-    houDropdown.style.display = 'none';
-    saveFormState();
-  }
+// Lift all panels to <body> at startup so they are never clipped by
+// parent overflow:hidden or trapped by a parent CSS transform context.
+document.querySelectorAll('.itr-name-panel').forEach(function(p) {
+  document.body.appendChild(p);
 });
 
-// Requester dropdown
-var staffDropdown = document.createElement('div');
-staffDropdown.style.cssText = ddStyle;
-document.body.appendChild(staffDropdown);
+function _positionPanel(prefix) {
+  var t = document.getElementById(prefix + '_trigger');
+  var p = document.getElementById(prefix + '_panel');
+  if (!t || !p) return;
+  var r = t.getBoundingClientRect();
+  p.style.top   = (r.bottom + 4) + 'px';
+  p.style.left  = r.left + 'px';
+  p.style.width = r.width + 'px';
+}
 
-staffDropdown.addEventListener('mousedown', function(e) {
-  var item = e.target.closest('[data-name]');
-  if (item) {
-    document.getElementById('req_name_search').value = item.getAttribute('data-name');
-    document.getElementById('req_name_val').value = item.getAttribute('data-name');
-    var dept    = item.getAttribute('data-dept') || '';
-    var staffNo = item.getAttribute('data-staff-no') || '';
-    var email   = item.getAttribute('data-email') || '';
-    var activeForm = activeType ? document.getElementById('form-' + activeType) : null;
-    if (activeForm) {
-      var deptInput = activeForm.querySelector('[name="req_department"]');
-      if (deptInput) deptInput.value = dept;
-      var idInput = activeForm.querySelector('[name="req_staff_id"]');
-      if (idInput) idInput.value = staffNo;
-      var contactInput = activeForm.querySelector('[name="req_contact"]');
-      if (contactInput) contactInput.value = email;
-    }
-    staffDropdown.style.display = 'none';
-    saveFormState();
-  }
-});
+function _closeAllDD() {
+  document.querySelectorAll('.itr-name-panel').forEach(function(p) { p.style.display = 'none'; });
+  document.querySelectorAll('.itr-name-trigger.is-open').forEach(function(t) { t.classList.remove('is-open'); });
+}
 
-function buildDropdownHTML(items) {
-  if (!items.length) return '<div style="padding:12px 16px;font-size:13px;color:#64748b;">No results found</div>';
-  return items.map(function(s) {
-    var name     = (s.name || '');
-    var dept     = (s.dept || '');
-    var staffNo  = (s.staff_no || '');
-    var email    = (s.email || '');
-    var escaped  = name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    var deptEsc  = dept.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    var noEsc    = staffNo.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    var emailEsc = email.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    return '<div data-name="' + escaped + '" data-dept="' + deptEsc + '" data-staff-no="' + noEsc + '" data-email="' + emailEsc + '" style="padding:10px 16px;cursor:pointer;font-size:13px;border-bottom:1px solid #e2e8f0;" onmouseover="this.style.background=\'#f0f9ff\'" onmouseout="this.style.background=\'#fff\'">'
-      + '<div style="font-weight:600;color:#0f172a;">' + name + '</div>'
-      + (dept ? '<div style="font-size:11px;color:#64748b;margin-top:2px;">' + dept + '</div>' : '')
+// ── Staff (user / requester) dropdown ─────────────────────────
+function renderStaffList(prefix, query) {
+  var q = query.trim().toLowerCase();
+  var items = q ? staffList.filter(function(s){ return s.name && s.name.toLowerCase().includes(q); }) : staffList;
+  var el = document.getElementById(prefix + '_list');
+  if (!el) return;
+  if (!items.length) { el.innerHTML = '<div class="itr-name-noresult">No results found</div>'; return; }
+  el.innerHTML = items.map(function(s) {
+    return '<div class="itr-name-item" onmousedown="pickStaff(\'' + prefix + '\',this)"'
+      + ' data-name="'     + _esc(s.name)     + '"'
+      + ' data-dept="'     + _esc(s.dept)     + '"'
+      + ' data-staff-no="' + _esc(s.staff_no) + '"'
+      + ' data-email="'    + _esc(s.email)    + '"'
+      + ' data-position="' + _esc(s.position) + '"'
+      + ' data-phone="'    + _esc(s.phone)    + '">'
+      + '<div class="itr-name-item-name">' + _esc(s.name) + '</div>'
+      + (s.dept ? '<div class="itr-name-item-dept">' + _esc(s.dept) + '</div>' : '')
       + '</div>';
   }).join('');
 }
 
-function filterList(query) {
+function openStaffDD(prefix) {
+  _closeAllDD();
+  var panel   = document.getElementById(prefix + '_panel');
+  var trigger = document.getElementById(prefix + '_trigger');
+  if (!panel) return;
+  _positionPanel(prefix);
+  panel.style.display = 'block';
+  if (trigger) trigger.classList.add('is-open');
+  renderStaffList(prefix, '');
+  var si = document.getElementById(prefix + '_search');
+  if (si) {
+    si.value = '';
+    setTimeout(function() { si.focus(); }, 0);
+  }
+}
+function closeStaffDD(prefix) {
+  var panel   = document.getElementById(prefix + '_panel');
+  var trigger = document.getElementById(prefix + '_trigger');
+  if (panel)   panel.style.display = 'none';
+  if (trigger) trigger.classList.remove('is-open');
+}
+function toggleStaffDD(prefix) {
+  var panel = document.getElementById(prefix + '_panel');
+  if (!panel) return;
+  if (panel.style.display === 'none') openStaffDD(prefix); else closeStaffDD(prefix);
+}
+function filterStaffDD(prefix, query) { renderStaffList(prefix, query); }
+
+function pickStaff(prefix, el) {
+  var name     = el.dataset.name     || '';
+  var dept     = el.dataset.dept     || '';
+  var staffNo  = el.dataset.staffNo  || '';
+  var email    = el.dataset.email    || '';
+  var position = el.dataset.position || '';
+  var phone    = el.dataset.phone    || '';
+
+  var valEl  = document.getElementById(prefix + '_val');
+  var dispEl = document.getElementById(prefix + '_display');
+  if (valEl)  valEl.value = name;
+  if (dispEl) { dispEl.textContent = name; dispEl.classList.remove('is-placeholder'); }
+  closeStaffDD(prefix);
+
+  var scope = (activeType ? document.getElementById('form-' + activeType) : null) || document;
+  function setF(sel, val) { var f = scope.querySelector(sel); if (f) f.value = val; }
+
+  if (prefix === 'user_name') {
+    setF('[name="user_department"]',  dept);
+    setF('[name="user_staff_id"]',    staffNo);
+    setF('[name="user_email"]',       email);
+    setF('[name="user_contact"]',     phone);
+    setF('[name="user_designation"]', position);
+  } else {
+    setF('[name="req_department"]',   dept);
+    setF('[name="req_staff_id"]',     staffNo);
+    setF('[name="req_contact"]',      email);
+    setF('[name="req_designation"]',  position);
+  }
+  saveFormState();
+}
+
+// ── HOU (approver) dropdown ───────────────────────────────────
+function renderHouList(prefix, query) {
   var q = query.trim().toLowerCase();
-  return q ? staffList.filter(function(s) { return s.name && s.name.toLowerCase().includes(q); }) : staffList;
+  var items = q ? houList.filter(function(s){ return s.name && s.name.toLowerCase().includes(q); }) : houList;
+  var el = document.getElementById(prefix + '_list');
+  if (!el) return;
+  if (!items.length) { el.innerHTML = '<div class="itr-name-noresult">No results found</div>'; return; }
+  el.innerHTML = items.map(function(s) {
+    return '<div class="itr-name-item" onmousedown="pickHou(\'' + prefix + '\',this)"'
+      + ' data-name="' + _esc(s.name) + '" data-dept="' + _esc(s.dept) + '" data-email="' + _esc(s.email) + '">'
+      + '<div class="itr-name-item-name">' + _esc(s.name) + '</div>'
+      + (s.dept ? '<div class="itr-name-item-dept">' + _esc(s.dept) + '</div>' : '')
+      + '</div>';
+  }).join('');
 }
 
-function positionDD(dd, inputId) {
-  var rect = document.getElementById(inputId).getBoundingClientRect();
-  dd.style.top = (rect.bottom + 3) + 'px';
-  dd.style.left = rect.left + 'px';
-  dd.style.width = rect.width + 'px';
+function openHouDD(prefix) {
+  _closeAllDD();
+  var panel   = document.getElementById(prefix + '_panel');
+  var trigger = document.getElementById(prefix + '_trigger');
+  if (!panel) return;
+  _positionPanel(prefix);
+  panel.style.display = 'block';
+  if (trigger) trigger.classList.add('is-open');
+  renderHouList(prefix, '');
+  var si = document.getElementById(prefix + '_search');
+  if (si) {
+    si.value = '';
+    setTimeout(function() { si.focus(); }, 0);
+  }
+}
+function closeHouDD(prefix) {
+  var panel   = document.getElementById(prefix + '_panel');
+  var trigger = document.getElementById(prefix + '_trigger');
+  if (panel)   panel.style.display = 'none';
+  if (trigger) trigger.classList.remove('is-open');
+}
+function toggleHouDD(prefix) {
+  var panel = document.getElementById(prefix + '_panel');
+  if (!panel) return;
+  if (panel.style.display === 'none') openHouDD(prefix); else closeHouDD(prefix);
+}
+function filterHouDD(prefix, query) { renderHouList(prefix, query); }
+
+function pickHou(prefix, el) {
+  var name  = el.dataset.name  || '';
+  var dept  = el.dataset.dept  || '';
+  var email = el.dataset.email || '';
+
+  var valEl  = document.getElementById(prefix + '_val');
+  var dispEl = document.getElementById(prefix + '_display');
+  if (valEl)  valEl.value = name;
+  if (dispEl) { dispEl.textContent = name; dispEl.classList.remove('is-placeholder'); }
+  closeHouDD(prefix);
+
+  var scope = (activeType ? document.getElementById('form-' + activeType) : null) || document;
+  function setF(sel, val) { var f = scope.querySelector(sel); if (f) f.value = val; }
+  setF('[name="approver_department"]', dept);
+  setF('[name="approver_contact"]',    email);
+  saveFormState();
 }
 
-function filterHouList(query) {
-  var q = query.trim().toLowerCase();
-  return q ? houList.filter(function(s) { return s.name && s.name.toLowerCase().includes(q); }) : houList;
-}
-function filterHou(query) {
-  document.getElementById('approver_name_val').value = query;
-  houDropdown.innerHTML = buildDropdownHTML(filterHouList(query));
-  positionDD(houDropdown,'approver_name_search');
-  houDropdown.style.display = 'block';
-}
-function showHouDropdown()  { houDropdown.innerHTML = buildDropdownHTML(filterHouList(document.getElementById('approver_name_search').value)); positionDD(houDropdown,'approver_name_search'); houDropdown.style.display = 'block'; }
-function hideHouDropdown()  { houDropdown.style.display = 'none'; }
+// Close panels when the user scrolls the page (no capture — only fires on window scroll,
+// not on element scrolls or programmatic scrolls triggered by focus/layout changes).
+window.addEventListener('scroll', function() { _closeAllDD(); });
 
-function filterStaff(query)   { document.getElementById('req_name_val').value = query; staffDropdown.innerHTML = buildDropdownHTML(filterList(query)); positionDD(staffDropdown,'req_name_search'); staffDropdown.style.display = 'block'; }
-function showStaffDropdown()  { staffDropdown.innerHTML = buildDropdownHTML(filterList(document.getElementById('req_name_search').value)); positionDD(staffDropdown,'req_name_search'); staffDropdown.style.display = 'block'; }
-function hideStaffDropdown()  { staffDropdown.style.display = 'none'; }
+// Close panels on mousedown outside (using mousedown ensures item picks via onmousedown win the race)
+document.addEventListener('mousedown', function(e) {
+  document.querySelectorAll('.itr-name-dd').forEach(function(wrap) {
+    if (wrap.contains(e.target)) return;
+    var panelId = wrap.id.replace(/_wrap$/, '_panel');
+    var panel   = document.getElementById(panelId);
+    if (panel && panel.contains(e.target)) return;
+    if (panel) panel.style.display = 'none';
+    var t = wrap.querySelector('.itr-name-trigger');
+    if (t) t.classList.remove('is-open');
+  });
+});
 
-window.addEventListener('scroll', function() {
-  if (houDropdown.style.display   !== 'none') positionDD(houDropdown,  'approver_name_search');
-  if (staffDropdown.style.display !== 'none') positionDD(staffDropdown,'req_name_search');
-}, true);
+// Validate name dropdowns on submit
+document.getElementById('form-hardware').addEventListener('submit', function(e) {
+  var ok = true;
+  [
+    { id: 'user_name_val',     wrap: 'user_name_wrap'     },
+    { id: 'req_name_val',      wrap: 'req_name_wrap'      },
+    { id: 'approver_name_val', wrap: 'approver_name_wrap' },
+  ].forEach(function(f) {
+    var v = document.getElementById(f.id);
+    if (v && !v.value.trim()) {
+      ok = false;
+      var w = document.getElementById(f.wrap);
+      if (w) {
+        var t = w.querySelector('.itr-name-trigger');
+        if (t) { t.style.borderColor = '#dc2626'; setTimeout(function(){ t.style.borderColor = ''; }, 2500); }
+      }
+    }
+  });
+  if (!ok) e.preventDefault();
+});
 </script>
 @endif {{-- end isStaff else --}}
 @endif
