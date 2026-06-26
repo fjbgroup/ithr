@@ -299,14 +299,17 @@
     <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Furniture, equipment, vehicles and other non-IT assets</p>
   </div>
-  @if($user->isAdminOrFinance())
+  @if(!$user->isReadOnlyViewer())
   <div id="nitHeaderBtns" style="display:flex;gap:8px;align-items:center">
+    @if($user->isAdminOrFinance())
     <button onclick="document.getElementById('nitImportModal').style.display='flex'"
       class="btn-secondary-custom" style="padding:10px 18px;font-size:13px;gap:7px">
       <i class="bi bi-file-earmark-excel-fill" style="color:#16a34a"></i> Import Excel
     </button>
+    @endif
     <a href="#" onclick="openNitAddForm();return false" class="btn-primary-custom" style="padding:10px 20px;font-size:13px">
-      <i class="bi bi-plus-lg"></i> Add Asset
+      <i class="bi bi-{{ $user->isAdminOrFinance() ? 'plus-lg' : 'send' }}"></i>
+      {{ $user->isAdminOrFinance() ? 'Add Asset' : 'Request to Add' }}
     </a>
   </div>
   @endif

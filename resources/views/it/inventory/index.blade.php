@@ -252,7 +252,12 @@
           </div>
           <div class="col-md-3 nit-field">
             <label>Asset Class</label>
-            <input type="text" name="asset_class" id="ief_asset_class" placeholder="e.g. COMPUTER">
+            <select name="asset_class" id="ief_asset_class">
+              <option value="">— Select Class —</option>
+              @foreach($assetClasses as $cls)
+              <option value="{{ $cls->name }}">{{ $cls->name }}</option>
+              @endforeach
+            </select>
           </div>
           <div class="col-md-3 nit-field">
             <label>Serial Number</label>

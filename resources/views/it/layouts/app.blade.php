@@ -871,14 +871,33 @@ $(document).ready(function () {
 
   function typeIcon(type) {
     var map = {
-      'add_request':    ['#2563eb','bi-box-seam-fill'],
-      'writeoff':       ['#d97706','bi-pen-fill'],
-      'delete_request': ['#dc2626','bi-trash3-fill'],
-      'ewaste':         ['#16a34a','bi-recycle'],
-      'it_request':     ['#0284c7','bi-file-earmark-text-fill'],
-      'general':        ['#0284c7','bi-bell-fill'],
+      'add_request':      ['#2563eb','bi-box-seam-fill'],
+      'edit_request':     ['#7c3aed','bi-pencil-square'],
+      'delete_request':   ['#dc2626','bi-trash3-fill'],
+      'request_approved': ['#16a34a','bi-check-circle-fill'],
+      'request_rejected': ['#dc2626','bi-x-circle-fill'],
+      'non_it_request':   ['#0891b2','bi-boxes'],
+      'writeoff':         ['#d97706','bi-pen-fill'],
+      'ewaste':           ['#16a34a','bi-recycle'],
+      'it_request':       ['#0284c7','bi-file-earmark-text-fill'],
+      'general':          ['#0284c7','bi-bell-fill'],
     };
     return map[type] || map['general'];
+  }
+
+  function typeRoute(type) {
+    var map = {
+      'add_request':      '{{ route("it.inventory.index") }}',
+      'edit_request':     '{{ route("it.inventory.index") }}',
+      'delete_request':   '{{ route("it.inventory.index") }}',
+      'request_approved': '{{ route("it.inventory.index") }}',
+      'request_rejected': '{{ route("it.inventory.index") }}',
+      'non_it_request':   '{{ route("it.non-it.index") }}',
+      'writeoff':         '{{ route("it.writeoff.index") }}',
+      'ewaste':           '{{ route("it.ewaste.index") }}',
+      'it_request':       '{{ route("it.it-request-form") }}',
+    };
+    return map[type] || '';
   }
 
   function timeAgo(dt) {
@@ -897,7 +916,7 @@ $(document).ready(function () {
     listEl.innerHTML = items.map(function(n) {
       var ic   = typeIcon(n.type);
       var read = !!n.is_read;
-      return '<div onclick="openNotif('+n.id+',\''+encodeURIComponent(n.link)+'\')" style="display:flex;gap:12px;align-items:flex-start;padding:12px 18px;border-bottom:1px solid #f8fafc;cursor:pointer;background:'+(read?'#fff':'#f0f9ff')+';transition:background .12s" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\''+(read?'#fff':'#f0f9ff')+'\'">'
+      return '<div onclick="openNotif('+n.id+',\''+encodeURIComponent(n.link||'')+'\',\''+n.type+'\')" style="display:flex;gap:12px;align-items:flex-start;padding:12px 18px;border-bottom:1px solid #f8fafc;cursor:pointer;background:'+(read?'#fff':'#f0f9ff')+';transition:background .12s" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\''+(read?'#fff':'#f0f9ff')+'\'">'
         + '<div style="width:34px;height:34px;border-radius:8px;background:'+ic[0]+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><i class="bi '+ic[1]+'" style="color:'+ic[0]+';font-size:15px"></i></div>'
         + '<div style="flex:1;min-width:0">'
         + '<div style="font-size:12px;font-weight:'+(read?'500':'700')+';color:#1e293b;line-height:1.4">'+n.title+'</div>'
@@ -932,13 +951,13 @@ $(document).ready(function () {
     if (open) fetchList();
   };
 
-  window.openNotif = function(id, link) {
+  window.openNotif = function(id, link, type) {
     fetch('{{ route("it.notifications.mark-read") }}', {
       method: 'POST',
       headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Content-Type': 'application/json'},
       body: JSON.stringify({id: id})
     }).catch(function(){});
-    var url = decodeURIComponent(link);
+    var url = decodeURIComponent(link) || typeRoute(type);
     if (url) { window.location.href = url; }
     else { fetchList(); fetchCount(); }
   };
