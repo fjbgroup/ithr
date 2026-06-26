@@ -82,9 +82,11 @@ body {
   background: var(--body-bg);
   color: var(--text);
   font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  font-size: 12px; line-height: 1.45; min-height: 100vh;
-  margin: 0;
-  padding: 0;
+  font-size: 12px; line-height: 1.45;
+  margin: 0; padding: 0;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 html.dark body { background: var(--body-bg); color: var(--text); }
 
@@ -106,13 +108,13 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
    SIDEBAR
 ══════════════════════════════════════════════════════ */
 .sidebar {
-  position: fixed; top: 0; left: 0;
+  flex-shrink: 0;
   width: var(--sidebar-w); height: 100vh;
   background: var(--sidebar-bg);
   display: flex; flex-direction: column;
-  z-index: 100; transition: width .3s ease, transform .25s ease;
+  z-index: 10; transition: width .3s ease;
   border-right: 1px solid rgba(255,255,255,.06);
-  overflow: hidden;
+  overflow-x: hidden; overflow-y: auto;
 }
 
 /* Brand */
@@ -391,19 +393,21 @@ body.sidebar-collapsed .dropdown-trigger.active-sidebar i:not(.dropdown-chevron)
    TOPBAR
 ══════════════════════════════════════════════════════ */
 .main-content {
-  margin-left: var(--sidebar-w); margin-top: 0; padding-top: 56px;
-  min-height: 100vh; display: flex; flex-direction: column;
-  transition: margin-left .3s ease;
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex; flex-direction: column;
 }
 
 .topbar {
   background: var(--topbar-bg); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--topbar-border);
-  margin-top: 0;
   padding: 6px 20px; min-height: 56px;
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  position: fixed; top: 0; left: var(--sidebar-w); right: 0; z-index: 90;
-  transition: left .3s ease;
+  position: sticky; top: 0; z-index: 90;
+  flex-shrink: 0; width: 100%; box-sizing: border-box;
 }
 html.dark .topbar { background: var(--topbar-bg); border-bottom-color: var(--topbar-border); }
 
@@ -1209,38 +1213,40 @@ body.sidebar-collapsed .sidebar-footer .user-card {
 }
 
 /* ══════════════════════════════════════════════════════
-   INVENTORY TABLE (sticky action col, horizontal scroll)
+   INVENTORY TABLE — fixed layout, contained within main-content
 ══════════════════════════════════════════════════════ */
-.content-surface #walkiesTable { table-layout: fixed !important; }
-.content-surface #walkiesTable th:last-child,
-.content-surface #walkiesTable td:last-child {
-  position: sticky !important; right: 0 !important; z-index: 30 !important;
-  width: 142px !important; min-width: 142px !important; max-width: 142px !important;
-  box-shadow: -1px 0 0 rgba(148,163,184,.2) !important;
+body .content-surface .inventory-page-shell #walkiesTable {
+  table-layout: fixed !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
-.content-surface #walkiesTable thead th:last-child { z-index: 40 !important; }
 #inventoryTableScroll.clean-admin-table-scroll {
-  display: block !important; max-width: 100% !important;
-  overflow-x: scroll !important; overflow-y: visible !important;
-  scrollbar-gutter: stable both-edges !important;
-  scrollbar-width: thin !important; cursor: grab !important;
-  -webkit-overflow-scrolling: touch !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
 }
-#inventoryTableScroll.clean-admin-table-scroll:active { cursor: grabbing !important; }
 
 /* ══════════════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+  body { display: block; height: auto; overflow-x: hidden; overflow-y: auto; }
   body.sidebar-collapsed .sidebar,
-  .sidebar { width: var(--sidebar-w); transform: translateX(-100%); }
+  .sidebar {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    width: var(--sidebar-w) !important; height: 100vh;
+    transform: translateX(-100%);
+  }
   .sidebar.open { transform: none; }
   body.sidebar-collapsed .main-content,
-  .main-content { margin-left: 0; }
+  .main-content {
+    height: auto; overflow-y: visible; overflow-x: hidden;
+    padding-top: 56px;
+  }
   .sidebar-toggle { display: flex; }
   .page-body { padding: 12px; }
   body.sidebar-collapsed .topbar,
-  .topbar { left: 0; padding: 0 12px; }
+  .topbar { position: fixed; top: 0; left: 0; right: 0; padding: 0 12px; width: 100%; }
   body.sidebar-collapsed .brand-name,
   body.sidebar-collapsed .nav-section-label,
   body.sidebar-collapsed .nav-link span,

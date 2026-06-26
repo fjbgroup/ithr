@@ -190,9 +190,9 @@
         }
 
         body .content-surface #walkiesTable {
-            table-layout: auto !important;
-            width: max-content !important;
-            min-width: 980px !important;
+            table-layout: fixed !important;
+            width: 100% !important;
+            min-width: 0 !important;
             border-collapse: collapse !important;
         }
 
@@ -388,9 +388,9 @@
         }
 
         html:not(.dark) body .content-surface #walkiesTable {
-            table-layout: auto !important;
-            width: max-content !important;
-            min-width: 980px !important;
+            table-layout: fixed !important;
+            width: 100% !important;
+            min-width: 0 !important;
         }
 
         html:not(.dark) body .content-surface #walkiesTable thead th {
@@ -597,7 +597,7 @@
             width: 100% !important;
             max-width: 100% !important;
             min-width: 0 !important;
-            table-layout: auto !important;
+            table-layout: fixed !important;
         }
         body .content-surface .inventory-page-shell #walkiesTable col.inventory-radio-colgroup {
             width: 1% !important;
@@ -780,9 +780,9 @@
 
         .inventory-page-shell #walkiesTable.clean-admin-table,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
-            margin-left: -16px !important;
-            width: calc(100% + 16px) !important;
-            min-width: calc(100% + 16px) !important;
+            margin-left: 0 !important;
+            width: 100% !important;
+            min-width: 0 !important;
         }
 
         body .content-surface .inventory-page-shell .inventory-page-header.page-header-block {
@@ -1036,9 +1036,9 @@
 
         .inventory-page-shell #walkiesTable.clean-admin-table,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
-            margin-left: -16px !important;
-            width: calc(100% + 16px) !important;
-            min-width: calc(100% + 16px) !important;
+            margin-left: 0 !important;
+            width: 100% !important;
+            min-width: 0 !important;
         }
 
         .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
@@ -1481,14 +1481,14 @@
     @push('final_styles')
     <style id="inventory-handover-action-final">
         body .content-surface #walkiesTable col.inventory-action-colgroup {
-            width: 360px !important;
+            width: 22% !important;
         }
 
         body .content-surface #walkiesTable th.inventory-action-col,
         body .content-surface #walkiesTable td.inventory-action-col {
-            width: 360px !important;
-            min-width: 360px !important;
-            max-width: 360px !important;
+            width: 22% !important;
+            min-width: 0 !important;
+            max-width: 22% !important;
         }
 
         body .content-surface #walkiesTable .inventory-action-buttons {
@@ -9175,9 +9175,9 @@
 
         .inventory-page-shell #walkiesTable.clean-admin-table,
         body .content-surface .inventory-page-shell #walkiesTable.clean-admin-table {
-            margin-left: -16px !important;
-            width: calc(100% + 16px) !important;
-            min-width: calc(100% + 16px) !important;
+            margin-left: 0 !important;
+            width: 100% !important;
+            min-width: 0 !important;
         }
 
         .inventory-page-shell #walkiesTable.clean-admin-table col.inventory-radio-colgroup,
