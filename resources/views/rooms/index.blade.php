@@ -11,8 +11,35 @@
     .pvt-btn { padding:.32rem .85rem; border-radius:6px; font-size:.8rem; font-weight:600; color:#64748b; text-decoration:none; transition:background .15s,color .15s; }
     .pvt-active { background:#fff !important; color:#003b95 !important; box-shadow:0 1px 3px rgba(0,0,0,.1); }
     .pub-date-nav { display:flex; align-items:center; gap:.5rem; }
-    .pub-datepicker-lbl { display:flex; align-items:center; gap:.3rem; cursor:pointer; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .6rem; background:#fff; }
-    .pub-datepicker-lbl input[type=date] { font-size:.8rem; font-weight:600; color:#334155; border:none; background:transparent; cursor:pointer; outline:none; padding:0; }
+    .pub-datepicker-lbl { position:relative; display:flex; align-items:center; gap:.35rem; cursor:pointer; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .6rem; background:#fff; }
+    .pub-datepicker-lbl .pub-cal-ico { color:#64748b; flex-shrink:0; }
+    .pub-datepicker-lbl .pub-date-text { font-size:.85rem; font-weight:700; color:#1e293b; white-space:nowrap; }
+    /* native input kept for the picker, but visually hidden so only one date label shows */
+    .pub-datepicker-lbl input[type=date] { position:absolute; left:0; top:0; width:1px; height:1px; opacity:0; padding:0; margin:0; border:0; pointer-events:none; }
+
+    /* Centralized (centered) custom date picker */
+    .rbdp-overlay { display:none; position:fixed; inset:0; background:rgba(15,23,42,.45); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
+    .rbdp-overlay.active { display:flex; }
+    .rbdp-modal { background:#fff; border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,.25); width:330px; max-width:92vw; padding:1.15rem 1.2rem 1rem; }
+    .rbdp-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem; }
+    .rbdp-title { font-size:1rem; font-weight:800; color:#1e293b; }
+    .rbdp-nav { width:34px; height:34px; border:none; background:#f1f5f9; border-radius:9px; cursor:pointer; font-size:1.25rem; line-height:1; color:#334155; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .rbdp-nav:hover { background:#e2e8f0; }
+    .rbdp-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:.25rem; margin-bottom:.35rem; }
+    .rbdp-weekdays span { text-align:center; font-size:.68rem; font-weight:800; color:#94a3b8; text-transform:uppercase; }
+    .rbdp-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:.25rem; }
+    .rbdp-cell { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:600; color:#334155; border-radius:9px; cursor:pointer; transition:background .12s, color .12s; }
+    .rbdp-cell.empty { cursor:default; }
+    .rbdp-cell:not(.empty):hover { background:#E6F1FB; color:#185FA5; }      /* light blue on hover */
+    .rbdp-cell.today { color:#185FA5; font-weight:800; }
+    .rbdp-cell.selected, .rbdp-cell.selected:hover { background:#003b95; color:#fff; }  /* dark blue when selected */
+    .rbdp-footer { margin-top:.9rem; display:flex; justify-content:flex-end; }
+    .rbdp-today-link { background:none; border:none; color:#185FA5; font-weight:700; font-size:.82rem; cursor:pointer; padding:.3rem .55rem; border-radius:7px; }
+    .rbdp-today-link:hover { background:#E6F1FB; }
+    [data-theme="dark"] .rbdp-modal { background:#1e293b; }
+    [data-theme="dark"] .rbdp-title { color:#f1f5f9; }
+    [data-theme="dark"] .rbdp-nav { background:#334155; color:#e2e8f0; }
+    [data-theme="dark"] .rbdp-cell { color:#cbd5e1; }
 
     .pub-day-stats { display:flex; align-items:stretch; background:#fff; border-radius:10px; box-shadow:var(--shadow); margin-bottom:.75rem; overflow:hidden; border:1px solid var(--border); }
     .pub-dstat { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.7rem .35rem; gap:.1rem; border-right:1px solid #f1f5f9; }
@@ -298,8 +325,7 @@
         .pub-controls > div:last-child { display: none !important; }
         .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; }
         .pub-datepicker-lbl { flex: 1; justify-content: center; }
-        .pub-datepicker-lbl span { display: none; }
-        .pub-datepicker-lbl input[type=date] { font-size: .82rem; flex: 1; text-align: center; }
+        .pub-datepicker-lbl .pub-date-text { font-size: .82rem; }
         .rb-today-btn { padding: .28rem .6rem; font-size: .78rem; white-space: nowrap; }
 
         /* 3. FLOATING ACTION BUTTON */
@@ -834,9 +860,10 @@
 
         <div class="pub-date-nav">
             <a href="{{ $prevNav }}" class="rb-today-btn" title="Previous">&larr;</a>
-            <label class="pub-datepicker-lbl">
+            <label class="pub-datepicker-lbl" onclick="rbOpenDatePicker(event)">
+                <svg class="pub-cal-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span class="pub-date-text">{{ $navLabel }}</span>
                 <input type="date" value="{{ $viewDate }}" onchange="window.location.href='{{ route('rooms.index') }}?view={{ $viewMode }}&date=' + this.value">
-                <span style="font-size:.85rem; font-weight:700; color:#1e293b; margin-left:.25rem;">{{ $navLabel }}</span>
             </label>
             <a href="{{ $nextNav }}" class="rb-today-btn" title="Next">&rarr;</a>
             <a href="{{ route('rooms.index', ['view' => $viewMode, 'date' => date('Y-m-d')]) }}" class="rb-today-btn">Today</a>
@@ -1739,6 +1766,22 @@
 </div>
 @endif
 
+{{-- Centralized date picker --}}
+<div id="rbDatePickerOverlay" class="rbdp-overlay" onclick="if(event.target===this)rbCloseDatePicker()">
+    <div class="rbdp-modal" role="dialog" aria-label="Pick a date">
+        <div class="rbdp-header">
+            <button type="button" class="rbdp-nav" onclick="rbDpChangeMonth(-1)" aria-label="Previous month">&lsaquo;</button>
+            <span class="rbdp-title" id="rbdpTitle"></span>
+            <button type="button" class="rbdp-nav" onclick="rbDpChangeMonth(1)" aria-label="Next month">&rsaquo;</button>
+        </div>
+        <div class="rbdp-weekdays"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+        <div class="rbdp-grid" id="rbdpGrid"></div>
+        <div class="rbdp-footer">
+            <button type="button" class="rbdp-today-link" onclick="rbDpGoToday()">Today</button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -1752,6 +1795,64 @@
     let dashRoomId = null;
     let clockState = { start:{h:null,m:null}, end:{h:null,m:null} };
     let dashCart = [];
+
+    // ── Centralized (centered) custom date picker ──
+    const RBDP_BASEURL  = "{{ route('rooms.index') }}";
+    const RBDP_VIEW     = "{{ $viewMode }}";
+    const RBDP_SELECTED = "{{ $viewDate }}";
+    let rbDpViewMonth = null; // Date pointing at the 1st of the displayed month
+
+    function rbDpFmt(d) {
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function rbOpenDatePicker(e) {
+        if (e) e.preventDefault();
+        const sel = new Date(RBDP_SELECTED + 'T00:00:00');
+        rbDpViewMonth = new Date(sel.getFullYear(), sel.getMonth(), 1);
+        rbDpRender();
+        document.getElementById('rbDatePickerOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function rbCloseDatePicker() {
+        document.getElementById('rbDatePickerOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function rbDpChangeMonth(delta) {
+        rbDpViewMonth = new Date(rbDpViewMonth.getFullYear(), rbDpViewMonth.getMonth() + delta, 1);
+        rbDpRender();
+    }
+
+    function rbDpGoToday() { rbDpSelect(rbDpFmt(new Date())); }
+
+    function rbDpSelect(dateStr) {
+        window.location.href = RBDP_BASEURL + '?view=' + RBDP_VIEW + '&date=' + dateStr;
+    }
+
+    function rbDpRender() {
+        const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const y = rbDpViewMonth.getFullYear(), m = rbDpViewMonth.getMonth();
+        document.getElementById('rbdpTitle').textContent = months[m] + ' ' + y;
+        const firstDay = new Date(y, m, 1).getDay();
+        const daysInMonth = new Date(y, m + 1, 0).getDate();
+        const todayStr = rbDpFmt(new Date());
+        let html = '';
+        for (let i = 0; i < firstDay; i++) html += '<div class="rbdp-cell empty"></div>';
+        for (let d = 1; d <= daysInMonth; d++) {
+            const ds = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+            let cls = 'rbdp-cell';
+            if (ds === RBDP_SELECTED) cls += ' selected';
+            if (ds === todayStr) cls += ' today';
+            html += '<div class="' + cls + '" onclick="rbDpSelect(\'' + ds + '\')">' + d + '</div>';
+        }
+        document.getElementById('rbdpGrid').innerHTML = html;
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') rbCloseDatePicker();
+    });
 
     function gToMin(t) { if(!t) return 0; const [h,m]=t.substring(0,5).split(':').map(Number); return h*60+m; }
     function gGetNowMin() { const n=new Date(); return n.getHours()*60+n.getMinutes(); }

@@ -71,157 +71,214 @@
 .nit-table td:nth-child(4),.nit-table th:nth-child(4){white-space:normal;word-break:break-word;min-width:150px}
 </style>
 
-{{-- ══ ADD FORM (shown inline when Add Asset clicked) ══ --}}
-<div id="nitAddFormSection" style="display:none">
-  <div class="nit-form-card">
-    <div class="nit-form-header">
-      <div class="nit-form-header-icon"><i class="bi bi-boxes"></i></div>
-      <div>
-        <div class="nit-form-header-title">Register New Non-IT Asset</div>
-        <div class="nit-form-header-sub">Fill in the details to register a non-IT asset</div>
+{{-- ══ ADD FORM (modal popup when Add Asset clicked) ══ --}}
+<div id="nitAddFormSection" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);align-items:flex-start;justify-content:center;padding:72px 24px 24px" onclick="if(event.target===this)closeNitAddForm()">
+  <div style="background:#fff;border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);font-family:'DM Sans',sans-serif">
+
+    {{-- Header --}}
+    <div style="background:#1e2d40;border-radius:12px 12px 0 0;padding:20px 28px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <i class="bi bi-boxes" style="color:#fff;font-size:18px"></i>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">Register New Non-IT Asset</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px">Fill in the details to register a non-IT asset</div>
+        </div>
       </div>
+      <button onclick="closeNitAddForm()" style="background:rgba(255,255,255,.1);border:none;cursor:pointer;width:32px;height:32px;border-radius:6px;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;line-height:1">&times;</button>
     </div>
+
     <form method="POST" action="{{ route('it.non-it.store') }}">
       @csrf
-      <div class="nit-form-body">
 
-        <div class="nit-section-label"><i class="bi bi-tag-fill"></i> Asset Identity</div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-3 nit-field">
-            <label>Asset Number</label>
-            <input type="text" name="asset_number" placeholder="e.g. NIT-001">
-            <div class="field-hint">Leave blank to assign manually later</div>
+      {{-- Section: Asset Identity --}}
+      <div style="padding:24px 28px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-tag" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Asset Identity</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Number</label>
+            <input type="text" name="asset_number" placeholder="e.g. NIT-001"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Leave blank to assign manually later</div>
           </div>
-          <div class="col-md-3 nit-field">
-            <label>F/A Code</label>
-            <input type="text" name="fa_code" placeholder="e.g. 4100000047">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">F/A Code</label>
+            <input type="text" name="fa_code" placeholder="e.g. 4100000047"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
-          <div class="col-md-3 nit-field">
-            <label>Asset Class <span class="req">*</span></label>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Class <span style="color:#e53e3e">*</span></label>
             @if($assetClasses->isEmpty())
-            <select name="asset_class" required disabled>
+            <select name="asset_class" required disabled
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box">
               <option value="">— No classes yet —</option>
             </select>
-            <div class="field-hint" style="color:#dc2626">
+            <div style="font-size:11px;color:#dc2626;margin-top:4px">
               <i class="bi bi-exclamation-triangle-fill"></i>
-              No Non-IT classes found. Go to
-              <a href="{{ route('it.asset-classes.index') }}" style="color:#0284c7;font-weight:600">Asset Classes</a>
-              and add some first.
+              No Non-IT classes found. Go to <a href="{{ route('it.asset-classes.index') }}" style="color:#0284c7;font-weight:600">Asset Classes</a> and add some first.
             </div>
             @else
-            <select name="asset_class" required>
+            <select name="asset_class" required
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
               <option value="" disabled selected>— Select Class —</option>
               @foreach($assetClasses as $cls)
               <option value="{{ $cls->name }}">{{ $cls->name }}</option>
               @endforeach
             </select>
-            <div class="field-hint">Manage classes under <a href="{{ route('it.asset-classes.index') }}" style="color:#0284c7">Asset Classes</a></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Manage classes under <a href="{{ route('it.asset-classes.index') }}" style="color:#0284c7">Asset Classes</a></div>
             @endif
           </div>
-          <div class="col-md-3 nit-field">
-            <label>Date Registered</label>
-            <input type="date" name="date_registered" value="{{ date('Y-m-d') }}">
-          </div>
-          <div class="col-12 nit-field">
-            <label>Description <span class="req">*</span></label>
-            <input type="text" name="description" required placeholder="e.g. Ergonomic Office Chair — Black Mesh, 5-wheel base">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Date Registered</label>
+            <input type="date" name="date_registered" value="{{ date('Y-m-d') }}"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
         </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
+          <input type="text" name="description" required placeholder="e.g. Ergonomic Office Chair — Black Mesh, 5-wheel base"
+            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+      </div>
 
-        <div class="nit-divider"></div>
-
-        <div class="nit-section-label"><i class="bi bi-currency-dollar"></i> Financial Details</div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-3 nit-field">
-            <label>Years Purchase</label>
-            <input type="number" name="years_purchase" placeholder="e.g. 2017" min="1990" max="2099">
+      {{-- Section: Financial Details --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-currency-dollar" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Financial Details</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Years Purchase</label>
+            <input type="number" name="years_purchase" placeholder="e.g. 2017" min="1990" max="2099"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
-          <div class="col-md-3 nit-field">
-            <label>Total Cost (RM)</label>
-            <input type="number" name="total_cost" placeholder="0.00" step="0.01" min="0">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Total Cost (RM)</label>
+            <input type="number" name="total_cost" placeholder="0.00" step="0.01" min="0"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
-          <div class="col-md-3 nit-field">
-            <label>Accumulated (RM)</label>
-            <input type="number" name="accumulated" placeholder="0.00" step="0.01" min="0">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Accumulated (RM)</label>
+            <input type="number" name="accumulated" placeholder="0.00" step="0.01" min="0"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
-          <div class="col-md-3 nit-field">
-            <label>NBV AT (RM)</label>
-            <input type="number" name="nbv_at" placeholder="0.00" step="0.01" min="0">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">NBV AT (RM)</label>
+            <input type="number" name="nbv_at" placeholder="0.00" step="0.01" min="0"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
         </div>
+      </div>
 
-        <div class="nit-divider"></div>
-
-        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Brand, Location &amp; Notes</div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-4 nit-field">
-            <label>Brand</label>
-            <select name="brand">
-              <option value="">— Select Brand —</option>
-              @foreach($brands as $brand)
-              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-              @endforeach
-            </select>
-            @if($brands->isEmpty())
-            <div class="field-hint" style="color:#dc2626"><i class="bi bi-exclamation-triangle-fill"></i> No brands yet. Add in <a href="{{ route('it.brands.index') }}" style="color:#0284c7">Masterdata &rsaquo; Brands</a>.</div>
-            @endif
-          </div>
-          <div class="col-md-4 nit-field">
-            <label>Location</label>
-            <select name="location">
+      {{-- Section: Location & Brand --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-geo-alt" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Location &amp; Brand</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Location</label>
+            <select name="location"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
               <option value="">— Select Location —</option>
               @foreach($locations as $loc)
               <option value="{{ $loc->name }}">{{ $loc->name }}</option>
               @endforeach
             </select>
             @if($locations->isEmpty())
-            <div class="field-hint" style="color:#dc2626"><i class="bi bi-exclamation-triangle-fill"></i> No locations yet. Add in <a href="{{ route('it.locations.index') }}" style="color:#0284c7">Masterdata &rsaquo; Locations</a>.</div>
+            <div style="font-size:11px;color:#dc2626;margin-top:4px"><i class="bi bi-exclamation-triangle-fill"></i> No locations yet. Add them in <a href="{{ route('it.locations.index') }}" style="color:#0284c7">Masterdata &rsaquo; Locations</a>.</div>
             @endif
           </div>
-          <div class="col-md-4 nit-field">
-            <label>Notes</label>
-            <input type="text" name="notes" placeholder="Any additional remarks...">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Brand</label>
+            <select name="brand"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="">— Select Brand —</option>
+              @foreach($brands as $brand)
+              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+              @endforeach
+            </select>
+            @if($brands->isEmpty())
+            <div style="font-size:11px;color:#dc2626;margin-top:4px"><i class="bi bi-exclamation-triangle-fill"></i> No brands yet. Add them in <a href="{{ route('it.brands.index') }}" style="color:#0284c7">Masterdata &rsaquo; Brands</a>.</div>
+            @endif
           </div>
         </div>
+      </div>
 
-        <div class="nit-divider"></div>
+      {{-- Section: Notes --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-journal-text" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Notes</span>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Notes</label>
+          <textarea name="notes" rows="3" placeholder="Any additional remarks about this asset..."
+            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;resize:vertical;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+      </div>
 
-        <div class="nit-section-label"><i class="bi bi-activity"></i> Condition</div>
-        <div class="row g-3">
-          <input type="hidden" name="item_status" value="Active">
-          <div class="col-md-6 nit-field">
-            <label>Condition</label>
-            <input type="hidden" name="condition_status" id="add_condition_status_val" value="Good">
-            <div class="nit-select-grid" id="addCondGrid">
-              <div class="nit-select-opt selected" data-color="#16a34a" data-bg="rgba(22,163,74,.1)"
-                onclick="selectOpt(this,'addCondGrid','add_condition_status_val','Good')"
-                style="border-color:#16a34a;background:rgba(22,163,74,.1);color:#16a34a">
-                <i class="bi bi-emoji-smile-fill" style="color:#16a34a"></i>Good
-              </div>
-              <div class="nit-select-opt" data-color="#d97706" data-bg="rgba(217,119,6,.1)"
-                onclick="selectOpt(this,'addCondGrid','add_condition_status_val','Fair')">
-                <i class="bi bi-emoji-neutral-fill"></i>Fair
-              </div>
-              <div class="nit-select-opt" data-color="#dc2626" data-bg="rgba(239,68,68,.1)"
-                onclick="selectOpt(this,'addCondGrid','add_condition_status_val','Poor')">
-                <i class="bi bi-emoji-frown-fill"></i>Poor
-              </div>
-              <div class="nit-select-opt" data-color="#64748b" data-bg="rgba(100,116,139,.1)"
-                onclick="selectOpt(this,'addCondGrid','add_condition_status_val','For Disposal')">
-                <i class="bi bi-trash2-fill"></i>For Disposal
-              </div>
+      {{-- Section: Condition --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-activity" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Condition</span>
+        </div>
+        <input type="hidden" name="item_status" value="Active">
+        <div style="max-width:520px">
+          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Condition</label>
+          <input type="hidden" name="condition_status" id="add_condition_status_val" value="Good">
+          <div class="nit-select-grid" id="addCondGrid">
+            <div class="nit-select-opt selected" data-color="#16a34a" data-bg="rgba(22,163,74,.1)"
+              onclick="selectOpt(this,'addCondGrid','add_condition_status_val','Good')"
+              style="border-color:#16a34a;background:rgba(22,163,74,.1);color:#16a34a">
+              <i class="bi bi-emoji-smile-fill" style="color:#16a34a"></i>Good
+            </div>
+            <div class="nit-select-opt" data-color="#d97706" data-bg="rgba(217,119,6,.1)"
+              onclick="selectOpt(this,'addCondGrid','add_condition_status_val','Fair')">
+              <i class="bi bi-emoji-neutral-fill"></i>Fair
+            </div>
+            <div class="nit-select-opt" data-color="#dc2626" data-bg="rgba(239,68,68,.1)"
+              onclick="selectOpt(this,'addCondGrid','add_condition_status_val','Poor')">
+              <i class="bi bi-emoji-frown-fill"></i>Poor
+            </div>
+            <div class="nit-select-opt" data-color="#64748b" data-bg="rgba(100,116,139,.1)"
+              onclick="selectOpt(this,'addCondGrid','add_condition_status_val','For Disposal')">
+              <i class="bi bi-trash2-fill"></i>For Disposal
             </div>
           </div>
         </div>
-
       </div>
-      <div class="nit-form-footer">
-        <button type="submit" class="btn-primary-custom" style="padding:10px 24px;font-size:13.5px">
-          <i class="bi bi-plus-lg"></i> Register Asset
+
+      {{-- Footer --}}
+      <div style="padding:16px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px">
+        <button type="submit"
+          style="padding:10px 22px;background:#1e2d40;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:7px">
+          <i class="bi bi-plus-lg"></i>
+          @if($user->isAdminOrFinance()) Register Asset @else Submit Request @endif
         </button>
-        <a href="#" onclick="closeNitAddForm();return false" class="btn-secondary-custom" style="padding:10px 20px;font-size:13.5px">
-          <i class="bi bi-x-lg"></i> Cancel
-        </a>
+        <button type="button" onclick="closeNitAddForm()"
+          style="padding:10px 20px;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px">
+          <i class="bi bi-x"></i> Cancel
+        </button>
       </div>
     </form>
   </div>
@@ -759,13 +816,10 @@ function nitSetGrid(gridId, hiddenId, val) {
 
 // ── Add form ──
 function openNitAddForm() {
-  document.getElementById('nitAddFormSection').style.display = '';
-  document.getElementById('nitHeaderBtns') && (document.getElementById('nitHeaderBtns').style.display = 'none');
-  document.getElementById('nitAddFormSection').scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('nitAddFormSection').style.display = 'flex';
 }
 function closeNitAddForm() {
   document.getElementById('nitAddFormSection').style.display = 'none';
-  document.getElementById('nitHeaderBtns') && (document.getElementById('nitHeaderBtns').style.display = 'flex');
 }
 
 // ── Edit form ──

@@ -80,6 +80,9 @@
 .sidebar-brand { min-width: 0; overflow: hidden; }
 .brand-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .brand-name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-tooltip{position:fixed;transform:translateY(-50%);background:#1e293b;color:#fff;padding:.4rem .65rem;border-radius:7px;font-size:.75rem;font-weight:600;white-space:nowrap;z-index:2000;pointer-events:none;opacity:0;transition:opacity .12s ease;box-shadow:0 6px 16px rgba(0,0,0,.22)}
+.sb-tooltip.show{opacity:1}
+.sb-tooltip::before{content:'';position:absolute;right:100%;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:#1e293b}
 </style>
 @stack('styles')
 @stack('final_styles')
@@ -674,6 +677,44 @@ if (sidebarOv) sidebarOv.onclick = closeMobileSidebar;
     syncSidebarCollapse(collapsed);
     localStorage.setItem('wt-sidebar-collapsed', collapsed ? '1' : '0');
     closeSidebarInfoPopovers();
+  });
+})();
+
+// Collapsed-sidebar hover tooltips: show each item's label when the rail is collapsed
+(function () {
+  var tip = null;
+  function ensureTip() {
+    if (!tip) { tip = document.createElement('div'); tip.className = 'sb-tooltip'; document.body.appendChild(tip); }
+    return tip;
+  }
+  function isCollapsed() {
+    return document.body.classList.contains('sidebar-collapsed') && window.innerWidth > 768;
+  }
+  function labelOf(el) {
+    var clone = el.cloneNode(true);
+    clone.querySelectorAll('i, svg, .nav-info-slot, .pending-nav-badge, .badge-count, .dropdown-chevron, .toggle-arrow').forEach(function (n) { n.remove(); });
+    return clone.textContent.replace(/\s+/g, ' ').trim();
+  }
+  function showTip(el) {
+    if (!isCollapsed()) return;
+    var label = el.getAttribute('data-tooltip');
+    if (!label) return;
+    var t = ensureTip();
+    t.textContent = label;
+    var r = el.getBoundingClientRect();
+    t.style.top = (r.top + r.height / 2) + 'px';
+    t.style.left = (r.right + 12) + 'px';
+    t.classList.add('show');
+  }
+  function hideTip() { if (tip) tip.classList.remove('show'); }
+
+  document.querySelectorAll('.sidebar-nav > .nav-link, .sidebar-nav .dropdown-trigger, .sidebar-footer .btn-logout').forEach(function (el) {
+    var label = labelOf(el);
+    if (!label) return;
+    el.setAttribute('data-tooltip', label);
+    el.addEventListener('mouseenter', function () { showTip(el); });
+    el.addEventListener('mouseleave', hideTip);
+    el.addEventListener('click', hideTip);
   });
 })();
 
