@@ -52,16 +52,22 @@
   })();
 </script>
 <style>
-  html.wt-render-lock body {
+  /* Lock only the page content area — sidebar and topbar stay visible at all times */
+  html.wt-render-lock .page-body {
     opacity: 0 !important;
   }
 
-  html.wt-render-ready body {
+  html.wt-render-ready .page-body {
     opacity: 1 !important;
   }
 
-  body {
+  body, .page-body {
     transition: none !important;
+  }
+
+  /* Protect sidebar from any page-specific CSS that might hide it */
+  #sidebar.sidebar {
+    display: flex !important;
   }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
