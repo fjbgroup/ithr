@@ -22,7 +22,7 @@ class WriteoffController extends Controller
                         ->orderBy('dept_name')->orderBy('name')->get();
 
         $savedSigUrl = ($user->signature_img && Storage::disk('public')->exists($user->signature_img))
-            ? route('profile.signature.image')
+            ? route('it.profile.signature.image')
             : '';
 
         // â”€â”€ HOU â”€â”€
