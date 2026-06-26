@@ -350,31 +350,45 @@
     }
     .owner-details-grid {
         max-width: 1180px;
-        column-gap: 16px !important;
-        row-gap: 20px !important;
+        column-gap: 12px !important;
+        row-gap: 14px !important;
+        justify-content: start !important;
+        justify-items: start !important;
+        align-items: start !important;
     }
     .owner-details-grid > div {
         min-width: 0;
+    }
+    .owner-details-grid > div:not(.owner-note-row) {
+        justify-self: start;
+        width: min(100%, 320px);
+        max-width: 320px;
+    }
+    .owner-details-grid > div:not(.owner-note-row) :is(input:not([type="hidden"]), select, textarea),
+    .owner-details-grid > div:not(.owner-note-row) .select2-container {
+        width: 100% !important;
+        max-width: 320px !important;
     }
     .owner-note-row {
         max-width: 1180px;
     }
     .corporate-combobox {
         position: relative;
-        width: 100%;
-        max-width: 100%;
+        width: min(100%, var(--form-lg-w, 520px)) !important;
+        max-width: min(100%, var(--form-lg-w, 520px)) !important;
     }
     .corporate-combobox select {
         display: none !important;
     }
     .corporate-combobox-input {
         width: 100% !important;
+        max-width: 100% !important;
         min-height: 28px !important;
         height: 28px !important;
         border-radius: 7px !important;
         border: 1px solid rgba(139, 94, 60, 0.3) !important;
         background: #ffffff !important;
-        padding: 5px 30px 5px 8px !important;
+        padding: 5px 24px 5px 8px !important;
         color: #1e293b !important;
         font-size: 9.5px !important;
         font-weight: 800 !important;
@@ -392,20 +406,24 @@
     }
     .corporate-combobox-toggle {
         position: absolute;
-        right: 10px;
+        right: 8px;
         top: 50%;
         transform: translateY(-50%);
         color: #64748b;
         font-size: 9px;
         pointer-events: none;
     }
+    .owner-details-grid .corporate-combobox {
+        width: min(100%, 320px) !important;
+        max-width: 320px !important;
+    }
     .owner-details-grid .select2-container--default .select2-selection--single {
         position: relative;
-        padding-right: 30px !important;
+        padding-right: 24px !important;
     }
     .owner-details-grid .select2-container--default .select2-selection--single .select2-selection__arrow {
-        right: 8px !important;
-        width: 18px !important;
+        right: 5px !important;
+        width: 16px !important;
     }
     .corporate-combobox-menu {
         position: absolute;
@@ -1021,6 +1039,73 @@
     }
     html .match-report-faulty .theme-note-panel p:first-child {
         color: var(--accent) !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card {
+        border: 1px solid rgba(2, 132, 199, 0.10) !important;
+        border-radius: 10px !important;
+        background: #ffffff !important;
+        color: #142b47 !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card > .flex:first-child {
+        border-bottom: 1px solid rgba(2, 132, 199, 0.10) !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card h2 {
+        color: #142b47 !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card h4 {
+        color: #0284c7 !important;
+        border-left-color: #0284c7 !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card form > .grid,
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card form > .rounded-2xl,
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-owner-card {
+        border: 1px solid rgba(2, 132, 199, 0.12) !important;
+        border-radius: 10px !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-section,
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-owner-card {
+        border-color: rgba(2, 132, 199, 0.16) !important;
+        background: rgba(248, 250, 252, 0.58) !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-toggle,
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-owner-toggle {
+        border: 0 !important;
+        background: rgba(2, 132, 199, 0.08) !important;
+        color: #0284c7 !important;
+        box-shadow: none !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-toggle:hover,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-toggle[aria-expanded="true"],
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-owner-toggle:hover,
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-owner-toggle[aria-expanded="true"] {
+        background: rgba(2, 132, 199, 0.15) !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-owner-panel {
+        background: #ffffff !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .longterm-note-box,
+    html:not(.dark) .longterm-modern.match-report-faulty .theme-note-panel {
+        border-color: rgba(2, 132, 199, 0.12) !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card label {
+        color: #64748b !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card input:not([type="checkbox"]):not([type="radio"]),
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card select,
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card textarea,
+    html:not(.dark) .longterm-modern.match-report-faulty .admin-request-card .select2-container .select2-selection--single {
+        border-color: rgba(2, 132, 199, 0.30) !important;
+        background: rgba(253, 251, 247, 0.50) !important;
+        color: #0f172a !important;
+    }
+    html:not(.dark) .longterm-modern.match-report-faulty #temporaryPicCount {
+        border-color: rgba(2, 132, 199, 0.20) !important;
+        background: #FDFBF7 !important;
+        color: #0284c7 !important;
     }
 </style>
 <div class="px-1 sm:px-2 admin-request-shell match-report-faulty {{ $isTemporaryRequest ? '' : 'longterm-modern' }}">
