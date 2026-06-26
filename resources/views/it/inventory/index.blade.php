@@ -12,6 +12,66 @@
 .data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; min-width:100px; }
 /* Actions column: never wrap, just enough for the buttons */
 .data-table td:last-child, .data-table th:last-child { white-space:nowrap; width:1%; }
+
+/* ── IT Edit Form Card (matches Non-IT layout) ── */
+.nit-form-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  margin-bottom: 28px;
+}
+.nit-form-header {
+  background: linear-gradient(135deg, var(--navy, #142b47) 0%, var(--navy-mid, #254a78) 100%);
+  padding: 20px 28px; display: flex; align-items: center; gap: 14px;
+}
+.nit-form-header-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: #fff; flex-shrink: 0;
+}
+.nit-form-header-title { color: #fff; font-size: 16px; font-weight: 700; line-height: 1.2; }
+.nit-form-header-sub   { color: rgba(255,255,255,.6); font-size: 12px; margin-top: 2px; }
+.nit-form-body   { padding: 28px; }
+.nit-section-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--muted); margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;
+}
+.nit-section-label i { font-size: 13px; }
+.nit-field label {
+  display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px;
+}
+.nit-field label .req { color: var(--red, #ef4444); margin-left: 3px; }
+.nit-field input, .nit-field select, .nit-field textarea {
+  width: 100%; padding: 10px 14px;
+  background: var(--body-bg, #f1f5f9); border: 1.5px solid var(--border);
+  border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+  color: var(--text); transition: border-color .18s, box-shadow .18s; outline: none;
+}
+.nit-field input:focus, .nit-field select:focus, .nit-field textarea:focus {
+  border-color: var(--accent, #0284c7); background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(2,132,199,.12);
+}
+.nit-field input::placeholder { color: var(--muted); opacity: .65; }
+.nit-field textarea { resize: vertical; min-height: 80px; }
+.nit-field .field-hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.nit-divider { height: 1px; background: var(--border); margin: 24px 0; }
+.nit-form-footer {
+  background: var(--body-bg, #f1f5f9); border-top: 1px solid var(--border);
+  padding: 16px 28px; display: flex; align-items: center; gap: 10px;
+}
+.nit-select-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.nit-select-opt  {
+  flex: 1; min-width: 110px; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  background: var(--body-bg); cursor: pointer; text-align: center;
+  transition: all .15s; font-size: 13px; font-weight: 600; color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
+.nit-select-opt:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,.05); }
+.nit-select-opt i { font-size: 18px; }
 </style>
 @endpush
 
@@ -41,7 +101,7 @@
     <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">IT Assets</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Manage and track all registered IT equipment</p>
   </div>
-  <div style="display:flex;gap:8px;align-items:center">
+  <div id="itHeaderBtns" style="display:flex;gap:8px;align-items:center">
     @if($user->isAdminOrFinance())
     <button onclick="document.getElementById('importModal').style.display='flex'"
       class="btn-secondary-custom" style="padding:10px 18px;font-size:13px;gap:7px">
@@ -162,6 +222,129 @@
   </div>
 </div>
 @endif
+
+{{-- ══ EDIT FORM (shown inline above table when Edit clicked) ══ --}}
+<div id="itEditFormSection" style="display:none">
+  <div class="nit-form-card">
+    <div class="nit-form-header">
+      <div class="nit-form-header-icon">
+        <i class="bi bi-pencil-square" id="itEditFormIcon"></i>
+      </div>
+      <div>
+        <div class="nit-form-header-title" id="itEditFormTitle">Edit Asset</div>
+        <div class="nit-form-header-sub" id="itEditFormSub">Update asset details below</div>
+      </div>
+    </div>
+    <form method="POST" id="itEditFormEl" action="">
+      @csrf
+      <input type="hidden" name="_method" value="POST">
+      <div class="nit-form-body">
+
+        <div class="nit-section-label"><i class="bi bi-tag-fill"></i> Asset Identity</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3 nit-field">
+            <label>Asset Number</label>
+            <input type="text" name="asset_number" id="ief_asset_number" placeholder="e.g. IT-001">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>FA Code</label>
+            <input type="text" name="fa_code" id="ief_fa_code" placeholder="e.g. 4100000047">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Asset Class</label>
+            <select name="asset_class" id="ief_asset_class">
+              <option value="">— Select Class —</option>
+              @foreach($assetClasses as $cls)
+              <option value="{{ $cls->name }}">{{ $cls->name }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Serial Number</label>
+            <input type="text" name="serial_number" id="ief_serial_number" placeholder="e.g. SN123456">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Warranty Until</label>
+            <input type="date" name="warranty_date" id="ief_warranty_date">
+          </div>
+          <div class="col-12 nit-field">
+            <label>Description <span class="req">*</span></label>
+            <input type="text" name="description" id="ief_description" required placeholder="e.g. Dell Latitude 5420 Laptop">
+          </div>
+        </div>
+
+        <div class="nit-divider"></div>
+
+        <div class="nit-section-label"><i class="bi bi-currency-dollar"></i> Financial Details</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3 nit-field">
+            <label>Purchase Price (RM)</label>
+            <input type="number" name="purchase_price" id="ief_purchase_price" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Years of Purchase</label>
+            <input type="number" name="years_purchase" id="ief_years_purchase" placeholder="e.g. 2020" min="1990" max="2099">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Total Cost (RM)</label>
+            <input type="number" name="total_cost" id="ief_total_cost" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Accumulated (RM)</label>
+            <input type="number" name="accumulated" id="ief_accumulated" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>NBV At (RM)</label>
+            <input type="number" name="nbv_at" id="ief_nbv_at" placeholder="0.00" step="0.01" min="0">
+          </div>
+        </div>
+
+        <div class="nit-divider"></div>
+
+        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Brand, Location &amp; Notes</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3 nit-field">
+            <label>Brand</label>
+            <select name="brand" id="ief_brand">
+              <option value="">— Select Brand —</option>
+              @foreach($brands as $brand)
+              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Model</label>
+            <input type="text" name="model" id="ief_model" placeholder="e.g. Latitude 5420">
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Location</label>
+            <select name="location" id="ief_location">
+              <option value="">— Select Location —</option>
+              @foreach($locations as $loc)
+              <option value="{{ $loc->name }}">{{ $loc->name }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-md-3 nit-field">
+            <label>Notes</label>
+            <input type="text" name="notes" id="ief_notes" placeholder="Any additional remarks...">
+          </div>
+        </div>
+
+
+      </div>
+      <div class="nit-form-footer">
+        <button type="submit" class="btn-primary-custom" id="itEditSubmitBtn" style="padding:10px 24px;font-size:13.5px">
+          <i class="bi bi-check-lg"></i> Save Changes
+        </button>
+        <a href="#" onclick="closeItEditForm();return false" class="btn-secondary-custom" style="padding:10px 20px;font-size:13.5px">
+          <i class="bi bi-x-lg"></i> Cancel
+        </a>
+        <div style="margin-left:auto;font-size:12px;color:var(--muted)" id="itEditLastUpdated"></div>
+      </div>
+    </form>
+  </div>
+</div>
 
 {{-- TABLE --}}
 <div id="inventoryLiveResults">
@@ -345,6 +528,12 @@
               style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Warranty Until</label>
+            <input type="date" name="warranty_date"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
@@ -493,9 +682,6 @@
   </div>
 </div>
 
-{{-- Edit overlay --}}
-<div id="editOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);align-items:center;justify-content:center;padding:20px"></div>
-
 {{-- QR Code Modal --}}
 <div id="qrModal" style="display:none;position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px">
   <div style="background:var(--surface);border-radius:16px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;font-family:'DM Sans',sans-serif">
@@ -533,58 +719,89 @@ var _locationOpts = @json($locations->pluck('name'));
 function openEditModal(id) {
   var d = _editData[id];
   if (!d) return;
-  var isAdmin = {{ $user->isAdmin() ? 'true' : 'false' }};
   var isAdminOrFinance = {{ $user->isAdminOrFinance() ? 'true' : 'false' }};
-  var btnLabel = isAdminOrFinance ? 'Save Changes' : 'Submit Edit Request';
-  var html = '<div style="background:var(--surface);border-radius:16px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)">'
-    + '<div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">'
-    + '<div style="font-size:15px;font-weight:700;color:var(--text)">' + (isAdminOrFinance ? 'Edit Asset' : 'Request to Edit Asset') + '</div>'
-    + '<button onclick="document.getElementById(\'editOverlay\').style.display=\'none\'" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&times;</button>'
-    + '</div>'
-    + '<form method="POST" action="/inventory/'+id+'">'
-    + '<input type="hidden" name="_token" value="{{ csrf_token() }}">'
-    + '<input type="hidden" name="_method" value="POST">'
-    + '<div style="padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px">'
-    + field('Description *','description','text',d.description,'span 2')
-    + field('Asset Class','asset_class','text',d.asset_class)
-    + field('Asset Number','asset_number','text',d.asset_number)
-    + field('FA Code','fa_code','text',d.fa_code)
-    + field('Purchase Price (RM)','purchase_price','number',d.purchase_price)
-    + field('Serial Number','serial_number','text',d.serial_number)
-    + selectField('Brand','brand',d.brand,_brandOpts)
-    + field('Model','model','text',d.model)
-    + selectField('Location','location',d.location,_locationOpts)
-    + field('Years of Purchase','years_purchase','number',d.years_purchase)
-    + field('Total Cost (RM)','total_cost','number',d.total_cost)
-    + field('Accumulated (RM)','accumulated','number',d.accumulated)
-    + field('NBV At (RM)','nbv_at','number',d.nbv_at)
-    + statusSel('condition_status','Condition',d.condition_status,['Good','Fair','Poor','For Disposal'])
-    + (isAdminOrFinance ? statusSel('item_status','Status',d.item_status,['Active','In Repair','Disposed','Reserved','Collected']) : '')
-    + '<div style="grid-column:span 2"><label class="form-label">Notes</label><textarea name="notes" class="form-control" rows="2">'+esc(d.notes||'')+'</textarea></div>'
-    + '</div>'
-    + '<div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px">'
-    + '<button type="button" onclick="document.getElementById(\'editOverlay\').style.display=\'none\'" class="btn-secondary-custom">Cancel</button>'
-    + '<button type="submit" class="btn-primary-custom"><i class="bi bi-check-lg"></i> '+btnLabel+'</button>'
-    + '</div></form></div>';
-  document.getElementById('editOverlay').innerHTML = html;
-  document.getElementById('editOverlay').style.display = 'flex';
+
+  document.getElementById('itEditFormEl').action = '{{ url("it/inventory") }}/' + id;
+  document.getElementById('ief_asset_number').value   = d.asset_number   || '';
+  document.getElementById('ief_fa_code').value        = d.fa_code        || '';
+  document.getElementById('ief_asset_class').value    = d.asset_class    || '';
+  document.getElementById('ief_serial_number').value  = d.serial_number  || '';
+  document.getElementById('ief_description').value    = d.description    || '';
+  document.getElementById('ief_purchase_price').value = d.purchase_price !== null ? d.purchase_price : '';
+  document.getElementById('ief_years_purchase').value = d.years_purchase  || '';
+  document.getElementById('ief_total_cost').value     = d.total_cost     !== null ? d.total_cost     : '';
+  document.getElementById('ief_accumulated').value    = d.accumulated    !== null ? d.accumulated    : '';
+  document.getElementById('ief_nbv_at').value         = d.nbv_at         !== null ? d.nbv_at         : '';
+  document.getElementById('ief_brand').value          = d.brand          || '';
+  document.getElementById('ief_model').value          = d.model          || '';
+  document.getElementById('ief_location').value       = d.location       || '';
+  document.getElementById('ief_notes').value          = d.notes          || '';
+  document.getElementById('ief_warranty_date').value  = d.warranty_date ? d.warranty_date.substring(0,10) : '';
+
+  if (!isAdminOrFinance) {
+    document.getElementById('itEditFormTitle').textContent = 'Request to Edit Asset';
+    document.getElementById('itEditFormSub').textContent   = 'Your changes will be reviewed before applying';
+    document.getElementById('itEditFormIcon').className    = 'bi bi-send';
+    document.getElementById('itEditSubmitBtn').innerHTML   = '<i class="bi bi-send"></i> Submit Edit Request';
+  } else {
+    document.getElementById('itEditFormTitle').textContent = 'Edit Asset';
+    document.getElementById('itEditFormSub').textContent   = 'Update asset details below';
+    document.getElementById('itEditFormIcon').className    = 'bi bi-pencil-square';
+    document.getElementById('itEditSubmitBtn').innerHTML   = '<i class="bi bi-check-lg"></i> Save Changes';
+  }
+
+  if (d.updated_at) {
+    var dt = new Date(d.updated_at);
+    document.getElementById('itEditLastUpdated').innerHTML =
+      '<i class="bi bi-clock"></i> Last updated ' + dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) + ', ' + dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  } else {
+    document.getElementById('itEditLastUpdated').innerHTML = '';
+  }
+
+  document.getElementById('itEditFormSection').style.display = '';
+  document.getElementById('itHeaderBtns').style.display = 'none';
+  document.getElementById('itEditFormSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
-function field(lbl,name,type,val,span) {
-  var s = span ? 'grid-column:'+span+';' : '';
-  return '<div style="'+s+'"><label class="form-label">'+lbl+'</label><input type="'+type+'" name="'+name+'" class="form-control" value="'+esc(val||'')+'"></div>';
+function closeItEditForm() {
+  document.getElementById('itEditFormSection').style.display = 'none';
+  document.getElementById('itHeaderBtns').style.display = 'flex';
 }
-function selectField(lbl,name,val,opts) {
-  var html = '<div><label class="form-label">'+lbl+'</label><select name="'+name+'" class="form-select"><option value="">— Select —</option>';
-  opts.forEach(function(o){ html += '<option value="'+esc(o)+'"'+(val===o?' selected':'')+'>'+esc(o)+'</option>'; });
-  html += '</select></div>';
-  return html;
+function selectOpt(el, gridId, hiddenId, val) {
+  document.querySelectorAll('#' + gridId + ' .nit-select-opt').forEach(function(o) {
+    o.classList.remove('selected');
+    o.style.borderColor = '';
+    o.style.background  = '';
+    o.style.color       = '';
+    var ic = o.querySelector('i'); if (ic) ic.style.color = '';
+  });
+  var clr = el.dataset.color || 'var(--accent)';
+  var bg  = el.dataset.bg    || 'rgba(2,132,199,.1)';
+  el.classList.add('selected');
+  el.style.borderColor = clr;
+  el.style.background  = bg;
+  el.style.color       = clr;
+  var ic = el.querySelector('i'); if (ic) ic.style.color = clr;
+  document.getElementById(hiddenId).value = val;
 }
-function statusSel(name,lbl,val,opts) {
-  return '<div><label class="form-label">'+lbl+'</label><select name="'+name+'" class="form-select">'
-    + opts.map(function(o){ return '<option value="'+o+'" '+(val===o?'selected':'')+'>'+o+'</option>'; }).join('')
-    + '</select></div>';
+function nitSetGrid(gridId, hiddenId, val) {
+  document.querySelectorAll('#' + gridId + ' .nit-select-opt').forEach(function(o) {
+    o.classList.remove('selected');
+    o.style.borderColor = o.style.background = o.style.color = '';
+    var ic = o.querySelector('i'); if (ic) ic.style.color = '';
+  });
+  document.querySelectorAll('#' + gridId + ' .nit-select-opt').forEach(function(o) {
+    var onclick = o.getAttribute('onclick') || '';
+    var match = onclick.match(/'([^']+)'\s*\)$/);
+    if (match && match[1] === val) {
+      var clr = o.dataset.color || 'var(--accent)';
+      var bg  = o.dataset.bg    || 'rgba(2,132,199,.1)';
+      o.classList.add('selected');
+      o.style.borderColor = clr; o.style.background = bg; o.style.color = clr;
+      var ic = o.querySelector('i'); if (ic) ic.style.color = clr;
+    }
+  });
+  document.getElementById(hiddenId).value = val;
 }
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
 // ── PERSISTENT CROSS-PAGE SELECTION ──
 const _SEL_KEY = 'fjb_sel_inventory';

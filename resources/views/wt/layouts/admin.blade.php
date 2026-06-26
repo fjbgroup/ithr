@@ -330,6 +330,9 @@
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+    <a href="{{ route('home') }}" class="nav-link" title="Back to Portal">
+      <i class="fas fa-th-large" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Back to Portal</span>
+    </a>
     <a href="{{ route('it.dashboard') }}" class="nav-link" title="IT System">
       <i class="fas fa-desktop" style="width:20px;text-align:center;flex-shrink:0"></i> <span>IT System</span>
     </a>

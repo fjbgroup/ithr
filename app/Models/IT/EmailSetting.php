@@ -16,6 +16,9 @@ class EmailSetting extends Model
     /** Setting key for the global "all email sending" master switch. */
     public const KEY_EMAIL_ENABLED = 'email_enabled';
 
+    /** Setting key for the global "Microsoft Authenticator (2FA)" master switch. */
+    public const KEY_TOTP_ENABLED = 'totp_enabled';
+
     public static function get(string $key, string $default = ''): string
     {
         return static::find($key)?->setting_value ?? $default;
@@ -40,6 +43,29 @@ class EmailSetting extends Model
     {
         static::updateOrCreate(
             ['setting_key' => self::KEY_EMAIL_ENABLED],
+            ['setting_value' => $on ? '1' : '0']
+        );
+    }
+
+    /**
+     * Whether Microsoft Authenticator (TOTP / 2FA) is active system-wide.
+     * Defaults to ON. Fails open (returns true) if the settings table is
+     * unreachable so a transient DB issue can't silently weaken security.
+     */
+    public static function totpEnabled(): bool
+    {
+        try {
+            return static::get(self::KEY_TOTP_ENABLED, '1') === '1';
+        } catch (\Throwable $e) {
+            return true;
+        }
+    }
+
+    /** Flip the global Microsoft Authenticator (2FA) master switch on/off. */
+    public static function setTotpEnabled(bool $on): void
+    {
+        static::updateOrCreate(
+            ['setting_key' => self::KEY_TOTP_ENABLED],
             ['setting_value' => $on ? '1' : '0']
         );
     }

@@ -85,26 +85,20 @@ class UserController extends Controller
         $existing = User::whereRaw('TRIM(staff_no) = ?', [$staffNo])->first();
 
         if ($existing) {
-            if ($existing->it_role !== null) {
-                // Already has IT access — nothing to do
-                return back()
-                    ->withInput()
-                    ->withErrors(['username' => $existing->full_name.' already has IT system access (role: '.$existing->getItRoleLabel().').']);
-            }
-
-            // Staff without IT access — grant it by setting it_role.
-            // Their HR role and WT role remain unchanged.
+            // Every staff defaults to the "Staff" IT role, so an existing account
+            // already has an it_role. Treat "Add" as an upsert: set/elevate the
+            // requested role. Their HR role and WT role remain unchanged.
             $data = ['it_role' => $request->role];
             if ($request->filled('dept_name'))  $data['dept_name']  = $request->dept_name;
             if ($request->filled('email'))       $data['email']      = $request->email;
             if ($request->filled('password'))    $data['password']   = Hash::make($request->password);
 
             $existing->update($data);
-            ActivityLogService::log('UPDATE', 'user', $existing->id, 'Granted IT access (it_role: '.$request->role.') to: '.$existing->username);
+            ActivityLogService::log('UPDATE', 'user', $existing->id, 'Set IT role to '.$request->role.' for: '.$existing->username);
 
             $roleTab = $request->role === 'admin_it' ? 'admin' : $request->role;
             return redirect()->route('it.users.index', ['role_tab' => $roleTab])
-                ->with('success', 'IT access granted to '.$existing->full_name.' as '.$existing->getItRoleLabel().'.');
+                ->with('success', $existing->full_name.' is now '.$existing->getItRoleLabel().' in the IT system.');
         }
 
         // Brand-new user — password is required
@@ -155,11 +149,13 @@ class UserController extends Controller
 
     public function destroy(int $id)
     {
-        if ($id === Auth::guard('it')->id()) return back()->with('error', 'Cannot revoke your own IT access.');
+        if ($id === Auth::guard('it')->id()) return back()->with('error', 'Cannot change your own IT role.');
         $user = User::findOrFail($id);
-        $user->update(['it_role' => null]);
-        ActivityLogService::log('UPDATE', 'user', $id, 'Revoked IT access for: '.$user->username);
-        return back()->with('success', 'IT access revoked for '.$user->full_name.'.');
+        // Policy: all staff keep at least the default "Staff" role so they can log
+        // in. "Revoke" demotes an elevated user back to Staff rather than removing access.
+        $user->update(['it_role' => 'user']);
+        ActivityLogService::log('UPDATE', 'user', $id, 'Reset IT role to Staff for: '.$user->username);
+        return back()->with('success', $user->full_name.' reset to Staff role.');
     }
 
     public function toggle(int $id)

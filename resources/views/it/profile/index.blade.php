@@ -99,23 +99,21 @@
                 @if(!auth('it')->user()->isAdmin()) readonly style="cursor:not-allowed;opacity:.7" @endif required>
             </div>
             <div class="col-md-6">
-              <label class="form-label">Username <span style="font-size:11px;color:var(--muted);font-weight:400">(cannot change)</span></label>
+              <label class="form-label">Staff ID <span style="font-size:11px;color:var(--muted);font-weight:400">(cannot change)</span></label>
               <input type="text" class="form-control" value="{{ $user->username }}" disabled style="opacity:.6;cursor:not-allowed">
             </div>
             <div class="col-md-6">
               <label class="form-label">Email</label>
               <div style="position:relative">
-                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" readonly style="cursor:not-allowed;padding-right:90px">
+                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" readonly style="cursor:not-allowed;{{ $user->isAdminOrFinance() ? 'padding-right:90px' : '' }}">
+                @if($user->isAdminOrFinance())
                 <a href="{{ route('it.email-settings.index') }}" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap">
                   <i class="bi bi-gear-fill" style="font-size:10px"></i> Settings
                 </a>
+                @endif
               </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label">Staff ID</label>
-              <input type="text" name="department" class="form-control" value="{{ old('department', $user->department) }}"
-                @if(!auth('it')->user()->isAdmin()) readonly style="cursor:not-allowed;opacity:.7" @endif placeholder="e.g. FJB-0012">
-            </div>
+
             <div class="col-md-6">
               <label class="form-label">Department <span style="font-size:11px;color:var(--muted);font-weight:400">{{ !auth('it')->user()->isAdmin() ? '(set by admin)' : '' }}</span></label>
               <input type="text" name="dept_name" class="form-control" value="{{ old('dept_name', $user->dept_name) }}"

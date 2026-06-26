@@ -86,6 +86,11 @@
       <i class="fa-solid fa-file-contract" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Policies</span>
       @include('wt.partials.sidebar-info', ['text' => 'Read the rules and guidelines for using company walkie talkies.'])
     </a>
+
+    <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+    <a href="{{ route('home') }}" class="nav-link" title="Back to Portal">
+      <i class="fas fa-th-large" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Back to Portal</span>
+    </a>
   </nav>
 
   <div class="sidebar-footer">

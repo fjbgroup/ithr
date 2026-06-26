@@ -113,6 +113,7 @@ class NonItAssetController extends Controller
             'total_cost'       => 'nullable|numeric',
             'accumulated'      => 'nullable|numeric',
             'nbv_at'           => 'nullable|numeric',
+            'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
 
@@ -128,7 +129,8 @@ class NonItAssetController extends Controller
             'asset_id'     => 0,
             'requested_by' => $user->id,
         ]));
-        return redirect()->route('it.non-it.index')->with('success', 'Edit request submitted. Awaiting approval.');
+        NotificationService::notifyAdmins('non_it_request', 'New Non-IT Asset Request', $user->full_name . ' requested to add a new Non-IT asset: ' . ($data['description'] ?? ''), route('it.non-it.index'));
+        return redirect()->route('it.non-it.index')->with('success', 'Request submitted. Awaiting approval.');
     }
 
     public function update(Request $request, int $id)
@@ -150,6 +152,7 @@ class NonItAssetController extends Controller
             'total_cost'       => 'nullable|numeric',
             'accumulated'      => 'nullable|numeric',
             'nbv_at'           => 'nullable|numeric',
+            'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
 

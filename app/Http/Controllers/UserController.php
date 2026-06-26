@@ -262,27 +262,29 @@ class UserController extends Controller
     }
 
     /**
-     * Admin (IT) only — disable Microsoft Authenticator (TOTP) for ALL users.
-     * Clears every user's totp_secret in one action, so nobody has 2FA enabled
-     * until they set it up again from Account Security.
+     * Admin (IT) only — flip the global Microsoft Authenticator (TOTP / 2FA)
+     * master switch on/off. When OFF, 2FA is skipped system-wide for login and
+     * password reset; users keep their existing setup and it resumes when the
+     * switch is turned back ON.
      */
-    public function disableAllTotp(Request $request)
+    public function toggleTotp(Request $request)
     {
         if (! Auth::user()->isAdminIT()) {
             abort(403);
         }
 
-        $affected = User::whereNotNull('totp_secret')->update(['totp_secret' => null]);
+        $enable = $request->boolean('enable');
+        EmailSetting::setTotpEnabled($enable);
 
-        AuditLogger::log('update', 'users',
-            'Microsoft Authenticator (TOTP) disabled for ALL users (' . $affected . ' affected).',
-            ['affected' => $affected]
+        AuditLogger::log('update', 'settings',
+            'Microsoft Authenticator (2FA) ' . ($enable ? 'ENABLED' : 'DISABLED') . ' (global master switch).',
+            ['totp_enabled' => $enable]
         );
 
         return redirect()->back()->with('success',
-            $affected > 0
-                ? "Microsoft Authenticator has been disabled for {$affected} user(s). They will need to set it up again to use it."
-                : 'No users currently had Microsoft Authenticator enabled.'
+            $enable
+                ? 'Microsoft Authenticator (2FA) has been enabled.'
+                : 'Microsoft Authenticator (2FA) has been disabled. It will be skipped for login and password reset until you re-enable it.'
         );
     }
 

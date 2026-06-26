@@ -45,7 +45,9 @@ class AuthController extends Controller
         }
 
         // ── TOTP path: HR users ──────────────────────────────────────────────
-        if ($user->isHrUser()) {
+        // Skip the authenticator entirely when 2FA is disabled system-wide;
+        // HR users then fall through to the email OTP path below.
+        if ($user->isHrUser() && EmailSetting::totpEnabled()) {
             if (!$user->hasTotpSetup()) {
                 return back()->with('error',
                     'Your account requires Microsoft Authenticator for password reset. ' .
@@ -231,7 +233,8 @@ class AuthController extends Controller
         }
 
         // Microsoft Authenticator enabled → require a 6-digit code before login.
-        if ($user->hasTotpSetup()) {
+        // The global master switch can skip 2FA system-wide without clearing setups.
+        if ($user->hasTotpSetup() && EmailSetting::totpEnabled()) {
             $request->session()->put('2fa.user_id', $user->id);
             $request->session()->put('2fa.remember', $request->filled('remember'));
             return redirect()->route('login.2fa');
