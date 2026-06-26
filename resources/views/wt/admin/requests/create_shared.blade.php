@@ -562,6 +562,109 @@
         flex: 0 0 auto;
         padding: 0 14px !important;
     }
+    .longterm-modern .executive-signature-group {
+        width: 300px !important;
+        max-width: 300px !important;
+    }
+    .longterm-modern .executive-signature-group .executive-signature-pad canvas {
+        height: 54px !important;
+    }
+    .longterm-modern .executive-signature-group .executive-signature-actions {
+        min-height: 32px;
+        padding: 5px 8px;
+    }
+    .temporary-request-details-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+        justify-content: start !important;
+        justify-items: start !important;
+        align-items: start !important;
+    }
+    .temporary-request-details-grid > div {
+        min-width: 0;
+    }
+    .temporary-quantity-group {
+        grid-column: span 4;
+        justify-self: start;
+        width: min(100%, 220px);
+    }
+    .temporary-owner-group {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+    .temporary-date-row,
+    .temporary-signature-row {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+    .temporary-date-row {
+        gap: 14px !important;
+        justify-content: start !important;
+        align-items: start !important;
+    }
+    .temporary-duration-group,
+    .temporary-start-group,
+    .temporary-end-group,
+    .temporary-purpose-group {
+        flex: 0 0 auto;
+        width: 220px;
+        max-width: 220px;
+    }
+    .temporary-duration-group > div {
+        max-width: 220px !important;
+    }
+    .temporary-duration-group .temporary-day-step {
+        width: 34px !important;
+        flex: 0 0 34px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .temporary-duration-group input {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    .temporary-purpose-group input,
+    .temporary-duration-group > div,
+    .temporary-start-group input,
+    .temporary-end-group input {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .temporary-signature-wrap {
+        flex: 0 0 300px;
+        width: 300px;
+        max-width: 300px;
+        margin: 6px 0 0 !important;
+    }
+    .temporary-signature-wrap .executive-signature-pad canvas {
+        height: 54px !important;
+    }
+    .temporary-signature-wrap .executive-signature-actions {
+        min-height: 32px;
+        padding: 5px 8px;
+    }
+    @media (max-width: 640px) {
+        .temporary-request-details-grid {
+            grid-template-columns: 1fr !important;
+        }
+        .temporary-quantity-group,
+        .temporary-owner-group,
+        .temporary-date-row,
+        .temporary-signature-row,
+        .temporary-duration-group,
+        .temporary-start-group,
+        .temporary-end-group,
+        .temporary-purpose-group {
+            grid-column: 1 / -1;
+            width: 100%;
+            max-width: 100%;
+            flex-basis: auto;
+        }
+        .temporary-signature-wrap {
+            width: 70%;
+            max-width: 70%;
+            flex-basis: auto;
+        }
+    }
 </style>
 @endpush
 
@@ -975,7 +1078,7 @@
         @endunless
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">1. Executive Details</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Name</label>
                 <input type="text" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
@@ -991,9 +1094,9 @@
         </div>
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Long Term Request Details' }}</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 {{ $isTemporaryRequest ? 'temporary-request-details-grid' : '' }}">
             @if($isTemporaryRequest)
-            <div>
+            <div class="temporary-quantity-group">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
                 <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
                     <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
@@ -1001,7 +1104,7 @@
                     <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
-            <div class="md:col-span-2">
+            <div class="md:col-span-2 temporary-owner-group">
                 <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <div>
                         <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
@@ -1039,31 +1142,49 @@
                     <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
                 @enderror
             </div>
-            <div>
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">How Many Days</label>
-                <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
-                    <input type="number" id="temporary_duration_days" name="duration_days" min="1" max="365" inputmode="numeric" placeholder="Type days" value="{{ old('duration_days', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
+            <div class="temporary-date-row flex flex-col gap-5 md:flex-row md:flex-nowrap md:items-start">
+                <div class="temporary-duration-group">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">How Many Days</label>
+                    <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
+                        <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
+                        <input type="number" id="temporary_duration_days" name="duration_days" min="1" max="365" inputmode="numeric" placeholder="Type days" value="{{ old('duration_days', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
+                        <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
+                    </div>
+                    <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Type the number of days, or use - / +. End date will update automatically.</p>
                 </div>
-                <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Type the number of days, or use - / +. End date will update automatically.</p>
+                <div class="temporary-start-group">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
+                    <input type="date" id="temporary_start_date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
+                </div>
+                <div class="temporary-end-group">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">End Date</label>
+                    <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
+                    <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Please return the walkie talkie to ICT Department on this end date.</p>
+                </div>
+                <div class="temporary-purpose-group">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
+                    <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
+                    <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
+                    <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
+                    <input type="hidden" id="request_justification_fallback" name="justifications" value="{{ old('justifications', old('event_name')) }}">
+                    <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
+                </div>
             </div>
-            <div>
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
-                <input type="date" id="temporary_start_date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
-            </div>
-            <div>
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">End Date</label>
-                <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
-                <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Please return the walkie talkie to ICT Department on this end date.</p>
-            </div>
-            <div class="md:col-span-2">
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
-                <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
-                <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
-                <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
-                <input type="hidden" id="request_justification_fallback" name="justifications" value="{{ old('justifications', old('event_name')) }}">
-                <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
+            <div class="temporary-signature-row flex flex-col md:flex-row md:flex-nowrap md:items-start">
+                <div class="temporary-signature-wrap">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
+                    <div class="executive-signature-pad" data-executive-signature-pad>
+                        <canvas></canvas>
+                        <div class="executive-signature-actions">
+                            <span class="executive-signature-hint">Sign inside the box</span>
+                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="request_signature" data-executive-signature-input>
+                    @error('request_signature')
+                        <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
             @endif
             @unless($isTemporaryRequest)
@@ -1124,11 +1245,12 @@
                 </div>
                 <div class="executive-signature-group w-full md:w-80 min-w-0">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
-                    <div class="executive-signature-field" data-executive-signature-pad>
-                        <div class="executive-signature-pad">
-                            <canvas></canvas>
+                    <div class="executive-signature-pad" data-executive-signature-pad>
+                        <canvas></canvas>
+                        <div class="executive-signature-actions">
+                            <span class="executive-signature-hint">Sign inside the box</span>
+                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
                         </div>
-                        <button type="button" class="executive-signature-clear rounded-lg border border-[#0284c7]/20 bg-white text-[8px] font-black uppercase tracking-widest text-slate-900 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" data-executive-signature-clear>Clear</button>
                     </div>
                     <input type="hidden" name="request_signature" data-executive-signature-input>
                     @error('request_signature')
@@ -1143,23 +1265,6 @@
         </div>
 
         <input type="hidden" name="pickup_method" value="self">
-
-        @if($isTemporaryRequest)
-        <div class="md:col-span-2 mt-4">
-            <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
-            <div class="executive-signature-pad" data-executive-signature-pad>
-                <canvas></canvas>
-                <div class="executive-signature-actions">
-                    <span class="executive-signature-hint">Sign inside the box</span>
-                    <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
-                </div>
-            </div>
-            <input type="hidden" name="request_signature" data-executive-signature-input>
-            @error('request_signature')
-                <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
-            @enderror
-        </div>
-        @endif
 
         <div class="request-submit-row pt-8 flex justify-end">
             <button type="submit" name="submit_action" value="submit" class="request-submit-btn bg-[#0284c7] text-white px-10 py-3.5 rounded-2xl font-black text-[11px] tracking-widest uppercase hover:bg-[#724D31] transition shadow-xl shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
