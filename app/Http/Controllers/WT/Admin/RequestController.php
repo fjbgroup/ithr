@@ -347,6 +347,9 @@ class RequestController extends Controller
             'pickup_note' => 'nullable|string|max:1000',
             'justifications' => $isDraft ? 'nullable|string|max:2000' : 'required|string|max:2000',
             'bay_from' => 'nullable|string|max:255',
+            'request_signature' => $isDraft
+                ? ['nullable', 'string', 'regex:/^data:image\/png;base64,/']
+                : ['required', 'string', 'regex:/^data:image\/png;base64,/'],
         ]);
 
         $quantity = max(1, (int) ($validated['quantity'] ?? 1));
@@ -425,6 +428,7 @@ class RequestController extends Controller
                 : null,
             'pickup_note' => $validated['pickup_note'] ?? null,
             'justifications' => $validated['justifications'] ?? null,
+            'request_signature' => $validated['request_signature'] ?? null,
             'status' => $isDraft ? 'Draft' : 'Pending IT Approval',
             'submit_to_admin_id' => auth('wt')->id(),
         ]);
@@ -1139,6 +1143,5 @@ class RequestController extends Controller
             });
     }
 }
-
 
 

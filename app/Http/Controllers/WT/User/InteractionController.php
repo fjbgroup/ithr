@@ -13,6 +13,7 @@ use App\Services\SystemNotifier;
 use App\Services\TemporaryRequestExpiryService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class InteractionController extends Controller
 {
@@ -355,6 +356,7 @@ class InteractionController extends Controller
             'location' => 'required|string|max:255',
             'event_name' => 'required|string|max:255',
             'justification' => 'required|string|max:2000',
+            'request_signature' => ['required', 'string', 'regex:/^data:image\/png;base64,/'],
         ]);
 
         $selectedAdmin = User::where('id', $validated['submit_to_admin_id'])->first();
@@ -379,6 +381,7 @@ class InteractionController extends Controller
             'location' => $validated['location'],
             'event_name' => $validated['event_name'],
             'justifications' => $validated['justification'],
+            'request_signature' => $validated['request_signature'],
             'status' => 'Pending Admin Approval',
             'submit_to_admin_id' => $validated['submit_to_admin_id'],
         ]);
@@ -570,6 +573,7 @@ class InteractionController extends Controller
             'return_person' => 'required|string|max:255',
             'return_department' => 'required|string|max:255',
             'return_phone_no' => 'required|string|max:50',
+            'return_signature' => ['required', 'string', 'regex:/^data:image\/png;base64,/'],
         ]);
 
         $isAdminRoute = $request->routeIs('wt.admin.*');
@@ -588,6 +592,7 @@ class InteractionController extends Controller
             'return_person' => trim((string) $request->return_person),
             'return_department' => trim((string) $request->return_department),
             'return_phone_no' => trim((string) $request->return_phone_no),
+            'return_signature' => $request->return_signature,
         ]);
 
         $senderUser = auth('wt')->user();

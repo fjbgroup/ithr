@@ -348,8 +348,21 @@
         padding: 8px !important;
         border-radius: 8px !important;
     }
+    .owner-details-grid {
+        max-width: 1180px;
+        column-gap: 16px !important;
+        row-gap: 20px !important;
+    }
+    .owner-details-grid > div {
+        min-width: 0;
+    }
+    .owner-note-row {
+        max-width: 1180px;
+    }
     .corporate-combobox {
         position: relative;
+        width: 100%;
+        max-width: 100%;
     }
     .corporate-combobox select {
         display: none !important;
@@ -361,7 +374,7 @@
         border-radius: 7px !important;
         border: 1px solid rgba(139, 94, 60, 0.3) !important;
         background: #ffffff !important;
-        padding: 5px 24px 5px 8px !important;
+        padding: 5px 30px 5px 8px !important;
         color: #1e293b !important;
         font-size: 9.5px !important;
         font-weight: 800 !important;
@@ -379,12 +392,20 @@
     }
     .corporate-combobox-toggle {
         position: absolute;
-        right: 9px;
+        right: 10px;
         top: 50%;
         transform: translateY(-50%);
         color: #64748b;
         font-size: 9px;
         pointer-events: none;
+    }
+    .owner-details-grid .select2-container--default .select2-selection--single {
+        position: relative;
+        padding-right: 30px !important;
+    }
+    .owner-details-grid .select2-container--default .select2-selection--single .select2-selection__arrow {
+        right: 8px !important;
+        width: 18px !important;
     }
     .corporate-combobox-menu {
         position: absolute;
@@ -448,6 +469,98 @@
     }
     .dark .corporate-combobox-meta {
         color: #94a3b8;
+    }
+    .executive-signature-pad {
+        border: 1px solid rgba(2, 132, 199, 0.22);
+        border-radius: 8px;
+        background: #ffffff;
+        overflow: hidden;
+    }
+    .executive-signature-pad canvas {
+        display: block;
+        width: 100%;
+        height: 138px;
+        background: #ffffff;
+        touch-action: none;
+    }
+    .executive-signature-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-top: 1px solid rgba(2, 132, 199, 0.16);
+        background: rgba(248, 250, 252, 0.92);
+        padding: 8px 10px;
+    }
+    .executive-signature-hint {
+        color: #64748b;
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    .executive-signature-clear {
+        border: 1px solid rgba(2, 132, 199, 0.2);
+        border-radius: 7px;
+        background: #ffffff;
+        color: #0f172a;
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        padding: 6px 10px;
+        text-transform: uppercase;
+    }
+    .dark .executive-signature-pad {
+        border-color: #334155;
+        background: #ffffff;
+    }
+    .dark .executive-signature-actions {
+        border-color: #334155;
+        background: #0f172a;
+    }
+    .dark .executive-signature-clear {
+        border-color: #334155;
+        background: #1e293b;
+        color: #e2e8f0;
+    }
+    .executive-request-inline-row {
+        align-items: end;
+    }
+    .executive-date-group {
+        flex: 0 0 auto;
+    }
+    .executive-remark-group {
+        flex: 0 0 auto;
+    }
+    .executive-signature-group {
+        flex: 0 0 auto;
+    }
+    .executive-row-control {
+        height: 40px !important;
+        min-height: 40px !important;
+        line-height: 1.2 !important;
+    }
+    .executive-row-textarea {
+        resize: none !important;
+        overflow: hidden !important;
+    }
+    .executive-signature-field {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .executive-signature-field .executive-signature-pad {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    .executive-signature-field .executive-signature-pad canvas {
+        height: 38px !important;
+    }
+    .executive-signature-field .executive-signature-clear {
+        height: 40px !important;
+        min-height: 40px !important;
+        flex: 0 0 auto;
+        padding: 0 14px !important;
     }
 </style>
 @endpush
@@ -1000,13 +1113,28 @@
                     <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
                 @enderror
             </div>
-            <div>
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
-                <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
-            </div>
-            <div class="md:col-span-2">
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark / Purpose</label>
-                <textarea name="justifications" rows="1" placeholder="Example: Long-term usage, department coordination, or shared daily usage" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>{{ old('justifications') }}</textarea>
+            <div class="md:col-span-2 executive-request-inline-row flex flex-col md:flex-row md:items-end justify-start gap-4 w-full">
+                <div class="executive-date-group w-full md:w-52 min-w-0">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
+                    <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="executive-row-control w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>
+                </div>
+                <div class="executive-remark-group w-full md:w-72 min-w-0">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark / Purpose</label>
+                    <textarea name="justifications" rows="1" placeholder="Long-term usage, department coordination, or shared daily usage" class="executive-row-control executive-row-textarea w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 py-2 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>{{ old('justifications') }}</textarea>
+                </div>
+                <div class="executive-signature-group w-full md:w-80 min-w-0">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
+                    <div class="executive-signature-field" data-executive-signature-pad>
+                        <div class="executive-signature-pad">
+                            <canvas></canvas>
+                        </div>
+                        <button type="button" class="executive-signature-clear rounded-lg border border-[#0284c7]/20 bg-white text-[8px] font-black uppercase tracking-widest text-slate-900 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" data-executive-signature-clear>Clear</button>
+                    </div>
+                    <input type="hidden" name="request_signature" data-executive-signature-input>
+                    @error('request_signature')
+                        <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+                    @enderror
+                </div>
                 <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                 <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                 <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
@@ -1015,6 +1143,23 @@
         </div>
 
         <input type="hidden" name="pickup_method" value="self">
+
+        @if($isTemporaryRequest)
+        <div class="md:col-span-2 mt-4">
+            <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
+            <div class="executive-signature-pad" data-executive-signature-pad>
+                <canvas></canvas>
+                <div class="executive-signature-actions">
+                    <span class="executive-signature-hint">Sign inside the box</span>
+                    <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                </div>
+            </div>
+            <input type="hidden" name="request_signature" data-executive-signature-input>
+            @error('request_signature')
+                <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+            @enderror
+        </div>
+        @endif
 
         <div class="request-submit-row pt-8 flex justify-end">
             <button type="submit" name="submit_action" value="submit" class="request-submit-btn bg-[#0284c7] text-white px-10 py-3.5 rounded-2xl font-black text-[11px] tracking-widest uppercase hover:bg-[#724D31] transition shadow-xl shadow-[#0284c7]/20 flex items-center gap-3 border border-[#A67B5B]">
@@ -1102,10 +1247,12 @@
                 section.button.addEventListener('click', () => {
                     if (section.button.getAttribute('aria-expanded') === 'true') {
                         closeAllSections();
+                        window.dispatchEvent(new Event('resize'));
                         return;
                     }
 
                     openSection(section);
+                    window.dispatchEvent(new Event('resize'));
                 });
             });
 
@@ -1120,11 +1267,122 @@
 
                 const panel = event.target.closest('.request-form-accordion-panel');
                 const section = sections.find((item) => item.panel === panel);
-                if (section) openSection(section);
+                if (section) {
+                    openSection(section);
+                    window.dispatchEvent(new Event('resize'));
+                }
             }, true);
         }
 
         mountRequestFormAccordion();
+
+        function setupExecutiveSignaturePad(container) {
+            const canvas = container.querySelector('canvas');
+            const input = container.parentElement.querySelector('[data-executive-signature-input]');
+            const clearButton = container.querySelector('[data-executive-signature-clear]');
+            const context = canvas.getContext('2d');
+            let drawing = false;
+            let hasSignature = false;
+
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                const rect = canvas.getBoundingClientRect();
+                const image = hasSignature ? canvas.toDataURL('image/png') : null;
+
+                canvas.width = rect.width * ratio;
+                canvas.height = rect.height * ratio;
+                context.setTransform(ratio, 0, 0, ratio, 0, 0);
+                context.lineWidth = 2;
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+                context.strokeStyle = '#111827';
+
+                if (image) {
+                    const img = new Image();
+                    img.onload = () => context.drawImage(img, 0, 0, rect.width, rect.height);
+                    img.src = image;
+                }
+            }
+
+            function point(event) {
+                const rect = canvas.getBoundingClientRect();
+                const source = event.touches ? event.touches[0] : event;
+                return { x: source.clientX - rect.left, y: source.clientY - rect.top };
+            }
+
+            function updateInput() {
+                input.value = hasSignature ? canvas.toDataURL('image/png') : '';
+            }
+
+            function start(event) {
+                event.preventDefault();
+                if (!canvas.width || !canvas.height) {
+                    resizeCanvas();
+                }
+                drawing = true;
+                const pos = point(event);
+                context.beginPath();
+                context.moveTo(pos.x, pos.y);
+            }
+
+            function move(event) {
+                if (!drawing) return;
+                event.preventDefault();
+                const pos = point(event);
+                context.lineTo(pos.x, pos.y);
+                context.stroke();
+                hasSignature = true;
+                updateInput();
+            }
+
+            function stop() {
+                drawing = false;
+                updateInput();
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', move);
+            canvas.addEventListener('mouseup', stop);
+            canvas.addEventListener('mouseleave', stop);
+            canvas.addEventListener('touchstart', start, { passive: false });
+            canvas.addEventListener('touchmove', move, { passive: false });
+            canvas.addEventListener('touchend', stop);
+            clearButton.addEventListener('click', function () {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                hasSignature = false;
+                updateInput();
+            });
+        }
+
+        document.querySelectorAll('[data-executive-signature-pad]').forEach(setupExecutiveSignaturePad);
+
+        const requestForm = document.querySelector('.admin-request-card form');
+        const executiveSignatureInput = document.querySelector('[data-executive-signature-input]');
+
+        if (requestForm && executiveSignatureInput) {
+            requestForm.addEventListener('submit', function (event) {
+                const submitter = event.submitter;
+                if (submitter && submitter.name === 'submit_action' && submitter.value === 'draft') {
+                    return;
+                }
+
+                if (executiveSignatureInput.value.trim() !== '') {
+                    return;
+                }
+
+                event.preventDefault();
+                const panel = executiveSignatureInput.closest('.request-form-accordion-panel');
+                const button = panel?.parentElement?.querySelector('.request-form-accordion-toggle');
+                if (panel && button) {
+                    button.setAttribute('aria-expanded', 'true');
+                    panel.hidden = false;
+                }
+                alert('Please sign before submitting the request.');
+                executiveSignatureInput.parentElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
 
         const oldPicDetails = @json($oldPicDetails);
         const oldRequestSharedWith = @json(strtoupper(old('shared_with', '')));
@@ -1571,7 +1829,7 @@
                         <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
                         <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
                     </div>
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="owner-details-grid grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-5">
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Name <span class="text-red-500">*</span></label>
                             <input type="hidden" name="pic_details[${index}][staff_no]" data-pic-staff-no value="${escapeAttribute(saved.staff_no || '')}">
@@ -1620,7 +1878,7 @@
                                 ${renderOptions(locationOptions, saved.location || '', 'Type or select location')}
                             </select>
                         </div>
-                        <div class="longterm-note-box rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-950/70 md:col-span-2">
+                        <div class="owner-note-row longterm-note-box rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-950/70 md:col-span-3">
                             <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
                             <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
                         </div>
@@ -1634,7 +1892,7 @@
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Pickup Phone No <span class="text-red-500">*</span></label>
                             <input type="text" name="pic_details[${index}][pickup_phone_no]" data-pic-pickup-phone value="${escapeAttribute(saved.pickup_phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
                         </div>
-                        <div class="md:col-span-2">
+                        <div class="md:col-span-3">
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">This name will be shown to ICT for pickup at ICT Department after approval.</p>
                         </div>
                     </div>

@@ -218,8 +218,10 @@ Route::prefix('it')->name('it.')->group(function () {
 
             // Admin + Finance
             Route::middleware('it.role:admin,finance_admin')->group(function () {
-                Route::get('/reports/it',     [ReportController::class, 'it'])->name('reports.it');
-                Route::get('/reports/non-it', [ReportController::class, 'nonIt'])->name('reports.non-it');
+                Route::get('/reports/it',         [ReportController::class, 'it'])->name('reports.it');
+                Route::get('/reports/it/export',  [ReportController::class, 'exportIt'])->name('reports.it.export');
+                Route::get('/reports/non-it',     [ReportController::class, 'nonIt'])->name('reports.non-it');
+                Route::get('/reports/non-it/export', [ReportController::class, 'exportNonIt'])->name('reports.non-it.export');
             });
 
             // Finance Admin only

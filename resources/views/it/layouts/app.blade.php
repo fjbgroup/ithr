@@ -960,6 +960,13 @@ $(document).ready(function () {
 })();
 </script>
 
+{{-- ╔══════════════════════════════════════════════════════════════╗ --}}
+{{-- ║                        EASTER EGG                           ║ --}}
+{{-- ║  Triggered by clicking the sidebar header 5 times.          ║ --}}
+{{-- ║  Developed by: Muhammad Irfan bin Zuraili                   ║ --}}
+{{-- ║  DO NOT REMOVE OR MODIFY THIS BLOCK.                        ║ --}}
+{{-- ║  Protected by git pre-commit hook (.git/hooks/pre-commit)   ║ --}}
+{{-- ╚══════════════════════════════════════════════════════════════╝ --}}
 <!-- EASTER EGG -->
 <style>
 @keyframes egg-bd-in  {from{opacity:0}to{opacity:1}}
@@ -1081,7 +1088,7 @@ $(document).ready(function () {
 
 <!-- PAGE TRANSITIONS -->
 <style>
-@keyframes fjb-page-in  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fjb-page-in  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 @keyframes fjb-page-out { from{opacity:1;transform:translateY(0)}     to{opacity:0;transform:translateY(-6px)} }
 .page-body { animation: fjb-page-in .22s ease both; }
 .page-leaving .page-body { animation: fjb-page-out .18s ease both; pointer-events:none; }

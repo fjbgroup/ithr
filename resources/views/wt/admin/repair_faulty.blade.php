@@ -639,7 +639,7 @@
 </div>
 <div class="clean-admin-table-shell" id="mainTableContainer">
     <div class="clean-admin-table-scroll">
-    <table id="maintenanceTable" class="clean-admin-table text-left">
+    <table id="maintenanceTable" class="clean-admin-table table-auto w-full text-left">
         <thead>
             <tr>
                 <th class="px-2 py-1 text-center">Radio ID</th>
@@ -1615,6 +1615,52 @@ html.dark .maintenance-page-shell #maintenanceTable .maintenance-status-pill[dat
         width: 100% !important;
         min-width: 0 !important;
         table-layout: auto !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(1),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(2),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(3),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(4),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(5),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(6),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(7),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(8),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(10),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(11),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(14),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
+        white-space: nowrap !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(1) { width: 7% !important; }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(2) { width: 10% !important; }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(3) { width: 8% !important; }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(4) { width: 8% !important; }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(5) { width: 8% !important; }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(6) {
+        width: 8% !important;
+        min-width: 100px !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(10),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(11),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(14),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
+        width: 6% !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(9),
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(13) {
+        width: 10% !important;
+        max-width: 220px !important;
+        min-width: 0 !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable :is(th, td):nth-child(15) {
+        width: 10% !important;
+        min-width: 70px !important;
+    }
+    body .content-surface .maintenance-page-shell #maintenanceTable thead th {
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
     }
     body .content-surface .maintenance-page-shell #maintenanceTable thead th {
         height: 28px !important;

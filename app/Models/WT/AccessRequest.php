@@ -47,10 +47,12 @@ class AccessRequest extends Model
         'justifications',
         'status',
         'approval_remark',
+        'request_signature',
         'return_date',
         'return_person',
         'return_department',
         'return_phone_no',
+        'return_signature',
         'return_status',
     ];
 
@@ -87,4 +89,3 @@ class AccessRequest extends Model
         return $this->hasOne(Handover::class, 'access_request_id');
     }
 }
-
