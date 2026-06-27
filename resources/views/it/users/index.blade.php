@@ -280,7 +280,7 @@ $action      = request('action', 'list');
 @endif
 
 <!-- EDIT USER MODAL -->
-<div id="mu-edit-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:1050;background:rgba(0,0,0,.5);align-items:flex-start;justify-content:center;padding:70px 20px 20px;overflow-y:auto">
+<div id="mu-edit-overlay" style="display:none;position:absolute;top:0;left:0;right:0;width:100%;height:100vh;z-index:1050;background:rgba(0,0,0,.5);align-items:flex-start;justify-content:center;padding:70px 20px 20px;overflow-y:auto">
   <div style="background:var(--surface);border-radius:16px;width:100%;max-width:720px;min-height:70vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.35);position:relative;display:flex;flex-direction:column">
 
     {{-- Header --}}
@@ -632,6 +632,8 @@ $action      = request('action', 'list');
 
 <script>
 // ── Edit User Modal ───────────────────────────────────────────────────────────
+let _muScrollSync = null;
+
 function openMuEditModal(data) {
   const overlay = document.getElementById('mu-edit-overlay');
   document.getElementById('mu-edit-form').action           = data.action;
@@ -642,11 +644,18 @@ function openMuEditModal(data) {
   document.getElementById('mu-edit-role').value            = data.role;
   document.getElementById('mu-edit-dept').value            = data.dept;
   document.getElementById('mu-edit-password').value        = '';
+  overlay.style.top = window.scrollY + 'px';
   overlay.style.display = 'flex';
+  _muScrollSync = function () { overlay.style.top = window.scrollY + 'px'; };
+  window.addEventListener('scroll', _muScrollSync, { passive: true });
 }
 
 function closeMuEditModal() {
   document.getElementById('mu-edit-overlay').style.display = 'none';
+  if (_muScrollSync) {
+    window.removeEventListener('scroll', _muScrollSync);
+    _muScrollSync = null;
+  }
 }
 
 // Backdrop click closes modal

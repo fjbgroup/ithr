@@ -46,7 +46,7 @@ class UserController extends Controller
                   ->orWhere('dept_name','like', "%$search%");
             });
         }
-        $users = $query->orderBy('name')->paginate(8)->withQueryString();
+        $users = $query->orderBy('name')->paginate(8)->appends($request->except(['partial']));
 
         if ($request->boolean('partial')) {
             $html = view('it.users.partials.user-list', [
