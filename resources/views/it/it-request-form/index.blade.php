@@ -1597,9 +1597,26 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
       <input type="hidden" name="hw_request_type" id="hw_request_type_val">
       <!-- hw_items[] injected dynamically by JS -->
 
-      <input type="hidden" name="subject" value="">
-
       <div class="itr-hw-layout">
+
+      {{-- Title / Subject --}}
+      <div class="itr-section itr-hw-full">
+        <div class="itr-section-head">
+          <i class="bi bi-tag" style="color:var(--muted);font-size:15px;flex-shrink:0"></i>
+          <div class="itr-section-title">Request Title</div>
+        </div>
+        <div class="itr-section-body">
+          <div class="fg">
+            <div class="itr-label">Title</div>
+            <input class="itr-input{{ $errors->has('subject') ? ' is-error' : '' }}"
+                   type="text" name="subject" id="itr-subject"
+                   value="{{ old('subject') }}"
+                   placeholder="Brief description of what this request is for…"
+                   maxlength="200"/>
+            @error('subject')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
+          </div>
+        </div>
+      </div>
 
       {{-- Section 1: Request Type & Item Selection (full width) --}}
       <div class="itr-section itr-hw-full">
@@ -1774,10 +1791,10 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         <div class="itr-section-body">
           <div class="fg">
             <div class="itr-label">Name <span class="itr-req">*</span></div>
-            <input type="hidden" name="req_name" id="req_name_val" value="{{ old('req_name', $user->full_name) }}">
+            <input type="hidden" name="req_name" id="req_name_val" value="{{ old('req_name') }}">
             <div class="itr-name-dd{{ $errors->has('req_name') ? ' is-error' : '' }}" id="req_name_wrap">
               <div class="itr-name-trigger" id="req_name_trigger" onclick="toggleStaffDD('req_name')">
-                <span class="itr-name-display{{ old('req_name', $user->full_name) ? '' : ' is-placeholder' }}" id="req_name_display">{{ old('req_name', $user->full_name) ?: '-- Select staff name --' }}</span>
+                <span class="itr-name-display{{ old('req_name') ? '' : ' is-placeholder' }}" id="req_name_display">{{ old('req_name') ?: '-- Select staff name --' }}</span>
                 <i class="bi bi-chevron-down itr-name-arrow"></i>
               </div>
               <div class="itr-name-panel" id="req_name_panel" style="display:none">
@@ -1789,22 +1806,22 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </div>
           <div class="fg">
             <div class="itr-label">Staff ID <span class="itr-req">*</span></div>
-            <input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id', $user->department ?? '') }}" required/>
+            <input class="itr-input{{ $errors->has('req_staff_id') ? ' is-error' : '' }}" type="text" name="req_staff_id" value="{{ old('req_staff_id') }}" required/>
             @error('req_staff_id')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
           <div class="fg">
             <div class="itr-label">Contact <span class="itr-req">*</span></div>
-            <input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact', $user->email ?? '') }}" required/>
+            <input class="itr-input{{ $errors->has('req_contact') ? ' is-error' : '' }}" type="text" name="req_contact" value="{{ old('req_contact') }}" required/>
             @error('req_contact')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
           <div class="fg">
             <div class="itr-label">Department <span class="itr-req">*</span></div>
-            <input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department', $user->dept_name ?? optional($user->department)->name ?? '') }}" required/>
+            <input class="itr-input{{ $errors->has('req_department') ? ' is-error' : '' }}" type="text" name="req_department" value="{{ old('req_department') }}" required/>
             @error('req_department')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
           <div class="fg" style="margin-bottom:0">
             <div class="itr-label">Designation <span class="itr-req">*</span></div>
-            <input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation', $user->position ?? '') }}" required/>
+            <input class="itr-input{{ $errors->has('req_designation') ? ' is-error' : '' }}" type="text" name="req_designation" value="{{ old('req_designation') }}" required/>
             @error('req_designation')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
         </div>
@@ -1822,12 +1839,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             <div class="itr-label">Name <span class="itr-req">*</span></div>
             <input type="hidden" name="approver_name" id="approver_name_val" value="{{ old('approver_name') }}">
             <div class="itr-name-dd{{ $errors->has('approver_name') ? ' is-error' : '' }}" id="approver_name_wrap">
-              <div class="itr-name-trigger" id="approver_name_trigger" onclick="toggleHouDD('approver_name')">
+              <div class="itr-name-trigger" id="approver_name_trigger" onclick="toggleStaffDD('approver_name')">
                 <span class="itr-name-display{{ old('approver_name') ? '' : ' is-placeholder' }}" id="approver_name_display">{{ old('approver_name') ?: '-- Select approver name --' }}</span>
                 <i class="bi bi-chevron-down itr-name-arrow"></i>
               </div>
               <div class="itr-name-panel" id="approver_name_panel" style="display:none">
-                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by name…" oninput="filterHouDD('approver_name',this.value)" autocomplete="off">
+                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by name…" oninput="filterStaffDD('approver_name',this.value)" autocomplete="off">
                 <div class="itr-name-list" id="approver_name_list"></div>
               </div>
             </div>
@@ -1860,11 +1877,24 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   </div><!-- /step2 -->
 </div><!-- /itr-wrap -->
 
+{{-- Navigation-away confirmation modal --}}
+<div id="itr-nav-confirm-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px 28px;max-width:400px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.22);text-align:center;">
+    <div style="font-size:1.1rem;font-weight:700;color:#1e293b;margin-bottom:10px;">Unsaved Changes</div>
+    <p style="color:#64748b;margin:0 0 24px;line-height:1.6;font-size:.95rem;">You have unsaved changes on this form. Would you like to save them as a draft before leaving?</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button id="itr-nav-cancel-btn" type="button" style="padding:10px 22px;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;color:#374151;font-weight:600;cursor:pointer;font-size:.9rem;">Cancel</button>
+      <button id="itr-nav-draft-btn" type="button" style="padding:10px 22px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:.9rem;"><i class="bi bi-floppy"></i> Save as Draft</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const typeConfig = {
   hardware: { label: 'Hardware', icon: 'bi-laptop', form: 'form-hardware' },
 };
 let activeType = null;
+var _accountName = {!! json_encode($user->full_name ?? '') !!};
 
 function selectType(type) {
   activeType = type;
@@ -1957,10 +1987,26 @@ function saveFormState() {
   if (!activeType || !typeConfig[activeType]) return;
   var form = document.getElementById(typeConfig[activeType].form);
   if (!form) return;
-  var state = { type: activeType, fields: {}, pills: {}, chips: {} };
+  var state = { type: activeType, fields: {}, pills: {}, chips: {}, names: {} };
   form.querySelectorAll('input:not([type=file]):not([type=hidden]), select, textarea').forEach(function(el) {
     if (el.name) state.fields[el.name] = el.value;
   });
+  // Save name-dropdown hidden inputs (excluded by the selector above)
+  ['user_name_val', 'req_name_val', 'approver_name_val'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.name) state.fields[el.name] = el.value;
+  });
+  // Save name trigger display texts so the trigger label survives a refresh
+  ['user_name', 'req_name', 'approver_name'].forEach(function(prefix) {
+    var disp = document.getElementById(prefix + '_display');
+    if (disp) state.names[prefix] = { text: disp.textContent, placeholder: disp.classList.contains('is-placeholder') };
+  });
+  // Sync Quill content to hidden input and capture it
+  if (window._itrJustifyEditor) {
+    var _jh = document.getElementById('itr-justify-hidden');
+    if (_jh) _jh.value = window._itrJustifyEditor.root.innerHTML;
+    state.fields['justification'] = window._itrJustifyEditor.root.innerHTML;
+  }
   [['hw_request_type_val','hw-req-type']].forEach(function(p) {
     var el = document.getElementById(p[0]); if (el) state.pills[p[1]] = el.value;
   });
@@ -2126,6 +2172,15 @@ function restoreFromSession() {
       if (el.type !== 'file') el.value = state.fields[name];
     });
   });
+  // Restore name trigger display texts
+  Object.keys(state.names || {}).forEach(function(prefix) {
+    var n = state.names[prefix];
+    var disp = document.getElementById(prefix + '_display');
+    if (disp) {
+      disp.textContent = n.text;
+      disp.classList.toggle('is-placeholder', n.placeholder);
+    }
+  });
 
   restoreOldPill('hw-req-type', 'hw_request_type_val', (state.pills||{})['hw-req-type']);
 }
@@ -2238,6 +2293,21 @@ function pickStaff(prefix, el) {
     setF('[name="user_email"]',       email);
     setF('[name="user_contact"]',     phone);
     setF('[name="user_designation"]', position);
+    // Mirror into Requester Details only when the selected person is the logged-in user
+    if (_accountName && name === _accountName) {
+      var reqVal  = document.getElementById('req_name_val');
+      var reqDisp = document.getElementById('req_name_display');
+      if (reqVal)  reqVal.value = name;
+      if (reqDisp) { reqDisp.textContent = name; reqDisp.classList.remove('is-placeholder'); }
+      setF('[name="req_department"]',   dept);
+      setF('[name="req_staff_id"]',     staffNo);
+      setF('[name="req_contact"]',      email);
+      setF('[name="req_designation"]',  position);
+    }
+  } else if (prefix === 'approver_name') {
+    setF('[name="approver_department"]',  dept);
+    setF('[name="approver_contact"]',     email);
+    setF('[name="approver_designation"]', position);
   } else {
     setF('[name="req_department"]',   dept);
     setF('[name="req_staff_id"]',     staffNo);
@@ -2326,8 +2396,9 @@ document.addEventListener('mousedown', function(e) {
   });
 });
 
-// Validate name dropdowns on submit
+// Validate name dropdowns on submit (skip for draft)
 document.getElementById('form-hardware').addEventListener('submit', function(e) {
+  if (e.submitter && e.submitter.value === 'draft') return;
   var ok = true;
   [
     { id: 'user_name_val',     wrap: 'user_name_wrap'     },
@@ -2346,6 +2417,42 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
   });
   if (!ok) e.preventDefault();
 });
+
+// Navigation-away guard: intercept sidebar/module links while the form is active
+(function() {
+  // Move modal to <body> so position:fixed isn't broken by a transformed ancestor
+  document.body.appendChild(document.getElementById('itr-nav-confirm-modal'));
+
+  function _step2Active() {
+    var s2 = document.getElementById('step2');
+    return s2 && s2.style.display !== 'none' && s2.style.display !== '';
+  }
+
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href === '#' || href.startsWith('javascript')) return;
+    if (!_step2Active()) return;
+    try {
+      var dest = new URL(href, window.location.href);
+      if (dest.pathname === window.location.pathname) return;
+    } catch(ex) { return; }
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById('itr-nav-confirm-modal').style.display = 'flex';
+  }, true);
+
+  document.getElementById('itr-nav-cancel-btn').addEventListener('click', function() {
+    document.getElementById('itr-nav-confirm-modal').style.display = 'none';
+  });
+
+  document.getElementById('itr-nav-draft-btn').addEventListener('click', function() {
+    document.getElementById('itr-nav-confirm-modal').style.display = 'none';
+    var draftBtn = document.querySelector('button[name="action"][value="draft"]');
+    if (draftBtn) draftBtn.click();
+  });
+})();
 </script>
 @endif {{-- end isStaff else --}}
 @endif
@@ -2386,7 +2493,18 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
   });
 
   var _jv = {!! json_encode(old('justification')) !!};
-  if (_jv) window._itrJustifyEditor.root.innerHTML = _jv;
+  if (_jv) {
+    window._itrJustifyEditor.root.innerHTML = _jv;
+  } else {
+    try {
+      var _ss = JSON.parse(sessionStorage.getItem('itr_form_state') || 'null');
+      if (_ss && _ss.fields && _ss.fields.justification) {
+        window._itrJustifyEditor.root.innerHTML = _ss.fields.justification;
+      }
+    } catch(e) {}
+  }
+
+  window._itrJustifyEditor.on('text-change', function() { saveFormState(); });
 
   window._itrJustifyEditor.on('selection-change', function(range) {
     var wrap = document.getElementById('itr-justify-wrap');
