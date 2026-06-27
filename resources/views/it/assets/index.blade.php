@@ -6,14 +6,15 @@
 @push('styles')
 <style>
 /* ── DATA TABLE ── */
-.data-table { width:100% !important; }
-.data-table td, .data-table th { vertical-align:middle !important; padding:8px 10px !important; white-space:nowrap; }
+.data-table { min-width:100%; }
+.data-table td, .data-table th { vertical-align:middle !important; padding:5px 8px !important; white-space:nowrap; font-size:12.5px; }
 /* Description column: allow wrapping so it absorbs spare space */
 .data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; min-width:100px; }
-/* Status column: center the header and badge */
-.data-table td:nth-child(6), .data-table th:nth-child(6) { text-align:center; }
 /* Actions column: never wrap, just enough for the buttons */
 .data-table td:last-child, .data-table th:last-child { white-space:nowrap; width:1%; }
+.data-scroll-wrap::-webkit-scrollbar{height:6px}
+.data-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
+.data-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
 </style>
 @endpush
 
@@ -168,7 +169,7 @@ $statItems = [
 @endif
 
 {{-- TABLE --}}
-<div class="table-card">
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)">
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <span style="font-size:13px;color:var(--muted);font-weight:500">
       <strong style="color:var(--text)">{{ number_format($items->total()) }}</strong>
@@ -178,16 +179,20 @@ $statItems = [
       @endif
     </span>
   </div>
-  <div>
-    <table class="table table-hover data-table" style="font-family:'DM Sans',sans-serif">
+  <div class="data-scroll-wrap" style="overflow-x:auto">
+    <table class="table table-hover data-table" style="font-family:'DM Sans',sans-serif;min-width:100%">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
-        <th>CLASS</th>
+        <th>F/A CODE</th>
         <th>DESCRIPTION</th>
+        <th>YEARS PURCHASE</th>
         <th>LOCATION</th>
-        <th>STATUS</th>
-        <th>ACTIONS</th>
+        <th>TOTAL COST</th>
+        <th>ACCUMULATED</th>
+        <th>NBV AT</th>
+        <th style="width:1%;white-space:nowrap">QR</th>
+        <th style="width:1%;white-space:nowrap">ACTIONS</th>
       </tr></thead>
       <tbody>
         @forelse($items as $item)
@@ -222,84 +227,62 @@ $statItems = [
             </a>
           </td>
 
-          {{-- Class --}}
-          <td>
-            <span style="display:inline-block;background:rgba(59,130,246,.1);color:#2563eb;border-radius:5px;padding:2px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;font-family:'DM Sans',sans-serif">
-              {{ $item->asset_class }}
-            </span>
-          </td>
+          {{-- F/A Code --}}
+          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->fa_code ?: '—' }}</td>
 
           {{-- Description --}}
           <td style="font-weight:500;font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->description }}</td>
 
+          {{-- Years Purchase --}}
+          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->years_purchase ?: '—' }}</td>
+
           {{-- Location --}}
           <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->location ?: '—' }}</td>
 
-          {{-- Status --}}
+          {{-- Total Cost --}}
+          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->total_cost !== null ? 'RM '.number_format((float)$item->total_cost,2) : '—' }}</td>
+
+          {{-- Accumulated --}}
+          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->accumulated !== null ? 'RM '.number_format((float)$item->accumulated,2) : '—' }}</td>
+
+          {{-- NBV At --}}
+          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->nbv_at !== null ? 'RM '.number_format((float)$item->nbv_at,2) : '—' }}</td>
+
+          {{-- QR Code --}}
           <td>
-            @if($displayStatus === 'Active')
-              <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(22,163,74,.1);color:#16a34a;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
-                <span style="width:6px;height:6px;background:#16a34a;border-radius:50%;display:inline-block"></span> Active
-              </span>
-            @elseif($displayStatus === 'Collected')
-              <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(234,179,8,.1);color:#ca8a04;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
-                <span style="width:6px;height:6px;background:#ca8a04;border-radius:50%;display:inline-block"></span> Collected
-              </span>
-            @elseif($displayStatus === 'Disposed')
-              <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(239,68,68,.1);color:#dc2626;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
-                <span style="width:6px;height:6px;background:#dc2626;border-radius:50%;display:inline-block"></span> Disposed
-              </span>
-            @elseif($displayStatus === 'Pending')
-              <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);color:#d97706;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
-                <span style="width:6px;height:6px;background:#d97706;border-radius:50%;display:inline-block"></span> Pending
-              </span>
-            @elseif($displayStatus === 'E-Waste')
-              <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);color:#d97706;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;white-space:nowrap">
-                <span style="width:6px;height:6px;background:#d97706;border-radius:50%;display:inline-block;flex-shrink:0"></span> E-Waste
-              </span>
-            @else
-              <span style="background:rgba(100,116,139,.1);color:var(--muted);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
-                {{ $displayStatus }}
-              </span>
-            @endif
+            <button
+              onclick="openQRModal({{ $item->id }}, '{{ addslashes($item->asset_number ?: 'N/A') }}', '{{ addslashes($item->description) }}', '{{ addslashes($item->asset_class) }}', '{{ addslashes($item->serial_number ?: '') }}', '{{ addslashes($item->brand ?: '') }}', '{{ addslashes($item->model ?: '') }}', '{{ addslashes($item->location ?: '') }}')"
+              style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
+              <i class="bi bi-qr-code" style="font-size:13px"></i>
+            </button>
           </td>
 
           {{-- Actions --}}
           <td>
             <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
-              {{-- QR Code --}}
-              <button
-                onclick="openQRModal({{ $item->id }}, '{{ addslashes($item->asset_number ?: 'N/A') }}', '{{ addslashes($item->description) }}', '{{ addslashes($item->asset_class) }}', '{{ addslashes($item->serial_number ?: '') }}', '{{ addslashes($item->brand ?: '') }}', '{{ addslashes($item->model ?: '') }}', '{{ addslashes($item->location ?: '') }}')"
-                style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
-                <i class="bi bi-qr-code" style="font-size:13px"></i>
-              </button>
-
               {{-- E-Waste button / status --}}
               @if($item->item_status !== 'Disposed' && $item->item_status !== 'Collected' && empty($ewStatus) && !$user->isReadOnlyViewer())
-              <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}"
-                style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
-                <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
+              <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}" title="Flag as E-Waste"
+                style="font-size:13px;color:#16a34a;background:rgba(22,163,74,.1);border-radius:6px;padding:4px 7px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+                <i class="bi bi-recycle"></i> E-Waste
               </a>
               @elseif(!empty($ewStatus) && !$user->isReadOnlyViewer())
-              <span style="font-size:11px;font-weight:600;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:5px 10px;white-space:nowrap;font-family:'DM Sans',sans-serif">
-                @if($ewStatus === 'Pending') ⏳ Pending
-                @elseif($ewStatus === 'Approved') ✓ E-Waste
-                @elseif($ewStatus === 'Collected') ✓ Collected
-                @else ✓ Disposed
-                @endif
+              <span style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center" title="@if($ewStatus==='Pending')Pending@elseif($ewStatus==='Approved')E-Waste@elseif($ewStatus==='Collected')Collected@else Disposed@endif">
+                <i class="bi bi-@if($ewStatus==='Pending')hourglass-split@elseif($ewStatus==='Collected')check-circle-fill@else recycle@endif"></i>
               </span>
               @endif
 
               {{-- Edit / Request Edit --}}
               @if(!$isLocked)
                 @if(!$user->isAdminOrFinance() && isset($pendingEditIds[$item->id]))
-                  <span title="Edit Request Pending" style="font-size:11px;font-weight:700;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 10px;white-space:nowrap;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:4px">
-                    <i class="bi bi-hourglass-split" style="font-size:10px"></i> Edit Pending
+                  <span title="Edit Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+                    <i class="bi bi-hourglass-split"></i>
                   </span>
                 @else
                   <a href="{{ route('it.inventory.index') }}?action=edit&id={{ $item->id }}"
-                    style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface)">
-                    {{ $user->isAdminOrFinance() ? 'Edit' : 'Request Edit' }}
+                    title="{{ $user->isAdminOrFinance() ? 'Edit' : 'Request Edit' }}"
+                    style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
+                    <i class="bi bi-pencil"></i> Edit
                   </a>
                 @endif
 
@@ -330,7 +313,7 @@ $statItems = [
         </tr>
         @empty
         <tr>
-          <td colspan="7" style="text-align:center;padding:40px;color:var(--muted)">No assets found.</td>
+          <td colspan="11" style="text-align:center;padding:40px;color:var(--muted)">No assets found.</td>
         </tr>
         @endforelse
       </tbody>

@@ -5,7 +5,7 @@
   <a href="{{ route('it.non-it.index') }}" style="font-size:13px;color:var(--accent)">Clear filters</a>
 </div>
 @else
-<div class="table-card">
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)">
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <span style="font-size:13px;color:var(--muted);font-weight:500">
       <strong style="color:var(--text)">{{ number_format($items->count()) }}</strong> asset{{ $items->count() !== 1 ? 's' : '' }}
@@ -14,8 +14,8 @@
       @endif
     </span>
   </div>
-  <div class="table-responsive">
-    <table class="table table-hover nit-table" style="font-family:'DM Sans',sans-serif;width:100%">
+  <div class="nit-scroll-wrap" style="overflow-x:auto">
+    <table class="table table-hover nit-table" style="font-family:'DM Sans',sans-serif;min-width:100%">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -26,8 +26,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th>QR</th>
-        @if(!$user->isReadOnlyViewer())<th>ACTIONS</th>@endif
+        <th style="width:1%;white-space:nowrap">QR</th>
+        @if(!$user->isReadOnlyViewer())<th style="width:1%;white-space:nowrap">ACTIONS</th>@endif
       </tr></thead>
       <tbody>
       @foreach($items as $row)
@@ -61,33 +61,33 @@
         <td>
           <div style="display:flex;align-items:center;gap:4px">
             @if(!in_array($row->item_status, ['Disposed', 'Pending for Write-Off', 'Pending to E-Waste/Disposal']))
-            <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}"
-              style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 9px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-trash3-fill" style="font-size:10px"></i> Dispose
+            <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
+              style="font-size:13px;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 7px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-trash3-fill"></i> Dispose
             </a>
             @endif
             @if($user->isAdminOrFinance())
-            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false"
-              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);white-space:nowrap">
+            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Edit"
+              style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
               <i class="bi bi-pencil"></i> Edit
             </a>
             <form method="POST" action="{{ route('it.non-it.destroy', $row->id) }}" style="display:inline" onsubmit="return confirm('Delete this asset? This cannot be undone.')">
               @csrf
               @method('DELETE')
-              <button type="submit"
+              <button type="submit" title="Delete"
                 style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center;cursor:pointer">
                 <i class="bi bi-trash"></i>
               </button>
             </form>
             @else
             @if(isset($pendingEditIds[$row->id]))
-            <span title="Edit Request Pending" style="font-size:11px;font-weight:700;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 10px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-hourglass-split" style="font-size:10px"></i> Edit Pending
+            <span title="Edit Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+              <i class="bi bi-hourglass-split"></i>
             </span>
             @else
-            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false"
-              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);white-space:nowrap">
-              <i class="bi bi-pencil"></i> Request Edit
+            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Request Edit"
+              style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-pencil"></i> Edit
             </a>
             @endif
             @endif

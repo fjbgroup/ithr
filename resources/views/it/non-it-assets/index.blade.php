@@ -67,7 +67,10 @@
 .nit-select-opt:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,.05); }
 .nit-select-opt i { font-size: 18px; }
 /* ── NIT Table ── */
-.nit-table td,.nit-table th{vertical-align:middle!important;padding:10px 14px!important;white-space:nowrap}
+.nit-table td,.nit-table th{vertical-align:middle!important;padding:5px 8px!important;white-space:nowrap;font-size:12.5px}
+.nit-scroll-wrap::-webkit-scrollbar{height:6px}
+.nit-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
+.nit-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
 .nit-table td:nth-child(4),.nit-table th:nth-child(4){white-space:normal;word-break:break-word;min-width:150px}
 </style>
 
@@ -318,10 +321,10 @@
 {{-- ══ STAT STRIP ══ --}}
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
   @foreach([
-    ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,                           'Total Assets',     '#0284c7'],
-    ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,                          'Active',           '#16a34a'],
-    ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,                            'Disposed',         '#dc2626'],
-    ['bi-hourglass-split',    'rgba(217,119,6,.12)',   '#d97706', $nit_pending_wo + $nit_pending_ewaste, 'Pending Approval', '#d97706'],
+    ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,   'Total Assets', '#0284c7'],
+    ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,  'Active',       '#16a34a'],
+    ['bi-tools',              'rgba(245,158,11,.12)',  '#d97706', $nit_repair,  'In Repair',    '#d97706'],
+    ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,    'Disposed',     '#dc2626'],
   ] as [$icon,$bg,$color,$val,$lbl,$border])
   <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {{ $border }};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05)">
     <div style="width:44px;height:44px;border-radius:10px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">
@@ -576,7 +579,7 @@
 </div>
 
 <div id="nitLiveResults">
-<div class="table-card">
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)">
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <span style="font-size:13px;color:var(--muted);font-weight:500">
       <strong style="color:var(--text)">{{ number_format($filtered_total) }}</strong> asset{{ $filtered_total !== 1 ? 's' : '' }}
@@ -585,8 +588,8 @@
       @endif
     </span>
   </div>
-  <div class="table-responsive">
-    <table class="table table-hover nit-table" style="font-family:'DM Sans',sans-serif;width:100%">
+  <div class="nit-scroll-wrap" style="overflow-x:auto">
+    <table class="table table-hover nit-table" style="font-family:'DM Sans',sans-serif;min-width:100%">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -597,8 +600,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th>QR</th>
-        @if(!$user->isReadOnlyViewer())<th>ACTIONS</th>@endif
+        <th style="width:1%;white-space:nowrap">QR</th>
+        @if(!$user->isReadOnlyViewer())<th style="width:1%;white-space:nowrap">ACTIONS</th>@endif
       </tr></thead>
       <tbody>
       @foreach($items as $row)
@@ -632,14 +635,14 @@
         <td>
           <div style="display:flex;align-items:center;gap:4px">
             @if(!in_array($row->item_status, ['Disposed', 'Pending for Write-Off', 'Pending to E-Waste/Disposal']))
-            <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}"
-              style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 9px;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-trash3-fill" style="font-size:10px"></i> Dispose
+            <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
+              style="font-size:13px;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 7px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-trash3-fill"></i> Dispose
             </a>
             @endif
             @if($user->isAdminOrFinance())
-            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false"
-              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);white-space:nowrap">
+            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Edit"
+              style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
               <i class="bi bi-pencil"></i> Edit
             </a>
             <form method="POST" action="{{ route('it.non-it.destroy', $row->id) }}" style="display:inline" onsubmit="return confirm('Delete this asset? This cannot be undone.')">
@@ -652,13 +655,13 @@
             </form>
             @else
             @if(isset($pendingEditIds[$row->id]))
-            <span title="Edit Request Pending" style="font-size:11px;font-weight:700;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 10px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-hourglass-split" style="font-size:10px"></i> Edit Pending
+            <span title="Edit Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+              <i class="bi bi-hourglass-split"></i>
             </span>
             @else
-            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false"
-              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);white-space:nowrap">
-              <i class="bi bi-pencil"></i> Request Edit
+            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Request Edit"
+              style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-pencil"></i> Edit
             </a>
             @endif
             @endif
