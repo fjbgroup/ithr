@@ -1628,10 +1628,6 @@ document.addEventListener('keydown', function(e) {
 }
 </style>
 
-</style>
-
-@include('wt.admin.partials.inventory-management-ui')
-
 <style>
 /* Absolute final Special Use action buttons: match inventory action styling. */
 body .content-surface:has(#specialTable) #specialTable th:last-child,
