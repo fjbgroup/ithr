@@ -497,8 +497,14 @@
       </a>
     </div>
     
-    <a href="{{ route('hr.home', ['date' => date('Y-m-d'), 'view' => $viewMode]) }}" 
+    <a href="{{ route('hr.home', ['date' => date('Y-m-d'), 'view' => $viewMode]) }}"
        class="btn btn-outline" style="border-radius:12px;padding:.5rem 1.25rem;">Today</a>
+
+    <button id="pub-theme-toggle" onclick="pubToggleTheme()" title="Toggle dark / light mode"
+            style="width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;">
+        <svg id="pub-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg id="pub-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
   </div>
 
 
@@ -1462,6 +1468,29 @@ function guestProceedToLogin() {
     document.body.appendChild(form);
     form.submit();
 }
+
+function pubToggleTheme() {
+    var isDark = document.documentElement.classList.contains('dark');
+    var next = isDark ? 'light' : 'dark';
+    ['fjb-theme','color-theme','theme'].forEach(function(k){ localStorage.setItem(k, next); });
+    document.documentElement.classList.toggle('dark', !isDark);
+    document.documentElement.setAttribute('data-theme', next);
+    document.documentElement.style.colorScheme = next;
+    var moon = document.getElementById('pub-icon-moon');
+    var sun  = document.getElementById('pub-icon-sun');
+    if (moon) moon.style.display = !isDark ? 'none' : '';
+    if (sun)  sun.style.display  = !isDark ? '' : 'none';
+}
+
+(function(){
+    var dark = document.documentElement.classList.contains('dark');
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+    var moon = document.getElementById('pub-icon-moon');
+    var sun  = document.getElementById('pub-icon-sun');
+    if (moon) moon.style.display = dark ? 'none' : '';
+    if (sun)  sun.style.display  = dark ? '' : 'none';
+})();
 
 </script>
 </body>
