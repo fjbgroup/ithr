@@ -76,6 +76,10 @@
 <link href="{{ asset('assets/css/wtsystem.css') }}" rel="stylesheet">
 <style>
 /* wtsystem.css is the single source of truth */
+/* Layout integrity: prevent any page-specific body CSS from breaking the sidebar position */
+body#main-body { flex-direction: row !important; }
+body#main-body > .sidebar { order: 0 !important; flex-shrink: 0 !important; }
+body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-width: 0 !important; }
 .sidebar-brand-row { min-width: 0; overflow: hidden; }
 .sidebar-brand { min-width: 0; overflow: hidden; }
 .brand-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
