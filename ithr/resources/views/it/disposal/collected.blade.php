@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Collected Proofs')
 @section('page_title', 'Collected Proofs')
@@ -11,7 +11,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       E-Waste &rsaquo; <span style="color:var(--accent)">Collected Proofs</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Collected Proofs</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Collected Proofs</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">E-waste items confirmed as physically collected for disposal</p>
   </div>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -19,12 +19,12 @@
       <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:5px 10px">
         <i class="bi bi-calendar3" style="color:var(--muted);font-size:13px;flex-shrink:0"></i>
         <input type="date" name="from" id="invoiceFrom" value="{{ now()->toDateString() }}"
-          style="background:transparent;border:none;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer">
+          style="background:transparent;border:none;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;outline:none;cursor:pointer">
         <span style="font-size:12px;color:var(--muted)">—</span>
         <input type="date" name="to" id="invoiceTo" value="{{ now()->toDateString() }}"
-          style="background:transparent;border:none;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer">
+          style="background:transparent;border:none;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;outline:none;cursor:pointer">
         <button type="button" onclick="resetToToday()" title="Reset to today"
-          style="background:rgba(2,132,199,.12);color:var(--accent);border:none;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap">
+          style="background:rgba(2,132,199,.12);color:var(--accent);border:none;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">
           Today
         </button>
       </div>
@@ -79,7 +79,7 @@
     </div>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover" style="font-family:'DM Sans',sans-serif;margin:0">
+    <table class="table table-hover" style="font-family:'Inter',sans-serif;margin:0">
       <thead><tr>
         <th style="width:36px">#</th>
         <th>Asset</th>
@@ -152,7 +152,7 @@
               onsubmit="return confirm('Revert this item back to Approved?')">
               @csrf
               <button type="submit"
-                style="display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.07);color:#dc2626;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+                style="display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.07);color:#dc2626;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
                 <i class="bi bi-arrow-counterclockwise"></i> Undo
               </button>
             </form>

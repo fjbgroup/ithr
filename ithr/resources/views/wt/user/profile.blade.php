@@ -6,7 +6,7 @@
 @push('styles')
 <style>
 .profile-hero{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-.profile-hero-initial{width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800;color:#fff;flex-shrink:0}
+.profile-hero-initial{width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:#fff;flex-shrink:0}
 .profile-section-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .profile-section-header{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
 .profile-section-title{font-size:14px;font-weight:700;color:var(--text)}
@@ -131,11 +131,11 @@
       <div class="profile-section-body" style="padding:16px 22px">
         <div class="account-row">
           <span class="account-row-label">Staff ID</span>
-          <span class="account-row-value">{{ $user->staff_id ?: '—' }}</span>
+          <span class="account-row-value">{{ $user->staff_id ?: 'â€”' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Username</span>
-          <span class="account-row-value">{{ $user->username ?: '—' }}</span>
+          <span class="account-row-value">{{ $user->username ?: 'â€”' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Role</span>
@@ -143,19 +143,19 @@
         </div>
         <div class="account-row">
           <span class="account-row-label">Department</span>
-          <span class="account-row-value">{{ $user->department ?: '—' }}</span>
+          <span class="account-row-value">{{ $user->department ?: 'â€”' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Position</span>
-          <span class="account-row-value">{{ $user->position ?: '—' }}</span>
+          <span class="account-row-value">{{ $user->position ?: 'â€”' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Phone</span>
-          <span class="account-row-value">{{ $user->phone_no ?: '—' }}</span>
+          <span class="account-row-value">{{ $user->phone_no ?: 'â€”' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Member Since</span>
-          <span class="account-row-value">{{ $user->created_at ? $user->created_at->format('d M Y') : '—' }}</span>
+          <span class="account-row-value">{{ $user->created_at ? $user->created_at->format('d M Y') : 'â€”' }}</span>
         </div>
       </div>
     </div>

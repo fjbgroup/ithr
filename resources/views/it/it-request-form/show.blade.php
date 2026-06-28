@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'IT Request #' . $form->id)
 @section('page_title', 'IT Request Form — Details')
@@ -8,7 +8,7 @@
 .itr-show-section { background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px; }
 .itr-show-head { display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--body-bg); }
 .itr-show-num { width:24px;height:24px;border-radius:50%;background:rgba(2,132,199,.12);color:var(--accent);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-.itr-show-title { font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text); }
+.itr-show-title { font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text); }
 .itr-show-body { padding:20px; }
 .itr-field-label { font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px; }
 .itr-field-value { font-size:13.5px;color:var(--text);font-weight:500;word-break:break-word; }
@@ -39,7 +39,7 @@
   <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
     Request Forms &rsaquo; <a href="{{ route('it.it-request-form') }}" style="color:var(--accent);text-decoration:none">IT Request Forms</a> &rsaquo; <span style="color:var(--text)">#{{ $form->id }}</span>
   </div>
-  <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 2px">IT Request #{{ $form->id }}</h4>
+  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 2px">IT Request #{{ $form->id }}</h4>
   <p style="font-size:13px;color:var(--muted);margin:0">Submitted {{ $form->created_at->format('d M Y, H:i') }}</p>
 </div>
 
@@ -122,7 +122,7 @@
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <i class="bi {{ $houResultIcon }}" style="font-size:20px;color:{{ $houResultColor }};flex-shrink:0"></i>
     <div style="flex:1">
-      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:{{ $houResultColor }}">
+      <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:{{ $houResultColor }}">
         {{ $houResultLabel }} — {{ $form->houReviewedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->hou_reviewed_at ? $form->hou_reviewed_at->format('d M Y, H:i') : '' }}
@@ -155,7 +155,7 @@
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <i class="bi {{ $resultIcon }}" style="font-size:20px;color:{{ $resultColor }};flex-shrink:0"></i>
     <div style="flex:1">
-      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:{{ $resultColor }}">
+      <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:{{ $resultColor }}">
         {{ $resultLabel }} — {{ $form->reviewedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->reviewed_at ? $form->reviewed_at->format('d M Y, H:i') : '' }}
@@ -176,16 +176,16 @@
 @if($isHou && $form->status === 'New')
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
   <div style="flex:1;min-width:0">
-    <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Review this Request</div>
+    <div style="font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Review this Request</div>
     <div style="font-size:12px;color:var(--muted);margin-top:2px">This request from your staff is awaiting your decision. If approved, it will be forwarded to IT Admin.</div>
   </div>
   <button onclick="openReviewModal('approve')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
     <i class="bi bi-check-circle-fill"></i> Approve
   </button>
   <button onclick="openReviewModal('reject')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
     <i class="bi bi-x-circle-fill"></i> Reject
   </button>
@@ -206,7 +206,7 @@
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <i class="bi {{ $valIcon }}" style="font-size:20px;color:{{ $valColor }};flex-shrink:0"></i>
     <div style="flex:1">
-      <div style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:{{ $valColor }}">
+      <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:{{ $valColor }}">
         {{ $valLabel }} — {{ $form->validatedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->validated_at ? $form->validated_at->format('d M Y, H:i') : '' }}
@@ -226,21 +226,21 @@
 @if($user->isAdmin() && $form->status === 'Pending IT')
 <div style="background:var(--surface);border:1px solid rgba(2,132,199,.3);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
   <div style="flex:1;min-width:0">
-    <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Final Approval Required</div>
+    <div style="font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Final Approval Required</div>
     <div style="font-size:12px;color:var(--muted);margin-top:2px">This request has been approved by the HOU and is now awaiting your final decision.</div>
   </div>
   <button onclick="openReviewModal('approve')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
     <i class="bi bi-check-circle-fill"></i> Approve
   </button>
   <button onclick="openReviewModal('update')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#d97706;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#d97706;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b45309'" onmouseout="this.style.background='#d97706'">
     <i class="bi bi-arrow-clockwise"></i> Request Update
   </button>
   <button onclick="openReviewModal('reject')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
     <i class="bi bi-x-circle-fill"></i> Reject
   </button>
@@ -252,16 +252,16 @@
 @if($isValidator && $form->status === 'Pending Validation')
 <div style="background:var(--surface);border:1px solid rgba(124,58,237,.3);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
   <div style="flex:1;min-width:0">
-    <div style="font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Validation Required</div>
+    <div style="font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text)">Validation Required</div>
     <div style="font-size:12px;color:var(--muted);margin-top:2px">This request has been approved by the IT Admin and is awaiting your final validation.</div>
   </div>
   <button onclick="openReviewModal('approve')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#16a34a;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
     <i class="bi bi-patch-check-fill"></i> Validate & Approve
   </button>
   <button onclick="openReviewModal('reject')"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;background:#dc2626;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s"
     onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
     <i class="bi bi-x-circle-fill"></i> Reject
   </button>
@@ -429,7 +429,7 @@
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
       <div id="modalIconWrap" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
       <div>
-        <h5 id="modalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin:0"></h5>
+        <h5 id="modalTitle" style="font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin:0"></h5>
         <p style="font-size:12px;color:var(--muted);margin:2px 0 0">IT Request #{{ $form->id }} — {{ $form->subject }}</p>
       </div>
     </div>
@@ -442,18 +442,18 @@
         </label>
         <textarea name="{{ ($isValidator ?? false) ? 'validator_remarks' : 'approval_remarks' }}" rows="3"
           placeholder="Add a remark or reason…"
-          style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;outline:none;resize:vertical;box-sizing:border-box;transition:border-color .15s"
+          style="width:100%;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;outline:none;resize:vertical;box-sizing:border-box;transition:border-color .15s"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end">
         <button type="button" onclick="closeReviewModal()"
-          style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 20px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;transition:all .15s"
+          style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 20px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;transition:all .15s"
           onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
           onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
           Cancel
         </button>
         <button type="submit" id="modalSubmitBtn"
-          style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 24px;border:none;border-radius:8px;color:#fff;cursor:pointer;transition:background .15s">
+          style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 24px;border:none;border-radius:8px;color:#fff;cursor:pointer;transition:background .15s">
         </button>
       </div>
     </form>

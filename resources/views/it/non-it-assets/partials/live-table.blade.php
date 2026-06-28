@@ -1,4 +1,4 @@
-﻿@if($items->isEmpty())
+@if($items->isEmpty())
 <div style="background:var(--surface);border:1.5px dashed var(--border);border-radius:14px;padding:48px 20px;text-align:center">
   <i class="bi bi-search" style="font-size:32px;color:var(--muted);display:block;margin-bottom:12px;opacity:.4"></i>
   <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px">No records match your filter</div>
@@ -15,7 +15,7 @@
     </span>
   </div>
   <div class="nit-scroll-wrap" style="overflow-x:auto">
-    <table class="table table-hover nit-table" style="font-family:'DM Sans',sans-serif;min-width:100%">
+    <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif;min-width:100%">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -53,7 +53,7 @@
         <td style="font-size:13px;color:var(--muted)">{{ $row->nbv_at !== null ? 'RM '.number_format((float)$row->nbv_at,2) : '—' }}</td>
         <td>
           <button onclick="openNitQRModal({{ $row->id }}, '{{ addslashes(e($row->asset_number ?? 'N/A')) }}', '{{ addslashes(e($row->description)) }}', '{{ addslashes(e($row->fa_code ?? '')) }}', '{{ addslashes(e($row->location ?? '')) }}')"
-            style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
+            style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
             <i class="bi bi-qr-code" style="font-size:13px"></i>
           </button>
         </td>

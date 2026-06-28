@@ -8,7 +8,7 @@
 @include('partials.favicons')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
@@ -30,7 +30,7 @@
             margin: 0;
             background: var(--bg);
             color: var(--text);
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -388,7 +388,7 @@
             border-radius: 10px;
             background: var(--field);
             padding: 12px;
-            font: 600 14px 'DM Sans', sans-serif;
+            font: 600 14px 'Inter', sans-serif;
             color: var(--text);
             outline: none;
         }
@@ -406,7 +406,7 @@
             border-radius: 10px;
             background: var(--brand);
             color: #ffffff;
-            font: 900 14px 'DM Sans', sans-serif;
+            font: 900 14px 'Inter', sans-serif;
             cursor: pointer;
         }
 
@@ -531,7 +531,7 @@
                 Your account does not have access to the <strong>Walkie Talkie</strong> system.<br>Please contact ICT to request access.
             </p>
             <div style="display:flex;gap:10px;justify-content:center;">
-                <a href="{{ url('/') }}" class="modal-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:10px;padding:0 20px;min-height:44px;background:#0f223b;color:#fff;font:700 14px 'DM Sans',sans-serif;">
+                <a href="{{ url('/') }}" class="modal-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:10px;padding:0 20px;min-height:44px;background:#0f223b;color:#fff;font:700 14px 'Inter',sans-serif;">
                     <i class="bi bi-arrow-left"></i> Back to Portal
                 </a>
                 <button type="button" class="modal-btn" onclick="document.getElementById('accessDeniedModal').classList.remove('active')" style="background:#f1f5f9;color:#475569;">

@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Activity Log')
 @section('page_title', 'Activity Log')
@@ -19,7 +19,7 @@
     --aly-input-bg:  #f8fafc;
     --aly-hover:     #f8fafc;
     --aly-thead:     #f8fafc;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 .aly-wrap.aly-dark {
     --aly-surface:   #1a1e2a;
@@ -121,7 +121,7 @@
     border: 1px solid var(--aly-border);
     border-radius: 8px;
     padding: 7px 12px 7px 32px;
-    font-size: 13px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-family: 'Inter', sans-serif;
     color: var(--aly-text); outline: none;
     transition: border-color .15s;
 }
@@ -133,7 +133,7 @@
     border: 1px solid var(--aly-border);
     border-radius: 20px;
     padding: 5px 12px;
-    font-size: 12px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 600; font-family: 'Inter', sans-serif;
     color: var(--aly-muted);
     cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
     transition: all .15s; white-space: nowrap;
@@ -154,7 +154,7 @@
 table#activityTable {
     width: 100% !important;
     border-collapse: collapse;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 table#activityTable thead th {
     background: var(--aly-thead) !important;
@@ -231,7 +231,7 @@ table#activityTable tbody td:last-child  { padding-right: 20px !important; }
 .aly-footer .dataTables_info {
     font-size: 12px !important;
     color: var(--aly-muted) !important;
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     padding: 0 !important;
     border: none !important;
     background: transparent !important;
@@ -252,7 +252,7 @@ table#activityTable tbody td:last-child  { padding-right: 20px !important; }
 .aly-footer .pagination .page-item .page-link {
     font-size: 11px !important;
     font-weight: 600 !important;
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     padding: 4px 9px !important;
     line-height: 1.4 !important;
     min-width: 28px;

@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Disposal Items')
 @section('page_title', 'Disposal Items')
@@ -12,7 +12,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Disposal &rsaquo; <span style="color:var(--accent)">Disposal Items</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Disposal Items</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Disposal Items</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Items sent to disposal by IT Admin or Finance Admin</p>
   </div>
   @if($user->isAdminOrFinance())
@@ -54,29 +54,29 @@
       <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;z-index:1"></i>
       <input type="text" id="diSearchInput" name="di_search" value="{{ $search }}" placeholder="Search asset no., class, description, serial..."
         autocomplete="off"
-        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
+        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none"
         onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       <ul id="diSearchDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;margin:0;padding:4px 0;list-style:none;max-height:240px;overflow-y:auto;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.15)"></ul>
     </div>
     <select name="di_class" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Classes</option>
       @foreach($assetClasses as $cls)
       <option value="{{ $cls }}" {{ $class == $cls ? 'selected' : '' }}>{{ $cls }}</option>
       @endforeach
     </select>
     <select name="di_status" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:130px">
       <option value="">All Status</option>
       <option value="Approved" {{ $status === 'Approved' ? 'selected' : '' }}>Approved</option>
       <option value="Disposed" {{ $status === 'Disposed' ? 'selected' : '' }}>Disposed</option>
     </select>
     <button type="submit"
-      style="padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      style="padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
     @if($search || $class || $status)
-    <a href="{{ route('it.disposal.index') }}" style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">Clear</a>
+    <a href="{{ route('it.disposal.index') }}" style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">Clear</a>
     @endif
   </form>
 </div>
@@ -107,7 +107,7 @@
     </span>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover di-table" style="font-family:'DM Sans',sans-serif;width:100%">
+    <table class="table table-hover di-table" style="font-family:'Inter',sans-serif;width:100%">
       <thead><tr>
         <th>ASSET NO.</th><th>CLASS</th><th>DESCRIPTION</th><th>SERIAL NO.</th>
         <th>STATUS</th><th>DATE FLAGGED</th><th>DATE DISPOSED</th><th>ADDED BY</th><th>ACTIONS</th>
@@ -141,7 +141,7 @@
                     onsubmit="return confirm('Mark as Disposed?')">
                 @csrf
                 <button type="submit"
-                  style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;font-family:'DM Sans',sans-serif">
+                  style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;font-family:'Inter',sans-serif">
                   <i class="bi bi-trash3" style="font-size:11px"></i> Dispose
                 </button>
               </form>
@@ -150,11 +150,11 @@
                     onsubmit="return confirm('Revert to Approved?')">
                 @csrf
                 <button type="submit"
-                  style="font-size:11px;font-weight:700;color:#c2590a;border:none;border-radius:6px;padding:4px 8px;background:rgba(245,158,11,.1);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">&#x21A9; Undo</button>
+                  style="font-size:11px;font-weight:700;color:#c2590a;border:none;border-radius:6px;padding:4px 8px;background:rgba(245,158,11,.1);cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#x21A9; Undo</button>
               </form>
               @endif
               <button onclick="openEditDisposal({{ $item->id }})"
-                style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif">
+                style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-family:'Inter',sans-serif">
                 <i class="bi bi-pencil"></i> Edit
               </button>
             @endif
@@ -163,7 +163,7 @@
                   onsubmit="return confirm('Delete this record?')">
               @csrf @method('DELETE')
               <button type="submit"
-                style="font-size:13px;color:#dc2626;text-decoration:none;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;cursor:pointer;display:inline-flex;align-items:center;font-family:'DM Sans',sans-serif">
+                style="font-size:13px;color:#dc2626;text-decoration:none;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;cursor:pointer;display:inline-flex;align-items:center;font-family:'Inter',sans-serif">
                 <i class="bi bi-trash"></i>
               </button>
             </form>
@@ -309,7 +309,7 @@
       <div id="diImportPreview" style="display:none">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">Preview (first 5 rows)</div>
         <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
-          <table id="diImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'DM Sans',sans-serif"></table>
+          <table id="diImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif"></table>
         </div>
         <div id="diImportRowCount" style="font-size:12px;color:var(--muted);margin-top:8px"></div>
       </div>
@@ -317,11 +317,11 @@
     </div>
     <div style="background:var(--body-bg,#f1f5f9);border-top:1px solid var(--border);padding:16px 24px;border-radius:0 0 16px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
       <button id="diImportSubmitBtn" onclick="diSubmitImport()"
-        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;align-items:center;gap:7px">
+        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;align-items:center;gap:7px">
         <i class="bi bi-upload"></i> Import Items
       </button>
       <button onclick="diCloseImport()"
-        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">
+        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">
         Cancel
       </button>
     </div>
@@ -453,7 +453,7 @@ function diEsc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;
 #diSearchDropdown li {
   padding: 8px 14px;
   font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: var(--text);
   cursor: pointer;
   white-space: nowrap;

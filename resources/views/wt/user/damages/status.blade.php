@@ -31,7 +31,7 @@
 {{-- Summary stat --}}
 <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:20px;display:inline-block;min-width:180px">
   <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:8px">{{ strtoupper($bucket) }}</div>
-  <div style="font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif">
+  <div style="font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif">
     {{ $bucket === 'pending' ? $summary['pending'] : ($bucket === 'drafts' ? $summary['drafts'] : $summary['completed']) }}
   </div>
 </div>

@@ -1,22 +1,22 @@
-﻿<style>
+<style>
 .apr-wrap{max-width:900px;margin:0 auto}
 .apr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:18px;padding:32px 36px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.apr-hero-title{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800;color:#fff;margin:0 0 6px}
+.apr-hero-title{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:#fff;margin:0 0 6px}
 .apr-hero-sub{font-size:13px;color:rgba(255,255,255,.6);margin:0}
 .apr-hero-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:16px 24px;text-align:center;flex-shrink:0}
-.apr-hero-badge-num{font-size:32px;font-weight:800;color:#fff;line-height:1;font-family:'DM Sans',sans-serif}
+.apr-hero-badge-num{font-size:32px;font-weight:800;color:#fff;line-height:1;font-family:'Inter',sans-serif}
 .apr-hero-badge-lbl{font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
 .apr-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:36px}
 .apr-tile{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;transition:box-shadow .15s,transform .15s}
 .apr-tile:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);transform:translateY(-2px)}
 .apr-tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .apr-tile-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.apr-tile-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.apr-tile-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .apr-tile-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
 .apr-section{margin-bottom:28px}
 .apr-section-hdr{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .apr-section-hdr-line{width:4px;height:24px;border-radius:3px;flex-shrink:0}
-.apr-section-hdr-text{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text);flex:1}
+.apr-section-hdr-text{font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text);flex:1}
 .apr-section-hdr-count{font-size:11px;font-weight:700;border-radius:20px;padding:4px 14px}
 .apr-cards{display:flex;flex-direction:column;gap:12px}
 .apr-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:flex;align-items:flex-start;gap:16px;transition:box-shadow .12s,border-color .12s}

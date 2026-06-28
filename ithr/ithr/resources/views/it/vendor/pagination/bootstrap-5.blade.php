@@ -1,5 +1,5 @@
-﻿@if ($paginator->hasPages())
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'DM Sans',sans-serif">
+@if ($paginator->hasPages())
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:'Inter',sans-serif">
 
   {{-- Showing X–Y of Z items --}}
   <span style="font-size:12px;color:var(--muted)">

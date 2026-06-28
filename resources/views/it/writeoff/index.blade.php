@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Write Off Authorisation')
 @section('page_title', 'Write Off Authorisation')
@@ -8,7 +8,7 @@
 
 <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px">
   <div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Write Off Authorisation</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Write Off Authorisation</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Authorise IT and Non-IT assets for E-Waste and Disposal</p>
   </div>
 </div>
@@ -56,7 +56,7 @@
       <i class="bi bi-pen-fill" style="color:var(--accent);font-size:16px"></i>
     </div>
     <div>
-      <div style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;color:var(--text)">Write-Off Authorisation Form</div>
+      <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:15px;color:var(--text)">Write-Off Authorisation Form</div>
       <div style="font-size:12px;color:var(--muted)">{{ $allItems->count() }} asset{{ $allItems->count() !== 1 ? 's' : '' }} selected &mdash; Complete and sign the digital write-off form, then submit for HOU review</div>
     </div>
     <a href="{{ route('it.writeoff.index') }}" class="btn-secondary-custom" style="margin-left:auto;font-size:12px;padding:5px 12px">
@@ -480,7 +480,7 @@
 <div class="table-card" style="margin-bottom:24px">
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <div>
-      <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:var(--text)">Pending Final Approval</span>
+      <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:var(--text)">Pending Final Approval</span>
       <div style="font-size:12px;color:var(--muted);margin-top:2px">Items signed by GM — awaiting CEO review and decision</div>
     </div>
     @if($woCount > 0)
@@ -656,7 +656,7 @@ function pfaToggle(id) {
       <form method="POST" action="{{ route('it.writeoff.dismiss-all') }}" style="display:inline"
             onsubmit="return confirm('Clear all submissions from this view? They will no longer appear here.')">
         @csrf
-        <button type="submit" style="font-size:12px;font-weight:600;color:#dc2626;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;padding:6px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif">
+        <button type="submit" style="font-size:12px;font-weight:600;color:#dc2626;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;padding:6px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:'Inter',sans-serif">
           <i class="bi bi-trash"></i> Clear All
         </button>
       </form>
@@ -759,7 +759,7 @@ function pfaToggle(id) {
             <input type="hidden" name="item_id" value="{{ $first->id }}">
           @endif
           <button type="submit" title="Dismiss from view"
-            style="font-size:11px;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:4px">
+            style="font-size:11px;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 10px;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px">
             <i class="bi bi-x"></i> Dismiss
           </button>
         </form>
@@ -1261,10 +1261,10 @@ function woToggleBatch(id) {
       <input type="hidden" name="hou_sig_img" id="houSigFormInput">
       <div style="padding:16px 24px;background:#f9fafb;border-top:1px solid #e5e7eb;display:flex;flex-direction:column;gap:12px">
         <div style="display:flex;gap:20px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600">
             <input type="radio" name="hou_action" value="approve" checked> Approve / Check
           </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600">
             <input type="radio" name="hou_action" value="reject"> Reject
           </label>
         </div>
@@ -1368,10 +1368,10 @@ function woToggleBatch(id) {
       <input type="hidden" name="gm_sig_img" id="gmSigFormInput">
       <div style="padding:16px 24px;background:#f9fafb;border-top:1px solid #e5e7eb;display:flex;flex-direction:column;gap:12px">
         <div style="display:flex;gap:20px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600">
             <input type="radio" name="gm_action" value="approve" checked> Approve / Check
           </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600">
             <input type="radio" name="gm_action" value="reject"> Reject
           </label>
         </div>
@@ -1475,10 +1475,10 @@ function woToggleBatch(id) {
       <input type="hidden" name="ceo_sig_img" id="ceoSigFormInput">
       <div style="padding:16px 24px;background:#f9fafb;border-top:1px solid #e5e7eb;display:flex;flex-direction:column;gap:12px">
         <div style="display:flex;gap:20px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600">
             <input type="radio" name="ceo_action" value="approve" checked> Approve
           </label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600">
             <input type="radio" name="ceo_action" value="reject"> Reject
           </label>
         </div>

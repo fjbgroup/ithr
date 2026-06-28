@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.auth')
+@extends('it.layouts.auth')
 
 @section('title', 'Sign In')
 
@@ -10,7 +10,7 @@
   --accent:#38bdf8; --accent-h:#0284c7; --navy:#142b47; --red:#dc2626; --green:#16a34a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 50%,#bae6fd 100%);font-family:'DM Sans',sans-serif;
+body{min-height:100vh;background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 50%,#bae6fd 100%);font-family:'Inter',sans-serif;
   display:flex;align-items:center;justify-content:center;padding:20px;
   position:relative;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;
@@ -23,13 +23,13 @@ body::after{content:'';position:fixed;width:600px;height:600px;
 .wrap{position:relative;z-index:1;width:100%;max-width:480px}
 .brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
 .brand img{width:48px;height:48px;object-fit:contain;background:transparent}
-.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#000;
+.brand-text{font-family:'Inter',sans-serif;font-size:20px;font-weight:800;color:#000;
   text-transform:uppercase;letter-spacing:.06em;line-height:1.3}
 .brand-text span{color:#000;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;
   overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 40px rgba(0,0,0,.07)}
 .form-body{padding:32px 36px}
-.form-title{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px}
+.form-title{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px}
 .form-sub{color:var(--muted);font-size:13px;margin-bottom:26px}
 .field{margin-bottom:18px}
 label{display:block;font-size:11px;font-weight:700;color:var(--muted);
@@ -38,13 +38,13 @@ label{display:block;font-size:11px;font-weight:700;color:var(--muted);
 .input-wrap i{position:absolute;left:14px;color:#9ca3af;font-size:15px;pointer-events:none;z-index:1}
 input[type="text"],input[type="email"],input[type="password"]{
   width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
-  color:var(--text);padding:13px 14px 13px 42px;font-size:14px;font-family:'DM Sans',sans-serif;
+  color:var(--text);padding:13px 14px 13px 42px;font-size:14px;font-family:'Inter',sans-serif;
   transition:border-color .2s,box-shadow .2s;outline:none}
 input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.15);background:#fff}
 input::placeholder{color:#bfc5cc}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .btn-submit{width:100%;margin-top:6px;background:var(--navy);color:#fff;border:none;
-  border-radius:10px;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+  border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
   letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;
   display:flex;align-items:center;justify-content:center;gap:8px;
   box-shadow:0 4px 14px rgba(20,43,71,.25)}

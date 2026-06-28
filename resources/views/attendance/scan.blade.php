@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Scan QR — {{ config('app.name', 'HR System') }}</title>
+<title>Scan QR â€” {{ config('app.name', 'HR System') }}</title>
 @include('partials.favicons')
 <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.setAttribute('data-theme', 'dark');
     }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -22,7 +22,7 @@
     --bg: #0f172a; --card: #1e293b; --border: #334155;
     --text: #f1f5f9; --muted: #94a3b8; --accent: #818cf8;
 }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.25rem; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.25rem; }
 .scan-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 1.75rem 1.5rem; max-width: 420px; width: 100%; text-align: center; }
 .scan-logo { font-size: .75rem; font-weight: 700; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; margin-bottom: 1.25rem; }
 .scan-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; background: #ede9fe; }
@@ -55,7 +55,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
     <p class="scan-sub">Point your camera at the QR code shown on the training screen.</p>
 
     <div id="reader"></div>
-    <div class="scan-status" id="status">Starting camera…</div>
+    <div class="scan-status" id="status">Starting cameraâ€¦</div>
 
     <button class="scan-btn scan-btn-primary" id="startBtn" style="display:none;">Allow Camera</button>
     <a href="{{ url('/') }}"><button class="scan-btn scan-btn-ghost">Cancel</button></a>
@@ -96,7 +96,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
             return;
         }
         handled = true;
-        setStatus('Code recognised — opening…');
+        setStatus('Code recognised â€” openingâ€¦');
         qr.stop().catch(function () {}).finally(function () {
             window.location.href = target;
         });
@@ -104,14 +104,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 
     function start() {
         startBtn.style.display = 'none';
-        setStatus('Starting camera…');
+        setStatus('Starting cameraâ€¦');
         qr.start(
             { facingMode: 'environment' },
             { fps: 10, qrbox: { width: 230, height: 230 } },
             onScan,
             function () { /* per-frame decode failures are normal; ignore */ }
         ).then(function () {
-            setStatus('Searching for a QR code…');
+            setStatus('Searching for a QR codeâ€¦');
         }).catch(function (err) {
             console.error(err);
             setStatus('Could not access the camera. Please grant camera permission and try again.', true);

@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'IT Request Form')
 @section('page_title', 'IT Request Form')
@@ -13,7 +13,7 @@
 .itr-admin-stat { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s; }
 .itr-admin-stat:hover { box-shadow:0 4px 18px rgba(0,0,0,.07); }
 .itr-admin-stat-icon { width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0; }
-.itr-admin-stat-val { font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1; }
+.itr-admin-stat-val { font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1; }
 .itr-admin-stat-lbl { font-size:11.5px;color:var(--muted);margin-top:3px;font-weight:500; }
 
 .itr-type-pill { display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700;line-height:1.8; }
@@ -37,7 +37,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Request Forms &rsaquo; <span style="color:var(--accent)">IT Request Forms</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 3px">IT Request Inbox</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 3px">IT Request Inbox</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Review and manage all IT service requests from staff</p>
   </div>
   @if($countNew > 0)
@@ -116,11 +116,11 @@
       <div style="position:relative;flex:1;min-width:200px">
         <i class="bi bi-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none"></i>
         <input type="text" name="itr_search" value="{{ $search }}" placeholder="Search subject, name, department…"
-          style="width:100%;padding:8px 12px 8px 32px;font-family:'DM Sans',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s"
+          style="width:100%;padding:8px 12px 8px 32px;font-family:'Inter',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       </div>
       <select name="itr_type" onchange="this.form.submit()"
-        style="font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $type ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
+        style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $type ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
         <option value="">All Types</option>
         <option value="hardware" {{ $type === 'hardware' ? 'selected' : '' }}>Hardware</option>
         <option value="software" {{ $type === 'software' ? 'selected' : '' }}>Software</option>
@@ -128,7 +128,7 @@
         <option value="service"  {{ $type === 'service'  ? 'selected' : '' }}>Service</option>
       </select>
       <select name="itr_status" onchange="this.form.submit()"
-        style="font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $status ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
+        style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $status ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
         <option value="">All Status</option>
         <option value="New"      {{ $status === 'New'      ? 'selected' : '' }}>Pending Review</option>
         <option value="Approved" {{ $status === 'Approved' ? 'selected' : '' }}>Approved</option>
@@ -136,7 +136,7 @@
         <option value="Draft"    {{ $status === 'Draft'    ? 'selected' : '' }}>Draft</option>
       </select>
       <button type="submit"
-        style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s"
+        style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s"
         onmouseover="this.style.background='var(--accent-h)'" onmouseout="this.style.background='var(--accent)'">
         <i class="bi bi-funnel-fill"></i> Filter
       </button>
@@ -257,7 +257,7 @@
 .itr-wrap { max-width: 900px; }
 
 .itr-page-title {
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   font-size: 22px; font-weight: 800;
   color: var(--text); letter-spacing: -.3px; margin-bottom: 4px;
 }
@@ -296,7 +296,7 @@
 .sys-icon { background: rgba(16,185,129,.1); color: #10b981; }
 .svc-icon { background: rgba(2,132,199,.1); color: var(--accent); }
 .itr-type-card.selected .itr-type-icon { transform: scale(1.08); }
-.itr-type-name { font-family:'DM Sans',sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.itr-type-name { font-family:'Inter',sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 .itr-type-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
 .itr-type-check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: white; display: none; align-items: center; justify-content: center; font-size: 11px; }
 .itr-type-card.selected .itr-type-check { display: flex; }
@@ -318,7 +318,7 @@
 .itr-banner-text { font-size: 13px; color: var(--muted); flex: 1; }
 .itr-change-btn {
   display: flex; align-items: center; gap: 6px;
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   font-size: 12.5px; font-weight: 600; color: var(--red);
   background: rgba(239,68,68,.07); border: 1.5px solid rgba(239,68,68,.2);
   border-radius: 8px; padding: 7px 14px; cursor: pointer; transition: all .15s;
@@ -331,14 +331,14 @@
 .itr-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
 .itr-section-head { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--body-bg); }
 .itr-section-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(2,132,199,.12); color: var(--accent); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.itr-section-title { font-family:'DM Sans',sans-serif; font-size: 13.5px; font-weight: 700; color: var(--text); flex: 1; }
+.itr-section-title { font-family:'Inter',sans-serif; font-size: 13.5px; font-weight: 700; color: var(--text); flex: 1; }
 .itr-section-body { padding: 20px; }
 
 /* ── Fields ── */
 .itr-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 3px; }
 .itr-req { color: var(--red); }
 .itr-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.itr-input { width: 100%; font-family:'DM Sans',sans-serif; font-size: 13px; color: var(--text); background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 12px; outline: none; transition: border-color .15s, box-shadow .15s; }
+.itr-input { width: 100%; font-family:'Inter',sans-serif; font-size: 13px; color: var(--text); background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 12px; outline: none; transition: border-color .15s, box-shadow .15s; }
 .itr-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,.12); }
 .itr-input::placeholder { color: var(--muted); opacity: .6; }
 textarea.itr-input { resize: vertical; min-height: 100px; }
@@ -379,7 +379,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-upload-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .itr-upload-row input[type="file"] { display: none; }
 .itr-filename { flex: 1; font-size: 12.5px; color: var(--muted); background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 7px; padding: 8px 12px; }
-.itr-browse-btn { font-family:'DM Sans',sans-serif; font-size: 12.5px; font-weight: 600; padding: 8px 18px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 7px; color: var(--text); cursor: pointer; transition: all .15s; }
+.itr-browse-btn { font-family:'Inter',sans-serif; font-size: 12.5px; font-weight: 600; padding: 8px 18px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 7px; color: var(--text); cursor: pointer; transition: all .15s; }
 .itr-browse-btn:hover { border-color: var(--accent); color: var(--accent); }
 
 .itr-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
@@ -391,9 +391,9 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
 /* ── Actions ── */
 .itr-action-bar { display: flex; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
-.itr-btn-submit { font-family:'DM Sans',sans-serif; font-size: 13.5px; font-weight: 700; padding: 11px 28px; background: var(--accent); color: white; border: none; border-radius: 9px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
+.itr-btn-submit { font-family:'Inter',sans-serif; font-size: 13.5px; font-weight: 700; padding: 11px 28px; background: var(--accent); color: white; border: none; border-radius: 9px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
 .itr-btn-submit:hover { background: var(--accent-h); }
-.itr-btn-draft { font-family:'DM Sans',sans-serif; font-size: 13px; font-weight: 600; padding: 11px 22px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 9px; color: var(--text); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 7px; }
+.itr-btn-draft { font-family:'Inter',sans-serif; font-size: 13px; font-weight: 600; padding: 11px 22px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 9px; color: var(--text); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 7px; }
 .itr-btn-draft:hover { border-color: var(--accent); color: var(--accent); }
 
 @media (max-width: 720px) {
@@ -448,7 +448,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   <!-- ══ MY SUBMISSIONS ══ -->
   @if(isset($myForms) && $myForms->count())
   <div style="margin-top:28px" id="my-submissions">
-    <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px">My Submissions</div>
+    <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px">My Submissions</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Track the status of your previously submitted IT service requests.</div>
     <div style="display:flex;flex-direction:column;gap:10px">
       @foreach($myForms as $mf)

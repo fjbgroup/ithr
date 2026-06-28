@@ -1,16 +1,16 @@
 <style>
-/* ══ My Requests ══ */
+/* â•â• My Requests â•â• */
 .myr-wrap{max-width:860px;margin:0 auto}
 .myr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:16px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.myr-hero-title{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
+.myr-hero-title{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
 .myr-hero-sub{font-size:13px;color:rgba(255,255,255,.55);margin:0}
 .myr-hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 20px;text-align:center;flex-shrink:0}
-.myr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'DM Sans',sans-serif}
+.myr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'Inter',sans-serif}
 .myr-hero-badge-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
 
 /* Tab bar */
 .myr-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.myr-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .15s;white-space:nowrap}
+.myr-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .15s;white-space:nowrap}
 .myr-tab:hover{border-color:currentColor;opacity:.85}
 .myr-tab .myr-tab-icon{font-size:14px;flex-shrink:0}
 .myr-tab .myr-tab-badge{font-size:11px;font-weight:800;border-radius:20px;padding:2px 8px;background:rgba(0,0,0,.06);color:inherit;transition:background .15s}
@@ -24,7 +24,7 @@
 .myr-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
 .myr-section-hdr{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--body-bg)}
 .myr-section-hdr-accent{width:4px;height:20px;border-radius:3px;flex-shrink:0}
-.myr-section-hdr-text{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--text);flex:1}
+.myr-section-hdr-text{font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:var(--text);flex:1}
 .myr-section-hdr-count{font-size:11px;font-weight:700;border-radius:20px;padding:3px 12px}
 .myr-row{border-bottom:1px solid var(--border)}
 .myr-row:last-child{border-bottom:none}
@@ -51,7 +51,7 @@
 .myr-pager{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--border);background:var(--body-bg)}
 .myr-pager-info{font-size:11px;color:var(--muted);font-weight:600}
 .myr-pager-btns{display:flex;gap:6px}
-.myr-pager-btn{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.myr-pager-btn{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
 .myr-pager-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .myr-pager-btn:disabled{opacity:.4;cursor:not-allowed}
 .myr-empty{padding:40px 24px;text-align:center}
@@ -169,7 +169,7 @@
   }
 @endphp
 
-{{-- ── SECTION 1: ADD ASSET ── --}}
+{{-- â”€â”€ SECTION 1: ADD ASSET â”€â”€ --}}
 @php
   $addRows = [];
   foreach ($myAdds as $req) {
@@ -203,7 +203,7 @@
   }
 @endphp
 
-{{-- ── SECTION 2: E-WASTE ── --}}
+{{-- â”€â”€ SECTION 2: E-WASTE â”€â”€ --}}
 @php
   $ewRows = [];
   foreach ($myEw as $req) {
@@ -238,7 +238,7 @@
   }
 @endphp
 
-{{-- ── SECTION 3: DISPOSAL (ewaste_items) ── --}}
+{{-- â”€â”€ SECTION 3: DISPOSAL (ewaste_items) â”€â”€ --}}
 @php
   $dispRows = [];
   $dgi = 0;
@@ -290,22 +290,22 @@
     $row .= '</div>';
     if ($ob !== 'Pending') $row .= myrDetailBlock($ob, array_filter([
       'Outcome' => $ob==='Approved'?(($req->finance_status==='EWaste')?'Routed to E-Waste':(($req->finance_status==='Disposal')?'Routed to Disposal':'Approved')):'Rejected',
-      'HOU'     => ($req->hou_signed_name??'')?e($req->hou_signed_name).($req->hou_signed_at?' · '.\Carbon\Carbon::parse($req->hou_signed_at)->format('d M Y'):''):'',
-      'GM'      => ($req->gm_signed_name??'')?e($req->gm_signed_name).($req->gm_signed_at?' · '.\Carbon\Carbon::parse($req->gm_signed_at)->format('d M Y'):''):'',
-      'CEO'     => ($req->ceo_signed_name??'')?e($req->ceo_signed_name).($req->ceo_signed_at?' · '.\Carbon\Carbon::parse($req->ceo_signed_at)->format('d M Y'):''):'',
+      'HOU'     => ($req->hou_signed_name??'')?e($req->hou_signed_name).($req->hou_signed_at?' Â· '.\Carbon\Carbon::parse($req->hou_signed_at)->format('d M Y'):''):'',
+      'GM'      => ($req->gm_signed_name??'')?e($req->gm_signed_name).($req->gm_signed_at?' Â· '.\Carbon\Carbon::parse($req->gm_signed_at)->format('d M Y'):''):'',
+      'CEO'     => ($req->ceo_signed_name??'')?e($req->ceo_signed_name).($req->ceo_signed_at?' Â· '.\Carbon\Carbon::parse($req->ceo_signed_at)->format('d M Y'):''):'',
     ]));
     $row .= '</div>';
     $dispRows[] = $row;
   }
 @endphp
 
-{{-- ── SECTION 4: DELETE ── --}}
+{{-- â”€â”€ SECTION 4: DELETE â”€â”€ --}}
 @php
   $delRows = [];
   foreach ($myDeletes as $req) {
     $resolved = $req->status !== 'Pending';
-    $desc    = $req->inventoryItem?->description ?? $req->asset_description ?? '—';
-    $assetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? '—';
+    $desc    = $req->inventoryItem?->description ?? $req->asset_description ?? 'â€”';
+    $assetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? 'â€”';
     $cls     = $req->inventoryItem?->asset_class ?? $req->asset_class ?? '';
     $row  = '<div class="myr-row">';
     $row .= '<div class="myr-row-top">';
@@ -335,7 +335,7 @@
   }
 @endphp
 
-{{-- ── SECTION 5: EDIT ── --}}
+{{-- â”€â”€ SECTION 5: EDIT â”€â”€ --}}
 @php
   $editRows = [];
   foreach ($myEdits as $req) {
@@ -349,7 +349,7 @@
       $row .= '<div style="margin-bottom:4px"><span style="display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><i class=\"bi bi-box-seam\"></i> Non-IT Asset</span></div>';
       $currentDesc = null;
     } else {
-      $currentDesc = $req->inventoryItem?->description ?? '—';
+      $currentDesc = $req->inventoryItem?->description ?? 'â€”';
       $row .= '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>'.e($currentDesc).'</em></div>';
     }
     $row .= '<div class="myr-row-meta">';

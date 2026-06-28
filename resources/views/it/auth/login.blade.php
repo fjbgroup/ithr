@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.auth')
+@extends('it.layouts.auth')
 
 @section('title', 'Sign In')
 
@@ -9,7 +9,7 @@ body{
   min-height:100vh;
   background:linear-gradient(135deg,#EEF0F3 0%,#ECEFF1 30%,#EDEFF2 65%,#ECEFF2 100%);
   background-attachment:fixed;
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   display:flex;align-items:center;justify-content:center;padding:24px;
 }
 
@@ -89,7 +89,7 @@ input[type="text"],input[type="email"],input[type="password"]{
   width:100%;background:#f8fafc;
   border:1.5px solid #e2e8f0;border-radius:10px;
   color:#0f172a;padding:12px 40px 12px 38px;
-  font-size:14px;font-family:'DM Sans',sans-serif;
+  font-size:14px;font-family:'Inter',sans-serif;
   transition:border-color .2s,box-shadow .2s;outline:none;
 }
 input:focus{border-color:#F7941D;box-shadow:0 0 0 3px rgba(247,148,29,.18);background:#fff;}
@@ -111,7 +111,7 @@ input::placeholder{color:#94a3b8;}
   width:100%;margin-top:4px;
   background:linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%);color:#fff;border:none;
   border-radius:10px;padding:14px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
   letter-spacing:.03em;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:8px;
   transition:filter .2s,box-shadow .2s,transform .1s;

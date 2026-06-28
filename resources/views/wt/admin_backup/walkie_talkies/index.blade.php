@@ -1958,7 +1958,7 @@
                         <td class="inventory-radio-col">
                             <span class="clean-admin-pill inventory-id-chip">{{ $w->radio_id ?: '-' }}</span>
                             @if($w->need_to_change_id)
-                            <span class="ml-1 text-yellow-300" title="DUPLICATE ID: Need to change">ðŸš©</span>
+                            <span class="ml-1 text-yellow-300" title="DUPLICATE ID: Need to change">Ã°Å¸Å¡Â©</span>
                             @endif
                         </td>
                         <td class="inventory-status-col">
@@ -6890,7 +6890,7 @@
             if (!modal || !title || !subtitle || !summaryHost || !bodyHost) return;
 
             title.textContent = summary.radio_id || '-';
-            subtitle.textContent = `${summary.model || '-'} Â· ${summary.serial_number || '-'} Â· ${summary.status || 'UNKNOWN'}`;
+            subtitle.textContent = `${summary.model || '-'} Ã‚Â· ${summary.serial_number || '-'} Ã‚Â· ${summary.status || 'UNKNOWN'}`;
 
             const summaryItems = [
                 ['Owner', summary.ownership || '-'],
@@ -7150,7 +7150,7 @@
                 <head>
                     <title>Walkie QR - ${timelineEscape(currentWalkieQr.radio_id || '-')}</title>
                     <style>
-                        body { font-family: 'DM Sans', sans-serif; margin: 32px; color: #111827; }
+                        body { font-family: 'Inter', sans-serif; margin: 32px; color: #111827; }
                         .label { width: 320px; border: 1px solid #d1d5db; border-radius: 10px; padding: 20px; }
                         h1 { margin: 0 0 12px; font-size: 20px; }
                         img { width: 220px; height: 220px; display: block; margin: 12px auto; }

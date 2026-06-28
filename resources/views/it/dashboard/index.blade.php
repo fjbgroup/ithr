@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Dashboard')
 @section('page_title', 'Dashboard')
@@ -15,7 +15,7 @@
 }
 .ds-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.15);transform:translateY(-2px)}
 .ds-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .ds-lbl{font-size:12px;color:var(--muted);margin-top:5px;font-weight:500}
 
 .ds-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:clip;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
@@ -23,7 +23,7 @@
 .ds-box-title{font-size:14px;font-weight:700;color:var(--text)}
 .ds-box-sub{font-size:12px;color:var(--muted);margin-top:2px}
 
-.ds-tab{padding:6px 16px;border-radius:7px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ds-tab{padding:6px 16px;border-radius:7px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .ds-tab.on{background:var(--navy,#142b47);color:#fff}
 .ds-tab.off{background:transparent;color:var(--muted)}
 
@@ -68,7 +68,7 @@
 
     <!-- Greeting -->
     <div style="flex:1;min-width:220px">
-      <div style="font-size:20px;font-weight:800;color:#fff;font-family:'DM Sans',sans-serif;line-height:1.2" id="dsGreeting">
+      <div style="font-size:20px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1.2" id="dsGreeting">
         Good Morning, {{ $user->full_name }}
       </div>
       <div style="font-size:12px;color:#93c5fd;margin-top:5px;font-weight:500">
@@ -80,23 +80,23 @@
     <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.12);border-right:1px solid rgba(255,255,255,.12);margin:0 28px">
       <div style="padding:0 28px;text-align:center">
         <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Total Assets</div>
-        <div style="font-size:26px;font-weight:800;color:#fff;font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
+        <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
       </div>
       <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
       <div style="padding:0 28px;text-align:center">
         <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Active</div>
-        <div style="font-size:26px;font-weight:800;color:#4ade80;font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
+        <div style="font-size:26px;font-weight:800;color:#4ade80;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
       </div>
       <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
       <div style="padding:0 28px;text-align:center">
         <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Pending</div>
-        <div style="font-size:26px;font-weight:800;color:{{ $pendingAll > 0 ? '#fbbf24' : 'rgba(255,255,255,.35)' }};font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
+        <div style="font-size:26px;font-weight:800;color:{{ $pendingAll > 0 ? '#fbbf24' : 'rgba(255,255,255,.35)' }};font-family:'Inter',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
       </div>
     </div>
 
     <!-- Live Clock -->
     <div style="text-align:right">
-      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'DM Sans',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
+      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'Inter',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
       <div style="font-size:10px;color:#93c5fd;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
     </div>
 
@@ -123,16 +123,16 @@
           <div id="chartTotalBadge" style="background:var(--body-bg);border:1px solid var(--border);border-radius:8px;padding:6px 14px;display:flex;align-items:center;gap:8px">
             <div style="width:6px;height:6px;border-radius:50%;background:#f97316;flex-shrink:0"></div>
             <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Total&nbsp;</span>
-            <span id="chartTotalNum" style="font-size:16px;font-weight:800;color:var(--text);font-family:'DM Sans',sans-serif">{{ $itTotal }}</span>
+            <span id="chartTotalNum" style="font-size:16px;font-weight:800;color:var(--text);font-family:'Inter',sans-serif">{{ $itTotal }}</span>
           </div>
           <!-- Tabs -->
           <div style="display:flex;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;padding:3px;gap:2px">
             <button id="tabIT" onclick="switchTab('it')"
-              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:#f97316;color:#fff;transition:all .2s">
+              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:#f97316;color:#fff;transition:all .2s">
               IT Assets
             </button>
             <button id="tabNIT" onclick="switchTab('nit')"
-              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--muted);transition:all .2s">
+              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--muted);transition:all .2s">
               Non-IT
             </button>
           </div>
@@ -343,9 +343,9 @@
           padding:14,
           cornerRadius:6,
           displayColors:false,
-          titleFont:{size:12,weight:'800',family:"'DM Sans',sans-serif"},
-          bodyFont:{size:13,weight:'700',family:"'DM Sans',sans-serif"},
-          footerFont:{size:10,family:"'DM Sans',sans-serif"},
+          titleFont:{size:12,weight:'800',family:"'Inter',sans-serif"},
+          bodyFont:{size:13,weight:'700',family:"'Inter',sans-serif"},
+          footerFont:{size:10,family:"'Inter',sans-serif"},
           callbacks:{
             title:function(i){return i[0].label;},
             label:function(c){return '  '+c.raw+' units';},
@@ -362,7 +362,7 @@
           border:{display:false},
           ticks:{
             color:function(){ return tickColorX(currentTab); },
-            font:{size:10,family:"'DM Sans',sans-serif",weight:'700'},
+            font:{size:10,family:"'Inter',sans-serif",weight:'700'},
             maxRotation:0
           }
         },
@@ -376,7 +376,7 @@
           },
           ticks:{
             color:function(){ return tickColorY(); },
-            font:{size:10,family:"'DM Sans',sans-serif",weight:'600'},
+            font:{size:10,family:"'Inter',sans-serif",weight:'600'},
             precision:0,padding:10,
             callback:function(v){return v%1===0?v:'';}
           }
@@ -392,7 +392,7 @@
               var val=ds.data[i];
               if(!val&&val!==0)return;
               c.save();
-              c.font="700 11px 'DM Sans',sans-serif";
+              c.font="700 11px 'Inter',sans-serif";
               c.textAlign='center'; c.textBaseline='bottom';
               var s=String(val), tw=c.measureText(s).width+12;
               c.fillStyle=labelBg();

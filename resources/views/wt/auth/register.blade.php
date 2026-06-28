@@ -8,7 +8,7 @@
 @include('partials.favicons')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script>
         const savedTheme = localStorage.getItem('color-theme');
@@ -50,7 +50,7 @@
     body {
         min-height: 100vh; margin: 0; padding: 20px 0;
         background: #eef4fa;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
         display: flex; justify-content: center; align-items: center;
         transition: background-color 0.3s;
         overflow-x: hidden;
@@ -117,7 +117,7 @@
         background: var(--input-bg); border: 1.5px solid var(--input-border);
         padding: 12px 15px; border-radius: 14px; width: 100%;
         font-size: 14px; margin-bottom: 15px; transition: 0.2s;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
         color: var(--text-dark);
     }
     .form-input:focus { outline: none; border-color: #94A3B8; background: #fff; box-shadow: 0 0 0 4px rgba(148,163,184,0.12); }
@@ -266,7 +266,7 @@
     <div class="divider"></div>
     
     <div class="back-link">
-        Already have an account? <a href="{{ route('wt.login') }}">Login here →</a>
+        Already have an account? <a href="{{ route('wt.login') }}">Login here â†’</a>
     </div>
 </div>
 

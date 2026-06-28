@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Edit IT Request #' . $form->id)
 @section('page_title', 'IT Request Form — Edit')
@@ -8,7 +8,7 @@
 .itr-edit-section { background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px; }
 .itr-edit-head { display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--body-bg); }
 .itr-edit-num { width:24px;height:24px;border-radius:50%;background:rgba(2,132,199,.12);color:var(--accent);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-.itr-edit-title { font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:var(--text); }
+.itr-edit-title { font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text); }
 .itr-edit-body { padding:20px; }
 .eg2 { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
 .eg3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px; }
@@ -17,7 +17,7 @@
 .ef:last-child { margin-bottom:0; }
 .itr-elabel { font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px; }
 .itr-ereq { color:#dc2626; }
-.itr-einput { width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s; }
+.itr-einput { width:100%;font-family:'Inter',sans-serif;font-size:13.5px;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s; }
 .itr-einput:focus { border-color:var(--accent) !important;box-shadow:0 0 0 3px rgba(2,132,199,.1) !important; }
 .itr-einput.is-error { border-color:#dc2626 !important;box-shadow:0 0 0 3px rgba(220,38,38,.1) !important; }
 .itr-efield-error { color:#dc2626;font-size:11.5px;margin-top:4px;display:flex;align-items:center;gap:4px; }
@@ -44,7 +44,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Request Forms &rsaquo; <a href="{{ route('it.it-request-form') }}" style="color:var(--accent);text-decoration:none">IT Request Forms</a> &rsaquo; <a href="{{ route('it.it-request-form.show', $form->id) }}" style="color:var(--accent);text-decoration:none">#{{ $form->id }}</a> &rsaquo; <span style="color:var(--text)">Edit</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 2px">Edit IT Request #{{ $form->id }}</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 2px">Edit IT Request #{{ $form->id }}</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Submitted by {{ $form->submittedBy?->full_name ?? 'Unknown' }} on {{ $form->created_at->format('d M Y, H:i') }}</p>
     @else
     <a href="{{ route('it.it-request-form') }}" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);text-decoration:none;margin-bottom:12px">
@@ -53,7 +53,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Request Forms &rsaquo; <a href="{{ route('it.it-request-form') }}" style="color:var(--accent);text-decoration:none">IT Request Forms</a> &rsaquo; <span style="color:var(--text)">Resume Draft #{{ $form->id }}</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 2px">Resume Draft — {{ ucfirst($form->request_type) }} Request</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 2px">Resume Draft — {{ ucfirst($form->request_type) }} Request</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Draft saved on {{ $form->updated_at->format('d M Y, H:i') }}. You can edit and submit, or save again as a draft.</p>
     @endif
   </div>
@@ -281,7 +281,7 @@
         <span style="font-size:12px;color:var(--muted);margin-left:8px">Upload a new file below to replace it.</span>
       </div>
       @endif
-      <input type="file" name="document" style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text)"/>
+      <input type="file" name="document" style="font-family:'Inter',sans-serif;font-size:13px;color:var(--text)"/>
       <div style="font-size:11.5px;color:var(--muted);margin-top:4px">Max 2MB · PDF, DOC, DOCX, JPG, JPEG, PNG</div>
       @error('document')<div class="itr-efield-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
     </div>
@@ -420,12 +420,12 @@
 @if($isAdmin)
 <div style="display:flex;align-items:center;gap:12px;margin-top:6px">
   <button type="submit"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 28px;background:#142b47;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:10px 28px;background:#142b47;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s"
     onmouseover="this.style.background='#254a78'" onmouseout="this.style.background='#142b47'">
     <i class="bi bi-floppy-fill"></i> Update Request
   </button>
   <a href="{{ route('it.it-request-form.show', $form->id) }}"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s"
     onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
     onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
     Cancel
@@ -435,17 +435,17 @@
 <p style="font-size:12px;color:var(--muted);margin:6px 0 10px">Fields marked <strong style="color:#dc2626">*</strong> are required only when submitting to IT Admin. You may <strong>Save as Draft</strong> at any time with incomplete fields.</p>
 <div style="display:flex;align-items:center;gap:12px;margin-top:6px;flex-wrap:wrap">
   <button type="submit" name="action" value="submit"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 28px;background:#142b47;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:10px 28px;background:#142b47;color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s"
     onmouseover="this.style.background='#254a78'" onmouseout="this.style.background='#142b47'">
     <i class="bi bi-send-fill"></i> Submit Request
   </button>
   <button type="submit" formnovalidate name="action" value="draft"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;background:var(--surface);color:#64748b;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:10px 22px;background:var(--surface);color:#64748b;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s"
     onmouseover="this.style.borderColor='#64748b'" onmouseout="this.style.borderColor='var(--border)'">
     <i class="bi bi-floppy-fill"></i> Save as Draft
   </button>
   <a href="{{ route('it.it-request-form') }}"
-    style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s"
+    style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:10px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s"
     onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
     onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
     Cancel

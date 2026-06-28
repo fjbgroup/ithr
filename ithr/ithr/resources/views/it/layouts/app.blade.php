@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 <title>@yield('title', 'Dashboard') — FJB Inventory System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -41,7 +41,7 @@
   --table-hover:       #f0f9ff;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh}
+body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
 /* ── SIDEBAR ── */
 .sidebar{
@@ -54,7 +54,7 @@ body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-seri
   display:flex;align-items:center;gap:12px;
 }
 .sidebar-brand img{width:36px;height:36px;object-fit:contain;background:transparent}
-.brand-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;
+.brand-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;
   text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
 .brand-name span{color:#fff;display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
 
@@ -92,7 +92,7 @@ button .badge-count{ margin-left:0; }
 .user-avatar{
   width:34px;height:34px;border-radius:50%;background:var(--accent);
   display:flex;align-items:center;justify-content:center;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;
 }
 .user-info{min-width:0;flex:1}
 .user-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -101,7 +101,7 @@ button .badge-count{ margin-left:0; }
   display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;
   background:rgba(255,255,255,.06);border:none;border-radius:8px;
   color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;text-decoration:none;
-  transition:all .15s;font-family:'DM Sans',sans-serif;
+  transition:all .15s;font-family:'Inter',sans-serif;
 }
 .btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
 
@@ -113,7 +113,7 @@ button .badge-count{ margin-left:0; }
   position:sticky;top:0;z-index:50;
 }
 .topbar-left{flex:1}
-.topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--navy,var(--text))}
+.topbar-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--navy,var(--text))}
 .topbar-breadcrumb{font-size:11px;color:var(--muted);margin-top:1px}
 .topbar-right{display:flex;align-items:center;gap:12px}
 .topbar-user{
@@ -147,7 +147,7 @@ button .badge-count{ margin-left:0; }
   width:44px;height:44px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;
 }
-.stat-value{font-family:'DM Sans',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1}
+.stat-value{font-family:'Inter',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1}
 .stat-label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
 
 /* ── TABLE CARD ── */
@@ -156,7 +156,7 @@ button .badge-count{ margin-left:0; }
   padding:16px 20px;border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:12px;background:var(--surface);
 }
-.table-card-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);flex:1}
+.table-card-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--text);flex:1}
 .table{color:var(--text);margin:0}
 .table thead th{
   background:var(--table-head-bg, #e2e8f0) !important;
@@ -189,7 +189,7 @@ button .badge-count{ margin-left:0; }
   border:1.5px solid var(--form-input-border, var(--border)) !important;
   color:var(--form-input-color, var(--text)) !important;
   border-radius:8px;padding:9px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;
+  font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s;
 }
 .form-control:focus,.form-select:focus{
   border-color:var(--sky-dark,var(--accent)) !important;
@@ -201,7 +201,7 @@ textarea.form-control{min-height:90px;resize:vertical}
 /* ── BUTTONS ── */
 .btn-primary-custom{
   background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;
-  padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  padding:9px 20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
   cursor:pointer;transition:all .15s;text-decoration:none;
   display:inline-flex;align-items:center;gap:7px;
 }
@@ -210,7 +210,7 @@ textarea.form-control{min-height:90px;resize:vertical}
   background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;
   padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;
   transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
 }
 .btn-secondary-custom:hover{border-color:var(--navy,#142b47);color:var(--navy,#142b47)}
 .btn-icon{
@@ -250,14 +250,14 @@ textarea.form-control{min-height:90px;resize:vertical}
 .dataTables_wrapper .dataTables_paginate .paginate_button{background:transparent !important;border:none !important;margin:0 !important;padding:0 !important;}
 .dataTables_wrapper .pagination{gap:3px;flex-wrap:wrap}
 .dataTables_wrapper .pagination .page-item .page-link{
-  font-size:12px !important;font-weight:600 !important;font-family:'DM Sans',sans-serif !important;
+  font-size:12px !important;font-weight:600 !important;font-family:'Inter',sans-serif !important;
   padding:4px 10px !important;line-height:1.5 !important;
   border-radius:6px !important;border:1px solid var(--border) !important;
   background:transparent !important;color:var(--muted) !important;transition:all .15s;
 }
 .dataTables_wrapper .pagination .page-item.active .page-link{background:var(--navy,#142b47) !important;border-color:var(--navy,#142b47) !important;color:#fff !important;}
 .dataTables_wrapper .pagination .page-item .page-link:hover{background:#f1f5f9 !important;color:var(--text) !important;}
-.dataTables_wrapper .dataTables_info{font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif;padding-top:6px;}
+.dataTables_wrapper .dataTables_info{font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;padding-top:6px;}
 table.dataTable tbody tr,
 table.dataTable tbody tr.odd,
 table.dataTable tbody tr.even{background-color:var(--surface) !important;color:var(--text) !important}
@@ -269,7 +269,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 
 /* ── MOBILE ── */
 .sidebar-toggle{display:none;background:none;border:1.5px solid var(--border);
-  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'DM Sans',sans-serif}
+  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'Inter',sans-serif}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:none}
@@ -637,7 +637,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
       <form method="POST" action="{{ route('it.logout') }}" style="margin:0">
         @csrf
         <button type="submit"
-          style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:8px;color:#dc2626;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+          style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:8px;color:#dc2626;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s"
           onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
           <i class="bi bi-box-arrow-right"></i> Logout
         </button>
@@ -869,7 +869,7 @@ $(document).ready(function () {
 
 <!-- EASTER EGG -->
 <div id="eggModal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(10,18,32,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:420px;margin:20px;box-shadow:0 32px 80px rgba(0,0,0,.35);font-family:'DM Sans',sans-serif;overflow:hidden">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:420px;margin:20px;box-shadow:0 32px 80px rgba(0,0,0,.35);font-family:'Inter',sans-serif;overflow:hidden">
     <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:32px 28px 24px;text-align:center">
       <div style="width:64px;height:64px;background:rgba(255,255,255,.12);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:1.5px solid rgba(255,255,255,.18)">
         <i class="bi bi-cpu-fill" style="color:#fff;font-size:28px"></i>
@@ -913,7 +913,7 @@ $(document).ready(function () {
     </div>
     <div style="padding:14px 28px 20px;text-align:center">
       <button onclick="document.getElementById('eggModal').style.display='none'"
-        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 32px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 32px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
         Close
       </button>
     </div>

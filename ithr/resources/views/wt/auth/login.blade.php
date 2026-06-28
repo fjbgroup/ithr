@@ -6,7 +6,7 @@
     <title>WT System | Sign In</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
@@ -28,7 +28,7 @@
     body {
         min-height: 100vh;
         background: linear-gradient(135deg, #ffffff 0%, #dcfce7 50%, #bbf7d0 100%);
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -73,7 +73,7 @@
     }
     .brand-logo-box:hover { transform: rotate(0deg) scale(1.05); }
     .brand-logo-box img { width: 32px; height: 32px; object-fit: contain; }
-    .brand-text { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 800; color: #000; text-transform: uppercase; letter-spacing: .06em; line-height: 1.3; }
+    .brand-text { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 800; color: #000; text-transform: uppercase; letter-spacing: .06em; line-height: 1.3; }
     .brand-text span { color: #000; display: block; font-size: 15px; letter-spacing: .05em; font-weight: 800; }
     .card {
         background: var(--surface);
@@ -83,7 +83,7 @@
         box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 20px 40px rgba(0,0,0,.07);
     }
     .form-body { padding: 32px 36px; }
-    .form-title { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .form-title { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
     .form-sub { color: var(--muted); font-size: 13px; margin-bottom: 26px; }
     .field { margin-bottom: 18px; }
     label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .09em; margin-bottom: 7px; }
@@ -97,7 +97,7 @@
         color: var(--text);
         padding: 13px 14px 13px 42px;
         font-size: 14px;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
         transition: border-color .2s, box-shadow .2s;
         outline: none;
     }
@@ -125,7 +125,7 @@
         border: none;
         border-radius: 10px;
         padding: 14px;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
         font-size: 14px;
         font-weight: 700;
         letter-spacing: .04em;
@@ -178,11 +178,11 @@
     .modal-field label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .09em; margin-bottom: 6px; }
     .modal-field input, .modal-field textarea {
         width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px;
-        padding: 10px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: all .2s;
+        padding: 10px 12px; font-size: 13px; font-family: 'Inter', sans-serif; color: var(--text); outline: none; transition: all .2s;
     }
     .modal-field textarea { min-height: 90px; resize: vertical; }
     .modal-field input:focus, .modal-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,.15); }
-    .modal-btn { width: 100%; background: var(--navy); color: #fff; border: none; border-radius: 8px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 8px; }
+    .modal-btn { width: 100%; background: var(--navy); color: #fff; border: none; border-radius: 8px; padding: 12px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 8px; }
     .modal-btn:hover { background: var(--accent-h); }
 
     @media (max-width: 480px) {

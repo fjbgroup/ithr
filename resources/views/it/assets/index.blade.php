@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'IT Assets')
 @section('page_title', 'IT Assets')
@@ -38,7 +38,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       All Assets &rsaquo; <span style="color:var(--accent)">IT Assets</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">IT Assets</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">IT Assets</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Manage and track all registered IT equipment</p>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
@@ -73,7 +73,7 @@ $statItems = [
       <i class="bi {{ $icon }}" style="color:{{ $color }}"></i>
     </div>
     <div>
-      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif">{{ $val }}</div>
+      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif">{{ $val }}</div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px">{{ $lbl }}</div>
     </div>
   </div>
@@ -93,18 +93,18 @@ $statItems = [
     <div style="position:relative;flex:1;min-width:220px">
       <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px"></i>
       <input type="text" name="search" value="{{ $fSearch }}" placeholder="Search asset no., class, description, serial..."
-        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
+        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none"
         onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
     </div>
     <select name="class" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Classes</option>
       @foreach($assetClasses as $cls)
       <option value="{{ $cls->name }}" {{ $fClass === $cls->name ? 'selected' : '' }}>{{ $cls->name }}</option>
       @endforeach
     </select>
     <select name="status" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:130px">
       <option value="">All Status</option>
       <option value="Active"    {{ $fStatus === 'Active'    ? 'selected' : '' }}>Active</option>
       <option value="E-Waste"   {{ $fStatus === 'E-Waste'   ? 'selected' : '' }}>E-Waste</option>
@@ -112,19 +112,19 @@ $statItems = [
       <option value="Collected" {{ $fStatus === 'Collected' ? 'selected' : '' }}>Collected</option>
     </select>
     <select name="location" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Locations</option>
       @foreach($locations ?? [] as $loc)
       <option value="{{ $loc }}" {{ $fLocation === $loc ? 'selected' : '' }}>{{ $loc }}</option>
       @endforeach
     </select>
     <button type="submit"
-      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
     @if($hasFilter)
     <a href="{{ route('it.inventory.index') }}"
-      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
+      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">
       Clear
     </a>
     @endif
@@ -135,7 +135,7 @@ $statItems = [
 @if(!$user->isReadOnlyViewer())
 <div id="bulkBar" style="display:none;position:sticky;top:12px;z-index:100;margin-bottom:12px">
   <div style="background:#1A2332;color:#fff;border-radius:10px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,.3)">
-    <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px">
+    <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px">
       <i class="bi bi-check2-square me-2"></i><span id="bulkCount">0</span> item(s) selected
     </span>
     <div style="display:flex;gap:8px">
@@ -180,7 +180,7 @@ $statItems = [
     </span>
   </div>
   <div class="data-scroll-wrap" style="overflow-x:auto">
-    <table class="table table-hover data-table" style="font-family:'DM Sans',sans-serif;min-width:100%">
+    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif;min-width:100%">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -222,37 +222,37 @@ $statItems = [
           {{-- Asset No. --}}
           <td>
             <a href="{{ route('it.inventory.index') }}?action=edit&id={{ $item->id }}"
-              style="color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif">
+              style="color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;font-family:'Inter',sans-serif">
               {{ $item->asset_number ?: '—' }}
             </a>
           </td>
 
           {{-- F/A Code --}}
-          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->fa_code ?: '—' }}</td>
+          <td style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif">{{ $item->fa_code ?: '—' }}</td>
 
           {{-- Description --}}
-          <td style="font-weight:500;font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->description }}</td>
+          <td style="font-weight:500;font-size:13px;font-family:'Inter',sans-serif">{{ $item->description }}</td>
 
           {{-- Years Purchase --}}
-          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->years_purchase ?: '—' }}</td>
+          <td style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif">{{ $item->years_purchase ?: '—' }}</td>
 
           {{-- Location --}}
-          <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->location ?: '—' }}</td>
+          <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->location ?: '—' }}</td>
 
           {{-- Total Cost --}}
-          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->total_cost !== null ? 'RM '.number_format((float)$item->total_cost,2) : '—' }}</td>
+          <td style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif">{{ $item->total_cost !== null ? 'RM '.number_format((float)$item->total_cost,2) : '—' }}</td>
 
           {{-- Accumulated --}}
-          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->accumulated !== null ? 'RM '.number_format((float)$item->accumulated,2) : '—' }}</td>
+          <td style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif">{{ $item->accumulated !== null ? 'RM '.number_format((float)$item->accumulated,2) : '—' }}</td>
 
           {{-- NBV At --}}
-          <td style="font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif">{{ $item->nbv_at !== null ? 'RM '.number_format((float)$item->nbv_at,2) : '—' }}</td>
+          <td style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif">{{ $item->nbv_at !== null ? 'RM '.number_format((float)$item->nbv_at,2) : '—' }}</td>
 
           {{-- QR Code --}}
           <td>
             <button
               onclick="openQRModal({{ $item->id }}, '{{ addslashes($item->asset_number ?: 'N/A') }}', '{{ addslashes($item->description) }}', '{{ addslashes($item->asset_class) }}', '{{ addslashes($item->serial_number ?: '') }}', '{{ addslashes($item->brand ?: '') }}', '{{ addslashes($item->model ?: '') }}', '{{ addslashes($item->location ?: '') }}')"
-              style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
+              style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
               <i class="bi bi-qr-code" style="font-size:13px"></i>
             </button>
           </td>
@@ -295,18 +295,18 @@ $statItems = [
                   </a>
                 @else
                   @if(isset($pendingDeleteIds[$item->id]))
-                    <span title="Delete Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;white-space:nowrap;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center">
+                    <span title="Delete Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center">
                       <i class="bi bi-hourglass-split"></i>
                     </span>
                   @else
                     <button onclick="openDeleteRequest({{ $item->id }}, '{{ addslashes($item->description) }}')"
-                      title="Request Delete" style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center">
+                      title="Request Delete" style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center">
                       <i class="bi bi-trash"></i>
                     </button>
                   @endif
                 @endif
               @else
-                <span style="font-size:11px;color:var(--muted);font-style:italic;font-family:'DM Sans',sans-serif">—</span>
+                <span style="font-size:11px;color:var(--muted);font-style:italic;font-family:'Inter',sans-serif">—</span>
               @endif
             </div>
           </td>

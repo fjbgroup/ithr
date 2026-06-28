@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Manage Users')
 @section('page_title', 'Manage Users')
@@ -43,7 +43,7 @@ $action      = request('action', 'list');
 /* Panel header */
 .mu-panel-hdr{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;display:flex;align-items:center;gap:16px}
 .mu-panel-hdr-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.mu-panel-hdr-title{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);line-height:1}
+.mu-panel-hdr-title{font-family:'Inter',sans-serif;font-size:18px;font-weight:800;color:var(--text);line-height:1}
 .mu-panel-hdr-sub{font-size:12px;color:var(--muted);margin-top:4px}
 
 /* User rows */
@@ -51,7 +51,7 @@ $action      = request('action', 'list');
 .mu-user-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);transition:background .1s}
 .mu-user-row:last-child{border-bottom:none}
 .mu-user-row:hover{background:var(--body-bg)}
-.mu-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;object-fit:cover}
+.mu-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;object-fit:cover}
 .mu-user-info{flex:1;min-width:0}
 .mu-user-name{font-size:14px;font-weight:700;color:var(--text)}
 .mu-user-sub{display:flex;align-items:center;gap:10px;margin-top:3px;flex-wrap:wrap}
@@ -71,7 +71,7 @@ $action      = request('action', 'list');
 
 /* Top bar */
 .mu-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
-.mu-topbar-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--text)}
+.mu-topbar-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text)}
 .mu-topbar-sub{font-size:13px;color:var(--muted);margin-top:3px}
 .mu-stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
 .mu-stat-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px}
@@ -116,7 +116,7 @@ $action      = request('action', 'list');
       <div style="width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center">
         <i class="bi bi-person-{{ $editUser ? 'gear' : 'plus-fill' }}" style="color:#fff;font-size:15px"></i>
       </div>
-      <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff">
+      <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:#fff">
         {{ $editUser ? 'Edit User — '.$editUser->full_name : 'Create New User' }}
       </span>
     </div>
@@ -445,7 +445,7 @@ $action      = request('action', 'list');
     <div style="display:flex;align-items:center;gap:10px">
       <i class="bi bi-key-fill" style="color:#d97706;font-size:16px"></i>
       <div>
-        <div style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:var(--text)">Password Reset Requests</div>
+        <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:var(--text)">Password Reset Requests</div>
         <div style="font-size:12px;color:var(--muted);margin-top:2px">Verify Staff ID before approving</div>
       </div>
     </div>

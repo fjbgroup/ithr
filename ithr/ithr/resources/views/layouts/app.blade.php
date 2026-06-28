@@ -6,13 +6,13 @@
 <title>{{ config('app.name', 'HR Admin System') }}</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
 @yield('styles')
 </head>
 <body class="app-body">
 <aside class="sidebar" id="sidebar">
-    <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">✕</button>
+    <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close menu">âœ•</button>
     <div class="sidebar-brand">
         <div class="brand-icon-sm">
             <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:26px;height:26px;object-fit:contain;">
@@ -185,7 +185,7 @@
                         <button class="notif-mark-all" onclick="markAllNotifRead()">Mark all as read</button>
                     </div>
                     <div class="notif-list" id="notifList">
-                        <div class="notif-empty">Loading…</div>
+                        <div class="notif-empty">Loadingâ€¦</div>
                     </div>
                 </div>
             </div>
@@ -308,7 +308,7 @@ function showNotifPopup(items) {
                     <button class="notif-popup-close" onclick="
                         this.closest('.notif-popup-card').remove();
                         notifMarkRead(${n.id}, null, '${n.type}');
-                    ">×</button>
+                    ">Ã—</button>
                 </div>
             `;
             if (n.link) card.style.cursor = 'pointer';

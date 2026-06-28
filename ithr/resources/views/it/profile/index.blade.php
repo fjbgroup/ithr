@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Profile Settings')
 @section('page_title', 'Profile Settings')
@@ -10,9 +10,9 @@
 .profile-hero{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;gap:24px}
 .profile-hero-avatar{position:relative;flex-shrink:0}
 .profile-hero-img{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)}
-.profile-hero-initial{width:88px;height:88px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;color:#fff;border:3px solid var(--accent)}
+.profile-hero-initial{width:88px;height:88px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:32px;font-weight:800;color:#fff;border:3px solid var(--accent)}
 .profile-hero-info{flex:1}
-.profile-hero-name{font-size:22px;font-weight:800;color:var(--text);font-family:'DM Sans',sans-serif;line-height:1}
+.profile-hero-name{font-size:22px;font-weight:800;color:var(--text);font-family:'Inter',sans-serif;line-height:1}
 .profile-hero-meta{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
 .profile-section-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
 .profile-section-header{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
@@ -80,7 +80,7 @@
               @if($user->avatar && Storage::disk('public')->exists($user->avatar))
               <img src="{{ Storage::url($user->avatar) }}" style="width:100%;height:100%;object-fit:cover">
               @else
-              <span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:18px;color:#fff">{{ strtoupper(substr($user->full_name, 0, 1)) }}</span>
+              <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:18px;color:#fff">{{ strtoupper(substr($user->full_name, 0, 1)) }}</span>
               @endif
             </div>
             <div>

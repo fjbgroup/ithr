@@ -1,4 +1,4 @@
-﻿@if($items->isEmpty())
+@if($items->isEmpty())
 <div style="background:var(--surface);border:1.5px dashed var(--border);border-radius:14px;padding:48px 20px;text-align:center">
   <i class="bi bi-search" style="font-size:32px;color:var(--muted);display:block;margin-bottom:12px"></i>
   <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:4px">No records match your filter</div>
@@ -16,7 +16,7 @@
     </span>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover di-table" style="font-family:'DM Sans',sans-serif;width:100%">
+    <table class="table table-hover di-table" style="font-family:'Inter',sans-serif;width:100%">
       <thead><tr>
         <th>ASSET NO.</th><th>CLASS</th><th>DESCRIPTION</th><th>SERIAL NO.</th>
         <th>STATUS</th><th>DATE FLAGGED</th><th>DATE DISPOSED</th><th>ADDED BY</th><th>ACTIONS</th>
@@ -50,7 +50,7 @@
                     onsubmit="return confirm('Mark as Disposed?')">
                 @csrf
                 <button type="submit"
-                  style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;font-family:'DM Sans',sans-serif">
+                  style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;font-family:'Inter',sans-serif">
                   <i class="bi bi-trash3" style="font-size:11px"></i> Dispose
                 </button>
               </form>
@@ -59,11 +59,11 @@
                     onsubmit="return confirm('Revert to Approved?')">
                 @csrf
                 <button type="submit"
-                  style="font-size:11px;font-weight:700;color:#c2590a;border:none;border-radius:6px;padding:4px 8px;background:rgba(245,158,11,.1);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">&#x21A9; Undo</button>
+                  style="font-size:11px;font-weight:700;color:#c2590a;border:none;border-radius:6px;padding:4px 8px;background:rgba(245,158,11,.1);cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#x21A9; Undo</button>
               </form>
               @endif
               <button onclick="openEditDisposal({{ $item->id }})"
-                style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif">
+                style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-family:'Inter',sans-serif">
                 <i class="bi bi-pencil"></i> Edit
               </button>
             @endif
@@ -72,7 +72,7 @@
                   onsubmit="return confirm('Delete this record?')">
               @csrf @method('DELETE')
               <button type="submit"
-                style="font-size:13px;color:#dc2626;text-decoration:none;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;cursor:pointer;display:inline-flex;align-items:center;font-family:'DM Sans',sans-serif">
+                style="font-size:13px;color:#dc2626;text-decoration:none;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;cursor:pointer;display:inline-flex;align-items:center;font-family:'Inter',sans-serif">
                 <i class="bi bi-trash"></i>
               </button>
             </form>

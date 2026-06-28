@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Non-IT Assets')
 @section('page_title', 'Non-IT Assets')
@@ -41,7 +41,7 @@
 .nit-field input, .nit-field select, .nit-field textarea {
   width: 100%; padding: 10px 14px;
   background: var(--body-bg, #f1f5f9); border: 1.5px solid var(--border);
-  border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13.5px;
+  border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13.5px;
   color: var(--text); transition: border-color .18s, box-shadow .18s; outline: none;
 }
 .nit-field input:focus, .nit-field select:focus, .nit-field textarea:focus {
@@ -381,7 +381,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       All Assets &rsaquo; <span style="color:var(--accent)">Non-IT Assets</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Furniture, equipment, vehicles and other non-IT assets</p>
   </div>
   @if($user->isAdminOrFinance())
@@ -410,7 +410,7 @@
       <i class="bi {{ $icon }}" style="color:{{ $color }}"></i>
     </div>
     <div>
-      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif">{{ number_format($val) }}</div>
+      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif">{{ number_format($val) }}</div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px">{{ $lbl }}</div>
     </div>
   </div>
@@ -425,19 +425,19 @@
       <input type="text" name="nit_search" id="nitSearchInput" value="{{ $search }}"
         placeholder="Search asset no., class, description, location..."
         autocomplete="off"
-        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
+        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none"
         onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       <div id="nitSearchSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
     </div>
     <select name="nit_class" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Classes</option>
       @foreach($nitClassesUsed->sort() as $cl)
       <option value="{{ $cl }}" {{ $class === $cl ? 'selected' : '' }}>{{ $cl }}</option>
       @endforeach
     </select>
     <select name="nit_status" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:130px">
       <option value="">All Status</option>
       <option value="Active"                    {{ $status === 'Active'                    ? 'selected' : '' }}>Active</option>
       <option value="In Repair"                 {{ $status === 'In Repair'                 ? 'selected' : '' }}>In Repair</option>
@@ -447,12 +447,12 @@
       <option value="Pending to E-Waste/Disposal" {{ $status === 'Pending to E-Waste/Disposal' ? 'selected' : '' }}>Pending to E-Waste/Disposal</option>
     </select>
     <button type="submit"
-      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
     @if($search || $class || $status)
     <a href="{{ route('it.non-it.index') }}"
-      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
+      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">
       Clear
     </a>
     @endif
@@ -484,7 +484,7 @@
 {{-- BULK ACTION BAR --}}
 <div id="nitBulkBar" style="display:none;position:sticky;top:12px;z-index:100;margin-bottom:12px">
   <div style="background:#1a2332;color:#fff;border-radius:10px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,.3)">
-    <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px">
+    <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px">
       <i class="bi bi-check2-square me-2"></i><span id="nitBulkCount">0</span> item(s) selected
     </span>
     <div style="display:flex;gap:8px;align-items:center">
@@ -522,7 +522,7 @@
     </span>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover nit-table" style="font-family:'DM Sans',sans-serif;width:100%">
+    <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif;width:100%">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -560,7 +560,7 @@
         <td style="font-size:13px;color:var(--muted)">{{ $row->nbv_at !== null ? 'RM '.number_format((float)$row->nbv_at,2) : '—' }}</td>
         <td>
           <button onclick="openNitQRModal({{ $row->id }}, '{{ addslashes(e($row->asset_number ?? 'N/A')) }}', '{{ addslashes(e($row->description)) }}', '{{ addslashes(e($row->fa_code ?? '')) }}', '{{ addslashes(e($row->location ?? '')) }}')"
-            style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
+            style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
             <i class="bi bi-qr-code" style="font-size:13px"></i>
           </button>
         </td>
@@ -661,7 +661,7 @@
       <div id="nitImportPreview" style="display:none">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">Preview (first 5 rows)</div>
         <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
-          <table id="nitImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'DM Sans',sans-serif"></table>
+          <table id="nitImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif"></table>
         </div>
         <div id="nitImportRowCount" style="font-size:12px;color:var(--muted);margin-top:8px"></div>
       </div>
@@ -671,11 +671,11 @@
 
     <div style="background:var(--body-bg,#f1f5f9);border-top:1px solid var(--border);padding:16px 24px;border-radius:0 0 16px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
       <button id="nitImportSubmitBtn" onclick="submitNitImport()"
-        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;align-items:center;gap:7px">
+        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;align-items:center;gap:7px">
         <i class="bi bi-upload"></i> Import Assets
       </button>
       <button onclick="closeImportModal('nitImportModal','nitImportFileInput','nitImportPreview','nitImportStatus')"
-        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">
+        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">
         Cancel
       </button>
     </div>
@@ -695,7 +695,7 @@
       <button onclick="closeNitQRModal()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;line-height:1">&times;</button>
     </div>
     <div style="padding:22px">
-      <div id="nitQrModalAssetId" style="font-size:18px;font-weight:800;color:var(--text);font-family:'DM Sans',sans-serif;line-height:1"></div>
+      <div id="nitQrModalAssetId" style="font-size:18px;font-weight:800;color:var(--text);font-family:'Inter',sans-serif;line-height:1"></div>
       <div id="nitQrModalDesc" style="font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:16px"></div>
       <div style="background:var(--body-bg);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:16px">
         <div id="nitQrModalCode" style="background:#fff;padding:10px;border-radius:8px;display:flex;align-items:center;justify-content:center;min-height:150px"></div>
@@ -703,11 +703,11 @@
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <button onclick="printNitQR()"
-          style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--body-bg);color:var(--text);border:1.5px solid var(--border);border-radius:9px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+          style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--body-bg);color:var(--text);border:1.5px solid var(--border);border-radius:9px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
           <i class="bi bi-printer-fill"></i> Print QR
         </button>
         <button id="nitQrOpenBtn"
-          style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+          style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
           <i class="bi bi-box-arrow-up-right"></i> Open Page
         </button>
       </div>
@@ -911,7 +911,7 @@ function nitSubmitBulkDispose() {
         .then(function(items) {
           if (!items.length) { box.style.display = 'none'; return; }
           box.innerHTML = items.map(function(d) {
-            return '<div class="nit-ac-item" style="padding:9px 14px;font-size:13px;cursor:pointer;font-family:\'DM Sans\',sans-serif;color:var(--text);border-bottom:1px solid var(--border)">' + String(d).replace(/</g, '&lt;') + '</div>';
+            return '<div class="nit-ac-item" style="padding:9px 14px;font-size:13px;cursor:pointer;font-family:\'Inter\',sans-serif;color:var(--text);border-bottom:1px solid var(--border)">' + String(d).replace(/</g, '&lt;') + '</div>';
           }).join('');
           var last = box.querySelector('.nit-ac-item:last-child');
           if (last) last.style.borderBottom = 'none';

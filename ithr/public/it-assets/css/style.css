@@ -1,10 +1,10 @@
 /* ============================================
-   IT Inventory System — Stylesheet
+   IT Inventory System â€” Stylesheet
    Merged & standardised to match HR design system
    ============================================ */
 
 :root {
-  /* ── Core palette (HR design system) ── */
+  /* â”€â”€ Core palette (HR design system) â”€â”€ */
   --navy:      #142b47;
   --navy-dark: #142b47;
   --navy-mid:  #254a78;
@@ -27,12 +27,12 @@
   --topbar-h:  60px;
   --transition: .18s ease;
 
-  /* ── Accent — replaces all orange (#F28C28) with sky-dark blue ── */
+  /* â”€â”€ Accent â€” replaces all orange (#F28C28) with sky-dark blue â”€â”€ */
   --accent:       #0284c7;
   --accent-light: rgba(2,132,199,.12);
   --accent-hover: #0369a1;
 
-  /* ── Aliases for cross-system compatibility ── */
+  /* â”€â”€ Aliases for cross-system compatibility â”€â”€ */
   --primary-color: var(--navy);
   --primary-light: var(--sky-light);
   --primary-hover: var(--navy-mid);
@@ -41,7 +41,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   color: var(--text);
   background: var(--bg);
@@ -68,7 +68,7 @@ a { text-decoration: none; color: inherit; }
   border-radius: 14px; display: flex; align-items: center; justify-content: center;
   margin: 0 auto 1rem; color: var(--white);
 }
-.brand-name { font-family: 'DM Sans', sans-serif; font-size: 1.6rem; color: var(--navy); }
+.brand-name { font-family: 'Inter', sans-serif; font-size: 1.6rem; color: var(--navy); }
 .brand-sub  { color: var(--muted); font-size: .875rem; margin-top: .25rem; }
 .login-form .form-group { margin-bottom: 1.25rem; }
 .login-form label { display: block; font-weight: 600; font-size: .85rem; margin-bottom: .4rem; color: var(--text); }
@@ -100,7 +100,7 @@ a { text-decoration: none; color: inherit; }
 .sidebar-brand {
   padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: .75rem;
   border-bottom: 1px solid rgba(255,255,255,.1);
-  font-family: 'DM Sans', sans-serif; font-size: 1.1rem; color: var(--white);
+  font-family: 'Inter', sans-serif; font-size: 1.1rem; color: var(--white);
 }
 .brand-icon-sm {
   width: 34px; height: 34px; background: rgba(255,255,255,.15);
@@ -116,7 +116,7 @@ a { text-decoration: none; color: inherit; }
 .sidebar-nav::-webkit-scrollbar-track { background: transparent; }
 .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 99px; }
 
-/* ── Sidebar section labels ── */
+/* â”€â”€ Sidebar section labels â”€â”€ */
 .nav-section-label {
   font-size: 10px; font-weight: 600; text-transform: uppercase;
   letter-spacing: .12em; color: rgba(255,255,255,.35);
@@ -124,7 +124,7 @@ a { text-decoration: none; color: inherit; }
 }
 .nav-section-label:first-child { margin-top: 4px; }
 
-/* ── Nav items ── */
+/* â”€â”€ Nav items â”€â”€ */
 .nav-item {
   display: flex; align-items: center; gap: .75rem;
   padding: .65rem 1rem; border-radius: 8px;
@@ -135,7 +135,7 @@ a { text-decoration: none; color: inherit; }
 .nav-item.active { background: rgba(56,189,248,.2); color: var(--sky); }
 .nav-item.active svg { color: var(--sky); }
 
-/* ── Nav group (dropdown) ── */
+/* â”€â”€ Nav group (dropdown) â”€â”€ */
 .nav-group { display: flex; flex-direction: column; }
 .nav-group-toggle {
   display: flex; align-items: center; gap: .75rem;
@@ -155,7 +155,7 @@ a { text-decoration: none; color: inherit; }
 .nav-child:hover, .nav-child.active { color: var(--sky); }
 .nav-divider { height: 1px; background: rgba(255,255,255,.08); margin: .5rem 0; }
 
-/* ── Sidebar badge/footer ── */
+/* â”€â”€ Sidebar badge/footer â”€â”€ */
 .badge-count {
   margin-left: auto; background: var(--danger); color: white;
   font-size: .7rem; font-weight: 700; padding: .15rem .45rem;
@@ -213,13 +213,13 @@ a { text-decoration: none; color: inherit; }
 }
 .card-header h3 { font-size: .95rem; font-weight: 700; color: var(--navy); }
 
-/* ── Table card (IT system specific) ── */
+/* â”€â”€ Table card (IT system specific) â”€â”€ */
 .table-card {
   background: var(--white); border-radius: var(--radius);
   box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border);
 }
 
-/* ── Form card (IT system specific) ── */
+/* â”€â”€ Form card (IT system specific) â”€â”€ */
 .form-card {
   background: var(--white); border-radius: var(--radius);
   box-shadow: var(--shadow); overflow: hidden;
@@ -237,7 +237,7 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: flex-start; justify-content: space-between;
   margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
 }
-.page-header h2 { font-family: 'DM Sans', sans-serif; font-size: 1.5rem; color: var(--navy); }
+.page-header h2 { font-family: 'Inter', sans-serif; font-size: 1.5rem; color: var(--navy); }
 .page-subtitle  { color: var(--muted); font-size: .875rem; margin-top: .2rem; }
 
 /* ===================== STATS ===================== */
@@ -351,7 +351,7 @@ a { text-decoration: none; color: inherit; }
 .btn-xs   { padding: .2rem .5rem; font-size: .75rem; border-radius: 5px; }
 .btn-full { width: 100%; justify-content: center; padding: .75rem; }
 
-/* ── IT system custom button classes (replaces orange) ── */
+/* â”€â”€ IT system custom button classes (replaces orange) â”€â”€ */
 .btn-primary-custom {
   display: inline-flex; align-items: center; gap: .4rem;
   padding: .6rem 1.2rem; background: var(--navy); color: white;
@@ -379,7 +379,7 @@ a { text-decoration: none; color: inherit; }
 .alert-warning { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
 .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
-/* ── IT system alert classes ── */
+/* â”€â”€ IT system alert classes â”€â”€ */
 .alert-success-custom {
   display: flex; align-items: center; gap: .5rem;
   padding: .75rem 1rem; border-radius: 8px; font-size: .875rem;

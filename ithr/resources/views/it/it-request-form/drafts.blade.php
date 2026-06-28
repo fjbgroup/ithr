@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Saved Drafts')
 @section('page_title', 'Saved Drafts')
@@ -11,7 +11,7 @@
     <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">
       Request Form &rsaquo; IT Request Form &rsaquo; <span style="color:var(--accent)">Saved Drafts</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin:0 0 4px">Saved Drafts</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin:0 0 4px">Saved Drafts</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Your unsubmitted IT request forms. Resume editing or delete drafts you no longer need.</p>
   </div>
   <a href="{{ route('it.it-request-form') }}"

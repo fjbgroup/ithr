@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'E-Waste Management')
 @section('page_title', 'E-Waste Management')
@@ -9,7 +9,7 @@
 <!-- PAGE HEADER -->
 <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
   <div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">E-Waste Management</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">E-Waste Management</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Track and manage devices flagged for disposal</p>
   </div>
   @if($user->isAdminOrFinance())
@@ -32,30 +32,30 @@
       <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;z-index:1"></i>
       <input type="text" id="ewSearchInput" name="ew_search" value="{{ request('ew_search') }}" placeholder="Search asset no., class, description, serial..."
         autocomplete="off"
-        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
+        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none"
         onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       <ul id="ewSearchDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;margin:0;padding:4px 0;list-style:none;max-height:240px;overflow-y:auto;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.15)"></ul>
     </div>
     <select name="ew_class" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Classes</option>
       @foreach($assetClasses as $cls)
       <option value="{{ $cls }}" {{ request('ew_class') == $cls ? 'selected' : '' }}>{{ $cls }}</option>
       @endforeach
     </select>
     <select name="ew_status" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:130px">
       <option value="">All Status</option>
       <option value="E-Waste"   {{ request('ew_status') == 'E-Waste'   ? 'selected' : '' }}>E-Waste</option>
       <option value="Collected" {{ request('ew_status') == 'Collected' ? 'selected' : '' }}>Collected</option>
     </select>
     <button type="submit"
-      style="padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      style="padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
     @if(request('ew_search') || request('ew_class') || request('ew_status'))
     <a href="{{ route('it.ewaste.index') }}"
-      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
+      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">
       Clear
     </a>
     @endif
@@ -65,14 +65,14 @@
 @if($user->isAdminOrFinance())
 <!-- BULK ACTION BAR -->
 <div id="ewBulkBar" style="display:none;background:#1a2332;border-radius:10px;padding:12px 20px;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px">
-  <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff;display:flex;align-items:center;gap:8px">
+  <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:#fff;display:flex;align-items:center;gap:8px">
     <i class="bi bi-check2-square"></i>
     <span id="ewBulkCount">0</span> item(s) selected
   </span>
   <div style="display:flex;gap:8px;align-items:center">
     <div style="position:relative" id="ewActionDropdownWrap">
       <button type="button" onclick="toggleEwDropdown()"
-        style="display:flex;align-items:center;gap:10px;padding:7px 14px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:7px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;min-width:200px;justify-content:space-between">
+        style="display:flex;align-items:center;gap:10px;padding:7px 14px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:7px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;min-width:200px;justify-content:space-between">
         <span id="ewActionLabel">— Choose Action —</span>
         <i class="bi bi-chevron-down" style="font-size:11px"></i>
       </button>
@@ -99,7 +99,7 @@
     </div>
     <input type="hidden" id="ewBulkActionValue" value="">
     <button type="button" onclick="applyEwBulk()"
-      style="background:var(--accent);color:#fff;border:none;border-radius:7px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+      style="background:var(--accent);color:#fff;border:none;border-radius:7px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
       Apply
     </button>
     <button type="button" onclick="clearEwSelection()"
@@ -129,7 +129,7 @@
     </span>
   </div>
   <div>
-    <table class="table table-hover data-table" style="font-family:'DM Sans',sans-serif">
+    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         @if($user->isAdminOrFinance())
         <th style="width:40px">
@@ -152,29 +152,29 @@
         @endif
         <td>
           <a href="#" onclick="openEwasteEdit({{ $item->id }});return false;"
-            style="color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif">
+            style="color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;font-family:'Inter',sans-serif">
             {{ $item->asset_number ?: '—' }}
           </a>
         </td>
         <td>
-          <span style="display:inline-block;background:rgba(59,130,246,.1);color:#2563eb;border-radius:5px;padding:2px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;font-family:'DM Sans',sans-serif">
+          <span style="display:inline-block;background:rgba(59,130,246,.1);color:#2563eb;border-radius:5px;padding:2px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;font-family:'Inter',sans-serif">
             {{ $item->asset_class }}
           </span>
         </td>
-        <td style="font-weight:500;font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->description }}</td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif;color:var(--muted)">{{ $item->serial_number ?: '—' }}</td>
+        <td style="font-weight:500;font-size:13px;font-family:'Inter',sans-serif">{{ $item->description }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif;color:var(--muted)">{{ $item->serial_number ?: '—' }}</td>
         <td>
           @if($item->disposal_status === 'Collected')
-            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(22,163,74,.1);color:#16a34a;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
+            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(22,163,74,.1);color:#16a34a;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif">
               <span style="width:6px;height:6px;background:#16a34a;border-radius:50%;display:inline-block"></span> Collected
             </span>
           @else
-            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);color:#d97706;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif">
+            <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);color:#d97706;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif">
               <span style="width:6px;height:6px;background:#d97706;border-radius:50%;display:inline-block"></span> E-Waste
             </span>
           @endif
         </td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->date_flagged ? $item->date_flagged->format('d/m/Y') : '—' }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->date_flagged ? $item->date_flagged->format('d/m/Y') : '—' }}</td>
         @if($user->isAdminOrFinance())
         <td>
           <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
@@ -182,7 +182,7 @@
               <form method="POST" action="{{ route('it.ewaste.collect', $item->id) }}" style="display:inline" onsubmit="return confirm('Mark this item as collected?')">
                 @csrf
                 <button type="submit"
-                  style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:4px">
+                  style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;padding:4px 8px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px">
                   <i class="bi bi-truck" style="font-size:11px"></i> Collected
                 </button>
               </form>
@@ -190,25 +190,25 @@
               <form method="POST" action="{{ route('it.ewaste.restore', $item->id) }}" style="display:inline" onsubmit="return confirm('Revert this item back to Approved?')">
                 @csrf
                 <button type="submit"
-                  style="font-size:11px;font-weight:700;color:#c2590a;border:none;border-radius:6px;padding:4px 8px;background:rgba(245,158,11,.1);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">&#x21A9; Undo</button>
+                  style="font-size:11px;font-weight:700;color:#c2590a;border:none;border-radius:6px;padding:4px 8px;background:rgba(245,158,11,.1);cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">&#x21A9; Undo</button>
               </form>
             @endif
 
             <button onclick="openEwasteEdit({{ $item->id }})"
-              style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;font-family:'DM Sans',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">Edit</button>
+              style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;font-family:'Inter',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">Edit</button>
 
             @if(!in_array($item->disposal_status, ['Collected','Disposed']))
             <form method="POST" action="{{ route('it.ewaste.restore', $item->id) }}" style="display:inline" onsubmit="return confirm('Restore this item back to IT Assets?')">
               @csrf
               <button type="submit"
-                style="font-size:11px;font-weight:700;color:#16a34a;border:none;background:rgba(22,163,74,.1);border-radius:6px;padding:4px 8px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">Restore</button>
+                style="font-size:11px;font-weight:700;color:#16a34a;border:none;background:rgba(22,163,74,.1);border-radius:6px;padding:4px 8px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">Restore</button>
             </form>
             @endif
 
             <form method="POST" action="{{ route('it.ewaste.destroy', $item->id) }}" style="display:inline" onsubmit="return confirm('Delete this record?')">
               @csrf @method('DELETE')
               <button type="submit" title="Delete"
-                style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center">
+                style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center">
                 <i class="bi bi-trash"></i>
               </button>
             </form>
@@ -343,7 +343,7 @@
       <div id="ewImportPreview" style="display:none">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">Preview (first 5 rows)</div>
         <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
-          <table id="ewImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'DM Sans',sans-serif"></table>
+          <table id="ewImportPreviewTable" style="width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif"></table>
         </div>
         <div id="ewImportRowCount" style="font-size:12px;color:var(--muted);margin-top:8px"></div>
       </div>
@@ -351,11 +351,11 @@
     </div>
     <div style="background:var(--body-bg,#f1f5f9);border-top:1px solid var(--border);padding:16px 24px;border-radius:0 0 16px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
       <button id="ewImportSubmitBtn" onclick="ewSubmitImport()"
-        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;align-items:center;gap:7px">
+        style="display:none;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;align-items:center;gap:7px">
         <i class="bi bi-upload"></i> Import Items
       </button>
       <button onclick="ewCloseImport()"
-        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">
+        style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">
         Cancel
       </button>
     </div>
@@ -483,7 +483,7 @@ function ewEsc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;
 #ewSearchDropdown li {
   padding: 8px 14px;
   font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: var(--text);
   cursor: pointer;
   white-space: nowrap;

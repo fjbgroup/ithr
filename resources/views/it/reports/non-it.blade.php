@@ -14,13 +14,13 @@
 .rpt-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .filter-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
 .filter-bar label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:block;margin-bottom:5px}
-.filter-bar select,.filter-bar input{background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;padding:7px 10px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
+.filter-bar select,.filter-bar input{background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;padding:7px 10px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
 .filter-bar select:focus,.filter-bar input:focus{border-color:var(--accent)}
-.btn-export{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background .15s}
+.btn-export{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;transition:background .15s}
 .btn-export:hover{background:#15803d;color:#fff}
-.btn-filter{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-filter{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
 .btn-filter:hover{background:var(--accent-h)}
-.btn-reset{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all .15s}
+.btn-reset{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;transition:all .15s}
 .btn-reset:hover{border-color:var(--accent);color:var(--accent)}
 </style>
 
@@ -30,7 +30,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Admin &rsaquo; <span style="color:var(--accent)">Reports</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets Report</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets Report</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">System-wide non-IT inventory analytics</p>
   </div>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -70,7 +70,7 @@
 <form method="GET" action="{{ route('it.reports.non-it') }}" class="filter-bar">
   <div>
     <label>Search</label>
-    <input type="text" name="search" value="{{ request('search') }}" placeholder="Asset no., description, serial…" style="width:220px">
+    <input type="text" name="search" value="{{ request('search') }}" placeholder="Asset no., description, serialâ€¦" style="width:220px">
   </div>
   <div>
     <label>Status</label>
@@ -112,7 +112,7 @@
     <div>
       <div class="table-card-title">Non-IT Assets</div>
       <div style="font-size:12px;color:var(--muted);margin-top:2px">
-        Showing {{ $nitItems->firstItem() ?? 0 }}–{{ $nitItems->lastItem() ?? 0 }} of {{ $nitItems->total() }} records
+        Showing {{ $nitItems->firstItem() ?? 0 }}â€“{{ $nitItems->lastItem() ?? 0 }} of {{ $nitItems->total() }} records
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
@@ -152,25 +152,25 @@
       @endphp
       <tr>
         <td style="color:var(--muted);font-size:12px">{{ $nitItems->firstItem() + $i }}</td>
-        <td><code style="color:var(--accent);font-size:12px">{{ $item->asset_number ?: '—' }}</code></td>
+        <td><code style="color:var(--accent);font-size:12px">{{ $item->asset_number ?: 'â€”' }}</code></td>
         <td>
           <span style="background:rgba(2,132,199,.08);border:1px solid rgba(2,132,199,.2);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--accent-h)">
             {{ $item->asset_class }}
           </span>
         </td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px" title="{{ $item->description }}">{{ $item->description ?: '—' }}</td>
-        <td style="font-size:12px;color:var(--muted)">{{ $item->serial_number ?: '—' }}</td>
-        <td style="font-size:12px">{{ trim(($item->brand ?? '') . ' ' . ($item->model ?? '')) ?: '—' }}</td>
-        <td style="font-size:12px;color:var(--muted)">{{ $item->location ?: '—' }}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px" title="{{ $item->description }}">{{ $item->description ?: 'â€”' }}</td>
+        <td style="font-size:12px;color:var(--muted)">{{ $item->serial_number ?: 'â€”' }}</td>
+        <td style="font-size:12px">{{ trim(($item->brand ?? '') . ' ' . ($item->model ?? '')) ?: 'â€”' }}</td>
+        <td style="font-size:12px;color:var(--muted)">{{ $item->location ?: 'â€”' }}</td>
         <td>
           <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:{{ $sbg }};color:{{ $sc }}">
             <span style="width:5px;height:5px;border-radius:50%;background:{{ $sc }};display:inline-block"></span>
             {{ $item->item_status }}
           </span>
         </td>
-        <td style="font-size:12px;color:var(--muted)">{{ $item->condition_status ?: '—' }}</td>
-        <td style="font-size:12px;white-space:nowrap;color:var(--muted)">{{ $item->date_registered?->format('d/m/Y') ?? '—' }}</td>
-        <td style="font-size:12px;white-space:nowrap">{{ $item->total_cost ? 'RM '.number_format($item->total_cost, 2) : '—' }}</td>
+        <td style="font-size:12px;color:var(--muted)">{{ $item->condition_status ?: 'â€”' }}</td>
+        <td style="font-size:12px;white-space:nowrap;color:var(--muted)">{{ $item->date_registered?->format('d/m/Y') ?? 'â€”' }}</td>
+        <td style="font-size:12px;white-space:nowrap">{{ $item->total_cost ? 'RM '.number_format($item->total_cost, 2) : 'â€”' }}</td>
       </tr>
       @empty
       <tr><td colspan="11" style="text-align:center;color:var(--muted);padding:40px">No assets match the selected filters.</td></tr>

@@ -1,9 +1,9 @@
-/* ════════════════════════════════════════════════════════════════
-   WT SYSTEM — Unified Design System
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   WT SYSTEM â€” Unified Design System
    Single source of truth. Do not add conflicting overrides.
-   ════════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* ── DESIGN TOKENS ── */
+/* â”€â”€ DESIGN TOKENS â”€â”€ */
 :root {
   --sidebar-w:        250px;
   --sidebar-bg:       #1a2535;
@@ -50,7 +50,7 @@
   --menu-hover:       #f1f5f9;
 }
 
-/* ── DARK MODE TOKENS ── */
+/* â”€â”€ DARK MODE TOKENS â”€â”€ */
 html.dark {
   color-scheme: dark;
   --body-bg:          #0f172a;
@@ -75,13 +75,13 @@ html.dark {
 }
 html:not(.dark) { color-scheme: light; }
 
-/* ── BASE ── */
+/* â”€â”€ BASE â”€â”€ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: inherit; }
 html { font-size: 12px; }
 body {
   background: var(--body-bg);
   color: var(--text);
-  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   font-size: 12px; line-height: 1.45;
   margin: 0; padding: 0;
   display: flex;
@@ -90,7 +90,7 @@ body {
 }
 html.dark body { background: var(--body-bg); color: var(--text); }
 
-/* Ensure all form elements inherit DM Sans — browsers default to system font otherwise */
+/* Ensure all form elements inherit Inter â€” browsers default to system font otherwise */
 input, select, textarea, button { font-family: inherit; font-size: 12px; }
 
 form,
@@ -98,15 +98,15 @@ form :is(label, input, select, textarea, button, p, span, div, a, option, .form-
   font-size: 12px !important;
 }
 
-/* ── SCROLLBAR ── */
+/* â”€â”€ SCROLLBAR â”€â”€ */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 html.dark ::-webkit-scrollbar-thumb { background: #334155; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SIDEBAR
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sidebar {
   flex-shrink: 0;
   width: var(--sidebar-w); height: 100vh;
@@ -184,7 +184,7 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
   font-size: 13.5px; font-weight: 500;
   transition: all var(--transition); margin-bottom: 2px;
   cursor: pointer; border: none; background: none;
-  width: 100%; font-family: 'DM Sans', sans-serif;
+  width: 100%; font-family: 'Inter', sans-serif;
   text-align: left; line-height: 1.3; min-height: 38px;
 }
 .nav-link span,
@@ -227,7 +227,7 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
   flex-shrink: 0; width: 14px; text-align: center;
 }
 
-/* When open: rotate chevron-right → chevron-down, keep parent highlighted */
+/* When open: rotate chevron-right â†’ chevron-down, keep parent highlighted */
 .dropdown-wrapper.open > .dropdown-trigger {
   background: rgba(255,255,255,.08);
   color: #fff;
@@ -301,14 +301,14 @@ body.sidebar-collapsed .sidebar { width: 72px; }
 body.sidebar-collapsed .main-content { margin-left: 72px; }
 body.sidebar-collapsed .topbar { left: 72px; }
 
-/* Brand row — center logo, collapse toggle overlays it on hover */
+/* Brand row â€” center logo, collapse toggle overlays it on hover */
 body.sidebar-collapsed .sidebar-brand-row { padding: 14px 8px; justify-content: center; gap: 0; position: relative; }
 body.sidebar-collapsed .sidebar-brand { flex: 0 0 auto; }
 body.sidebar-collapsed .brand-name { display: none !important; }
 body.sidebar-collapsed .sidebar-collapse-toggle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 9px; background: rgba(15,23,42,.55); }
 body.sidebar-collapsed .sidebar-collapse-toggle i { transform: rotate(180deg); }
 
-/* Nav — block layout, padding-based (matches IT system approach) */
+/* Nav â€” block layout, padding-based (matches IT system approach) */
 body.sidebar-collapsed .sidebar-nav { display: block; padding: 16px 0; }
 body.sidebar-collapsed .nav-section-label { display: none !important; }
 body.sidebar-collapsed .dropdown-content { display: none !important; }
@@ -389,9 +389,9 @@ body.sidebar-collapsed .dropdown-trigger.active-sidebar i:not(.dropdown-chevron)
 }
 .nav-info-popover.hidden { display: none !important; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TOPBAR
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .main-content {
   flex: 1;
   min-width: 0;
@@ -516,9 +516,9 @@ html.dark .topbar-role-switcher { background: #1f2937; border-color: #374151; }
 }
 html.dark .sidebar-toggle { border-color: #374151; color: #e2e8f0; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PAGE BODY & CONTENT
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .page-body { padding: 14px 16px; flex: 1; }
 .content-surface {
   width: min(100%, var(--content-max-w));
@@ -544,9 +544,9 @@ html.dark .page-title-standard { color: #f1f5f9 !important; }
   letter-spacing: 0 !important; text-transform: none !important;
 }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CARDS
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .table-card, .form-card, .stat-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); box-shadow: var(--shadow);
@@ -575,9 +575,9 @@ html.dark .table-card-header { border-color: var(--border); }
 .stat-value { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1; }
 .stat-label { font-size: 11.5px; color: var(--muted); margin-top: 4px; font-weight: 500; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TABLES
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .table { color: var(--text); margin: 0; width: 100%; border-collapse: collapse; }
 .table thead th {
   background: var(--table-head-bg) !important;
@@ -742,9 +742,9 @@ html.dark .content-surface .repair-table-footer { background: var(--surface); }
 html.dark .content-surface .dataTables_scrollBody::-webkit-scrollbar-track { background: #111827; }
 html.dark .content-surface .dataTables_scrollBody::-webkit-scrollbar-thumb { background: #475569; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BADGES
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .badge-status {
   display: inline-flex; align-items: center;
   padding: 3px 10px; border-radius: 20px;
@@ -760,9 +760,9 @@ html.dark .bs-disposed { background: rgba(239,68,68,.18);  color: #f87171; }
 html.dark .bs-pending  { background: rgba(245,158,11,.18); color: #fbbf24; }
 html.dark .bs-repair   { background: rgba(59,130,246,.18); color: #60a5fa; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BUTTONS
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .btn-primary-custom {
   background: var(--navy); color: #fff; border: 1.5px solid var(--navy);
   border-radius: 8px; padding: 8px 18px;
@@ -820,9 +820,9 @@ html.dark .wt-btn:hover { background: var(--soft-surface); border-color: #60a5fa
 .btn-view       { background: rgba(2,132,199,.1);   color: #0284c7; }
 .btn-view:hover { background: rgba(2,132,199,.2);   color: #0369a1; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FORMS
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .form-label { display: block; color: var(--text); font-size: 11.5px; font-weight: 700; margin-bottom: 5px; }
 .form-control,
 .form-select {
@@ -879,9 +879,9 @@ textarea:not([data-preserve-case="true"]) { text-transform: uppercase; }
 input[data-preserve-case="true"],
 textarea[data-preserve-case="true"] { text-transform: none !important; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ALERTS
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .alert-success-custom {
   background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534;
   border-radius: 9px; padding: 11px 15px; margin-bottom: 16px;
@@ -895,9 +895,9 @@ textarea[data-preserve-case="true"] { text-transform: none !important; }
 html.dark .alert-success-custom { background: rgba(21,128,61,.15); border-color: rgba(34,197,94,.25); color: #4ade80; }
 html.dark .alert-danger-custom  { background: rgba(153,27,27,.15); border-color: rgba(239,68,68,.25);  color: #f87171; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MODALS
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .modal-overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(15,23,42,.5); backdrop-filter: blur(6px);
@@ -1049,9 +1049,9 @@ html.dark .modern-confirm-footer { background: #111827; border-color: #334155; }
 .modern-confirm-btn.confirm:hover { background: var(--navy-mid); }
 html.dark .modern-confirm-btn.cancel { background: #1e293b; border-color: #374151; color: #e2e8f0; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    WALKIE TIMELINE MODAL
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .global-walkie-modal { width: min(980px,calc(100vw - 32px)) !important; max-width: 980px !important; }
 .global-walkie-summary {
   display: grid;
@@ -1108,9 +1108,9 @@ html.dark .global-walkie-history-detail { color: #94a3b8; }
   .global-walkie-history-row { grid-template-columns: 1fr; }
 }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SCROLL CONTROLS
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 #systemScrollControls {
   position: fixed; right: 16px; bottom: 16px;
   display: flex; flex-direction: column; gap: 5px;
@@ -1127,9 +1127,9 @@ html.dark .global-walkie-history-detail { color: #94a3b8; }
 html.dark .system-scroll-btn { background: #1e293b; border-color: #334155; }
 .system-scroll-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    NOTIFICATION DROPDOWN
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 #notificationDropdown {
   background: var(--surface) !important; border: 1px solid var(--border) !important;
   border-radius: var(--radius-lg) !important; box-shadow: 0 16px 40px rgba(15,23,42,.16) !important;
@@ -1147,9 +1147,9 @@ html.dark #notificationDropdown > div:first-child { background: #111827 !importa
 html.dark .notification-item-btn:hover { background: #111827; }
 .notification-item-action { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); white-space: nowrap; }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DARK MODE TAILWIND COMPAT
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 html.dark div.bg-white,
 html.dark section.bg-white { background-color: var(--surface) !important; border-color: var(--border) !important; }
 html.dark .bg-stone-50,
@@ -1212,9 +1212,9 @@ body.sidebar-collapsed .sidebar-footer .user-card {
   padding: 0 !important;
 }
 
-/* ══════════════════════════════════════════════════════
-   INVENTORY TABLE — fixed layout, contained within main-content
-══════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   INVENTORY TABLE â€” fixed layout, contained within main-content
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 body .content-surface .inventory-page-shell #walkiesTable {
   table-layout: fixed !important;
   width: 100% !important;
@@ -1226,9 +1226,9 @@ body .content-surface .inventory-page-shell #walkiesTable {
   overflow-y: visible !important;
 }
 
-/* ══════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    RESPONSIVE
-══════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @media (max-width: 768px) {
   body { display: block; height: auto; overflow-x: hidden; overflow-y: auto; }
   body.sidebar-collapsed .sidebar,
@@ -1269,6 +1269,6 @@ body .content-surface .inventory-page-shell #walkiesTable {
   .logout-modal-btn { width: 100%; min-width: 0; }
 }
 
-/* ── MISC ── */
+/* â”€â”€ MISC â”€â”€ */
 code { color: var(--accent); background: rgba(2,132,199,.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 .hidden { display: none !important; }

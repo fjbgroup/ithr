@@ -9,7 +9,7 @@
 .rs-filter-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-1px)}
 .rs-filter-card.active{border-width:2px}
 .rs-filter-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px}
-.rs-filter-count{font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.rs-filter-count{font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .rs-req-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
 .rs-badge{display:inline-flex;padding:2px 10px;border-radius:20px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border:1px solid}
 </style>

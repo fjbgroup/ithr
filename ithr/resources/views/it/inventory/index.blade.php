@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'IT Assets')
 @section('page_title', 'IT Assets')
@@ -38,7 +38,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       All Assets &rsaquo; <span style="color:var(--accent)">IT Assets</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">IT Assets</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">IT Assets</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Manage and track all registered IT equipment</p>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
@@ -70,7 +70,7 @@
       <i class="bi {{ $icon }}" style="color:{{ $color }}"></i>
     </div>
     <div>
-      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif">{{ number_format($val) }}</div>
+      <div style="font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif">{{ number_format($val) }}</div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px">{{ $lbl }}</div>
     </div>
   </div>
@@ -84,19 +84,19 @@
       <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;z-index:1"></i>
       <input type="text" id="mainSearchInput" name="search" value="{{ $f_search }}" placeholder="Search asset no., class, description, serial..."
         autocomplete="off"
-        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none"
+        style="width:100%;padding:9px 12px 9px 34px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none"
         onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       <div id="mainSearchSuggestions" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:1000;background:var(--surface);border:1.5px solid var(--accent);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.15);margin-top:3px;overflow:hidden"></div>
     </div>
     <select name="class" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Classes</option>
       @foreach($assetClasses as $cls)
       <option value="{{ $cls->name }}" {{ $f_class === $cls->name ? 'selected' : '' }}>{{ $cls->name }}</option>
       @endforeach
     </select>
     <select name="status" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:130px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:130px">
       <option value="">All Status</option>
       <option value="Active"                {{ $f_status === 'Active'                ? 'selected' : '' }}>Active</option>
       <option value="E-Waste"               {{ $f_status === 'E-Waste'               ? 'selected' : '' }}>E-Waste</option>
@@ -106,19 +106,19 @@
       <option value="Pending to E-Waste/Disposal" {{ $f_status === 'Pending to E-Waste/Disposal' ? 'selected' : '' }}>Pending to E-Waste/Disposal</option>
     </select>
     <select name="location" onchange="this.form.submit()"
-      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;min-width:140px">
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:140px">
       <option value="">All Locations</option>
       @foreach($all_locations as $loc)
       <option value="{{ $loc }}" {{ $f_location === $loc ? 'selected' : '' }}>{{ $loc }}</option>
       @endforeach
     </select>
     <button type="submit"
-      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
     @if($f_search || $f_class || $f_status || $f_location)
     <a href="{{ route('it.inventory.index') }}"
-      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif">
+      style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">
       Clear
     </a>
     @endif
@@ -137,7 +137,7 @@
 @if(!$user->isReadOnlyViewer())
 <div id="bulkBar" style="display:none;position:sticky;top:12px;z-index:100;margin-bottom:12px">
   <div style="background:#1A2332;color:#fff;border-radius:10px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,.3)">
-    <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px">
+    <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px">
       <i class="bi bi-check2-square me-2"></i><span id="bulkCount">0</span> item(s) selected
     </span>
     <div style="display:flex;gap:8px">
@@ -169,7 +169,7 @@
 <div id="inventoryLiveResults">
 <div class="table-card">
   <div>
-    <table class="table table-hover data-table" style="font-family:'DM Sans',sans-serif">
+    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -205,20 +205,20 @@
         </td>
         <td>
           <a href="{{ route('it.asset.show', $item->id) }}"
-            style="color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif">
+            style="color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;font-family:'Inter',sans-serif">
             {{ $item->asset_number ?: '—' }}
           </a>
         </td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->fa_code ?: '—' }}</td>
-        <td style="font-weight:500;font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->description }}</td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->years_purchase ?: '—' }}</td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->location ?: '—' }}</td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->total_cost ? number_format($item->total_cost, 2) : '—' }}</td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->accumulated ? number_format($item->accumulated, 2) : '—' }}</td>
-        <td style="font-size:13px;font-family:'DM Sans',sans-serif">{{ $item->nbv_at ? number_format($item->nbv_at, 2) : '—' }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->fa_code ?: '—' }}</td>
+        <td style="font-weight:500;font-size:13px;font-family:'Inter',sans-serif">{{ $item->description }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->years_purchase ?: '—' }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->location ?: '—' }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->total_cost ? number_format($item->total_cost, 2) : '—' }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->accumulated ? number_format($item->accumulated, 2) : '—' }}</td>
+        <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->nbv_at ? number_format($item->nbv_at, 2) : '—' }}</td>
         <td>
           <button onclick="openQRModal({{ $item->id }},{{ json_encode($item->asset_number) }},{{ json_encode($item->description) }},{{ json_encode($item->asset_class) }},{{ json_encode($item->serial_number) }},{{ json_encode($item->brand) }},{{ json_encode($item->model) }},{{ json_encode($item->location) }})"
-            style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
+            style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
             <i class="bi bi-qr-code" style="font-size:13px"></i>
           </button>
         </td>
@@ -227,14 +227,14 @@
             {{-- E-Waste button --}}
             @if(($display_status === 'Active' || $user->isAdmin()) && !$user->isReadOnlyViewer())
             <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}"
-              style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
               <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
             </a>
             @endif
             {{-- Edit button --}}
             @if(!$user->isReadOnlyViewer() && ($display_status === 'Active' || $user->isAdmin()))
             <button onclick="openEditModal({{ $item->id }})"
-              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;font-family:'DM Sans',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">
+              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">
               {{ $user->isAdminOrFinance() ? 'Edit' : 'Request Edit' }}
             </button>
             @endif
@@ -255,7 +255,7 @@
               @csrf
               @method('DELETE')
               <button type="submit" title="Request Delete"
-                style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'DM Sans',sans-serif;cursor:pointer;display:inline-flex;align-items:center">
+                style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center">
                 <i class="bi bi-trash"></i>
               </button>
             </form>
@@ -281,7 +281,7 @@
 
 {{-- Add Modal --}}
 <div id="addModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:24px">
-  <div style="background:#fff;border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);font-family:'DM Sans',sans-serif">
+  <div style="background:#fff;border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);font-family:'Inter',sans-serif">
 
     {{-- Header band --}}
     <div style="background:#1e2d40;border-radius:12px 12px 0 0;padding:20px 28px;display:flex;align-items:center;justify-content:space-between">
@@ -312,20 +312,20 @@
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Number</label>
             <input type="text" name="asset_number" placeholder="e.g. OEPC1401"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
             <div style="font-size:11px;color:var(--muted);margin-top:4px">Leave blank to assign later</div>
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">F/A Code</label>
             <input type="text" name="fa_code" placeholder="e.g. 4100000047"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Class <span style="color:#e53e3e">*</span></label>
             <select name="asset_class" required
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
               <option value="">— Select Class —</option>
               @foreach($assetClasses as $cls)
@@ -336,7 +336,7 @@
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Serial Number</label>
             <input type="text" name="serial_number" placeholder="e.g. SGH629QBBY"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
         </div>
@@ -344,7 +344,7 @@
           <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
           <div style="position:relative">
             <input type="text" id="addDescInput" name="description" required placeholder="e.g. HP ELITEONE 800 G2 23, AIO, NOTEBOOK..." autocomplete="off"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
             <div id="descSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
           </div>
@@ -364,25 +364,25 @@
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Years Purchase</label>
             <input type="number" name="years_purchase" placeholder="e.g. 2017"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Total Cost (RM)</label>
             <input type="number" step="0.01" name="total_cost" placeholder="0.00"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Accumulated (RM)</label>
             <input type="number" step="0.01" name="accumulated" placeholder="0.00"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">NBV AT (RM)</label>
             <input type="number" step="0.01" name="nbv_at" placeholder="0.00"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
         </div>
@@ -398,14 +398,14 @@
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Location</label>
             <input type="text" name="location" placeholder="e.g. Server Room 1"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
               onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Brand</label>
             <div style="position:relative">
               <input type="text" id="addBrandInput" name="brand" placeholder="e.g. HP, LENOVO, DELL..." autocomplete="off"
-                style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+                style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
                 onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
               <div id="brandSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
             </div>
@@ -414,7 +414,7 @@
             <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Model</label>
             <div style="position:relative">
               <input type="text" id="addModelInput" name="model" placeholder="e.g. ELITEONE 800 G2..." autocomplete="off"
-                style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;box-sizing:border-box"
+                style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
                 onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
               <div id="modelSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
             </div>
@@ -431,7 +431,7 @@
         <div>
           <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Notes</label>
           <textarea name="notes" rows="3" placeholder="Any additional remarks about this asset..."
-            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;resize:vertical;box-sizing:border-box"
+            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;resize:vertical;box-sizing:border-box"
             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
         </div>
       </div>
@@ -439,12 +439,12 @@
       {{-- Footer --}}
       <div style="padding:16px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px">
         <button type="submit"
-          style="padding:10px 22px;background:#1e2d40;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:7px">
+          style="padding:10px 22px;background:#1e2d40;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:7px">
           <i class="bi bi-plus-lg"></i>
           @if($user->isAdminOrFinance()) Register Asset @else Submit Request @endif
         </button>
         <button type="button" onclick="document.getElementById('addModal').style.display='none'"
-          style="padding:10px 20px;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px">
+          style="padding:10px 20px;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px">
           <i class="bi bi-x"></i> Cancel
         </button>
       </div>
@@ -479,7 +479,7 @@
 
 {{-- QR Code Modal --}}
 <div id="qrModal" style="display:none;position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px">
-  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;font-family:'DM Sans',sans-serif">
+  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;font-family:'Inter',sans-serif">
     <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
       <div style="font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px">
         <i class="bi bi-qr-code" style="color:#7c3aed"></i> QR Code
@@ -756,7 +756,7 @@ function makeAutocomplete(inputId, boxId, url, minLen) {
         .then(function(items) {
           if (!items.length) { box.style.display = 'none'; return; }
           box.innerHTML = items.map(function(d) {
-            return '<div class="ac-item" style="padding:9px 14px;font-size:13px;cursor:pointer;font-family:\'DM Sans\',sans-serif;color:var(--text);border-bottom:1px solid var(--border)">' + String(d).replace(/</g,'&lt;') + '</div>';
+            return '<div class="ac-item" style="padding:9px 14px;font-size:13px;cursor:pointer;font-family:\'Inter\',sans-serif;color:var(--text);border-bottom:1px solid var(--border)">' + String(d).replace(/</g,'&lt;') + '</div>';
           }).join('');
           var last = box.querySelector('.ac-item:last-child');
           if (last) last.style.borderBottom = 'none';
@@ -806,7 +806,7 @@ makeAutocomplete('addModelInput', 'modelSuggestions', '{{ route("it.inventory.mo
           if (!items.length) { box.style.display = 'none'; return; }
           box.innerHTML = items.map(function(item) {
             return '<div class="ms-item" data-value="' + encodeURIComponent(item.value) + '"'
-              + ' style="padding:9px 14px;font-size:13px;cursor:pointer;font-family:\'DM Sans\',sans-serif;color:var(--text);border-bottom:1px solid var(--border)">'
+              + ' style="padding:9px 14px;font-size:13px;cursor:pointer;font-family:\'Inter\',sans-serif;color:var(--text);border-bottom:1px solid var(--border)">'
               + String(item.label).replace(/</g, '&lt;') + '</div>';
           }).join('');
           var last = box.querySelector('.ms-item:last-child');

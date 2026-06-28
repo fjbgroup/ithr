@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Write Off Inventory')
 @section('page_title', 'Write Off Inventory')
@@ -9,7 +9,7 @@
 .ds-card{display:flex;align-items:center;gap:18px;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07);transition:box-shadow .2s,transform .2s;height:100%}
 .ds-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.15);transform:translateY(-2px)}
 .ds-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .ds-lbl{font-size:12px;color:var(--muted);margin-top:5px;font-weight:500}
 </style>
 
@@ -22,7 +22,7 @@
 {{-- ══ PAGE HEADER ══ --}}
 <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px">
   <div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0;letter-spacing:-.3px">
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0;letter-spacing:-.3px">
       Write Off Inventory
     </h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">
@@ -82,7 +82,7 @@
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:10px">
       <div style="width:4px;height:22px;background:#d97706;border-radius:2px"></div>
-      <span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--text);text-transform:uppercase;letter-spacing:.04em">
+      <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:15px;color:var(--text);text-transform:uppercase;letter-spacing:.04em">
         Pending Finance Decision
       </span>
       @if($pendingCount > 0)
@@ -240,7 +240,7 @@
   {{-- Section header --}}
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
     <div style="width:4px;height:22px;background:#16a34a;border-radius:2px"></div>
-    <span style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;color:var(--text);text-transform:uppercase;letter-spacing:.04em">
+    <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:15px;color:var(--text);text-transform:uppercase;letter-spacing:.04em">
       Processed History
     </span>
     <span style="background:rgba(22,163,74,.1);color:#16a34a;border-radius:20px;padding:2px 12px;font-size:11px;font-weight:700">
@@ -345,7 +345,7 @@
     <div style="background:#142b47;color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
       <div style="display:flex;align-items:center;gap:10px">
         <i class="bi bi-file-earmark-text" style="font-size:18px"></i>
-        <span style="font-weight:700;font-size:15px;font-family:'DM Sans',sans-serif">Write-Off Report</span>
+        <span style="font-weight:700;font-size:15px;font-family:'Inter',sans-serif">Write-Off Report</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <button onclick="printReport()"

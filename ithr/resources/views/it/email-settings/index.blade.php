@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Email Settings')
 @section('page_title', 'Email Settings')
@@ -10,7 +10,7 @@
 .es-head{padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px}
 .es-head-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .es-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:6px}
-.es-input{width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:#1e293b;background:#f8fafc;outline:none;transition:border-color .18s,box-shadow .18s,background .18s;box-sizing:border-box}
+.es-input{width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'Inter',sans-serif;font-size:13.5px;color:#1e293b;background:#f8fafc;outline:none;transition:border-color .18s,box-shadow .18s,background .18s;box-sizing:border-box}
 .es-input:focus{border-color:#0284c7;background:#fff;box-shadow:0 0 0 3px rgba(2,132,199,.1)}
 .es-input::placeholder{color:#94a3b8}
 </style>
@@ -20,7 +20,7 @@
 <div style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
   <div>
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:5px">Admin › <span style="color:#0284c7">Email Settings</span></div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:#1e293b;margin:0">Email Notifications</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:#1e293b;margin:0">Email Notifications</h4>
     <p style="font-size:13px;color:#64748b;margin:4px 0 0">Configure outgoing email so admins get notified when users submit requests.</p>
   </div>
   <div style="display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;{{ $configured ? 'background:#dcfce7;color:#16a34a;border:1px solid #bbf7d0' : 'background:#fff7ed;color:#c2410c;border:1px solid #fed7aa' }}">
@@ -51,7 +51,7 @@
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             @foreach([['Gmail','smtp.gmail.com','587','tls'],['Outlook','smtp-mail.outlook.com','587','tls'],['Yahoo','smtp.mail.yahoo.com','587','tls']] as [$pname,$phost,$pport,$penc])
             <button type="button" onclick="setProvider('{{ $phost }}','{{ $pport }}','{{ $penc }}')"
-              style="padding:7px 16px;border:1.5px solid #e2e8f0;border-radius:8px;background:#f8fafc;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s{{ ($settings['smtp_host'] ?? '') === $phost ? ';border-color:#0284c7;background:#f0f9ff;color:#0284c7' : '' }}"
+              style="padding:7px 16px;border:1.5px solid #e2e8f0;border-radius:8px;background:#f8fafc;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#475569;cursor:pointer;transition:all .15s{{ ($settings['smtp_host'] ?? '') === $phost ? ';border-color:#0284c7;background:#f0f9ff;color:#0284c7' : '' }}"
               onmouseover="this.style.borderColor='#0284c7';this.style.color='#0284c7'"
               onmouseout="this.style.borderColor='{{ ($settings['smtp_host'] ?? '') === $phost ? '#0284c7' : '#e2e8f0' }}';this.style.color='{{ ($settings['smtp_host'] ?? '') === $phost ? '#0284c7' : '#475569' }}'">
               {{ $pname }}
@@ -116,7 +116,7 @@
 
         <div class="col-12" style="margin-top:4px">
           <button type="submit"
-            style="display:inline-flex;align-items:center;gap:8px;background:#142b47;color:#fff;border:none;border-radius:9px;padding:11px 26px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s"
+            style="display:inline-flex;align-items:center;gap:8px;background:#142b47;color:#fff;border:none;border-radius:9px;padding:11px 26px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s"
             onmouseover="this.style.background='#254a78'" onmouseout="this.style.background='#142b47'">
             <i class="bi bi-floppy2-fill"></i> Save Settings
           </button>
@@ -144,7 +144,7 @@
         </div>
         <div class="col-auto">
           <button type="submit" name="test_email" value="1" {{ !$configured ? 'disabled' : '' }}
-            style="display:inline-flex;align-items:center;gap:7px;background:{{ $configured ? '#16a34a' : '#94a3b8' }};color:#fff;border:none;border-radius:9px;padding:10px 20px;font-size:13px;font-weight:700;cursor:{{ $configured ? 'pointer' : 'not-allowed' }};font-family:'DM Sans',sans-serif">
+            style="display:inline-flex;align-items:center;gap:7px;background:{{ $configured ? '#16a34a' : '#94a3b8' }};color:#fff;border:none;border-radius:9px;padding:10px 20px;font-size:13px;font-weight:700;cursor:{{ $configured ? 'pointer' : 'not-allowed' }};font-family:'Inter',sans-serif">
             <i class="bi bi-send-fill"></i> Send Test
           </button>
         </div>
@@ -225,11 +225,11 @@
     <!-- Tab switcher -->
     <div style="display:flex;background:#f8fafc;border-bottom:1px solid #e2e8f0">
       <button id="apwTabGmail" onclick="apwTab('gmail')"
-        style="flex:1;padding:11px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#0284c7;border-bottom:2px solid #0284c7;transition:all .15s">
+        style="flex:1;padding:11px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#0284c7;border-bottom:2px solid #0284c7;transition:all .15s">
         📧 Gmail
       </button>
       <button id="apwTabOutlook" onclick="apwTab('outlook')"
-        style="flex:1;padding:11px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;border-bottom:2px solid transparent;transition:all .15s">
+        style="flex:1;padding:11px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;border-bottom:2px solid transparent;transition:all .15s">
         📨 Outlook
       </button>
     </div>
@@ -283,7 +283,7 @@
     <!-- Footer -->
     <div style="padding:14px 22px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end">
       <button onclick="closeAppPwPopup()"
-        style="display:inline-flex;align-items:center;gap:7px;background:#142b47;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+        style="display:inline-flex;align-items:center;gap:7px;background:#142b47;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
         Got it <i class="bi bi-check-lg"></i>
       </button>
     </div>

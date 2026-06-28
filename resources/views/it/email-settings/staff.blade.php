@@ -13,8 +13,8 @@
 
 <!-- HEADER -->
 <div style="margin-bottom:24px">
-  <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:5px">Settings › <span style="color:#0284c7">Email Notifications</span></div>
-  <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:#1e293b;margin:0">My Email Notifications</h4>
+  <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:5px">Settings â€º <span style="color:#0284c7">Email Notifications</span></div>
+  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:#1e293b;margin:0">My Email Notifications</h4>
   <p style="font-size:13px;color:#64748b;margin:4px 0 0">You'll receive email updates when your requests are approved or rejected.</p>
 </div>
 
@@ -99,18 +99,18 @@
     </div>
     <div style="padding:10px 20px 16px">
       @foreach([
-        ['#16a34a','bi-check-circle-fill','Add Asset Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'Add Asset Request — Rejected'],
-        ['#16a34a','bi-check-circle-fill','Edit Asset Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'Edit Asset Request — Rejected'],
-        ['#16a34a','bi-check-circle-fill','Delete Asset Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'Delete Asset Request — Rejected'],
-        ['#16a34a','bi-check-circle-fill','E-Waste Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'E-Waste Request — Rejected'],
-        ['#16a34a','bi-pen-fill',         'Write-Off — Approved by CEO'],
-        ['#ef4444','bi-pen-fill',         'Write-Off — Rejected (HOU / GM / CEO)'],
-        ['#16a34a','bi-clipboard-check-fill','IT Request Form — Approved'],
-        ['#ef4444','bi-clipboard-x-fill', 'IT Request Form — Rejected'],
+        ['#16a34a','bi-check-circle-fill','Add Asset Request â€” Approved'],
+        ['#ef4444','bi-x-circle-fill',    'Add Asset Request â€” Rejected'],
+        ['#16a34a','bi-check-circle-fill','Edit Asset Request â€” Approved'],
+        ['#ef4444','bi-x-circle-fill',    'Edit Asset Request â€” Rejected'],
+        ['#16a34a','bi-check-circle-fill','Delete Asset Request â€” Approved'],
+        ['#ef4444','bi-x-circle-fill',    'Delete Asset Request â€” Rejected'],
+        ['#16a34a','bi-check-circle-fill','E-Waste Request â€” Approved'],
+        ['#ef4444','bi-x-circle-fill',    'E-Waste Request â€” Rejected'],
+        ['#16a34a','bi-pen-fill',         'Write-Off â€” Approved by CEO'],
+        ['#ef4444','bi-pen-fill',         'Write-Off â€” Rejected (HOU / GM / CEO)'],
+        ['#16a34a','bi-clipboard-check-fill','IT Request Form â€” Approved'],
+        ['#ef4444','bi-clipboard-x-fill', 'IT Request Form â€” Rejected'],
       ] as [$tc,$ti,$tt])
       <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc">
         <div style="width:26px;height:26px;border-radius:7px;background:{{ $tc }}18;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">

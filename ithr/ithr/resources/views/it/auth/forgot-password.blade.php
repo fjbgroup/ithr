@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.auth')
+@extends('it.layouts.auth')
 
 @section('title', 'Forgot Password')
 
@@ -10,7 +10,7 @@
   --accent:#0284c7; --accent-h:#0369a1; --red:#dc2626; --green:#16a34a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 50%,#bae6fd 100%);font-family:'DM Sans',sans-serif;
+body{min-height:100vh;background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 50%,#bae6fd 100%);font-family:'Inter',sans-serif;
   display:flex;align-items:center;justify-content:center;padding:20px;
   position:relative;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;
@@ -25,7 +25,7 @@ body::after{content:'';position:fixed;width:600px;height:600px;
 
 .brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:16px}
 .brand img{width:40px;height:40px;object-fit:contain}
-.brand-text{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#000;
+.brand-text{font-family:'Inter',sans-serif;font-size:20px;font-weight:800;color:#000;
   text-transform:uppercase;letter-spacing:.06em;line-height:1.3}
 .brand-text span{color:#000;display:block;font-size:15px;letter-spacing:.05em;font-weight:800}
 
@@ -42,7 +42,7 @@ body::after{content:'';position:fixed;width:600px;height:600px;
 .icon-circle{width:52px;height:52px;border-radius:50%;background:rgba(2,132,199,.1);
   border:1.5px solid rgba(2,132,199,.25);display:flex;align-items:center;justify-content:center;
   font-size:22px;color:var(--accent);margin-bottom:18px}
-.form-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px}
+.form-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px}
 .form-sub{color:var(--muted);font-size:13px;margin-bottom:24px;line-height:1.6}
 
 .info-note{background:rgba(2,132,199,.06);border:1px solid rgba(2,132,199,.2);
@@ -57,13 +57,13 @@ label{display:block;font-size:11px;font-weight:700;color:var(--muted);
 .input-wrap i{position:absolute;left:14px;color:#9ca3af;font-size:15px;pointer-events:none}
 input[type="text"]{
   width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
-  color:var(--text);padding:13px 14px 13px 42px;font-size:14px;font-family:'DM Sans',sans-serif;
+  color:var(--text);padding:13px 14px 13px 42px;font-size:14px;font-family:'Inter',sans-serif;
   transition:border-color .2s,box-shadow .2s;outline:none}
 input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(2,132,199,.1);background:#fff}
 input::placeholder{color:#bfc5cc}
 
 .btn-submit{width:100%;margin-top:4px;background:var(--accent);color:#fff;border:none;
-  border-radius:10px;padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+  border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
   letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;
   display:flex;align-items:center;justify-content:center;gap:8px;
   box-shadow:0 4px 14px rgba(2,132,199,.35)}
@@ -80,10 +80,10 @@ input::placeholder{color:#bfc5cc}
 .success-icon{width:64px;height:64px;border-radius:50%;background:rgba(22,163,74,.1);
   border:2px solid rgba(22,163,74,.25);display:flex;align-items:center;justify-content:center;
   font-size:28px;color:var(--green);margin:0 auto 18px}
-.success-state h3{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
+.success-state h3{font-family:'Inter',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px}
 .success-state p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:22px}
 .btn-back{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;
-  border:none;border-radius:10px;padding:12px 24px;font-family:'DM Sans',sans-serif;font-size:13px;
+  border:none;border-radius:10px;padding:12px 24px;font-family:'Inter',sans-serif;font-size:13px;
   font-weight:700;letter-spacing:.04em;cursor:pointer;text-decoration:none;
   box-shadow:0 4px 14px rgba(2,132,199,.35);transition:background .2s,transform .1s}
 .btn-back:hover{background:var(--accent-h);transform:translateY(-1px)}

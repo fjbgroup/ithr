@@ -33,7 +33,7 @@
 }
 
 html body {
-    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
     background: linear-gradient(180deg, #F4F7FB 0%, #EDF2F7 100%) !important;
     color: var(--text) !important;
     font-size: 14px;
@@ -550,7 +550,7 @@ table.dataTable tbody tr:hover {
 /* Sidebar polish: match the HR Admin reference while keeping WT colors. */
 .sidebar-shell,
 .sidebar-shell * {
-    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
 }
 
 .sidebar-shell i.fas,
@@ -688,7 +688,7 @@ table.dataTable tbody tr:hover {
 .dropdown-trigger .fa-chevron-right::before,
 .sidebar-link .fa-chevron-down::before,
 .sidebar-link .fa-chevron-right::before {
-    content: "›" !important;
+    content: "â€º" !important;
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
@@ -1133,7 +1133,7 @@ html.dark .content-surface .unused-search {
     border: 0 !important;
     border-collapse: collapse !important;
     background: #ffffff !important;
-    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
 }
 
 html.dark .content-surface table.dataTable,

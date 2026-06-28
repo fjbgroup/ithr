@@ -6,14 +6,14 @@
 @section('content')
 @if($user->isAdmin())
 
-{{-- ══════════════════════════════════════════
-     IT ADMIN — INBOX VIEW
-══════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     IT ADMIN â€” INBOX VIEW
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <style>
 .itr-admin-stat { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s; }
 .itr-admin-stat:hover { box-shadow:0 4px 18px rgba(0,0,0,.07); }
 .itr-admin-stat-icon { width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0; }
-.itr-admin-stat-val { font-family:'DM Sans',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1; }
+.itr-admin-stat-val { font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:var(--text);line-height:1; }
 .itr-admin-stat-lbl { font-size:11.5px;color:var(--muted);margin-top:3px;font-weight:500; }
 
 .itr-type-pill { display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700;line-height:1.8; }
@@ -48,7 +48,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Request Forms &rsaquo; <span style="color:var(--accent)">IT Request Forms</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 3px">IT Request Inbox</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0 0 3px">IT Request Inbox</h4>
     <p style="font-size:13px;color:var(--muted);margin:0">Review and manage all IT service requests from staff</p>
   </div>
   @if($countNew > 0 || $countPendingIT > 0)
@@ -106,12 +106,12 @@
     <form method="GET" action="{{ route('it.it-request-form') }}" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div style="position:relative;flex:1;min-width:200px">
         <i class="bi bi-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none"></i>
-        <input type="text" name="itr_search" value="{{ $search }}" placeholder="Search subject, name, department…"
-          style="width:100%;padding:8px 12px 8px 32px;font-family:'DM Sans',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s"
+        <input type="text" name="itr_search" value="{{ $search }}" placeholder="Search subject, name, departmentâ€¦"
+          style="width:100%;padding:8px 12px 8px 32px;font-family:'Inter',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       </div>
       <select name="itr_type" onchange="this.form.submit()"
-        style="font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $type ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
+        style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $type ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
         <option value="">All Types</option>
         <option value="hardware" {{ $type === 'hardware' ? 'selected' : '' }}>Hardware</option>
         <option value="software" {{ $type === 'software' ? 'selected' : '' }}>Software</option>
@@ -119,7 +119,7 @@
         <option value="service"  {{ $type === 'service'  ? 'selected' : '' }}>Service</option>
       </select>
       <select name="itr_status" onchange="this.form.submit()"
-        style="font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $status ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
+        style="font-family:'Inter',sans-serif;font-size:13px;padding:8px 30px 8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:{{ $status ? 'var(--text)' : 'var(--muted)' }};outline:none;cursor:pointer;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center">
         <option value="">All Status</option>
         <option value="New"        {{ $status === 'New'        ? 'selected' : '' }}>Pending HOU</option>
         <option value="Pending IT"         {{ $status === 'Pending IT'         ? 'selected' : '' }}>Pending IT Approval</option>
@@ -129,7 +129,7 @@
         <option value="Draft"      {{ $status === 'Draft'      ? 'selected' : '' }}>Draft</option>
       </select>
       <button type="submit"
-        style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s"
+        style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s"
         onmouseover="this.style.background='var(--accent-h)'" onmouseout="this.style.background='var(--accent)'">
         <i class="bi bi-funnel-fill"></i> Filter
       </button>
@@ -150,10 +150,10 @@
   {{-- Admin bulk bar --}}
   <div id="adminBulkBar" style="display:none;padding:10px 20px;background:rgba(2,132,199,.07);border-bottom:1px solid rgba(2,132,199,.2);align-items:center;gap:12px;flex-wrap:wrap">
     <span id="adminBulkCount" style="font-size:13px;font-weight:700;color:#0284c7;min-width:80px"></span>
-    <button id="adminApproveBtn" onclick="openBulkModal('admin','approve')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-check-circle-fill"></i> Approve Selected</button>
-    <button id="adminRejectBtn"  onclick="openBulkModal('admin','reject')"  style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
-    <button id="adminArchiveBtn" onclick="openBulkModal('admin','archive')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#d97706;color:#fff;border:none;border-radius:8px;cursor:pointer;display:none;align-items:center;gap:6px"><i class="bi bi-archive-fill"></i> Archive Selected</button>
-    <button onclick="clearBulkSelection('admin')" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
+    <button id="adminApproveBtn" onclick="openBulkModal('admin','approve')" style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-check-circle-fill"></i> Approve Selected</button>
+    <button id="adminRejectBtn"  onclick="openBulkModal('admin','reject')"  style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
+    <button id="adminArchiveBtn" onclick="openBulkModal('admin','archive')" style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#d97706;color:#fff;border:none;border-radius:8px;cursor:pointer;display:none;align-items:center;gap:6px"><i class="bi bi-archive-fill"></i> Archive Selected</button>
+    <button onclick="clearBulkSelection('admin')" style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
   </div>
 
   {{-- Column headers --}}
@@ -204,14 +204,14 @@
     <div style="display:flex;align-items:center;gap:9px;min-width:0">
       <div style="width:30px;height:30px;border-radius:50%;background:rgba(2,132,199,.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi bi-person-fill"></i></div>
       <div style="min-width:0">
-        <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $form->submittedBy?->full_name ?? '—' }}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $form->submittedBy?->full_name ?? 'â€”' }}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $form->submittedBy?->getItRoleLabel() ?? '' }}</div>
       </div>
     </div>
 
     {{-- Department --}}
     <div style="font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;align-self:center">
-      {{ $form->user_department ?: ($form->submittedBy?->dept_name ?? '—') }}
+      {{ $form->user_department ?: ($form->submittedBy?->dept_name ?? 'â€”') }}
     </div>
 
     {{-- Date --}}
@@ -265,11 +265,11 @@
   @endif
 </div>
 
-{{-- ══ ARCHIVE SECTION ══ --}}
+{{-- â•â• ARCHIVE SECTION â•â• --}}
 <div style="margin-top:32px" id="admin-archive-section">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+      <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
         <i class="bi bi-archive-fill" style="color:#d97706;margin-right:7px"></i>Archive
         @if($archivedForms->total())
         <span style="font-size:12px;font-weight:600;color:#d97706;background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $archivedForms->total() }}</span>
@@ -278,7 +278,7 @@
       <div style="font-size:12.5px;color:var(--muted)">Decided requests that have been moved out of the active inbox.</div>
     </div>
     <button onclick="toggleArchive()" id="archiveToggleBtn"
-      style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
+      style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
       onmouseover="this.style.borderColor='#d97706';this.style.color='#d97706'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
       <i class="bi bi-chevron-down" id="archiveToggleIcon"></i> Show Archive
     </button>
@@ -329,13 +329,13 @@
         <div style="display:flex;align-items:center;gap:8px;min-width:0">
           <div style="width:28px;height:28px;border-radius:50%;background:rgba(100,116,139,.1);color:#64748b;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0"><i class="bi bi-person-fill"></i></div>
           <div style="min-width:0">
-            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $af->submittedBy?->full_name ?? '—' }}</div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $af->submittedBy?->full_name ?? 'â€”' }}</div>
           </div>
         </div>
 
         {{-- Department --}}
         <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-          {{ $af->user_department ?: ($af->submittedBy?->dept_name ?? '—') }}
+          {{ $af->user_department ?: ($af->submittedBy?->dept_name ?? 'â€”') }}
         </div>
 
         {{-- Date --}}
@@ -358,7 +358,7 @@
           <form method="POST" action="{{ route('it.it-request-form.unarchive', $af->id) }}" style="margin:0">
             @csrf
             <button type="submit"
-              style="font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:600;padding:5px 10px;background:transparent;border:1.5px solid var(--border);border-radius:7px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap"
+              style="font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;padding:5px 10px;background:transparent;border:1.5px solid var(--border);border-radius:7px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap"
               onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'"
               title="Move back to inbox">
               <i class="bi bi-arrow-counterclockwise"></i> Restore
@@ -410,22 +410,22 @@ function toggleArchive() {
   <div style="background:var(--surface);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
       <div id="bulkModalIcon" style="width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
-      <div id="bulkModalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
+      <div id="bulkModalTitle" style="font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
     </div>
     <div id="bulkModalDesc" style="font-size:13px;color:var(--muted);margin-bottom:16px"></div>
     <form id="bulkForm" method="POST">
       @csrf
       <div id="bulkIdsContainer"></div>
       <div id="bulkRemarksDiv" style="margin-bottom:16px">
-        <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional — applies to all selected)</span></label>
+        <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional â€” applies to all selected)</span></label>
         <textarea name="remarks" id="bulkRemarks" rows="3"
-          style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
+          style="width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
-          placeholder="Add a remark (optional)…"></textarea>
+          placeholder="Add a remark (optional)â€¦"></textarea>
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end">
-        <button type="button" onclick="closeBulkModal()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
-        <button type="submit" id="bulkModalSubmit" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer"></button>
+        <button type="button" onclick="closeBulkModal()" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
+        <button type="submit" id="bulkModalSubmit" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer"></button>
       </div>
     </form>
   </div>
@@ -540,11 +540,11 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 
 @else
 @if($user->isStaff())
-{{-- ══════════════════════════════════════════
-     STAFF — READ-ONLY VIEW
-══════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     STAFF â€” READ-ONLY VIEW
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div style="margin-bottom:10px">
-  <div style="font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px">IT Request Form</div>
+  <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px">IT Request Form</div>
   <div style="font-size:13px;color:var(--muted)">View IT requests that have been submitted on your behalf.</div>
 </div>
 
@@ -578,7 +578,7 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 
 <div style="margin-top:24px">
   <div style="margin-bottom:14px">
-    <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+    <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
       <i class="bi bi-clipboard2-check-fill" style="color:var(--accent);margin-right:7px"></i>My IT Requests
       @if(isset($staffForms) && $staffForms->count())
       <span style="font-size:12px;font-weight:600;color:var(--accent);background:rgba(2,132,199,.1);border:1px solid rgba(2,132,199,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $staffForms->count() }}</span>
@@ -677,23 +677,23 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
   @endif
 </div>
 @else
-{{-- ══════════════════════════════════════════
-     NON-ADMIN — EXISTING 2-STEP WIZARD
-══════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     NON-ADMIN â€” EXISTING 2-STEP WIZARD
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <style>
-/* ══════════════════════════════════════════
-   IT REQUEST FORM — WIZARD REDESIGN
-══════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   IT REQUEST FORM â€” WIZARD REDESIGN
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .itr-wrap { max-width: 100%; }
 
 .itr-page-title {
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   font-size: 22px; font-weight: 800;
   color: var(--text); letter-spacing: -.3px; margin-bottom: 4px;
 }
 .itr-page-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
 
-/* ── Progress ── */
+/* â”€â”€ Progress â”€â”€ */
 .itr-progress { display: flex; align-items: center; gap: 0; margin-bottom: 28px; }
 .itr-step { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .itr-step-num {
@@ -710,11 +710,11 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-step-line { flex: 1; height: 2px; background: var(--border); margin: 0 10px; border-radius: 2px; transition: background .3s; }
 .itr-step-line.done { background: var(--accent); }
 
-/* ── Step 1 hardware intro ── */
+/* â”€â”€ Step 1 hardware intro â”€â”€ */
 .itr-hw-intro { background:var(--surface); border:2px solid var(--border); border-radius:18px; overflow:hidden; }
 .itr-hw-intro-banner { background:linear-gradient(135deg,rgba(59,130,246,.12) 0%,rgba(2,132,199,.08) 100%); border-bottom:1px solid var(--border); padding:36px 40px; display:flex; align-items:center; gap:28px; }
 .itr-hw-intro-icon { width:72px; height:72px; border-radius:18px; background:rgba(59,130,246,.15); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:34px; flex-shrink:0; }
-.itr-hw-intro-title { font-family:'DM Sans',sans-serif; font-size:22px; font-weight:800; color:var(--text); margin-bottom:6px; }
+.itr-hw-intro-title { font-family:'Inter',sans-serif; font-size:22px; font-weight:800; color:var(--text); margin-bottom:6px; }
 .itr-hw-intro-sub { font-size:13.5px; color:var(--muted); line-height:1.6; }
 .itr-hw-items-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
 .itr-hw-item { display:flex; align-items:center; gap:12px; padding:16px 20px; border-top:1px solid var(--border); }
@@ -724,11 +724,11 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-hw-item-desc { font-size:11.5px; color:var(--muted); margin-top:1px; }
 .itr-hw-cta { padding:24px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; background:var(--body-bg); border-top:1px solid var(--border); }
 .itr-hw-cta-note { font-size:12.5px; color:var(--muted); }
-.itr-hw-btn { display:inline-flex; align-items:center; gap:8px; padding:11px 28px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; }
+.itr-hw-btn { display:inline-flex; align-items:center; gap:8px; padding:11px 28px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-family:'Inter',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .15s; }
 .itr-hw-btn:hover { background:#0272b1; box-shadow:0 4px 16px rgba(2,132,199,.35); transform:translateY(-1px); }
 .itr-locked-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; min-height: 18px; }
 
-/* ── Step 2 ── */
+/* â”€â”€ Step 2 â”€â”€ */
 #step2 { display: none; }
 .itr-selected-banner {
   display: flex; align-items: center; gap: 12px;
@@ -744,7 +744,7 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-banner-text { font-size: 13px; color: var(--muted); flex: 1; }
 .itr-change-btn {
   display: flex; align-items: center; gap: 6px;
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
   font-size: 12.5px; font-weight: 600; color: var(--red);
   background: rgba(239,68,68,.07); border: 1.5px solid rgba(239,68,68,.2);
   border-radius: 8px; padding: 7px 14px; cursor: pointer; transition: all .15s;
@@ -753,39 +753,39 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 
 .itr-subject-row { display: grid; grid-template-columns: 1fr 160px; gap: 14px; margin-bottom: 20px; }
 
-/* ── Section cards ── */
+/* â”€â”€ Section cards â”€â”€ */
 .itr-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
 .itr-section-head { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--body-bg); }
 .itr-section-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(2,132,199,.12); color: var(--accent); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.itr-section-title { font-family:'DM Sans',sans-serif; font-size: 13.5px; font-weight: 700; color: var(--text); flex: 1; }
+.itr-section-title { font-family:'Inter',sans-serif; font-size: 13.5px; font-weight: 700; color: var(--text); flex: 1; }
 .itr-section-body { padding: 20px; }
 
-/* ── Fields ── */
+/* â”€â”€ Fields â”€â”€ */
 .itr-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 3px; }
 .itr-req { color: var(--red); }
 .itr-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.itr-input { width: 100%; font-family:'DM Sans',sans-serif; font-size: 13px; color: var(--text); background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 12px; outline: none; transition: border-color .15s, box-shadow .15s; }
+.itr-input { width: 100%; font-family:'Inter',sans-serif; font-size: 13px; color: var(--text); background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 12px; outline: none; transition: border-color .15s, box-shadow .15s; }
 .itr-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(2,132,199,.12); }
 .itr-input::placeholder { color: var(--muted); opacity: .6; }
 textarea.itr-input { resize: vertical; min-height: 100px; }
 select.itr-input { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px; }
 .itr-input[readonly] { background: var(--body-bg); color: var(--muted); cursor: default; }
 
-/* ── Grid ── */
+/* â”€â”€ Grid â”€â”€ */
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 .fg { margin-bottom: 14px; }
 .fg:last-child { margin-bottom: 0; }
 
-/* ── Radio pills ── */
+/* â”€â”€ Radio pills â”€â”€ */
 .itr-radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
 .itr-radio-pill { display: flex; align-items: center; gap: 7px; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12.5px; font-weight: 500; color: var(--text); background: var(--surface); transition: all .15s; user-select: none; }
 .itr-radio-pill input { display: none; }
 .itr-radio-pill:hover { border-color: var(--accent); color: var(--accent); }
 .itr-radio-pill.checked { border-color: var(--accent); background: rgba(2,132,199,.08); color: var(--accent); font-weight: 600; }
 
-/* ── Check chips ── */
+/* â”€â”€ Check chips â”€â”€ */
 .itr-check-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .itr-check-chip { display: flex; align-items: center; gap: 6px; padding: 6px 13px; border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12.5px; color: var(--text); background: var(--surface); transition: all .15s; user-select: none; }
 .itr-check-chip input { display: none; }
@@ -794,7 +794,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .chip-dot { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; transition: all .15s; }
 .itr-check-chip.checked .chip-dot { background: var(--accent); border-color: var(--accent); }
 
-/* ── Upload ── */
+/* â”€â”€ Upload â”€â”€ */
 .itr-upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 18px 20px; transition: border-color .15s; }
 .itr-upload-zone:hover { border-color: var(--accent); }
 .itr-notice { display: flex; align-items: flex-start; gap: 9px; font-size: 12px; line-height: 1.6; padding: 9px 12px; border-radius: 7px; margin-bottom: 8px; }
@@ -805,17 +805,17 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-upload-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .itr-upload-row input[type="file"] { display: none; }
 .itr-filename { flex: 1; font-size: 12.5px; color: var(--muted); background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 7px; padding: 8px 12px; }
-.itr-browse-btn { font-family:'DM Sans',sans-serif; font-size: 12.5px; font-weight: 600; padding: 8px 18px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 7px; color: var(--text); cursor: pointer; transition: all .15s; }
+.itr-browse-btn { font-family:'Inter',sans-serif; font-size: 12.5px; font-weight: 600; padding: 8px 18px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 7px; color: var(--text); cursor: pointer; transition: all .15s; }
 .itr-browse-btn:hover { border-color: var(--accent); color: var(--accent); }
 
 .itr-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
 
-/* ── Inline field errors ── */
+/* â”€â”€ Inline field errors â”€â”€ */
 .itr-field-error { color: #dc2626; font-size: 11.5px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
 .itr-field-error i { font-size: 12px; flex-shrink: 0; }
 .itr-input.is-error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.1) !important; }
 
-/* ── Name Searchable Dropdown ── */
+/* â”€â”€ Name Searchable Dropdown â”€â”€ */
 .itr-name-dd { position:relative; }
 .itr-name-trigger { display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;background:var(--surface);font-size:13px;transition:border-color .15s,box-shadow .15s;min-height:40px;user-select:none; }
 .itr-name-trigger:hover { border-color:var(--accent); }
@@ -825,7 +825,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-name-arrow { color:var(--muted);font-size:11px;flex-shrink:0;margin-left:8px;transition:transform .2s; }
 .itr-name-trigger.is-open .itr-name-arrow { transform:rotate(180deg); }
 .itr-name-panel { position:fixed;z-index:9999;background:#fff;border:1.5px solid #0284c7;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.15);overflow:hidden; }
-.itr-name-search-input { width:100%;border:none;border-bottom:1px solid #e2e8f0;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;font-family:'DM Sans',sans-serif; }
+.itr-name-search-input { width:100%;border:none;border-bottom:1px solid #e2e8f0;padding:9px 12px;font-size:13px;outline:none;box-sizing:border-box;font-family:'Inter',sans-serif; }
 .itr-name-list { max-height:220px;overflow-y:auto; }
 .itr-name-item { padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid #f1f5f9; }
 .itr-name-item:hover { background:#f0f9ff; }
@@ -833,21 +833,21 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-name-item-dept { font-size:11px;color:#64748b;margin-top:2px; }
 .itr-name-noresult { padding:12px 14px;font-size:13px;color:#64748b; }
 
-/* ── Actions ── */
+/* â”€â”€ Actions â”€â”€ */
 .itr-action-bar { display: flex; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
-.itr-btn-submit { font-family:'DM Sans',sans-serif; font-size: 13.5px; font-weight: 700; padding: 11px 28px; background: var(--accent); color: white; border: none; border-radius: 9px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
+.itr-btn-submit { font-family:'Inter',sans-serif; font-size: 13.5px; font-weight: 700; padding: 11px 28px; background: var(--accent); color: white; border: none; border-radius: 9px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
 .itr-btn-submit:hover { background: var(--accent-h); }
-.itr-btn-draft { font-family:'DM Sans',sans-serif; font-size: 13px; font-weight: 600; padding: 11px 22px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 9px; color: var(--text); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 7px; }
+.itr-btn-draft { font-family:'Inter',sans-serif; font-size: 13px; font-weight: 600; padding: 11px 22px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 9px; color: var(--text); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 7px; }
 .itr-btn-draft:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ── Paired-row form grid ── */
+/* â”€â”€ Paired-row form grid â”€â”€ */
 .itr-hw-layout { display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start; }
 .itr-hw-layout > .itr-section { margin-bottom:0; }
 .itr-hw-full { grid-column:1 / -1; }
-/* ── Doc upload zone ── */
+/* â”€â”€ Doc upload zone â”€â”€ */
 .itr-doc-zone { display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--body-bg);border:1.5px dashed var(--border);border-radius:9px;transition:border-color .15s; }
 .itr-doc-zone:hover { border-color:var(--accent); }
-/* ── Section head hint ── */
+/* â”€â”€ Section head hint â”€â”€ */
 .itr-section-hint { margin-left:auto;font-size:11.5px;color:var(--muted);font-weight:500; }
 
 @media (max-width: 900px)  { .itr-hw-layout { grid-template-columns:1fr; } }
@@ -866,7 +866,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div class="itr-step" id="prog-step2"><div class="itr-step-num">2</div> Fill in Details</div>
   </div>
 
-  <!-- ══ STEP 1 ══ -->
+  <!-- â•â• STEP 1 â•â• -->
   <div id="step1">
     <div class="itr-hw-intro">
       <div class="itr-hw-intro-banner">
@@ -915,7 +915,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     $ongoingForms = isset($myForms) ? $myForms->whereIn('status', ['Draft','New','Pending IT','Pending Validation'])->values() : collect();
     $decidedForms = isset($myForms) ? $myForms->whereIn('status', ['Approved','Rejected'])->values() : collect();
 
-    // Shared card renderer macro — defined as a PHP closure to avoid duplication
+    // Shared card renderer macro â€” defined as a PHP closure to avoid duplication
     $renderCard = function($mf) {
       $mfTypeMap = [
         'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
@@ -927,10 +927,10 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     };
   @endphp
 
-  {{-- ══ SECTION 1: ACTIVE REQUESTS ══ --}}
+  {{-- â•â• SECTION 1: ACTIVE REQUESTS â•â• --}}
   <div style="margin-top:32px" id="my-submissions">
     <div style="margin-bottom:14px">
-      <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+      <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
         <i class="bi bi-clipboard2-pulse-fill" style="color:var(--accent);margin-right:7px"></i>Active Requests
         @if($ongoingForms->count())
         <span style="font-size:12px;font-weight:600;color:var(--accent);background:rgba(2,132,199,.1);border:1px solid rgba(2,132,199,.25);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $ongoingForms->count() }}</span>
@@ -1031,11 +1031,11 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     @endif
   </div>
 
-  {{-- ══ SECTION 2: DECIDED REQUESTS ══ --}}
+  {{-- â•â• SECTION 2: DECIDED REQUESTS â•â• --}}
   <div style="margin-top:28px" id="my-decided">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
       <div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+        <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
           <i class="bi bi-check2-circle" style="color:#16a34a;margin-right:7px"></i>Decided Requests
           @if($decidedForms->count())
           <span style="font-size:12px;font-weight:600;color:#64748b;background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.2);border-radius:20px;padding:2px 10px;margin-left:8px">{{ $decidedForms->count() }}</span>
@@ -1049,13 +1049,13 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           onsubmit="return confirm('Clear all decided requests (Approved / Rejected) from your list?')" style="margin:0">
           @csrf
           <button type="submit"
-            style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+            style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#64748b;border:1.5px solid rgba(100,116,139,.3);border-radius:9px;padding:7px 14px;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s"
             onmouseover="this.style.borderColor='rgba(100,116,139,.6)';this.style.color='#334155'" onmouseout="this.style.borderColor='rgba(100,116,139,.3)';this.style.color='#64748b'">
             <i class="bi bi-x-circle"></i> Clear All
           </button>
         </form>
         <button onclick="toggleDecided()" id="decidedToggleBtn"
-          style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
+          style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;padding:7px 14px;background:transparent;border:1.5px solid var(--border);border-radius:9px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s"
           onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
           <i class="bi bi-chevron-down" id="decidedToggleIcon"></i> Show
         </button>
@@ -1174,12 +1174,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   }
   </script>
 
-  {{-- ══ HOU: PENDING APPROVAL REQUESTS ══ --}}
+  {{-- â•â• HOU: PENDING APPROVAL REQUESTS â•â• --}}
   @if($user->it_role === 'hou')
   <div style="margin-top:32px" id="hou-pending-section">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
       <div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+        <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
           <i class="bi bi-person-check-fill" style="color:#7c3aed;margin-right:7px"></i>Pending Approval Requests
         </div>
         <div style="font-size:12.5px;color:var(--muted)">IT requests from your staff that have listed you as approver.</div>
@@ -1198,9 +1198,9 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
       {{-- HOU bulk bar --}}
       <div id="houBulkBar" style="display:none;padding:10px 20px;background:rgba(124,58,237,.07);border-bottom:1px solid rgba(124,58,237,.2);align-items:center;gap:12px;flex-wrap:wrap">
         <span id="houBulkCount" style="font-size:13px;font-weight:700;color:#7c3aed;min-width:80px"></span>
-        <button onclick="openBulkModal('hou','approve')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-check-circle-fill"></i> Approve Selected</button>
-        <button onclick="openBulkModal('hou','reject')"  style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
-        <button onclick="clearBulkSelection('hou')" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
+        <button onclick="openBulkModal('hou','approve')" style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-check-circle-fill"></i> Approve Selected</button>
+        <button onclick="openBulkModal('hou','reject')"  style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
+        <button onclick="clearBulkSelection('hou')" style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
       </div>
 
       {{-- Column headers --}}
@@ -1256,15 +1256,15 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </div>
           <div style="min-width:0">
             <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              {{ $pa->req_name ?: ($pa->submittedBy?->full_name ?? '—') }}
+              {{ $pa->req_name ?: ($pa->submittedBy?->full_name ?? 'â€”') }}
             </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pa->req_designation ?: '—' }}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pa->req_designation ?: 'â€”' }}</div>
           </div>
         </div>
 
         {{-- Department --}}
         <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-          {{ $pa->req_department ?: '—' }}
+          {{ $pa->req_department ?: 'â€”' }}
         </div>
 
         {{-- Date --}}
@@ -1310,7 +1310,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div style="background:var(--surface);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
         <div id="houModalIcon" style="width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
-        <div id="houModalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
+        <div id="houModalTitle" style="font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
       </div>
       <form id="houActionForm" method="POST">
         @csrf
@@ -1319,17 +1319,17 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             Remarks <span id="houRemarksNote" style="font-weight:400;color:var(--muted)"></span>
           </label>
           <textarea name="approval_remarks" id="houRemarks" rows="3"
-            style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
+            style="width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
-            placeholder="Add a remark (optional)…"></textarea>
+            placeholder="Add a remark (optional)â€¦"></textarea>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end">
           <button type="button" onclick="closeHouModal()"
-            style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
+            style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
             Cancel
           </button>
           <button type="submit" id="houModalSubmit"
-            style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer">
+            style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer">
           </button>
         </div>
       </form>
@@ -1452,22 +1452,22 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <div style="background:var(--surface);border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);margin:16px">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
         <div id="bulkModalIcon" style="width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
-        <div id="bulkModalTitle" style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
+        <div id="bulkModalTitle" style="font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text)"></div>
       </div>
       <div id="bulkModalDesc" style="font-size:13px;color:var(--muted);margin-bottom:16px"></div>
       <form id="bulkForm" method="POST">
         @csrf
         <div id="bulkIdsContainer"></div>
         <div style="margin-bottom:16px">
-          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional — applies to all selected)</span></label>
+          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional â€” applies to all selected)</span></label>
           <textarea name="remarks" id="bulkRemarks" rows="3"
-            style="width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
+            style="width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
-            placeholder="Add a remark (optional)…"></textarea>
+            placeholder="Add a remark (optional)â€¦"></textarea>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end">
-          <button type="button" onclick="closeBulkModal()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
-          <button type="submit" id="bulkModalSubmit" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer"></button>
+          <button type="button" onclick="closeBulkModal()" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
+          <button type="submit" id="bulkModalSubmit" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:9px 22px;border:none;border-radius:8px;color:#fff;cursor:pointer"></button>
         </div>
       </form>
     </div>
@@ -1477,12 +1477,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   </script>
   @endif
 
-  {{-- ══ VALIDATOR: PENDING VALIDATION REQUESTS (Mohd Azrull only) ══ --}}
+  {{-- â•â• VALIDATOR: PENDING VALIDATION REQUESTS (Mohd Azrull only) â•â• --}}
   @if($user->isItValidator())
   <div style="margin-top:32px" id="validator-pending-section">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
       <div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
+        <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px">
           <i class="bi bi-patch-check-fill" style="color:#7c3aed;margin-right:7px"></i>Pending Validation
         </div>
         <div style="font-size:12.5px;color:var(--muted)">IT requests approved by IT Admin that are awaiting your final validation.</div>
@@ -1501,9 +1501,9 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
       {{-- Validator bulk bar --}}
       <div id="valBulkBar" style="display:none;padding:10px 20px;background:rgba(124,58,237,.07);border-bottom:1px solid rgba(124,58,237,.2);align-items:center;gap:12px;flex-wrap:wrap">
         <span id="valBulkCount" style="font-size:13px;font-weight:700;color:#7c3aed;min-width:80px"></span>
-        <button onclick="openBulkModal('val','approve')" style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-patch-check-fill"></i> Validate &amp; Approve Selected</button>
-        <button onclick="openBulkModal('val','reject')"  style="font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
-        <button onclick="clearBulkSelection('val')" style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
+        <button onclick="openBulkModal('val','approve')" style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-patch-check-fill"></i> Validate &amp; Approve Selected</button>
+        <button onclick="openBulkModal('val','reject')"  style="font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;padding:7px 16px;background:#dc2626;color:#fff;border:none;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><i class="bi bi-x-circle-fill"></i> Reject Selected</button>
+        <button onclick="clearBulkSelection('val')" style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer">Clear</button>
       </div>
 
       <div style="display:grid;grid-template-columns:40px 2fr 1fr 1fr 110px auto;padding:10px 20px;background:var(--body-bg);border-bottom:1px solid var(--border);align-items:center">
@@ -1548,12 +1548,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </div>
           <div style="min-width:0">
             <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              {{ $pv->req_name ?: ($pv->submittedBy?->full_name ?? '—') }}
+              {{ $pv->req_name ?: ($pv->submittedBy?->full_name ?? 'â€”') }}
             </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->req_designation ?: '—' }}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->req_designation ?: 'â€”' }}</div>
           </div>
         </div>
-        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->user_department ?: '—' }}</div>
+        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->user_department ?: 'â€”' }}</div>
         <div>
           <div style="font-size:12.5px;font-weight:500;color:var(--text)">{{ $pv->created_at->format('d M Y') }}</div>
           <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->created_at->format('H:i') }}</div>
@@ -1578,7 +1578,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
   </div>
   @endif
 
-  <!-- ══ STEP 2 ══ -->
+  <!-- â•â• STEP 2 â•â• -->
   <div id="step2">
 
     <div class="itr-selected-banner">
@@ -1589,7 +1589,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
     <!-- Shared subject row (rendered per-form via JS copy, but we place it inside each form below) -->
 
-    <!-- ░░ HARDWARE ░░ -->
+    <!-- â–‘â–‘ HARDWARE â–‘â–‘ -->
     <form id="form-hardware" style="display:none" method="POST" action="{{ route('it.it-request-form.store') }}" enctype="multipart/form-data" onsubmit="return validateAndSubmit('hardware', event)" novalidate>
       @csrf
       <input type="hidden" name="request_type" value="hardware">
@@ -1611,7 +1611,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             <input class="itr-input{{ $errors->has('subject') ? ' is-error' : '' }}"
                    type="text" name="subject" id="itr-subject"
                    value="{{ old('subject') }}"
-                   placeholder="Brief description of what this request is for…"
+                   placeholder="Brief description of what this request is forâ€¦"
                    maxlength="200"/>
             @error('subject')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
@@ -1640,7 +1640,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             </div>
             <div>
               <div class="itr-label" style="margin-bottom:10px">Type of Item <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('hw_items') ? ' is-error' : '' }}" type="text" name="hw_items[]" value="{{ old('hw_items.0') }}" placeholder="e.g. Laptop, Desktop PC, Printer…" required/>
+              <input class="itr-input{{ $errors->has('hw_items') ? ' is-error' : '' }}" type="text" name="hw_items[]" value="{{ old('hw_items.0') }}" placeholder="e.g. Laptop, Desktop PC, Printerâ€¦" required/>
               @error('hw_items')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
               <div class="itr-field-error itr-js-error" id="err-hw-items" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please enter a type of item.</div>
             </div>
@@ -1710,7 +1710,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 </label>
                 <span id="hw-fname" style="font-size:12.5px;color:var(--muted);margin-left:8px">No file chosen</span>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);flex-shrink:0">Max 2 MB · PDF, DOC, DOCX, JPG, PNG</div>
+              <div style="font-size:11.5px;color:var(--muted);flex-shrink:0">Max 2 MB Â· PDF, DOC, DOCX, JPG, PNG</div>
             </div>
           </div>
         </div>
@@ -1735,7 +1735,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                   <i class="bi bi-chevron-down itr-name-arrow"></i>
                 </div>
                 <div class="itr-name-panel" id="user_name_panel" style="display:none">
-                  <input class="itr-name-search-input" type="text" id="user_name_search" placeholder="Filter by name…" oninput="filterStaffDD('user_name',this.value)" autocomplete="off">
+                  <input class="itr-name-search-input" type="text" id="user_name_search" placeholder="Filter by nameâ€¦" oninput="filterStaffDD('user_name',this.value)" autocomplete="off">
                   <div class="itr-name-list" id="user_name_list"></div>
                 </div>
               </div>
@@ -1798,7 +1798,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 <i class="bi bi-chevron-down itr-name-arrow"></i>
               </div>
               <div class="itr-name-panel" id="req_name_panel" style="display:none">
-                <input class="itr-name-search-input" type="text" id="req_name_search" placeholder="Filter by name…" oninput="filterStaffDD('req_name',this.value)" autocomplete="off">
+                <input class="itr-name-search-input" type="text" id="req_name_search" placeholder="Filter by nameâ€¦" oninput="filterStaffDD('req_name',this.value)" autocomplete="off">
                 <div class="itr-name-list" id="req_name_list"></div>
               </div>
             </div>
@@ -1844,7 +1844,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 <i class="bi bi-chevron-down itr-name-arrow"></i>
               </div>
               <div class="itr-name-panel" id="approver_name_panel" style="display:none">
-                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by name…" oninput="filterStaffDD('approver_name',this.value)" autocomplete="off">
+                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by nameâ€¦" oninput="filterStaffDD('approver_name',this.value)" autocomplete="off">
                 <div class="itr-name-list" id="approver_name_list"></div>
               </div>
             </div>
@@ -2019,7 +2019,7 @@ function saveFormState() {
 }
 
 function validateAndSubmit(type, event) {
-  // Use event.submitter (which button triggered submit) — immune to onclick order or hidden-input state
+  // Use event.submitter (which button triggered submit) â€” immune to onclick order or hidden-input state
   var isDraft = !!(event && event.submitter && event.submitter.value === 'draft');
 
   if (isDraft) {
@@ -2068,7 +2068,7 @@ function collectChips(gridId, fieldName) {
   });
 }
 
-// ── Restore state after validation redirect-back ──────────────
+// â”€â”€ Restore state after validation redirect-back â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 (function() {
   var oldType = @json(old('request_type'));
   if (!oldType || !typeConfig[oldType]) return;
@@ -2131,7 +2131,7 @@ function restoreOldChips(gridId, values) {
   });
 }
 
-// ── Persist form state across page refreshes ──────────────────
+// â”€â”€ Persist form state across page refreshes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function restoreFromSession() {
   if (@json(old('request_type'))) return; // already handled by Laravel old()
   var saved = sessionStorage.getItem('itr_form_state');
@@ -2192,7 +2192,7 @@ restoreFromSession();
   if (f) { f.addEventListener('input', saveFormState); f.addEventListener('change', saveFormState); }
 });
 
-// ── Staff / Approver Searchable Dropdowns ─────────────────────
+// â”€â”€ Staff / Approver Searchable Dropdowns â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const staffList = @json($staffList ?? []);
 const houList   = @json($houList ?? []);
 
@@ -2221,7 +2221,7 @@ function _closeAllDD() {
   document.querySelectorAll('.itr-name-trigger.is-open').forEach(function(t) { t.classList.remove('is-open'); });
 }
 
-// ── Staff (user / requester) dropdown ─────────────────────────
+// â”€â”€ Staff (user / requester) dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderStaffList(prefix, query) {
   var q = query.trim().toLowerCase();
   var items = q ? staffList.filter(function(s){ return s.name && s.name.toLowerCase().includes(q); }) : staffList;
@@ -2317,7 +2317,7 @@ function pickStaff(prefix, el) {
   saveFormState();
 }
 
-// ── HOU (approver) dropdown ───────────────────────────────────
+// â”€â”€ HOU (approver) dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderHouList(prefix, query) {
   var q = query.trim().toLowerCase();
   var items = q ? houList.filter(function(s){ return s.name && s.name.toLowerCase().includes(q); }) : houList;
@@ -2379,7 +2379,7 @@ function pickHou(prefix, el) {
   saveFormState();
 }
 
-// Close panels when the user scrolls the page (no capture — only fires on window scroll,
+// Close panels when the user scrolls the page (no capture â€” only fires on window scroll,
 // not on element scrolls or programmatic scrolls triggered by focus/layout changes).
 window.addEventListener('scroll', function() { _closeAllDD(); });
 
@@ -2464,9 +2464,9 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
 .itr-quill-wrap{border:1.5px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .15s,box-shadow .15s;}
 .itr-quill-wrap.focused{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(2,132,199,.1)!important;}
 .itr-quill-wrap.is-error{border-color:#dc2626!important;box-shadow:0 0 0 3px rgba(220,38,38,.1)!important;}
-.itr-quill-wrap .ql-toolbar.ql-snow{border:none!important;border-bottom:1px solid var(--border)!important;background:var(--body-bg);font-family:'DM Sans',sans-serif;padding:6px 10px;}
+.itr-quill-wrap .ql-toolbar.ql-snow{border:none!important;border-bottom:1px solid var(--border)!important;background:var(--body-bg);font-family:'Inter',sans-serif;padding:6px 10px;}
 .itr-quill-wrap .ql-container.ql-snow{border:none!important;background:var(--surface);}
-.itr-quill-wrap .ql-editor{min-height:180px;padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text);}
+.itr-quill-wrap .ql-editor{min-height:180px;padding:9px 13px;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--text);}
 .itr-quill-wrap .ql-editor.ql-blank::before{color:var(--muted);opacity:.6;font-style:normal;}
 </style>
 @endpush
@@ -2479,7 +2479,7 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
 
   window._itrJustifyEditor = new Quill('#itr-justify-editor', {
     theme: 'snow',
-    placeholder: 'Describe why this request is needed…',
+    placeholder: 'Describe why this request is neededâ€¦',
     modules: {
       toolbar: [
         [{ font: [] }, { size: [] }],

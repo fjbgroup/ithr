@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Two-Factor Verification — {{ config('app.name', 'HR Admin System') }}</title>
+<title>Two-Factor Verification â€” {{ config('app.name', 'HR Admin System') }}</title>
 @include('partials.favicons')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <script>!function(){var t=localStorage.getItem('fjb-theme')||localStorage.getItem('color-theme')||localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}();</script>
 <style>
@@ -125,7 +125,7 @@
     <h1>Two-Step Verification</h1>
     <p class="sub">
       @if(!empty($userName))
-        Hi <strong>{{ explode(' ', $userName)[0] }}</strong> — open
+        Hi <strong>{{ explode(' ', $userName)[0] }}</strong> â€” open
       @else
         Open
       @endif

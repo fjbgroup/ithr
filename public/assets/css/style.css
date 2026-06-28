@@ -1,5 +1,5 @@
 /* ============================================
-   HR Admin System — Main Stylesheet
+   HR Admin System â€” Main Stylesheet
    ============================================ */
 
 :root {
@@ -72,7 +72,7 @@ html, body {
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   color: var(--text);
   background: var(--bg);
@@ -110,7 +110,7 @@ a { text-decoration: none; color: inherit; }
   margin: 0 auto 1rem;
 }
 
-.brand-name { font-family: 'DM Sans', sans-serif; font-size: 1.6rem; color: var(--navy); }
+.brand-name { font-family: 'Inter', sans-serif; font-size: 1.6rem; color: var(--navy); }
 .brand-sub  { color: var(--muted); font-size: .875rem; margin-top: .25rem; }
 
 .login-form .form-group { margin-bottom: 1.25rem; }
@@ -157,7 +157,7 @@ a { text-decoration: none; color: inherit; }
   padding: 1.25rem 1.5rem;
   display: flex; align-items: center; gap: .75rem;
   border-bottom: 1px solid rgba(255,255,255,.1);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
   color: var(--white);
 }
@@ -315,7 +315,7 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: flex-start; justify-content: space-between;
   margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
 }
-.page-header h2  { font-family: 'DM Sans', sans-serif; font-size: 1.5rem; color: var(--navy); }
+.page-header h2  { font-family: 'Inter', sans-serif; font-size: 1.5rem; color: var(--navy); }
 .page-subtitle   { color: var(--muted); font-size: .875rem; margin-top: .2rem; }
 
 /* ===================== STATS ===================== */
@@ -655,7 +655,7 @@ a { text-decoration: none; color: inherit; }
 .empty-state svg { opacity: .3; }
 .empty-state p { font-size: .9rem; }
 
-/* ===================== MEETING ROOMS — DATE NAV ===================== */
+/* ===================== MEETING ROOMS â€” DATE NAV ===================== */
 .date-nav {
   display: flex; align-items: center; gap: .75rem;
   margin-bottom: 1rem; flex-wrap: wrap;
@@ -908,7 +908,7 @@ a { text-decoration: none; color: inherit; }
 .booking-details span   { color: var(--muted); font-size: .8rem; }
 .booking-details small  { color: var(--muted); font-size: .75rem; }
 
-/* ===================== RESPONSIVE — see bottom of file for full rules ===================== */
+/* ===================== RESPONSIVE â€” see bottom of file for full rules ===================== */
 
 /* ===== 3-ROLE SYSTEM ADDITIONS ===== */
 
@@ -1035,7 +1035,7 @@ a { text-decoration: none; color: inherit; }
 
 
 
-/* ===================== MEETING ROOMS — REDESIGNED (rb-*) ===================== */
+/* ===================== MEETING ROOMS â€” REDESIGNED (rb-*) ===================== */
 
 /* Date strip */
 .rb-date-strip {
@@ -1187,7 +1187,7 @@ a { text-decoration: none; color: inherit; }
   background: #E1F5EE; border-color: #0F6E56; color: #0F6E56;
 }
 
-/* ── Room timeline bar ── */
+/* â”€â”€ Room timeline bar â”€â”€ */
 .rb-timeline-wrap  { margin-bottom: .6rem; }
 .rb-timeline-track {
   position: relative; height: 48px;
@@ -1223,7 +1223,7 @@ a { text-decoration: none; color: inherit; }
   .rb-quick-btn       { width: 100%; text-align: center; }
 }
 
-/* ── Manage Rooms modal rows ── */
+/* â”€â”€ Manage Rooms modal rows â”€â”€ */
 .mrm-room-row {
   display: flex; align-items: center; gap: .75rem;
   padding: .6rem .5rem; border-radius: 8px;
@@ -1244,7 +1244,7 @@ a { text-decoration: none; color: inherit; }
 
 
 /* ============================================================
-   v3 PATCH — Training type styles
+   v3 PATCH â€” Training type styles
    ============================================================ */
 
 /* Training type badges (used in training.php + training_report.php) */
@@ -1267,9 +1267,9 @@ a { text-decoration: none; color: inherit; }
 /* ============================================================
    RESPONSIVE SYSTEM
    Breakpoints:
-     1100px — tablet landscape (narrow sidebar)
-      768px — tablet portrait / large phone (sidebar off-canvas)
-      480px — small phones (compact everything)
+     1100px â€” tablet landscape (narrow sidebar)
+      768px â€” tablet portrait / large phone (sidebar off-canvas)
+      480px â€” small phones (compact everything)
    ============================================================ */
 
 /* Utility Classes for Responsiveness */
@@ -1285,7 +1285,7 @@ a { text-decoration: none; color: inherit; }
   .w-full-mobile { width: 100% !important; }
 }
 
-/* ── Scrollable table wrapper ── */
+/* â”€â”€ Scrollable table wrapper â”€â”€ */
 .table-wrap,
 .table-responsive {
   overflow-x: auto;
@@ -1294,7 +1294,7 @@ a { text-decoration: none; color: inherit; }
   position: relative;
 }
 
-/* ── Sidebar overlay (dims content when sidebar is open on mobile) ── */
+/* â”€â”€ Sidebar overlay (dims content when sidebar is open on mobile) â”€â”€ */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -1306,7 +1306,7 @@ a { text-decoration: none; color: inherit; }
 }
 .sidebar-overlay.active { display: block; }
 
-/* ── Sidebar close button (shown only on mobile) ── */
+/* â”€â”€ Sidebar close button (shown only on mobile) â”€â”€ */
 .sidebar-close-btn {
   display: none;
   position: absolute;
@@ -1324,7 +1324,7 @@ a { text-decoration: none; color: inherit; }
 }
 .sidebar-close-btn:hover { background: rgba(255,255,255,.25); }
 
-/* ── Rooms / index — rb-rooms-grid responsive grid ── */
+/* â”€â”€ Rooms / index â€” rb-rooms-grid responsive grid â”€â”€ */
 .rb-rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -1355,7 +1355,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================================
-   1100px — tablet landscape
+   1100px â€” tablet landscape
    ============================================================ */
 @media (max-width: 1100px) {
   :root { --sidebar-w: 210px; }
@@ -1365,7 +1365,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================================
-   768px — tablet portrait & large phones
+   768px â€” tablet portrait & large phones
    ============================================================ */
 @media (max-width: 768px) {
   /* Sidebar */
@@ -1387,7 +1387,7 @@ a { text-decoration: none; color: inherit; }
   /* Content */
   .content-area { padding: .75rem; width: 100%; overflow-x: hidden; }
 
-  /* Page header — keep on one row, shrink text */
+  /* Page header â€” keep on one row, shrink text */
   .page-header { flex-direction: row; align-items: center; gap: .5rem; margin-bottom: .75rem; flex-wrap: nowrap; }
   .page-header > div:first-child { flex: 1; min-width: 0; }
   .page-header h2 { font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1434,14 +1434,14 @@ a { text-decoration: none; color: inherit; }
   .rb-date-strip { gap: .4rem; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
   .rb-date-strip::-webkit-scrollbar { display: none; }
 
-  /* Form inputs — bigger touch targets */
+  /* Form inputs â€” bigger touch targets */
   input[type="text"], input[type="email"], input[type="password"],
   input[type="number"], input[type="date"], select, textarea {
     font-size: .875rem;
     padding: .55rem .75rem;
   }
 
-  /* Modals — centered instead of bottom-sheet */
+  /* Modals â€” centered instead of bottom-sheet */
   .modal { padding: 1rem; align-items: center; }
   .modal-box {
     max-width: 100% !important;
@@ -1467,7 +1467,7 @@ a { text-decoration: none; color: inherit; }
   .rb-quick-banner    { flex-direction: column; gap: .5rem; }
   .rb-quick-btn       { width: 100%; text-align: center; justify-content: center; }
 
-  /* Timeline: horizontal scroll so full 07:00–20:00 window is visible on phones */
+  /* Timeline: horizontal scroll so full 07:00â€“20:00 window is visible on phones */
   .rb-timeline-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .rb-timeline-wrap::-webkit-scrollbar { display: none; }
   .rb-timeline-track  { min-width: 650px; }
@@ -1492,7 +1492,7 @@ a { text-decoration: none; color: inherit; }
   .toast-container { top: auto; bottom: 1rem; left: .875rem; right: .875rem; }
   .toast { min-width: 0; width: 100%; }
 
-  /* Notification popup — full width at bottom on mobile */
+  /* Notification popup â€” full width at bottom on mobile */
   #notifPopupStack {
     bottom: 0 !important;
     right: 0 !important;
@@ -1512,7 +1512,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================================
-   480px — small phones
+   480px â€” small phones
    ============================================================ */
 @media (max-width: 480px) {
   :root { --topbar-h: 48px; }
@@ -1557,7 +1557,7 @@ a { text-decoration: none; color: inherit; }
   .filter-tab  { padding: .2rem .45rem; font-size: .68rem; }
   .filter-bar  { gap: .25rem; }
 
-  /* Forms — keep 1rem (16px) to prevent iOS auto-zoom on input focus */
+  /* Forms â€” keep 1rem (16px) to prevent iOS auto-zoom on input focus */
   .form-group label { font-size: .78rem; margin-bottom: .25rem; }
   input[type="text"], input[type="email"], input[type="password"],
   input[type="number"], input[type="date"], select, textarea {
@@ -1590,7 +1590,7 @@ a { text-decoration: none; color: inherit; }
   .clock-slot      { font-size: .75rem; padding: .35rem .1rem; }
 }
 
-/* ── Notification Bell ───────────────────────────────────────── */
+/* â”€â”€ Notification Bell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .notif-wrap { position: relative; }
 
 .notif-bell-btn {
@@ -1610,7 +1610,7 @@ a { text-decoration: none; color: inherit; }
   padding: 0 4px; border: 2px solid #fff; pointer-events: none;
 }
 
-/* ── Notification Dropdown ──────────────────────────────────── */
+/* â”€â”€ Notification Dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .notif-dropdown {
   position: absolute; top: calc(100% + 8px); right: 0;
   width: 320px; background: var(--surface);
@@ -1662,7 +1662,7 @@ a { text-decoration: none; color: inherit; }
 }
 .notif-item-time { font-size: .72rem; color: #94a3b8; margin-top: .25rem; }
 
-/* ── Notification Popup Toast ────────────────────────────────── */
+/* â”€â”€ Notification Popup Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes notifSlideIn {
   from { transform: translateX(110%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
@@ -1900,12 +1900,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================================
-   DARK MODE — component-level overrides
+   DARK MODE â€” component-level overrides
    These fix elements that use hardcoded colours the CSS
    variable system cannot reach.
    ============================================================ */
 
-/* ── Timetable row separators ── */
+/* â”€â”€ Timetable row separators â”€â”€ */
 html.dark .tt-row      { border-bottom-color: var(--border); }
 html.dark .tt-row-hour { border-bottom-color: var(--border); }
 html.dark .tt-row-half { border-bottom-color: rgba(255,255,255,.06); }
@@ -1915,24 +1915,24 @@ html.dark .tt-header-room-amber { background: rgba(245,158,11,.1); border-top-co
 html.dark .tt-booked-status-approved { background: rgba(22,163,74,.12); }
 html.dark .tt-booked-status-pending  { background: rgba(133,77,14,.12); }
 
-/* ── Analytics day grid clickable hover ── */
+/* â”€â”€ Analytics day grid clickable hover â”€â”€ */
 html.dark .rba-col.rba-clickable:hover { background: rgba(99,102,241,.08); }
 
-/* ── Analytics bkf button hover ── */
+/* â”€â”€ Analytics bkf button hover â”€â”€ */
 html.dark .bkf-btn:hover { background: rgba(99,102,241,.12); color: #818cf8; }
 
-/* ── Booking items ── */
+/* â”€â”€ Booking items â”€â”€ */
 html.dark .booking-item.room-blue  { background: rgba(59,130,246,.1); }
 html.dark .booking-item.room-green { background: rgba(34,197,94,.1); }
 html.dark .booking-item.room-amber { background: rgba(245,158,11,.1); }
 
-/* ── Stat card icon backgrounds ── */
+/* â”€â”€ Stat card icon backgrounds â”€â”€ */
 html.dark .stat-blue  .stat-icon { background: rgba(59,130,246,.15); }
 html.dark .stat-green .stat-icon { background: rgba(34,197,94,.15); }
 html.dark .stat-amber .stat-icon { background: rgba(245,158,11,.15); }
 html.dark .stat-red   .stat-icon { background: rgba(239,68,68,.15); }
 
-/* ── Status / relation / role badges ── */
+/* â”€â”€ Status / relation / role badges â”€â”€ */
 html.dark .status-completed,
 html.dark .status-badge.status-completed,
 html.dark .status-badge.status-approved   { background: rgba(22,163,74,.15); color: #86efac; }
@@ -1978,7 +1978,7 @@ html.dark .room-badge.room-amber { background: rgba(146,64,14,.15);  color: #fcd
 html.dark .company-fjb  { background: rgba(109,40,217,.15); color: #c4b5fd; }
 html.dark .company-fbsb { background: rgba(157,23,77,.15);  color: #f9a8d4; }
 
-/* ── Training badges ── */
+/* â”€â”€ Training badges â”€â”€ */
 html.dark .type-external, html.dark .type-External { background: rgba(194,65,12,.15);  color: #fdba74; border-color: rgba(194,65,12,.25); }
 html.dark .type-internal, html.dark .type-Internal { background: rgba(21,128,61,.15);  color: #86efac; border-color: rgba(21,128,61,.25); }
 
@@ -1992,24 +1992,24 @@ html.dark .dstat.ext-stat .dstat-val { color: #fdba74; }
 html.dark .dstat.int-stat .dstat-val { color: #86efac; }
 html.dark .dstat-val { color: #818cf8; }
 
-/* ── Alert boxes ── */
+/* â”€â”€ Alert boxes â”€â”€ */
 html.dark .alert-error   { background: rgba(153,27,27,.2);   color: #fca5a5; border-color: rgba(220,38,38,.3); }
 html.dark .alert-warning { background: rgba(146,64,14,.15);  color: #fde68a; border-color: rgba(253,230,138,.2); }
 html.dark .alert-success { background: rgba(22,101,52,.2);   color: #86efac; border-color: rgba(187,247,208,.15); }
 
-/* ── Availability badges ── */
+/* â”€â”€ Availability badges â”€â”€ */
 html.dark .rb-badge-free { background: rgba(59,186,87,.15);  color: #86efac; }
 html.dark .rb-badge-busy { background: rgba(163,45,45,.15);  color: #fca5a5; }
 
-/* ── Room booking pills ── */
+/* â”€â”€ Room booking pills â”€â”€ */
 html.dark .rb-booking-pill { background: var(--bg); }
 html.dark .tt-btn-cancel { background: rgba(220,38,38,.15); color: #fca5a5; border-color: rgba(220,38,38,.25); }
 
-/* ── Manage-rooms delete button ── */
+/* â”€â”€ Manage-rooms delete button â”€â”€ */
 html.dark .mrm-del-btn { background: rgba(163,45,45,.15); color: #fca5a5; border-color: rgba(220,38,38,.2); }
 html.dark .mrm-del-btn:hover { background: rgba(163,45,45,.25); }
 
-/* ── Inline hardcoded light backgrounds not reachable by vars ── */
+/* â”€â”€ Inline hardcoded light backgrounds not reachable by vars â”€â”€ */
 html.dark .dept-badge { background: var(--bg); color: var(--text); }
 html.dark .rb-timeline-labels { color: var(--muted); }
 html.dark .tt-bk-dur { background: rgba(255,255,255,.08); color: var(--text); }
@@ -2018,28 +2018,28 @@ html.dark .stat-blue  .stat-icon { color: #93c5fd; }
 html.dark .stat-green .stat-icon { color: #86efac; }
 html.dark .stat-red   .stat-icon { color: #fca5a5; }
 
-/* ── Room header timetable colors in dark ── */
+/* â”€â”€ Room header timetable colors in dark â”€â”€ */
 html.dark .tt-booked-room-blue  { background: rgba(34,197,94,.1);  border-left-color: #22c55e; }
 html.dark .tt-booked-room-green { background: rgba(34,197,94,.1);  border-left-color: #22c55e; }
 html.dark .tt-booked-room-amber { background: rgba(133,77,14,.1);  border-left-color: #b45309; }
 
-/* ── Free cell hover in timetable ── */
+/* â”€â”€ Free cell hover in timetable â”€â”€ */
 html.dark .tt-free-cell:hover { background: rgba(34,197,94,.08); }
 html.dark .tt-free-hint { color: #86efac; }
 
-/* ── Room booking record subtle bg ── */
+/* â”€â”€ Room booking record subtle bg â”€â”€ */
 html.dark .rb-booking-record { background: var(--bg); }
 html.dark .rb-booking-pill   { background: var(--bg); }
 
-/* ── Dept type bar track ── */
+/* â”€â”€ Dept type bar track â”€â”€ */
 html.dark .dept-type-bar { background: var(--border); }
 
-/* ══════════════════════════════════════════════════════════════
-   DARK MODE — page-specific class overrides
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DARK MODE â€” page-specific class overrides
    (classes defined in @section('styles') of individual views)
-   ══════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* ── Dashboard: KPI cards ── */
+/* â”€â”€ Dashboard: KPI cards â”€â”€ */
 html.dark .hd-kpi               { background: var(--surface); }
 html.dark .hd-kpi-blue  .hd-kpi-icon { background: rgba(59,130,246,.15);  color: #93c5fd; }
 html.dark .hd-kpi-green .hd-kpi-icon { background: rgba(34,197,94,.15);   color: #86efac; }
@@ -2059,14 +2059,14 @@ html.dark .hd-to-chip    { background: var(--bg); }
 html.dark .hd-dept-co    { background: var(--bg); }
 html.dark .hd-req-age    { background: var(--bg); }
 
-/* ── Dashboard: active tabs that use var(--navy) as background ── */
+/* â”€â”€ Dashboard: active tabs that use var(--navy) as background â”€â”€ */
 html.dark .hd-kpi-blue  { border-left-color: #3b82f6; }
 html.dark .hd-kpi-green { border-left-color: #22c55e; }
 html.dark .hd-kpi-amber { border-left-color: #f59e0b; }
 html.dark .hd-kpi-red   { border-left-color: #ef4444; }
 html.dark .hd-kpi-purple { border-left-color: #8b5cf6; }
 
-/* ── Training page ── */
+/* â”€â”€ Training page â”€â”€ */
 html.dark .tr-progress-track           { background: var(--border); }
 html.dark .tr-dp-track                 { background: var(--border); }
 html.dark .tr-tab.active               { background: var(--primary); border-color: var(--primary); }
@@ -2089,7 +2089,7 @@ html.dark .tr-search-bar      { background: var(--surface); }
 html.dark .tr-filter-bar      { background: var(--surface); }
 html.dark .hd-comp-bar-wrap .hd-type-bar-track { background: var(--border); }
 
-/* ── Rooms page ── */
+/* â”€â”€ Rooms page â”€â”€ */
 html.dark .pub-view-tabs        { background: var(--bg); }
 html.dark .pvt-btn              { color: var(--muted); }
 html.dark .pvt-active           { background: var(--surface) !important; color: var(--sky-dark) !important; box-shadow: var(--shadow); }
@@ -2137,14 +2137,14 @@ html.dark .st-Rejected       { background: rgba(239,68,68,.1);   border-color: r
 /* Mobile card transformation in dark */
 html.dark .rb-m-stack tbody tr { background: var(--surface); }
 
-/* ── Report pages ── */
+/* â”€â”€ Report pages â”€â”€ */
 html.dark .rpt-kpi { background: var(--surface); border-color: var(--border); }
 
-/* ── Audit page ── */
+/* â”€â”€ Audit page â”€â”€ */
 html.dark .audit-timeline-dot  { background: var(--surface); border-color: var(--border); }
 html.dark .audit-card          { background: var(--surface); }
 
-/* ── Chatbot ── */
+/* â”€â”€ Chatbot â”€â”€ */
 html.dark .chatbot-panel { background: var(--surface); border-color: var(--border); }
 html.dark .chatbot-msg-bot { background: var(--bg); }
 html.dark .chatbot-input  { background: var(--surface); border-color: var(--border); color: var(--text); }

@@ -1,21 +1,21 @@
-﻿<style>
+<style>
 /* ══ My Requests ══ */
 .myr-wrap{max-width:860px;margin:0 auto}
 .myr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:16px;padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.myr-hero-title{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
+.myr-hero-title{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
 .myr-hero-sub{font-size:13px;color:rgba(255,255,255,.55);margin:0}
 .myr-hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 20px;text-align:center;flex-shrink:0}
-.myr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'DM Sans',sans-serif}
+.myr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'Inter',sans-serif}
 .myr-hero-badge-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
 .myr-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:28px}
 .myr-tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
 .myr-tile-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
-.myr-tile-num{font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.myr-tile-num{font-size:26px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .myr-tile-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .myr-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
 .myr-section-hdr{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--body-bg)}
 .myr-section-hdr-accent{width:4px;height:20px;border-radius:3px;flex-shrink:0}
-.myr-section-hdr-text{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--text);flex:1}
+.myr-section-hdr-text{font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:var(--text);flex:1}
 .myr-section-hdr-count{font-size:11px;font-weight:700;border-radius:20px;padding:3px 12px}
 .myr-row{border-bottom:1px solid var(--border)}
 .myr-row:last-child{border-bottom:none}
@@ -45,7 +45,7 @@
 .myr-pager{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--border);background:var(--body-bg)}
 .myr-pager-info{font-size:11px;color:var(--muted);font-weight:600}
 .myr-pager-btns{display:flex;gap:6px}
-.myr-pager-btn{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.myr-pager-btn{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
 .myr-pager-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .myr-pager-btn:disabled{opacity:.4;cursor:not-allowed}
 .myr-empty{padding:40px 24px;text-align:center}

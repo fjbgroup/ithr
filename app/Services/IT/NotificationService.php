@@ -52,7 +52,7 @@ class NotificationService
             ? '<p style="margin:24px 0 0"><a href="' . htmlspecialchars($link) . '" style="display:inline-block;padding:11px 24px;background:#142b47;color:#fff;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.01em">View Details &rarr;</a></p>'
             : '';
 
-        return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f1f5f9;font-family:\'DM Sans\',Arial,sans-serif">
+        return '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f1f5f9;font-family:\'Inter\',Arial,sans-serif">
 <div style="max-width:520px;margin:36px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
   <div style="background:#142b47;padding:22px 28px;display:flex;align-items:center;gap:12px">
     <div style="width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">&#128274;</div>

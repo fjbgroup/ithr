@@ -8,7 +8,7 @@
 .ud-stat{display:flex;align-items:center;gap:18px;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07);transition:box-shadow .2s,transform .2s;height:100%}
 .ud-stat:hover{box-shadow:0 6px 24px rgba(0,0,0,.15);transform:translateY(-2px)}
 .ud-stat-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ud-stat-val{font-size:22px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.ud-stat-val{font-size:22px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .ud-stat-lbl{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
 </style>
 @endpush

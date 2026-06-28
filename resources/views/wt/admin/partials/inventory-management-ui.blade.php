@@ -1,4 +1,4 @@
-﻿<span class="inventory-management-ui" hidden></span>
+<span class="inventory-management-ui" hidden></span>
 <style>
 /* Shared Inventory Management UI. Baseline: Under Repair / Faulty page. */
 body .content-surface:has(.inventory-management-ui),
@@ -2641,7 +2641,7 @@ body .content-surface :is(
     .clean-admin-table,
     .wt-data table
 ) {
-    font-family: Inter, "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+    font-family: Inter, "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
     font-size: 11px !important;
     line-height: 1.1 !important;
 }

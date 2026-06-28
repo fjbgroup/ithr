@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Dashboard')
 @section('page_title', 'Dashboard')
@@ -15,7 +15,7 @@
 }
 .ds-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.15);transform:translateY(-2px)}
 .ds-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .ds-lbl{font-size:12px;color:var(--muted);margin-top:5px;font-weight:500}
 
 .ds-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
@@ -23,7 +23,7 @@
 .ds-box-title{font-size:14px;font-weight:700;color:var(--text)}
 .ds-box-sub{font-size:12px;color:var(--muted);margin-top:2px}
 
-.ds-tab{padding:6px 16px;border-radius:7px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ds-tab{padding:6px 16px;border-radius:7px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .ds-tab.on{background:var(--navy,#142b47);color:#fff}
 .ds-tab.off{background:transparent;color:var(--muted)}
 
@@ -72,14 +72,14 @@
       </div>
       <div>
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px">FJB Inventory System</div>
-        <div style="font-size:13px;font-weight:700;color:var(--text)">{{ now()->format('d M Y') }} &nbsp;·&nbsp; <span id="dsLiveClock" style="color:#0284c7;font-family:'DM Sans',sans-serif"></span></div>
+        <div style="font-size:13px;font-weight:700;color:var(--text)">{{ now()->format('d M Y') }} &nbsp;·&nbsp; <span id="dsLiveClock" style="color:#0284c7;font-family:'Inter',sans-serif"></span></div>
       </div>
     </div>
 
     <div class="ds-status-cell" style="min-width:150px">
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Total Assets</div>
-        <div style="font-size:22px;font-weight:800;color:var(--text);font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
+        <div style="font-size:22px;font-weight:800;color:var(--text);font-family:'Inter',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
       </div>
     </div>
 
@@ -87,7 +87,7 @@
       <div style="width:8px;height:8px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.15);flex-shrink:0"></div>
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Active</div>
-        <div style="font-size:22px;font-weight:800;color:#16a34a;font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
+        <div style="font-size:22px;font-weight:800;color:#16a34a;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
       </div>
     </div>
 
@@ -99,7 +99,7 @@
       @endif
       <div>
         <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Pending</div>
-        <div style="font-size:22px;font-weight:800;color:{{ $pendingAll > 0 ? '#f59e0b' : 'var(--muted)' }};font-family:'DM Sans',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
+        <div style="font-size:22px;font-weight:800;color:{{ $pendingAll > 0 ? '#f59e0b' : 'var(--muted)' }};font-family:'Inter',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
       </div>
     </div>
 
@@ -217,16 +217,16 @@
           <div id="chartTotalBadge" style="background:var(--body-bg);border:1px solid var(--border);border-radius:8px;padding:6px 14px;display:flex;align-items:center;gap:8px">
             <div style="width:6px;height:6px;border-radius:50%;background:#f97316;flex-shrink:0"></div>
             <span style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Total&nbsp;</span>
-            <span id="chartTotalNum" style="font-size:16px;font-weight:800;color:var(--text);font-family:'DM Sans',sans-serif">{{ $itTotal }}</span>
+            <span id="chartTotalNum" style="font-size:16px;font-weight:800;color:var(--text);font-family:'Inter',sans-serif">{{ $itTotal }}</span>
           </div>
           <!-- Tabs -->
           <div style="display:flex;background:var(--body-bg);border:1px solid var(--border);border-radius:8px;padding:3px;gap:2px">
             <button id="tabIT" onclick="switchTab('it')"
-              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:#f97316;color:#fff;transition:all .2s">
+              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:#f97316;color:#fff;transition:all .2s">
               IT Assets
             </button>
             <button id="tabNIT" onclick="switchTab('nit')"
-              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--muted);transition:all .2s">
+              style="padding:6px 18px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--muted);transition:all .2s">
               Non-IT
             </button>
           </div>
@@ -436,9 +436,9 @@
           padding:14,
           cornerRadius:6,
           displayColors:false,
-          titleFont:{size:12,weight:'800',family:"'DM Sans',sans-serif"},
-          bodyFont:{size:13,weight:'700',family:"'DM Sans',sans-serif"},
-          footerFont:{size:10,family:"'DM Sans',sans-serif"},
+          titleFont:{size:12,weight:'800',family:"'Inter',sans-serif"},
+          bodyFont:{size:13,weight:'700',family:"'Inter',sans-serif"},
+          footerFont:{size:10,family:"'Inter',sans-serif"},
           callbacks:{
             title:function(i){return i[0].label;},
             label:function(c){return '  '+c.raw+' units';},
@@ -455,7 +455,7 @@
           border:{display:false},
           ticks:{
             color:function(){ return tickColorX(currentTab); },
-            font:{size:10,family:"'DM Sans',sans-serif",weight:'700'},
+            font:{size:10,family:"'Inter',sans-serif",weight:'700'},
             maxRotation:0
           }
         },
@@ -469,7 +469,7 @@
           },
           ticks:{
             color:function(){ return tickColorY(); },
-            font:{size:10,family:"'DM Sans',sans-serif",weight:'600'},
+            font:{size:10,family:"'Inter',sans-serif",weight:'600'},
             precision:0,padding:10,
             callback:function(v){return v%1===0?v:'';}
           }
@@ -485,7 +485,7 @@
               var val=ds.data[i];
               if(!val&&val!==0)return;
               c.save();
-              c.font="700 11px 'DM Sans',sans-serif";
+              c.font="700 11px 'Inter',sans-serif";
               c.textAlign='center'; c.textBaseline='bottom';
               var s=String(val), tw=c.measureText(s).width+12;
               c.fillStyle=labelBg();

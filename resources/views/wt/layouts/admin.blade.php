@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>@yield('title', 'Dashboard') — WT System</title>
+<title>@yield('title', 'Dashboard') â€” WT System</title>
 @include('partials.favicons')
 <script>
   document.documentElement.classList.add('wt-render-lock');
@@ -66,7 +66,7 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{corp:{navy:'#1F2937',brown:'#075985',gold:'#38bdf8'}}}}}</script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -382,7 +382,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         <form action="{{ route('wt.switch_executive_account') }}" method="POST" style="display:flex;align-items:center">
           @csrf
           <select name="executive_user_id" onchange="if(this.value) this.form.submit()"
-            style="border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;outline:none;padding:4px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;text-transform:uppercase;max-width:180px">
+            style="border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;outline:none;padding:4px 8px;cursor:pointer;font-family:'Inter',sans-serif;text-transform:uppercase;max-width:180px">
             <option value="">Executive Account</option>
             @foreach($executiveSwitcherAccounts as $executiveAccount)
               <option value="{{ $executiveAccount->user_id ?? $executiveAccount->id }}">
@@ -1024,7 +1024,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
-// ── RENDER LOCK ──
+// â”€â”€ RENDER LOCK â”€â”€
 (function() {
   var unlocked = false;
   function unlockRender() {
@@ -1044,7 +1044,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   }
 })();
 
-// ── LIVE CLOCK ──
+// â”€â”€ LIVE CLOCK â”€â”€
 (function() {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1059,7 +1059,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   setInterval(tick, 60000);
 })();
 
-// ── THEME ──
+// â”€â”€ THEME â”€â”€
 const DARK_VARS = {
   '--body-bg':            '#0f172a',
   '--surface':            '#1e293b',
@@ -1138,7 +1138,7 @@ if (themeToggleBtn) {
   applyTheme(theme === 'dark');
 })();
 
-// ── SIDEBAR TOGGLE (mobile) ──
+// â”€â”€ SIDEBAR TOGGLE (mobile) â”€â”€
 function toggleMobileSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('mobileSidebarOverlay');
@@ -1205,7 +1205,7 @@ document.body.classList.remove('sidebar-collapsed');
   });
 })();
 
-// ── DROPDOWN TOGGLE ──
+// â”€â”€ DROPDOWN TOGGLE â”€â”€
 function toggleDropdown(trigger) {
   const wrapper = trigger.closest('.dropdown-wrapper');
   const isOpen = wrapper.classList.contains('open');
@@ -1226,7 +1226,7 @@ function toggleDropdown(trigger) {
   }
 }
 
-// ── LOGOUT ──
+// â”€â”€ LOGOUT â”€â”€
 function handleLogout() { openLogoutModal(); }
 function openLogoutModal() {
   var m = document.getElementById('logoutModal');
@@ -1246,7 +1246,7 @@ function submitLogout() {
   document.getElementById('logout-form').submit();
 }
 
-// ── MODERN CONFIRM ──
+// â”€â”€ MODERN CONFIRM â”€â”€
 let modernConfirmForm = null;
 function openModernConfirm(form) {
   modernConfirmForm = form;
@@ -1301,7 +1301,7 @@ document.addEventListener('click', function(event) {
   if (event.target === m) closeModernConfirm();
 });
 
-// ── POLICIES MODAL ──
+// â”€â”€ POLICIES MODAL â”€â”€
 function openPoliciesModal() {
   var m = document.getElementById('policiesModal');
   if (m) { m.style.display = 'block'; document.body.style.overflow = 'hidden'; }
@@ -1311,7 +1311,7 @@ function closePoliciesModal() {
   if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
 }
 
-// ── AUTO UPPERCASE ──
+// â”€â”€ AUTO UPPERCASE â”€â”€
 function bindAutoUppercase(root) {
   root = root || document;
   var fields = root.querySelectorAll('input[type="text"], input[type="search"], textarea');
@@ -1327,7 +1327,7 @@ function bindAutoUppercase(root) {
   });
 }
 
-// ── SIDEBAR INFO POPOVERS ──
+// â”€â”€ SIDEBAR INFO POPOVERS â”€â”€
 function closeSidebarInfoPopovers() {
   document.querySelectorAll('.nav-info-popover').forEach(function(item) {
     item.classList.add('hidden');
@@ -1356,7 +1356,7 @@ function positionSidebarInfoPopover(button, popover) {
   popover.style.visibility = 'visible';
 }
 
-// ── ADMIN TABLE UTILITIES ──
+// â”€â”€ ADMIN TABLE UTILITIES â”€â”€
 var canUseAdminExports = false;
 function syncAdminTableFooter(tableApi, footerParts) {
   if (!tableApi || !footerParts) return;
@@ -1413,7 +1413,7 @@ function mountAdminTableExportDropdown(tableApi, hostSelector, label) {
   host.innerHTML = '';
 }
 
-// ── GLOBAL WALKIE TIMELINE ──
+// â”€â”€ GLOBAL WALKIE TIMELINE â”€â”€
 function globalTimelineEscape(value) {
   return String(value ?? '').replace(/[&<>"']/g, function(c) {
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];
@@ -1505,7 +1505,7 @@ function closeGlobalWalkieTimelineOutside(event) {
   if (event.target === document.getElementById('globalWalkieTimelineModal')) closeGlobalWalkieTimeline();
 }
 
-// ── DOM READY ──
+// â”€â”€ DOM READY â”€â”€
 document.addEventListener('DOMContentLoaded', function() {
   // Notification toggle
   var notifToggle = document.getElementById('notificationToggle');
@@ -1560,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, true);
 
-  // Scroll controls — targets .main-content (flex layout: body overflow:hidden, page scrolls inside .main-content)
+  // Scroll controls â€” targets .main-content (flex layout: body overflow:hidden, page scrolls inside .main-content)
   var mainContent = document.querySelector('.main-content');
   var scrollControls = document.getElementById('systemScrollControls');
   var scrollTopBtn = scrollControls && scrollControls.querySelector('[data-scroll-target="top"]');

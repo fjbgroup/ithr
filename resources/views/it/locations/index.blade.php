@@ -16,12 +16,12 @@
 .md-card-meta small{font-size:11px;color:var(--muted)}
 .md-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .md-stat-box{background:var(--body-bg);border:1px solid var(--border);border-radius:10px;padding:11px 14px;text-align:center}
-.md-stat-num{font-size:20px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif}
+.md-stat-num{font-size:20px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .md-stat-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
 .md-add-row{background:var(--body-bg);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:8px}
-.md-add-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;background:var(--surface);outline:none;transition:border-color .2s,box-shadow .2s;min-width:0}
+.md-add-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;background:var(--surface);outline:none;transition:border-color .2s,box-shadow .2s;min-width:0}
 .md-add-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(2,132,199,.1)}
-.md-add-btn{display:inline-flex;align-items:center;gap:5px;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;color:#fff;background:var(--navy,#142b47)}
+.md-add-btn{display:inline-flex;align-items:center;gap:5px;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;color:#fff;background:var(--navy,#142b47)}
 .md-table{width:100%;border-collapse:collapse}
 .md-table thead th{background:var(--body-bg);padding:9px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
 .md-table tbody td{padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;color:var(--text)}
@@ -35,9 +35,9 @@
 .btn-del{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:#dc2626}
 .btn-del-dis{background:var(--body-bg);border-color:var(--border);color:var(--muted);cursor:not-allowed;opacity:.5}
 .md-edit-form{display:none;align-items:center;gap:6px}
-.md-edit-input{font-size:12px;font-weight:700;color:var(--text);background:var(--body-bg);border:1.5px solid var(--accent);border-radius:7px;padding:5px 10px;width:220px;font-family:'DM Sans',sans-serif;text-transform:uppercase;outline:none}
-.md-btn-save{font-size:11px;font-weight:700;color:#fff;background:var(--navy,#142b47);border:none;border-radius:6px;padding:5px 11px;cursor:pointer;font-family:'DM Sans',sans-serif}
-.md-btn-cancel{font-size:11px;font-weight:600;color:var(--muted);background:transparent;border:1.5px solid var(--border);border-radius:6px;padding:5px 9px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.md-edit-input{font-size:12px;font-weight:700;color:var(--text);background:var(--body-bg);border:1.5px solid var(--accent);border-radius:7px;padding:5px 10px;width:220px;font-family:'Inter',sans-serif;text-transform:uppercase;outline:none}
+.md-btn-save{font-size:11px;font-weight:700;color:#fff;background:var(--navy,#142b47);border:none;border-radius:6px;padding:5px 11px;cursor:pointer;font-family:'Inter',sans-serif}
+.md-btn-cancel{font-size:11px;font-weight:600;color:var(--muted);background:transparent;border:1.5px solid var(--border);border-radius:6px;padding:5px 9px;cursor:pointer;font-family:'Inter',sans-serif}
 .md-empty{padding:44px 20px;text-align:center;color:var(--muted)}
 .md-empty i{font-size:28px;display:block;margin-bottom:10px;opacity:.3}
 .md-empty p{font-size:13px;font-weight:600;margin:0}
@@ -50,7 +50,7 @@
   <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
     Masterdata &rsaquo; <span style="color:var(--accent)">Locations</span>
   </div>
-  <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Locations</h4>
+  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Locations</h4>
   <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Manage asset locations used in IT and Non-IT assets</p>
 </div>
 
@@ -170,7 +170,7 @@
               </button>
             </form>
             @else
-            <span class="md-btn-sm btn-del-dis" title="In use — cannot delete"><i class="bi bi-trash-fill"></i></span>
+            <span class="md-btn-sm btn-del-dis" title="In use â€” cannot delete"><i class="bi bi-trash-fill"></i></span>
             @endif
           </div>
         </td>

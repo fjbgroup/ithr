@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Non-IT Assets Report')
 @section('page_title', 'Non-IT Assets Report')
@@ -22,7 +22,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Admin &rsaquo; <span style="color:var(--accent)">Reports</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets Report</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Non-IT Assets Report</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">System-wide inventory and disposal analytics</p>
   </div>
   <!-- Tab switcher -->
@@ -34,7 +34,7 @@
       <i class="bi bi-archive-fill"></i> Non-IT Assets
     </a>
     <button onclick="window.print()"
-      style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+      style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s"
       onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
       onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
       <i class="bi bi-printer"></i> Print

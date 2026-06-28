@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-<title>Reset Password — {{ config('app.name') }}</title>
+<title>Reset Password â€” {{ config('app.name') }}</title>
 @include('partials.favicons')
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <script>!function(){var t=localStorage.getItem('fjb-theme')||localStorage.getItem('color-theme')||localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}();</script>
     <style>
@@ -218,7 +218,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-full">Generate OTP</button>
             </form>
-            <a href="{{ route('login') }}" class="back-link">← Back to Login</a>
+            <a href="{{ route('login') }}" class="back-link">â† Back to Login</a>
 
         {{-- STEP 2: Verify (TOTP or email OTP) --}}
         @elseif ($step === 'verify')
@@ -231,7 +231,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" style="margin-bottom:.5rem;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     <div style="font-size:.95rem;font-weight:600;color:#4f46e5;margin-bottom:.25rem;">Open Microsoft Authenticator</div>
                     <div class="otp-note">Enter the 6-digit code shown in the app for this account.</div>
-                    <div class="otp-note" style="margin-top:.25rem;">• Codes refresh every 30 seconds</div>
+                    <div class="otp-note" style="margin-top:.25rem;">â€¢ Codes refresh every 30 seconds</div>
                 </div>
                 <p style="font-size:.84rem;color:#6b7280;text-align:center;margin-bottom:.75rem;">
                     Enter the current code from your Authenticator app to continue.
@@ -243,7 +243,7 @@
                     @if ($maskedEmail)
                         <div style="font-size:.82rem;color:#6b7280;">{{ $maskedEmail }}</div>
                     @endif
-                    <div class="otp-note" style="margin-top:.5rem;">• Valid for 15 minutes &nbsp;·&nbsp; Check your inbox</div>
+                    <div class="otp-note" style="margin-top:.5rem;">â€¢ Valid for 15 minutes &nbsp;Â·&nbsp; Check your inbox</div>
                 </div>
                 <p style="font-size:.84rem;color:#6b7280;text-align:center;margin-bottom:.75rem;">
                     Enter the 6-digit code from your email to continue.
@@ -263,7 +263,7 @@
                     {{ $method === 'totp' ? 'Verify Code' : 'Verify OTP' }}
                 </button>
             </form>
-            <a href="{{ route('password.otp.restart') }}" class="back-link" onclick="return confirmRestart()">← Start over</a>
+            <a href="{{ route('password.otp.restart') }}" class="back-link" onclick="return confirmRestart()">â† Start over</a>
 
         {{-- STEP 3: New Password --}}
         @elseif ($step === 'reset')
@@ -295,7 +295,7 @@
 </div>
 
 <script>
-    // —— OTP digit inputs —————————————————————————————————————————————————
+    // â€”â€” OTP digit inputs â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
     const digits  = document.querySelectorAll('.otp-digit');
     const hidden  = document.getElementById('otp_hidden');
     const verifyBtn = document.getElementById('verifyBtn');
@@ -331,7 +331,7 @@
         if (verifyBtn) verifyBtn.disabled = val.length < 6;
     }
 
-    // —— Password strength ————————————————————————————————————————————————
+    // â€”â€” Password strength â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
     function checkStrength(pw) {
         const bar = document.getElementById('strengthBar');
         if (!bar) return;
@@ -357,16 +357,16 @@
         if (!cfm) { msg.textContent = ''; return; }
         if (pw === cfm) {
             msg.style.color = '#16a34a';
-            msg.textContent = '✓ Passwords match';
+            msg.textContent = 'âœ“ Passwords match';
             if (btn) btn.disabled = false;
         } else {
             msg.style.color = '#ef4444';
-            msg.textContent = '× Passwords do not match';
+            msg.textContent = 'Ã— Passwords do not match';
             if (btn) btn.disabled = true;
         }
     }
 
-    // —— Restart confirmation —————————————————————————————————————————————
+    // â€”â€” Restart confirmation â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
     function confirmRestart() {
         return confirm('Start over? Your current OTP will be cancelled.');
     }

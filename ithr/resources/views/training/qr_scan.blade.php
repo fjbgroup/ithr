@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mark Attendance — {{ config('app.name', 'HR System') }}</title>
+<title>Mark Attendance â€” {{ config('app.name', 'HR System') }}</title>
 <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.setAttribute('data-theme', 'dark');
     }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -20,7 +20,7 @@
     --bg: #0f172a; --card: #1e293b; --border: #334155;
     --text: #f1f5f9; --muted: #94a3b8; --accent: #818cf8;
 }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
 .scan-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem 1.75rem; max-width: 400px; width: 100%; text-align: center; }
 .scan-logo { font-size: .75rem; font-weight: 700; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; margin-bottom: 1.5rem; }
 .scan-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
@@ -87,7 +87,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
                 <span class="scan-info-val">
                     @if($attendance->course->start_date)
                         @if($attendance->course->end_date && $attendance->course->end_date !== $attendance->course->start_date)
-                            {{ \Carbon\Carbon::parse($attendance->course->start_date)->format('d M') }} – {{ \Carbon\Carbon::parse($attendance->course->end_date)->format('d M Y') }}
+                            {{ \Carbon\Carbon::parse($attendance->course->start_date)->format('d M') }} â€“ {{ \Carbon\Carbon::parse($attendance->course->end_date)->format('d M Y') }}
                         @else
                             {{ \Carbon\Carbon::parse($attendance->course->start_date)->format('d M Y') }}
                         @endif

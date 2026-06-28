@@ -1,4 +1,4 @@
-﻿@extends('it.layouts.app')
+@extends('it.layouts.app')
 
 @section('title', 'Collected Proofs')
 @section('page_title', 'Collected Proofs')
@@ -12,7 +12,7 @@
     <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
       Disposal &rsaquo; <span style="color:var(--accent)">Collected Proofs</span>
     </div>
-    <h4 style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Collected Proofs</h4>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Collected Proofs</h4>
     <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Disposal items confirmed as physically disposed</p>
   </div>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -63,7 +63,7 @@
     </div>
   </div>
   <div class="table-responsive">
-    <table class="table table-hover" style="font-family:'DM Sans',sans-serif;margin:0">
+    <table class="table table-hover" style="font-family:'Inter',sans-serif;margin:0">
       <thead><tr>
         <th style="width:36px">#</th>
         <th>Asset</th>
@@ -118,7 +118,7 @@
                   onsubmit="return confirm('Revert this item back to Approved?')">
               @csrf
               <button type="submit"
-                style="display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.07);color:#dc2626;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">
+                style="display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.07);color:#dc2626;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
                 <i class="bi bi-arrow-counterclockwise"></i> Undo
               </button>
             </form>

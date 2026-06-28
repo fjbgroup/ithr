@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mark Attendance — {{ config('app.name', 'HR System') }}</title>
+<title>Mark Attendance â€” {{ config('app.name', 'HR System') }}</title>
 @include('partials.favicons')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.setAttribute('data-theme', 'dark');
@@ -31,7 +31,7 @@
     --text: #f1f5f9; --muted: #94a3b8; --danger: #f87171; --success: #4ade80;
 }
 body {
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--text);
     min-height: 100vh; display: flex; align-items: center;
     justify-content: center; padding: 1.5rem;
@@ -123,7 +123,7 @@ body {
     <div class="logo">{{ config('app.name', 'HR System') }}</div>
 
     @if($expired)
-        {{-- ── Expired state ── --}}
+        {{-- â”€â”€ Expired state â”€â”€ --}}
         <div class="icon icon-err">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5">
                 <circle cx="12" cy="12" r="10"/>
@@ -140,7 +140,7 @@ body {
         <a href="{{ route('training.index') }}" class="btn-ghost">Go to My Training</a>
 
     @elseif(!empty($inactive))
-        {{-- ── Inactive staff state ── --}}
+        {{-- â”€â”€ Inactive staff state â”€â”€ --}}
         <div class="icon icon-err">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5">
                 <circle cx="12" cy="12" r="10"/>
@@ -158,7 +158,7 @@ body {
         <a href="{{ route('dashboard') }}" class="btn-ghost">Back to Dashboard</a>
 
     @else
-        {{-- ── Login form ── --}}
+        {{-- â”€â”€ Login form â”€â”€ --}}
         <div class="icon icon-ok">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5">
                 <rect x="3" y="11" width="18" height="11" rx="2"/>
@@ -188,7 +188,7 @@ body {
                 <label for="password">Password</label>
                 <div class="input-wrap">
                     <svg class="lead" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    <input id="password" name="password" type="password" class="has-toggle" autocomplete="current-password" placeholder="••••••••">
+                    <input id="password" name="password" type="password" class="has-toggle" autocomplete="current-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
                     <button type="button" class="toggle" aria-label="Show password" onclick="togglePassword(this)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>@yield('title', 'Dashboard') — FJB Inventory System</title>
+<title>@yield('title', 'Dashboard') â€” FJB Inventory System</title>
 @include('partials.favicons')
 <script>
 (function () {
@@ -22,7 +22,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -56,9 +56,9 @@
   --table-hover:       #f0f9ff;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh}
+body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
-/* ── SIDEBAR ── */
+/* â”€â”€ SIDEBAR â”€â”€ */
 .sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
   background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:100;
@@ -69,7 +69,7 @@ body{background:var(--body-bg);color:var(--text);font-family:'DM Sans',sans-seri
   display:flex;align-items:center;gap:12px;
 }
 .sidebar-brand img{width:42px;height:42px;object-fit:contain;background:transparent}
-.brand-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;
+.brand-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;
   text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
 .brand-name span{color:#fff;display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
 
@@ -107,7 +107,7 @@ button .badge-count{ margin-left:0; }
 .user-avatar{
   width:34px;height:34px;border-radius:50%;background:var(--accent);
   display:flex;align-items:center;justify-content:center;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;
 }
 .user-info{min-width:0;flex:1}
 .user-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -116,11 +116,11 @@ button .badge-count{ margin-left:0; }
   display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;
   background:rgba(255,255,255,.06);border:none;border-radius:8px;
   color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;text-decoration:none;
-  transition:all .15s;font-family:'DM Sans',sans-serif;
+  transition:all .15s;font-family:'Inter',sans-serif;
 }
 .btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
 
-/* ── MAIN ── */
+/* â”€â”€ MAIN â”€â”€ */
 .main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;padding-top:60px}
 .topbar{
   background:var(--surface);border-bottom:1px solid var(--border);
@@ -128,7 +128,7 @@ button .badge-count{ margin-left:0; }
   position:fixed;top:0;left:var(--sidebar-w);right:0;z-index:50;
 }
 .topbar-left{flex:1}
-.topbar-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+.topbar-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
 .topbar-breadcrumb{font-size:11px;color:var(--muted);margin-top:1px}
 .topbar-right{display:flex;align-items:center;gap:12px}
 .topbar-user{
@@ -151,7 +151,7 @@ button .badge-count{ margin-left:0; }
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
 .page-body{padding:0 28px;flex:1}
 
-/* ── STAT CARDS ── */
+/* â”€â”€ STAT CARDS â”€â”€ */
 .stat-card{
   background:var(--surface);border:1px solid var(--border);
   border-radius:12px;padding:20px 22px;
@@ -164,16 +164,16 @@ button .badge-count{ margin-left:0; }
   width:44px;height:44px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;
 }
-.stat-value{font-family:'DM Sans',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1}
+.stat-value{font-family:'Inter',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1}
 .stat-label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
 
-/* ── TABLE CARD ── */
+/* â”€â”€ TABLE CARD â”€â”€ */
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
 .table-card-header{
   padding:16px 20px;border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:12px;background:var(--surface);
 }
-.table-card-title{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);flex:1}
+.table-card-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--text);flex:1}
 .table{color:var(--text);margin:0}
 .table thead th{
   background:var(--table-head-bg, #e2e8f0) !important;
@@ -191,14 +191,14 @@ button .badge-count{ margin-left:0; }
 .table tbody td span:not(.badge-status),.table tbody td div,.table tbody td a{color:var(--text) !important}
 .table tbody td code{color:var(--accent) !important}
 
-/* ── BADGES ── */
+/* â”€â”€ BADGES â”€â”€ */
 .badge-status{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
 .bs-active  {background:rgba(34,197,94,.12);color:#16a34a}
 .bs-disposed{background:rgba(239,68,68,.12);color:#dc2626}
 .bs-pending {background:rgba(245,158,11,.12);color:#d97706}
 .bs-repair  {background:rgba(59,130,246,.12);color:#2563eb}
 
-/* ── FORM ── */
+/* â”€â”€ FORM â”€â”€ */
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
 .form-label{color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
 .form-control,.form-select{
@@ -206,7 +206,7 @@ button .badge-count{ margin-left:0; }
   border:1.5px solid var(--form-input-border, var(--border)) !important;
   color:var(--form-input-color, var(--text)) !important;
   border-radius:8px;padding:9px 13px;
-  font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s;
+  font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s;
 }
 .form-control:focus,.form-select:focus{
   border-color:var(--sky-dark,var(--accent)) !important;
@@ -215,10 +215,10 @@ button .badge-count{ margin-left:0; }
 textarea.form-control{min-height:90px;resize:vertical}
 .form-control::placeholder{color:var(--muted);opacity:.7}
 
-/* ── BUTTONS ── */
+/* â”€â”€ BUTTONS â”€â”€ */
 .btn-primary-custom{
   background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;
-  padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  padding:9px 20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
   cursor:pointer;transition:all .15s;text-decoration:none;
   display:inline-flex;align-items:center;gap:7px;
 }
@@ -227,7 +227,7 @@ textarea.form-control{min-height:90px;resize:vertical}
   background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;
   padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;
   transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;
-  font-family:'DM Sans',sans-serif;
+  font-family:'Inter',sans-serif;
 }
 .btn-secondary-custom:hover{border-color:var(--navy,#142b47);color:var(--navy,#142b47)}
 .btn-icon{
@@ -242,7 +242,7 @@ textarea.form-control{min-height:90px;resize:vertical}
 .btn-view      {background:rgba(var(--accent-rgb),.1);color:var(--accent)}
 .btn-view:hover{background:rgba(var(--accent-rgb),.2);color:var(--accent)}
 
-/* ── ALERTS ── */
+/* â”€â”€ ALERTS â”€â”€ */
 .alert-success-custom{
   background:#dcfce7;border:1px solid #bbf7d0;
   color:#166534;border-radius:8px;padding:12px 16px;
@@ -267,14 +267,14 @@ textarea.form-control{min-height:90px;resize:vertical}
 .dataTables_wrapper .dataTables_paginate .paginate_button{background:transparent !important;border:none !important;margin:0 !important;padding:0 !important;}
 .dataTables_wrapper .pagination{gap:3px;flex-wrap:wrap}
 .dataTables_wrapper .pagination .page-item .page-link{
-  font-size:12px !important;font-weight:600 !important;font-family:'DM Sans',sans-serif !important;
+  font-size:12px !important;font-weight:600 !important;font-family:'Inter',sans-serif !important;
   padding:4px 10px !important;line-height:1.5 !important;
   border-radius:6px !important;border:1px solid var(--border) !important;
   background:transparent !important;color:var(--muted) !important;transition:all .15s;
 }
 .dataTables_wrapper .pagination .page-item.active .page-link{background:var(--navy,#142b47) !important;border-color:var(--navy,#142b47) !important;color:#fff !important;}
 .dataTables_wrapper .pagination .page-item .page-link:hover{background:#f1f5f9 !important;color:var(--text) !important;}
-.dataTables_wrapper .dataTables_info{font-size:13px;color:var(--muted);font-family:'DM Sans',sans-serif;padding-top:6px;}
+.dataTables_wrapper .dataTables_info{font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;padding-top:6px;}
 table.dataTable tbody tr,
 table.dataTable tbody tr.odd,
 table.dataTable tbody tr.even{background-color:var(--surface) !important;color:var(--text) !important}
@@ -284,13 +284,13 @@ table.dataTable tbody tr.even:hover{background-color:var(--table-hover) !importa
 table.dataTable tbody td{color:var(--text) !important}
 code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-radius:4px;font-size:12px}
 
-/* ── TOPBAR TOGGLE — mobile only ── */
+/* â”€â”€ TOPBAR TOGGLE â€” mobile only â”€â”€ */
 .sidebar-toggle{display:none;align-items:center;background:none;border:1.5px solid var(--border);
-  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'DM Sans',sans-serif;
+  border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'Inter',sans-serif;
   transition:border-color .15s,color .15s}
 .sidebar-toggle:hover{border-color:var(--accent);color:var(--accent)}
 
-/* ── SIDEBAR CLOSE BUTTON (inside sidebar, expanded state only) ── */
+/* â”€â”€ SIDEBAR CLOSE BUTTON (inside sidebar, expanded state only) â”€â”€ */
 .sb-close-btn{
   flex-shrink:0;margin-left:auto;
   width:28px;height:28px;
@@ -302,7 +302,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 .sb-close-btn:hover{background:rgba(255,255,255,.18);color:#fff;font-size:12px}
 html.sidebar-collapsed .sb-close-btn{display:none!important}
 
-/* ── LOGO AS OPEN BUTTON (collapsed state) ── */
+/* â”€â”€ LOGO AS OPEN BUTTON (collapsed state) â”€â”€ */
 .sb-open-icon{display:none}
 html.sidebar-collapsed .sb-logo-btn{cursor:pointer!important;position:relative!important}
 html.sidebar-collapsed .sb-logo-btn img{transition:opacity .15s}
@@ -313,16 +313,16 @@ html.sidebar-collapsed .sb-logo-btn .sb-open-icon{
 html.sidebar-collapsed .sb-logo-btn:hover img{opacity:0}
 html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon{opacity:1}
 
-/* ── COLLAPSE TRANSITIONS ── */
+/* â”€â”€ COLLAPSE TRANSITIONS â”€â”€ */
 .main-content{transition:margin-left .3s ease}
 .topbar{transition:left .3s ease}
 
-/* ── DESKTOP COLLAPSED (icon rail) ── */
+/* â”€â”€ DESKTOP COLLAPSED (icon rail) â”€â”€ */
 html.sidebar-collapsed .sidebar{width:64px}
 html.sidebar-collapsed .main-content{margin-left:64px}
 html.sidebar-collapsed .topbar{left:64px}
 
-/* ── ICON RAIL STYLES ── */
+/* â”€â”€ ICON RAIL STYLES â”€â”€ */
 html.sidebar-collapsed .sidebar-nav{padding:16px 0}
 html.sidebar-collapsed .sidebar-brand{padding:14px 8px;justify-content:center}
 html.sidebar-collapsed .sidebar-brand .brand-name{display:none!important}
@@ -342,7 +342,7 @@ html.sidebar-collapsed .sidebar-footer .user-card i{display:none!important}
 html.sidebar-collapsed .btn-logout{font-size:0!important;padding:10px 0!important;justify-content:center!important;gap:0!important}
 html.sidebar-collapsed .btn-logout i{font-size:15px!important}
 
-/* ── COLLAPSED ACTIVE STATE ── */
+/* â”€â”€ COLLAPSED ACTIVE STATE â”€â”€ */
 html.sidebar-collapsed .sidebar-nav .nav-link.active {
   background: rgba(56,189,248,.18) !important;
   border-left: 3px solid var(--sky) !important;
@@ -358,7 +358,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
   color: var(--sky) !important;
 }
 
-/* ── MOBILE ── */
+/* â”€â”€ MOBILE â”€â”€ */
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important;overflow-y:auto}
   .sidebar.open{transform:none}
@@ -367,7 +367,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
   .sidebar-toggle{display:flex}
 }
 
-/* ── COLLAPSED SIDEBAR HOVER TOOLTIPS ── */
+/* â”€â”€ COLLAPSED SIDEBAR HOVER TOOLTIPS â”€â”€ */
 .sb-tooltip{position:fixed;transform:translateY(-50%);background:#1e293b;color:#fff;padding:.4rem .65rem;border-radius:7px;font-size:.75rem;font-weight:600;white-space:nowrap;z-index:2000;pointer-events:none;opacity:0;transition:opacity .12s ease;box-shadow:0 6px 16px rgba(0,0,0,.22)}
 .sb-tooltip.show{opacity:1}
 .sb-tooltip::before{content:'';position:absolute;right:100%;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:#1e293b}
@@ -482,19 +482,19 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     }
     </script>
 
-    {{-- Write Off — all users --}}
+    {{-- Write Off â€” all users --}}
     <a href="{{ route('it.writeoff.index') }}" class="nav-link {{ request()->routeIs('writeoff.index') || request()->routeIs('writeoff.hou-sign') || request()->routeIs('writeoff.gm-sign') || request()->routeIs('writeoff.ceo-approve') || request()->routeIs('writeoff.assign-hou') ? 'active' : '' }}">
       <i class="bi bi-pen-fill"></i> Write Off
     </a>
 
-    {{-- Write Off Inventory — Finance Admin only --}}
+    {{-- Write Off Inventory â€” Finance Admin only --}}
     @if($user->isFinanceAdmin())
     <a href="{{ route('it.writeoff-inventory.index') }}" class="nav-link {{ request()->routeIs('writeoff-inventory.*') ? 'active' : '' }}">
       <i class="bi bi-clipboard2-x-fill"></i> Write Off Inventory
     </a>
     @endif
 
-    {{-- E-Waste — Admin + Finance only --}}
+    {{-- E-Waste â€” Admin + Finance only --}}
     @if($user->isAdminOrFinance())
     @php $ewActive = request()->routeIs('ewaste.*') || request()->routeIs('ewaste.collected'); @endphp
     <div>
@@ -530,7 +530,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     }
     </script>
 
-    {{-- Disposal — Admin + Finance only --}}
+    {{-- Disposal â€” Admin + Finance only --}}
     @php $dispActive = request()->routeIs('disposal.*'); @endphp
     <div>
       <button onclick="toggleDisposal()" id="disposalToggle" class="{{ $dispActive ? 'sb-active' : '' }}"
@@ -565,7 +565,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     }
     </script>
 
-    {{-- Reports — Admin + Finance only --}}
+    {{-- Reports â€” Admin + Finance only --}}
     @php $rptActive = request()->routeIs('reports.*'); @endphp
     <div>
       <button onclick="toggleReports()" id="reportsToggle" class="{{ $rptActive ? 'sb-active' : '' }}"
@@ -601,7 +601,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     </script>
     @endif
 
-    {{-- Request Form — all users --}}
+    {{-- Request Form â€” all users --}}
     <div class="nav-section-label">Request Form</div>
     @php
       $itrActive = request()->routeIs('it-request-form') || request()->routeIs('it-request-form.drafts');
@@ -760,7 +760,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
       <form method="POST" action="{{ route('it.logout') }}" style="margin:0">
         @csrf
         <button type="submit"
-          style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:8px;color:#dc2626;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s"
+          style="display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(239,68,68,.08);border:1.5px solid rgba(239,68,68,.2);border-radius:8px;color:#dc2626;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s"
           onmouseover="this.style.background='rgba(239,68,68,.15)'" onmouseout="this.style.background='rgba(239,68,68,.08)'">
           <i class="bi bi-box-arrow-right"></i> Logout
         </button>
@@ -790,7 +790,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
-// ── LIVE CLOCK ──
+// â”€â”€ LIVE CLOCK â”€â”€
 (function() {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -805,7 +805,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
   setInterval(tick, 60000);
 })();
 
-// ── THEME ──
+// â”€â”€ THEME â”€â”€
 const DARK_VARS = {
   '--sidebar-bg':    '#1a2235',
   '--sidebar-hover': '#243044',
@@ -882,7 +882,7 @@ function toggleTheme() {
   applyTheme(theme === 'dark');
 })();
 
-// ── DATATABLES ──
+// â”€â”€ DATATABLES â”€â”€
 $(document).ready(function () {
   const isInventory = window.location.pathname.includes('inventory');
   const isEwaste    = window.location.pathname.includes('ewaste');
@@ -896,8 +896,8 @@ $(document).ready(function () {
         search: '',
         searchPlaceholder: 'Search...',
         lengthMenu: 'Show _MENU_',
-        info: 'Showing _START_–_END_ of _TOTAL_ items',
-        paginate: { previous: '← Previous', next: 'Next →' }
+        info: 'Showing _START_â€“_END_ of _TOTAL_ items',
+        paginate: { previous: 'â† Previous', next: 'Next â†’' }
       },
       drawCallback: function() {
         if (typeof window._onDtDraw === 'function') window._onDtDraw();
@@ -908,7 +908,7 @@ $(document).ready(function () {
   setTimeout(() => $('.alert-success-custom, .alert-danger-custom').fadeOut(500), 4000);
 });
 
-// ── BELL NOTIFICATION ──
+// â”€â”€ BELL NOTIFICATION â”€â”€
 (function() {
   var bellWrap = document.getElementById('notifWrap');
   if (!bellWrap) return;
@@ -1030,13 +1030,13 @@ $(document).ready(function () {
 })();
 </script>
 
-{{-- ╔══════════════════════════════════════════════════════════════╗ --}}
-{{-- ║                        EASTER EGG                           ║ --}}
-{{-- ║  Triggered by clicking the sidebar header 5 times.          ║ --}}
-{{-- ║  Developed by: Muhammad Irfan bin Zuraili                   ║ --}}
-{{-- ║  DO NOT REMOVE OR MODIFY THIS BLOCK.                        ║ --}}
-{{-- ║  Protected by git pre-commit hook (.git/hooks/pre-commit)   ║ --}}
-{{-- ╚══════════════════════════════════════════════════════════════╝ --}}
+{{-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•— --}}
+{{-- â•‘                        EASTER EGG                           â•‘ --}}
+{{-- â•‘  Triggered by clicking the sidebar header 5 times.          â•‘ --}}
+{{-- â•‘  Developed by: Muhammad Irfan bin Zuraili                   â•‘ --}}
+{{-- â•‘  DO NOT REMOVE OR MODIFY THIS BLOCK.                        â•‘ --}}
+{{-- â•‘  Protected by git pre-commit hook (.git/hooks/pre-commit)   â•‘ --}}
+{{-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <!-- EASTER EGG -->
 <style>
 @keyframes egg-bd-in  {from{opacity:0}to{opacity:1}}
@@ -1050,7 +1050,7 @@ $(document).ready(function () {
 </style>
 
 <div id="eggModal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(10,18,32,.75);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px">
-  <div id="eggCard" style="background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:430px;box-shadow:0 32px 80px rgba(0,0,0,.45);font-family:'DM Sans',sans-serif;position:relative;overflow:hidden">
+  <div id="eggCard" style="background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:430px;box-shadow:0 32px 80px rgba(0,0,0,.45);font-family:'Inter',sans-serif;position:relative;overflow:hidden">
 
     {{-- Header --}}
     <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:28px 28px 22px;text-align:center;border-radius:20px 20px 0 0">
@@ -1082,7 +1082,7 @@ $(document).ready(function () {
         <tr style="border-bottom:1px solid var(--border)">
           <td style="padding:9px 0"><i class="bi bi-calendar3" style="color:#0d9488"></i></td>
           <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Period</td>
-          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 – 17/07/2026)</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 â€“ 17/07/2026)</td>
         </tr>
         <tr>
           <td style="padding:9px 0"><i class="bi bi-building" style="color:#d97706"></i></td>
@@ -1100,13 +1100,13 @@ $(document).ready(function () {
     {{-- Footer --}}
     <div style="padding:16px 28px 22px;text-align:center">
       <button id="eggClose"
-        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 36px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s"
+        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 36px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s"
         onmouseover="this.style.background='#1e3f6e'" onmouseout="this.style.background='#142b47'">
         Close
       </button>
     </div>
 
-    {{-- Cutout character — inside card, anchored bottom-right --}}
+    {{-- Cutout character â€” inside card, anchored bottom-right --}}
     <img id="eggCharImg" src="" alt="Irfan"
       style="position:absolute;bottom:0;right:0;height:260px;width:auto;pointer-events:none;user-select:none;display:block">
   </div>
@@ -1184,7 +1184,7 @@ $(document).ready(function () {
 </script>
 
 <script>
-// ── SIDEBAR COLLAPSE ──
+// â”€â”€ SIDEBAR COLLAPSE â”€â”€
 function toggleSidebar() {
   if (window.innerWidth <= 768) {
     document.getElementById('sidebar').classList.toggle('open');

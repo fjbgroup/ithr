@@ -1,16 +1,16 @@
 <style>
-/* ══ Pending Requests (admin) — mirrors My Requests layout ══ */
+/* â•â• Pending Requests (admin) â€” mirrors My Requests layout â•â• */
 .apr-wrap{max-width:860px;margin:0 auto}
 .apr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:16px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.apr-hero-title{font-family:'DM Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
+.apr-hero-title{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
 .apr-hero-sub{font-size:13px;color:rgba(255,255,255,.55);margin:0}
 .apr-hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:12px 20px;text-align:center;flex-shrink:0}
-.apr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'DM Sans',sans-serif}
+.apr-hero-badge-num{font-size:28px;font-weight:800;color:#fff;line-height:1;font-family:'Inter',sans-serif}
 .apr-hero-badge-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.07em;margin-top:3px}
 
 /* Tab bar */
 .apr-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.apr-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .15s;white-space:nowrap}
+.apr-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .15s;white-space:nowrap}
 .apr-tab:hover{border-color:currentColor;opacity:.85}
 .apr-tab .apr-tab-icon{font-size:14px;flex-shrink:0}
 .apr-tab .apr-tab-badge{font-size:11px;font-weight:800;border-radius:20px;padding:2px 8px;background:rgba(0,0,0,.06);color:inherit;transition:background .15s}
@@ -24,7 +24,7 @@
 .apr-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
 .apr-section-hdr{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--body-bg)}
 .apr-section-hdr-accent{width:4px;height:20px;border-radius:3px;flex-shrink:0}
-.apr-section-hdr-text{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;color:var(--text);flex:1}
+.apr-section-hdr-text{font-family:'Inter',sans-serif;font-size:14px;font-weight:800;color:var(--text);flex:1}
 .apr-section-hdr-count{font-size:11px;font-weight:700;border-radius:20px;padding:3px 12px}
 
 /* Rows */
@@ -91,7 +91,7 @@
   @endforeach
 </div>
 
-{{-- ── TAB 1: ADD ASSET ── --}}
+{{-- â”€â”€ TAB 1: ADD ASSET â”€â”€ --}}
 <div class="apr-tab-panel active" id="aprpanel-add">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -119,7 +119,7 @@
             @if($req->serial_number)<span class="apr-tag-muted">S/N {{ $req->serial_number }}</span>@endif
             @if($req->brand || $req->model)<span class="apr-tag-muted">{{ trim(($req->brand ?? '').' '.($req->model ?? '')) }}</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>
@@ -141,7 +141,7 @@
   </div>
 </div>
 
-{{-- ── TAB 2: E-WASTE ── --}}
+{{-- â”€â”€ TAB 2: E-WASTE â”€â”€ --}}
 <div class="apr-tab-panel" id="aprpanel-ew">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -171,7 +171,7 @@
             @if($req->asset_number)<span class="apr-tag-muted" style="color:var(--accent);font-weight:600">{{ $req->asset_number }}</span>@endif
             @if($req->serial_number)<span class="apr-tag-muted">S/N {{ $req->serial_number }}</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>
@@ -193,7 +193,7 @@
   </div>
 </div>
 
-{{-- ── TAB 3: DELETE ── --}}
+{{-- â”€â”€ TAB 3: DELETE â”€â”€ --}}
 <div class="apr-tab-panel" id="aprpanel-del">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -213,7 +213,7 @@
     @php
       $delDesc    = $req->inventoryItem?->description ?? $req->asset_description ?? '(Asset removed)';
       $delClass   = $req->inventoryItem?->asset_class ?? $req->asset_class ?? '';
-      $delAssetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? '—';
+      $delAssetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? 'â€”';
     @endphp
     <div class="apr-row">
       <div class="apr-row-top">
@@ -225,7 +225,7 @@
             <span class="apr-tag-muted" style="color:var(--accent);font-weight:600">{{ $delAssetNo }}</span>
             @if($req->reason)<span class="apr-tag-muted" style="font-style:italic">"{{ $req->reason }}"</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>
@@ -247,7 +247,7 @@
   </div>
 </div>
 
-{{-- ── TAB 4: EDIT ASSET ── --}}
+{{-- â”€â”€ TAB 4: EDIT ASSET â”€â”€ --}}
 <div class="apr-tab-panel" id="aprpanel-edit">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -272,7 +272,7 @@
           @if($req->asset_type === 'non_it')
           <div style="margin-bottom:4px"><span style="display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><i class="bi bi-box-seam"></i> Non-IT Asset</span></div>
           @else
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>{{ $req->inventoryItem?->description ?? '—' }}</em></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>{{ $req->inventoryItem?->description ?? 'â€”' }}</em></div>
           @endif
           <div class="apr-row-meta" style="margin-bottom:6px">
             @if($req->asset_class)<span class="apr-tag">{{ $req->asset_class }}</span>@endif
@@ -280,7 +280,7 @@
             @if($req->serial_number)<span class="apr-tag-muted">S/N {{ $req->serial_number }}</span>@endif
             @if($req->location)<span class="apr-tag-muted"><i class="bi bi-geo-alt" style="font-size:10px"></i> {{ $req->location }}</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>

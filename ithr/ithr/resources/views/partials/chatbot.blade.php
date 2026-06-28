@@ -37,7 +37,7 @@
     flex-direction: column;
     z-index: 9099;
     overflow: hidden;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     animation: chatSlideIn .2s ease;
 }
 @keyframes chatSlideIn {
@@ -155,7 +155,7 @@
     border-radius: 8px;
     padding: .5rem .75rem;
     font-size: .83rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     outline: none;
     resize: none;
     line-height: 1.45;
@@ -219,7 +219,7 @@
         </div>
         <div class="chatbot-header-info">
             <div class="chatbot-header-title">HR Assistant</div>
-            <div class="chatbot-header-sub">Powered by Ollama · Local AI</div>
+            <div class="chatbot-header-sub">Powered by Ollama Â· Local AI</div>
         </div>
         <button class="chatbot-clear-btn" onclick="clearChatHistory()" title="Clear conversation">Clear</button>
     </div>
@@ -227,7 +227,7 @@
         <div class="chat-msg assistant">Hi {{ Auth::user()->name ? explode(' ', Auth::user()->name)[0] : 'there' }}! I'm your HR Assistant. Ask me anything about HR policies, room bookings, training, or travel requests.</div>
     </div>
     <div class="chatbot-footer">
-        <textarea id="chatbot-input" placeholder="Ask anything…" rows="1"></textarea>
+        <textarea id="chatbot-input" placeholder="Ask anythingâ€¦" rows="1"></textarea>
         <button id="chatbot-send-btn" onclick="sendChatMessage()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
@@ -282,13 +282,13 @@
             const data = await res.json();
 
             if (!res.ok || data.error) {
-                appendMessage('error', '⚠ ' + (data.error || 'Something went wrong.'));
+                appendMessage('error', 'âš  ' + (data.error || 'Something went wrong.'));
             } else {
                 appendMessage('assistant', formatMessage(data.reply));
             }
         } catch (err) {
             typingEl.remove();
-            appendMessage('error', '⚠ Network error. Is Ollama running?');
+            appendMessage('error', 'âš  Network error. Is Ollama running?');
         } finally {
             sendBtn.disabled = false;
             input.focus();

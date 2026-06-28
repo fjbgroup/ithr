@@ -13,7 +13,7 @@
 .fh-action-card{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07);transition:box-shadow .2s,transform .2s}
 .fh-action-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.12);transform:translateY(-2px)}
 .fh-action-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-bottom:14px}
-.fh-action-count{font-size:28px;font-weight:800;color:var(--text);line-height:1;font-family:'DM Sans',sans-serif;margin-bottom:4px}
+.fh-action-count{font-size:28px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif;margin-bottom:4px}
 .fh-action-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
 .fh-action-desc{font-size:12px;color:var(--muted);line-height:1.5}
 .fh-record{padding:14px 0;border-bottom:1px solid var(--border)}
