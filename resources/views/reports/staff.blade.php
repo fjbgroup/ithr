@@ -92,7 +92,7 @@
             <h4 style="font-size:.85rem;font-weight:700;margin-bottom:.75rem;color:var(--text);">Top 8 Positions</h4>
             <div style="display:flex;flex-direction:column;gap:.5rem;">
                 @foreach($posRows as $pos)
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;background:#f8fafc;border-radius:6px;border:1px solid var(--border);">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;background:var(--bg);border-radius:6px;border:1px solid var(--border);">
                     <span style="font-size:.8rem;font-weight:600;color:var(--text-muted);">{{ $pos->position }}</span>
                     <span style="background:var(--navy);color:#fff;font-size:.7rem;font-weight:700;padding:.1rem .5rem;border-radius:10px;">{{ $pos->total }}</span>
                 </div>

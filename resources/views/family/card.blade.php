@@ -6,7 +6,7 @@
     $indentStyle = $isIndented ? 'margin-left: 2.5rem; position: relative; margin-top: 0.5rem;' : 'margin-bottom: 0.5rem;';       
 @endphp
 
-<div class="fc-card" style="{{ $indentStyle }} background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; display: flex; gap: 1rem; align-items: flex-start;">
+<div class="fc-card" style="{{ $indentStyle }} background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; gap: 1rem; align-items: flex-start;">
     @if($isIndented)
     <div style="position: absolute; left: -1.5rem; top: 1.5rem; width: 1.5rem; border-top: 2px dashed #cbd5e1;"></div>
     <div style="position: absolute; left: -1.5rem; top: -1rem; height: 2.5rem; border-left: 2px dashed #cbd5e1;"></div>

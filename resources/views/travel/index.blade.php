@@ -65,14 +65,14 @@
                 <svg class="app-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input type="text" name="q" value="{{ $search }}" placeholder="Search staff, destination…">
             </div>
-            <select name="dept" style="padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;background:#fff;min-width:180px;">
+            <select name="dept" style="padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--form-input-bg);min-width:180px;">
                 <option value="">All Departments</option>
                 @foreach($departments as $d)
                 <option value="{{ $d->id }}" {{ $dept_filter == $d->id ? 'selected' : '' }}>[{{ $d->company }}] {{ $d->name }}</option>
                 @endforeach
             </select>
             @endif
-            <input type="month" name="month" value="{{ $month_filter }}" style="padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;background:#fff;">
+            <input type="month" name="month" value="{{ $month_filter }}" style="padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;background:var(--form-input-bg);">
             <button type="submit" class="btn btn-outline btn-sm">Filter</button>
             @if($search || $dept_filter || $month_filter || $staff_filter)
             <a href="{{ route('travel.index') }}" class="btn btn-ghost btn-sm">Clear</a>
@@ -195,7 +195,7 @@
                     <label>Staff Member <span style="color:var(--danger)">*</span></label>
                     <div style="display:flex;gap:.4rem;margin-bottom:.6rem;">
                         <button type="button" id="tabSearch" onclick="switchStaffTab('search')" style="flex:1;padding:.42rem .75rem;font-size:.78rem;font-weight:600;border-radius:7px;border:1.5px solid var(--primary);background:var(--primary);color:#fff;cursor:pointer;transition:.15s;">🔍 Search</button>
-                        <button type="button" id="tabDept" onclick="switchStaffTab('dept')" style="flex:1;padding:.42rem .75rem;font-size:.78rem;font-weight:600;border-radius:7px;border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer;transition:.15s;">🏢 Browse</button>
+                        <button type="button" id="tabDept" onclick="switchStaffTab('dept')" style="flex:1;padding:.42rem .75rem;font-size:.78rem;font-weight:600;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:.15s;">🏢 Browse</button>
                     </div>
 
                     <div id="panelSearch">
@@ -242,7 +242,7 @@
                     <label>Return Date <span style="color:var(--danger)">*</span></label>
                     <input type="date" name="return_date" id="travel_return" required style="width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;">      
                 </div>
-                <div class="form-full" id="durationPreview" style="display:none;padding:.5rem .75rem;background:#f8fafc;border-radius:8px;font-size:.85rem;color:var(--muted);text-align:center;"></div>
+                <div class="form-full" id="durationPreview" style="display:none;padding:.5rem .75rem;background:var(--bg);border-radius:8px;font-size:.85rem;color:var(--muted);text-align:center;"></div>
                 <div class="form-group form-full">
                     <label>Mode of Transport</label>
                     <select name="transport" id="travel_transport" style="width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;background:white;">

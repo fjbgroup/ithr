@@ -102,7 +102,7 @@
         </div>
 
         @if ($req->status !== 'Pending' && $req->admin_note)
-        <div style="padding:.75rem 1.25rem; background:#f8fafc; border-top:1px dashed var(--border); font-size:.82rem;">
+        <div style="padding:.75rem 1.25rem; background:var(--bg); border-top:1px dashed var(--border); font-size:.82rem;">
             <strong style="color:var(--text);font-weight:600;">Admin Note:</strong>
             <span style="color:var(--text-muted);">{{ $req->admin_note }}</span>
         </div>

@@ -49,7 +49,7 @@
             <div class="modal-body">
 
                 <!-- Context banner for Training / Family records -->
-                <div id="ur_context_banner" style="display:none;background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;align-items:center;gap:.6rem;">
+                <div id="ur_context_banner" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;align-items:center;gap:.6rem;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     <div style="font-size:.8rem;">
                         <span style="font-weight:600;color:var(--muted);text-transform:uppercase;font-size:.68rem;letter-spacing:.04em;">Record</span>

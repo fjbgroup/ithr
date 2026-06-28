@@ -9,9 +9,9 @@
     .pub-controls { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; margin-bottom:1.1rem; }
     .pub-view-tabs { display:flex; gap:.25rem; background:var(--bg-faded, #f1f5f9); padding:.22rem; border-radius:8px; }
     .pvt-btn { padding:.32rem .85rem; border-radius:6px; font-size:.8rem; font-weight:600; color:#64748b; text-decoration:none; transition:background .15s,color .15s; }
-    .pvt-active { background:#fff !important; color:#003b95 !important; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .pvt-active { background: var(--surface) !important; color:#003b95 !important; box-shadow:0 1px 3px rgba(0,0,0,.1); }
     .pub-date-nav { display:flex; align-items:center; gap:.5rem; }
-    .pub-datepicker-lbl { position:relative; display:flex; align-items:center; gap:.35rem; cursor:pointer; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .6rem; background:#fff; }
+    .pub-datepicker-lbl { position:relative; display:flex; align-items:center; gap:.35rem; cursor:pointer; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .6rem; background: var(--surface); }
     .pub-datepicker-lbl .pub-cal-ico { color:#64748b; flex-shrink:0; }
     .pub-datepicker-lbl .pub-date-text { font-size:.85rem; font-weight:700; color:#1e293b; white-space:nowrap; }
     /* native input kept for the picker, but visually hidden so only one date label shows */
@@ -20,7 +20,7 @@
     /* Centralized (centered) custom date picker */
     .rbdp-overlay { display:none; position:fixed; inset:0; background:rgba(15,23,42,.45); z-index:1000; align-items:center; justify-content:center; padding:1rem; }
     .rbdp-overlay.active { display:flex; }
-    .rbdp-modal { background:#fff; border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,.25); width:330px; max-width:92vw; padding:1.15rem 1.2rem 1rem; }
+    .rbdp-modal { background: var(--surface); border-radius:16px; box-shadow:0 20px 50px rgba(0,0,0,.25); width:330px; max-width:92vw; padding:1.15rem 1.2rem 1rem; }
     .rbdp-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.9rem; }
     .rbdp-title { font-size:1rem; font-weight:800; color:#1e293b; }
     .rbdp-nav { width:34px; height:34px; border:none; background:#f1f5f9; border-radius:9px; cursor:pointer; font-size:1.25rem; line-height:1; color:#334155; display:flex; align-items:center; justify-content:center; transition:background .15s; }
@@ -36,37 +36,37 @@
     .rbdp-footer { margin-top:.9rem; display:flex; justify-content:flex-end; }
     .rbdp-today-link { background:none; border:none; color:#185FA5; font-weight:700; font-size:.82rem; cursor:pointer; padding:.3rem .55rem; border-radius:7px; }
     .rbdp-today-link:hover { background:#E6F1FB; }
-    [data-theme="dark"] .rbdp-modal { background:#1e293b; }
-    [data-theme="dark"] .rbdp-title { color:#f1f5f9; }
-    [data-theme="dark"] .rbdp-nav { background:#334155; color:#e2e8f0; }
-    [data-theme="dark"] .rbdp-cell { color:#cbd5e1; }
+    html.dark .rbdp-modal { background: var(--surface); border: 1px solid var(--border); }
+    html.dark .rbdp-title { color: var(--text); }
+    html.dark .rbdp-nav   { background: var(--bg); color: var(--text); }
+    html.dark .rbdp-cell  { color: var(--text); }
 
-    .pub-day-stats { display:flex; align-items:stretch; background:#fff; border-radius:10px; box-shadow:var(--shadow); margin-bottom:.75rem; overflow:hidden; border:1px solid var(--border); }
-    .pub-dstat { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.7rem .35rem; gap:.1rem; border-right:1px solid #f1f5f9; }
+    .pub-day-stats { display:flex; align-items:stretch; background: var(--surface); border-radius:10px; box-shadow:var(--shadow); margin-bottom:.75rem; overflow:hidden; border:1px solid var(--border); }
+    .pub-dstat { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:.7rem .35rem; gap:.1rem; border-right:1px solid var(--border); }
     .pub-dstat:last-child { border-right:none; }
     .pub-dstat-num { font-size:1.4rem; font-weight:800; color:var(--text); line-height:1; }
     .pub-dstat-lbl { font-size:.65rem; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:.04em; text-align:center; }     
     .pub-dstat-green .pub-dstat-num { color:#16a34a; }
     .pub-dstat-blue  .pub-dstat-num { color:#1d4ed8; }
     .pub-dstat-red   .pub-dstat-num { color:#dc2626; }
-    .rb-today-btn { background:#fff; border:1.5px solid var(--border); border-radius:7px; padding:.28rem .75rem; font-size:.8rem; font-weight:700; color:#334155; cursor:pointer; text-decoration:none; }
+    .rb-today-btn { background: var(--surface); border:1.5px solid var(--border); border-radius:7px; padding:.28rem .75rem; font-size:.8rem; font-weight:700; color: var(--text); cursor:pointer; text-decoration:none; }
 
     /* Timeline & Grid */
-    .rb-grid-container { background:#fff; border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .rb-grid-container { background: var(--surface); border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden; }
     .rb-timeline-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .rb-timeline-inner { min-width: 800px; }
-    .rb-grid-header { display:flex; background:#f8fafc; border-bottom:1px solid var(--border); }
+    .rb-grid-header { display:flex; background: var(--table-head-bg); border-bottom:1px solid var(--border); }
     .rb-grid-corner { width:220px; border-right:1px solid var(--border); flex-shrink:0; }
     .rb-grid-tlabels { flex:1; display:flex; position:relative; height:40px; align-items:center; }
     .rb-tlabel { position:absolute; transform:translateX(-50%); font-size:.7rem; font-weight:700; color:#94a3b8; }
     
-    .rb-room-row { display:flex; border-bottom:1px solid #f1f5f9; min-height:85px; transition:background .1s; }
+    .rb-room-row { display:flex; border-bottom:1px solid var(--border); min-height:85px; transition:background .1s; }
     .rb-room-row:last-child { border-bottom:none; }
-    .rb-room-row:hover { background:#fcfdfe; }
+    .rb-room-row:hover { background: var(--table-hover); }
     .rb-room-meta-col { width:220px; border-right:1px solid var(--border); padding:.85rem 1rem; flex-shrink:0; display:flex; flex-direction:column; justify-content:center; gap:.25rem; }
     .rb-rm-name { font-size:.95rem; font-weight:800; color:var(--navy); line-height:1.2; }
     .rb-rm-sub { font-size:.72rem; color:#64748b; font-weight:500; }
-    .rb-timeline-col { flex:1; position:relative; background-image: linear-gradient(90deg, #f1f5f9 1px, transparent 1px); background-size: calc(100% / 13) 100%; }
+    .rb-timeline-col { flex:1; position:relative; background-image: linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: calc(100% / 13) 100%; }
     
     .rb-booking-bar { position:absolute; top:12px; height:60px; border-radius:8px; padding:.4rem .6rem; cursor:pointer; transition:transform .15s, box-shadow .15s; z-index:2; overflow:hidden; border:1px solid rgba(0,0,0,0.05); }
     .rb-booking-bar:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,0.08); z-index:10; }
@@ -95,20 +95,20 @@
     .clock-picker  { display:flex; gap:.75rem; align-items:flex-end; }
     .clock-col     { flex:1; position:relative; }
     .clock-arrow   { padding-bottom:1.05rem; color:#94a3b8; flex-shrink:0; }
-    .clock-display { background:#fff; border:1.5px solid var(--border); border-radius:10px; padding:.65rem .9rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:.5rem; transition:all .2s; }
-    .clock-display:hover { border-color:#3b82f6; background:#f8fafc; }
+    .clock-display { background: var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:.65rem .9rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:.5rem; transition:all .2s; }
+    .clock-display:hover { border-color:#3b82f6; background: var(--bg); }
     .clock-display.open  { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
-    .clock-display.locked { opacity:.5; cursor:not-allowed; background:#f8fafc; }
-    .clock-display.locked:hover { border-color:var(--border); background:#f8fafc; }
-    .clock-lbl  { font-size:.6rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.1rem; }
-    .clock-val  { font-size:1.3rem; font-weight:800; color:#1e293b; font-variant-numeric:tabular-nums; line-height:1; }
-    .clock-val.unset { color:#cbd5e1; }
-    .clock-dropdown    { display:none; position:fixed; width:230px; background:#fff; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.12); z-index:400; padding:.75rem; }
-    .clock-section-lbl { font-size:.6rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem; }
-    .clock-divider     { height:1px; background:#f1f5f9; margin:.55rem -.75rem .55rem; }
+    .clock-display.locked { opacity:.5; cursor:not-allowed; background: var(--bg); }
+    .clock-display.locked:hover { border-color:var(--border); background: var(--bg); }
+    .clock-lbl  { font-size:.6rem; font-weight:700; color: var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:.1rem; }
+    .clock-val  { font-size:1.3rem; font-weight:800; color: var(--text); font-variant-numeric:tabular-nums; line-height:1; }
+    .clock-val.unset { color: var(--border); }
+    .clock-dropdown    { display:none; position:fixed; width:230px; background: var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.12); z-index:400; padding:.75rem; }
+    .clock-section-lbl { font-size:.6rem; font-weight:800; color: var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem; }
+    .clock-divider     { height:1px; background: var(--border); margin:.55rem -.75rem .55rem; }
     .clock-hour-grid   { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; }
     .clock-min-row     { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; }
-    .clock-btn         { padding:.45rem .2rem; text-align:center; border-radius:8px; cursor:pointer; font-weight:700; color:#475569; font-size:.82rem; border:1.5px solid transparent; transition:all .12s; }
+    .clock-btn         { padding:.45rem .2rem; text-align:center; border-radius:8px; cursor:pointer; font-weight:700; color: var(--text); font-size:.82rem; border:1.5px solid transparent; transition:all .12s; }
     .clock-btn:hover:not(.disabled) { background:#eff6ff; border-color:#bfdbfe; color:#1e40af; }
     .clock-btn.h-selected { background:#e0f2fe; color:#0369a1; border-color:#bae6fd; }
     .clock-btn.selected   { background:#3b82f6; color:#fff; border-color:#3b82f6; }
@@ -131,7 +131,7 @@
     }
     .dash-cart-panel {
         flex: 0.8;
-        background: #f8fafc;
+        background: var(--bg);
         border-radius: 12px;
         padding: 1.2rem;
         display: flex;
@@ -209,7 +209,7 @@
             border-radius: 10px;
             margin: 0 0 .75rem;
             padding: .85rem 1rem;
-            background: #fff;
+            background: var(--surface);
         }
         .rb-m-stack tbody td {
             display: block;
@@ -286,7 +286,7 @@
             position: fixed;
             bottom: 0; left: 0; right: 0;
             z-index: 500;
-            background: #ffffff;
+            background: var(--surface);
             border-top: 1px solid var(--border);
             padding-bottom: env(safe-area-inset-bottom, 0px);
             box-shadow: 0 -2px 12px rgba(0,0,0,.08);
@@ -353,7 +353,7 @@
         .rb-mob-dayview { display: flex; flex-direction: column; gap: .65rem; }
 
         .rb-mob-room-card {
-            background: #fff;
+            background: var(--surface);
             border-radius: 12px;
             border: 1px solid var(--border);
             box-shadow: 0 1px 4px rgba(0,0,0,.06);
@@ -523,6 +523,8 @@
     <style>
         .rb-approval-wrap { border: 1px solid #fed7aa; background: #fffcf9; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); margin-bottom: 1.5rem; }
         .rb-approval-header { background: #fff7ed; border-bottom: 1px solid #fed7aa; padding: .85rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+        html.dark .rb-approval-wrap   { background: rgba(253,186,74,.04); border-color: rgba(253,186,74,.25); }
+        html.dark .rb-approval-header { background: rgba(245,158,11,.1);  border-bottom-color: rgba(253,186,74,.2); }
         .rb-approval-header h3 { font-size: 1rem; color: #9a3412; margin: 0; display: flex; align-items: center; gap: .6rem; font-weight: 800; }
         .rb-approval-badge { font-size: .72rem; color: #c2410c; font-weight: 700; background: #ffedd5; padding: .22rem .6rem; border-radius: 20px; border: 1px solid #fed7aa; }
         .rb-panel { border-bottom: 1px solid #fed7aa; }
@@ -627,7 +629,7 @@
             <div id="panel-cancel" class="rb-panel-body open">
                 <div class="table-responsive">
                     <table class="table rb-m-stack" style="margin-bottom:0; border-collapse:separate; border-spacing:0;">
-                        <thead style="background:#fff5f5; border-top:1px solid #fecaca; border-bottom:1px solid #fecaca;">
+                        <thead style="background: var(--table-head-bg); border-top:1px solid #fecaca; border-bottom:1px solid #fecaca;">
                             <tr>
                                 <th style="padding:.75rem 1.25rem; font-size:.7rem; color:#991b1b; text-transform:uppercase; letter-spacing:.05em;">Request Details</th>
                                 <th style="padding:.75rem 1.25rem; font-size:.7rem; color:#991b1b; text-transform:uppercase; letter-spacing:.05em;">Original Booking</th>
@@ -995,7 +997,7 @@
         <div class="rb-grid-container" style="overflow-x:auto;">
             <table style="width:100%; border-collapse:collapse; min-width:800px;">
                 <thead>
-                    <tr style="background:#f8fafc; border-bottom:1px solid var(--border);">
+                    <tr style="background:var(--table-head-bg); border-bottom:1px solid var(--border);">
                         <th style="width:200px; padding:1rem; text-align:left; border-right:1px solid var(--border);">Room</th>
                         @php
                             $current = Carbon\Carbon::parse($rangeStart);
@@ -1046,7 +1048,7 @@
             $endOfCalendar = $lastDay->copy()->endOfWeek(Carbon\Carbon::SUNDAY);
         @endphp
         <div class="rb-grid-container">
-            <div class="rb-month-grid-days" style="display:grid; grid-template-columns: repeat(7, 1fr); background:#f8fafc; border-bottom:1px solid var(--border);">
+            <div class="rb-month-grid-days" style="display:grid; grid-template-columns: repeat(7, 1fr); background:var(--table-head-bg); border-bottom:1px solid var(--border);">
                 @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $day)
                     <div style="padding:.75rem; text-align:center; font-size:.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:.05em;">{{ $day }}</div>
                 @endforeach
@@ -1058,7 +1060,7 @@
                         $isCurrentMonth = $curr->month == $firstDay->month;
                         $dayB = $allRangeBookings->filter(fn($b) => $b->booking_date == $curr->toDateString());
                     @endphp
-                    <div class="rb-month-cell" style="padding:.5rem; border-right:1px solid #f1f5f9; border-bottom:1px solid #f1f5f9; {{ $curr->isToday() ? 'background:#eff6ff;' : (!$isCurrentMonth ? 'background:#f8fafc; opacity:.5;' : '') }}">
+                    <div class="rb-month-cell" style="padding:.5rem; border-right:1px solid var(--border); border-bottom:1px solid var(--border); {{ $curr->isToday() ? 'background:#eff6ff;' : (!$isCurrentMonth ? 'background:var(--table-head-bg); opacity:.5;' : '') }}">
                         <div style="text-align:right; font-size:.85rem; font-weight:800; color:{{ $curr->isToday() ? '#2563eb' : '#64748b' }}; margin-bottom:.5rem;">{{ $curr->day }}</div>
                         @foreach($dayB->take(4) as $b)
                             <div class="rb-m-booking-text st-{{ $b->status }}" style="font-size:.6rem; padding:2px 4px; border-radius:3px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border:1px solid rgba(0,0,0,0.05); cursor:pointer;"
@@ -1088,7 +1090,7 @@
         </div>
     @elseif($viewMode === 'my-bookings')
         <div class="rb-grid-container">
-            <div class="card-header" style="background: #f8fafc; border-bottom: 1px solid var(--border); padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+            <div class="card-header" style="background:var(--table-head-bg); border-bottom: 1px solid var(--border); padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="font-size: 1.1rem; color: var(--navy); margin: 0; font-weight: 800; display: flex; align-items: center; gap: .75rem;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                     My Booking History & Schedule
@@ -1096,7 +1098,7 @@
             </div>
             <div class="table-responsive">
                 <table class="table rb-m-stack" style="width:100%; border-collapse: separate; border-spacing: 0;">
-                    <thead style="background:#f8fafc; border-bottom: 2px solid var(--border);">
+                    <thead style="background:var(--table-head-bg); border-bottom: 2px solid var(--border);">
                         <tr>
                             <th style="padding:1.25rem; font-size: .75rem; color: #64748b; text-transform: uppercase; letter-spacing: .05em; font-weight: 800;">Meeting / Room</th>
                             <th style="padding:1.25rem; font-size: .75rem; color: #64748b; text-transform: uppercase; letter-spacing: .05em; font-weight: 800;">Date & Time</th>
@@ -1181,7 +1183,7 @@
                 </table>
             </div>
             @if($allRangeBookings instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                <div style="padding: 1.25rem; border-top: 1px solid var(--border); background: #f8fafc;">
+                <div style="padding: 1.25rem; border-top: 1px solid var(--border); background:var(--table-head-bg);">
                     {{ $allRangeBookings->appends(request()->query())->links() }}
                 </div>
             @endif
@@ -1189,7 +1191,7 @@
     @elseif($viewMode === 'manage')
         <div class="rb-grid-container">
             <table class="table rb-m-stack" style="width:100%;">
-                <thead style="background:#f8fafc;">
+                <thead style="background:var(--table-head-bg);">
                     <tr>
                         <th style="text-align:left; padding:1rem;">Room Name</th>
                         <th style="text-align:left; padding:1rem;">Description</th>
@@ -1315,7 +1317,7 @@
                     </div>
 
                     <input type="hidden" name="is_full_day" id="rbDashFullDayInput" value="0">
-                    <div id="rbDashFullDayWrap" style="display:flex; flex-direction:column; gap:.3rem; padding:.6rem .75rem; border:1.5px solid var(--border); border-radius:8px; background:#f8fafc;">
+                    <div id="rbDashFullDayWrap" style="display:flex; flex-direction:column; gap:.3rem; padding:.6rem .75rem; border:1.5px solid var(--border); border-radius:8px; background:var(--bg);">
                         <label id="rbDashFullDayLabel" style="display:flex; align-items:center; gap:.5rem; cursor:pointer; font-weight:700; font-size:.82rem; color:var(--navy);">
                             <input type="checkbox" id="rbDashFullDay" onchange="dashToggleFullDay()" style="width:1rem; height:1rem; cursor:pointer;">
                             Full Day <span style="font-weight:600; color:#64748b;">(07:00 – 20:00)</span>
@@ -1370,7 +1372,7 @@
                         </div>
                     </div>
 
-                    <div id="rbDashOccSlots" style="display:none; padding:.75rem; border-radius:10px; border:1px solid #f97316; background:#fff7ed;">
+                    <div id="rbDashOccSlots" style="display:none; padding:.75rem; border-radius:10px; border:1px solid #f97316; background:var(--bg);">
                         <div style="font-size:.72rem; font-weight:800; color:#c2410c; text-transform:uppercase; margin-bottom:.5rem;">Occupied Slots</div>
                         <div id="rbDashOccList" style="display:flex; flex-wrap:wrap; gap:.4rem;"></div>
                     </div>
@@ -1384,7 +1386,7 @@
                         ⚠️ This slot overlaps with an existing booking.
                     </div>
 
-                    <div id="rbDashSummary" style="display:none; padding:1rem; border-radius:10px; background:#f8fafc; border:1.5px dashed var(--border); font-size:.85rem; color:var(--navy); line-height:1.4;"></div>
+                    <div id="rbDashSummary" style="display:none; padding:1rem; border-radius:10px; background:var(--bg); border:1.5px dashed var(--border); font-size:.85rem; color:var(--navy); line-height:1.4;"></div>
 
                     @guest
                     <div style="margin-top:1rem; padding:1.25rem; background:#f0f7ff; border:1.5px solid #bfdbfe; border-radius:12px;">
@@ -1492,7 +1494,7 @@
         </div>
         <div class="modal-body">
             <div style="display:grid; grid-template-columns:1fr; gap:1.25rem;">
-                <div style="display:flex; gap:1rem; align-items:center; background:#f8fafc; padding:1rem; border-radius:12px; border:1px solid #e2e8f0;">
+                <div style="display:flex; gap:1rem; align-items:center; background:var(--bg); padding:1rem; border-radius:12px; border:1px solid var(--border);">
                     <div style="width:48px; height:48px; border-radius:50%; background:#e0f2fe; color:#0369a1; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.2rem; flex-shrink:0;" id="pvInitials">
                         ?
                     </div>
@@ -1523,7 +1525,7 @@
 
                 <div>
                     <label style="font-size:.65rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:.05em; display:block; margin-bottom:.3rem;">Purpose</label>
-                    <div id="pvPurpose" style="font-weight:600; color:#334155; line-height:1.5; background:#f8fafc; padding:.75rem; border-radius:8px; border:1px solid #f1f5f9;">—</div>
+                    <div id="pvPurpose" style="font-weight:600; color:var(--text); line-height:1.5; background:var(--bg); padding:.75rem; border-radius:8px; border:1px solid var(--border);">—</div>
                 </div>
 
                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1682,7 +1684,7 @@
                 <h4 style="font-size:.85rem; font-weight:800; color:var(--navy); text-transform:uppercase; letter-spacing:.05em; margin:0 0 .75rem;">All Bookings ({{ $allRangeBookings->count() }})</h4>
                 <div style="max-height:280px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">
                     <table class="table" style="margin-bottom:0; font-size:.82rem;">
-                        <thead style="background:#f8fafc; position:sticky; top:0; z-index:1;">
+                        <thead style="background:var(--table-head-bg); position:sticky; top:0; z-index:1;">
                             <tr>
                                 <th style="padding:.6rem .9rem; font-size:.72rem; color:#64748b; text-transform:uppercase; font-weight:700;">Booked By</th>
                                 <th style="padding:.6rem .9rem; font-size:.72rem; color:#64748b; text-transform:uppercase; font-weight:700;">Room</th>
@@ -1719,7 +1721,7 @@
                     <h4 style="font-size:.85rem; font-weight:800; color:var(--navy); text-transform:uppercase; letter-spacing:.05em; margin:0 0 .75rem;">Top Bookers</h4>
                     <div style="border:1px solid var(--border); border-radius:8px; overflow:hidden;">
                         <table class="table" style="margin-bottom:0; font-size:.82rem;">
-                            <thead style="background:#f8fafc;">
+                            <thead style="background:var(--table-head-bg);">
                                 <tr>
                                     <th style="padding:.6rem .9rem; font-size:.72rem; color:#64748b; text-transform:uppercase; font-weight:700; width:36px;">#</th>
                                     <th style="padding:.6rem .9rem; font-size:.72rem; color:#64748b; text-transform:uppercase; font-weight:700;">Name</th>
@@ -2422,7 +2424,7 @@
             btn.style.display = 'block';
             dashCart.forEach((s, idx) => {
                 const item = document.createElement('div');
-                item.style.padding = '.75rem'; item.style.background = '#fff'; item.style.border = '1px solid var(--border)'; item.style.borderRadius = '8px';
+                item.style.padding = '.75rem'; item.style.background = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim()||'#fff'; item.style.border = '1px solid var(--border)'; item.style.borderRadius = '8px';
                 const timeLabel = s.is_full_day ? 'Full Day (07:00-20:00)' : `${s.start_time}-${s.end_time}`;
                 item.innerHTML = `<div style="font-weight:700; font-size:.8rem;">${s.room_name}</div>
                                   <div style="font-size:.7rem; color:#64748b;">${s.booking_date} • ${timeLabel}</div>
@@ -2561,8 +2563,9 @@
             if (!stack) return;
             const colors = { success:'#16a34a', warning:'#b45309', info:'#1d4ed8', danger:'#dc2626' };
             const c = colors[type] || colors.info;
+            const isDark = document.documentElement.classList.contains('dark');
             const el = document.createElement('div');
-            el.style.cssText = `background:#fff;border:1px solid #e2e8f0;border-left:4px solid ${c};border-radius:10px;padding:.75rem 1rem;font-size:.82rem;font-weight:600;color:#1e293b;pointer-events:all;box-shadow:0 4px 16px rgba(0,0,0,.1);transition:opacity .4s;`;
+            el.style.cssText = `background:${isDark?'#1e293b':'#fff'};border:1px solid ${isDark?'#334155':'#e2e8f0'};border-left:4px solid ${c};border-radius:10px;padding:.75rem 1rem;font-size:.82rem;font-weight:600;color:${isDark?'#e2e8f0':'#1e293b'};pointer-events:all;box-shadow:0 4px 16px rgba(0,0,0,.1);transition:opacity .4s;`;
             el.textContent = msg;
             stack.appendChild(el);
             setTimeout(() => el.style.opacity = '0', 4600);

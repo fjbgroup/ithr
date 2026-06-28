@@ -50,7 +50,7 @@
 </div>
 @else
 @canwrite
-<div style="display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;margin-bottom:.75rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
+<div style="display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;margin-bottom:.75rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;">
     <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none;margin:0;">
         <input type="checkbox" id="fc-global-all" onchange="fcToggleAll(this)" style="width:16px;height:16px;cursor:pointer;accent-color:#6366f1;">
         <span style="font-size:.82rem;color:#64748b;font-weight:500;">Select All</span>
@@ -61,7 +61,7 @@
 @foreach($grouped as $staff_id => $members)
 @php $first = $members[0]; @endphp
 <details class="card fc-staff-card" style="margin-bottom: 1rem; border: none; background: transparent;" {{ count($grouped) == 1 ? 'open' : '' }}>
-    <summary class="card-header" style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem;">
+    <summary class="card-header" style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem;">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <div style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;" class="staff-toggle-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -85,7 +85,7 @@
         <span class="fc-member-count">{{ count($members) }} member{{ count($members) !== 1 ? 's' : '' }}</span>
     </summary>
 
-    <div class="fc-list" style="padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+    <div class="fc-list" style="padding: 1rem; background: var(--bg); border: 1px solid var(--border); border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
         @if(count($members) > 1)
         @canwrite
         <label style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .5rem;margin-bottom:.6rem;cursor:pointer;user-select:none;font-size:.78rem;color:#64748b;">

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <script>!function(){var t=localStorage.getItem('fjb-theme')||localStorage.getItem('color-theme')||localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}();</script>
     <style>
         .progress-bar {
             display: flex;
@@ -28,7 +29,7 @@
             height: 32px;
             border-radius: 50%;
             border: 2px solid #d1d5db;
-            background: #fff;
+            background: var(--surface);
             display: flex;
             align-items: center;
             justify-content: center;

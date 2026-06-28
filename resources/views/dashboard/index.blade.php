@@ -517,7 +517,7 @@
 /* —— KPI Row ———————————————————————————————————————————————————————— */
 .hd-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
 .hd-kpi {
-    background: white; border-radius: 12px; padding: 1rem 1.1rem;
+    background: var(--surface); border-radius: 12px; padding: 1rem 1.1rem;
     display: flex; align-items: center; gap: .85rem;
     box-shadow: var(--shadow); border-left: 4px solid transparent;
     position: relative; overflow: hidden;
@@ -561,7 +561,7 @@
 .hd-to-chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .hd-to-chip-lbl { color: var(--muted); font-weight: 500; flex: 1; }
 .hd-to-chip-val { font-weight: 800; color: var(--text); }
-.hd-to-chip-pct { font-size: .7rem; color: var(--muted); background: white; padding: .1rem .3rem; border-radius: 4px; flex-shrink: 0; }
+.hd-to-chip-pct { font-size: .7rem; color: var(--muted); background: var(--surface); padding: .1rem .3rem; border-radius: 4px; flex-shrink: 0; }
 
 .hd-to-bars { display: flex; flex-direction: column; gap: .28rem; }
 .hd-to-bar-row { display: flex; align-items: center; gap: .5rem; font-size: .78rem; }
@@ -601,7 +601,7 @@
 .hd-dept-sp-name { font-size: .88rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hd-dept-sp-meta { display: flex; gap: .5rem; margin-top: .2rem; font-size: .78rem; align-items: center; }
 .hd-dept-sp-cnt { font-weight: 700; color: var(--text); }
-.hd-dept-sp-pct { color: var(--muted); background: white; padding: .1rem .35rem; border-radius: 4px; font-weight: 600; }
+.hd-dept-sp-pct { color: var(--muted); background: var(--surface); padding: .1rem .35rem; border-radius: 4px; font-weight: 600; }
 .hd-sv-slice { cursor: pointer; stroke: white; stroke-width: 2; transition: filter .15s, stroke-width .15s; }
 .hd-sv-slice:hover { filter: brightness(1.12); stroke-width: 3; }
 .hd-pie-sv { text-anchor: middle; dominant-baseline: middle; font-size: 28px; font-weight: 800; fill: #1e293b; font-family: 'DM Sans', sans-serif; }
@@ -674,7 +674,7 @@
 }
 .hd-pie-hole {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 78px; height: 78px; background: white; border-radius: 50%;
+    width: 78px; height: 78px; background: var(--surface); border-radius: 50%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }

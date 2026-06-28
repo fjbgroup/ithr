@@ -129,7 +129,7 @@
 {{-- KPI Cards --}}
 <div class="rpt-kpi-row">
     <div class="rpt-kpi ext-kpi">
-        <div class="rpt-kpi-icon" style="background:#fff7ed;color:#c2410c;">
+        <div class="rpt-kpi-icon" style="background:var(--bg);color:#c2410c;">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
         <div>
@@ -156,7 +156,7 @@
         </div>
     </div>
     <div class="rpt-kpi">
-        <div class="rpt-kpi-icon" style="background:#f8fafc;color:#475569;">
+        <div class="rpt-kpi-icon" style="background:var(--bg);color:#475569;">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         </div>
         <div>
@@ -282,7 +282,7 @@
             </div>
             {{-- Monthly quick-stats if filtered --}}
             @if ($month_f)
-            <div style="margin-top:1.25rem;padding:1rem;background:#f8fafc;border-radius:8px;font-size:.8rem;">
+            <div style="margin-top:1.25rem;padding:1rem;background:var(--bg);border-radius:8px;font-size:.8rem;">
                 <strong>{{ date('F', mktime(0,0,0,$month_f,1)) }} {{ $year_f }}:</strong><br>
                 <span style="color:#c2410c;">External: {{ $ext_count }}</span> &nbsp;·&nbsp;
                 <span style="color:#15803d;">Internal: {{ $int_count }}</span>
@@ -439,7 +439,7 @@ function printCourse(cid) {
 <style>
 /* ── KPI Row ────────────────────────────────────────────────────────── */
 .rpt-kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:1.25rem; }
-.rpt-kpi { background:#fff; border:1px solid var(--border); border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:.85rem; box-shadow:var(--shadow); }
+.rpt-kpi { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem 1.25rem; display:flex; align-items:center; gap:.85rem; box-shadow:var(--shadow); }
 .rpt-kpi-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .rpt-kpi-val { font-size:1.6rem; font-weight:700; color:var(--text); line-height:1.1; }
 .rpt-kpi-lbl { font-size:.7rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.04em; margin-top:.2rem; }

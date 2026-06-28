@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<script>!function(){var t=localStorage.getItem('fjb-theme')||localStorage.getItem('color-theme')||localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}();</script>
 <style>
   :root {
     --lg-navy:   #0f223b;
@@ -20,6 +21,17 @@
     --lg-border: #e2e8f0;
     --lg-text:   #1e293b;
     --lg-muted:  #64748b;
+    --lg-card:   #fff;
+    --lg-input:  #f8fafc;
+    --lg-input-focus: #fff;
+  }
+  html.dark {
+    --lg-border: #334155;
+    --lg-text:   #e2e8f0;
+    --lg-muted:  #94a3b8;
+    --lg-card:   #1e293b;
+    --lg-input:  #0f172a;
+    --lg-input-focus: #1e293b;
   }
 
   .auth-page {
@@ -37,7 +49,7 @@
     max-width: 940px;
     display: grid;
     grid-template-columns: 1.05fr .95fr;
-    background: #fff;
+    background: var(--lg-card);
     border-radius: 22px;
     overflow: hidden;
     box-shadow: 0 30px 70px -20px rgba(8,20,40,.55), 0 2px 8px rgba(8,20,40,.2);
@@ -153,7 +165,7 @@
     font-family: inherit;
     font-size: .95rem;
     color: var(--lg-text);
-    background: #f8fafc;
+    background: var(--lg-input);
     border: 1.5px solid var(--lg-border);
     border-radius: 11px;
     transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
@@ -161,7 +173,7 @@
   .auth-input-wrap input::placeholder { color: #94a3b8; }
   .auth-input-wrap input:focus {
     outline: none;
-    background: #fff;
+    background: var(--lg-input-focus);
     border-color: var(--lg-sky);
     box-shadow: 0 0 0 4px rgba(56,189,248,.16);
   }

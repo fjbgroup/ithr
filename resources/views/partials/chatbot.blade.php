@@ -30,7 +30,7 @@
     right: 1.5rem;
     width: 360px;
     max-height: 520px;
-    background: #fff;
+    background: var(--surface);
     border-radius: 16px;
     box-shadow: 0 8px 40px rgba(0,0,0,.18);
     display: none;
@@ -143,15 +143,15 @@
 
 .chatbot-footer {
     padding: .75rem 1rem;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--border);
     display: flex;
     gap: .5rem;
     flex-shrink: 0;
-    background: #fff;
+    background: var(--surface);
 }
 #chatbot-input {
     flex: 1;
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid var(--border);
     border-radius: 8px;
     padding: .5rem .75rem;
     font-size: .83rem;

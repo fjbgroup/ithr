@@ -34,7 +34,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
 
         {{-- INTERNAL --}}
-        <div style="background:#fff;border-radius:14px;border:1px solid #e2e8f0;border-top:4px solid #22c55e;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;">
+        <div style="background:var(--surface);border-radius:14px;border:1px solid var(--border);border-top:4px solid #22c55e;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;">
             <div style="padding:1.5rem;">
                 {{-- Card header --}}
                 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
@@ -48,7 +48,7 @@
                 </div>
 
                 {{-- Format info --}}
-                <div style="background:#f8fafc;border-radius:8px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.78rem;color:#64748b;line-height:1.7;">
+                <div style="background:var(--bg);border-radius:8px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.78rem;color:var(--muted);line-height:1.7;">
                     Expected columns:
                     <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem;">
                         @foreach(['DATE TRAINING','VENUE','NAME OF COURSE','ID STAFF'] as $col)
@@ -87,7 +87,7 @@
         </div>
 
         {{-- EXTERNAL --}}
-        <div style="background:#fff;border-radius:14px;border:1px solid #e2e8f0;border-top:4px solid #f97316;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;">
+        <div style="background:var(--surface);border-radius:14px;border:1px solid var(--border);border-top:4px solid #f97316;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden;">
             <div style="padding:1.5rem;">
                 {{-- Card header --}}
                 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
@@ -101,7 +101,7 @@
                 </div>
 
                 {{-- Format info --}}
-                <div style="background:#f8fafc;border-radius:8px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.78rem;color:#64748b;line-height:1.7;">
+                <div style="background:var(--bg);border-radius:8px;padding:.85rem 1rem;margin-bottom:1.1rem;font-size:.78rem;color:var(--muted);line-height:1.7;">
                     Expected columns:
                     <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem;">
                         @foreach(['REF NO','NAME OF COURSE','VENUE','TRAINING DATE','ID PETUGAS'] as $col)
@@ -142,7 +142,7 @@
     </div>
 
     {{-- Generic / Simple format — secondary card --}}
-    <div style="background:#fff;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);">
+    <div style="background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);">
         <div style="padding:1.25rem 1.5rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
                 <div style="display:flex;align-items:center;gap:.75rem;">
@@ -168,7 +168,7 @@
                         @csrf
                         <input type="hidden" name="csv_type" value="simple">
                         <label for="simple_file"
-                               style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border:1.5px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:.78rem;font-weight:700;color:#475569;background:#f8fafc;">
+                               style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:.78rem;font-weight:700;color:var(--muted);background:var(--bg);">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                             <span id="simple-label">Choose file</span>
                         </label>
@@ -185,7 +185,7 @@
     </div>
 
     {{-- Danger Zone --}}
-    <div style="margin-top:1.25rem;background:#fff;border-radius:14px;border:1px solid #fecaca;box-shadow:0 1px 3px rgba(0,0,0,.05);">
+    <div style="margin-top:1.25rem;background:var(--surface);border-radius:14px;border:1px solid #fecaca;box-shadow:0 1px 3px rgba(0,0,0,.05);">
         <div style="padding:1rem 1.5rem;border-bottom:1px solid #fee2e2;display:flex;align-items:center;gap:.5rem;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             <span style="font-size:.8rem;font-weight:800;color:#dc2626;text-transform:uppercase;letter-spacing:.04em;">Danger Zone</span>
@@ -201,7 +201,7 @@
                     @csrf
                     <input type="hidden" name="type" value="Internal">
                     <button type="submit"
-                            style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;background:#fff;border:1.5px solid #22c55e;border-radius:8px;font-size:.78rem;font-weight:700;color:#15803d;cursor:pointer;">
+                            style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;background:var(--surface);border:1.5px solid #22c55e;border-radius:8px;font-size:.78rem;font-weight:700;color:#15803d;cursor:pointer;">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
                         Delete All Internal
                     </button>
@@ -212,7 +212,7 @@
                     @csrf
                     <input type="hidden" name="type" value="External">
                     <button type="submit"
-                            style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;background:#fff;border:1.5px solid #f97316;border-radius:8px;font-size:.78rem;font-weight:700;color:#c2410c;cursor:pointer;">
+                            style="display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;background:var(--surface);border:1.5px solid #f97316;border-radius:8px;font-size:.78rem;font-weight:700;color:#c2410c;cursor:pointer;">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
                         Delete All External
                     </button>

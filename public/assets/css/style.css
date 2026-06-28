@@ -2033,3 +2033,118 @@ html.dark .rb-booking-pill   { background: var(--bg); }
 
 /* ── Dept type bar track ── */
 html.dark .dept-type-bar { background: var(--border); }
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE — page-specific class overrides
+   (classes defined in @section('styles') of individual views)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Dashboard: KPI cards ── */
+html.dark .hd-kpi               { background: var(--surface); }
+html.dark .hd-kpi-blue  .hd-kpi-icon { background: rgba(59,130,246,.15);  color: #93c5fd; }
+html.dark .hd-kpi-green .hd-kpi-icon { background: rgba(34,197,94,.15);   color: #86efac; }
+html.dark .hd-kpi-amber .hd-kpi-icon { background: rgba(245,158,11,.15);  color: #fcd34d; }
+html.dark .hd-kpi-red   .hd-kpi-icon { background: rgba(239,68,68,.15);   color: #fca5a5; }
+html.dark .hd-kpi-purple .hd-kpi-icon { background: rgba(139,92,246,.15); color: #c4b5fd; }
+html.dark .hd-kpi-link:hover          { background: var(--bg); }
+html.dark .hd-to-chip-pct  { background: var(--bg); }
+html.dark .hd-dept-sp-pct  { background: var(--bg); }
+html.dark .hd-pie-hole     { background: var(--surface); }
+html.dark .hd-pie-sv       { fill: var(--text); }
+html.dark .hd-type-chip.external { background: rgba(194,65,12,.15);  color: #fdba74; }
+html.dark .hd-type-chip.internal { background: rgba(21,128,61,.15);   color: #86efac; }
+html.dark .hd-req-avatar { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+html.dark .hd-year-badge { background: rgba(2,132,199,.18); color: var(--sky); }
+html.dark .hd-to-chip    { background: var(--bg); }
+html.dark .hd-dept-co    { background: var(--bg); }
+html.dark .hd-req-age    { background: var(--bg); }
+
+/* ── Dashboard: active tabs that use var(--navy) as background ── */
+html.dark .hd-kpi-blue  { border-left-color: #3b82f6; }
+html.dark .hd-kpi-green { border-left-color: #22c55e; }
+html.dark .hd-kpi-amber { border-left-color: #f59e0b; }
+html.dark .hd-kpi-red   { border-left-color: #ef4444; }
+html.dark .hd-kpi-purple { border-left-color: #8b5cf6; }
+
+/* ── Training page ── */
+html.dark .tr-progress-track           { background: var(--border); }
+html.dark .tr-dp-track                 { background: var(--border); }
+html.dark .tr-tab.active               { background: var(--primary); border-color: var(--primary); }
+html.dark .tr-type-pill.active         { background: var(--primary); color: #fff; }
+html.dark button.tr-type-pill.active   { background: var(--primary); color: #fff; }
+html.dark .tr-type-pill.active.tr-pill-ext { background: rgba(234,88,12,.2);  color: #fdba74; }
+html.dark .tr-type-pill.active.tr-pill-int { background: rgba(34,197,94,.15); color: #86efac; }
+html.dark .tr-type-badge.tr-ext        { background: rgba(234,88,12,.15);  color: #fdba74; }
+html.dark .tr-type-badge.tr-int        { background: rgba(34,197,94,.15);  color: #86efac; }
+html.dark .tr-dept-co-badge            { background: rgba(99,102,241,.15); color: #818cf8; }
+html.dark .type-chip-ext input:checked + span { background: rgba(249,115,22,.15); border-color: #f97316; color: #fdba74; }
+html.dark .bg-orange  { background: rgba(249,115,22,.12) !important; }
+html.dark .bg-slate   { background: var(--bg)  !important; }
+html.dark .color-slate { color: var(--muted)   !important; }
+html.dark .hd-type-bar-track  { background: var(--border); }
+html.dark .hd-pill-track      { background: var(--border); }
+html.dark .hd-to-bar-track    { background: var(--border); }
+html.dark .hd-to-dept-bar-track { background: var(--border); }
+html.dark .tr-search-bar      { background: var(--surface); }
+html.dark .tr-filter-bar      { background: var(--surface); }
+html.dark .hd-comp-bar-wrap .hd-type-bar-track { background: var(--border); }
+
+/* ── Rooms page ── */
+html.dark .pub-view-tabs        { background: var(--bg); }
+html.dark .pvt-btn              { color: var(--muted); }
+html.dark .pvt-active           { background: var(--surface) !important; color: var(--sky-dark) !important; box-shadow: var(--shadow); }
+html.dark .pub-datepicker-lbl   { background: var(--surface); border-color: var(--border); }
+html.dark .pub-datepicker-lbl .pub-date-text { color: var(--text); }
+html.dark .pub-datepicker-lbl .pub-cal-ico   { color: var(--muted); }
+html.dark .rbdp-modal           { background: var(--surface); }
+html.dark .rbdp-title           { color: var(--text); }
+html.dark .rbdp-nav             { background: var(--bg); color: var(--text); }
+html.dark .rbdp-nav:hover       { background: var(--border); }
+html.dark .rbdp-cell            { color: var(--text); }
+html.dark .rbdp-cell:not(.empty):hover { background: rgba(24,95,165,.2); color: #93c5fd; }
+html.dark .pub-day-stats        { background: var(--surface); }
+html.dark .pub-dstat            { border-right-color: var(--border); }
+html.dark .pub-dstat-lbl        { color: var(--muted); }
+html.dark .rb-today-btn         { background: var(--surface); border-color: var(--border); color: var(--text); }
+html.dark .rb-grid-container    { background: var(--surface); }
+html.dark .rb-grid-header       { background: var(--table-head-bg); }
+html.dark .rb-room-row          { border-bottom-color: var(--border); }
+html.dark .rb-room-row:hover    { background: rgba(255,255,255,.02); }
+html.dark .rb-timeline-col      { background-image: linear-gradient(90deg, var(--border) 1px, transparent 1px); }
+html.dark .clock-display        { background: var(--surface); border-color: var(--border); color: var(--text); }
+html.dark .clock-display:hover  { background: var(--bg); }
+html.dark .clock-display.locked { background: var(--bg); }
+html.dark .clock-lbl  { color: var(--muted); }
+html.dark .clock-val  { color: var(--text); }
+html.dark .clock-val.unset { color: var(--border); }
+html.dark .clock-dropdown   { background: var(--surface); border-color: var(--border); }
+html.dark .clock-section-lbl { color: var(--muted); }
+html.dark .clock-divider    { background: var(--border); }
+html.dark .clock-btn        { color: var(--text); }
+html.dark .clock-btn:hover:not(.disabled) { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.3); color: #93c5fd; }
+html.dark .clock-btn.h-selected { background: rgba(3,105,161,.2); color: #7dd3fc; border-color: rgba(3,105,161,.3); }
+html.dark .rb-approval-wrap     { background: rgba(253,186,74,.04); border-color: rgba(253,186,74,.25); }
+html.dark .rb-approval-header   { background: rgba(245,158,11,.1);  border-bottom-color: rgba(253,186,74,.2); }
+html.dark .dash-cart-panel      { background: var(--bg); }
+
+/* Booking bar status colors in dark */
+html.dark .st-Pending        { background: rgba(234,179,8,.1);   border-color: rgba(234,179,8,.3);   color: #fde047; }
+html.dark .st-Approved       { background: rgba(34,197,94,.1);   border-color: rgba(34,197,94,.3);   color: #86efac; }
+html.dark .st-EditRequested  { background: rgba(59,130,246,.1);  border-color: rgba(59,130,246,.3);  color: #93c5fd; }
+html.dark .st-CancelRequested{ background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.3);   color: #fca5a5; }
+html.dark .st-Rejected       { background: rgba(239,68,68,.1);   border-color: rgba(239,68,68,.3);   color: #fca5a5; }
+
+/* Mobile card transformation in dark */
+html.dark .rb-m-stack tbody tr { background: var(--surface); }
+
+/* ── Report pages ── */
+html.dark .rpt-kpi { background: var(--surface); border-color: var(--border); }
+
+/* ── Audit page ── */
+html.dark .audit-timeline-dot  { background: var(--surface); border-color: var(--border); }
+html.dark .audit-card          { background: var(--surface); }
+
+/* ── Chatbot ── */
+html.dark .chatbot-panel { background: var(--surface); border-color: var(--border); }
+html.dark .chatbot-msg-bot { background: var(--bg); }
+html.dark .chatbot-input  { background: var(--surface); border-color: var(--border); color: var(--text); }
