@@ -160,16 +160,13 @@
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-brand-row flex items-center justify-between gap-x-3 pl-4 pr-3">
+  <div class="sidebar-brand-row flex items-center gap-x-3 pl-4 pr-3">
     <a href="{{ request()->fullUrl() }}" class="sidebar-brand flex min-w-0 flex-1 items-center gap-x-3" title="Refresh page">
       <div class="sidebar-logo-shell flex shrink-0 items-center justify-center">
         <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
       </div>
       <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
     </a>
-    <button type="button" class="sidebar-collapse-toggle" id="sidebarCollapseToggle" aria-label="Toggle sidebar" aria-expanded="true">
-      <i class="fas fa-angles-left"></i>
-    </button>
   </div>
 
   <nav class="sidebar-nav">
@@ -1161,30 +1158,9 @@ function closeMobileSidebar() {
 var sidebarOv = document.getElementById('mobileSidebarOverlay');
 if (sidebarOv) sidebarOv.onclick = closeMobileSidebar;
 
-// -- SIDEBAR COLLAPSE (desktop) --
-(function () {
-  var body = document.body;
-  var toggle = document.getElementById('sidebarCollapseToggle');
-  if (!body || !toggle) return;
-
-  function syncSidebarCollapse(collapsed) {
-    body.classList.toggle('sidebar-collapsed', collapsed);
-    toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-    toggle.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
-  }
-
-  var saved = localStorage.getItem('wt-sidebar-collapsed') === '1';
-  syncSidebarCollapse(saved);
-
-  toggle.addEventListener('click', function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    var collapsed = !body.classList.contains('sidebar-collapsed');
-    syncSidebarCollapse(collapsed);
-    localStorage.setItem('wt-sidebar-collapsed', collapsed ? '1' : '0');
-    closeSidebarInfoPopovers();
-  });
-})();
+// -- SIDEBAR ALWAYS VISIBLE (collapse disabled) --
+localStorage.removeItem('wt-sidebar-collapsed');
+document.body.classList.remove('sidebar-collapsed');
 
 // Collapsed-sidebar hover tooltips: show each item's label when the rail is collapsed
 (function () {
