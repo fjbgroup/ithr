@@ -202,9 +202,13 @@
         .rb-pending-acts .btn { flex: 1 !important; justify-content: center !important; }
 
         /* Table → card transformation */
+        .rb-m-stack { display: block; width: 100%; }
         .rb-m-stack thead { display: none; }
+        .rb-m-stack tbody { display: block; width: 100%; }
         .rb-m-stack tbody tr {
             display: block;
+            width: 100%;
+            box-sizing: border-box;
             border: 1px solid var(--border) !important;
             border-radius: 10px;
             margin: 0 0 .75rem;
@@ -332,7 +336,7 @@
         .rb-fab {
             display: flex;
             position: fixed;
-            bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 1rem);
+            top: calc(52px + env(safe-area-inset-top, 0px) + .6rem);
             right: 1.1rem;
             z-index: 490;
             width: 52px; height: 52px;
@@ -1008,9 +1012,9 @@
                             $end = Carbon\Carbon::parse($rangeEnd);
                         @endphp
                         @while($current <= $end)
-                            <th style="padding:1rem; text-align:center; border-right:1px solid var(--border); {{ $current->isToday() ? 'background:#eff6ff;' : '' }}">
-                                <div style="font-size:.7rem; color:#64748b; text-transform:uppercase;">{{ $current->format('D') }}</div>
-                                <div style="font-size:1rem; font-weight:800; color:#1e293b;">{{ $current->format('d M') }}</div>
+                            <th style="padding:1rem; text-align:center; border-right:1px solid var(--border); {{ $current->isToday() ? 'background:rgba(56,130,248,.12);' : '' }}">
+                                <div style="font-size:.7rem; color:var(--muted); text-transform:uppercase;">{{ $current->format('D') }}</div>
+                                <div style="font-size:1rem; font-weight:800; color:var(--text);">{{ $current->format('d M') }}</div>
                             </th>
                             @php $current->addDay(); @endphp
                         @endwhile
@@ -1018,14 +1022,14 @@
                 </thead>
                 <tbody>
                     @foreach($rooms as $room)
-                    <tr style="border-bottom:1px solid #f1f5f9;">
+                    <tr style="border-bottom:1px solid var(--border);">
                         <td style="padding:1rem; border-right:1px solid var(--border);">
                             <div class="rb-rm-name">{{ $room->name }}</div>
                             <div class="rb-rm-sub">Cap: {{ $room->capacity }}</div>
                         </td>
                         @php $current = Carbon\Carbon::parse($rangeStart); @endphp
                         @while($current <= $end)
-                            <td style="padding:.5rem; border-right:1px solid var(--border); vertical-align:top; {{ $current->isToday() ? 'background:#fcfdfe;' : '' }}">
+                            <td style="padding:.5rem; border-right:1px solid var(--border); vertical-align:top; {{ $current->isToday() ? 'background:rgba(56,130,248,.06);' : '' }}">
                                 @php
                                     $dayB = $allRangeBookings->filter(fn($b) => $b->room_id == $room->id && $b->booking_date == $current->toDateString());
                                 @endphp
@@ -1054,7 +1058,7 @@
         <div class="rb-grid-container">
             <div class="rb-month-grid-days" style="display:grid; grid-template-columns: repeat(7, 1fr); background:var(--table-head-bg); border-bottom:1px solid var(--border);">
                 @foreach(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] as $day)
-                    <div style="padding:.75rem; text-align:center; font-size:.75rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:.05em;">{{ $day }}</div>
+                    <div style="padding:.75rem; text-align:center; font-size:.75rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;">{{ $day }}</div>
                 @endforeach
             </div>
             <div class="rb-month-grid-cells" style="display:grid; grid-template-columns: repeat(7, 1fr); grid-auto-rows: minmax(120px, auto);">
@@ -1064,8 +1068,8 @@
                         $isCurrentMonth = $curr->month == $firstDay->month;
                         $dayB = $allRangeBookings->filter(fn($b) => $b->booking_date == $curr->toDateString());
                     @endphp
-                    <div class="rb-month-cell" style="padding:.5rem; border-right:1px solid var(--border); border-bottom:1px solid var(--border); {{ $curr->isToday() ? 'background:#eff6ff;' : (!$isCurrentMonth ? 'background:var(--table-head-bg); opacity:.5;' : '') }}">
-                        <div style="text-align:right; font-size:.85rem; font-weight:800; color:{{ $curr->isToday() ? '#2563eb' : '#64748b' }}; margin-bottom:.5rem;">{{ $curr->day }}</div>
+                    <div class="rb-month-cell" style="padding:.5rem; border-right:1px solid var(--border); border-bottom:1px solid var(--border); {{ $curr->isToday() ? 'background:rgba(56,130,248,.12);' : (!$isCurrentMonth ? 'background:var(--table-head-bg); opacity:.5;' : '') }}">
+                        <div style="text-align:right; font-size:.85rem; font-weight:800; color:{{ $curr->isToday() ? '#3b82f6' : 'var(--muted)' }}; margin-bottom:.5rem;">{{ $curr->day }}</div>
                         @foreach($dayB->take(4) as $b)
                             <div class="rb-m-booking-text st-{{ $b->status }}" style="font-size:.6rem; padding:2px 4px; border-radius:3px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border:1px solid rgba(0,0,0,0.05); cursor:pointer;"
                                  onclick="openEditModal('{{ $b->id }}', '{{ $b->room_id }}', '{{ $b->booking_date }}', '{{ substr($b->start_time, 0, 5) }}', '{{ substr($b->end_time, 0, 5) }}', '{{ addslashes($b->purpose) }}', '{{ $b->attendees }}', '{{ $b->status }}')">
@@ -1207,7 +1211,7 @@
                 </thead>
                 <tbody>
                     @foreach($rooms as $room)
-                    <tr style="border-bottom:1px solid #f1f5f9;">
+                    <tr style="border-bottom:1px solid var(--border);">
                         <td data-label="Room Name" style="padding:1rem;"><strong>{{ $room->name }}</strong></td>
                         <td data-label="Description" style="padding:1rem; color:#64748b; font-size:.8rem;">{{ $room->description ?: '-' }}</td>
                         <td data-label="Capacity" style="padding:1rem; text-align:center;">{{ $room->capacity }}</td>
@@ -1699,7 +1703,7 @@
                         </thead>
                         <tbody>
                             @forelse($allRangeBookings->sortBy('booking_date')->sortBy('start_time') as $b)
-                            <tr style="border-bottom:1px solid #f1f5f9;">
+                            <tr style="border-bottom:1px solid var(--border);">
                                 <td style="padding:.55rem .9rem; font-weight:600; color:var(--navy);">{{ $b->booked_by_name }}</td>
                                 <td style="padding:.55rem .9rem; color:var(--text);">{{ $b->room->name }}</td>
                                 <td style="padding:.55rem .9rem; color:#64748b; white-space:nowrap;">{{ date('d M, D', strtotime($b->booking_date)) }}</td>
@@ -1734,7 +1738,7 @@
                             </thead>
                             <tbody>
                                 @forelse($topBookers as $name => $count)
-                                <tr style="border-bottom:1px solid #f1f5f9;">
+                                <tr style="border-bottom:1px solid var(--border);">
                                     <td style="padding:.55rem .9rem; color:#94a3b8; font-weight:700; font-size:.75rem;">
                                         @if($loop->index === 0) <span style="color:#f59e0b;">&#9733;</span>
                                         @elseif($loop->index === 1) <span style="color:#94a3b8;">&#9734;</span>
