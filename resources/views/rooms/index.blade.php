@@ -195,8 +195,8 @@
         .rb-month-dots { display: flex !important; flex-wrap: wrap; gap: 2px; margin-top: .2rem; }
     }
 
-    /* 640px — table → card layout */
-    @media (max-width: 640px) {
+    /* 768px — table → card layout (matches mobile bottom-nav / FAB breakpoint) */
+    @media (max-width: 768px) {
         /* Pending action buttons stretch full width */
         .rb-pending-acts { width: 100% !important; justify-content: stretch !important; }
         .rb-pending-acts .btn { flex: 1 !important; justify-content: center !important; }
@@ -351,6 +351,15 @@
             transition: transform .15s, box-shadow .15s;
         }
         .rb-fab:active { transform: scale(.94); box-shadow: 0 2px 8px rgba(0,59,149,.3); }
+
+        /* Lift the global chatbot button/window above the mobile bottom nav
+           so it no longer covers the "Mine" tab. (Bottom nav ≈ 52px tall.) */
+        #chatbot-fab {
+            bottom: calc(52px + env(safe-area-inset-bottom, 0px) + 1rem) !important;
+        }
+        #chatbot-window {
+            bottom: calc(52px + env(safe-area-inset-bottom, 0px) + 4.5rem) !important;
+        }
 
         /* 4. DAY VIEW — hide desktop timeline, show room cards */
         .rb-desktop-timeline { display: none !important; }
