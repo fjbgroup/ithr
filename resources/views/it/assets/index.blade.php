@@ -6,16 +6,21 @@
 @push('styles')
 <style>
 /* ── DATA TABLE ── */
-/* Auto layout: every column hugs its content (no huge gaps); the Description
-   column flexes to absorb all leftover width so QR + Actions stay in view. */
-.data-table { width:100%; table-layout:auto; }
-.data-table td, .data-table th { vertical-align:middle !important; padding:6px 10px !important; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-/* Description (col 4) takes the remaining space and truncates with ellipsis */
-.data-table th:nth-child(4), .data-table td:nth-child(4) { width:100%; max-width:0; }
-/* Centered columns: years purchase, qr, actions */
-.data-table th:nth-child(5), .data-table td:nth-child(5) { text-align:center; }
-.data-table th:nth-child(10), .data-table td:nth-child(10) { text-align:center; }
-.data-table th:nth-child(11), .data-table td:nth-child(11) { text-align:center; }
+/* Fixed layout with percentage widths that sum to 100% -> the table fills the
+   container exactly: no huge gaps, no horizontal scroll, QR + Actions visible. */
+.data-table { width:100%; table-layout:fixed; }
+.data-table td, .data-table th { vertical-align:middle !important; padding:6px 8px !important; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.data-table th:nth-child(1),  .data-table td:nth-child(1)  { width:3%;  text-align:center; } /* checkbox */
+.data-table th:nth-child(2),  .data-table td:nth-child(2)  { width:9%;  }                    /* asset no */
+.data-table th:nth-child(3),  .data-table td:nth-child(3)  { width:8%;  }                    /* f/a code */
+.data-table th:nth-child(4),  .data-table td:nth-child(4)  { width:18%; }                    /* description */
+.data-table th:nth-child(5),  .data-table td:nth-child(5)  { width:8%;  text-align:center; } /* years purchase */
+.data-table th:nth-child(6),  .data-table td:nth-child(6)  { width:9%;  }                    /* location */
+.data-table th:nth-child(7),  .data-table td:nth-child(7)  { width:9%;  }                    /* total cost */
+.data-table th:nth-child(8),  .data-table td:nth-child(8)  { width:9%;  }                    /* accumulated */
+.data-table th:nth-child(9),  .data-table td:nth-child(9)  { width:9%;  }                    /* nbv at */
+.data-table th:nth-child(10), .data-table td:nth-child(10) { width:4%;  text-align:center; } /* qr */
+.data-table th:nth-child(11), .data-table td:nth-child(11) { width:14%; text-align:center; } /* actions */
 .data-scroll-wrap::-webkit-scrollbar{height:6px}
 .data-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .data-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
@@ -186,7 +191,7 @@ $statItems = [
   <div class="data-scroll-wrap" style="overflow-x:auto">
     <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
-        <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
+        <th><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
         <th>F/A CODE</th>
         <th>DESCRIPTION</th>
@@ -195,8 +200,8 @@ $statItems = [
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th style="width:1%;white-space:nowrap">QR</th>
-        <th style="width:1%;white-space:nowrap">ACTIONS</th>
+        <th>QR</th>
+        <th>ACTIONS</th>
       </tr></thead>
       <tbody>
         @forelse($items as $item)
