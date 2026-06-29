@@ -11,6 +11,10 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
+        if (auth('wt')->user()?->wt_role === 'admin') {
+            return redirect()->route('wt.admin.walkies.myInventory');
+        }
+
         $statusCounts = WalkieTalkie::select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->get();
@@ -116,4 +120,3 @@ class AdminDashboardController extends Controller
         ));
     }
 }
-

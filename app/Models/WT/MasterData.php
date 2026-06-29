@@ -18,7 +18,7 @@ class MasterData extends Model
      */
     public const CATEGORIES = [
         'model' => 'Model',
-        'department' => 'Department',
+        'department' => 'Location',
         'position' => 'Position',
         'ownership_type' => 'Ownership Type',
     ];

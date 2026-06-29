@@ -113,7 +113,7 @@
                 <thead class="border-b border-gray-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
                     <tr class="h-12">
                         @foreach($columns as $column)
-                            <th class="truncate px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                            <th class="truncate px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
                                 {{ $column['label'] }}
                             </th>
                         @endforeach

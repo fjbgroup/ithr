@@ -96,7 +96,7 @@
                 <thead>
                     <tr>
                         @foreach($columns as $column)
-                            <th class="h-[46px] border border-slate-200 bg-slate-50 px-4 text-left text-[13px] font-black uppercase tracking-[0.06em] text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                            <th class="h-[46px] border border-slate-200 bg-slate-50 px-4 text-center text-[13px] font-black uppercase tracking-[0.06em] text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
                                 {{ $column['label'] ?? strtoupper(str_replace('_', ' ', $column['key'] ?? '')) }}
                             </th>
                         @endforeach

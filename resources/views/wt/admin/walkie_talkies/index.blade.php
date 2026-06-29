@@ -261,12 +261,12 @@
                         @if($showInventoryBulk)
                         <th class="px-3 py-3 text-center inventory-select-col"></th>
                         @endif
-                        <th class="inventory-radio-col" style="width:10%">RADIO ID</th>
-                        <th class="inventory-status-col" style="width:10%">STATUS</th>
-                        <th class="inventory-serial-col" style="width:15%">SERIAL NO.</th>
-                        <th class="inventory-model-col" style="width:15%">MODEL</th>
-                        <th class="inventory-assigned-col" style="width:35%">ASSIGNED TO</th>
-                        <th class="inventory-action-col" style="width:15%">ACTION</th>
+                        <th class="inventory-radio-col text-center" style="width:10%; text-align:center !important;">RADIO ID</th>
+                        <th class="inventory-status-col text-center" style="width:10%; text-align:center !important;">STATUS</th>
+                        <th class="inventory-serial-col text-center" style="width:15%; text-align:center !important;">SERIAL NO.</th>
+                        <th class="inventory-model-col text-center" style="width:15%; text-align:center !important;">MODEL</th>
+                        <th class="inventory-assigned-col text-center" style="width:35%; text-align:center !important;">ASSIGNED TO</th>
+                        <th class="inventory-action-col text-center" style="width:15%; text-align:center !important;">ACTION</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-700/40 text-[11px]">
@@ -1820,4 +1820,3 @@
     </script>
 
     @endsection
-
