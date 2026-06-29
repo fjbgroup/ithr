@@ -2,7 +2,7 @@
   <div style="overflow-x:auto">
     <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
-        <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
+        <th><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
         <th>F/A CODE</th>
         <th>DESCRIPTION</th>
@@ -11,8 +11,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th style="width:1%;white-space:nowrap">QR</th>
-        <th style="width:1%;white-space:nowrap">ACTIONS</th>
+        <th>QR</th>
+        <th>ACTIONS</th>
       </tr></thead>
       <tbody>
       @forelse($items as $item)

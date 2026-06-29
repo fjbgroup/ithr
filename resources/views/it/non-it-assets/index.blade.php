@@ -67,23 +67,24 @@
 .nit-select-opt:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,.05); }
 .nit-select-opt i { font-size: 18px; }
 /* ── NIT Table ── */
+/* Fixed layout with % widths that sum to 100% -> table fills the container
+   exactly: tight columns with no gaps, no horizontal scroll, QR + Actions aligned. */
 .nit-table { width:100%; table-layout:fixed; }
-.nit-table td,.nit-table th{vertical-align:middle!important;padding:5px 6px!important;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nit-table td,.nit-table th{vertical-align:middle!important;padding:8px 8px!important;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nit-scroll-wrap::-webkit-scrollbar{height:6px}
 .nit-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .nit-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
-/* Column widths: checkbox(36) assetNo(90) faCode(80) desc(auto) yearsPurch(65) location(75) totalCost(80) accumulated(80) nbvAt(70) qr(36) actions(60) */
-.nit-table th:nth-child(1),.nit-table td:nth-child(1){width:36px}
-.nit-table th:nth-child(2),.nit-table td:nth-child(2){width:90px}
-.nit-table th:nth-child(3),.nit-table td:nth-child(3){width:80px}
-.nit-table th:nth-child(4),.nit-table td:nth-child(4){white-space:normal;word-break:break-word;overflow:visible}
-.nit-table th:nth-child(5),.nit-table td:nth-child(5){width:65px;text-align:center}
-.nit-table th:nth-child(6),.nit-table td:nth-child(6){width:75px}
-.nit-table th:nth-child(7),.nit-table td:nth-child(7){width:80px}
-.nit-table th:nth-child(8),.nit-table td:nth-child(8){width:80px}
-.nit-table th:nth-child(9),.nit-table td:nth-child(9){width:70px}
-.nit-table th:nth-child(10),.nit-table td:nth-child(10){width:36px;text-align:center}
-.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:60px;text-align:center}
+.nit-table th:nth-child(1),.nit-table td:nth-child(1){width:3%;text-align:center}   /* checkbox */
+.nit-table th:nth-child(2),.nit-table td:nth-child(2){width:9%}                      /* asset no */
+.nit-table th:nth-child(3),.nit-table td:nth-child(3){width:8%}                      /* f/a code */
+.nit-table th:nth-child(4),.nit-table td:nth-child(4){width:18%}                     /* description */
+.nit-table th:nth-child(5),.nit-table td:nth-child(5){width:8%;text-align:center}    /* years purchase */
+.nit-table th:nth-child(6),.nit-table td:nth-child(6){width:9%}                      /* location */
+.nit-table th:nth-child(7),.nit-table td:nth-child(7){width:9%}                      /* total cost */
+.nit-table th:nth-child(8),.nit-table td:nth-child(8){width:9%}                      /* accumulated */
+.nit-table th:nth-child(9),.nit-table td:nth-child(9){width:9%}                      /* nbv at */
+.nit-table th:nth-child(10),.nit-table td:nth-child(10){width:4%;text-align:center}  /* qr */
+.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:14%;text-align:center} /* actions */
 </style>
 
 {{-- ══ ADD FORM (modal popup when Add Asset clicked) ══ --}}
@@ -603,7 +604,7 @@
   <div class="nit-scroll-wrap" style="overflow-x:auto">
     <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
-        <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
+        <th><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
         <th>F/A CODE</th>
         <th>DESCRIPTION</th>
@@ -612,8 +613,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th style="width:1%;white-space:nowrap">QR</th>
-        @if(!$user->isReadOnlyViewer())<th style="width:1%;white-space:nowrap">ACTIONS</th>@endif
+        <th>QR</th>
+        @if(!$user->isReadOnlyViewer())<th>ACTIONS</th>@endif
       </tr></thead>
       <tbody>
       @foreach($items as $row)

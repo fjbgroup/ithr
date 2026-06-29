@@ -17,7 +17,7 @@
   <div class="nit-scroll-wrap" style="overflow-x:auto">
     <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif;min-width:100%">
       <thead><tr>
-        <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
+        <th><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
         <th>F/A CODE</th>
         <th>DESCRIPTION</th>
@@ -26,8 +26,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th style="width:1%;white-space:nowrap">QR</th>
-        @if(!$user->isReadOnlyViewer())<th style="width:1%;white-space:nowrap">ACTIONS</th>@endif
+        <th>QR</th>
+        @if(!$user->isReadOnlyViewer())<th>ACTIONS</th>@endif
       </tr></thead>
       <tbody>
       @foreach($items as $row)

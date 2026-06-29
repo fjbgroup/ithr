@@ -5,13 +5,22 @@
 
 @push('styles')
 <style>
-/* Let DataTables handle table width — just style cells */
-.data-table { width:100% !important; }
-.data-table td, .data-table th { vertical-align:middle !important; padding:8px 10px !important; white-space:nowrap; }
-/* Description column: allow wrapping so it absorbs spare space */
-.data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; min-width:100px; }
-/* Actions column: never wrap, just enough for the buttons */
-.data-table td:last-child, .data-table th:last-child { white-space:nowrap; width:1%; }
+/* Fixed layout with % widths that sum to 100% -> table fills the container
+   exactly: columns are tight with no gaps, no horizontal scroll, and the
+   QR + Actions columns stay aligned at the right edge. */
+.data-table { width:100% !important; table-layout:fixed; }
+.data-table td, .data-table th { vertical-align:middle !important; padding:8px 8px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.data-table th:nth-child(1),  .data-table td:nth-child(1)  { width:3%;  text-align:center; } /* checkbox */
+.data-table th:nth-child(2),  .data-table td:nth-child(2)  { width:9%;  }                    /* asset no */
+.data-table th:nth-child(3),  .data-table td:nth-child(3)  { width:8%;  }                    /* f/a code */
+.data-table th:nth-child(4),  .data-table td:nth-child(4)  { width:18%; }                    /* description */
+.data-table th:nth-child(5),  .data-table td:nth-child(5)  { width:8%;  text-align:center; } /* years purchase */
+.data-table th:nth-child(6),  .data-table td:nth-child(6)  { width:9%;  }                    /* location */
+.data-table th:nth-child(7),  .data-table td:nth-child(7)  { width:9%;  }                    /* total cost */
+.data-table th:nth-child(8),  .data-table td:nth-child(8)  { width:9%;  }                    /* accumulated */
+.data-table th:nth-child(9),  .data-table td:nth-child(9)  { width:9%;  }                    /* nbv at */
+.data-table th:nth-child(10), .data-table td:nth-child(10) { width:4%;  text-align:center; } /* qr */
+.data-table th:nth-child(11), .data-table td:nth-child(11) { width:14%; text-align:center; } /* actions */
 
 /* ── IT Edit Form Card (matches Non-IT layout) ── */
 .nit-form-card {
@@ -360,7 +369,7 @@
   <div style="overflow-x:auto">
     <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
-        <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
+        <th><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
         <th>F/A CODE</th>
         <th>DESCRIPTION</th>
@@ -369,8 +378,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th style="width:1%;white-space:nowrap">QR</th>
-        <th style="width:1%;white-space:nowrap">ACTIONS</th>
+        <th>QR</th>
+        <th>ACTIONS</th>
       </tr></thead>
       <tbody>
       @forelse($items as $item)
