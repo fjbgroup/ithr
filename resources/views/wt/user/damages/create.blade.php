@@ -493,6 +493,7 @@
     }
     .damage-form-page .problem-checklist-grid {
         row-gap: 3px !important;
+        column-gap: 28px !important;
     }
     @media (max-width: 768px) {
         .damage-form-page .damage-card {
@@ -1232,30 +1233,36 @@
 
         {{-- Problem Checklist --}}
         <h3 class="text-[10px] font-black text-[#0284c7] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Problem Checklist (Select all that apply)</h3>
-        <div class="damage-muted-panel problem-checklist-grid grid grid-cols-1 md:grid-cols-2 gap-x-8 mb-6 bg-stone-50 p-4 rounded-xl border border-stone-100">
-            @php
-                $problems = [
-                    'Cannot power ON',
-                    'Cannot charge',
-                    'Speaker issue',
-                    'Microphone issue',
-                    'Battery faulty / drains too fast',
-                    'Weak or unstable signal',
-                    'Channel interference / cross line',
-                    'Antenna broken / loose',
-                    'Button faulty (volume / channel)',
-                    'Casing / housing'
-                ];
-            @endphp
-            @foreach($problems as $p)
-            <label class="flex items-center gap-2.5 cursor-pointer group">
-                <input type="checkbox" name="problem_possible[]" value="{{ $p }}" class="w-4 h-4 rounded border-stone-300 text-[#0284c7] focus:ring-[#0284c7]" @checked(in_array($p, $selectedProblems, true))>
-                <span class="damage-check-text font-bold text-stone-700 group-hover:text-[#0284c7] transition">{{ $p }}</span>
-            </label>
-            @endforeach
-            <div class="col-span-2 mt-3">
+        <div class="damage-muted-panel mb-6 bg-stone-50 rounded-xl border border-stone-100" style="display:flex;align-items:stretch;gap:20px;padding:16px">
+            {{-- Left (~65%): 2-column checkbox grid --}}
+            <div style="flex:0 0 65%;min-width:0">
+                <div class="problem-checklist-grid grid grid-cols-2">
+                    @php
+                        $problems = [
+                            'Cannot power ON',
+                            'Cannot charge',
+                            'Speaker issue',
+                            'Microphone issue',
+                            'Battery faulty / drains too fast',
+                            'Weak or unstable signal',
+                            'Channel interference / cross line',
+                            'Antenna broken / loose',
+                            'Button faulty (volume / channel)',
+                            'Casing / housing'
+                        ];
+                    @endphp
+                    @foreach($problems as $p)
+                    <label class="flex items-center gap-2.5 cursor-pointer group">
+                        <input type="checkbox" name="problem_possible[]" value="{{ $p }}" class="w-4 h-4 rounded border-stone-300 text-[#0284c7] focus:ring-[#0284c7]" @checked(in_array($p, $selectedProblems, true))>
+                        <span class="damage-check-text font-bold text-stone-700 group-hover:text-[#0284c7] transition">{{ $p }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+            {{-- Right (~35%): Other / Additional Details --}}
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--border);padding-left:20px">
                 <label class="form-label">Other / Additional Details</label>
-                <textarea name="other_problem" rows="2" placeholder="Please specify..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold">{{ old('other_problem', $draftOtherProblem ? trim(\Illuminate\Support\Str::after($draftOtherProblem, 'OTHER:')) : '') }}</textarea>
+                <textarea name="other_problem" placeholder="Please specify..." class="w-full rounded-lg border border-stone-200 bg-white focus:border-[#0284c7] outline-none transition font-bold" style="flex:1;min-height:80px;resize:vertical;padding:8px 10px">{{ old('other_problem', $draftOtherProblem ? trim(\Illuminate\Support\Str::after($draftOtherProblem, 'OTHER:')) : '') }}</textarea>
             </div>
         </div>
 
