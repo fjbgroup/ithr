@@ -487,6 +487,13 @@
     .damage-form-page .text-\[9px\] {
         font-size: 9px !important;
     }
+    .damage-form-page .damage-check-text {
+        font-size: 13px !important;
+        line-height: 1.3 !important;
+    }
+    .damage-form-page .problem-checklist-grid {
+        row-gap: 3px !important;
+    }
     @media (max-width: 768px) {
         .damage-form-page .damage-card {
             padding: 8px !important;
@@ -1225,7 +1232,7 @@
 
         {{-- Problem Checklist --}}
         <h3 class="text-[10px] font-black text-[#0284c7] uppercase tracking-widest mb-4 border-b border-stone-100 pb-2">Problem Checklist (Select all that apply)</h3>
-        <div class="damage-muted-panel grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8 mb-6 bg-stone-50 p-4 rounded-xl border border-stone-100">
+        <div class="damage-muted-panel problem-checklist-grid grid grid-cols-1 md:grid-cols-2 gap-x-8 mb-6 bg-stone-50 p-4 rounded-xl border border-stone-100">
             @php
                 $problems = [
                     'Cannot power ON',
@@ -1243,7 +1250,7 @@
             @foreach($problems as $p)
             <label class="flex items-center gap-2.5 cursor-pointer group">
                 <input type="checkbox" name="problem_possible[]" value="{{ $p }}" class="w-4 h-4 rounded border-stone-300 text-[#0284c7] focus:ring-[#0284c7]" @checked(in_array($p, $selectedProblems, true))>
-                <span class="damage-check-text text-[11px] font-bold text-stone-700 group-hover:text-[#0284c7] transition">{{ $p }}</span>
+                <span class="damage-check-text font-bold text-stone-700 group-hover:text-[#0284c7] transition">{{ $p }}</span>
             </label>
             @endforeach
             <div class="col-span-2 mt-3">
@@ -1270,12 +1277,12 @@
                     <p class="mt-1 text-[11px] font-bold leading-5 text-sky-900">Do you need a spare walkie talkie while this unit is being checked or repaired?</p>
                     <p class="mt-1 text-[10px] font-bold leading-5 text-sky-700">ICT will decide based on your request, urgency, and available spare stock.</p>
                 </div>
-                <div class="grid min-w-[220px] gap-2">
-                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-sky-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-sky-800">
+                <div class="flex flex-row flex-nowrap items-center gap-3">
+                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-sky-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-sky-800 whitespace-nowrap">
                         <input type="radio" name="need_temporary_spare" value="1" class="h-3 w-3 border-sky-300 text-sky-700 focus:ring-sky-600" required @checked($draftTemporarySpareRequested === '1')>
                         Yes, need spare
                     </label>
-                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-700">
+                    <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-700 whitespace-nowrap">
                         <input type="radio" name="need_temporary_spare" value="0" class="h-3 w-3 border-slate-300 text-slate-700 focus:ring-slate-500" required @checked($draftTemporarySpareRequested === '0')>
                         No spare needed
                     </label>
