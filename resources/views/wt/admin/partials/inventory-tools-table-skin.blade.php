@@ -305,4 +305,41 @@ html[data-theme="dark"] body .content-surface :is(
 ) tbody tr:hover td {
     background: #152033 !important;
 }
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table,
+    .clean-admin-table,
+    .wt-data table
+) thead th {
+    text-align: center !important;
+}
+
+body .content-surface :is(
+    .clean-admin-filter,
+    .unused-filter-panel,
+    .duplicate-search-panel,
+    .special-filter-panel,
+    .wt-data-filter
+) {
+    margin-bottom: 12px !important;
+}
+
+body .content-surface :is(
+    #mainTableContainer.inventory-table-shell,
+    #mainTableContainer.clean-admin-table-shell,
+    #mainTableContainer.duplicate-table-shell,
+    #mainTableContainer.special-table-shell,
+    .inventory-table-shell,
+    .clean-admin-table-shell,
+    .duplicate-table-shell,
+    .special-table-shell,
+    .wt-data-table
+) {
+    margin-top: 8px !important;
+}
 </style>

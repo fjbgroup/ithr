@@ -161,12 +161,12 @@
             <table class="w-full text-left table-body min-w-[900px]">
                 <thead class="table-head text-stone-400 dark:text-slate-500 border-b border-stone-50 dark:border-slate-700">
                     <tr>
-                        <th class="px-4 py-4 text-[9px] uppercase tracking-widest font-black">Request</th>
-                        <th class="px-4 py-4 text-[9px] uppercase tracking-widest font-black">Type</th>
-                        <th class="px-4 py-4 text-[9px] uppercase tracking-widest font-black">Assigned Units</th>
-                        <th class="px-4 py-4 text-[9px] uppercase tracking-widest font-black">Period</th>
-                        <th class="px-4 py-4 text-[9px] uppercase tracking-widest font-black">Return Date</th>
-                        <th class="px-4 py-4 text-[9px] uppercase tracking-widest font-black">Status</th>
+                        <th class="px-4 py-4 text-center text-[9px] uppercase tracking-widest font-black">Request</th>
+                        <th class="px-4 py-4 text-center text-[9px] uppercase tracking-widest font-black">Type</th>
+                        <th class="px-4 py-4 text-center text-[9px] uppercase tracking-widest font-black">Assigned Units</th>
+                        <th class="px-4 py-4 text-center text-[9px] uppercase tracking-widest font-black">Period</th>
+                        <th class="px-4 py-4 text-center text-[9px] uppercase tracking-widest font-black">Return Date</th>
+                        <th class="px-4 py-4 text-center text-[9px] uppercase tracking-widest font-black">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-stone-50 dark:divide-slate-700/30">
@@ -244,8 +244,23 @@
         </div>
     </div>
     <div class="p-4">
-        <div class="space-y-3" id="myInventoryList">
-            @forelse($records as $record)
+        <div class="overflow-x-auto custom-scrollbar" id="myInventoryList">
+            <table class="w-full table-body text-left">
+                <thead class="table-head border-b border-stone-50 text-stone-400 dark:border-slate-700 dark:text-slate-500">
+                    <tr>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Radio ID</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Status</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Serial No</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Model</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Assigned To</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Department</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Ownership Type</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Remarks</th>
+                        <th class="px-4 py-4 text-center text-[9px] font-black uppercase tracking-widest">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-50 dark:divide-slate-700/30">
+                    @forelse($records as $record)
                     @php
                         $activeRequest = $record->active_request ?? null;
                         $ownerName = $record->ownership
@@ -253,7 +268,6 @@
                             ?: ($activeRequest && $activeRequest->user ? ($activeRequest->user->full_name ?: $activeRequest->user->username) : null)
                             ?: '-';
                         $ownerDept = $record->department ?: ($activeRequest->department ?? null);
-                        $picDetails = collect($activeRequest->pic_details ?? [])->filter(fn ($pic) => is_array($pic))->values();
                         $displayRemark = $activeRequest
                             ? ($activeRequest->approval_remark ?: $record->remark)
                             : $record->remark;
@@ -268,12 +282,8 @@
                             'bay_from' => $activeRequest->bay_from ?? null,
                             'location' => $activeRequest->location ?? null,
                         ], fn ($value) => filled($value)));
-                        $requestUnits = collect($activeRequest->assigned_radio_ids ?? [])->filter()->values();
-                        if ($requestUnits->isEmpty() && $activeRequest && $activeRequest->radio_id) {
-                            $requestUnits = collect(explode(',', $activeRequest->radio_id))->map(fn ($unit) => trim($unit))->filter()->values();
-                        }
                     @endphp
-                    <article class="rounded-md border border-slate-200 bg-white shadow-sm dark:border-slate-700/70 dark:bg-slate-900/40" data-my-inventory-item data-my-inventory-search="{{ strtoupper(implode(' ', [
+                    <tr class="hover:bg-stone-50/50 dark:hover:bg-slate-700/30 transition-colors" data-my-inventory-item data-my-inventory-search="{{ strtoupper(implode(' ', [
                         $record->radio_id,
                         $record->model,
                         $record->serial_number,
@@ -286,192 +296,43 @@
                         optional($activeRequest)->staff_id,
                         optional($activeRequest)->request_type,
                     ])) }}">
-                        <div class="flex flex-col gap-2 border-b border-slate-100 px-4 py-3 dark:border-slate-700/70 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                                <p class="text-[8px] font-black uppercase tracking-[0.16em] text-slate-400">Walkie Talkie Unit</p>
-                                <h5 class="mt-0.5 text-sm font-black text-slate-900 dark:text-slate-100">Radio ID {{ $record->radio_id }}</h5>
-                            </div>
-
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[8px] font-black uppercase tracking-widest text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
-                                    <span class="h-1.5 w-1.5 rounded-full {{ $record->status === 'IN USE' ? 'bg-emerald-500' : 'bg-stone-300' }}"></span>
-                                    {{ $record->status }}
-                                </span>
-                                @if($activeRequest)
-                                    <button type="button" class="my-inventory-view-btn" onclick="openInventoryRequestModal('inventoryRequestModal-{{ $record->walkie_id }}')">
-                                        <i class="fa-solid fa-eye"></i>
-                                        View Form
-                                    </button>
-                                @else
-                                    <button type="button" class="my-inventory-view-btn" disabled>
-                                        <i class="fa-solid fa-eye-slash"></i>
-                                        No Form
-                                    </button>
-                                @endif
-                                <a href="{{ $reportFaultyUrl }}" class="my-inventory-view-btn">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    Report Faulty
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-px bg-slate-100 dark:bg-slate-700/70 md:grid-cols-5">
-                            <div class="bg-slate-50 px-4 py-2.5 dark:bg-slate-900/50">
-                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Model</p>
-                                <p class="mt-0.5 text-[11px] font-black text-slate-900 dark:text-slate-100">{{ $record->model ?: '-' }}</p>
-                            </div>
-                            <div class="bg-slate-50 px-4 py-2.5 dark:bg-slate-900/50">
-                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Serial No</p>
-                                <p class="mt-0.5 font-mono text-[11px] font-black text-slate-900 dark:text-slate-100">{{ $record->serial_number ?: '-' }}</p>
-                            </div>
-                            <div class="bg-slate-50 px-4 py-2.5 dark:bg-slate-900/50">
-                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Type</p>
-                                <p class="mt-0.5 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $record->ownership_type ?: '-' }}</p>
-                            </div>
-                            <div class="bg-white px-4 py-2.5 dark:bg-slate-900/30">
-                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Owner</p>
-                                <p class="mt-0.5 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $ownerName }}</p>
-                            </div>
-                            <div class="bg-white px-4 py-2.5 dark:bg-slate-900/30">
-                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Department</p>
-                                <p class="mt-0.5 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $ownerDept ?: '-' }}</p>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-slate-100 bg-white px-4 py-2.5 dark:border-slate-700/70 dark:bg-slate-900/30">
-                            <p class="text-[8px] font-black uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">ICT Remarks</p>
-                            <p class="mt-0.5 whitespace-pre-line text-[11px] font-bold leading-4 text-slate-900 dark:text-slate-100">{{ $displayRemark ?: 'No ICT remarks yet.' }}</p>
-                        </div>
-                    </article>
-                    @if($activeRequest)
-                            <div id="inventoryRequestModal-{{ $record->walkie_id }}" class="fixed inset-0 z-50 hidden items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm" onclick="if (event.target === this) closeInventoryRequestModal('inventoryRequestModal-{{ $record->walkie_id }}')">
-                                <div class="my-inventory-modal-panel w-full max-w-3xl rounded-2xl shadow-xl">
-                                    <div class="flex items-start justify-between gap-4 border-b border-stone-100 px-6 py-5 dark:border-slate-700/70">
-                                        <div>
-                                            <p class="text-[9px] font-black uppercase tracking-[0.2em] text-[#0284c7] dark:text-[#38bdf8]">View Form</p>
-                                            <h3 class="mt-2 text-base font-black text-stone-900 dark:text-slate-100">Request #{{ str_pad($activeRequest->id, 5, '0', STR_PAD_LEFT) }}</h3>
-                                            <p class="mt-1 text-[10px] font-bold uppercase tracking-widest text-stone-400 dark:text-slate-500">{{ $activeRequest->request_type === 'temporary_walkie_talkie' ? 'Temporary Request' : 'Walkie Talkie Request' }}</p>
-                                        </div>
-                                        <button type="button" class="rounded-xl border border-stone-200 px-3 py-2 text-stone-500 transition hover:bg-stone-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800" onclick="closeInventoryRequestModal('inventoryRequestModal-{{ $record->walkie_id }}')">
-                                            <i class="fa-solid fa-xmark"></i>
-                                        </button>
-                                    </div>
-
-                                    <div class="space-y-4 px-6 py-5">
-                                        <section>
-                                            <p class="mb-2 text-[9px] font-black uppercase tracking-[0.18em] text-slate-400">Ownership Information</p>
-                                            <div class="space-y-3">
-                                                @forelse($picDetails as $picIndex => $pic)
-                                                <div class="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/40">
-                                                    <div class="flex items-center gap-2 border-b border-slate-100 px-3 py-2 dark:border-slate-700">
-                                                        <span class="h-5 w-1 rounded-full bg-[#0284c7]"></span>
-                                                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">{{ $picIndex + 1 }}. Ownership Information</p>
-                                                    </div>
-                                                    <div class="grid grid-cols-1 gap-3 p-3 md:grid-cols-2">
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Name</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['name']) ? $pic['name'] : '-' }}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Phone No</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['phone_no']) ? $pic['phone_no'] : '-' }}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Department</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['department']) ? $pic['department'] : '-' }}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Type</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['ownership_type']) ? $pic['ownership_type'] : '-' }}</p>
-                                                        </div>
-                                                        @if(strtoupper((string) ($pic['ownership_type'] ?? '')) === 'SHARED')
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Shared With</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['shared_with']) ? $pic['shared_with'] : '-' }}</p>
-                                                        </div>
-                                                        @endif
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Sector</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['sector']) ? $pic['sector'] : '-' }}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Bay From</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['bay_from']) ? $pic['bay_from'] : '-' }}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Location</p>
-                                                            <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['location']) ? $pic['location'] : '-' }}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="border-t border-slate-100 bg-slate-50 px-3 py-3 dark:border-slate-700 dark:bg-slate-800/60">
-                                                        <p class="text-[8px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
-                                                        <p class="mt-1 text-[10px] font-bold text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
-                                                        <div class="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
-                                                            <div>
-                                                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Who Will Pick Up This Walkie Talkie?</p>
-                                                                <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['pickup_person']) ? $pic['pickup_person'] : '-' }}</p>
-                                                            </div>
-                                                            <div>
-                                                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Pickup Phone No</p>
-                                                                <p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ !empty($pic['pickup_phone_no']) ? $pic['pickup_phone_no'] : '-' }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @empty
-                                                <div class="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/40">
-                                                    <div class="flex items-center gap-2 border-b border-slate-100 px-3 py-2 dark:border-slate-700">
-                                                        <span class="h-5 w-1 rounded-full bg-[#0284c7]"></span>
-                                                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-800 dark:text-slate-100">1. Ownership Information</p>
-                                                    </div>
-                                                    <div class="grid grid-cols-1 gap-3 p-3 md:grid-cols-2">
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Name</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->full_name ?: $ownerName }}</p></div>
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Phone No</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">-</p></div>
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Department</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $ownerDept ?: '-' }}</p></div>
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Ownership Type</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->ownership_type ?: $record->ownership_type ?: '-' }}</p></div>
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Sector</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->sector ?: '-' }}</p></div>
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Bay From</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->bay_from ?: '-' }}</p></div>
-                                                        <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Location</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->location ?: '-' }}</p></div>
-                                                    </div>
-                                                    <div class="border-t border-slate-100 bg-slate-50 px-3 py-3 dark:border-slate-700 dark:bg-slate-800/60">
-                                                        <p class="text-[8px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
-                                                        <p class="mt-1 text-[10px] font-bold text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
-                                                        <div class="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
-                                                            <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Who Will Pick Up This Walkie Talkie?</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $activeRequest->pickup_representative_name ?: $activeRequest->full_name ?: '-' }}</p></div>
-                                                            <div><p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Pickup Phone No</p><p class="mt-1 text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">-</p></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforelse
-                                            </div>
-                                        </section>
-
-                                        <section class="grid grid-cols-1 gap-3">
-                                            <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
-                                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">Justification / Notes</p>
-                                                <p class="mt-1 whitespace-pre-line text-[11px] font-bold leading-5 text-slate-900 dark:text-slate-100">{{ $activeRequest->justifications ?: 'No notes.' }}</p>
-                                            </div>
-
-                                            <div class="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
-                                                <p class="text-[8px] font-black uppercase tracking-widest text-slate-400">ICT Remarks / Update</p>
-                                                <p class="mt-1 whitespace-pre-line text-[11px] font-bold leading-5 text-slate-900 dark:text-slate-100">{{ $activeRequest->approval_remark ?: 'No ICT remarks yet.' }}</p>
-                                            </div>
-                                        </section>
-                                    </div>
+                        <td class="px-4 py-4 text-center font-mono text-[11px] font-black text-slate-900 dark:text-slate-100">{{ $record->radio_id ?: '-' }}</td>
+                        <td class="px-4 py-4 text-center">
+                            <span class="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[8px] font-black uppercase tracking-widest text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
+                                <span class="h-1.5 w-1.5 rounded-full {{ strtoupper((string) $record->status) === 'IN USE' ? 'bg-emerald-500' : 'bg-stone-300' }}"></span>
+                                {{ $record->status ?: '-' }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 text-center font-mono text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ $record->serial_number ?: '-' }}</td>
+                        <td class="px-4 py-4 text-center text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ $record->model ?: '-' }}</td>
+                        <td class="px-4 py-4 text-center text-[11px] font-black uppercase text-slate-900 dark:text-slate-100">{{ $ownerName }}</td>
+                        <td class="px-4 py-4 text-center text-[11px] font-bold uppercase text-slate-600 dark:text-slate-300">{{ $ownerDept ?: '-' }}</td>
+                        <td class="px-4 py-4 text-center text-[11px] font-bold uppercase text-slate-600 dark:text-slate-300">{{ $record->ownership_type ?: '-' }}</td>
+                        <td class="px-4 py-4 text-center text-[10px] font-bold text-slate-500 dark:text-slate-400">{{ $displayRemark ?: '-' }}</td>
+                        <td class="px-4 py-4 text-center">
+                            <a href="{{ $reportFaultyUrl }}" class="my-inventory-view-btn">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                Report Faulty
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="9" class="p-0 text-center align-middle">
+                            <div class="flex min-h-[340px] w-full items-center justify-center px-6 py-10">
+                                <div class="mx-auto flex max-w-[520px] flex-col items-center justify-center gap-3 text-center">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-stone-50 text-stone-200 dark:bg-slate-700 dark:text-slate-600">
+                                    <i class="fas fa-box-open text-xl"></i>
+                                </div>
+                                <p class="text-center text-[10px] font-black uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">No assets assigned to you yet</p>
+                                <p class="mt-1 mx-auto w-full max-w-[420px] text-center text-[9px] leading-relaxed text-stone-400 dark:text-slate-500">Assigned inventory will appear here automatically once ICT assigns assets to your executive account.</p>
                                 </div>
                             </div>
-                    @endif
-                    @empty
-                    <div class="px-4 py-20 text-center">
-                        <div class="flex flex-col items-center gap-3">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-stone-50 text-stone-200 dark:bg-slate-700 dark:text-slate-600">
-                                <i class="fas fa-box-open text-xl"></i>
-                            </div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-stone-300 dark:text-slate-600">No walkie talkies assigned to you</p>
-                            <p class="mt-1 max-w-[200px] text-[9px] leading-relaxed text-stone-400 dark:text-slate-500">If you should have a device assigned, please contact the ICT department for updates.</p>
-                        </div>
-                    </div>
+                        </td>
+                    </tr>
                     @endforelse
+                </tbody>
+            </table>
         </div>
         <div id="myInventorySearchEmpty" class="hidden px-4 py-16 text-center">
             <div class="flex flex-col items-center gap-3">

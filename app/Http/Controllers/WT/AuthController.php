@@ -60,6 +60,10 @@ class AuthController extends Controller
                 return redirect()->route('wt.user.dashboard');
             }
 
+            if ($user->wt_role === 'admin') {
+                return redirect()->route('wt.admin.walkies.myInventory');
+            }
+
             return redirect()->route('wt.admin.dashboard');
         }
 

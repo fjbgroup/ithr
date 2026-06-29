@@ -116,7 +116,7 @@
             font-weight: 900 !important;
             letter-spacing: 0.04em !important;
             line-height: 1.1 !important;
-            text-align: left !important;
+            text-align: center !important;
             text-transform: uppercase !important;
             white-space: nowrap !important;
         }

@@ -101,13 +101,13 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th class="sortable" data-col="0" data-type="num">Radio ID <i class="dup-sort-icon">↕</i></th>
-                        <th>Status</th>
-                        <th class="sortable" data-col="2" data-type="text">Serial No. <i class="dup-sort-icon">↕</i></th>
-                        <th class="sortable" data-col="3" data-type="text">Model <i class="dup-sort-icon">↕</i></th>
-                        <th class="sortable" data-col="4" data-type="num">Change ID To <i class="dup-sort-icon">&#8597;</i></th>
-                        <th>Done</th>
-                        <th>Action</th>
+                        <th class="sortable text-center" style="text-align:center !important;" data-col="0" data-type="num">Radio ID <i class="dup-sort-icon">↕</i></th>
+                        <th class="text-center" style="text-align:center !important;">Status</th>
+                        <th class="sortable text-center" style="text-align:center !important;" data-col="2" data-type="text">Serial No. <i class="dup-sort-icon">↕</i></th>
+                        <th class="sortable text-center" style="text-align:center !important;" data-col="3" data-type="text">Model <i class="dup-sort-icon">↕</i></th>
+                        <th class="sortable text-center" style="text-align:center !important;" data-col="4" data-type="num">Change ID To <i class="dup-sort-icon">&#8597;</i></th>
+                        <th class="text-center" style="text-align:center !important;">Done</th>
+                        <th class="text-center" style="text-align:center !important;">Action</th>
                     </tr>
                 </thead>
                 <tbody>

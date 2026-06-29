@@ -12,6 +12,7 @@ use App\Models\WT\UserActivityLog;
 use App\Models\Staff;
 use App\Services\TemporaryRequestExpiryService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Facades\Excel;
@@ -797,20 +798,34 @@ public function repairFaulty()
         $historyRetentionYears = max(1, min(5, (int) env('WT_RETURN_HISTORY_YEARS', 5)));
         $historyCutoff = now()->subYears($historyRetentionYears)->startOfDay();
 
-        if ($user->wt_role === 'admin') {
+        if ($user->wt_role === 'admin_it') {
             $records = collect();
             $historyRequests = collect();
 
             return view('wt.admin.walkie_talkies.my_inventory', compact('records', 'historyRequests', 'viewMode', 'historyRetentionYears'));
         }
 
+        $ownerNames = collect([$user->full_name, $user->username])
+            ->map(fn ($name) => strtoupper(trim((string) $name)))
+            ->filter()
+            ->unique()
+            ->values();
+        $ownerSearchTokens = $ownerNames
+            ->flatMap(fn ($name) => preg_split('/\s+/', $name) ?: [])
+            ->map(fn ($token) => trim((string) $token))
+            ->filter(fn ($token) => strlen($token) >= 3 && ! in_array($token, ['BIN', 'BINTI'], true))
+            ->unique()
+            ->values();
+
         $candidateRequests = AccessRequest::with('user')
             ->where('status', 'Approved')
-            ->where(function ($query) use ($user) {
+            ->where(function ($query) use ($user, $ownerNames) {
                 $query->where('user_id', $user->user_id)
-                    ->orWhere('submit_to_admin_id', $user->user_id)
-                    ->orWhere('full_name', $user->full_name)
-                    ->orWhere('full_name', $user->username);
+                    ->orWhere('submit_to_admin_id', $user->user_id);
+
+                if ($ownerNames->isNotEmpty()) {
+                    $query->orWhereIn(DB::raw('UPPER(TRIM(full_name))'), $ownerNames->all());
+                }
             })
             ->where(function ($query) {
                 $query->whereNull('return_status')
@@ -834,10 +849,19 @@ public function repairFaulty()
             ->unique()
             ->values();
 
-        $records = WalkieTalkie::where('status', 'IN USE')
-            ->where(function ($query) use ($user, $activeAssignedIds) {
-                $query->where('ownership', $user->full_name)
-                    ->orWhere('ownership', $user->username);
+        $records = WalkieTalkie::whereRaw('UPPER(TRIM(status)) = ?', ['IN USE'])
+            ->where(function ($query) use ($ownerNames, $ownerSearchTokens, $activeAssignedIds) {
+                if ($ownerNames->isNotEmpty()) {
+                    $query->whereIn(DB::raw('UPPER(TRIM(ownership))'), $ownerNames->all());
+
+                    if ($ownerSearchTokens->isNotEmpty()) {
+                        $query->orWhere(function ($tokenQuery) use ($ownerSearchTokens) {
+                            foreach ($ownerSearchTokens as $token) {
+                                $tokenQuery->whereRaw("UPPER(COALESCE(ownership, '')) LIKE ?", ['%' . $token . '%']);
+                            }
+                        });
+                    }
+                }
 
                 if ($activeAssignedIds->isNotEmpty()) {
                     $query->orWhereIn('walkie_id', $activeAssignedIds->all());
@@ -865,14 +889,16 @@ public function repairFaulty()
 
             $record->active_request = $matchedRequest;
         });
-        $records = $records->filter(fn (WalkieTalkie $record) => $record->active_request)->values();
+        $records = $records->values();
 
         $historyRequests = AccessRequest::with(['user', 'submitToAdmin', 'handler'])
-            ->where(function ($query) use ($user) {
+            ->where(function ($query) use ($user, $ownerNames) {
                 $query->where('user_id', $user->user_id)
-                    ->orWhere('submit_to_admin_id', $user->user_id)
-                    ->orWhere('full_name', $user->full_name)
-                    ->orWhere('full_name', $user->username);
+                    ->orWhere('submit_to_admin_id', $user->user_id);
+
+                if ($ownerNames->isNotEmpty()) {
+                    $query->orWhereIn(DB::raw('UPPER(TRIM(full_name))'), $ownerNames->all());
+                }
             })
             ->where('return_status', 'Returned')
             ->where(function ($query) {

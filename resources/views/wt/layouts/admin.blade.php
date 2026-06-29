@@ -175,10 +175,12 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   </div>
 
   <nav class="sidebar-nav">
+    @if($isAdminItView)
     <div class="nav-section-label" style="margin-top:4px">Main</div>
     <a href="{{ route('wt.admin.dashboard') }}" class="nav-link {{ request()->routeIs('wt.admin.dashboard') ? 'active-sidebar' : '' }}" title="Dashboard">
       <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
+    @endif
 
     <div class="nav-section-label">{{ $isAdminItView ? 'Management' : 'Personal Assets' }}</div>
 
