@@ -79,8 +79,14 @@ html.dark {
   overflow-wrap: break-word;
 }
 
-html, body {
+html {
+  /* Keep the horizontal-overflow guard on <html> only.
+     Setting overflow-x on <body> forces its overflow-y to compute as `auto`,
+     turning <body> into a scroll container and breaking `position: sticky`
+     on the topbar (it would scroll away instead of sticking). */
   overflow-x: hidden;
+}
+html, body {
   width: 100%;
   -webkit-text-size-adjust: 100%;
 }
