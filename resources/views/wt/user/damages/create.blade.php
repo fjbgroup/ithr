@@ -390,13 +390,13 @@
     .damage-form-page label,
     .damage-form-page .damage-check-text,
     .damage-form-page p {
-        font-size: 9px !important;
-        line-height: 1.25 !important;
+        font-size: 11.5px !important;
+        line-height: 1.35 !important;
         color: var(--text) !important;
     }
     .damage-form-page label {
-        font-size: 8.5px !important;
-        margin-bottom: 3px !important;
+        font-size: 13px !important;
+        margin-bottom: 6px !important;
         letter-spacing: 0.08em !important;
         color: var(--muted) !important;
     }
