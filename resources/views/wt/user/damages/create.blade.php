@@ -1074,7 +1074,7 @@
         <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
             <p class="text-[10px] font-black uppercase tracking-widest text-emerald-700">ICT Collection Info</p>
             <p class="mt-1 text-[10px] font-bold leading-5 text-emerald-800">
-                Please hand over the faulty walkie talkie at ICT Department Sejurumus. After ICT approval or when the unit is ready, pickup can also be done at ICT Department Sejurumus.
+                Please hand over the faulty walkie talkie at ICT Department. After ICT approval or when the unit is ready, pickup can also be done at ICT Department.
             </p>
         </div>
         <div class="wt-form-row mb-3">
@@ -1278,13 +1278,19 @@
         </div>
 
         <div class="damage-muted-panel mb-6 rounded-xl border border-sky-200 bg-sky-50 p-4">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-8">
-                <div class="min-w-0">
+            <div style="display:flex;align-items:stretch;gap:16px;justify-content:flex-start">
+                {{-- Col 1: title + description --}}
+                <div style="flex:0 0 180px;display:flex;flex-direction:column;justify-content:center">
                     <p class="text-[10px] font-black uppercase tracking-widest text-sky-700">Temporary Spare WT <span class="text-red-500">*</span></p>
-                    <p class="mt-1 text-[10px] font-medium leading-relaxed text-sky-800">Do you need a spare walkie talkie while this unit is being checked or repaired?</p>
-                    <p class="mt-0.5 text-[9.5px] font-normal leading-relaxed text-sky-600">ICT will decide based on your request, urgency, and available spare stock.</p>
+                    <p class="mt-1 text-[10px] font-medium leading-relaxed text-sky-700">Do you need a spare walkie talkie while this unit is being checked or repaired?</p>
+                    <p class="mt-0.5 text-[10px] font-medium leading-relaxed text-sky-700">ICT will decide based on your request, urgency, and available spare stock.</p>
                 </div>
-                <div class="flex flex-row flex-nowrap items-center gap-3">
+                {{-- Col 2: optional note textarea --}}
+                <div style="flex:0 0 240px;display:flex;flex-direction:column">
+                    <textarea name="temporary_spare_request_note" rows="4" class="rounded-lg border border-sky-200 bg-white px-3 py-2 text-[10px] font-medium text-sky-900 outline-none focus:border-sky-500" style="flex:1;min-height:90px;resize:vertical;width:100%" placeholder="Optional note, e.g. urgent event / operation reason">{{ $draftTemporarySpareNote }}</textarea>
+                </div>
+                {{-- Col 3: stacked radio buttons --}}
+                <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:8px;justify-content:center">
                     <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-sky-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-sky-800 whitespace-nowrap">
                         <input type="radio" name="need_temporary_spare" value="1" class="h-3 w-3 border-sky-300 text-sky-700 focus:ring-sky-600" required @checked($draftTemporarySpareRequested === '1')>
                         Yes, need spare
@@ -1295,7 +1301,6 @@
                     </label>
                 </div>
             </div>
-            <textarea name="temporary_spare_request_note" rows="2" class="mt-3 w-full rounded-lg border border-sky-200 bg-white px-3 py-2 text-[11px] font-bold text-sky-900 outline-none focus:border-sky-500" placeholder="Optional note, e.g. urgent event / operation reason">{{ $draftTemporarySpareNote }}</textarea>
             @error('need_temporary_spare')
                 <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
             @enderror
