@@ -67,11 +67,18 @@
 .nit-select-opt:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,.05); }
 .nit-select-opt i { font-size: 18px; }
 /* ── NIT Table ── */
+.nit-table { width:100%; table-layout:auto; }
 .nit-table td,.nit-table th{vertical-align:middle!important;padding:5px 8px!important;white-space:nowrap;font-size:12.5px}
 .nit-scroll-wrap::-webkit-scrollbar{height:6px}
 .nit-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .nit-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
-.nit-table td:nth-child(4),.nit-table th:nth-child(4){white-space:normal;word-break:break-word;min-width:150px}
+/* Description column: allow wrapping and take remaining space */
+.nit-table td:nth-child(4),.nit-table th:nth-child(4){white-space:normal;word-break:break-word;width:100%;min-width:150px}
+/* Location column: allow wrapping */
+.nit-table td:nth-child(6),.nit-table th:nth-child(6){white-space:normal;word-break:break-word;min-width:100px}
+/* Actions & QR columns: never wrap, just enough for the buttons */
+.nit-table td:last-child, .nit-table th:last-child,
+.nit-table td:nth-last-child(2), .nit-table th:nth-last-child(2) { white-space:nowrap; width:1%; }
 </style>
 
 {{-- ══ ADD FORM (modal popup when Add Asset clicked) ══ --}}

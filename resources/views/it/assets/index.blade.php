@@ -6,12 +6,15 @@
 @push('styles')
 <style>
 /* ── DATA TABLE ── */
-.data-table { min-width:100%; }
+.data-table { width:100%; table-layout:auto; }
 .data-table td, .data-table th { vertical-align:middle !important; padding:5px 8px !important; white-space:nowrap; font-size:12.5px; }
-/* Description column: allow wrapping so it absorbs spare space */
-.data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; min-width:100px; }
+/* Description column: allow wrapping and take remaining space */
+.data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; width:100%; min-width:150px; }
+/* Location column: allow wrapping */
+.data-table td:nth-child(6), .data-table th:nth-child(6) { white-space:normal; word-break:break-word; min-width:100px; }
 /* Actions column: never wrap, just enough for the buttons */
-.data-table td:last-child, .data-table th:last-child { white-space:nowrap; width:1%; }
+.data-table td:last-child, .data-table th:last-child,
+.data-table td:nth-last-child(2), .data-table th:nth-last-child(2) { white-space:nowrap; width:1%; }
 .data-scroll-wrap::-webkit-scrollbar{height:6px}
 .data-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .data-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
