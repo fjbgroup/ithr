@@ -32,12 +32,12 @@ html.sidebar-collapsed .main-wrapper { margin-left: 64px !important; }
 .sb-close-btn {
   flex-shrink: 0;
   width: 28px; height: 28px;
-  background: rgba(255,255,255,.08); border: none; border-radius: 6px;
-  color: rgba(255,255,255,.5); cursor: pointer; font-size: 15px;
+  background: var(--sidebar-hover-bg); border: none; border-radius: 6px;
+  color: var(--sidebar-text); cursor: pointer; font-size: 15px;
   display: flex; align-items: center; justify-content: center;
   transition: background .15s, color .15s;
 }
-.sb-close-btn:hover { background: rgba(255,255,255,.18); color: #fff; }
+.sb-close-btn:hover { background: var(--sidebar-active-bg); color: var(--sidebar-text-hover); }
 html.sidebar-collapsed .sb-close-btn { display: none !important; }
 
 /* Logo becomes open button in collapsed state */
@@ -60,7 +60,7 @@ html.sidebar-collapsed .sidebar-nav { padding: .75rem 0 !important; }
 html.sidebar-collapsed .sidebar > div:first-child {
   display: flex !important; padding: .75rem 0 !important;
   justify-content: center !important; gap: 0 !important;
-  border-bottom: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid var(--sidebar-border);
 }
 html.sidebar-collapsed .sidebar > div:first-child > a { display: none !important; }
 
@@ -137,7 +137,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
 </head>
 <body class="app-body">
 <aside class="sidebar" id="sidebar">
-    <div style="display:flex;align-items:center;padding:1.1rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);gap:.75rem">
+    <div style="display:flex;align-items:center;padding:1.1rem 1.25rem 1rem;border-bottom:1px solid var(--sidebar-border);gap:.75rem">
         <div class="brand-icon-sm sb-logo-btn"
              onclick="if(document.documentElement.classList.contains('sidebar-collapsed'))toggleSidebar();"
              title="Open sidebar" style="cursor:default;flex-shrink:0;transition:opacity .15s;width:44px;height:44px;border-radius:10px;overflow:hidden;padding:4px">
@@ -146,7 +146,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="13 8 17 12 13 16"/></svg>
             </span>
         </div>
-        <a href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;display:flex;align-items:center;flex:1;font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;" title="Go to Dashboard">
+        <a href="{{ Auth::check() ? url('/dashboard') : route('login') }}" style="text-decoration:none;display:flex;align-items:center;flex:1;font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;color:var(--sidebar-brand-text);" title="Go to Dashboard">
             HR Admin
         </a>
         <button class="sb-close-btn" onclick="toggleSidebar()" title="Close sidebar">
@@ -280,7 +280,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
             @endif
         </a>
         @endif
-        <div class="nav-divider" style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+        <div class="nav-divider" style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
         <a href="{{ route('it.dashboard') }}" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             IT System
