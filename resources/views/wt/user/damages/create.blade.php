@@ -1281,8 +1281,8 @@
             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-8">
                 <div class="min-w-0">
                     <p class="text-[10px] font-black uppercase tracking-widest text-sky-700">Temporary Spare WT <span class="text-red-500">*</span></p>
-                    <p class="mt-1 text-[11px] font-bold leading-5 text-sky-900">Do you need a spare walkie talkie while this unit is being checked or repaired?</p>
-                    <p class="mt-1 text-[10px] font-bold leading-5 text-sky-700">ICT will decide based on your request, urgency, and available spare stock.</p>
+                    <p class="mt-1 text-[10px] font-medium leading-relaxed text-sky-800">Do you need a spare walkie talkie while this unit is being checked or repaired?</p>
+                    <p class="mt-0.5 text-[9.5px] font-normal leading-relaxed text-sky-600">ICT will decide based on your request, urgency, and available spare stock.</p>
                 </div>
                 <div class="flex flex-row flex-nowrap items-center gap-3">
                     <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-sky-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-sky-800 whitespace-nowrap">
