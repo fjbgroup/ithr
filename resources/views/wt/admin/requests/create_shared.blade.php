@@ -349,7 +349,10 @@
         border-radius: 8px !important;
     }
     .owner-details-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
         max-width: 1180px;
+        width: 100%;
         column-gap: 12px !important;
         row-gap: 14px !important;
         justify-content: start !important;
@@ -361,13 +364,13 @@
     }
     .owner-details-grid > div:not(.owner-note-row) {
         justify-self: start;
-        width: min(100%, 320px);
-        max-width: 320px;
+        width: 100%;
+        max-width: none;
     }
     .owner-details-grid > div:not(.owner-note-row) :is(input:not([type="hidden"]), select, textarea),
     .owner-details-grid > div:not(.owner-note-row) .select2-container {
         width: 100% !important;
-        max-width: 320px !important;
+        max-width: 100% !important;
     }
     .owner-note-row {
         max-width: 1180px;
@@ -414,8 +417,8 @@
         pointer-events: none;
     }
     .owner-details-grid .corporate-combobox {
-        width: min(100%, 320px) !important;
-        max-width: 320px !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .owner-details-grid .select2-container--default .select2-selection--single {
         position: relative;
@@ -616,6 +619,7 @@
     }
     .temporary-date-row {
         gap: 14px !important;
+        flex-wrap: wrap !important;
         justify-content: start !important;
         align-items: start !important;
     }
@@ -623,9 +627,14 @@
     .temporary-start-group,
     .temporary-end-group,
     .temporary-purpose-group {
-        flex: 0 0 auto;
-        width: 220px;
-        max-width: 220px;
+        flex: 1 1 220px;
+        width: 100%;
+        max-width: 320px;
+    }
+    .temporary-purpose-group {
+        flex: 1 1 320px;
+        max-width: none;
+        min-width: min(100%, 280px);
     }
     .temporary-duration-group > div {
         max-width: 220px !important;
@@ -648,9 +657,9 @@
         max-width: 100% !important;
     }
     .temporary-signature-wrap {
-        flex: 0 0 300px;
-        width: 300px;
-        max-width: 300px;
+        flex: 1 1 320px;
+        width: min(100%, 420px);
+        max-width: 420px;
         margin: 6px 0 0 !important;
     }
     .temporary-signature-wrap .executive-signature-pad canvas {
@@ -678,8 +687,8 @@
             flex-basis: auto;
         }
         .temporary-signature-wrap {
-            width: 70%;
-            max-width: 70%;
+            width: 100%;
+            max-width: 100%;
             flex-basis: auto;
         }
     }
