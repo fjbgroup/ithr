@@ -1079,7 +1079,7 @@
         </div>
         <div class="wt-form-row mb-3">
             <div>
-                <label class="form-label">Who Will Handover To ICT <span class="text-red-500">*</span></label>
+                <label class="form-label">Who handovers to ICT <span class="text-red-500">*</span></label>
                 <input type="text" name="handover_person" value="{{ strtoupper(old('handover_person', $draftRecord->handover_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                 @error('handover_person')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
@@ -1102,14 +1102,14 @@
                 @enderror
             </div>
             <div>
-                <label class="form-label">Pickup Contact Name <span class="text-red-500">*</span></label>
+                <label class="form-label">Pickup's Name <span class="text-red-500">*</span></label>
                 <input type="text" name="pickup_person" value="{{ strtoupper(old('pickup_person', $draftRecord->pickup_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                 @error('pickup_person')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
             </div>
             <div>
-                <label class="form-label">Pickup Contact Phone No <span class="text-red-500">*</span></label>
+                <label class="form-label">Pickup's Phone No <span class="text-red-500">*</span></label>
                 <input type="text" id="pickup_phone_no" value="{{ old('phone_no', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->phone_no ?? '') : ($draftRecord->phone_no ?? ($currentUser->phone_no ?? ''))) }}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                 @error('phone_no')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
