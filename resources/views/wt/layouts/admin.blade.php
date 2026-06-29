@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>@yield('title', 'Dashboard') â€” WT System</title>
+<title>WT System</title>
 @include('partials.favicons')
 <script>
   document.documentElement.classList.add('wt-render-lock');
@@ -175,13 +175,10 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   </div>
 
   <nav class="sidebar-nav">
-    {{-- Dashboard (ICT only) --}}
-    @if($isAdminItView)
     <div class="nav-section-label" style="margin-top:4px">Main</div>
     <a href="{{ route('wt.admin.dashboard') }}" class="nav-link {{ request()->routeIs('wt.admin.dashboard') ? 'active-sidebar' : '' }}" title="Dashboard">
       <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
-    @endif
 
     <div class="nav-section-label">{{ $isAdminItView ? 'Management' : 'Personal Assets' }}</div>
 
@@ -335,7 +332,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     <a href="{{ route('home') }}" class="nav-link" title="Back to Portal">
       <i class="fas fa-th-large" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Back to Portal</span>
     </a>
-    <a href="{{ route('it.dashboard') }}" class="nav-link" title="IT System">
+    <a href="{{ route('it.login') }}" class="nav-link" title="IT System">
       <i class="fas fa-desktop" style="width:20px;text-align:center;flex-shrink:0"></i> <span>IT System</span>
     </a>
     <a href="{{ route('dashboard') }}" class="nav-link" title="HR Portal">
@@ -364,7 +361,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <div class="topbar-title">{{ $topbarTitle }}</div>
       <div class="topbar-breadcrumb">
         FGV Johor Bulkers &rsaquo;
-        <a href="{{ $isAdminItView ? route('wt.admin.dashboard') : route('wt.admin.requests.create.shared') }}" style="color:var(--muted);text-decoration:none">Dashboard</a>
+        <a href="{{ route('wt.admin.dashboard') }}" style="color:var(--muted);text-decoration:none">Dashboard</a>
         &rsaquo; {{ $topbarTitle }}
       </div>
     </div>

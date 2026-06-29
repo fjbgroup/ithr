@@ -42,6 +42,10 @@ class SsoService
             return false;
         }
 
+        if ($guard === 'it' && $model->it_role === null) {
+            return false;
+        }
+
         Auth::guard($guard)->login($model);
 
         return true;

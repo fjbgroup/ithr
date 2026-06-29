@@ -1079,36 +1079,14 @@
             </div>
             <div>
                 <label class="form-label">Handover Date & Time <span class="text-red-500">*</span></label>
-                <input type="hidden" id="handover_at" name="handover_at" value="{{ $draftHandoverAt }}">
-                <div class="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-2">
-                    <select id="handover_day_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
-                        <option value="">Day</option>
-                        @for($day = 1; $day <= 31; $day++)
-                            @php $dayValue = str_pad((string) $day, 2, '0', STR_PAD_LEFT); @endphp
-                            <option value="{{ $dayValue }}" @selected($draftHandoverParts['day'] === $dayValue)>{{ $day }}</option>
-                        @endfor
-                    </select>
-                    <select id="handover_month_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
-                        <option value="">Month</option>
-                        @foreach($damageMonthOptions as $monthValue => $monthLabel)
-                            <option value="{{ $monthValue }}" @selected($draftHandoverParts['month'] === $monthValue)>{{ $monthLabel }}</option>
-                        @endforeach
-                    </select>
-                    <select id="handover_year_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
-                        <option value="">Year</option>
-                        @foreach($damageYearOptions as $yearOption)
-                            <option value="{{ $yearOption }}" @selected($draftHandoverParts['year'] === (string) $yearOption)>{{ $yearOption }}</option>
-                        @endforeach
-                    </select>
-                    <select id="handover_time_ui" data-damage-date-part="handover" class="w-full px-2 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
-                        <option value="">Time</option>
-                        @if($draftHandoverParts['time'] && !in_array($draftHandoverParts['time'], $damageTimeOptions, true))
-                            <option value="{{ $draftHandoverParts['time'] }}" selected>{{ \Carbon\Carbon::createFromFormat('H:i', $draftHandoverParts['time'])->format('g:i A') }}</option>
-                        @endif
-                        @foreach($damageTimeOptions as $timeOption)
-                            <option value="{{ $timeOption }}" @selected($draftHandoverParts['time'] === $timeOption)>{{ \Carbon\Carbon::createFromFormat('H:i', $timeOption)->format('g:i A') }}</option>
-                        @endforeach
-                    </select>
+                <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+                    <input
+                        type="datetime-local"
+                        id="handover_at"
+                        name="handover_at"
+                        value="{{ $draftHandoverAt }}"
+                        class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold"
+                        required>
                     <button type="button" id="handoverNowBtn" class="rounded-lg bg-[#0284c7] px-3 py-2 text-[9px] font-black uppercase tracking-widest text-white transition hover:bg-[#734C2F]">Now</button>
                 </div>
                 @error('handover_at')
@@ -2164,33 +2142,6 @@
             return Math.min(parsed, 999);
         };
 
-        const syncDamageDateTime = (prefix) => {
-            const day = document.getElementById(`${prefix}_day_ui`);
-            const month = document.getElementById(`${prefix}_month_ui`);
-            const year = document.getElementById(`${prefix}_year_ui`);
-            const time = document.getElementById(`${prefix}_time_ui`);
-            const hidden = document.getElementById(`${prefix}_at`);
-
-            if (!day || !month || !year || !time || !hidden) return;
-
-            const maxDay = year.value && month.value
-                ? new Date(Number(year.value), Number(month.value), 0).getDate()
-                : 31;
-
-            Array.from(day.options).forEach((option) => {
-                if (!option.value) return;
-                option.disabled = Number(option.value) > maxDay;
-            });
-
-            if (day.value && Number(day.value) > maxDay) {
-                day.value = String(maxDay).padStart(2, '0');
-            }
-
-            hidden.value = day.value && month.value && year.value && time.value
-                ? `${year.value}-${month.value}-${day.value}T${time.value}`
-                : '';
-        };
-
         const syncRecipientSharedWith = (row) => {
             const typeSelect = row.querySelector('[data-recipient-ownership-type]');
             const sharedWrapper = row.querySelector('[data-recipient-shared-wrapper]');
@@ -2361,41 +2312,23 @@
             renderDeviceDetails();
         }
 
-        document.querySelectorAll('[data-damage-date-part]').forEach((field) => {
-            const prefix = field.dataset.damageDatePart;
-            field.addEventListener('change', () => syncDamageDateTime(prefix));
-            field.addEventListener('input', () => syncDamageDateTime(prefix));
-        });
-
         document.getElementById('handoverNowBtn')?.addEventListener('click', () => {
             const now = new Date();
-            const day = document.getElementById('handover_day_ui');
-            const month = document.getElementById('handover_month_ui');
-            const year = document.getElementById('handover_year_ui');
-            const time = document.getElementById('handover_time_ui');
+            const handoverAt = document.getElementById('handover_at');
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
             const hour = String(now.getHours()).padStart(2, '0');
-            const roundedMinute = now.getMinutes() < 30 ? '00' : '30';
-            const timeValue = `${hour}:${roundedMinute}`;
+            const minute = String(now.getMinutes()).padStart(2, '0');
 
-            if (day) day.value = String(now.getDate()).padStart(2, '0');
-            if (month) month.value = String(now.getMonth() + 1).padStart(2, '0');
-            if (year) year.value = String(now.getFullYear());
-            if (time) {
-                if (!Array.from(time.options).some((option) => option.value === timeValue)) {
-                    time.add(new Option(timeValue, timeValue, true, true), time.options[1] || null);
-                }
-                time.value = timeValue;
-            }
-            syncDamageDateTime('handover');
+            if (handoverAt) handoverAt.value = `${year}-${month}-${day}T${hour}:${minute}`;
         });
 
         document.querySelector('form')?.addEventListener('submit', () => {
             syncPickupPhoneToMain();
-            syncDamageDateTime('handover');
         });
 
         syncMainPhoneToPickup();
-        syncDamageDateTime('handover');
 
     });
 </script>

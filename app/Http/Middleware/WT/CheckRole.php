@@ -19,7 +19,9 @@ class CheckRole
 
         if ($actualRole === null) {
             Auth::guard('wt')->logout();
-            return redirect()->route('wt.login')->with('error', 'You do not have access to the Walkie Talkie system.');
+            return redirect()->route('wt.login')
+                ->with('wt_access_denied', true)
+                ->with('error', "You don't have access to this system.");
         }
 
         $userRole = $actualRole;
@@ -41,6 +43,10 @@ class CheckRole
             return redirect()->route('wt.admin.dashboard');
         }
 
-        return redirect()->route('wt.admin.requests.create.shared');
+        if ($userRole === 'user') {
+            return redirect()->route('wt.user.dashboard');
+        }
+
+        return redirect()->route('wt.admin.dashboard');
     }
 }

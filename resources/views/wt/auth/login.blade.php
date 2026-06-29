@@ -528,7 +528,7 @@
                 <h3 style="margin:0;font-size:18px;font-weight:900;color:#101827;">Access Denied</h3>
             </div>
             <p style="margin:0 0 22px;color:#64748b;font-size:14px;font-weight:600;line-height:1.6;">
-                Your account does not have access to the <strong>Walkie Talkie</strong> system.<br>Please contact ICT to request access.
+                You don't have access to this system.<br>Please contact ICT to request access.
             </p>
             <div style="display:flex;gap:10px;justify-content:center;">
                 <a href="{{ url('/') }}" class="modal-btn" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:10px;padding:0 20px;min-height:44px;background:#0f223b;color:#fff;font:700 14px 'Inter',sans-serif;">
