@@ -430,19 +430,24 @@
     }
 
     .form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px 22px;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 22px;
     }
 
     .form-group {
+        flex: 1 1 0;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
     .form-group-full {
-        grid-column: 1 / -1;
+        flex: 1 1 0;
+        min-width: 0;
     }
 
     .form-section-title {
@@ -683,10 +688,6 @@
         .walkie-form-footer {
             padding-left: 18px;
             padding-right: 18px;
-        }
-
-        .form-grid {
-            grid-template-columns: 1fr;
         }
 
         .walkie-form-footer {

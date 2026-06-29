@@ -468,8 +468,8 @@
 
         <!-- 1. EXECUTIVE INFORMATION -->
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">1. Person Details</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div class="md:col-span-2">
+        <div class="wt-form-row">
+            <div>
                 <div class="rounded-2xl border border-[#0284c7]/15 bg-[#FDFBF7] dark:bg-slate-900/70 dark:border-slate-700 px-4 py-3.5">
                     <p class="text-[9px] font-black text-[#0284c7] uppercase tracking-[0.22em]">Request Routing</p>
                     <p class="mt-1 text-[11px] font-semibold text-stone-600 dark:text-slate-300">
@@ -512,7 +512,7 @@
 
         <!-- 2. DEPLOYMENT DETAILS -->
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Deployment' }}</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="wt-form-row">
             @if($isTemporaryRequest)
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
@@ -540,7 +540,7 @@
                 <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
                 <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Please return the walkie talkie to ICT Department on this end date.</p>
             </div>
-            <div class="md:col-span-2">
+            <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
                 <input type="text" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, crowd control, or daily operations" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
             </div>
@@ -613,7 +613,7 @@
                 @endif
             </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="wt-form-row">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Preferred Pickup Date & Time</label>
                 <input type="datetime-local" name="requested_pickup_at" value="{{ old('requested_pickup_at') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>

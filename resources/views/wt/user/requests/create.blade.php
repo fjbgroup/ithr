@@ -322,7 +322,7 @@
                 Your personal details are filled automatically based on <span style="text-transform:uppercase">My Profile</span>. If you need to update your name, staff ID, or department, please update them in <span style="text-transform:uppercase">My Profile</span> first.
             </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="wt-form-row">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Full Name</label>
                 <input type="text" name="requestor_name" value="{{ strtoupper((string) $profileName) }}" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-100 text-[11px] font-bold uppercase" readonly required>
@@ -335,7 +335,7 @@
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Date</label>
                 <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="w-full px-3 py-2 rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 text-[11px]" required>
             </div>
-            <div class="md:col-span-2">
+            <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Department</label>
                 <select name="requestor_dept[]" class="dept-select w-full" multiple="multiple" required>
                     @foreach($departmentOptions as $department)
@@ -352,7 +352,7 @@
 
         <!-- 2. OWNERSHIP TYPE -->
         <h4 class="form-section-title">2. Ownership Type</h4>
-        <div class="grid grid-cols-1 gap-6">
+        <div class="wt-form-row">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-2 uppercase tracking-widest">Select Ownership Type</label>
                 <div class="radio-grid">
@@ -399,7 +399,7 @@
             </select>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="wt-form-row">
             <div id="bay_section">
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Bay <span class="text-stone-400">(Optional)</span></label>
                 <select name="bay_from" id="bay_from" class="smart-select w-full" data-placeholder="Type number only, e.g. 3">
@@ -435,8 +435,8 @@
 
         <!-- 4. SUBMIT TO -->
         <h4 class="form-section-title">4. Submit To</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="md:col-span-2">
+        <div class="wt-form-row">
+            <div>
                 <label class="block text-[10px] font-bold text-stone-600 mb-2 font-black uppercase tracking-widest">Submit request to Executive</label>
                 <select name="submit_to_admin_id" id="submit_to_admin_id" class="admin-select w-full" required>
                     <option value="" disabled selected>Select an Executive...</option>

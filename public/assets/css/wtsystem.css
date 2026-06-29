@@ -1274,6 +1274,23 @@ body .content-surface .inventory-page-shell #walkiesTable {
   .logout-modal-btn { width: 100%; min-width: 0; }
 }
 
+/* ── FORM ROW LAYOUT ── */
+.wt-form-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.wt-form-row > * {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 /* ── MISC ── */
 code { color: var(--accent); background: rgba(2,132,199,.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 .hidden { display: none !important; }
