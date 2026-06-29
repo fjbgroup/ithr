@@ -931,7 +931,7 @@
             </div>
             @endif
             <div>
-                <label class="form-label">{{ $isAdminRoute && $mode === 'staff' ? 'Ownership Phone No' : 'Phone No' }} <span class="text-red-500">*</span></label>
+                <label class="form-label">Phone No <span class="text-red-500">*</span></label>
                 <input type="text" name="phone_no" id="phone_no" value="{{ old('phone_no', ($isAdminRoute && $mode === 'staff') ? ($draftRecord->phone_no ?? '') : ($draftRecord->phone_no ?? ($currentUser->phone_no ?? ''))) }}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
             </div>
             <input type="hidden" name="designation" id="designation" value="{{ strtoupper(old('designation', $isAdminRoute && $mode === 'staff' ? 'STAFF' : (auth('wt')->user()->position ?: 'EXECUTIVE'))) }}">
@@ -2226,7 +2226,7 @@
                             <input type="text" name="recipient_details[${index}][reporter_name]" data-recipient-name list="managedRecipientOptions" value="${escapeHtml(saved.reporter_name || '')}" placeholder="Search ownership name..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
                         </div>
                         <div>
-                            <label class="form-label">Ownership Phone No <span class="text-red-500">*</span></label>
+                            <label class="form-label">Phone No <span class="text-red-500">*</span></label>
                             <input type="text" name="recipient_details[${index}][phone_no]" data-recipient-phone value="${escapeHtml(saved.phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold" required>
                         </div>
                         <div>
