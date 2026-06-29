@@ -77,14 +77,14 @@
 .nit-table th:nth-child(1),.nit-table td:nth-child(1){width:3%;text-align:center}   /* checkbox */
 .nit-table th:nth-child(2),.nit-table td:nth-child(2){width:9%}                      /* asset no */
 .nit-table th:nth-child(3),.nit-table td:nth-child(3){width:8%}                      /* f/a code */
-.nit-table th:nth-child(4),.nit-table td:nth-child(4){width:18%}                     /* description */
-.nit-table th:nth-child(5),.nit-table td:nth-child(5){width:8%;text-align:center}    /* years purchase */
+.nit-table th:nth-child(4),.nit-table td:nth-child(4){width:13%}                     /* description */
+.nit-table th:nth-child(5),.nit-table td:nth-child(5){width:6%;text-align:center}    /* years purchase */
 .nit-table th:nth-child(6),.nit-table td:nth-child(6){width:9%}                      /* location */
 .nit-table th:nth-child(7),.nit-table td:nth-child(7){width:9%}                      /* total cost */
 .nit-table th:nth-child(8),.nit-table td:nth-child(8){width:9%}                      /* accumulated */
 .nit-table th:nth-child(9),.nit-table td:nth-child(9){width:9%}                      /* nbv at */
-.nit-table th:nth-child(10),.nit-table td:nth-child(10){width:4%;text-align:center}  /* qr */
-.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:14%;text-align:center} /* actions */
+.nit-table th:nth-child(10),.nit-table td:nth-child(10){width:3%;text-align:center}  /* qr — tightened next to NBV AT */
+.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:22%;text-align:left;padding-left:120px!important} /* actions — widened, left-aligned & nudged right so all buttons show */
 </style>
 
 {{-- ══ ADD FORM (modal popup when Add Asset clicked) ══ --}}

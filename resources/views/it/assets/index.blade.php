@@ -13,14 +13,14 @@
 .data-table th:nth-child(1),  .data-table td:nth-child(1)  { width:3%;  text-align:center; } /* checkbox */
 .data-table th:nth-child(2),  .data-table td:nth-child(2)  { width:9%;  }                    /* asset no */
 .data-table th:nth-child(3),  .data-table td:nth-child(3)  { width:8%;  }                    /* f/a code */
-.data-table th:nth-child(4),  .data-table td:nth-child(4)  { width:18%; }                    /* description */
-.data-table th:nth-child(5),  .data-table td:nth-child(5)  { width:8%;  text-align:center; } /* years purchase */
-.data-table th:nth-child(6),  .data-table td:nth-child(6)  { width:9%;  }                    /* location */
-.data-table th:nth-child(7),  .data-table td:nth-child(7)  { width:9%;  }                    /* total cost */
-.data-table th:nth-child(8),  .data-table td:nth-child(8)  { width:9%;  }                    /* accumulated */
-.data-table th:nth-child(9),  .data-table td:nth-child(9)  { width:9%;  }                    /* nbv at */
-.data-table th:nth-child(10), .data-table td:nth-child(10) { width:4%;  text-align:center; } /* qr */
-.data-table th:nth-child(11), .data-table td:nth-child(11) { width:14%; text-align:center; } /* actions */
+.data-table th:nth-child(4),  .data-table td:nth-child(4)  { width:9%;  }                    /* description */
+.data-table th:nth-child(5),  .data-table td:nth-child(5)  { width:6%;  text-align:center; } /* years purchase */
+.data-table th:nth-child(6),  .data-table td:nth-child(6)  { width:8%;  }                    /* location */
+.data-table th:nth-child(7),  .data-table td:nth-child(7)  { width:8%;  }                    /* total cost */
+.data-table th:nth-child(8),  .data-table td:nth-child(8)  { width:8%;  }                    /* accumulated */
+.data-table th:nth-child(9),  .data-table td:nth-child(9)  { width:8%;  }                    /* nbv at */
+.data-table th:nth-child(10), .data-table td:nth-child(10) { width:3%;  text-align:center; } /* qr — tightened next to NBV AT */
+.data-table th:nth-child(11), .data-table td:nth-child(11) { width:30%; text-align:left; overflow:visible !important; } /* actions — widened, pulled left & never clipped so all buttons show */
 .data-scroll-wrap::-webkit-scrollbar{height:6px}
 .data-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .data-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
