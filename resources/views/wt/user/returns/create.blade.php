@@ -112,16 +112,16 @@
     @if($isAdminRoute && $mode === 'staff')
     <div class="m-4 return-panel">
         <h4 class="return-section-title"><i class="fa-solid fa-user-tie"></i> Executive Details</h4>
-        <div class="row g-3">
-            <div class="col-md-4">
+        <div class="wt-form-row">
+            <div>
                 <label class="form-label">Executive Name</label>
                 <input type="text" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="return-readonly" readonly>
             </div>
-            <div class="col-md-4">
+            <div>
                 <label class="form-label">Executive Staff ID</label>
                 <input type="text" value="{{ strtoupper(auth('wt')->user()->staff_id ?: '-') }}" class="return-readonly" readonly>
             </div>
-            <div class="col-md-4">
+            <div>
                 <label class="form-label">Executive Department</label>
                 <input type="text" value="{{ strtoupper(auth('wt')->user()->department ?: 'GENERAL') }}" class="return-readonly" readonly>
             </div>

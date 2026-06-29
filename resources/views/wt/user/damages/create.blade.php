@@ -821,7 +821,7 @@
 
         @if($isAdminRoute)
         <h3 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">1. Executive Details</h3>
-        <div class="row g-3 mb-3">
+        <div class="wt-form-row mb-3">
             <div>
                 <label class="form-label">Executive Name</label>
                 <input type="text" id="manager_name_display" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="form-control" style="text-transform:uppercase;background:var(--body-bg)" readonly>
@@ -858,7 +858,7 @@
                 @endif
             </p>
         </div>
-        <div class="row g-3 mb-3">
+        <div class="wt-form-row mb-3">
             @if($isAdminRoute && $mode === 'staff')
             <div>
                 <label class="form-label">Ownership Name <span class="text-red-500">*</span></label>
@@ -1069,7 +1069,7 @@
                 Please hand over the faulty walkie talkie at ICT Department Sejurumus. After ICT approval or when the unit is ready, pickup can also be done at ICT Department Sejurumus.
             </p>
         </div>
-        <div class="row g-3 mb-3">
+        <div class="wt-form-row mb-3">
             <div>
                 <label class="form-label">Who Will Handover To ICT <span class="text-red-500">*</span></label>
                 <input type="text" name="handover_person" value="{{ strtoupper(old('handover_person', $draftRecord->handover_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
@@ -1173,7 +1173,7 @@
         @if($isAdminRoute && $mode === 'staff')
         <div id="damageDeviceDetailList" class="mb-6 space-y-4"></div>
         @else
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="wt-form-row mb-6">
                 <div>
                     <label class="form-label">Model <span class="text-red-500">*</span></label>
                     <input type="text" name="model" id="damage_model" value="{{ old('model', $draftRecord->model ?? '') }}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
@@ -2201,7 +2201,7 @@
                 row.innerHTML = `
                     <div class="mb-4 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">Ownership ${index + 1}</div>
                     <input type="hidden" name="recipient_details[${index}][user_id]" data-recipient-user-id value="${escapeHtml(saved.user_id || '')}">
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="wt-form-row">
                         <div>
                             <label class="form-label">Ownership Name <span class="text-red-500">*</span></label>
                             <input type="text" name="recipient_details[${index}][reporter_name]" data-recipient-name list="managedRecipientOptions" value="${escapeHtml(saved.reporter_name || '')}" placeholder="Search ownership name..." class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
@@ -2273,7 +2273,7 @@
                 row.setAttribute('data-device-row', '1');
                 row.innerHTML = `
                     <div class="mb-3 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">Walkie Talkie Details ${index + 1}</div>
-                    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <div class="wt-form-row">
                         <div>
                             <label class="form-label">Model <span class="text-red-500">*</span></label>
                             <input type="text" name="device_details[${index}][model]" data-device-model value="${escapeHtml(saved.model || '')}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">

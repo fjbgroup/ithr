@@ -1163,7 +1163,7 @@
         @endunless
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">1. Executive Details</h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="wt-form-row">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Name</label>
                 <input type="text" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
@@ -1179,7 +1179,7 @@
         </div>
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Long Term Request Details' }}</h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 {{ $isTemporaryRequest ? 'temporary-request-details-grid' : '' }}">
+        <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : '' }}">
             @if($isTemporaryRequest)
             <div class="temporary-quantity-group">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
@@ -1189,7 +1189,7 @@
                     <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
-            <div class="md:col-span-2 temporary-owner-group">
+            <div class="temporary-owner-group">
                 <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <div>
                         <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
@@ -1281,7 +1281,7 @@
                     <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
-            <div class="md:col-span-2">
+            <div>
                 <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <div>
                         <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
@@ -1319,7 +1319,7 @@
                     <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="md:col-span-2 executive-request-inline-row flex flex-col md:flex-row md:items-end justify-start gap-4 w-full">
+            <div class="executive-request-inline-row flex flex-col md:flex-row md:items-end justify-start gap-4 w-full">
                 <div class="executive-date-group w-full md:w-52 min-w-0">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
                     <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="executive-row-control w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>
@@ -2019,7 +2019,7 @@
                         <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
                         <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
                     </div>
-                    <div class="owner-details-grid grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-5">
+                    <div class="owner-details-grid wt-form-row">
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Name <span class="text-red-500">*</span></label>
                             <input type="hidden" name="pic_details[${index}][staff_no]" data-pic-staff-no value="${escapeAttribute(saved.staff_no || '')}">
