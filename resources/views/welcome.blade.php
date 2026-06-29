@@ -114,7 +114,7 @@
 <style>
   body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; color: var(--text); }
   .pub-topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: .75rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
-  .pub-brand  { display: flex; align-items: center; gap: .75rem; font-weight: 800; font-size: 1.1rem; color: #0f172a; letter-spacing: -0.01em; }
+  .pub-brand  { display: flex; align-items: center; gap: .75rem; font-weight: 800; font-size: 1.1rem; color: var(--text); letter-spacing: -0.01em; }
   .pub-login-btn { background: #0f172a; color: #fff; border: none; padding: .6rem 1.25rem; border-radius: 10px; font-size: .875rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all .2s; display: flex; align-items: center; gap: .5rem; }
   .pub-login-btn:hover { background: #1e293b; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15,23,42,0.15); }
   
@@ -125,8 +125,8 @@
   .pub-container { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem; }
   
   .pub-hero { text-align: center; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto; }
-  .pub-hero h1 { font-size: 2.25rem; font-weight: 800; color: #0f172a; margin: 0 0 .75rem; letter-spacing: -0.02em; }
-  .pub-hero p  { color: #64748b; font-size: 1.05rem; margin: 0; line-height: 1.6; }
+  .pub-hero h1 { font-size: 2.25rem; font-weight: 800; color: var(--text); margin: 0 0 .75rem; letter-spacing: -0.02em; }
+  .pub-hero p  { color: var(--muted); font-size: 1.05rem; margin: 0; line-height: 1.6; }
 
   /* Controls */
   .pub-controls { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
@@ -138,14 +138,14 @@
   .pub-nav-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 9px; color: #64748b; transition: all .2s; border: none; background: transparent; cursor: pointer; }
   .pub-nav-btn:hover { background: #f1f5f9; color: #0f172a; }
   
-  .pub-datepicker-lbl { display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; cursor: pointer; font-weight: 700; font-size: .95rem; color: #0f172a; }
+  .pub-datepicker-lbl { display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; cursor: pointer; font-weight: 700; font-size: .95rem; color: var(--text); }
   .pub-datepicker-lbl input[type="date"] { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
 
   /* Stats Bar */
   .pub-day-stats { display: flex; gap: 1.25rem; margin-bottom: 2.5rem; justify-content: center; flex-wrap: wrap; }
   .pub-dstat { background: var(--surface); border: 1px solid var(--border); padding: 1.25rem 2rem; border-radius: 16px; display: flex; flex-direction: column; align-items: center; min-width: 140px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-  .pub-dstat-num { font-size: 1.75rem; font-weight: 800; color: #0f172a; line-height: 1; }
-  .pub-dstat-lbl { font-size: .7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .06em; margin-top: .4rem; }
+  .pub-dstat-num { font-size: 1.75rem; font-weight: 800; color: var(--text); line-height: 1; }
+  .pub-dstat-lbl { font-size: .7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: .4rem; }
   .pub-dstat-green .pub-dstat-num { color: #10b981; }
   .pub-dstat-blue .pub-dstat-num  { color: #3b82f6; }
   .pub-dstat-red .pub-dstat-num   { color: #ef4444; }
@@ -159,8 +159,8 @@
   .rb-room-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .rb-room-dot { width: 22px; height: 22px; border-radius: 50%; }
   .rb-room-info { flex: 1; }
-  .rb-room-name { font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em; }
-  .rb-room-meta { font-size: .82rem; color: #64748b; margin-top: .3rem; display: flex; gap: .75rem; align-items: center; }
+  .rb-room-name { font-size: 1.15rem; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+  .rb-room-meta { font-size: .82rem; color: var(--muted); margin-top: .3rem; display: flex; gap: .75rem; align-items: center; }
   
   .rb-avail-badge { padding: .3rem .75rem; border-radius: 99px; font-size: .75rem; font-weight: 700; }
   .rb-badge-free { background: #ecfdf5; color: #059669; }
@@ -170,8 +170,8 @@
   .rb-booking-record { padding: .75rem; background: var(--bg); border-radius: 12px; margin-bottom: .5rem; display: flex; align-items: center; gap: .75rem; border: 1px solid var(--border); }
   .rb-record-time { font-size: .8rem; font-weight: 800; color: var(--text); background: var(--surface); padding: .4rem .6rem; border-radius: 8px; border: 1px solid var(--border); min-width: 50px; text-align: center; }
   .rb-record-info { flex: 1; min-width: 0; }
-  .rb-record-purp { font-size: .82rem; font-weight: 600; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .rb-record-by   { font-size: .7rem; color: #64748b; margin-top: .1rem; }
+  .rb-record-purp { font-size: .82rem; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rb-record-by   { font-size: .7rem; color: var(--muted); margin-top: .1rem; }
 
   .rb-card-footer { padding: 1.25rem 1.5rem 1.5rem; border-top: 1px solid var(--border); }
   .rb-book-btn { width: 100%; background: #0f172a; color: #fff; border: none; padding: .75rem; border-radius: 12px; font-weight: 700; font-size: .9rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: .5rem; }
@@ -180,19 +180,19 @@
   /* Schedule List */
   .pub-schedule-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 2.5rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
   .pub-sch-hd { padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: .75rem; cursor: pointer; user-select: none; }
-  .pub-sch-hd span:first-child { font-weight: 800; color: #0f172a; font-size: 1.05rem; }
-  .pub-sch-badge { background: #f1f5f9; color: #475569; padding: .25rem .75rem; border-radius: 99px; font-size: .75rem; font-weight: 700; }
+  .pub-sch-hd span:first-child { font-weight: 800; color: var(--text); font-size: 1.05rem; }
+  .pub-sch-badge { background: var(--bg); color: var(--muted); padding: .25rem .75rem; border-radius: 99px; font-size: .75rem; font-weight: 700; }
   .pub-sch-caret { margin-left: auto; color: #94a3b8; transition: transform .2s; font-size: 1.2rem; }
   .pub-sch-caret.collapsed { transform: rotate(-90deg); }
   .pub-sch-body { border-top: 1px solid #f1f5f9; padding: .5rem 0; }
   .pub-sch-row { display: flex; align-items: center; padding: .75rem 1.5rem; gap: 1.25rem; }
-  .pub-sch-time { min-width: 65px; font-size: .9rem; font-weight: 800; color: #0f172a; display: flex; flex-direction: column; }
+  .pub-sch-time { min-width: 65px; font-size: .9rem; font-weight: 800; color: var(--text); display: flex; flex-direction: column; }
   .pub-sch-end { font-size: .75rem; font-weight: 500; color: #94a3b8; margin-top: -2px; }
   .pub-sch-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; position: relative; }
   .pub-sch-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; background: inherit; opacity: .15; }
   .pub-sch-info { flex: 1; }
-  .pub-sch-room { font-size: .9rem; font-weight: 700; color: #0f172a; }
-  .pub-sch-purp { font-size: .82rem; color: #64748b; margin-top: .15rem; }
+  .pub-sch-room { font-size: .9rem; font-weight: 700; color: var(--text); }
+  .pub-sch-purp { font-size: .82rem; color: var(--muted); margin-top: .15rem; }
   .pub-sch-stat { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
 
   /* Modal Enhancements */
@@ -201,7 +201,7 @@
   .modal-header h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
   .modal-footer { padding: 1.5rem 2rem 2rem; border: none; background: transparent; }
   .rb-step-badge { width: 28px; height: 28px; background: #0f172a; color: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 800; }
-  .rb-step-title { font-size: 1.05rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em; }
+  .rb-step-title { font-size: 1.05rem; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
   .rb-modal-section { padding: 0 2rem 1.5rem; }
   .rb-modal-step-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.25rem; }
   
@@ -210,7 +210,7 @@
   .form-group input:focus { border-color: #0f172a; box-shadow: 0 0 0 4px rgba(15,23,42,0.05); }
 
   /* ── Staff Login modal: matched login styling ── */
-  #loginConfirmModal .form-group label { text-transform: none; letter-spacing: 0; font-size: .8rem; font-weight: 600; color: #1e293b; }
+  #loginConfirmModal .form-group label { text-transform: none; letter-spacing: 0; font-size: .8rem; font-weight: 600; color: var(--text); }
   #loginConfirmModal .lcm-input-wrap { position: relative; }
   #loginConfirmModal .lcm-input-wrap > svg.lead {
     position: absolute; left: .9rem; top: 50%; transform: translateY(-50%);
@@ -264,8 +264,8 @@
   .rb-room-selection.active .rb-rs-inner { transform: scale(1); }
 
   .rb-rs-info { flex: 1; }
-  .rb-rs-name { font-weight: 800; color: #0f172a; font-size: .95rem; }
-  .rb-rs-meta { font-size: .78rem; color: #64748b; font-weight: 500; }
+  .rb-rs-name { font-weight: 800; color: var(--text); font-size: .95rem; }
+  .rb-rs-meta { font-size: .78rem; color: var(--muted); font-weight: 500; }
   .rb-rs-emoji { display: flex; align-items: center; justify-content: center; opacity: .8; }
   .rb-rs-dot { width: 16px; height: 16px; border-radius: 50%; }
 
@@ -285,7 +285,7 @@
   .clock-divider     { height:1px; background:var(--border); margin:.55rem -.75rem .55rem; }
   .clock-hour-grid   { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; }
   .clock-min-row     { display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem; }
-  .clock-btn         { padding:.45rem .2rem; text-align:center; border-radius:8px; cursor:pointer; font-weight:700; color:#475569; font-size:.82rem; border:1.5px solid transparent; transition:all .12s; }
+  .clock-btn         { padding:.45rem .2rem; text-align:center; border-radius:8px; cursor:pointer; font-weight:700; color:var(--muted); font-size:.82rem; border:1.5px solid transparent; transition:all .12s; }
   .clock-btn:hover:not(.disabled) { background:#eff6ff; border-color:#bfdbfe; color:#1e40af; }
   .clock-btn.h-selected { background:#e0f2fe; color:#0369a1; border-color:#bae6fd; }
   .clock-btn.selected   { background:#0f172a; color:#fff; border-color:#0f172a; }
@@ -299,12 +299,12 @@
   @endfor
 
   /* Day Legend */
-  .pub-day-legend { display: flex; align-items: center; gap: 1.25rem; margin-bottom: .75rem; padding: 0 .25rem; font-size: .75rem; font-weight: 600; color: #64748b; }
+  .pub-day-legend { display: flex; align-items: center; gap: 1.25rem; margin-bottom: .75rem; padding: 0 .25rem; font-size: .75rem; font-weight: 600; color: var(--muted); }
   .pub-leg-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; vertical-align: middle; margin-right: .4rem; }
 
   /* View Legends (Week/Month) */
   .pub-view-legend { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-  .pvl-item { display: flex; align-items: center; gap: .4rem; font-size: .75rem; font-weight: 600; color: #64748b; }
+  .pvl-item { display: flex; align-items: center; gap: .4rem; font-size: .75rem; font-weight: 600; color: var(--muted); }
   .pvl-item::before { content: ''; width: 12px; height: 12px; border-radius: 3px; }
   .pvl-free::before  { background: var(--surface); border: 1px solid var(--border); }
   .pvl-light::before { background: #f0fdf4; border: 1px solid #bbf7d0; }
@@ -336,7 +336,7 @@
   .pwt-today-cell { background-color: rgba(37, 99, 235, 0.03); }
   .pwt-room-ico { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
   .pwt-room-dot { width: 14px; height: 14px; border-radius: 50%; }
-  .pwt-room-nm  { font-size: .85rem; font-weight: 700; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pwt-room-nm  { font-size: .85rem; font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* Month Grid */
   .pmc-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
@@ -430,6 +430,38 @@
 
     .rb-dur-pill { padding: .4rem .8rem; }
   }
+
+  /* ── Dark Mode Overrides ── */
+  html.dark .pub-login-btn { background: #e2e8f0; color: #0f172a; }
+  html.dark .pub-login-btn:hover { background: #f1f5f9; }
+  html.dark .pub-notice { background: #1e293b; color: #93c5fd; border-color: #334155; }
+  html.dark .pub-notice strong { color: #60a5fa; }
+  html.dark .pub-notice a { color: #60a5fa; }
+  html.dark .pub-view-tabs { background: var(--border); }
+  html.dark .pub-nav-btn:hover { background: var(--border); color: var(--text); }
+  html.dark .pub-datepicker-lbl svg stroke { stroke: var(--muted); }
+  html.dark .rb-book-btn { background: #e2e8f0; color: #0f172a; }
+  html.dark .rb-book-btn:hover { background: #f1f5f9; }
+  html.dark .rb-badge-free { background: rgba(5,150,105,0.15); }
+  html.dark .rb-badge-busy { background: rgba(220,38,38,0.15); }
+  html.dark .rb-step-badge { background: #e2e8f0; color: #0f172a; }
+  html.dark .rb-room-option.active .rb-ro-check { border-color: #60a5fa; background: #60a5fa; }
+  html.dark .rb-room-option.active { border-color: #60a5fa; }
+  html.dark .rb-room-selection.active { border-color: #60a5fa; }
+  html.dark .rb-room-selection.active .rb-rs-radio { border-color: #60a5fa; }
+  html.dark .rb-rs-inner { background: #60a5fa; }
+  html.dark .rb-dur-pill.active { background: #e2e8f0; color: #0f172a; border-color: #e2e8f0; }
+  html.dark .clock-btn.selected { background: #e2e8f0; color: #0f172a; border-color: #e2e8f0; }
+  html.dark .clock-btn:hover:not(.disabled) { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.3); color: #93c5fd; }
+  html.dark .clock-btn.h-selected { background: rgba(96,165,250,0.1); color: #60a5fa; border-color: rgba(96,165,250,0.25); }
+  html.dark .clock-display.open { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(96,165,250,0.1); }
+  html.dark .pub-sch-body { border-top-color: var(--border); }
+  html.dark .form-group input, html.dark .form-group select { border-color: var(--border); background: var(--surface); color: var(--text); }
+  html.dark .form-group input:focus { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(96,165,250,0.1); }
+  html.dark .pwt-today { background: rgba(37,99,235,0.1); }
+  html.dark .pwt-today-cell { background-color: rgba(37,99,235,0.05); }
+  html.dark .pmc-today { background: rgba(37,99,235,0.1); }
+  html.dark .pub-scroll-hint { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -456,7 +488,7 @@
   <div style="display:flex;align-items:center;gap:.75rem;">
     <div style="display:flex;align-items:center;gap:5px;">
       <span class="pub-sys-label" style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-right:2px;">System</span>
-      <span style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid #0f172a;font-size:11px;font-weight:700;color:#0f172a;background:#f1f5f9;cursor:default;">HR</span>
+      <span style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--text);font-size:11px;font-weight:700;color:var(--text);background:var(--bg);cursor:default;">HR</span>
       <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:var(--surface);transition:all .2s;">WT</a>
       <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:var(--surface);transition:all .2s;">IT</a>
     </div>
@@ -549,7 +581,7 @@
   @endphp
   <div class="pub-schedule-card" id="pubScheduleCard">
     <div class="pub-sch-hd" onclick="pubToggleSchedule()">
-      <div style="background:#f1f5f9;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📋</div>
+      <div style="background:var(--bg);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📋</div>
       <span>{{ $isToday ? "Today's Schedule" : date('d M Y', strtotime($viewDate)).' Schedule' }}</span>
       <span class="pub-sch-badge">{{ $scheduledCount }} event{{ $scheduledCount!==1?'s':'' }}</span>
       <span class="pub-sch-caret" id="pubSchCaret">▼</span>
@@ -558,8 +590,8 @@
       @if ($sortedBkgs->isEmpty())
       <div style="padding:3rem 1.5rem;text-align:center;">
         <div style="font-size:2rem;margin-bottom:1rem;">☕</div>
-        <div style="font-weight:800;font-size:1.1rem;color:#0f172a;margin-bottom:.5rem;">Quiet day ahead</div>
-        <div style="color:#64748b;font-size:.9rem;">No meetings scheduled for this date. All rooms are ready to book!</div>
+        <div style="font-weight:800;font-size:1.1rem;color:var(--text);margin-bottom:.5rem;">Quiet day ahead</div>
+        <div style="color:var(--muted);font-size:.9rem;">No meetings scheduled for this date. All rooms are ready to book!</div>
       </div>
       @else
       @foreach ($sortedBkgs as $b)
@@ -591,7 +623,7 @@
       <span><span class="pub-leg-dot" style="background:#10b981;"></span>Confirmed</span>
       <span><span class="pub-leg-dot" style="background:#eab308;"></span>Pending</span>
     </div>
-    <div style="font-size:.85rem;font-weight:700;color:#0f172a;">
+    <div style="font-size:.85rem;font-weight:700;color:var(--text);">
       <span style="color:#10b981;">{{ $freeCount }}</span> rooms available
     </div>
   </div>
@@ -628,8 +660,8 @@
       @if ($visible->isEmpty())
       <div class="rb-empty-day">
         <div style="margin-bottom:.5rem;"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        <div style="font-weight:700;color:#0f172a;margin-bottom:.2rem;">No meetings yet</div>
-        <div style="color:#64748b;font-size:.78rem;">This room is fully available.</div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:.2rem;">No meetings yet</div>
+        <div style="color:var(--muted);font-size:.78rem;">This room is fully available.</div>
       </div>
       @else
       <div style="font-size:.75rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;padding:0 .25rem;">Schedule</div>
@@ -766,8 +798,8 @@
   <div class="modal-box" style="max-width:560px;width:100%">
     <div class="modal-header" style="background:var(--table-head-bg);border-bottom:1px solid var(--border);">
       <div>
-        <h3 style="margin:0;">Book <span id="guestModalRoomName" style="color:#0f172a;"></span></h3>
-        <div id="guestModalRoomMeta" style="font-size:.85rem;color:#64748b;margin-top:.25rem;font-weight:500;"></div>
+        <h3 style="margin:0;">Book <span id="guestModalRoomName" style="color:var(--text);"></span></h3>
+        <div id="guestModalRoomMeta" style="font-size:.85rem;color:var(--muted);margin-top:.25rem;font-weight:500;"></div>
       </div>
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
@@ -839,7 +871,7 @@
           <span class="rb-dur-pill" onclick="guestSetDuration(60,this)">1h</span>
           <span class="rb-dur-pill" onclick="guestSetDuration(120,this)">2h</span>
         </div>
-        <button type="button" id="guestFullDay" class="btn btn-ghost btn-sm" onclick="guestSetFullDay()" style="display:none;color:#0f172a;font-weight:700;">☀️ Full Day</button>       
+        <button type="button" id="guestFullDay" class="btn btn-ghost btn-sm" onclick="guestSetFullDay()" style="display:none;color:var(--text);font-weight:700;">☀️ Full Day</button>       
       </div>
     </div>
 
@@ -885,7 +917,7 @@
       
       <div class="rb-modal-summary" id="guestSummary" style="display:none;margin-bottom:1.25rem;border-left:4px solid #0f172a;"></div>
       
-      <button type="button" class="btn btn-outline" onclick="guestAddToCart()" style="width:100%;justify-content:center;height:48px;border-radius:14px;border-width:2px;font-size:.95rem;font-weight:800;border-color:#0f172a;color:#0f172a;">
+      <button type="button" class="btn btn-outline" onclick="guestAddToCart()" style="width:100%;justify-content:center;height:48px;border-radius:14px;border-width:2px;font-size:.95rem;font-weight:800;border-color:var(--text);color:var(--text);">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         Add to Booking List
       </button>
@@ -893,8 +925,8 @@
 
     <!-- CART / BOOKING LIST -->
     <div class="rb-modal-section" id="guestCartWrap" style="display:none;background:var(--bg);padding-top:1.5rem;padding-bottom:1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-      <div style="font-size:.8rem;font-weight:800;color:#0f172a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;">
-        <div style="background:#0f172a;color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;">✓</div>
+      <div style="font-size:.8rem;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;">
+        <div style="background:var(--text);color:var(--bg);width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;">✓</div>
         Your Booking List
       </div>
       <div id="guestCartList" style="display:flex;flex-direction:column;gap:.75rem;"></div>
@@ -916,7 +948,7 @@
     <div class="modal-header" style="background:var(--table-head-bg);border-bottom:1px solid var(--border);">
       <div>
         <h3 id="lcmTitle" style="margin:0;">Verify Identity</h3>
-        <div id="lcmSubtitle" style="font-size:.85rem;color:#64748b;margin-top:.25rem;font-weight:500;">Please sign in to confirm your booking.</div>
+        <div id="lcmSubtitle" style="font-size:.85rem;color:var(--muted);margin-top:.25rem;font-weight:500;">Please sign in to confirm your booking.</div>
       </div>
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
@@ -928,10 +960,10 @@
         Booking Details
       </div>
       <div style="display:flex;flex-direction:column;gap:.6rem;">
-        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:#64748b;">Room</span><span id="lcmRoom" style="font-weight:700;color:#0f172a;"></span></div>
-        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:#64748b;">Date</span><span id="lcmDate" style="font-weight:700;color:#0f172a;"></span></div>
-        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:#64748b;">Time</span><span id="lcmTime" style="font-weight:700;color:#0f172a;"></span></div>
-        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:#64748b;">Purpose</span><span id="lcmPurpose" style="font-weight:700;color:#0f172a;max-width:200px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span></div>
+        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted);">Room</span><span id="lcmRoom" style="font-weight:700;color:var(--text);"></span></div>
+        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted);">Date</span><span id="lcmDate" style="font-weight:700;color:var(--text);"></span></div>
+        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted);">Time</span><span id="lcmTime" style="font-weight:700;color:var(--text);"></span></div>
+        <div class="lcm-row" style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted);">Purpose</span><span id="lcmPurpose" style="font-weight:700;color:var(--text);max-width:200px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span></div>
       </div>
     </div>
 
