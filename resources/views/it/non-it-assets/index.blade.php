@@ -67,18 +67,23 @@
 .nit-select-opt:hover { border-color: var(--accent); color: var(--accent); background: rgba(2,132,199,.05); }
 .nit-select-opt i { font-size: 18px; }
 /* ── NIT Table ── */
-.nit-table { width:100%; table-layout:auto; }
-.nit-table td,.nit-table th{vertical-align:middle!important;padding:5px 8px!important;white-space:nowrap;font-size:12.5px}
+.nit-table { width:100%; table-layout:fixed; }
+.nit-table td,.nit-table th{vertical-align:middle!important;padding:5px 6px!important;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nit-scroll-wrap::-webkit-scrollbar{height:6px}
 .nit-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .nit-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
-/* Description column: allow wrapping and take remaining space */
-.nit-table td:nth-child(4),.nit-table th:nth-child(4){white-space:normal;word-break:break-word;width:100%;min-width:150px}
-/* Location column: allow wrapping */
-.nit-table td:nth-child(6),.nit-table th:nth-child(6){white-space:normal;word-break:break-word;min-width:100px}
-/* Actions & QR columns: never wrap, just enough for the buttons */
-.nit-table td:last-child, .nit-table th:last-child,
-.nit-table td:nth-last-child(2), .nit-table th:nth-last-child(2) { white-space:nowrap; width:1%; }
+/* Column widths: checkbox(36) assetNo(90) faCode(80) desc(auto) yearsPurch(65) location(75) totalCost(80) accumulated(80) nbvAt(70) qr(36) actions(60) */
+.nit-table th:nth-child(1),.nit-table td:nth-child(1){width:36px}
+.nit-table th:nth-child(2),.nit-table td:nth-child(2){width:90px}
+.nit-table th:nth-child(3),.nit-table td:nth-child(3){width:80px}
+.nit-table th:nth-child(4),.nit-table td:nth-child(4){white-space:normal;word-break:break-word;overflow:visible}
+.nit-table th:nth-child(5),.nit-table td:nth-child(5){width:65px;text-align:center}
+.nit-table th:nth-child(6),.nit-table td:nth-child(6){width:75px}
+.nit-table th:nth-child(7),.nit-table td:nth-child(7){width:80px}
+.nit-table th:nth-child(8),.nit-table td:nth-child(8){width:80px}
+.nit-table th:nth-child(9),.nit-table td:nth-child(9){width:70px}
+.nit-table th:nth-child(10),.nit-table td:nth-child(10){width:36px;text-align:center}
+.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:60px;text-align:center}
 </style>
 
 {{-- ══ ADD FORM (modal popup when Add Asset clicked) ══ --}}
@@ -596,7 +601,7 @@
     </span>
   </div>
   <div class="nit-scroll-wrap" style="overflow-x:auto">
-    <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif;min-width:100%">
+    <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>

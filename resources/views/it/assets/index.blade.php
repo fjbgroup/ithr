@@ -6,15 +6,16 @@
 @push('styles')
 <style>
 /* ── DATA TABLE ── */
+/* Auto layout: every column hugs its content (no huge gaps); the Description
+   column flexes to absorb all leftover width so QR + Actions stay in view. */
 .data-table { width:100%; table-layout:auto; }
-.data-table td, .data-table th { vertical-align:middle !important; padding:5px 8px !important; white-space:nowrap; font-size:12.5px; }
-/* Description column: allow wrapping and take remaining space */
-.data-table td:nth-child(4), .data-table th:nth-child(4) { white-space:normal; word-break:break-word; width:100%; min-width:150px; }
-/* Location column: allow wrapping */
-.data-table td:nth-child(6), .data-table th:nth-child(6) { white-space:normal; word-break:break-word; min-width:100px; }
-/* Actions column: never wrap, just enough for the buttons */
-.data-table td:last-child, .data-table th:last-child,
-.data-table td:nth-last-child(2), .data-table th:nth-last-child(2) { white-space:nowrap; width:1%; }
+.data-table td, .data-table th { vertical-align:middle !important; padding:6px 10px !important; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* Description (col 4) takes the remaining space and truncates with ellipsis */
+.data-table th:nth-child(4), .data-table td:nth-child(4) { width:100%; max-width:0; }
+/* Centered columns: years purchase, qr, actions */
+.data-table th:nth-child(5), .data-table td:nth-child(5) { text-align:center; }
+.data-table th:nth-child(10), .data-table td:nth-child(10) { text-align:center; }
+.data-table th:nth-child(11), .data-table td:nth-child(11) { text-align:center; }
 .data-scroll-wrap::-webkit-scrollbar{height:6px}
 .data-scroll-wrap::-webkit-scrollbar-track{background:var(--border);border-radius:3px}
 .data-scroll-wrap::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
@@ -183,7 +184,7 @@ $statItems = [
     </span>
   </div>
   <div class="data-scroll-wrap" style="overflow-x:auto">
-    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif;min-width:100%">
+    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
