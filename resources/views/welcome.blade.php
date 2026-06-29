@@ -492,6 +492,11 @@
       <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:var(--surface);transition:all .2s;">WT</a>
       <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:var(--surface);transition:all .2s;">IT</a>
     </div>
+    <button id="pub-theme-toggle" onclick="pubToggleTheme()" title="Toggle dark / light mode"
+            style="width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;">
+        <svg id="pub-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg id="pub-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
     <a class="pub-login-btn" href="{{ route('login') }}">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
       Staff Login
@@ -536,12 +541,6 @@
     
     <a href="{{ route('hr.home', ['date' => date('Y-m-d'), 'view' => $viewMode]) }}"
        class="btn btn-outline" style="border-radius:12px;padding:.5rem 1.25rem;">Today</a>
-
-    <button id="pub-theme-toggle" onclick="pubToggleTheme()" title="Toggle dark / light mode"
-            style="width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;">
-        <svg id="pub-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-        <svg id="pub-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-    </button>
   </div>
 
 
