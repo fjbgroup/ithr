@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mark Attendance â€” {{ config('app.name', 'HR System') }}</title>
+<title>Mark Attendance — {{ config('app.name', 'HR System') }}</title>
 @include('partials.favicons')
 <script>
     if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -89,7 +89,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
                 <span class="scan-info-val">
                     @if($attendance->course->start_date)
                         @if($attendance->course->end_date && $attendance->course->end_date !== $attendance->course->start_date)
-                            {{ \Carbon\Carbon::parse($attendance->course->start_date)->format('d M') }} â€“ {{ \Carbon\Carbon::parse($attendance->course->end_date)->format('d M Y') }}
+                            {{ \Carbon\Carbon::parse($attendance->course->start_date)->format('d M') }} - {{ \Carbon\Carbon::parse($attendance->course->end_date)->format('d M Y') }}
                         @else
                             {{ \Carbon\Carbon::parse($attendance->course->start_date)->format('d M Y') }}
                         @endif

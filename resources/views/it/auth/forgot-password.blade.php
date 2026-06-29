@@ -13,7 +13,7 @@ body{
   display:flex;align-items:center;justify-content:center;padding:24px;
 }
 
-/* â”€â”€ Card â”€â”€ */
+/* ── Card ── */
 .card{
   width:100%;max-width:480px;
   border-radius:22px;overflow:hidden;

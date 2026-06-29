@@ -70,7 +70,7 @@
 <form method="GET" action="{{ route('it.reports.it') }}" class="filter-bar">
   <div>
     <label>Search</label>
-    <input type="text" name="search" value="{{ request('search') }}" placeholder="Asset no., description, serialâ€¦" style="width:220px">
+    <input type="text" name="search" value="{{ request('search') }}" placeholder="Asset no., description, serial…" style="width:220px">
   </div>
   <div>
     <label>Status</label>
@@ -112,7 +112,7 @@
     <div>
       <div class="table-card-title">IT Assets</div>
       <div style="font-size:12px;color:var(--muted);margin-top:2px">
-        Showing {{ $items->firstItem() ?? 0 }}â€“{{ $items->lastItem() ?? 0 }} of {{ $items->total() }} records
+        Showing {{ $items->firstItem() ?? 0 }}-{{ $items->lastItem() ?? 0 }} of {{ $items->total() }} records
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
@@ -152,25 +152,25 @@
       @endphp
       <tr>
         <td style="color:var(--muted);font-size:12px">{{ $items->firstItem() + $i }}</td>
-        <td><code style="color:var(--accent);font-size:12px">{{ $item->asset_number ?: 'â€”' }}</code></td>
+        <td><code style="color:var(--accent);font-size:12px">{{ $item->asset_number ?: '—' }}</code></td>
         <td>
           <span style="background:rgba(2,132,199,.08);border:1px solid rgba(2,132,199,.2);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--accent-h)">
             {{ $item->asset_class }}
           </span>
         </td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px" title="{{ $item->description }}">{{ $item->description ?: 'â€”' }}</td>
-        <td style="font-size:12px;color:var(--muted)">{{ $item->serial_number ?: 'â€”' }}</td>
-        <td style="font-size:12px">{{ trim(($item->brand ?? '') . ' ' . ($item->model ?? '')) ?: 'â€”' }}</td>
-        <td style="font-size:12px;color:var(--muted)">{{ $item->location ?: 'â€”' }}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px" title="{{ $item->description }}">{{ $item->description ?: '—' }}</td>
+        <td style="font-size:12px;color:var(--muted)">{{ $item->serial_number ?: '—' }}</td>
+        <td style="font-size:12px">{{ trim(($item->brand ?? '') . ' ' . ($item->model ?? '')) ?: '—' }}</td>
+        <td style="font-size:12px;color:var(--muted)">{{ $item->location ?: '—' }}</td>
         <td>
           <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:{{ $sbg }};color:{{ $sc }}">
             <span style="width:5px;height:5px;border-radius:50%;background:{{ $sc }};display:inline-block"></span>
             {{ $item->item_status }}
           </span>
         </td>
-        <td style="font-size:12px;color:var(--muted)">{{ $item->condition_status ?: 'â€”' }}</td>
-        <td style="font-size:12px;white-space:nowrap;color:var(--muted)">{{ $item->purchase_date?->format('d/m/Y') ?? 'â€”' }}</td>
-        <td style="font-size:12px;white-space:nowrap">{{ $item->purchase_price ? 'RM '.number_format($item->purchase_price, 2) : 'â€”' }}</td>
+        <td style="font-size:12px;color:var(--muted)">{{ $item->condition_status ?: '—' }}</td>
+        <td style="font-size:12px;white-space:nowrap;color:var(--muted)">{{ $item->purchase_date?->format('d/m/Y') ?? '—' }}</td>
+        <td style="font-size:12px;white-space:nowrap">{{ $item->purchase_price ? 'RM '.number_format($item->purchase_price, 2) : '—' }}</td>
       </tr>
       @empty
       <tr><td colspan="11" style="text-align:center;color:var(--muted);padding:40px">No assets match the selected filters.</td></tr>

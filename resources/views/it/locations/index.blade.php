@@ -170,7 +170,7 @@
               </button>
             </form>
             @else
-            <span class="md-btn-sm btn-del-dis" title="In use â€” cannot delete"><i class="bi bi-trash-fill"></i></span>
+            <span class="md-btn-sm btn-del-dis" title="In use — cannot delete"><i class="bi bi-trash-fill"></i></span>
             @endif
           </div>
         </td>

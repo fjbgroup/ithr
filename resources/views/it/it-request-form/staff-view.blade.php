@@ -1,7 +1,7 @@
 @extends('it.layouts.app')
 
 @section('title', 'IT Request #' . $form->id)
-@section('page_title', 'IT Request Form â€” View')
+@section('page_title', 'IT Request Form — View')
 
 @section('content')
 <style>
@@ -99,7 +99,7 @@
   </div>
   <div style="margin-left:auto;text-align:right">
     <div style="font-size:12px;color:var(--muted)">Subject</div>
-    <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $form->subject ?? 'â€”' }}</div>
+    <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $form->subject ?? '—' }}</div>
   </div>
 </div>
 
@@ -164,7 +164,7 @@
     <i class="bi {{ $houIcon }}" style="font-size:20px;color:{{ $houColor }};flex-shrink:0"></i>
     <div style="flex:1">
       <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:{{ $houColor }}">
-        {{ $houLabel }} â€” {{ $form->houReviewedBy?->full_name ?? 'â€”' }}
+        {{ $houLabel }} — {{ $form->houReviewedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->hou_reviewed_at ? $form->hou_reviewed_at->format('d M Y, H:i') : '' }}
         </span>
@@ -193,7 +193,7 @@
     <i class="bi {{ $rIcon }}" style="font-size:20px;color:{{ $rColor }};flex-shrink:0"></i>
     <div style="flex:1">
       <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:{{ $rColor }}">
-        {{ $rLabel }} â€” {{ $form->reviewedBy?->full_name ?? 'â€”' }}
+        {{ $rLabel }} — {{ $form->reviewedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->reviewed_at ? $form->reviewed_at->format('d M Y, H:i') : '' }}
         </span>
@@ -223,7 +223,7 @@
     <i class="bi {{ $valIcon }}" style="font-size:20px;color:{{ $valColor }};flex-shrink:0"></i>
     <div style="flex:1">
       <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:{{ $valColor }}">
-        {{ $valLabel }} â€” {{ $form->validatedBy?->full_name ?? 'â€”' }}
+        {{ $valLabel }} — {{ $form->validatedBy?->full_name ?? '—' }}
         <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">
           {{ $form->validated_at ? $form->validated_at->format('d M Y, H:i') : '' }}
         </span>
@@ -256,7 +256,7 @@
       <div>
         <div class="itr-field-label">Type of Request</div>
         @php $hwLabels = ['new'=>'New','replacement'=>'Replacement','transfer_staff'=>'Transfer to Other Staff','transfer_company'=>'Transfer to Other Company']; @endphp
-        <div class="itr-field-value">{{ $hwLabels[$form->hw_request_type] ?? ($form->hw_request_type ?? 'â€”') }}</div>
+        <div class="itr-field-value">{{ $hwLabels[$form->hw_request_type] ?? ($form->hw_request_type ?? '—') }}</div>
       </div>
       <div>
         <div class="itr-field-label">Type of Item</div>
@@ -272,31 +272,31 @@
       </div>
     </div>
     <div class="sg2">
-      <div class="sf"><div class="itr-field-label">PC / Laptop No.</div><div class="itr-field-value">{{ $form->hw_pc_laptop_no ?? 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Printer No.</div><div class="itr-field-value">{{ $form->hw_printer_no ?? 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">PC / Laptop No.</div><div class="itr-field-value">{{ $form->hw_pc_laptop_no ?? '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Printer No.</div><div class="itr-field-value">{{ $form->hw_printer_no ?? '—' }}</div></div>
     </div>
     @elseif($form->request_type === 'software')
     <div class="sg2 sf">
       <div>
         <div class="itr-field-label">Type of Request</div>
-        <div class="itr-field-value">{{ $form->sw_request_type ? ucfirst($form->sw_request_type) : 'â€”' }}</div>
+        <div class="itr-field-value">{{ $form->sw_request_type ? ucfirst($form->sw_request_type) : '—' }}</div>
       </div>
       <div>
         <div class="itr-field-label">Software Name / Suggestion</div>
-        <div class="itr-field-value">{{ $form->sw_software_name ?: 'â€”' }}</div>
+        <div class="itr-field-value">{{ $form->sw_software_name ?: '—' }}</div>
       </div>
     </div>
     <div class="sg4">
-      <div class="sf"><div class="itr-field-label">Budgeted?</div><div class="itr-field-value">{{ $form->sw_budgeted ? ucfirst($form->sw_budgeted) : 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Opex / Capex</div><div class="itr-field-value">{{ $form->sw_opex_capex ? ucfirst($form->sw_opex_capex) : 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Cost Center</div><div class="itr-field-value">{{ $form->sw_cost_center ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Expected Value (RM)</div><div class="itr-field-value">{{ $form->sw_expected_value ?: 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Budgeted?</div><div class="itr-field-value">{{ $form->sw_budgeted ? ucfirst($form->sw_budgeted) : '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Opex / Capex</div><div class="itr-field-value">{{ $form->sw_opex_capex ? ucfirst($form->sw_opex_capex) : '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Cost Center</div><div class="itr-field-value">{{ $form->sw_cost_center ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Expected Value (RM)</div><div class="itr-field-value">{{ $form->sw_expected_value ?: '—' }}</div></div>
     </div>
     @elseif($form->request_type === 'system')
     <div class="sg2 sf">
       <div>
         <div class="itr-field-label">Type of Request</div>
-        <div class="itr-field-value">{{ $form->sys_request_type ? ucfirst($form->sys_request_type) : 'â€”' }}</div>
+        <div class="itr-field-value">{{ $form->sys_request_type ? ucfirst($form->sys_request_type) : '—' }}</div>
       </div>
       <div>
         <div class="itr-field-label">Type of Item</div>
@@ -335,13 +335,13 @@
     <div class="sg2 sf">
       <div>
         <div class="sg2">
-          <div class="sf"><div class="itr-field-label">Type of User</div><div class="itr-field-value">{{ $form->user_type ?? 'â€”' }}</div></div>
-          <div class="sf"><div class="itr-field-label">Exit / Join Date</div><div class="itr-field-value">{{ $form->exit_join_date ? $form->exit_join_date->format('d/m/Y') : 'â€”' }}</div></div>
+          <div class="sf"><div class="itr-field-label">Type of User</div><div class="itr-field-value">{{ $form->user_type ?? '—' }}</div></div>
+          <div class="sf"><div class="itr-field-label">Exit / Join Date</div><div class="itr-field-value">{{ $form->exit_join_date ? $form->exit_join_date->format('d/m/Y') : '—' }}</div></div>
         </div>
       </div>
       <div>
         <div class="itr-field-label">Justification</div>
-        <div class="itr-field-value itr-rich-text" style="line-height:1.6">{!! $form->justification ?: 'â€”' !!}</div>
+        <div class="itr-field-value itr-rich-text" style="line-height:1.6">{!! $form->justification ?: '—' !!}</div>
       </div>
     </div>
     @if($form->document_path)
@@ -361,14 +361,14 @@
   <div class="itr-show-head"><div class="itr-show-num">3</div><div class="itr-show-title">User Details</div></div>
   <div class="itr-show-body">
     <div class="sg3 sf">
-      <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->user_name ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Email</div><div class="itr-field-value">{{ $form->user_email ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Staff ID</div><div class="itr-field-value">{{ $form->user_staff_id ?: 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->user_name ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Email</div><div class="itr-field-value">{{ $form->user_email ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Staff ID</div><div class="itr-field-value">{{ $form->user_staff_id ?: '—' }}</div></div>
     </div>
     <div class="sg3">
-      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->user_department ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->user_designation ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->user_contact ?: 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->user_department ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->user_designation ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->user_contact ?: '—' }}</div></div>
     </div>
   </div>
 </div>
@@ -378,13 +378,13 @@
   <div class="itr-show-head"><div class="itr-show-num">4</div><div class="itr-show-title">Requester Details</div></div>
   <div class="itr-show-body">
     <div class="sg3 sf">
-      <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->req_name ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->req_department ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Staff ID</div><div class="itr-field-value">{{ $form->req_staff_id ?: 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->req_name ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->req_department ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Staff ID</div><div class="itr-field-value">{{ $form->req_staff_id ?: '—' }}</div></div>
     </div>
     <div class="sg2">
-      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->req_designation ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->req_contact ?: 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->req_designation ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->req_contact ?: '—' }}</div></div>
     </div>
   </div>
 </div>
@@ -393,11 +393,11 @@
 <div class="itr-show-section">
   <div class="itr-show-head"><div class="itr-show-num">5</div><div class="itr-show-title">Approver Details</div></div>
   <div class="itr-show-body">
-    <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->approver_name ?: 'â€”' }}</div></div>
+    <div class="sf"><div class="itr-field-label">Name</div><div class="itr-field-value">{{ $form->approver_name ?: '—' }}</div></div>
     <div class="sg3">
-      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->approver_department ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->approver_designation ?: 'â€”' }}</div></div>
-      <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->approver_contact ?: 'â€”' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Department</div><div class="itr-field-value">{{ $form->approver_department ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Designation</div><div class="itr-field-value">{{ $form->approver_designation ?: '—' }}</div></div>
+      <div class="sf"><div class="itr-field-label">Contact</div><div class="itr-field-value">{{ $form->approver_contact ?: '—' }}</div></div>
     </div>
   </div>
 </div>

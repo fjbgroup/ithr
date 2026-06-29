@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login â€” {{ config('app.name', 'HR Admin System') }}</title>
+<title>Login — {{ config('app.name', 'HR Admin System') }}</title>
 @include('partials.favicons')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -263,7 +263,7 @@
         <img src="{{ asset('assets/images/logo.png') }}" alt="FJB" style="width:56px;height:56px;object-fit:contain;">
       </div>
       <h2>Welcome to the<br>HR Admin System</h2>
-      <p>Manage staff, training, meeting rooms and more â€” all from one secure workspace.</p>
+      <p>Manage staff, training, meeting rooms and more — all from one secure workspace.</p>
 
       <div class="auth-features">
         <div class="auth-feature">
@@ -302,9 +302,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0" style="flex-shrink:0;margin-top:1px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <div>
           <strong>Pending booking:</strong>
-          {{ $slotCount }} room slot{{ $slotCount > 1 ? 's' : '' }} waiting â€” sign in to confirm
+          {{ $slotCount }} room slot{{ $slotCount > 1 ? 's' : '' }} waiting — sign in to confirm
           @if($slotCount === 1)
-            ({{ $pendingSlots[0]['room_name'] ?? '' }}, {{ \Carbon\Carbon::parse($pendingSlots[0]['booking_date'])->format('d M') }}, {{ substr($pendingSlots[0]['start_time'],0,5) }}â€“{{ substr($pendingSlots[0]['end_time'],0,5) }})
+            ({{ $pendingSlots[0]['room_name'] ?? '' }}, {{ \Carbon\Carbon::parse($pendingSlots[0]['booking_date'])->format('d M') }}, {{ substr($pendingSlots[0]['start_time'],0,5) }}-{{ substr($pendingSlots[0]['end_time'],0,5) }})
           @endif
         </div>
       </div>

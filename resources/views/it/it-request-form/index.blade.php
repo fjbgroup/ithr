@@ -7,7 +7,7 @@
 @if($user->isAdmin())
 
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     IT ADMIN â€” INBOX VIEW
+     IT ADMIN — INBOX VIEW
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <style>
 .itr-admin-stat { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s; }
@@ -106,7 +106,7 @@
     <form method="GET" action="{{ route('it.it-request-form') }}" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div style="position:relative;flex:1;min-width:200px">
         <i class="bi bi-search" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none"></i>
-        <input type="text" name="itr_search" value="{{ $search }}" placeholder="Search subject, name, departmentâ€¦"
+        <input type="text" name="itr_search" value="{{ $search }}" placeholder="Search subject, name, department…"
           style="width:100%;padding:8px 12px 8px 32px;font-family:'Inter',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;box-sizing:border-box;transition:border-color .15s"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
       </div>
@@ -204,14 +204,14 @@
     <div style="display:flex;align-items:center;gap:9px;min-width:0">
       <div style="width:30px;height:30px;border-radius:50%;background:rgba(2,132,199,.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0"><i class="bi bi-person-fill"></i></div>
       <div style="min-width:0">
-        <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $form->submittedBy?->full_name ?? 'â€”' }}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $form->submittedBy?->full_name ?? '—' }}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $form->submittedBy?->getItRoleLabel() ?? '' }}</div>
       </div>
     </div>
 
     {{-- Department --}}
     <div style="font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;align-self:center">
-      {{ $form->user_department ?: ($form->submittedBy?->dept_name ?? 'â€”') }}
+      {{ $form->user_department ?: ($form->submittedBy?->dept_name ?? '—') }}
     </div>
 
     {{-- Date --}}
@@ -329,13 +329,13 @@
         <div style="display:flex;align-items:center;gap:8px;min-width:0">
           <div style="width:28px;height:28px;border-radius:50%;background:rgba(100,116,139,.1);color:#64748b;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0"><i class="bi bi-person-fill"></i></div>
           <div style="min-width:0">
-            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $af->submittedBy?->full_name ?? 'â€”' }}</div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $af->submittedBy?->full_name ?? '—' }}</div>
           </div>
         </div>
 
         {{-- Department --}}
         <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-          {{ $af->user_department ?: ($af->submittedBy?->dept_name ?? 'â€”') }}
+          {{ $af->user_department ?: ($af->submittedBy?->dept_name ?? '—') }}
         </div>
 
         {{-- Date --}}
@@ -417,11 +417,11 @@ function toggleArchive() {
       @csrf
       <div id="bulkIdsContainer"></div>
       <div id="bulkRemarksDiv" style="margin-bottom:16px">
-        <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional â€” applies to all selected)</span></label>
+        <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional — applies to all selected)</span></label>
         <textarea name="remarks" id="bulkRemarks" rows="3"
           style="width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
           onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
-          placeholder="Add a remark (optional)â€¦"></textarea>
+          placeholder="Add a remark (optional)…"></textarea>
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end">
         <button type="button" onclick="closeBulkModal()" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
@@ -541,7 +541,7 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 @else
 @if($user->isStaff())
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     STAFF â€” READ-ONLY VIEW
+     STAFF — READ-ONLY VIEW
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div style="margin-bottom:10px">
   <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:4px">IT Request Form</div>
@@ -678,11 +678,11 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 </div>
 @else
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     NON-ADMIN â€” EXISTING 2-STEP WIZARD
+     NON-ADMIN — EXISTING 2-STEP WIZARD
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <style>
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   IT REQUEST FORM â€” WIZARD REDESIGN
+   IT REQUEST FORM — WIZARD REDESIGN
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .itr-wrap { max-width: 100%; }
 
@@ -693,7 +693,7 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 }
 .itr-page-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
 
-/* â”€â”€ Progress â”€â”€ */
+/* ── Progress ── */
 .itr-progress { display: flex; align-items: center; gap: 0; margin-bottom: 28px; }
 .itr-step { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .itr-step-num {
@@ -710,7 +710,7 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-step-line { flex: 1; height: 2px; background: var(--border); margin: 0 10px; border-radius: 2px; transition: background .3s; }
 .itr-step-line.done { background: var(--accent); }
 
-/* â”€â”€ Step 1 hardware intro â”€â”€ */
+/* ── Step 1 hardware intro ── */
 .itr-hw-intro { background:var(--surface); border:2px solid var(--border); border-radius:18px; overflow:hidden; }
 .itr-hw-intro-banner { background:linear-gradient(135deg,rgba(59,130,246,.12) 0%,rgba(2,132,199,.08) 100%); border-bottom:1px solid var(--border); padding:36px 40px; display:flex; align-items:center; gap:28px; }
 .itr-hw-intro-icon { width:72px; height:72px; border-radius:18px; background:rgba(59,130,246,.15); color:#3b82f6; display:flex; align-items:center; justify-content:center; font-size:34px; flex-shrink:0; }
@@ -728,7 +728,7 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 .itr-hw-btn:hover { background:#0272b1; box-shadow:0 4px 16px rgba(2,132,199,.35); transform:translateY(-1px); }
 .itr-locked-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; min-height: 18px; }
 
-/* â”€â”€ Step 2 â”€â”€ */
+/* ── Step 2 ── */
 #step2 { display: none; }
 .itr-selected-banner {
   display: flex; align-items: center; gap: 12px;
@@ -753,14 +753,14 @@ if (adminSA) adminSA.addEventListener('change', function(){ toggleSelectAll('adm
 
 .itr-subject-row { display: grid; grid-template-columns: 1fr 160px; gap: 14px; margin-bottom: 20px; }
 
-/* â”€â”€ Section cards â”€â”€ */
+/* ── Section cards ── */
 .itr-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
 .itr-section-head { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--body-bg); }
 .itr-section-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(2,132,199,.12); color: var(--accent); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .itr-section-title { font-family:'Inter',sans-serif; font-size: 13.5px; font-weight: 700; color: var(--text); flex: 1; }
 .itr-section-body { padding: 20px; }
 
-/* â”€â”€ Fields â”€â”€ */
+/* ── Fields ── */
 .itr-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 3px; }
 .itr-req { color: var(--red); }
 .itr-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
@@ -771,21 +771,21 @@ textarea.itr-input { resize: vertical; min-height: 100px; }
 select.itr-input { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px; }
 .itr-input[readonly] { background: var(--body-bg); color: var(--muted); cursor: default; }
 
-/* â”€â”€ Grid â”€â”€ */
+/* ── Grid ── */
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 .fg { margin-bottom: 14px; }
 .fg:last-child { margin-bottom: 0; }
 
-/* â”€â”€ Radio pills â”€â”€ */
+/* ── Radio pills ── */
 .itr-radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
 .itr-radio-pill { display: flex; align-items: center; gap: 7px; padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12.5px; font-weight: 500; color: var(--text); background: var(--surface); transition: all .15s; user-select: none; }
 .itr-radio-pill input { display: none; }
 .itr-radio-pill:hover { border-color: var(--accent); color: var(--accent); }
 .itr-radio-pill.checked { border-color: var(--accent); background: rgba(2,132,199,.08); color: var(--accent); font-weight: 600; }
 
-/* â”€â”€ Check chips â”€â”€ */
+/* ── Check chips ── */
 .itr-check-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .itr-check-chip { display: flex; align-items: center; gap: 6px; padding: 6px 13px; border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12.5px; color: var(--text); background: var(--surface); transition: all .15s; user-select: none; }
 .itr-check-chip input { display: none; }
@@ -794,7 +794,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .chip-dot { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; transition: all .15s; }
 .itr-check-chip.checked .chip-dot { background: var(--accent); border-color: var(--accent); }
 
-/* â”€â”€ Upload â”€â”€ */
+/* ── Upload ── */
 .itr-upload-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 18px 20px; transition: border-color .15s; }
 .itr-upload-zone:hover { border-color: var(--accent); }
 .itr-notice { display: flex; align-items: flex-start; gap: 9px; font-size: 12px; line-height: 1.6; padding: 9px 12px; border-radius: 7px; margin-bottom: 8px; }
@@ -810,12 +810,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 
 .itr-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
 
-/* â”€â”€ Inline field errors â”€â”€ */
+/* ── Inline field errors ── */
 .itr-field-error { color: #dc2626; font-size: 11.5px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
 .itr-field-error i { font-size: 12px; flex-shrink: 0; }
 .itr-input.is-error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.1) !important; }
 
-/* â”€â”€ Name Searchable Dropdown â”€â”€ */
+/* ── Name Searchable Dropdown ── */
 .itr-name-dd { position:relative; }
 .itr-name-trigger { display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;background:var(--surface);font-size:13px;transition:border-color .15s,box-shadow .15s;min-height:40px;user-select:none; }
 .itr-name-trigger:hover { border-color:var(--accent); }
@@ -833,21 +833,21 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
 .itr-name-item-dept { font-size:11px;color:#64748b;margin-top:2px; }
 .itr-name-noresult { padding:12px 14px;font-size:13px;color:#64748b; }
 
-/* â”€â”€ Actions â”€â”€ */
+/* ── Actions ── */
 .itr-action-bar { display: flex; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
 .itr-btn-submit { font-family:'Inter',sans-serif; font-size: 13.5px; font-weight: 700; padding: 11px 28px; background: var(--accent); color: white; border: none; border-radius: 9px; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 7px; }
 .itr-btn-submit:hover { background: var(--accent-h); }
 .itr-btn-draft { font-family:'Inter',sans-serif; font-size: 13px; font-weight: 600; padding: 11px 22px; background: var(--body-bg); border: 1.5px solid var(--border); border-radius: 9px; color: var(--text); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 7px; }
 .itr-btn-draft:hover { border-color: var(--accent); color: var(--accent); }
 
-/* â”€â”€ Paired-row form grid â”€â”€ */
+/* ── Paired-row form grid ── */
 .itr-hw-layout { display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start; }
 .itr-hw-layout > .itr-section { margin-bottom:0; }
 .itr-hw-full { grid-column:1 / -1; }
-/* â”€â”€ Doc upload zone â”€â”€ */
+/* ── Doc upload zone ── */
 .itr-doc-zone { display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--body-bg);border:1.5px dashed var(--border);border-radius:9px;transition:border-color .15s; }
 .itr-doc-zone:hover { border-color:var(--accent); }
-/* â”€â”€ Section head hint â”€â”€ */
+/* ── Section head hint ── */
 .itr-section-hint { margin-left:auto;font-size:11.5px;color:var(--muted);font-weight:500; }
 
 @media (max-width: 900px)  { .itr-hw-layout { grid-template-columns:1fr; } }
@@ -915,7 +915,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     $ongoingForms = isset($myForms) ? $myForms->whereIn('status', ['Draft','New','Pending IT','Pending Validation'])->values() : collect();
     $decidedForms = isset($myForms) ? $myForms->whereIn('status', ['Approved','Rejected'])->values() : collect();
 
-    // Shared card renderer macro â€” defined as a PHP closure to avoid duplication
+    // Shared card renderer macro — defined as a PHP closure to avoid duplication
     $renderCard = function($mf) {
       $mfTypeMap = [
         'hardware' => ['label'=>'Hardware','color'=>'#3b82f6','bg'=>'rgba(59,130,246,.1)','icon'=>'bi-laptop'],
@@ -1256,15 +1256,15 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </div>
           <div style="min-width:0">
             <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              {{ $pa->req_name ?: ($pa->submittedBy?->full_name ?? 'â€”') }}
+              {{ $pa->req_name ?: ($pa->submittedBy?->full_name ?? '—') }}
             </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pa->req_designation ?: 'â€”' }}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pa->req_designation ?: '—' }}</div>
           </div>
         </div>
 
         {{-- Department --}}
         <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-          {{ $pa->req_department ?: 'â€”' }}
+          {{ $pa->req_department ?: '—' }}
         </div>
 
         {{-- Date --}}
@@ -1321,7 +1321,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           <textarea name="approval_remarks" id="houRemarks" rows="3"
             style="width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
-            placeholder="Add a remark (optional)â€¦"></textarea>
+            placeholder="Add a remark (optional)…"></textarea>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end">
           <button type="button" onclick="closeHouModal()"
@@ -1459,11 +1459,11 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
         @csrf
         <div id="bulkIdsContainer"></div>
         <div style="margin-bottom:16px">
-          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional â€” applies to all selected)</span></label>
+          <label style="font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:6px">Remarks <span style="font-weight:400;color:var(--muted)">(optional — applies to all selected)</span></label>
           <textarea name="remarks" id="bulkRemarks" rows="3"
             style="width:100%;font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:vertical;box-sizing:border-box"
             onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
-            placeholder="Add a remark (optional)â€¦"></textarea>
+            placeholder="Add a remark (optional)…"></textarea>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end">
           <button type="button" onclick="closeBulkModal()" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:9px 18px;background:var(--body-bg);border:1.5px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Cancel</button>
@@ -1548,12 +1548,12 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
           </div>
           <div style="min-width:0">
             <div style="font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              {{ $pv->req_name ?: ($pv->submittedBy?->full_name ?? 'â€”') }}
+              {{ $pv->req_name ?: ($pv->submittedBy?->full_name ?? '—') }}
             </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->req_designation ?: 'â€”' }}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->req_designation ?: '—' }}</div>
           </div>
         </div>
-        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->user_department ?: 'â€”' }}</div>
+        <div style="font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $pv->user_department ?: '—' }}</div>
         <div>
           <div style="font-size:12.5px;font-weight:500;color:var(--text)">{{ $pv->created_at->format('d M Y') }}</div>
           <div style="font-size:11px;color:var(--muted);margin-top:1px">{{ $pv->created_at->format('H:i') }}</div>
@@ -1611,7 +1611,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             <input class="itr-input{{ $errors->has('subject') ? ' is-error' : '' }}"
                    type="text" name="subject" id="itr-subject"
                    value="{{ old('subject') }}"
-                   placeholder="Brief description of what this request is forâ€¦"
+                   placeholder="Brief description of what this request is for…"
                    maxlength="200"/>
             @error('subject')<div class="itr-field-error"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
           </div>
@@ -1640,7 +1640,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
             </div>
             <div>
               <div class="itr-label" style="margin-bottom:10px">Type of Item <span class="itr-req">*</span></div>
-              <input class="itr-input{{ $errors->has('hw_items') ? ' is-error' : '' }}" type="text" name="hw_items[]" value="{{ old('hw_items.0') }}" placeholder="e.g. Laptop, Desktop PC, Printerâ€¦" required/>
+              <input class="itr-input{{ $errors->has('hw_items') ? ' is-error' : '' }}" type="text" name="hw_items[]" value="{{ old('hw_items.0') }}" placeholder="e.g. Laptop, Desktop PC, Printer…" required/>
               @error('hw_items')<div class="itr-field-error" style="margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i>{{ $message }}</div>@enderror
               <div class="itr-field-error itr-js-error" id="err-hw-items" style="display:none;margin-top:6px"><i class="bi bi-exclamation-circle-fill"></i> Please enter a type of item.</div>
             </div>
@@ -1710,7 +1710,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 </label>
                 <span id="hw-fname" style="font-size:12.5px;color:var(--muted);margin-left:8px">No file chosen</span>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);flex-shrink:0">Max 2 MB Â· PDF, DOC, DOCX, JPG, PNG</div>
+              <div style="font-size:11.5px;color:var(--muted);flex-shrink:0">Max 2 MB · PDF, DOC, DOCX, JPG, PNG</div>
             </div>
           </div>
         </div>
@@ -1735,7 +1735,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                   <i class="bi bi-chevron-down itr-name-arrow"></i>
                 </div>
                 <div class="itr-name-panel" id="user_name_panel" style="display:none">
-                  <input class="itr-name-search-input" type="text" id="user_name_search" placeholder="Filter by nameâ€¦" oninput="filterStaffDD('user_name',this.value)" autocomplete="off">
+                  <input class="itr-name-search-input" type="text" id="user_name_search" placeholder="Filter by name…" oninput="filterStaffDD('user_name',this.value)" autocomplete="off">
                   <div class="itr-name-list" id="user_name_list"></div>
                 </div>
               </div>
@@ -1798,7 +1798,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 <i class="bi bi-chevron-down itr-name-arrow"></i>
               </div>
               <div class="itr-name-panel" id="req_name_panel" style="display:none">
-                <input class="itr-name-search-input" type="text" id="req_name_search" placeholder="Filter by nameâ€¦" oninput="filterStaffDD('req_name',this.value)" autocomplete="off">
+                <input class="itr-name-search-input" type="text" id="req_name_search" placeholder="Filter by name…" oninput="filterStaffDD('req_name',this.value)" autocomplete="off">
                 <div class="itr-name-list" id="req_name_list"></div>
               </div>
             </div>
@@ -1844,7 +1844,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
                 <i class="bi bi-chevron-down itr-name-arrow"></i>
               </div>
               <div class="itr-name-panel" id="approver_name_panel" style="display:none">
-                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by nameâ€¦" oninput="filterStaffDD('approver_name',this.value)" autocomplete="off">
+                <input class="itr-name-search-input" type="text" id="approver_name_search" placeholder="Filter by name…" oninput="filterStaffDD('approver_name',this.value)" autocomplete="off">
                 <div class="itr-name-list" id="approver_name_list"></div>
               </div>
             </div>
@@ -2019,7 +2019,7 @@ function saveFormState() {
 }
 
 function validateAndSubmit(type, event) {
-  // Use event.submitter (which button triggered submit) â€” immune to onclick order or hidden-input state
+  // Use event.submitter (which button triggered submit) — immune to onclick order or hidden-input state
   var isDraft = !!(event && event.submitter && event.submitter.value === 'draft');
 
   if (isDraft) {
@@ -2068,7 +2068,7 @@ function collectChips(gridId, fieldName) {
   });
 }
 
-// â”€â”€ Restore state after validation redirect-back â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Restore state after validation redirect-back ──────────────
 (function() {
   var oldType = @json(old('request_type'));
   if (!oldType || !typeConfig[oldType]) return;
@@ -2131,7 +2131,7 @@ function restoreOldChips(gridId, values) {
   });
 }
 
-// â”€â”€ Persist form state across page refreshes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Persist form state across page refreshes ──────────────────
 function restoreFromSession() {
   if (@json(old('request_type'))) return; // already handled by Laravel old()
   var saved = sessionStorage.getItem('itr_form_state');
@@ -2192,7 +2192,7 @@ restoreFromSession();
   if (f) { f.addEventListener('input', saveFormState); f.addEventListener('change', saveFormState); }
 });
 
-// â”€â”€ Staff / Approver Searchable Dropdowns â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Staff / Approver Searchable Dropdowns ────────────────────â”€
 const staffList = @json($staffList ?? []);
 const houList   = @json($houList ?? []);
 
@@ -2221,7 +2221,7 @@ function _closeAllDD() {
   document.querySelectorAll('.itr-name-trigger.is-open').forEach(function(t) { t.classList.remove('is-open'); });
 }
 
-// â”€â”€ Staff (user / requester) dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Staff (user / requester) dropdown ────────────────────────â”€
 function renderStaffList(prefix, query) {
   var q = query.trim().toLowerCase();
   var items = q ? staffList.filter(function(s){ return s.name && s.name.toLowerCase().includes(q); }) : staffList;
@@ -2317,7 +2317,7 @@ function pickStaff(prefix, el) {
   saveFormState();
 }
 
-// â”€â”€ HOU (approver) dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── HOU (approver) dropdown ──────────────────────────────────â”€
 function renderHouList(prefix, query) {
   var q = query.trim().toLowerCase();
   var items = q ? houList.filter(function(s){ return s.name && s.name.toLowerCase().includes(q); }) : houList;
@@ -2379,7 +2379,7 @@ function pickHou(prefix, el) {
   saveFormState();
 }
 
-// Close panels when the user scrolls the page (no capture â€” only fires on window scroll,
+// Close panels when the user scrolls the page (no capture — only fires on window scroll,
 // not on element scrolls or programmatic scrolls triggered by focus/layout changes).
 window.addEventListener('scroll', function() { _closeAllDD(); });
 
@@ -2479,7 +2479,7 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
 
   window._itrJustifyEditor = new Quill('#itr-justify-editor', {
     theme: 'snow',
-    placeholder: 'Describe why this request is neededâ€¦',
+    placeholder: 'Describe why this request is needed…',
     modules: {
       toolbar: [
         [{ font: [] }, { size: [] }],

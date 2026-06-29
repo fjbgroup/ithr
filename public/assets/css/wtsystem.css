@@ -1,9 +1,9 @@
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   WT SYSTEM â€” Unified Design System
+   WT SYSTEM — Unified Design System
    Single source of truth. Do not add conflicting overrides.
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* â”€â”€ DESIGN TOKENS â”€â”€ */
+/* ── DESIGN TOKENS ── */
 :root {
   --sidebar-w:        250px;
   --sidebar-bg:       #1a2535;
@@ -50,7 +50,7 @@
   --menu-hover:       #f1f5f9;
 }
 
-/* â”€â”€ DARK MODE TOKENS â”€â”€ */
+/* ── DARK MODE TOKENS ── */
 html.dark {
   color-scheme: dark;
   --body-bg:          #0f172a;
@@ -75,7 +75,7 @@ html.dark {
 }
 html:not(.dark) { color-scheme: light; }
 
-/* â”€â”€ BASE â”€â”€ */
+/* ── BASE ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: inherit; }
 html { font-size: 12px; }
 body {
@@ -90,7 +90,7 @@ body {
 }
 html.dark body { background: var(--body-bg); color: var(--text); }
 
-/* Ensure all form elements inherit Inter â€” browsers default to system font otherwise */
+/* Ensure all form elements inherit Inter — browsers default to system font otherwise */
 input, select, textarea, button { font-family: inherit; font-size: 12px; }
 
 form,
@@ -98,7 +98,7 @@ form :is(label, input, select, textarea, button, p, span, div, a, option, .form-
   font-size: 12px !important;
 }
 
-/* â”€â”€ SCROLLBAR â”€â”€ */
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -227,7 +227,7 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
   flex-shrink: 0; width: 14px; text-align: center;
 }
 
-/* When open: rotate chevron-right â†’ chevron-down, keep parent highlighted */
+/* When open: rotate chevron-right → chevron-down, keep parent highlighted */
 .dropdown-wrapper.open > .dropdown-trigger {
   background: rgba(255,255,255,.08);
   color: #fff;
@@ -301,14 +301,14 @@ body.sidebar-collapsed .sidebar { width: 72px; }
 body.sidebar-collapsed .main-content { margin-left: 72px; }
 body.sidebar-collapsed .topbar { left: 72px; }
 
-/* Brand row â€” center logo, collapse toggle overlays it on hover */
+/* Brand row — center logo, collapse toggle overlays it on hover */
 body.sidebar-collapsed .sidebar-brand-row { padding: 14px 8px; justify-content: center; gap: 0; position: relative; }
 body.sidebar-collapsed .sidebar-brand { flex: 0 0 auto; }
 body.sidebar-collapsed .brand-name { display: none !important; }
 body.sidebar-collapsed .sidebar-collapse-toggle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 9px; background: rgba(15,23,42,.55); }
 body.sidebar-collapsed .sidebar-collapse-toggle i { transform: rotate(180deg); }
 
-/* Nav â€” block layout, padding-based (matches IT system approach) */
+/* Nav — block layout, padding-based (matches IT system approach) */
 body.sidebar-collapsed .sidebar-nav { display: block; padding: 16px 0; }
 body.sidebar-collapsed .nav-section-label { display: none !important; }
 body.sidebar-collapsed .dropdown-content { display: none !important; }
@@ -1213,7 +1213,7 @@ body.sidebar-collapsed .sidebar-footer .user-card {
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   INVENTORY TABLE â€” fixed layout, contained within main-content
+   INVENTORY TABLE — fixed layout, contained within main-content
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 body .content-surface .inventory-page-shell #walkiesTable {
   table-layout: fixed !important;
@@ -1269,6 +1269,6 @@ body .content-surface .inventory-page-shell #walkiesTable {
   .logout-modal-btn { width: 100%; min-width: 0; }
 }
 
-/* â”€â”€ MISC â”€â”€ */
+/* ── MISC ── */
 code { color: var(--accent); background: rgba(2,132,199,.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 .hidden { display: none !important; }

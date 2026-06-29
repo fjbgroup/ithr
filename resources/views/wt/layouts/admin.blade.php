@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>@yield('title', 'Dashboard') â€” WT System</title>
+<title>@yield('title', 'Dashboard') — WT System</title>
 @include('partials.favicons')
 <script>
   document.documentElement.classList.add('wt-render-lock');
@@ -1024,7 +1024,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
-// â”€â”€ RENDER LOCK â”€â”€
+// ── RENDER LOCK ──
 (function() {
   var unlocked = false;
   function unlockRender() {
@@ -1044,7 +1044,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   }
 })();
 
-// â”€â”€ LIVE CLOCK â”€â”€
+// ── LIVE CLOCK ──
 (function() {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1059,7 +1059,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   setInterval(tick, 60000);
 })();
 
-// â”€â”€ THEME â”€â”€
+// ── THEME ──
 const DARK_VARS = {
   '--body-bg':            '#0f172a',
   '--surface':            '#1e293b',
@@ -1138,7 +1138,7 @@ if (themeToggleBtn) {
   applyTheme(theme === 'dark');
 })();
 
-// â”€â”€ SIDEBAR TOGGLE (mobile) â”€â”€
+// ── SIDEBAR TOGGLE (mobile) ──
 function toggleMobileSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('mobileSidebarOverlay');
@@ -1205,7 +1205,7 @@ document.body.classList.remove('sidebar-collapsed');
   });
 })();
 
-// â”€â”€ DROPDOWN TOGGLE â”€â”€
+// ── DROPDOWN TOGGLE ──
 function toggleDropdown(trigger) {
   const wrapper = trigger.closest('.dropdown-wrapper');
   const isOpen = wrapper.classList.contains('open');
@@ -1226,7 +1226,7 @@ function toggleDropdown(trigger) {
   }
 }
 
-// â”€â”€ LOGOUT â”€â”€
+// ── LOGOUT ──
 function handleLogout() { openLogoutModal(); }
 function openLogoutModal() {
   var m = document.getElementById('logoutModal');
@@ -1246,7 +1246,7 @@ function submitLogout() {
   document.getElementById('logout-form').submit();
 }
 
-// â”€â”€ MODERN CONFIRM â”€â”€
+// ── MODERN CONFIRM ──
 let modernConfirmForm = null;
 function openModernConfirm(form) {
   modernConfirmForm = form;
@@ -1301,7 +1301,7 @@ document.addEventListener('click', function(event) {
   if (event.target === m) closeModernConfirm();
 });
 
-// â”€â”€ POLICIES MODAL â”€â”€
+// ── POLICIES MODAL ──
 function openPoliciesModal() {
   var m = document.getElementById('policiesModal');
   if (m) { m.style.display = 'block'; document.body.style.overflow = 'hidden'; }
@@ -1311,7 +1311,7 @@ function closePoliciesModal() {
   if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
 }
 
-// â”€â”€ AUTO UPPERCASE â”€â”€
+// ── AUTO UPPERCASE ──
 function bindAutoUppercase(root) {
   root = root || document;
   var fields = root.querySelectorAll('input[type="text"], input[type="search"], textarea');
@@ -1327,7 +1327,7 @@ function bindAutoUppercase(root) {
   });
 }
 
-// â”€â”€ SIDEBAR INFO POPOVERS â”€â”€
+// ── SIDEBAR INFO POPOVERS ──
 function closeSidebarInfoPopovers() {
   document.querySelectorAll('.nav-info-popover').forEach(function(item) {
     item.classList.add('hidden');
@@ -1356,7 +1356,7 @@ function positionSidebarInfoPopover(button, popover) {
   popover.style.visibility = 'visible';
 }
 
-// â”€â”€ ADMIN TABLE UTILITIES â”€â”€
+// ── ADMIN TABLE UTILITIES ──
 var canUseAdminExports = false;
 function syncAdminTableFooter(tableApi, footerParts) {
   if (!tableApi || !footerParts) return;
@@ -1413,7 +1413,7 @@ function mountAdminTableExportDropdown(tableApi, hostSelector, label) {
   host.innerHTML = '';
 }
 
-// â”€â”€ GLOBAL WALKIE TIMELINE â”€â”€
+// ── GLOBAL WALKIE TIMELINE ──
 function globalTimelineEscape(value) {
   return String(value ?? '').replace(/[&<>"']/g, function(c) {
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];
@@ -1505,7 +1505,7 @@ function closeGlobalWalkieTimelineOutside(event) {
   if (event.target === document.getElementById('globalWalkieTimelineModal')) closeGlobalWalkieTimeline();
 }
 
-// â”€â”€ DOM READY â”€â”€
+// ── DOM READY ──
 document.addEventListener('DOMContentLoaded', function() {
   // Notification toggle
   var notifToggle = document.getElementById('notificationToggle');
@@ -1560,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, true);
 
-  // Scroll controls â€” targets .main-content (flex layout: body overflow:hidden, page scrolls inside .main-content)
+  // Scroll controls — targets .main-content (flex layout: body overflow:hidden, page scrolls inside .main-content)
   var mainContent = document.querySelector('.main-content');
   var scrollControls = document.getElementById('systemScrollControls');
   var scrollTopBtn = scrollControls && scrollControls.querySelector('[data-scroll-target="top"]');

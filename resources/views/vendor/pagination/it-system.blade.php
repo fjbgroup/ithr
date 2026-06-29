@@ -5,7 +5,7 @@
   <div style="font-size:12.5px;color:var(--muted);white-space:nowrap">
     Showing
     <strong style="color:var(--text)">{{ $paginator->firstItem() }}</strong>
-    â€“
+    -
     <strong style="color:var(--text)">{{ $paginator->lastItem() }}</strong>
     of
     <strong style="color:var(--text)">{{ number_format($paginator->total()) }}</strong>

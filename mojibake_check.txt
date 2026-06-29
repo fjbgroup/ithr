@@ -1,0 +1,8 @@
+Line 211: /* â”€â”€ Staff Login modal: matched login styling â”€â”€ */
+Line 392: /* â”€â”€ Guest booking modal: make it fit the phone, no sideways scroll â”€â”€ */
+Line 772: âš ï¸ Past day cannot book
+Line 775: âš ï¸ This slot is already taken.
+Line 837: <button type="button" id="guestFullDay" class="btn btn-ghost btn-sm" onclick="guestSetFullDay()" style="display:none;color:#0f172a;font-weight:700;">â˜€ï¸ Full Day</button>
+Line 985: <button type="button" class="btn btn-ghost" id="lcmBackBtn" onclick="lcmBack()">â† Back</button>
+Line 1229: list.innerHTML = '<div style="color:#dc2626;font-weight:700;width:100%;text-align:center;padding:.5rem;">ðŸš« Fully booked, please choose another option.</div>';
+Line 1263: hint.innerHTML = `<span style="color:#dc2626;font-weight:600;">âš ï¸ Exceeds limit — max ${cap} seats</span>`;

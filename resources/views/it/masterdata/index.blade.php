@@ -7,14 +7,14 @@
 
 @push('styles')
 <style>
-/* â”€â”€ Tab Bar â”€â”€ */
+/* ── Tab Bar ── */
 .md-tab-bar{display:flex;gap:4px;background:var(--body-bg);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:24px;width:fit-content}
 .md-tab{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s;color:var(--muted);background:transparent}
 .md-tab:hover{color:var(--text);background:rgba(0,0,0,.04)}
 .md-tab.active{background:var(--surface);color:var(--navy,#142b47);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 .md-tab i{font-size:14px}
 
-/* â”€â”€ Shared card styles â”€â”€ */
+/* ── Shared card styles ── */
 .ac-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.04)}
 .ac-card-head{padding:18px 20px 14px;border-bottom:1px solid var(--border)}
 .ac-card-title-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -173,7 +173,7 @@
                   <button type="submit" class="ac-btn-sm btn-del" title="Delete"><i class="bi bi-trash-fill"></i></button>
                 </form>
                 @else
-                <span class="ac-btn-sm btn-del-dis" title="In use â€” cannot delete"><i class="bi bi-trash-fill"></i></span>
+                <span class="ac-btn-sm btn-del-dis" title="In use — cannot delete"><i class="bi bi-trash-fill"></i></span>
                 @endif
               </div>
             </td>
@@ -269,7 +269,7 @@
                   <button type="submit" class="ac-btn-sm btn-del" title="Delete"><i class="bi bi-trash-fill"></i></button>
                 </form>
                 @else
-                <span class="ac-btn-sm btn-del-dis" title="In use â€” cannot delete"><i class="bi bi-trash-fill"></i></span>
+                <span class="ac-btn-sm btn-del-dis" title="In use — cannot delete"><i class="bi bi-trash-fill"></i></span>
                 @endif
               </div>
             </td>
@@ -379,7 +379,7 @@
               <button type="submit" class="ac-btn-sm btn-del" title="Delete"><i class="bi bi-trash-fill"></i></button>
             </form>
             @else
-            <span class="ac-btn-sm btn-del-dis" title="In use â€” cannot delete"><i class="bi bi-trash-fill"></i></span>
+            <span class="ac-btn-sm btn-del-dis" title="In use — cannot delete"><i class="bi bi-trash-fill"></i></span>
             @endif
           </div>
         </td>
@@ -486,7 +486,7 @@
               <button type="submit" class="ac-btn-sm btn-del" title="Delete"><i class="bi bi-trash-fill"></i></button>
             </form>
             @else
-            <span class="ac-btn-sm btn-del-dis" title="In use â€” cannot delete"><i class="bi bi-trash-fill"></i></span>
+            <span class="ac-btn-sm btn-del-dis" title="In use — cannot delete"><i class="bi bi-trash-fill"></i></span>
             @endif
           </div>
         </td>
