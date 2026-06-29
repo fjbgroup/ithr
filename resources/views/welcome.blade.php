@@ -72,7 +72,7 @@
         'room-purple' => ['dot' => '#534AB7', 'light' => '#EEEDFE'],
         'room-yellow' => ['dot' => '#BA7517', 'light' => '#FFFDE7'],
     ];
-    {{-- Room emojis replaced with colored dots —- no emoji array needed --}}
+    // Room emojis replaced with colored dots
 
     $ts_prev = Carbon\Carbon::parse($viewDate);
     $ts_next = Carbon\Carbon::parse($viewDate);
@@ -599,7 +599,7 @@
       $rid    = $rm->id;
       $rmBkgs = $bookingsByRoom[$rid] ?? collect();
       $clr    = $colorMap[$rm->color_class] ?? $colorMap['room-blue'];
-      {{-- emoji removed, using colored dot instead --}}
+      // emoji removed, using colored dot instead
       $isBusy = $isToday && $rmBkgs->filter(fn($b) =>
           in_array($b->status,['Approved','Pending']) &&
           toMinutes($b->start_time) <= $nowMin && toMinutes($b->end_time) > $nowMin)->isNotEmpty();
@@ -688,7 +688,7 @@
     @foreach ($rooms as $i => $rm)
       @php
         $clr   = $colorMap[$rm->color_class] ?? $colorMap['room-blue'];
-        {{-- emoji removed, using colored dot instead --}}
+        // emoji removed, using colored dot instead
       @endphp
     <div class="pwt-row">
       <div class="pwt-room-col">
