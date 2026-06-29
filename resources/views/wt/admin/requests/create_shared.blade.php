@@ -2029,7 +2029,7 @@
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search the staff record and pick the owner - department &amp; phone auto-fill. If the staff is not listed, you can still type the name manually.</p>
                         </div>
                         <div>
-                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Phone No</label>
+                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Phone No</label>
                             <input type="text" name="pic_details[${index}][phone_no]" data-pic-phone value="${escapeAttribute(saved.phone_no || '')}" placeholder="Auto-filled if available" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Use (-) if not applicable.</p>
                         </div>
