@@ -72,7 +72,7 @@
         'room-purple' => ['dot' => '#534AB7', 'light' => '#EEEDFE'],
         'room-yellow' => ['dot' => '#BA7517', 'light' => '#FFFDE7'],
     ];
-    $roomEmojis = ['🛋️', '🔧', '🎓', '🌊', '⭐', '🏢', '💡', '📋'];
+    {{-- Room emojis replaced with colored dots —- no emoji array needed --}}
 
     $ts_prev = Carbon\Carbon::parse($viewDate);
     $ts_next = Carbon\Carbon::parse($viewDate);
@@ -156,7 +156,8 @@
   .rb-room-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: #cbd5e1; }
   
   .rb-card-header { padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; }
-  .rb-room-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+  .rb-room-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .rb-room-dot { width: 22px; height: 22px; border-radius: 50%; }
   .rb-room-info { flex: 1; }
   .rb-room-name { font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em; }
   .rb-room-meta { font-size: .82rem; color: #64748b; margin-top: .3rem; display: flex; gap: .75rem; align-items: center; }
@@ -265,7 +266,8 @@
   .rb-rs-info { flex: 1; }
   .rb-rs-name { font-weight: 800; color: #0f172a; font-size: .95rem; }
   .rb-rs-meta { font-size: .78rem; color: #64748b; font-weight: 500; }
-  .rb-rs-emoji { font-size: 1.25rem; opacity: .8; }
+  .rb-rs-emoji { display: flex; align-items: center; justify-content: center; opacity: .8; }
+  .rb-rs-dot { width: 16px; height: 16px; border-radius: 50%; }
 
   .rb-modal-summary { background: var(--bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 1.25rem; color: var(--text); line-height: 1.5; font-weight: 500; }
   .rb-cart-item { border-radius: 14px; padding: 1rem; border: 1.5px solid var(--border); background: var(--surface); }
@@ -332,7 +334,8 @@
   .pwt-busy  { background: #22c55e; color: #fff; }
   .pwt-busy .pwt-cnt { color: #15803d; }
   .pwt-today-cell { background-color: rgba(37, 99, 235, 0.03); }
-  .pwt-room-ico { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .9rem; }
+  .pwt-room-ico { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .pwt-room-dot { width: 14px; height: 14px; border-radius: 50%; }
   .pwt-room-nm  { font-size: .85rem; font-weight: 700; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* Month Grid */
@@ -596,7 +599,7 @@
       $rid    = $rm->id;
       $rmBkgs = $bookingsByRoom[$rid] ?? collect();
       $clr    = $colorMap[$rm->color_class] ?? $colorMap['room-blue'];
-      $emoji  = $roomEmojis[$i % count($roomEmojis)];
+      {{-- emoji removed, using colored dot instead --}}
       $isBusy = $isToday && $rmBkgs->filter(fn($b) =>
           in_array($b->status,['Approved','Pending']) &&
           toMinutes($b->start_time) <= $nowMin && toMinutes($b->end_time) > $nowMin)->isNotEmpty();
@@ -605,13 +608,13 @@
     @endphp
   <div class="rb-room-card" id="roomCard_{{ $rm->id }}">
     <div class="rb-card-header">
-      <div class="rb-room-icon" style="background:{{ $clr['light'] }}">{{ $emoji }}</div>
+      <div class="rb-room-icon" style="background:{{ $clr['light'] }}"><span class="rb-room-dot" style="background:{{ $clr['dot'] }}"></span></div>
       <div class="rb-room-info">
         <div class="rb-room-name">{{ $rm->name }}</div>
         <div class="rb-room-meta">
-          <span>👥 Up to {{ (int)$rm->capacity }}</span>
+          <span><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Up to {{ (int)$rm->capacity }}</span>
           @if ($picNames)
-          <span title="PIC">🔑 {{ $picNames }}</span>
+          <span title="PIC"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> {{ $picNames }}</span>
           @endif
         </div>
       </div>
@@ -622,7 +625,7 @@
       @php $visible = $rmBkgs->filter(fn($b) => $b->status !== 'Rejected')->sortBy('start_time'); @endphp
       @if ($visible->isEmpty())
       <div class="rb-empty-day">
-        <div style="font-size:1.5rem;margin-bottom:.5rem;">🗓️</div>
+        <div style="margin-bottom:.5rem;"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         <div style="font-weight:700;color:#0f172a;margin-bottom:.2rem;">No meetings yet</div>
         <div style="color:#64748b;font-size:.78rem;">This room is fully available.</div>
       </div>
@@ -648,7 +651,7 @@
 
     @if ($isPastDay)
     <div class="rb-card-footer" style="background:var(--bg);text-align:center;padding:.75rem;">
-      <span style="font-size:.8rem;color:#94a3b8;font-weight:600;">📅 Past date — view only</span>
+      <span style="font-size:.8rem;color:#94a3b8;font-weight:600;"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Past date — view only</span>
     </div>
     @else
     <div class="rb-card-footer">
@@ -685,11 +688,11 @@
     @foreach ($rooms as $i => $rm)
       @php
         $clr   = $colorMap[$rm->color_class] ?? $colorMap['room-blue'];
-        $emoji = $roomEmojis[$i % count($roomEmojis)];
+        {{-- emoji removed, using colored dot instead --}}
       @endphp
     <div class="pwt-row">
       <div class="pwt-room-col">
-        <span class="pwt-room-ico" style="background:{{ $clr['light'] }}">{{ $emoji }}</span>
+        <span class="pwt-room-ico" style="background:{{ $clr['light'] }}"><span class="pwt-room-dot" style="background:{{ $clr['dot'] }}"></span></span>
         <span class="pwt-room-nm">{{ $rm->name }}</span>
       </div>
       @foreach ($rangeDays as $wd)
@@ -857,9 +860,9 @@
               </div>
               <div class="rb-rs-info">
                 <div class="rb-rs-name">{{ $rm->name }}</div>
-                <div class="rb-rs-meta">👥 {{ $rm->capacity }} seats</div>
+                <div class="rb-rs-meta"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> {{ $rm->capacity }} seats</div>
               </div>
-              <div class="rb-rs-emoji">{{ $roomEmojis[$loop->index % count($roomEmojis)] }}</div>
+              <div class="rb-rs-emoji"><span class="rb-rs-dot" style="background:{{ $clr['dot'] }}"></span></div>
             </label>
           @endforeach
         </div>
@@ -1011,7 +1014,7 @@ const guestRooms    = @json($rooms);
 const guestViewDate = '{{ $viewDate }}';
 const isPastDay     = {{ $isPastDay ? 'true' : 'false' }};
 const guestColorMap = @json($colorMap);
-const guestEmojis   = @json($roomEmojis);
+{{-- guestEmojis removed, using colored dots instead --}}
 let guestRoomId = null;
 let clockState  = { start:{h:null,m:null}, end:{h:null,m:null} };
 let guestCart   = [];
