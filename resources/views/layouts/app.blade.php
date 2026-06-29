@@ -773,12 +773,15 @@ document.addEventListener('DOMContentLoaded', function () {
      ║  Easter Egg — Creator credit                                  ║
      ║  Triggers: Konami code (↑↑↓↓â†→â†→ B A)  ·  footer clicked 5×   ║
      â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
+<audio id="eggAudio" preload="auto" loop>
+    <source src="{{ asset('assets/audio/easter-egg.mp3') }}" type="audio/mpeg">
+</audio>
 <div class="egg-overlay" id="eggOverlay" aria-hidden="true" onclick="if(event.target===this)closeEgg()">
     <div class="egg-card" role="dialog" aria-label="Creator credit">
         <button class="egg-close" onclick="closeEgg()" aria-label="Close">&times;</button>
         <div class="egg-confetti" id="eggConfetti"></div>
         <div class="egg-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <img src="{{ asset('assets/images/aren.jpg') }}" alt="" class="egg-badge-img">
         </div>
         <div class="egg-kicker">✦ You found the secret ✦</div>
         <div class="egg-name">ALIF&nbsp;TEOH</div>
@@ -817,12 +820,13 @@ document.addEventListener('DOMContentLoaded', function () {
 .egg-badge{
     width:64px; height:64px; margin:0 auto 1rem;
     display:flex; align-items:center; justify-content:center;
-    border-radius:18px; color:#0f223b;
+    border-radius:50%; color:#0f223b;
     background:linear-gradient(135deg,#38bdf8,#7dd3fc);
     box-shadow:0 10px 26px -8px rgba(56,189,248,.8);
     animation:eggSpin 6s linear infinite;
 }
 @keyframes eggSpin{ to{ transform:rotate(360deg) } }
+.egg-badge-img{ width:100%; height:100%; object-fit:cover; border-radius:inherit; display:block; }
 .egg-kicker{ font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:#7dd3fc; font-weight:600; }
 .egg-name{
     margin-top:.55rem; font-size:2.1rem; font-weight:700; letter-spacing:.02em;
@@ -846,10 +850,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const overlay  = document.getElementById('eggOverlay');
     if(!overlay) return;
     const confetti = document.getElementById('eggConfetti');
+    const audio    = document.getElementById('eggAudio');
     const colors   = ['#38bdf8','#7dd3fc','#fcd34d','#fff','#0284c7'];
     let open = false;
 
-    window.closeEgg = function(){ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); open = false; };
+    window.closeEgg = function(){
+        overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); open = false;
+        if(audio){ audio.pause(); audio.currentTime = 0; }
+    };
 
     function burstConfetti(){
         if(!confetti) return;
@@ -871,6 +879,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.classList.add('show');
         overlay.setAttribute('aria-hidden','false');
         burstConfetti();
+        if(audio){ audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
     // Trigger 1 — Konami code
