@@ -202,13 +202,13 @@
         .rb-pending-acts .btn { flex: 1 !important; justify-content: center !important; }
 
         /* Table → card transformation */
-        .rb-m-stack { display: block; width: 100%; }
-        .rb-m-stack thead { display: none; }
-        .rb-m-stack tbody { display: block; width: 100%; }
+        .rb-m-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        .rb-m-stack thead { display: none !important; }
+        .rb-m-stack tbody { display: block !important; width: 100% !important; box-sizing: border-box !important; }
         .rb-m-stack tbody tr {
-            display: block;
-            width: 100%;
-            box-sizing: border-box;
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
             border: 1px solid var(--border) !important;
             border-radius: 10px;
             margin: 0 0 .75rem;
@@ -216,11 +216,14 @@
             background: var(--surface);
         }
         .rb-m-stack tbody td {
-            display: block;
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
             padding: .2rem 0 !important;
             border: none !important;
             text-align: left !important;
             white-space: normal !important;
+            word-wrap: break-word !important;
         }
         .rb-m-stack tbody td[data-label]::before {
             content: attr(data-label);
