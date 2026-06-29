@@ -29,11 +29,14 @@
 <link href="{{ asset('it-assets/css/style.css') }}" rel="stylesheet">
 <style>
 :root {
-  --sidebar-bg:        #142b47;
-  --sidebar-hover:     rgba(255,255,255,.08);
-  --sidebar-active-bg: rgba(56,189,248,.18);
-  --sidebar-text:      rgba(255,255,255,.65);
-  --sidebar-head:      #ffffff;
+  --sidebar-bg:        #f8fafc;
+  --sidebar-hover:     #f1f5f9;
+  --sidebar-active-bg: #e0f2fe;
+  --sidebar-text:      #334155;
+  --sidebar-head:      #1e293b;
+  --sidebar-border:    #e2e8f0;
+  --sidebar-muted:     #64748b;
+  --sidebar-active-tx: #0284c7;
   --sidebar-w:         250px;
   --accent:            #0284c7;
   --accent-h:          #0369a1;
@@ -62,25 +65,26 @@ body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;
 .sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
   background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:100;
+  border-right:1px solid var(--sidebar-border);
   transition:width .3s ease;overflow:hidden;
 }
 .sidebar-brand{
-  padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);
+  padding:20px 20px 16px;border-bottom:1px solid var(--sidebar-border);
   display:flex;align-items:center;gap:12px;
 }
 .sidebar-brand img{width:42px;height:42px;object-fit:contain;background:transparent}
-.brand-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;
+.brand-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--sidebar-head);
   text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
-.brand-name span{color:#fff;display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
+.brand-name span{color:var(--sidebar-muted);display:block;font-size:10px;letter-spacing:.1em;font-weight:700}
 
-.sidebar-nav{flex:1;overflow-y:auto;padding:16px 12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent}
+.sidebar-nav{flex:1;overflow-y:auto;padding:16px 12px;scrollbar-width:thin;scrollbar-color:rgba(15,23,42,.15) transparent}
 .sidebar-nav::-webkit-scrollbar{width:3px}
 .sidebar-nav::-webkit-scrollbar-track{background:transparent}
-.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:99px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:rgba(15,23,42,.15);border-radius:99px}
 .sidebar-nav::-webkit-scrollbar-thumb:hover{background:rgba(2,132,199,.4)}
-.sidebar-nav:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14)}
+.sidebar-nav:hover::-webkit-scrollbar-thumb{background:rgba(15,23,42,.22)}
 .nav-section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;
-  color:rgba(255,255,255,.3);padding:0 8px;margin:20px 0 6px}
+  color:var(--sidebar-muted);padding:0 8px;margin:20px 0 6px}
 .nav-section-label:first-child{margin-top:4px}
 
 .nav-link{
@@ -89,33 +93,33 @@ body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;
   transition:all .15s;margin-bottom:2px;
 }
 .nav-link i{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.nav-link:hover{background:rgba(255,255,255,.08);color:#fff}
-.nav-link.active{background:rgba(56,189,248,.18);color:var(--sky);font-weight:600}
+.nav-link:hover{background:var(--sidebar-hover);color:#1e293b}
+.nav-link.active{background:var(--sidebar-active-bg);color:var(--sidebar-active-tx);font-weight:600}
 .nav-link .badge-count, button .badge-count{
   margin-left:auto;background:var(--red);color:#fff;
   border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;flex-shrink:0;
 }
 button .badge-count{ margin-left:0; }
 
-.sidebar-footer{padding:14px 12px;border-top:1px solid rgba(255,255,255,.08)}
+.sidebar-footer{padding:14px 12px;border-top:1px solid var(--sidebar-border)}
 .user-card{
   display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border-radius:8px;background:rgba(255,255,255,.06);
+  border-radius:8px;background:rgba(15,23,42,.05);
   margin-bottom:10px;text-decoration:none;transition:background .15s;cursor:pointer;
 }
-.user-card:hover{background:rgba(255,255,255,.1)}
+.user-card:hover{background:rgba(15,23,42,.09)}
 .user-avatar{
   width:34px;height:34px;border-radius:50%;background:var(--accent);
   display:flex;align-items:center;justify-content:center;
   font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;
 }
 .user-info{min-width:0;flex:1}
-.user-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-name{font-size:13px;font-weight:500;color:var(--sidebar-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-role{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
 .btn-logout{
   display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;
-  background:rgba(255,255,255,.06);border:none;border-radius:8px;
-  color:rgba(255,255,255,.5);font-size:13px;cursor:pointer;text-decoration:none;
+  background:rgba(15,23,42,.05);border:none;border-radius:8px;
+  color:var(--sidebar-muted);font-size:13px;cursor:pointer;text-decoration:none;
   transition:all .15s;font-family:'Inter',sans-serif;
 }
 .btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
@@ -294,12 +298,12 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 .sb-close-btn{
   flex-shrink:0;margin-left:auto;
   width:28px;height:28px;
-  background:rgba(255,255,255,.08);border:none;border-radius:6px;
-  color:rgba(255,255,255,.5);cursor:pointer;font-size:15px;
+  background:rgba(15,23,42,.06);border:none;border-radius:6px;
+  color:var(--sidebar-muted);cursor:pointer;font-size:15px;
   display:flex;align-items:center;justify-content:center;
   transition:background .15s,color .15s,font-size .15s;
 }
-.sb-close-btn:hover{background:rgba(255,255,255,.18);color:#fff;font-size:12px}
+.sb-close-btn:hover{background:rgba(15,23,42,.12);color:#1e293b;font-size:12px}
 html.sidebar-collapsed .sb-close-btn{display:none!important}
 
 /* ── LOGO AS OPEN BUTTON (collapsed state) ── */
@@ -344,18 +348,18 @@ html.sidebar-collapsed .btn-logout i{font-size:15px!important}
 
 /* ── COLLAPSED ACTIVE STATE ── */
 html.sidebar-collapsed .sidebar-nav .nav-link.active {
-  background: rgba(56,189,248,.18) !important;
-  border-left: 3px solid var(--sky) !important;
+  background: var(--sidebar-active-bg) !important;
+  border-left: 3px solid var(--sidebar-active-tx) !important;
 }
 html.sidebar-collapsed .sidebar-nav .nav-link.active i {
-  color: var(--sky) !important;
+  color: var(--sidebar-active-tx) !important;
 }
 html.sidebar-collapsed .sidebar-nav > div > button.sb-active {
-  background: rgba(2,132,199,.25) !important;
-  border-left: 3px solid var(--sky) !important;
+  background: var(--sidebar-active-bg) !important;
+  border-left: 3px solid var(--sidebar-active-tx) !important;
 }
 html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
-  color: var(--sky) !important;
+  color: var(--sidebar-active-tx) !important;
 }
 
 /* ── MOBILE ── */
@@ -416,8 +420,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div>
       <button onclick="toggleITAssets()" id="itAssetsToggle" class="{{ $itActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $itActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $itActive ? 'var(--accent)' : '#94a3b8' }};
+          background:{{ $itActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $itActive ? 'var(--sidebar-active-tx)' : '#475569' }};
           border:none;font-size:13.5px;font-weight:{{ $itActive ? '600' : '500' }};
           cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
         <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
@@ -445,8 +449,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div>
       <button onclick="toggleITAssets()" id="itAssetsToggle" class="{{ $itActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $itActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $itActive ? 'var(--accent)' : '#94a3b8' }};
+          background:{{ $itActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $itActive ? 'var(--sidebar-active-tx)' : '#475569' }};
           border:none;font-size:13.5px;font-weight:{{ $itActive ? '600' : '500' }};
           cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
         <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
@@ -500,8 +504,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div>
       <button onclick="toggleEwaste()" id="ewasteToggle" class="{{ $ewActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $ewActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $ewActive ? 'var(--accent)' : '#94a3b8' }};
+          background:{{ $ewActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $ewActive ? 'var(--sidebar-active-tx)' : '#475569' }};
           border:none;font-size:13.5px;font-weight:{{ $ewActive ? '600' : '500' }};
           cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
         <i class="bi bi-recycle" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
@@ -535,8 +539,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div>
       <button onclick="toggleDisposal()" id="disposalToggle" class="{{ $dispActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $dispActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $dispActive ? 'var(--accent)' : '#94a3b8' }};
+          background:{{ $dispActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $dispActive ? 'var(--sidebar-active-tx)' : '#475569' }};
           border:none;font-size:13.5px;font-weight:{{ $dispActive ? '600' : '500' }};
           cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
         <i class="bi bi-trash3-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
@@ -570,8 +574,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div>
       <button onclick="toggleReports()" id="reportsToggle" class="{{ $rptActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $rptActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $rptActive ? 'var(--accent)' : '#94a3b8' }};
+          background:{{ $rptActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $rptActive ? 'var(--sidebar-active-tx)' : '#475569' }};
           border:none;font-size:13.5px;font-weight:{{ $rptActive ? '600' : '500' }};
           cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
         <i class="bi bi-bar-chart-line-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
@@ -610,8 +614,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div>
       <button onclick="toggleITRequestForm()" id="itrToggle" class="{{ $itrActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
-          background:{{ $itrActive ? 'rgba(2,132,199,.15)' : 'none' }};
-          color:{{ $itrActive ? 'var(--accent)' : '#94a3b8' }};
+          background:{{ $itrActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $itrActive ? 'var(--sidebar-active-tx)' : '#475569' }};
           border:none;font-size:13.5px;font-weight:{{ $itrActive ? '600' : '500' }};
           cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
         <i class="bi bi-file-earmark-text-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
@@ -681,7 +685,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div class="nav-section-label">Documentation</div>
     @endif
 
-    <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+    <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
     </a>
@@ -704,11 +708,11 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
       @endif
       <div class="user-info">
         <div class="user-name">{{ $user->full_name }}</div>
-        <div class="user-role" style="color:{{ match($user->it_role) { 'admin_it', 'admin' => 'var(--accent)', 'finance_admin' => '#38bdf8', 'ceo' => '#f59e0b', 'gm' => '#2dd4bf', 'hou' => '#a78bfa', default => 'rgba(255,255,255,.4)' } }}">
+        <div class="user-role" style="color:{{ match($user->it_role) { 'admin_it', 'admin' => 'var(--accent)', 'finance_admin' => '#0284c7', 'ceo' => '#d97706', 'gm' => '#0d9488', 'hou' => '#7c3aed', default => '#64748b' } }}">
           {{ $user->getItRoleLabel() }}
         </div>
       </div>
-      <i class="bi bi-gear" style="color:rgba(255,255,255,.3);font-size:13px;flex-shrink:0"></i>
+      <i class="bi bi-gear" style="color:var(--sidebar-muted);font-size:13px;flex-shrink:0"></i>
     </a>
   </div>
 </aside>
@@ -807,8 +811,8 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 
 // ── THEME ──
 const DARK_VARS = {
-  '--sidebar-bg':    '#1a2235',
-  '--sidebar-hover': '#243044',
+  '--sidebar-bg':    '#f8fafc',
+  '--sidebar-hover': '#f1f5f9',
   '--bg':            '#111827',
   '--body-bg':       '#111827',
   '--white':         '#1f2937',
@@ -825,8 +829,8 @@ const DARK_VARS = {
   '--table-head-color': '#9ca3af',
 };
 const LIGHT_VARS = {
-  '--sidebar-bg':    '#1a2332',
-  '--sidebar-hover': '#243044',
+  '--sidebar-bg':    '#f8fafc',
+  '--sidebar-hover': '#f1f5f9',
   '--bg':            '#f1f5f9',
   '--body-bg':       '#f1f5f9',
   '--white':         '#ffffff',
