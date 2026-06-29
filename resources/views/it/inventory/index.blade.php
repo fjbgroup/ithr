@@ -10,17 +10,25 @@
    QR + Actions columns stay aligned at the right edge. */
 .data-table { width:100% !important; table-layout:fixed; }
 .data-table td, .data-table th { vertical-align:middle !important; padding:8px 8px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* ── Default / IT Admin layout (unchanged) ── */
 .data-table th:nth-child(1),  .data-table td:nth-child(1)  { width:3%;  text-align:center; } /* checkbox */
-.data-table th:nth-child(2),  .data-table td:nth-child(2)  { width:8%;  }                    /* asset no */
-.data-table th:nth-child(3),  .data-table td:nth-child(3)  { width:7%;  }                    /* f/a code */
-.data-table th:nth-child(4),  .data-table td:nth-child(4)  { width:8%;  }                    /* description */
-.data-table th:nth-child(5),  .data-table td:nth-child(5)  { width:6%;  text-align:center; } /* years purchase */
-.data-table th:nth-child(6),  .data-table td:nth-child(6)  { width:7%;  }                    /* location */
-.data-table th:nth-child(7),  .data-table td:nth-child(7)  { width:7%;  }                    /* total cost */
-.data-table th:nth-child(8),  .data-table td:nth-child(8)  { width:7%;  }                    /* accumulated */
-.data-table th:nth-child(9),  .data-table td:nth-child(9)  { width:7%;  }                    /* nbv at */
-.data-table th:nth-child(10), .data-table td:nth-child(10) { width:3%;  text-align:center; } /* qr — tightened next to NBV AT */
-.data-table th:nth-child(11), .data-table td:nth-child(11) { width:37%; text-align:left; overflow:visible !important; } /* actions — pulled further left & never clipped so all buttons show */
+.data-table th:nth-child(2),  .data-table td:nth-child(2)  { width:9%;  }                    /* asset no */
+.data-table th:nth-child(3),  .data-table td:nth-child(3)  { width:8%;  }                    /* f/a code */
+.data-table th:nth-child(4),  .data-table td:nth-child(4)  { width:18%; }                    /* description */
+.data-table th:nth-child(5),  .data-table td:nth-child(5)  { width:8%;  text-align:center; } /* years purchase */
+.data-table th:nth-child(6),  .data-table td:nth-child(6)  { width:9%;  }                    /* location */
+.data-table th:nth-child(7),  .data-table td:nth-child(7)  { width:9%;  }                    /* total cost */
+.data-table th:nth-child(8),  .data-table td:nth-child(8)  { width:9%;  }                    /* accumulated */
+.data-table th:nth-child(9),  .data-table td:nth-child(9)  { width:9%;  }                    /* nbv at */
+.data-table th:nth-child(10), .data-table td:nth-child(10) { width:4%;  text-align:center; } /* qr */
+.data-table th:nth-child(11), .data-table td:nth-child(11) { width:14%; text-align:center; } /* actions */
+/* ── Staff layout ── Staff action buttons use longer labels ("Request Edit") plus
+   E-Waste. Keep the clean admin spacing and only adjust the 3 columns that need it:
+   trim Description, pull QR tight to NBV AT, and give Actions just enough room. */
+.data-table--staff th:nth-child(4),  .data-table--staff td:nth-child(4)  { width:12%; }                    /* description */
+.data-table--staff th:nth-child(10), .data-table--staff td:nth-child(10) { width:3%;  text-align:center; } /* qr — tight to NBV AT */
+.data-table--staff th:nth-child(11), .data-table--staff td:nth-child(11) { width:21%; text-align:right; overflow:visible !important; } /* actions — just enough, right-aligned, no clipping */
+.data-table--staff td:nth-child(11) > div { justify-content:flex-end; } /* push action buttons to the right, no gap on the right side */
 
 /* ── IT Edit Form Card (matches Non-IT layout) ── */
 .nit-form-card {
@@ -367,7 +375,7 @@
     </span>
   </div>
   <div style="overflow-x:auto">
-    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
+    <table class="table table-hover data-table {{ (!$user->isAdminOrFinance() && !$user->isReadOnlyViewer()) ? 'data-table--staff' : '' }}" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>

@@ -85,6 +85,11 @@
 .nit-table th:nth-child(9),.nit-table td:nth-child(9){width:9%}                      /* nbv at */
 .nit-table th:nth-child(10),.nit-table td:nth-child(10){width:3%;text-align:center}  /* qr — tightened next to NBV AT */
 .nit-table th:nth-child(11),.nit-table td:nth-child(11){width:22%;text-align:left;padding-left:120px!important} /* actions — widened, left-aligned & nudged right so all buttons show */
+/* ── Staff layout ── Staff has fewer/narrower action buttons, so drop the big right
+   nudge, tighten Actions and give the space back to Description for a cleaner table. */
+.nit-table--staff th:nth-child(4),.nit-table--staff td:nth-child(4){width:13%}                                 /* description */
+.nit-table--staff th:nth-child(5),.nit-table--staff td:nth-child(5){width:7%;text-align:center}               /* years purchase */
+.nit-table--staff th:nth-child(11),.nit-table--staff td:nth-child(11){width:21%;text-align:left;padding-left:8px!important;overflow:visible!important} /* actions — Dispose + Request Edit + Request Delete */
 </style>
 
 {{-- ══ ADD FORM (modal popup when Add Asset clicked) ══ --}}
@@ -602,7 +607,7 @@
     </span>
   </div>
   <div class="nit-scroll-wrap" style="overflow-x:auto">
-    <table class="table table-hover nit-table" style="font-family:'Inter',sans-serif">
+    <table class="table table-hover nit-table {{ (!$user->isAdminOrFinance() && !$user->isReadOnlyViewer()) ? 'nit-table--staff' : '' }}" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th><input type="checkbox" id="nitSelectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>
@@ -647,13 +652,15 @@
         @if(!$user->isReadOnlyViewer())
         <td style="width:1%;white-space:nowrap">
           <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
-            @if(!in_array($row->item_status, ['Disposed', 'Pending for Write-Off', 'Pending to E-Waste/Disposal']))
+            @php $nitCanDispose = !in_array($row->item_status, ['Disposed', 'Pending for Write-Off', 'Pending to E-Waste/Disposal']); @endphp
+            @if($user->isAdminOrFinance())
+            {{-- Admin / Finance --}}
+            @if($nitCanDispose)
             <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
               style="font-size:13px;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 7px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
               <i class="bi bi-trash3-fill"></i> Dispose
             </a>
             @endif
-            @if($user->isAdminOrFinance())
             <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Edit"
               style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
               <i class="bi bi-pencil"></i> Edit
@@ -667,15 +674,36 @@
               </button>
             </form>
             @else
+            {{-- Staff — buttons sized to match IT Assets (inventory) --}}
+            @if($nitCanDispose)
+            <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
+              style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-trash3-fill" style="font-size:11px"></i> Dispose
+            </a>
+            @endif
             @if(isset($pendingEditIds[$row->id]))
             <span title="Edit Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
               <i class="bi bi-hourglass-split"></i>
             </span>
             @else
-            <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Request Edit"
-              style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-pencil"></i> Edit
-            </a>
+            <button type="button" onclick="openNitEditFormById({{ $row->id }})" title="Request Edit"
+              style="font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;font-family:'Inter',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">
+              Request Edit
+            </button>
+            @endif
+            @if(isset($pendingDeleteIds[$row->id]))
+            <span title="Delete Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+              <i class="bi bi-hourglass-split"></i>
+            </span>
+            @else
+            <form method="POST" action="{{ route('it.non-it.destroy', $row->id) }}" style="display:inline" onsubmit="return confirm('Submit a delete request for this asset?')">
+              @csrf
+              @method('DELETE')
+              <button type="submit" title="Request Delete"
+                style="font-size:13px;color:#dc2626;background:rgba(239,68,68,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
             @endif
             @endif
           </div>
