@@ -375,6 +375,29 @@
     .owner-note-row {
         max-width: 1180px;
     }
+    .owner-pickup-field,
+    .owner-pickup-helper {
+        grid-column: span 1;
+    }
+    .owner-pickup-helper {
+        display: flex;
+        align-items: flex-end;
+    }
+    .owner-pickup-helper p {
+        margin-top: 0 !important;
+    }
+    @media (max-width: 900px) {
+        .owner-pickup-field,
+        .owner-pickup-helper {
+            grid-column: 1 / -1;
+        }
+        .owner-pickup-helper {
+            align-items: flex-start;
+        }
+        .owner-pickup-helper p {
+            margin-top: 4px !important;
+        }
+    }
     .corporate-combobox {
         position: relative;
         width: min(100%, var(--form-lg-w, 520px)) !important;
@@ -606,11 +629,81 @@
     .temporary-quantity-group {
         grid-column: span 4;
         justify-self: start;
-        width: min(100%, 220px);
+        width: 100%;
+        max-width: 100%;
     }
     .temporary-owner-group {
         grid-column: 1 / -1;
         width: 100%;
+    }
+    .temporary-owner-summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .temporary-owner-summary > div:first-child {
+        flex: 1 1 260px;
+        min-width: 0;
+    }
+    .temporary-request-meta {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px 18px;
+        align-items: start;
+        width: 100%;
+    }
+    .temporary-request-basics {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px 18px;
+        align-items: start;
+        width: 100%;
+    }
+    .temporary-request-meta > .temporary-purpose-group {
+        grid-column: 1 / -1;
+    }
+    .temporary-owner-card {
+        width: 100%;
+    }
+    .temporary-owner-card > [data-pic-row] + [data-pic-row] {
+        margin-top: 16px;
+    }
+    .temporary-unit-card {
+        border: 1px solid rgba(2, 132, 199, 0.14);
+        border-radius: 14px;
+        background: #f8fafc;
+        padding: 16px;
+    }
+    .temporary-unit-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(2, 132, 199, 0.10);
+    }
+    .temporary-unit-title {
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: #0284c7;
+    }
+    .temporary-unit-chip {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(2, 132, 199, 0.16);
+        background: #ffffff;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: #0284c7;
     }
     .temporary-date-row,
     .temporary-signature-row {
@@ -624,20 +717,39 @@
         align-items: start !important;
     }
     .temporary-duration-group,
+    .temporary-request-basics > .temporary-quantity-group,
     .temporary-start-group,
     .temporary-end-group,
     .temporary-purpose-group {
-        flex: 1 1 220px;
         width: 100%;
-        max-width: 320px;
+        max-width: 100%;
+    }
+    .temporary-request-basics > .temporary-quantity-group,
+    .temporary-owner-summary .temporary-quantity-group,
+    .temporary-duration-group {
+        justify-self: start;
+    }
+    .temporary-owner-summary .temporary-quantity-group {
+        flex: 0 1 360px;
+        width: min(100%, 360px);
+        max-width: 100%;
     }
     .temporary-purpose-group {
-        flex: 1 1 320px;
         max-width: none;
-        min-width: min(100%, 280px);
+        min-width: 0;
     }
+    .temporary-request-basics input,
+    .temporary-request-basics .temporary-duration-group > div {
+        min-height: 42px;
+    }
+    .temporary-request-basics > .temporary-quantity-group > div,
+    .temporary-owner-summary .temporary-quantity-group > div,
     .temporary-duration-group > div {
-        max-width: 220px !important;
+        width: min(100%, 180px) !important;
+        max-width: 100% !important;
+    }
+    .temporary-owner-summary .temporary-quantity-group > div {
+        width: 100% !important;
     }
     .temporary-duration-group .temporary-day-step {
         width: 34px !important;
@@ -673,8 +785,15 @@
         .temporary-request-details-grid {
             grid-template-columns: 1fr !important;
         }
+        .temporary-request-basics,
+        .temporary-request-meta {
+            grid-template-columns: 1fr;
+        }
         .temporary-quantity-group,
         .temporary-owner-group,
+        .temporary-request-basics,
+        .temporary-request-meta,
+        .temporary-owner-card,
         .temporary-date-row,
         .temporary-signature-row,
         .temporary-duration-group,
@@ -685,6 +804,9 @@
             width: 100%;
             max-width: 100%;
             flex-basis: auto;
+        }
+        .temporary-request-meta > .temporary-purpose-group {
+            grid-column: 1 / -1;
         }
         .temporary-signature-wrap {
             width: 100%;
@@ -1190,53 +1312,7 @@
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Long Term Request Details' }}</h4>
         <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : '' }}">
             @if($isTemporaryRequest)
-            <div class="temporary-quantity-group">
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
-                <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
-                    <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-3 py-1.5 text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
-                </div>
-            </div>
-            <div class="temporary-owner-group">
-                <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                        <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
-                        <p class="mt-1 text-[9px] font-bold text-stone-500 dark:text-slate-400">1 unit = 1 owner. Add owner and pickup contact for each unit.</p>
-                    </div>
-                    <span id="temporaryPicCount" class="rounded-lg border border-[#0284c7]/20 bg-[#FDFBF7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#0284c7] dark:border-slate-700 dark:bg-slate-900">1 unit</span>
-                </div>
-                <div id="temporaryPicList" class="space-y-3"></div>
-                <datalist id="picOwnershipNameOptions">
-                    @foreach($ownershipNameOptions as $ownershipName)
-                    <option value="{{ $ownershipName }}"></option>
-                    @endforeach
-                </datalist>
-                <datalist id="picPickupPersonOptions">
-                    @foreach($pickupPersonOptions as $pickupPerson)
-                    <option value="{{ $pickupPerson }}"></option>
-                    @endforeach
-                </datalist>
-                <datalist id="picDepartmentOptions">
-                    @foreach($departmentOptions as $department)
-                    <option value="{{ $department }}"></option>
-                    @endforeach
-                </datalist>
-                <datalist id="picSectorOptions">
-                    @foreach($sectorOptions as $sector)
-                    <option value="{{ $sector }}"></option>
-                    @endforeach
-                </datalist>
-                <datalist id="picLocationOptions">
-                    @foreach($locationOptions as $location)
-                    <option value="{{ $location }}"></option>
-                    @endforeach
-                </datalist>
-                @error('pic_details')
-                    <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="temporary-date-row flex flex-col gap-5 md:flex-row md:flex-nowrap md:items-start">
+            <div class="temporary-request-basics">
                 <div class="temporary-duration-group">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">How Many Days</label>
                     <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
@@ -1255,6 +1331,8 @@
                     <input type="date" id="temporary_end_date" name="end_date" value="{{ old('end_date', old('request_date', date('Y-m-d'))) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
                     <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Please return the walkie talkie to ICT Department on this end date.</p>
                 </div>
+            </div>
+            <div class="temporary-request-meta">
                 <div class="temporary-purpose-group">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
                     <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
@@ -1262,22 +1340,6 @@
                     <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                     <input type="hidden" id="request_justification_fallback" name="justifications" value="{{ old('justifications', old('event_name')) }}">
                     <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
-                </div>
-            </div>
-            <div class="temporary-signature-row flex flex-col md:flex-row md:flex-nowrap md:items-start">
-                <div class="temporary-signature-wrap">
-                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
-                    <div class="executive-signature-pad" data-executive-signature-pad>
-                        <canvas></canvas>
-                        <div class="executive-signature-actions">
-                            <span class="executive-signature-hint">Sign inside the box</span>
-                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="request_signature" data-executive-signature-input>
-                    @error('request_signature')
-                        <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
-                    @enderror
                 </div>
             </div>
             @endif
@@ -1357,6 +1419,76 @@
             </div>
             @endunless
         </div>
+
+        @if($isTemporaryRequest)
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">3. Ownership Information</h4>
+        <div class="temporary-owner-card">
+            <div class="temporary-owner-summary mb-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
+                    <p class="mt-1 text-[9px] font-bold text-stone-500 dark:text-slate-400">1 unit = 1 owner. Add owner and pickup contact for each unit.</p>
+                </div>
+                <div class="temporary-quantity-group">
+                    <div class="mb-2 flex items-center justify-between gap-3">
+                        <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Quantity</label>
+                        <span id="temporaryPicCount" class="rounded-lg border border-[#0284c7]/20 bg-[#FDFBF7] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#0284c7] dark:border-slate-700 dark:bg-slate-900">1 unit</span>
+                    </div>
+                    <div class="flex overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
+                        <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
+                        <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-3 py-1.5 text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
+                        <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
+                    </div>
+                </div>
+            </div>
+            <div id="temporaryPicList" class="space-y-3"></div>
+            <datalist id="picOwnershipNameOptions">
+                @foreach($ownershipNameOptions as $ownershipName)
+                <option value="{{ $ownershipName }}"></option>
+                @endforeach
+            </datalist>
+            <datalist id="picPickupPersonOptions">
+                @foreach($pickupPersonOptions as $pickupPerson)
+                <option value="{{ $pickupPerson }}"></option>
+                @endforeach
+            </datalist>
+            <datalist id="picDepartmentOptions">
+                @foreach($departmentOptions as $department)
+                <option value="{{ $department }}"></option>
+                @endforeach
+            </datalist>
+            <datalist id="picSectorOptions">
+                @foreach($sectorOptions as $sector)
+                <option value="{{ $sector }}"></option>
+                @endforeach
+            </datalist>
+            <datalist id="picLocationOptions">
+                @foreach($locationOptions as $location)
+                <option value="{{ $location }}"></option>
+                @endforeach
+            </datalist>
+            @error('pic_details')
+                <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">4. Executive Signature</h4>
+        <div class="temporary-signature-row flex flex-col md:flex-row md:flex-nowrap md:items-start">
+            <div class="temporary-signature-wrap">
+                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
+                <div class="executive-signature-pad" data-executive-signature-pad>
+                    <canvas></canvas>
+                    <div class="executive-signature-actions">
+                        <span class="executive-signature-hint">Sign inside the box</span>
+                        <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                    </div>
+                </div>
+                <input type="hidden" name="request_signature" data-executive-signature-input>
+                @error('request_signature')
+                    <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        @endif
 
         <input type="hidden" name="pickup_method" value="self">
 
@@ -2015,15 +2147,14 @@
                 const saved = existingRows[index] || oldPicDetails[index] || {};
                 const row = document.createElement('div');
                 row.className = isTemporaryRequest
-                    ? 'rounded-2xl border border-[#0284c7]/15 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/70'
+                    ? 'temporary-unit-card'
                     : 'longterm-owner-card';
                 row.setAttribute('data-pic-row', '1');
                 row.innerHTML = `
-                    <button type="button" class="request-form-accordion-toggle longterm-owner-toggle" data-owner-section-toggle aria-expanded="false">
-                        <span class="request-form-accordion-title">${index + 1}. Ownership Information</span>
-                        <i class="fa-solid fa-chevron-down request-form-accordion-icon"></i>
-                    </button>
-                    <div class="request-form-accordion-panel longterm-owner-panel" data-owner-section-panel hidden>
+                    <div class="temporary-unit-header">
+                        <p class="temporary-unit-title">Ownership Profile</p>
+                        <span class="temporary-unit-chip">Unit ${index + 1}</span>
+                    </div>
                     <div class="theme-note-panel longterm-note-box mb-4 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
                         <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
@@ -2081,20 +2212,19 @@
                             <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
                             <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
                         </div>
-                        <div>
+                        <div class="owner-pickup-field">
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Who Will Pick Up This Walkie Talkie? <span class="text-red-500">*</span></label>
                             <select name="pic_details[${index}][pickup_person]" data-pic-pickup-person data-placeholder="Search pickup person..." class="pic-tag-select w-full" required>
                                 ${renderOptions(pickupPersonOptions, saved.pickup_person || '', 'Search pickup person...')}
                             </select>
                         </div>
-                        <div>
+                        <div class="owner-pickup-field">
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Pickup Phone No <span class="text-red-500">*</span></label>
                             <input type="text" name="pic_details[${index}][pickup_phone_no]" data-pic-pickup-phone value="${escapeAttribute(saved.pickup_phone_no || '')}" placeholder="E.G. 012-3456789" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
                         </div>
-                        <div class="md:col-span-3">
+                        <div class="owner-pickup-helper">
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">This name will be shown to ICT for pickup at ICT Department after approval.</p>
                         </div>
-                    </div>
                     </div>
                 `;
                 list.appendChild(row);
@@ -2295,13 +2425,6 @@
         $('#temporaryPicList').on('change', '[data-pic-ownership-type]', function () {
             syncPicSharedWithRows();
             syncRequestFallbackFields();
-        });
-        $('#temporaryPicList').on('click', '[data-owner-section-toggle]', function () {
-            const row = this.closest('[data-pic-row]');
-            const panel = row?.querySelector('[data-owner-section-panel]');
-            const isOpen = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-            if (panel) panel.hidden = isOpen;
         });
         $('#temporary_purpose_usage').on('input change', syncJustificationFallback);
         renderTemporaryPicRows();
