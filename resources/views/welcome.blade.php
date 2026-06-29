@@ -138,8 +138,9 @@
   .pub-nav-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 9px; color: #64748b; transition: all .2s; border: none; background: transparent; cursor: pointer; }
   .pub-nav-btn:hover { background: #f1f5f9; color: #0f172a; }
   
-  .pub-datepicker-lbl { display: flex; align-items: center; gap: .5rem; padding: 0 .75rem; cursor: pointer; font-weight: 700; font-size: .95rem; color: #0f172a; }
-  .pub-datepicker-lbl input { border: none; font-family: inherit; font-size: inherit; font-weight: inherit; color: inherit; padding: 0; cursor: pointer; outline: none; background:transparent; width: 130px; }
+  .pub-datepicker-lbl { display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; cursor: pointer; font-weight: 700; font-size: .95rem; color: #0f172a; position: relative; }
+  .pub-datepicker-lbl input[type="date"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
+  .pub-datepicker-lbl .pub-date-text { pointer-events: none; }
 
   /* Stats Bar */
   .pub-day-stats { display: flex; gap: 1.25rem; margin-bottom: 2.5rem; justify-content: center; flex-wrap: wrap; }
@@ -493,7 +494,8 @@
       <label class="pub-datepicker-lbl">
         <input type="date" id="rbViewDatePicker" value="{{ $viewDate }}"
                onchange="window.location.href='{{ route('hr.home') }}?date='+this.value+'&view={{ $viewMode }}'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#64748b;margin-left:auto;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="pub-date-text">{{ $navLabel }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       </label>
       <a href="{{ $nextNav }}" class="pub-nav-btn" title="Next">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
