@@ -220,6 +220,9 @@
         <div class="apr-row-icon" style="background:rgba(239,68,68,.1)"><i class="bi bi-trash" style="color:#dc2626"></i></div>
         <div class="apr-row-body">
           <div class="apr-row-title">{{ $delDesc }}</div>
+          @if($req->non_it_id)
+          <div style="margin-bottom:4px"><span style="display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><i class="bi bi-box-seam"></i> Non-IT Asset</span></div>
+          @endif
           <div class="apr-row-meta" style="margin-bottom:6px">
             @if($delClass)<span class="apr-tag">{{ $delClass }}</span>@endif
             <span class="apr-tag-muted" style="color:var(--accent);font-weight:600">{{ $delAssetNo }}</span>

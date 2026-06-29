@@ -1,6 +1,6 @@
 <div class="table-card">
   <div style="overflow-x:auto">
-    <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
+    <table class="table table-hover data-table {{ (!$user->isAdminOrFinance() && !$user->isReadOnlyViewer()) ? 'data-table--staff' : '' }}" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
         <th>ASSET NO.</th>

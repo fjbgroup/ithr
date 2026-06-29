@@ -132,14 +132,23 @@ class RequestController extends Controller
         $req = DeleteRequest::findOrFail($id);
         if ($req->status !== 'Pending') return back()->with('error', 'Request is no longer pending.');
 
-        if ($req->inventory_id) {
+        if ($req->non_it_id) {
+            \App\Models\IT\NonItAsset::where('id', $req->non_it_id)->delete();
+            $logType = 'non_it_asset';
+            $logId   = (int) $req->non_it_id;
+        } elseif ($req->inventory_id) {
             EwasteItem::where('original_inventory_id', $req->inventory_id)->delete();
             InventoryItem::where('id', $req->inventory_id)->delete();
+            $logType = 'inventory';
+            $logId   = (int) $req->inventory_id;
+        } else {
+            $logType = 'inventory';
+            $logId   = 0;
         }
 
         $req->update(['status' => 'Approved', 'reviewed_by' => Auth::guard('it')->id(), 'reviewed_at' => now()]);
         NotificationService::notifyUserWithEmail($req->requested_by, 'request_approved', 'Delete Request Approved', 'Your asset delete request has been approved.', route('it.inventory.index'));
-        ActivityLogService::log('APPROVE_DELETE', 'inventory', (int)$req->inventory_id, 'Approved delete request for: '.$req->asset_description);
+        ActivityLogService::log('APPROVE_DELETE', $logType, $logId, 'Approved delete request for: '.$req->asset_description);
 
         return redirect()->route('it.inventory.index', ['view' => 'pending_requests'])->with('success', 'Delete request approved.');
     }

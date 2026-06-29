@@ -57,15 +57,21 @@ class NonItAssetController extends Controller
                             ->mapWithKeys(fn($id) => [$id => true])
                             ->all();
 
+        $pendingDeleteIds = \App\Models\IT\DeleteRequest::whereNotNull('non_it_id')
+                            ->where('status', 'Pending')
+                            ->pluck('non_it_id')
+                            ->mapWithKeys(fn($id) => [$id => true])
+                            ->all();
+
         if ($request->boolean('partial')) {
             $user = Auth::guard('it')->user();
-            return response(view('it.non-it-assets.partials.live-table', compact('items', 'user', 'pendingEditIds', 'nit_total', 'search', 'class', 'status'))->render());
+            return response(view('it.non-it-assets.partials.live-table', compact('items', 'user', 'pendingEditIds', 'pendingDeleteIds', 'nit_total', 'search', 'class', 'status'))->render());
         }
 
         return view('it.non-it-assets.index', compact(
             'items', 'assetClasses', 'brands', 'locations',
             'nit_total', 'nit_active', 'nit_repair', 'nit_disp', 'nit_pending_wo', 'nit_pending_ewaste', 'filtered_total',
-            'nitClassesUsed', 'pendingEditIds', 'allLocations',
+            'nitClassesUsed', 'pendingEditIds', 'pendingDeleteIds', 'allLocations',
             'search', 'class', 'status', 'location'
         ));
     }
@@ -183,11 +189,28 @@ class NonItAssetController extends Controller
     public function destroy(int $id)
     {
         $user = Auth::guard('it')->user();
-        if (!$user->isAdminOrFinance()) abort(403);
         $item = NonItAsset::findOrFail($id);
-        ActivityLogService::log('DELETE', 'non_it_asset', $id, 'Deleted: '.$item->description);
-        $item->delete();
-        return redirect()->route('it.non-it.index')->with('success', 'Asset deleted.');
+
+        if ($user->isAdminOrFinance()) {
+            ActivityLogService::log('DELETE', 'non_it_asset', $id, 'Deleted: '.$item->description);
+            $item->delete();
+            return redirect()->route('it.non-it.index')->with('success', 'Asset deleted.');
+        }
+
+        if ($user->isReadOnlyViewer()) abort(403);
+
+        // Staff: submit a delete request for admin approval
+        \App\Models\IT\DeleteRequest::create([
+            'non_it_id'         => $id,
+            'requested_by'      => $user->id,
+            'reason'            => request('reason', ''),
+            'asset_number'      => $item->asset_number,
+            'asset_class'       => $item->asset_class,
+            'asset_description' => $item->description,
+        ]);
+        NotificationService::notifyAdmins('delete_request', 'Non-IT Asset Delete Request', $user->full_name.' requested to delete: '.$item->description, route('it.non-it.index'));
+        ActivityLogService::log('REQUEST_DELETE', 'non_it_asset', $id, 'Submitted delete request for: '.$item->description);
+        return redirect()->route('it.non-it.index')->with('success', 'Delete request submitted for admin approval.');
     }
 
     public function bulkDestroy(Request $request)
