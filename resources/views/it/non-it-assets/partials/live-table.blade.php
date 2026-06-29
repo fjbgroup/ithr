@@ -51,15 +51,15 @@
         <td style="font-size:13px;color:var(--muted)">{{ $row->total_cost !== null ? 'RM '.number_format((float)$row->total_cost,2) : '—' }}</td>
         <td style="font-size:13px;color:var(--muted)">{{ $row->accumulated !== null ? 'RM '.number_format((float)$row->accumulated,2) : '—' }}</td>
         <td style="font-size:13px;color:var(--muted)">{{ $row->nbv_at !== null ? 'RM '.number_format((float)$row->nbv_at,2) : '—' }}</td>
-        <td>
+        <td style="width:1%;white-space:nowrap">
           <button onclick="openNitQRModal({{ $row->id }}, '{{ addslashes(e($row->asset_number ?? 'N/A')) }}', '{{ addslashes(e($row->description)) }}', '{{ addslashes(e($row->fa_code ?? '')) }}', '{{ addslashes(e($row->location ?? '')) }}')"
             style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
             <i class="bi bi-qr-code" style="font-size:13px"></i>
           </button>
         </td>
         @if(!$user->isReadOnlyViewer())
-        <td>
-          <div style="display:flex;align-items:center;gap:4px">
+        <td style="width:1%;white-space:nowrap">
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
             @if(!in_array($row->item_status, ['Disposed', 'Pending for Write-Off', 'Pending to E-Waste/Disposal']))
             <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
               style="font-size:13px;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 7px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">

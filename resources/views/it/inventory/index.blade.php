@@ -357,7 +357,7 @@
       @endif
     </span>
   </div>
-  <div>
+  <div style="overflow-x:auto">
     <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         <th style="width:40px"><input type="checkbox" id="selectAll" style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></th>
@@ -369,8 +369,8 @@
         <th>TOTAL COST</th>
         <th>ACCUMULATED</th>
         <th>NBV AT</th>
-        <th>QR</th>
-        <th>ACTIONS</th>
+        <th style="width:1%;white-space:nowrap">QR</th>
+        <th style="width:1%;white-space:nowrap">ACTIONS</th>
       </tr></thead>
       <tbody>
       @forelse($items as $item)
@@ -405,13 +405,13 @@
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->total_cost ? number_format($item->total_cost, 2) : '—' }}</td>
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->accumulated ? number_format($item->accumulated, 2) : '—' }}</td>
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->nbv_at ? number_format($item->nbv_at, 2) : '—' }}</td>
-        <td>
+        <td style="width:1%;white-space:nowrap">
           <button onclick="openQRModal({{ $item->id }},{{ json_encode($item->asset_number) }},{{ json_encode($item->description) }},{{ json_encode($item->asset_class) }},{{ json_encode($item->serial_number) }},{{ json_encode($item->brand) }},{{ json_encode($item->model) }},{{ json_encode($item->location) }})"
             style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
             <i class="bi bi-qr-code" style="font-size:13px"></i>
           </button>
         </td>
-        <td>
+        <td style="width:1%;white-space:nowrap">
           <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
             {{-- E-Waste button --}}
             @if(($display_status === 'Active' || $user->isAdmin()) && !$user->isReadOnlyViewer())
