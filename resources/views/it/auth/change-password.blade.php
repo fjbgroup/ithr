@@ -7,7 +7,7 @@
 :root {
   --bg:#f0f2f5; --surface:#fff; --surface2:#f7f8fa;
   --border:#e2e5ea; --text:#1a1f2e; --muted:#6b7280;
-  --accent:#0284c7; --accent-h:#e07d1a; --red:#dc2626; --green:#16a34a;
+  --accent:#F7941D; --accent-h:#C96800; --red:#dc2626; --green:#16a34a;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:var(--bg);font-family:'Inter',sans-serif;
@@ -17,7 +17,7 @@ body::before{content:'';position:fixed;inset:0;
   background-image:radial-gradient(circle,#d1d5db 1px,transparent 1px);
   background-size:28px 28px;z-index:0;opacity:.5}
 body::after{content:'';position:fixed;width:600px;height:600px;
-  background:radial-gradient(circle,rgba(2,132,199,.13) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(247,148,29,.13) 0%,transparent 65%);
   top:-200px;right:-200px;z-index:0;animation:orb 10s ease-in-out infinite alternate}
 @keyframes orb{to{transform:translate(-60px,100px)}}
 
@@ -34,7 +34,7 @@ body::after{content:'';position:fixed;width:600px;height:600px;
 
 .card-header{padding:20px 36px 0;border-bottom:none}
 
-.warning-banner{background:rgba(2,132,199,.08);border:1.5px solid rgba(2,132,199,.3);
+.warning-banner{background:rgba(247,148,29,.08);border:1.5px solid rgba(247,148,29,.3);
   border-radius:12px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;margin-bottom:22px}
 .warning-banner i{color:var(--accent);font-size:20px;flex-shrink:0;margin-top:1px}
 .warning-banner strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
@@ -53,18 +53,18 @@ input[type="password"]{
   width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;
   color:var(--text);padding:13px 14px 13px 42px;font-size:14px;font-family:'Inter',sans-serif;
   transition:border-color .2s,box-shadow .2s;outline:none}
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(2,132,199,.1);background:#fff}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(247,148,29,.18);background:#fff}
 input::placeholder{color:#bfc5cc}
 
 .strength-bar{height:4px;border-radius:2px;background:var(--border);margin-top:8px;overflow:hidden}
 .strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
 
-.btn-submit{width:100%;margin-top:6px;background:var(--accent);color:#fff;border:none;
+.btn-submit{width:100%;margin-top:6px;background:linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%);color:#fff;border:none;
   border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
-  letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .1s,box-shadow .2s;
+  letter-spacing:.04em;cursor:pointer;transition:filter .2s,transform .1s,box-shadow .2s;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 4px 14px rgba(2,132,199,.35)}
-.btn-submit:hover{background:var(--accent-h);box-shadow:0 6px 20px rgba(2,132,199,.45);transform:translateY(-1px)}
+  box-shadow:0 4px 14px rgba(247,148,29,.4)}
+.btn-submit:hover{filter:brightness(1.08);box-shadow:0 6px 20px rgba(247,148,29,.5);transform:translateY(-1px)}
 .btn-submit:active{transform:none;box-shadow:none}
 
 .alert{border-radius:10px;padding:11px 14px;font-size:13px;margin-bottom:20px;display:flex;align-items:center;gap:9px}
@@ -134,7 +134,7 @@ input::placeholder{color:#bfc5cc}
       @endif
 
     </div>
-    <div class="divider">FJV Johor Bulkers Sdn Bhd</div>
+    <div class="divider">FGV Johor Bulkers Sdn Bhd</div>
   </div>
 
 </div>
