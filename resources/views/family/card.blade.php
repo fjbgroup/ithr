@@ -17,28 +17,28 @@
     <div class="fc-avatar" style="background:{{ $relColor }}1a;color:{{ $relColor }}; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">{{ $initials }}</div>
     <div class="fc-body" style="flex: 1;">
         <div class="fc-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-            <div class="fc-name" style="font-weight: 600; color: #0f172a;">{{ $r->display_name }}</div>
+            <div class="fc-name" style="font-weight: 600; color: var(--text);">{{ $r->display_name }}</div>
             <span class="rel-badge rel-{{ $relKey }}" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; background: {{ $relColor }}1a; color: {{ $relColor }}; font-weight: 600;">{{ $r->relationship }}</span>
         </div>
         <div class="fc-fields" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem;">
             @if($r->date_of_birth)
             <div class="fc-field">
-                <span class="fc-lbl" style="font-size: 0.7rem; color: #64748b; display: block;">Date of Birth</span>
-                <span class="fc-val" style="font-size: 0.85rem; color: #334155;">{{ \Carbon\Carbon::parse($r->date_of_birth)->format('d M Y') }}</span>
+                <span class="fc-lbl" style="font-size: 0.7rem; color: var(--muted); display: block;">Date of Birth</span>
+                <span class="fc-val" style="font-size: 0.85rem; color: var(--text);">{{ \Carbon\Carbon::parse($r->date_of_birth)->format('d M Y') }}</span>
             </div>
             @endif
             @if($r->phone_number)
             <div class="fc-field">
-                <span class="fc-lbl" style="font-size: 0.7rem; color: #64748b; display: block;">Phone</span>
-                <span class="fc-val" style="font-size: 0.85rem; color: #334155;">{{ $r->phone_number }}</span>
+                <span class="fc-lbl" style="font-size: 0.7rem; color: var(--muted); display: block;">Phone</span>
+                <span class="fc-val" style="font-size: 0.85rem; color: var(--text);">{{ $r->phone_number }}</span>
             </div>
             @endif
             <div class="fc-field">
-                <span class="fc-lbl" style="font-size: 0.7rem; color: #64748b; display: block;">Emergency Contact</span>      
+                <span class="fc-lbl" style="font-size: 0.7rem; color: var(--muted); display: block;">Emergency Contact</span>      
                 @if($r->emergency_contact === 'Yes')
                 <span class="badge-yes" style="font-size: 0.85rem; color: #16a34a; font-weight: 600;">✓ Yes</span>
                 @else
-                <span class="fc-val muted" style="font-size: 0.85rem; color: #94a3b8;">No</span>
+                <span class="fc-val muted" style="font-size: 0.85rem; color: var(--muted);">No</span>
                 @endif
             </div>
         </div>

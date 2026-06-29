@@ -53,9 +53,9 @@
 <div style="display:flex;align-items:center;gap:.75rem;padding:.55rem 1rem;margin-bottom:.75rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;">
     <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none;margin:0;">
         <input type="checkbox" id="fc-global-all" onchange="fcToggleAll(this)" style="width:16px;height:16px;cursor:pointer;accent-color:#6366f1;">
-        <span style="font-size:.82rem;color:#64748b;font-weight:500;">Select All</span>
+        <span style="font-size:.82rem;color:var(--muted);font-weight:500;">Select All</span>
     </label>
-    <span id="fc-global-count" style="font-size:.78rem;color:#94a3b8;margin-left:.25rem;"></span>
+    <span id="fc-global-count" style="font-size:.78rem;color:var(--muted);margin-left:.25rem;"></span>
 </div>
 @endcanwrite
 @foreach($grouped as $staff_id => $members)
@@ -88,7 +88,7 @@
     <div class="fc-list" style="padding: 1rem; background: var(--bg); border: 1px solid var(--border); border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
         @if(count($members) > 1)
         @canwrite
-        <label style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .5rem;margin-bottom:.6rem;cursor:pointer;user-select:none;font-size:.78rem;color:#64748b;">
+        <label style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .5rem;margin-bottom:.6rem;cursor:pointer;user-select:none;font-size:.78rem;color:var(--muted);">
             <input type="checkbox" class="fc-section-all" data-staff="{{ $staff_id }}" onchange="fcToggleSection(this,'{{ $staff_id }}')" onclick="event.stopPropagation()" style="width:14px;height:14px;cursor:pointer;accent-color:#6366f1;">
             Select all in this group
         </label>
@@ -113,7 +113,7 @@
             @foreach($spouses as $spouse)
             <details class="spouse-group" open style="margin-bottom: 0.5rem;">
                 <summary style="cursor: pointer; list-style: none; position: relative; outline: none; padding-left: 1.5rem;">
-                    <div style="position: absolute; left: 0.5rem; top: 1.5rem; font-size: 0.8rem; color: #64748b; transition: transform 0.2s;" class="spouse-arrow">▼</div>
+                    <div style="position: absolute; left: 0.5rem; top: 1.5rem; font-size: 0.8rem; color: var(--muted); transition: transform 0.2s;" class="spouse-arrow">▼</div>
                     @include('family.card', ['r' => $spouse, 'isIndented' => false])
                 </summary>
                 @if(!$childrenRendered && $children->isNotEmpty())
