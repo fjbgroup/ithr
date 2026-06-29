@@ -33,6 +33,16 @@ class SsoAutoLogin
                 $wtUser = \App\Models\WT\User::find($userId);
                 if ($wtUser && $wtUser->is_active && $wtUser->wt_role === null) {
                     session()->flash('wt_access_denied', true);
+                    session()->flash('error', "You don't have access to this system.");
+                }
+            }
+
+            if (! $loggedIn && $guard === 'it') {
+                $userId = session('_sso_user_id');
+                $itUser = \App\Models\IT\User::find($userId);
+                if ($itUser && $itUser->is_active && $itUser->it_role === null) {
+                    session()->flash('it_access_denied', true);
+                    session()->flash('error', "You don't have access to this system.");
                 }
             }
         }

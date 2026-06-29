@@ -16,6 +16,7 @@ class RedirectIfAuthenticated
             if ($user->wt_role === null) {
                 Auth::guard('wt')->logout();
                 session()->flash('wt_access_denied', true);
+                session()->flash('error', "You don't have access to this system.");
                 return redirect()->route('wt.login');
             }
 

@@ -24,7 +24,9 @@ class RoleMiddleware
 
         if ($itRole === null) {
             Auth::guard('it')->logout();
-            return redirect()->route('it.login')->with('error', 'You do not have access to the IT system.');
+            return redirect()->route('it.login')
+                ->with('it_access_denied', true)
+                ->with('error', "You don't have access to this system.");
         }
 
         foreach ($roles as $role) {

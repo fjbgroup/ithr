@@ -41,7 +41,10 @@ class LoginController extends Controller
         }
 
         if ($user->it_role === null) {
-            return back()->withErrors(['login' => 'You do not have access to the IT system. Please contact your IT administrator.'])->withInput(['username' => $input]);
+            return back()
+                ->with('it_access_denied', true)
+                ->with('error', "You don't have access to this system.")
+                ->withInput(['username' => $input]);
         }
 
         Auth::guard('it')->login($user);

@@ -122,6 +122,16 @@ input::placeholder{color:#94a3b8;}
 .alert{border-radius:10px;padding:11px 14px;font-size:13px;display:flex;align-items:center;gap:9px;margin-bottom:16px;font-weight:500;}
 .alert-error{background:#fee2e2;border:1px solid #fecaca;color:#991b1b;}
 .alert-success{background:#dcfce7;border:1px solid #bbf7d0;color:#166534;}
+.access-modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.48);padding:20px;backdrop-filter:blur(4px);}
+.access-modal.active{display:flex;}
+.access-card{width:100%;max-width:420px;border-radius:18px;background:#fff;padding:26px;text-align:center;box-shadow:0 30px 70px -24px rgba(15,23,42,.45);}
+.access-icon{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#fff1f2;color:#e11d48;margin-bottom:14px;font-size:26px;}
+.access-title{font-size:18px;font-weight:900;color:#101827;margin-bottom:10px;}
+.access-copy{font-size:14px;font-weight:600;line-height:1.6;color:#64748b;margin-bottom:22px;}
+.access-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.access-btn{border:0;border-radius:10px;min-height:42px;padding:0 18px;font:700 13px 'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;}
+.access-btn.primary{background:#0f223b;color:#fff;}
+.access-btn.secondary{background:#f1f5f9;color:#475569;}
 
 /* Bottom links inside right panel */
 .card-footer{margin-top:20px;text-align:center;}
@@ -229,6 +239,20 @@ input::placeholder{color:#94a3b8;}
 
 </div>
 
+@if(session('it_access_denied'))
+<div id="itAccessDeniedModal" class="access-modal active" onclick="if(event.target === this) this.classList.remove('active')">
+  <div class="access-card">
+    <div class="access-icon"><i class="bi bi-shield-x"></i></div>
+    <div class="access-title">Access Denied</div>
+    <div class="access-copy">You don't have access to this system.<br>Please contact ICT to request access.</div>
+    <div class="access-actions">
+      <a href="{{ url('/') }}" class="access-btn primary"><i class="bi bi-arrow-left"></i> Back to Portal</a>
+      <button type="button" class="access-btn secondary" onclick="document.getElementById('itAccessDeniedModal').classList.remove('active')">Dismiss</button>
+    </div>
+  </div>
+</div>
+@endif
+
 <script>
 function togglePassword() {
   const input = document.getElementById('password-input');
@@ -238,5 +262,3 @@ function togglePassword() {
 }
 </script>
 @endsection
-
-
