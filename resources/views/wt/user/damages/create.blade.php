@@ -1278,8 +1278,8 @@
         </div>
 
         <div class="damage-muted-panel mb-6 rounded-xl border border-sky-200 bg-sky-50 p-4">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                <div class="min-w-0 flex-1">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-8">
+                <div class="min-w-0">
                     <p class="text-[10px] font-black uppercase tracking-widest text-sky-700">Temporary Spare WT <span class="text-red-500">*</span></p>
                     <p class="mt-1 text-[11px] font-bold leading-5 text-sky-900">Do you need a spare walkie talkie while this unit is being checked or repaired?</p>
                     <p class="mt-1 text-[10px] font-bold leading-5 text-sky-700">ICT will decide based on your request, urgency, and available spare stock.</p>
