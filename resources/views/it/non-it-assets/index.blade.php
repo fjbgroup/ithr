@@ -84,7 +84,9 @@
 .nit-table th:nth-child(8),.nit-table td:nth-child(8){width:9%}                      /* accumulated */
 .nit-table th:nth-child(9),.nit-table td:nth-child(9){width:9%}                      /* nbv at */
 .nit-table th:nth-child(10),.nit-table td:nth-child(10){width:3%;text-align:center}  /* qr — tightened next to NBV AT */
-.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:22%;text-align:left;padding-left:120px!important} /* actions — widened, left-aligned & nudged right so all buttons show */
+.nit-table th:nth-child(11),.nit-table td:nth-child(11){width:22%;text-align:right;padding-right:20px!important} /* actions — right-aligned, empty space falls on the left */
+/* Push the action buttons to the right edge (admin/finance view); leaves the staff layout untouched */
+.nit-table:not(.nit-table--staff) td:nth-child(11)>div{justify-content:flex-end!important}
 /* ── Staff layout ── Staff has fewer/narrower action buttons, so drop the big right
    nudge, tighten Actions and give the space back to Description for a cleaner table. */
 .nit-table--staff th:nth-child(4),.nit-table--staff td:nth-child(4){width:13%}                                 /* description */
@@ -657,13 +659,13 @@
             {{-- Admin / Finance --}}
             @if($nitCanDispose)
             <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
-              style="font-size:13px;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 7px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-trash3-fill"></i> Dispose
+              style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-trash3-fill" style="font-size:11px"></i> Dispose
             </a>
             @endif
             <a href="#" onclick="openNitEditFormById({{ $row->id }});return false" title="Edit"
-              style="font-size:13px;color:var(--text);text-decoration:none;padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-pencil"></i> Edit
+              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:6px;background:var(--surface);display:inline-flex;align-items:center;gap:4px">
+              <i class="bi bi-pencil" style="font-size:11px"></i> Edit
             </a>
             <form method="POST" action="{{ route('it.non-it.destroy', $row->id) }}" style="display:inline" onsubmit="return confirm('Delete this asset? This cannot be undone.')">
               @csrf
