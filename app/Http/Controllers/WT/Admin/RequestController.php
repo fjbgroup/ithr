@@ -15,6 +15,26 @@ use Illuminate\Support\Str;
 
 class RequestController extends Controller
 {
+    private function effectiveWtRole(): ?string
+    {
+        $actualRole = auth('wt')->user()?->wt_role;
+
+        if ($actualRole === 'admin_it') {
+            return session('view_mode', $actualRole);
+        }
+
+        return $actualRole;
+    }
+
+    private function redirectIfNotExecutiveRequestView()
+    {
+        if ($this->effectiveWtRole() !== 'admin') {
+            return redirect()->route('wt.admin.dashboard');
+        }
+
+        return null;
+    }
+
     /**
      * HR staff lookup for executives registering ownership on behalf of their
      * team. Returns active staff records so the owner can be tied to a real HR
@@ -246,6 +266,10 @@ class RequestController extends Controller
 
     public function createShared()
     {
+        if ($redirect = $this->redirectIfNotExecutiveRequestView()) {
+            return $redirect;
+        }
+
         $currentUser = auth('wt')->user();
 
         return view('wt.admin.requests.create_shared', array_merge(
@@ -271,6 +295,10 @@ class RequestController extends Controller
 
     public function createTemporaryShared()
     {
+        if ($redirect = $this->redirectIfNotExecutiveRequestView()) {
+            return $redirect;
+        }
+
         $currentUser = auth('wt')->user();
 
         return view('wt.admin.requests.create_shared', array_merge(
@@ -296,6 +324,10 @@ class RequestController extends Controller
 
     protected function storeManagerRequest(Request $request, string $requestType)
     {
+        if ($redirect = $this->redirectIfNotExecutiveRequestView()) {
+            return $redirect;
+        }
+
         $submitAction = $request->input('submit_action') === 'draft' ? 'draft' : 'submit';
         $isDraft = $submitAction === 'draft';
         $isTemporaryRequest = $requestType === 'temporary_walkie_talkie';
@@ -1143,5 +1175,3 @@ class RequestController extends Controller
             });
     }
 }
-
-

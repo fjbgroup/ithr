@@ -6890,7 +6890,7 @@
             if (!modal || !title || !subtitle || !summaryHost || !bodyHost) return;
 
             title.textContent = summary.radio_id || '-';
-            subtitle.textContent = `${summary.model || '-'} Ã‚Â· ${summary.serial_number || '-'} Ã‚Â· ${summary.status || 'UNKNOWN'}`;
+            subtitle.textContent = `${summary.model || '-'} Ã‚· ${summary.serial_number || '-'} Ã‚· ${summary.status || 'UNKNOWN'}`;
 
             const summaryItems = [
                 ['Owner', summary.ownership || '-'],

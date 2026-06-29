@@ -37,7 +37,8 @@ class AuthController extends Controller
 
             if ($user->wt_role === null) {
                 return back()
-                    ->with('error', 'You do not have access to the Walkie Talkie system. Please contact ICT.')
+                    ->with('wt_access_denied', true)
+                    ->with('error', "You don't have access to this system.")
                     ->onlyInput('staff_no');
             }
 
@@ -55,11 +56,11 @@ class AuthController extends Controller
                 'created_at'  => now(),
             ]);
 
-            if ($user->wt_role === 'admin_it') {
-                return redirect()->route('wt.admin.dashboard');
+            if ($user->wt_role === 'user') {
+                return redirect()->route('wt.user.dashboard');
             }
 
-            return redirect()->route('wt.admin.requests.create.shared');
+            return redirect()->route('wt.admin.dashboard');
         }
 
         UserActivityLog::create([
@@ -161,5 +162,3 @@ class AuthController extends Controller
         return redirect()->route('wt.login')->with('success', 'Password reset request submitted. ICT will review your request and handle the password reset.');
     }
 }
-
-

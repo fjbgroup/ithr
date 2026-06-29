@@ -266,7 +266,7 @@
     <div class="divider"></div>
     
     <div class="back-link">
-        Already have an account? <a href="{{ route('wt.login') }}">Login here â†’</a>
+        Already have an account? <a href="{{ route('wt.login') }}">Login here →</a>
     </div>
 </div>
 

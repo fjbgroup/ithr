@@ -35,6 +35,10 @@ Route::prefix('wt')->name('wt.')->group(function () {
 
     // Authenticated routes — ICT-only sub-sections are further guarded by wt.role:admin_it
     Route::middleware(['wt.auth'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->middleware('wt.role:admin_it,admin')
+            ->name('dashboard');
+
         // Walkie Talkie Management
         Route::get('/repair-faulty', [WalkieTalkieController::class, 'repairFaulty'])->name('walkies.repairFaulty');
 
@@ -45,7 +49,6 @@ Route::prefix('wt')->name('wt.')->group(function () {
             Route::get('/walkies/create/unassigned', [WalkieTalkieController::class, 'createUnassigned'])->name('walkies.create.unassigned');
             Route::get('/walkies/create/special-use', [WalkieTalkieController::class, 'createSpecialUse'])->name('walkies.create.specialUse');
             Route::get('/walkies/create/duplicate', [WalkieTalkieController::class, 'createDuplicate'])->name('walkies.create.duplicate');
-            Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
             Route::get('/maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
             Route::get('/maintenance/create', [MaintenanceController::class, 'create'])->name('maintenance.create');
             Route::get('/maintenance/{maintenance}/timeline', [WalkieTalkieController::class, 'timelineFromMaintenance'])->name('maintenance.timeline');

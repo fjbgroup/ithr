@@ -218,7 +218,7 @@
         </div>
         <div class="wt-chatbot-header-info">
             <div class="wt-chatbot-header-title">WT Assistant</div>
-            <div class="wt-chatbot-header-sub">Powered by Ollama Â· Local AI</div>
+            <div class="wt-chatbot-header-sub">Powered by Ollama · Local AI</div>
         </div>
         <button class="wt-chatbot-clear-btn" onclick="wtClearChatHistory()" title="Clear conversation">Clear</button>
     </div>
@@ -226,7 +226,7 @@
         <div class="wt-chat-msg assistant">Hi {{ Auth::guard('wt')->user()->full_name ? explode(' ', Auth::guard('wt')->user()->full_name)[0] : 'there' }}! I'm your WT Assistant. Ask me anything about walkie talkie inventory, requests, or maintenance.</div>
     </div>
     <div class="wt-chatbot-footer">
-        <textarea id="wt-chatbot-input" placeholder="Ask anythingâ€¦" rows="1"></textarea>
+        <textarea id="wt-chatbot-input" placeholder="Ask anything…" rows="1"></textarea>
         <button id="wt-chatbot-send-btn" onclick="wtSendChatMessage()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>

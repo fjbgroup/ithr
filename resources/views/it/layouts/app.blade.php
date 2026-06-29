@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>@yield('title', 'Dashboard') â€” FJB Inventory System</title>
+<title>@yield('title', 'Dashboard') — FJB Inventory System</title>
 @include('partials.favicons')
 <script>
 (function () {
@@ -58,7 +58,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
-/* â”€â”€ SIDEBAR â”€â”€ */
+/* ── SIDEBAR ── */
 .sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
   background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:100;
@@ -120,7 +120,7 @@ button .badge-count{ margin-left:0; }
 }
 .btn-logout:hover{background:rgba(239,68,68,.15);color:#ef4444}
 
-/* â”€â”€ MAIN â”€â”€ */
+/* ── MAIN ── */
 .main-content{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;padding-top:60px}
 .topbar{
   background:var(--surface);border-bottom:1px solid var(--border);
@@ -151,7 +151,7 @@ button .badge-count{ margin-left:0; }
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
 .page-body{padding:0 28px;flex:1}
 
-/* â”€â”€ STAT CARDS â”€â”€ */
+/* ── STAT CARDS ── */
 .stat-card{
   background:var(--surface);border:1px solid var(--border);
   border-radius:12px;padding:20px 22px;
@@ -167,7 +167,7 @@ button .badge-count{ margin-left:0; }
 .stat-value{font-family:'Inter',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1}
 .stat-label{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
 
-/* â”€â”€ TABLE CARD â”€â”€ */
+/* ── TABLE CARD ── */
 .table-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
 .table-card-header{
   padding:16px 20px;border-bottom:1px solid var(--border);
@@ -191,14 +191,14 @@ button .badge-count{ margin-left:0; }
 .table tbody td span:not(.badge-status),.table tbody td div,.table tbody td a{color:var(--text) !important}
 .table tbody td code{color:var(--accent) !important}
 
-/* â”€â”€ BADGES â”€â”€ */
+/* ── BADGES ── */
 .badge-status{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
 .bs-active  {background:rgba(34,197,94,.12);color:#16a34a}
 .bs-disposed{background:rgba(239,68,68,.12);color:#dc2626}
 .bs-pending {background:rgba(245,158,11,.12);color:#d97706}
 .bs-repair  {background:rgba(59,130,246,.12);color:#2563eb}
 
-/* â”€â”€ FORM â”€â”€ */
+/* ── FORM ── */
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)}
 .form-label{color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
 .form-control,.form-select{
@@ -215,7 +215,7 @@ button .badge-count{ margin-left:0; }
 textarea.form-control{min-height:90px;resize:vertical}
 .form-control::placeholder{color:var(--muted);opacity:.7}
 
-/* â”€â”€ BUTTONS â”€â”€ */
+/* ── BUTTONS ── */
 .btn-primary-custom{
   background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;
   padding:9px 20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
@@ -242,7 +242,7 @@ textarea.form-control{min-height:90px;resize:vertical}
 .btn-view      {background:rgba(var(--accent-rgb),.1);color:var(--accent)}
 .btn-view:hover{background:rgba(var(--accent-rgb),.2);color:var(--accent)}
 
-/* â”€â”€ ALERTS â”€â”€ */
+/* ── ALERTS ── */
 .alert-success-custom{
   background:#dcfce7;border:1px solid #bbf7d0;
   color:#166534;border-radius:8px;padding:12px 16px;
@@ -284,13 +284,13 @@ table.dataTable tbody tr.even:hover{background-color:var(--table-hover) !importa
 table.dataTable tbody td{color:var(--text) !important}
 code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-radius:4px;font-size:12px}
 
-/* â”€â”€ TOPBAR TOGGLE â€” mobile only â”€â”€ */
+/* ── TOPBAR TOGGLE — mobile only ── */
 .sidebar-toggle{display:none;align-items:center;background:none;border:1.5px solid var(--border);
   border-radius:7px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:18px;font-family:'Inter',sans-serif;
   transition:border-color .15s,color .15s}
 .sidebar-toggle:hover{border-color:var(--accent);color:var(--accent)}
 
-/* â”€â”€ SIDEBAR CLOSE BUTTON (inside sidebar, expanded state only) â”€â”€ */
+/* ── SIDEBAR CLOSE BUTTON (inside sidebar, expanded state only) ── */
 .sb-close-btn{
   flex-shrink:0;margin-left:auto;
   width:28px;height:28px;
@@ -302,7 +302,7 @@ code{color:var(--accent);background:rgba(2,132,199,.08);padding:1px 5px;border-r
 .sb-close-btn:hover{background:rgba(255,255,255,.18);color:#fff;font-size:12px}
 html.sidebar-collapsed .sb-close-btn{display:none!important}
 
-/* â”€â”€ LOGO AS OPEN BUTTON (collapsed state) â”€â”€ */
+/* ── LOGO AS OPEN BUTTON (collapsed state) ── */
 .sb-open-icon{display:none}
 html.sidebar-collapsed .sb-logo-btn{cursor:pointer!important;position:relative!important}
 html.sidebar-collapsed .sb-logo-btn img{transition:opacity .15s}
@@ -313,16 +313,16 @@ html.sidebar-collapsed .sb-logo-btn .sb-open-icon{
 html.sidebar-collapsed .sb-logo-btn:hover img{opacity:0}
 html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon{opacity:1}
 
-/* â”€â”€ COLLAPSE TRANSITIONS â”€â”€ */
+/* ── COLLAPSE TRANSITIONS ── */
 .main-content{transition:margin-left .3s ease}
 .topbar{transition:left .3s ease}
 
-/* â”€â”€ DESKTOP COLLAPSED (icon rail) â”€â”€ */
+/* ── DESKTOP COLLAPSED (icon rail) ── */
 html.sidebar-collapsed .sidebar{width:64px}
 html.sidebar-collapsed .main-content{margin-left:64px}
 html.sidebar-collapsed .topbar{left:64px}
 
-/* â”€â”€ ICON RAIL STYLES â”€â”€ */
+/* ── ICON RAIL STYLES ── */
 html.sidebar-collapsed .sidebar-nav{padding:16px 0}
 html.sidebar-collapsed .sidebar-brand{padding:14px 8px;justify-content:center}
 html.sidebar-collapsed .sidebar-brand .brand-name{display:none!important}
@@ -342,7 +342,7 @@ html.sidebar-collapsed .sidebar-footer .user-card i{display:none!important}
 html.sidebar-collapsed .btn-logout{font-size:0!important;padding:10px 0!important;justify-content:center!important;gap:0!important}
 html.sidebar-collapsed .btn-logout i{font-size:15px!important}
 
-/* â”€â”€ COLLAPSED ACTIVE STATE â”€â”€ */
+/* ── COLLAPSED ACTIVE STATE ── */
 html.sidebar-collapsed .sidebar-nav .nav-link.active {
   background: rgba(56,189,248,.18) !important;
   border-left: 3px solid var(--sky) !important;
@@ -358,7 +358,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
   color: var(--sky) !important;
 }
 
-/* â”€â”€ MOBILE â”€â”€ */
+/* ── MOBILE ── */
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);width:var(--sidebar-w)!important;overflow-y:auto}
   .sidebar.open{transform:none}
@@ -367,7 +367,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
   .sidebar-toggle{display:flex}
 }
 
-/* â”€â”€ COLLAPSED SIDEBAR HOVER TOOLTIPS â”€â”€ */
+/* ── COLLAPSED SIDEBAR HOVER TOOLTIPS ── */
 .sb-tooltip{position:fixed;transform:translateY(-50%);background:#1e293b;color:#fff;padding:.4rem .65rem;border-radius:7px;font-size:.75rem;font-weight:600;white-space:nowrap;z-index:2000;pointer-events:none;opacity:0;transition:opacity .12s ease;box-shadow:0 6px 16px rgba(0,0,0,.22)}
 .sb-tooltip.show{opacity:1}
 .sb-tooltip::before{content:'';position:absolute;right:100%;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:#1e293b}
@@ -482,19 +482,19 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     }
     </script>
 
-    {{-- Write Off â€” all users --}}
+    {{-- Write Off — all users --}}
     <a href="{{ route('it.writeoff.index') }}" class="nav-link {{ request()->routeIs('writeoff.index') || request()->routeIs('writeoff.hou-sign') || request()->routeIs('writeoff.gm-sign') || request()->routeIs('writeoff.ceo-approve') || request()->routeIs('writeoff.assign-hou') ? 'active' : '' }}">
       <i class="bi bi-pen-fill"></i> Write Off
     </a>
 
-    {{-- Write Off Inventory â€” Finance Admin only --}}
+    {{-- Write Off Inventory — Finance Admin only --}}
     @if($user->isFinanceAdmin())
     <a href="{{ route('it.writeoff-inventory.index') }}" class="nav-link {{ request()->routeIs('writeoff-inventory.*') ? 'active' : '' }}">
       <i class="bi bi-clipboard2-x-fill"></i> Write Off Inventory
     </a>
     @endif
 
-    {{-- E-Waste â€” Admin + Finance only --}}
+    {{-- E-Waste — Admin + Finance only --}}
     @if($user->isAdminOrFinance())
     @php $ewActive = request()->routeIs('ewaste.*') || request()->routeIs('ewaste.collected'); @endphp
     <div>
@@ -530,7 +530,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     }
     </script>
 
-    {{-- Disposal â€” Admin + Finance only --}}
+    {{-- Disposal — Admin + Finance only --}}
     @php $dispActive = request()->routeIs('disposal.*'); @endphp
     <div>
       <button onclick="toggleDisposal()" id="disposalToggle" class="{{ $dispActive ? 'sb-active' : '' }}"
@@ -565,7 +565,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     }
     </script>
 
-    {{-- Reports â€” Admin + Finance only --}}
+    {{-- Reports — Admin + Finance only --}}
     @php $rptActive = request()->routeIs('reports.*'); @endphp
     <div>
       <button onclick="toggleReports()" id="reportsToggle" class="{{ $rptActive ? 'sb-active' : '' }}"
@@ -601,7 +601,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     </script>
     @endif
 
-    {{-- Request Form â€” all users --}}
+    {{-- Request Form — all users --}}
     <div class="nav-section-label">Request Form</div>
     @php
       $itrActive = request()->routeIs('it-request-form') || request()->routeIs('it-request-form.drafts');
@@ -790,7 +790,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
-// â”€â”€ LIVE CLOCK â”€â”€
+// ── LIVE CLOCK ──
 (function() {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -805,7 +805,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
   setInterval(tick, 60000);
 })();
 
-// â”€â”€ THEME â”€â”€
+// ── THEME ──
 const DARK_VARS = {
   '--sidebar-bg':    '#1a2235',
   '--sidebar-hover': '#243044',
@@ -882,7 +882,7 @@ function toggleTheme() {
   applyTheme(theme === 'dark');
 })();
 
-// â”€â”€ DATATABLES â”€â”€
+// ── DATATABLES ──
 $(document).ready(function () {
   const isInventory = window.location.pathname.includes('inventory');
   const isEwaste    = window.location.pathname.includes('ewaste');
@@ -896,8 +896,8 @@ $(document).ready(function () {
         search: '',
         searchPlaceholder: 'Search...',
         lengthMenu: 'Show _MENU_',
-        info: 'Showing _START_â€“_END_ of _TOTAL_ items',
-        paginate: { previous: 'â† Previous', next: 'Next â†’' }
+        info: 'Showing _START_-_END_ of _TOTAL_ items',
+        paginate: { previous: 'â† Previous', next: 'Next →' }
       },
       drawCallback: function() {
         if (typeof window._onDtDraw === 'function') window._onDtDraw();
@@ -908,7 +908,7 @@ $(document).ready(function () {
   setTimeout(() => $('.alert-success-custom, .alert-danger-custom').fadeOut(500), 4000);
 });
 
-// â”€â”€ BELL NOTIFICATION â”€â”€
+// ── BELL NOTIFICATION ──
 (function() {
   var bellWrap = document.getElementById('notifWrap');
   if (!bellWrap) return;
@@ -1031,11 +1031,11 @@ $(document).ready(function () {
 </script>
 
 {{-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•— --}}
-{{-- â•‘                        EASTER EGG                           â•‘ --}}
-{{-- â•‘  Triggered by clicking the sidebar header 5 times.          â•‘ --}}
-{{-- â•‘  Developed by: Muhammad Irfan bin Zuraili                   â•‘ --}}
-{{-- â•‘  DO NOT REMOVE OR MODIFY THIS BLOCK.                        â•‘ --}}
-{{-- â•‘  Protected by git pre-commit hook (.git/hooks/pre-commit)   â•‘ --}}
+{{-- ║                        EASTER EGG                           ║ --}}
+{{-- ║  Triggered by clicking the sidebar header 5 times.          ║ --}}
+{{-- ║  Developed by: Muhammad Irfan bin Zuraili                   ║ --}}
+{{-- ║  DO NOT REMOVE OR MODIFY THIS BLOCK.                        ║ --}}
+{{-- ║  Protected by git pre-commit hook (.git/hooks/pre-commit)   ║ --}}
 {{-- â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <!-- EASTER EGG -->
 <style>
@@ -1082,7 +1082,7 @@ $(document).ready(function () {
         <tr style="border-bottom:1px solid var(--border)">
           <td style="padding:9px 0"><i class="bi bi-calendar3" style="color:#0d9488"></i></td>
           <td style="padding:9px 0 9px 10px;color:var(--muted);font-weight:600">Period</td>
-          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 â€“ 17/07/2026)</td>
+          <td style="padding:9px 0;color:var(--text);font-weight:700">UniKL MIIT Internship Programme (02/03/2026 - 17/07/2026)</td>
         </tr>
         <tr>
           <td style="padding:9px 0"><i class="bi bi-building" style="color:#d97706"></i></td>
@@ -1106,7 +1106,7 @@ $(document).ready(function () {
       </button>
     </div>
 
-    {{-- Cutout character â€” inside card, anchored bottom-right --}}
+    {{-- Cutout character — inside card, anchored bottom-right --}}
     <img id="eggCharImg" src="" alt="Irfan"
       style="position:absolute;bottom:0;right:0;height:260px;width:auto;pointer-events:none;user-select:none;display:block">
   </div>
@@ -1184,7 +1184,7 @@ $(document).ready(function () {
 </script>
 
 <script>
-// â”€â”€ SIDEBAR COLLAPSE â”€â”€
+// ── SIDEBAR COLLAPSE ──
 function toggleSidebar() {
   if (window.innerWidth <= 768) {
     document.getElementById('sidebar').classList.toggle('open');

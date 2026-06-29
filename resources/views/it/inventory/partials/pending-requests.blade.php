@@ -1,5 +1,5 @@
 <style>
-/* â•â• Pending Requests (admin) â€” mirrors My Requests layout â•â• */
+/* â•â• Pending Requests (admin) — mirrors My Requests layout â•â• */
 .apr-wrap{max-width:860px;margin:0 auto}
 .apr-hero{background:linear-gradient(135deg,var(--navy,#142b47) 0%,#1e3a5f 100%);border-radius:16px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .apr-hero-title{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:#fff;margin:0 0 5px}
@@ -91,7 +91,7 @@
   @endforeach
 </div>
 
-{{-- â”€â”€ TAB 1: ADD ASSET â”€â”€ --}}
+{{-- ── TAB 1: ADD ASSET ── --}}
 <div class="apr-tab-panel active" id="aprpanel-add">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -119,7 +119,7 @@
             @if($req->serial_number)<span class="apr-tag-muted">S/N {{ $req->serial_number }}</span>@endif
             @if($req->brand || $req->model)<span class="apr-tag-muted">{{ trim(($req->brand ?? '').' '.($req->model ?? '')) }}</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>
@@ -141,7 +141,7 @@
   </div>
 </div>
 
-{{-- â”€â”€ TAB 2: E-WASTE â”€â”€ --}}
+{{-- ── TAB 2: E-WASTE ── --}}
 <div class="apr-tab-panel" id="aprpanel-ew">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -171,7 +171,7 @@
             @if($req->asset_number)<span class="apr-tag-muted" style="color:var(--accent);font-weight:600">{{ $req->asset_number }}</span>@endif
             @if($req->serial_number)<span class="apr-tag-muted">S/N {{ $req->serial_number }}</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>
@@ -193,7 +193,7 @@
   </div>
 </div>
 
-{{-- â”€â”€ TAB 3: DELETE â”€â”€ --}}
+{{-- ── TAB 3: DELETE ── --}}
 <div class="apr-tab-panel" id="aprpanel-del">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -213,7 +213,7 @@
     @php
       $delDesc    = $req->inventoryItem?->description ?? $req->asset_description ?? '(Asset removed)';
       $delClass   = $req->inventoryItem?->asset_class ?? $req->asset_class ?? '';
-      $delAssetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? 'â€”';
+      $delAssetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? '—';
     @endphp
     <div class="apr-row">
       <div class="apr-row-top">
@@ -225,7 +225,7 @@
             <span class="apr-tag-muted" style="color:var(--accent);font-weight:600">{{ $delAssetNo }}</span>
             @if($req->reason)<span class="apr-tag-muted" style="font-style:italic">"{{ $req->reason }}"</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>
@@ -247,7 +247,7 @@
   </div>
 </div>
 
-{{-- â”€â”€ TAB 4: EDIT ASSET â”€â”€ --}}
+{{-- ── TAB 4: EDIT ASSET ── --}}
 <div class="apr-tab-panel" id="aprpanel-edit">
   <div class="apr-section">
     <div class="apr-section-hdr">
@@ -272,7 +272,7 @@
           @if($req->asset_type === 'non_it')
           <div style="margin-bottom:4px"><span style="display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><i class="bi bi-box-seam"></i> Non-IT Asset</span></div>
           @else
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>{{ $req->inventoryItem?->description ?? 'â€”' }}</em></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>{{ $req->inventoryItem?->description ?? '—' }}</em></div>
           @endif
           <div class="apr-row-meta" style="margin-bottom:6px">
             @if($req->asset_class)<span class="apr-tag">{{ $req->asset_class }}</span>@endif
@@ -280,7 +280,7 @@
             @if($req->serial_number)<span class="apr-tag-muted">S/N {{ $req->serial_number }}</span>@endif
             @if($req->location)<span class="apr-tag-muted"><i class="bi bi-geo-alt" style="font-size:10px"></i> {{ $req->location }}</span>@endif
           </div>
-          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? 'â€”' }}</span>
+          <span class="apr-requester"><i class="bi bi-person-fill" style="font-size:10px"></i>{{ $req->requester?->full_name ?? '—' }}</span>
         </div>
         <div class="apr-row-right">
           <div class="apr-row-date">{{ \Carbon\Carbon::parse($req->created_at)->format('d M Y') }}<br>{{ \Carbon\Carbon::parse($req->created_at)->format('H:i') }}</div>

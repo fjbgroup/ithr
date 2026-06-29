@@ -72,7 +72,7 @@
         'room-purple' => ['dot' => '#534AB7', 'light' => '#EEEDFE'],
         'room-yellow' => ['dot' => '#BA7517', 'light' => '#FFFDE7'],
     ];
-    $roomEmojis = ['ðŸ›‹ï¸', 'ðŸ”', 'ðŸŽ“', 'ðŸŒŠ', 'â­', 'ðŸ¢', 'ðŸ’¡', 'ðŸ“‹'];
+    $roomEmojis = ['🛋️', '🔧', '🎓', '🌊', '⭐', '🏢', '💡', '📋'];
 
     $ts_prev = Carbon\Carbon::parse($viewDate);
     $ts_next = Carbon\Carbon::parse($viewDate);
@@ -92,7 +92,7 @@
     $navLabel = '';
     $ts = strtotime($viewDate);
     if ($viewMode === 'week') {
-        $navLabel = date('d M', strtotime($rangeStart)) . ' â€“ ' . date('d M Y', strtotime($rangeEnd));
+        $navLabel = date('d M', strtotime($rangeStart)) . ' - ' . date('d M Y', strtotime($rangeEnd));
     } elseif ($viewMode === 'month') {
         $navLabel = date('F Y', $ts);
     } else {
@@ -105,7 +105,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Meeting Room Availability â€” HR Admin System</title>
+<title>Meeting Room Availability - HR Admin System</title>
 @include('partials.favicons')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -208,7 +208,7 @@
   .form-group input, .form-group select { border-radius: 12px; border: 1.5px solid #e2e8f0; padding: .75rem 1rem; font-weight: 500; }
   .form-group input:focus { border-color: #0f172a; box-shadow: 0 0 0 4px rgba(15,23,42,0.05); }
 
-  /* â”€â”€ Staff Login modal: matched login styling â”€â”€ */
+  /* ── Staff Login modal: matched login styling ── */
   #loginConfirmModal .form-group label { text-transform: none; letter-spacing: 0; font-size: .8rem; font-weight: 600; color: #1e293b; }
   #loginConfirmModal .lcm-input-wrap { position: relative; }
   #loginConfirmModal .lcm-input-wrap > svg.lead {
@@ -389,7 +389,7 @@
   @media (max-width:640px) {
     .rb-room-options { grid-template-columns: 1fr; }
 
-    /* â”€â”€ Guest booking modal: make it fit the phone, no sideways scroll â”€â”€ */
+    /* ── Guest booking modal: make it fit the phone, no sideways scroll ── */
     #guestBookModal .modal-box,
     #loginConfirmModal .modal-box { border-radius: 18px; overflow-x: hidden; }
 
@@ -433,13 +433,13 @@
 
 @if(session('success'))
 <div style="background:#dcfce7;border-bottom:1px solid #bbf7d0;padding:.65rem 1.5rem;font-size:.875rem;color:#166534;display:flex;align-items:center;gap:.5rem;">
-  âœ“ {{ session('success') }}
+  ✓ {{ session('success') }}
 </div>
 @endif
 
 @if(session('error'))
 <div style="background:#fee2e2;border-bottom:1px solid #fecaca;padding:.65rem 1.5rem;font-size:.875rem;color:#991b1b;display:flex;align-items:center;gap:.5rem;">
-  âœ• {{ session('error') }}
+  ✕ {{ session('error') }}
 </div>
 @endif
 
@@ -465,8 +465,8 @@
 </div>
 
 <div class="pub-notice">
-  <span>âœ¨</span>
-  <span>You're viewing as a <strong>guest</strong>. Browse availability freely â€” <a href="{{ route('login') }}">login</a> to book a room.</span>
+  <span>✨</span>
+  <span>You're viewing as a <strong>guest</strong>. Browse availability freely — <a href="{{ route('login') }}">login</a> to book a room.</span>
 </div>
 
 <div class="pub-container">
@@ -544,15 +544,15 @@
   @endphp
   <div class="pub-schedule-card" id="pubScheduleCard">
     <div class="pub-sch-hd" onclick="pubToggleSchedule()">
-      <div style="background:#f1f5f9;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">ðŸ“‹</div>
+      <div style="background:#f1f5f9;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📋</div>
       <span>{{ $isToday ? "Today's Schedule" : date('d M Y', strtotime($viewDate)).' Schedule' }}</span>
       <span class="pub-sch-badge">{{ $scheduledCount }} event{{ $scheduledCount!==1?'s':'' }}</span>
-      <span class="pub-sch-caret" id="pubSchCaret">â–¾</span>
+      <span class="pub-sch-caret" id="pubSchCaret">▼</span>
     </div>
     <div class="pub-sch-body" id="pubSchBody">
       @if ($sortedBkgs->isEmpty())
       <div style="padding:3rem 1.5rem;text-align:center;">
-        <div style="font-size:2rem;margin-bottom:1rem;">â˜•</div>
+        <div style="font-size:2rem;margin-bottom:1rem;">☕</div>
         <div style="font-weight:800;font-size:1.1rem;color:#0f172a;margin-bottom:.5rem;">Quiet day ahead</div>
         <div style="color:#64748b;font-size:.9rem;">No meetings scheduled for this date. All rooms are ready to book!</div>
       </div>
@@ -609,9 +609,9 @@
       <div class="rb-room-info">
         <div class="rb-room-name">{{ $rm->name }}</div>
         <div class="rb-room-meta">
-          <span>ðŸ‘¥ Up to {{ (int)$rm->capacity }}</span>
+          <span>👥 Up to {{ (int)$rm->capacity }}</span>
           @if ($picNames)
-          <span title="PIC">ðŸ”‘ {{ $picNames }}</span>
+          <span title="PIC">🔑 {{ $picNames }}</span>
           @endif
         </div>
       </div>
@@ -622,7 +622,7 @@
       @php $visible = $rmBkgs->filter(fn($b) => $b->status !== 'Rejected')->sortBy('start_time'); @endphp
       @if ($visible->isEmpty())
       <div class="rb-empty-day">
-        <div style="font-size:1.5rem;margin-bottom:.5rem;">ðŸ—“ï¸</div>
+        <div style="font-size:1.5rem;margin-bottom:.5rem;">🗓️</div>
         <div style="font-weight:700;color:#0f172a;margin-bottom:.2rem;">No meetings yet</div>
         <div style="color:#64748b;font-size:.78rem;">This room is fully available.</div>
       </div>
@@ -648,7 +648,7 @@
 
     @if ($isPastDay)
     <div class="rb-card-footer" style="background:var(--bg);text-align:center;padding:.75rem;">
-      <span style="font-size:.8rem;color:#94a3b8;font-weight:600;">ðŸ“… Past date â€” view only</span>
+      <span style="font-size:.8rem;color:#94a3b8;font-weight:600;">📅 Past date — view only</span>
     </div>
     @else
     <div class="rb-card-footer">
@@ -666,11 +666,11 @@
   <!-- WEEK VIEW -->
   <div class="pub-view-legend">
     <span class="pvl-item pvl-free">Free</span>
-    <span class="pvl-item pvl-light">1â€“2 bookings</span>
-    <span class="pvl-item pvl-mod">3â€“4 bookings</span>
+    <span class="pvl-item pvl-light">1-2 bookings</span>
+    <span class="pvl-item pvl-mod">3-4 bookings</span>
     <span class="pvl-item pvl-busy">5+ bookings</span>
   </div>
-  <p class="pub-scroll-hint">Swipe left/right to see all days â†’</p>
+  <p class="pub-scroll-hint">Swipe left/right to see all days →</p>
   <div class="pwt-wrap">
     <div class="pwt-head">
       <div class="pwt-room-col">Room</div>
@@ -713,8 +713,8 @@
   <!-- MONTH VIEW -->
   <div class="pub-view-legend">
     <span class="pvl-item pvl-free">No bookings</span>
-    <span class="pvl-item pvl-light">1â€“3 bookings</span>
-    <span class="pvl-item pvl-mod">4â€“6 bookings</span>
+    <span class="pvl-item pvl-light">1-3 bookings</span>
+    <span class="pvl-item pvl-mod">4-6 bookings</span>
     <span class="pvl-item pvl-busy">7+ bookings</span>
   </div>
   <div class="pmc-wrap">
@@ -764,15 +764,15 @@
         <h3 style="margin:0;">Book <span id="guestModalRoomName" style="color:#0f172a;"></span></h3>
         <div id="guestModalRoomMeta" style="font-size:.85rem;color:#64748b;margin-top:.25rem;font-weight:500;"></div>
       </div>
-      <button class="modal-close" onclick="closeModal()">Ã—</button>
+      <button class="modal-close" onclick="closeModal()">×</button>
     </div>
 
     <div class="guest-pad" style="padding:1.5rem 2rem 0;">
       <div id="guestPastWarn" class="alert alert-warning" style="display:none;margin-bottom:1rem;border-radius:12px;">
-        âš ï¸ Past day cannot book
+        ⚠️ Past day cannot book
       </div>
       <div id="guestConflictWarn" class="alert alert-danger" style="display:none;margin-bottom:1rem;border-radius:12px;">
-        âš ï¸ This slot is already taken.
+        ⚠️ This slot is already taken.
       </div>
       <div id="guestOccSlots" class="rb-modal-occ" style="display:none;margin-bottom:1.25rem;padding:1rem;background:#fff7ed;border:1px solid #ffedd5;border-radius:12px;">
         <div style="font-size:.75rem;font-weight:800;color:#9a3412;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">Occupied Times</div>
@@ -834,7 +834,7 @@
           <span class="rb-dur-pill" onclick="guestSetDuration(60,this)">1h</span>
           <span class="rb-dur-pill" onclick="guestSetDuration(120,this)">2h</span>
         </div>
-        <button type="button" id="guestFullDay" class="btn btn-ghost btn-sm" onclick="guestSetFullDay()" style="display:none;color:#0f172a;font-weight:700;">â˜€ï¸ Full Day</button>       
+        <button type="button" id="guestFullDay" class="btn btn-ghost btn-sm" onclick="guestSetFullDay()" style="display:none;color:#0f172a;font-weight:700;">☀️ Full Day</button>       
       </div>
     </div>
 
@@ -857,7 +857,7 @@
               </div>
               <div class="rb-rs-info">
                 <div class="rb-rs-name">{{ $rm->name }}</div>
-                <div class="rb-rs-meta">ðŸ‘¥ {{ $rm->capacity }} seats</div>
+                <div class="rb-rs-meta">👥 {{ $rm->capacity }} seats</div>
               </div>
               <div class="rb-rs-emoji">{{ $roomEmojis[$loop->index % count($roomEmojis)] }}</div>
             </label>
@@ -889,7 +889,7 @@
     <!-- CART / BOOKING LIST -->
     <div class="rb-modal-section" id="guestCartWrap" style="display:none;background:var(--bg);padding-top:1.5rem;padding-bottom:1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
       <div style="font-size:.8rem;font-weight:800;color:#0f172a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;">
-        <div style="background:#0f172a;color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;">âœ“</div>
+        <div style="background:#0f172a;color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;">✓</div>
         Your Booking List
       </div>
       <div id="guestCartList" style="display:flex;flex-direction:column;gap:.75rem;"></div>
@@ -913,7 +913,7 @@
         <h3 id="lcmTitle" style="margin:0;">Verify Identity</h3>
         <div id="lcmSubtitle" style="font-size:.85rem;color:#64748b;margin-top:.25rem;font-weight:500;">Please sign in to confirm your booking.</div>
       </div>
-      <button class="modal-close" onclick="closeModal()">Ã—</button>
+      <button class="modal-close" onclick="closeModal()">×</button>
     </div>
 
     <!-- Booking summary card -->
@@ -982,7 +982,7 @@
       </div>
 
       <div class="modal-footer" style="padding:0;margin-top:.25rem;border:none;">
-        <button type="button" class="btn btn-ghost" id="lcmBackBtn" onclick="lcmBack()">â† Back</button>
+        <button type="button" class="btn btn-ghost" id="lcmBackBtn" onclick="lcmBack()">← Back</button>
         <button type="submit" class="btn btn-primary">
           Sign In
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -1226,7 +1226,7 @@ function guestRefreshOccupied() {
     if (!hasAnyFree) {
         wrap.style.display = 'block'; wrap.style.borderColor = '#dc2626'; wrap.style.background = '#fef2f2';
         fullDayBtn.style.display = 'none';
-        list.innerHTML = '<div style="color:#dc2626;font-weight:700;width:100%;text-align:center;padding:.5rem;">ðŸš« Fully booked, please choose another option.</div>';
+        list.innerHTML = '<div style="color:#dc2626;font-weight:700;width:100%;text-align:center;padding:.5rem;">🚫 Fully booked, please choose another option.</div>';
         return;
     }
     if (all.length === 0) {
@@ -1239,7 +1239,7 @@ function guestRefreshOccupied() {
         all.forEach(b => {
             const pill = document.createElement('span');
             pill.className = 'rb-mocc-pill';
-            pill.textContent = b.start_time.substring(0,5) + ' â€“ ' + b.end_time.substring(0,5);
+            pill.textContent = b.start_time.substring(0,5) + ' - ' + b.end_time.substring(0,5);
             list.appendChild(pill);
         });
     }
@@ -1260,7 +1260,7 @@ function guestCheckCapacity() {
     if (!rm) { hint.textContent=''; return true; }
     const cap = parseInt(rm.capacity);
     if (attendees > cap) {
-        hint.innerHTML = `<span style="color:#dc2626;font-weight:600;">âš ï¸ Exceeds limit â€” max ${cap} seats</span>`;
+        hint.innerHTML = `<span style="color:#dc2626;font-weight:600;">⚠️ Exceeds limit — max ${cap} seats</span>`;
         return false;
     }
     hint.innerHTML = `<span style="color:#16a34a;">${cap-attendees} of ${cap} seat(s) remaining</span>`;
@@ -1280,7 +1280,7 @@ function guestUpdateSummary() {
     const [eh,em] = end.split(':').map(Number);
     const d = (eh*60+em)-(sh*60+sm);
     const dur = d>0 ? (Math.floor(d/60)?(Math.floor(d/60)+'h '):'')+(d%60?(d%60+'m'):'') : '';
-    el.innerHTML = '<strong>'+rm.name+'</strong> Â· '+date+' Â· '+start+'â€“'+end+(dur?' ('+dur.trim()+')':'')+(purp?'<br><span style="color:#94a3b8">"'+purp.substring(0,70)+(purp.length>70?'â€¦':'')+'"</span>':'');
+    el.innerHTML = '<strong>'+rm.name+'</strong> · '+date+' · '+start+'-'+end+(dur?' ('+dur.trim()+')':'')+(purp?'<br><span style="color:#94a3b8">"'+purp.substring(0,70)+(purp.length>70?'…':'')+'"</span>':'');
     el.style.display='block';
 }
 
@@ -1295,7 +1295,7 @@ function guestOnRoomChange(val) {
         picNames = rm.pics.map(p => p.name).join(', ');
     }
     
-    document.getElementById('guestModalRoomMeta').textContent = rm ? 'ðŸ‘¥ Up to ' + rm.capacity + ' seats' + (picNames ? ' Â· PIC: ' + picNames : '') : '';
+    document.getElementById('guestModalRoomMeta').textContent = rm ? '👥 Up to ' + rm.capacity + ' seats' + (picNames ? ' · PIC: ' + picNames : '') : '';
     
     // Toggle active class on selection cards
     document.querySelectorAll('.rb-room-selection').forEach(el => el.classList.remove('active'));
@@ -1402,7 +1402,7 @@ function guestRenderCart() {
     guestCart.forEach((s, idx) => {
         const item = document.createElement('div');
         item.className = 'rb-cart-item';
-        item.innerHTML = `<div class="rb-cart-info"><strong>${s.room_name}</strong> Â· ${dateFmt(s.booking_date)}<br><span style="color:#64748b">${s.start_time}â€“${s.end_time} Â· ${s.purpose.substring(0,30)}${s.purpose.length>30?'â€¦':''}</span></div><button type="button" class="rb-cart-rm" onclick="guestRemoveFromCart(${idx})">âœ•</button>`;
+        item.innerHTML = `<div class="rb-cart-info"><strong>${s.room_name}</strong> · ${dateFmt(s.booking_date)}<br><span style="color:#64748b">${s.start_time}-${s.end_time} · ${s.purpose.substring(0,30)}${s.purpose.length>30?'…':''}</span></div><button type="button" class="rb-cart-rm" onclick="guestRemoveFromCart(${idx})">✕</button>`;
         list.appendChild(item);
     });
 }

@@ -131,11 +131,11 @@
       <div class="profile-section-body" style="padding:16px 22px">
         <div class="account-row">
           <span class="account-row-label">Staff ID</span>
-          <span class="account-row-value">{{ $user->staff_id ?: 'â€”' }}</span>
+          <span class="account-row-value">{{ $user->staff_id ?: '—' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Username</span>
-          <span class="account-row-value">{{ $user->username ?: 'â€”' }}</span>
+          <span class="account-row-value">{{ $user->username ?: '—' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Role</span>
@@ -143,19 +143,19 @@
         </div>
         <div class="account-row">
           <span class="account-row-label">Department</span>
-          <span class="account-row-value">{{ $user->department ?: 'â€”' }}</span>
+          <span class="account-row-value">{{ $user->department ?: '—' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Position</span>
-          <span class="account-row-value">{{ $user->position ?: 'â€”' }}</span>
+          <span class="account-row-value">{{ $user->position ?: '—' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Phone</span>
-          <span class="account-row-value">{{ $user->phone_no ?: 'â€”' }}</span>
+          <span class="account-row-value">{{ $user->phone_no ?: '—' }}</span>
         </div>
         <div class="account-row">
           <span class="account-row-label">Member Since</span>
-          <span class="account-row-value">{{ $user->created_at ? $user->created_at->format('d M Y') : 'â€”' }}</span>
+          <span class="account-row-value">{{ $user->created_at ? $user->created_at->format('d M Y') : '—' }}</span>
         </div>
       </div>
     </div>

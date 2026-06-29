@@ -20,7 +20,7 @@
 })();
 </script>
 <style>
-/* â”€â”€ HR COLLAPSIBLE SIDEBAR â”€â”€ */
+/* ── HR COLLAPSIBLE SIDEBAR ── */
 .menu-toggle { display: none !important; }
 @media(max-width:768px){ .menu-toggle { display: flex !important; } }
 .sidebar { transition: width .3s ease !important; overflow: hidden !important; }
@@ -28,7 +28,7 @@
 html.sidebar-collapsed .sidebar { width: 64px !important; transform: none !important; }
 html.sidebar-collapsed .main-wrapper { margin-left: 64px !important; }
 
-/* Sidebar close button â€” expanded state only */
+/* Sidebar close button — expanded state only */
 .sb-close-btn {
   flex-shrink: 0;
   width: 28px; height: 28px;
@@ -53,7 +53,7 @@ html.sidebar-collapsed .sb-logo-btn .sb-open-icon svg { display: block; }
 html.sidebar-collapsed .sb-logo-btn:hover img { opacity: 0; }
 html.sidebar-collapsed .sb-logo-btn:hover .sb-open-icon { opacity: 1; }
 
-/* â”€â”€ ICON RAIL â”€â”€ */
+/* ── ICON RAIL ── */
 html.sidebar-collapsed .sidebar-nav { padding: .75rem 0 !important; }
 
 /* Brand row: show only logo, centered */
@@ -64,7 +64,7 @@ html.sidebar-collapsed .sidebar > div:first-child {
 }
 html.sidebar-collapsed .sidebar > div:first-child > a { display: none !important; }
 
-/* Nav direct links â€” icon only */
+/* Nav direct links — icon only */
 html.sidebar-collapsed .nav-item {
   font-size: 0 !important; padding: .6rem 0 !important;
   justify-content: center !important; gap: 0 !important;
@@ -72,7 +72,7 @@ html.sidebar-collapsed .nav-item {
 html.sidebar-collapsed .nav-item > svg { display: block !important; flex-shrink: 0; }
 html.sidebar-collapsed .nav-item .badge-count { display: none !important; }
 
-/* Nav groups â€” icon only, sub-items hidden */
+/* Nav groups — icon only, sub-items hidden */
 html.sidebar-collapsed .nav-group-toggle {
   font-size: 0 !important; padding: .6rem 0 !important;
   justify-content: center !important; gap: 0 !important;
@@ -95,7 +95,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
   .main-wrapper { margin-left: 0 !important; }
 }
 
-/* â”€â”€ COLLAPSED SIDEBAR HOVER TOOLTIPS â”€â”€ */
+/* ── COLLAPSED SIDEBAR HOVER TOOLTIPS ── */
 .sb-tooltip {
   position: fixed;
   transform: translateY(-50%);
@@ -280,12 +280,12 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
             @endif
         </a>
         @endif
-        <div class="nav-divider" style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
+        <div class="nav-divider" style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
         <a href="{{ route('it.dashboard') }}" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             IT System
         </a>
-        <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-item">
+        <a href="{{ route('wt.login') }}" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
             WT System
         </a>
@@ -330,7 +330,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
                         <button class="notif-mark-all" onclick="markAllNotifRead()">Mark all as read</button>
                     </div>
                     <div class="notif-list" id="notifList">
-                        <div class="notif-empty">Loadingâ€¦</div>
+                        <div class="notif-empty">Loading…</div>
                     </div>
                 </div>
             </div>
@@ -590,7 +590,7 @@ function showNotifPopup(items) {
                     <button class="notif-popup-close" onclick="
                         this.closest('.notif-popup-card').remove();
                         notifMarkRead(${n.id}, null, '${n.type}');
-                    ">Ã—</button>
+                    ">×</button>
                 </div>
             `;
             if (n.link) card.style.cursor = 'pointer';
@@ -770,8 +770,8 @@ document.addEventListener('DOMContentLoaded', function () {
 @endauth
 
 {{-- â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-     â•‘  Easter Egg â€” Creator credit                                  â•‘
-     â•‘  Triggers: Konami code (â†‘â†‘â†“â†“â†â†’â†â†’ B A)  Â·  footer clicked 5Ã—   â•‘
+     ║  Easter Egg — Creator credit                                  ║
+     ║  Triggers: Konami code (↑↑↓↓â†→â†→ B A)  ·  footer clicked 5×   ║
      â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="egg-overlay" id="eggOverlay" aria-hidden="true" onclick="if(event.target===this)closeEgg()">
     <div class="egg-card" role="dialog" aria-label="Creator credit">
@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="egg-badge">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-        <div class="egg-kicker">âœ¦ You found the secret âœ¦</div>
+        <div class="egg-kicker">✦ You found the secret ✦</div>
         <div class="egg-name">ALIF&nbsp;TEOH</div>
         <div class="egg-role">Creator &amp; Developer</div>
         <div class="egg-divider"></div>
@@ -873,7 +873,7 @@ document.addEventListener('DOMContentLoaded', function () {
         burstConfetti();
     }
 
-    // Trigger 1 â€” Konami code
+    // Trigger 1 — Konami code
     const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     let pos = 0;
     document.addEventListener('keydown', function(e){
@@ -883,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(pos === seq.length){ pos = 0; openEgg(); }
     });
 
-    // Trigger 2 â€” click the footer text 5 times
+    // Trigger 2 — click the footer text 5 times
     const foot = document.getElementById('eggFooterText');
     if(foot){
         let clicks = 0, timer = null;
@@ -897,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Signature in the browser console
     console.log(
-        '%câœ¦ FJB HR System âœ¦%c\nCrafted by %cALIF TEOH%c\nPsstâ€¦ try the Konami code â†‘â†‘â†“â†“â†â†’â†â†’ B A',
+        '%c✦ FJB HR System ✦%c\nCrafted by %cALIF TEOH%c\nPsst… try the Konami code ↑↑↓↓â†→â†→ B A',
         'font-size:15px;font-weight:700;color:#38bdf8',
         'color:#94a3b8',
         'font-size:14px;font-weight:700;color:#0f223b;background:#7dd3fc;padding:2px 8px;border-radius:4px',

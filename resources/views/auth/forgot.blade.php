@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-<title>Reset Password â€” {{ config('app.name') }}</title>
+<title>Reset Password — {{ config('app.name') }}</title>
 @include('partials.favicons')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -243,7 +243,7 @@
                     @if ($maskedEmail)
                         <div style="font-size:.82rem;color:#6b7280;">{{ $maskedEmail }}</div>
                     @endif
-                    <div class="otp-note" style="margin-top:.5rem;">â€¢ Valid for 15 minutes &nbsp;Â·&nbsp; Check your inbox</div>
+                    <div class="otp-note" style="margin-top:.5rem;">â€¢ Valid for 15 minutes &nbsp;·&nbsp; Check your inbox</div>
                 </div>
                 <p style="font-size:.84rem;color:#6b7280;text-align:center;margin-bottom:.75rem;">
                     Enter the 6-digit code from your email to continue.
@@ -295,7 +295,7 @@
 </div>
 
 <script>
-    // â€”â€” OTP digit inputs â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
+    // —— OTP digit inputs —————————————————————————————————————————————————
     const digits  = document.querySelectorAll('.otp-digit');
     const hidden  = document.getElementById('otp_hidden');
     const verifyBtn = document.getElementById('verifyBtn');
@@ -331,7 +331,7 @@
         if (verifyBtn) verifyBtn.disabled = val.length < 6;
     }
 
-    // â€”â€” Password strength â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
+    // —— Password strength ————————————————————————————————————————————————
     function checkStrength(pw) {
         const bar = document.getElementById('strengthBar');
         if (!bar) return;
@@ -357,16 +357,16 @@
         if (!cfm) { msg.textContent = ''; return; }
         if (pw === cfm) {
             msg.style.color = '#16a34a';
-            msg.textContent = 'âœ“ Passwords match';
+            msg.textContent = '✓ Passwords match';
             if (btn) btn.disabled = false;
         } else {
             msg.style.color = '#ef4444';
-            msg.textContent = 'Ã— Passwords do not match';
+            msg.textContent = '× Passwords do not match';
             if (btn) btn.disabled = true;
         }
     }
 
-    // â€”â€” Restart confirmation â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
+    // —— Restart confirmation —————————————————————————————————————————————
     function confirmRestart() {
         return confirm('Start over? Your current OTP will be cancelled.');
     }

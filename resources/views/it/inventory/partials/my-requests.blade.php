@@ -169,7 +169,7 @@
   }
 @endphp
 
-{{-- â”€â”€ SECTION 1: ADD ASSET â”€â”€ --}}
+{{-- ── SECTION 1: ADD ASSET ── --}}
 @php
   $addRows = [];
   foreach ($myAdds as $req) {
@@ -203,7 +203,7 @@
   }
 @endphp
 
-{{-- â”€â”€ SECTION 2: E-WASTE â”€â”€ --}}
+{{-- ── SECTION 2: E-WASTE ── --}}
 @php
   $ewRows = [];
   foreach ($myEw as $req) {
@@ -238,7 +238,7 @@
   }
 @endphp
 
-{{-- â”€â”€ SECTION 3: DISPOSAL (ewaste_items) â”€â”€ --}}
+{{-- ── SECTION 3: DISPOSAL (ewaste_items) ── --}}
 @php
   $dispRows = [];
   $dgi = 0;
@@ -290,22 +290,22 @@
     $row .= '</div>';
     if ($ob !== 'Pending') $row .= myrDetailBlock($ob, array_filter([
       'Outcome' => $ob==='Approved'?(($req->finance_status==='EWaste')?'Routed to E-Waste':(($req->finance_status==='Disposal')?'Routed to Disposal':'Approved')):'Rejected',
-      'HOU'     => ($req->hou_signed_name??'')?e($req->hou_signed_name).($req->hou_signed_at?' Â· '.\Carbon\Carbon::parse($req->hou_signed_at)->format('d M Y'):''):'',
-      'GM'      => ($req->gm_signed_name??'')?e($req->gm_signed_name).($req->gm_signed_at?' Â· '.\Carbon\Carbon::parse($req->gm_signed_at)->format('d M Y'):''):'',
-      'CEO'     => ($req->ceo_signed_name??'')?e($req->ceo_signed_name).($req->ceo_signed_at?' Â· '.\Carbon\Carbon::parse($req->ceo_signed_at)->format('d M Y'):''):'',
+      'HOU'     => ($req->hou_signed_name??'')?e($req->hou_signed_name).($req->hou_signed_at?' · '.\Carbon\Carbon::parse($req->hou_signed_at)->format('d M Y'):''):'',
+      'GM'      => ($req->gm_signed_name??'')?e($req->gm_signed_name).($req->gm_signed_at?' · '.\Carbon\Carbon::parse($req->gm_signed_at)->format('d M Y'):''):'',
+      'CEO'     => ($req->ceo_signed_name??'')?e($req->ceo_signed_name).($req->ceo_signed_at?' · '.\Carbon\Carbon::parse($req->ceo_signed_at)->format('d M Y'):''):'',
     ]));
     $row .= '</div>';
     $dispRows[] = $row;
   }
 @endphp
 
-{{-- â”€â”€ SECTION 4: DELETE â”€â”€ --}}
+{{-- ── SECTION 4: DELETE ── --}}
 @php
   $delRows = [];
   foreach ($myDeletes as $req) {
     $resolved = $req->status !== 'Pending';
-    $desc    = $req->inventoryItem?->description ?? $req->asset_description ?? 'â€”';
-    $assetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? 'â€”';
+    $desc    = $req->inventoryItem?->description ?? $req->asset_description ?? '—';
+    $assetNo = $req->inventoryItem?->asset_number ?? $req->asset_number ?? '—';
     $cls     = $req->inventoryItem?->asset_class ?? $req->asset_class ?? '';
     $row  = '<div class="myr-row">';
     $row .= '<div class="myr-row-top">';
@@ -335,7 +335,7 @@
   }
 @endphp
 
-{{-- â”€â”€ SECTION 5: EDIT â”€â”€ --}}
+{{-- ── SECTION 5: EDIT ── --}}
 @php
   $editRows = [];
   foreach ($myEdits as $req) {
@@ -349,7 +349,7 @@
       $row .= '<div style="margin-bottom:4px"><span style="display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.1);color:#7c3aed;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><i class=\"bi bi-box-seam\"></i> Non-IT Asset</span></div>';
       $currentDesc = null;
     } else {
-      $currentDesc = $req->inventoryItem?->description ?? 'â€”';
+      $currentDesc = $req->inventoryItem?->description ?? '—';
       $row .= '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Currently: <em>'.e($currentDesc).'</em></div>';
     }
     $row .= '<div class="myr-row-meta">';

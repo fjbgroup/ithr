@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mark Attendance â€” {{ config('app.name', 'HR System') }}</title>
+<title>Mark Attendance — {{ config('app.name', 'HR System') }}</title>
 @include('partials.favicons')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -123,7 +123,7 @@ body {
     <div class="logo">{{ config('app.name', 'HR System') }}</div>
 
     @if($expired)
-        {{-- â”€â”€ Expired state â”€â”€ --}}
+        {{-- ── Expired state ── --}}
         <div class="icon icon-err">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5">
                 <circle cx="12" cy="12" r="10"/>
@@ -140,7 +140,7 @@ body {
         <a href="{{ route('training.index') }}" class="btn-ghost">Go to My Training</a>
 
     @elseif(!empty($inactive))
-        {{-- â”€â”€ Inactive staff state â”€â”€ --}}
+        {{-- ── Inactive staff state ── --}}
         <div class="icon icon-err">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5">
                 <circle cx="12" cy="12" r="10"/>
@@ -158,7 +158,7 @@ body {
         <a href="{{ route('dashboard') }}" class="btn-ghost">Back to Dashboard</a>
 
     @else
-        {{-- â”€â”€ Login form â”€â”€ --}}
+        {{-- ── Login form ── --}}
         <div class="icon icon-ok">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5">
                 <rect x="3" y="11" width="18" height="11" rx="2"/>

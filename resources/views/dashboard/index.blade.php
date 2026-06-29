@@ -13,7 +13,7 @@
             @endphp
             Good {{ $greeting }}, {{ explode(' ', Auth::user()->name)[0] }}
         </div>
-        <div class="hd-date">{{ date('l, d F Y') }} &nbsp;Â·&nbsp; {{ Auth::user()->getRoleLabel() }}</div>
+        <div class="hd-date">{{ date('l, d F Y') }} &nbsp;·&nbsp; {{ Auth::user()->getRoleLabel() }}</div>
     </div>
     <div class="hd-banner-right">
         <div class="hd-clock" id="hdClock"></div>
@@ -32,7 +32,7 @@
             <div class="hd-kpi-val">{{ number_format($totalStaff) }}</div>
             <div class="hd-kpi-lbl">Total Staff</div>
         </div>
-        <a href="{{ url('/staff') }}" class="hd-kpi-link">View â†’</a>
+        <a href="{{ url('/staff') }}" class="hd-kpi-link">View →</a>
     </div>
     <div class="hd-kpi hd-kpi-green">
         <div class="hd-kpi-icon">
@@ -42,7 +42,7 @@
             <div class="hd-kpi-val">{{ number_format($totalTraining) }}</div>
             <div class="hd-kpi-lbl">Training {{ date('Y') }}</div>
         </div>
-        <a href="{{ url('/training') }}" class="hd-kpi-link">View â†’</a>
+        <a href="{{ url('/training') }}" class="hd-kpi-link">View →</a>
     </div>
     <div class="hd-kpi hd-kpi-red {{ $pendingReqs > 0 ? 'hd-kpi-alert' : '' }}">
         <div class="hd-kpi-icon">
@@ -52,7 +52,7 @@
             <div class="hd-kpi-val">{{ number_format($pendingReqs) }}</div>
             <div class="hd-kpi-lbl">Pending Requests</div>
         </div>
-        <a href="{{ url('/requests') }}" class="hd-kpi-link">View â†’</a>
+        <a href="{{ url('/requests') }}" class="hd-kpi-link">View →</a>
     </div>
     <div class="hd-kpi hd-kpi-amber">
         <div class="hd-kpi-icon">
@@ -62,7 +62,7 @@
             <div class="hd-kpi-val">{{ number_format($totalBookings) }}</div>
             <div class="hd-kpi-lbl">Upcoming Bookings</div>
         </div>
-        <a href="{{ url('/rooms') }}" class="hd-kpi-link">Report â†’</a>
+        <a href="{{ url('/rooms') }}" class="hd-kpi-link">Report →</a>
     </div>
 </div>
 
@@ -73,11 +73,11 @@
     <div class="card hd-training-card" style="border-top:4px solid #22c55e;">
         <div class="card-header">
             <h3>Training Overview <span class="hd-year-badge">{{ date('Y') }}</span></h3>
-            <a href="{{ url('/training-report') }}" class="btn btn-sm btn-ghost">Full Report â†’</a>
+            <a href="{{ url('/training-report') }}" class="btn btn-sm btn-ghost">Full Report →</a>
         </div>
         <div class="hd-training-body">
 
-            <!-- Type split â€” two stat chips + combined bar -->
+            <!-- Type split — two stat chips + combined bar -->
             @php $typeTotal = ($extCnt + $intCnt) ?: 1; @endphp
             <div>
                 <div class="hd-to-type-row">
@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <!-- Top departments â€” donut pie -->
+            <!-- Top departments — donut pie -->
             <div>
                 <div class="hd-trend-label">Top Departments</div>
                 @php
@@ -150,7 +150,7 @@
                                     @php $c = $colors[$i] ?? '#64748b'; @endphp
                                     <div class="hd-to-pie-leg-row">
                                         <span class="hd-leg-dot" style="background:{{ $c }};flex-shrink:0;"></span>
-                                        <span class="hd-to-pie-leg-name" title="{{ $d->name }}">{{ strlen($d->name) > 22 ? substr($d->name,0,22).'â€¦' : $d->name }}</span>
+                                        <span class="hd-to-pie-leg-name" title="{{ $d->name }}">{{ strlen($d->name) > 22 ? substr($d->name,0,22).'…' : $d->name }}</span>
                                         <span class="hd-to-pie-leg-cnt">{{ $d->cnt }}</span>
                                     </div>
                                 @endforeach
@@ -170,7 +170,7 @@
         <div class="card" style="margin-bottom:1rem;border-top:4px solid #f59e0b;">
             <div class="card-header">
                 <h3>Today's Room Schedule</h3>
-                <a href="{{ url('/rooms') }}" class="btn btn-sm btn-ghost">Book Room â†’</a>
+                <a href="{{ url('/rooms') }}" class="btn btn-sm btn-ghost">Book Room →</a>
             </div>
             @if ($todayBookings->isEmpty())
                 <div class="hd-empty">No meetings scheduled for today.</div>
@@ -221,7 +221,7 @@
         <div class="card" style="border-top:4px solid #ef4444;">
             <div class="card-header">
                 <h3>Pending Requests @if ($pendingReqs > 0)<span class="badge-count">{{ $pendingReqs }}</span>@endif</h3>  
-                <a href="{{ url('/requests') }}" class="btn btn-sm btn-ghost">View All â†’</a>
+                <a href="{{ url('/requests') }}" class="btn btn-sm btn-ghost">View All →</a>
             </div>
             @if ($pendingList->isEmpty())
                 <div class="hd-empty">No pending requests.</div>
@@ -232,7 +232,7 @@
                         <div class="hd-req-avatar">{{ strtoupper(substr($r->requester_name,0,1)) }}</div>
                         <div class="hd-req-info">
                             <div class="hd-req-name">{{ $r->requester_name }}</div>
-                            <div class="hd-req-field"><em>{{ $r->record_type }}</em> â€” {{ substr($r->record_reference,0,35) }}</div>
+                            <div class="hd-req-field"><em>{{ $r->record_type }}</em> — {{ substr($r->record_reference,0,35) }}</div>
                         </div>
                         <div class="hd-req-age">{{ floor(now()->diffInDays($r->created_at)) }}d</div>
                     </div>
@@ -248,7 +248,7 @@
 <div class="card" style="margin-top:1rem;border-top:4px solid #22c55e;">
     <div class="card-header">
         <h3>Recent Training Activity</h3>
-        <a href="{{ url('/training') }}" class="btn btn-sm btn-ghost">View All â†’</a>
+        <a href="{{ url('/training') }}" class="btn btn-sm btn-ghost">View All →</a>
     </div>
     @if ($recentTraining->isEmpty())
         <div class="hd-empty">No training records yet.</div>
@@ -261,10 +261,10 @@
             @foreach ($recentTraining as $t)
             <tr>
                 <td style="font-weight:600;">{{ $t->emp_name }}</td>
-                <td style="font-size:.8rem;color:var(--muted);">{{ $t->staff->department->name ?? 'â€”' }}</td>
+                <td style="font-size:.8rem;color:var(--muted);">{{ $t->staff->department->name ?? '—' }}</td>
                 <td>
                     <a href="{{ url('/training?view=course&course_id=' . $t->course_id) }}" style="text-decoration:none;"><code class="training-code training-code-link">{{ $t->training_code }}</code></a>
-                    <span style="font-size:.82rem;margin-left:.4rem;">{{ substr($t->training_title,0,45) }}â€¦</span>    
+                    <span style="font-size:.82rem;margin-left:.4rem;">{{ substr($t->training_title,0,45) }}…</span>    
                 </td>
                 <td><span class="status-badge status-{{ strtolower(str_replace(' ','-',$t->status)) }}">{{ $t->status }}</span></td>    
                 <td style="font-size:.8rem;color:var(--muted);white-space:nowrap;">{{ $t->created_at->format('d M Y') }}</td>     
@@ -287,7 +287,7 @@
             <div class="hd-kpi-val">{{ $myStats['total_training'] }}</div>
             <div class="hd-kpi-lbl">Total Trainings</div>
         </div>
-        <a href="{{ url('/training') }}" class="hd-kpi-link">View â†’</a>
+        <a href="{{ url('/training') }}" class="hd-kpi-link">View →</a>
     </div>
     <div class="hd-kpi hd-kpi-blue">
         <div class="hd-kpi-icon">
@@ -297,7 +297,7 @@
             <div class="hd-kpi-val">{{ $myStats['this_year'] }}</div>
             <div class="hd-kpi-lbl">This Year</div>
         </div>
-        <a href="{{ url('/training') }}" class="hd-kpi-link">View â†’</a>
+        <a href="{{ url('/training') }}" class="hd-kpi-link">View →</a>
     </div>
     <div class="hd-kpi hd-kpi-purple">
         <div class="hd-kpi-icon">
@@ -307,7 +307,7 @@
             <div class="hd-kpi-val">{{ $myStats['family_count'] }}</div>
             <div class="hd-kpi-lbl">Family Records</div>
         </div>
-        <a href="{{ url('/family') }}" class="hd-kpi-link">View â†’</a>
+        <a href="{{ url('/family') }}" class="hd-kpi-link">View →</a>
     </div>
     <div class="hd-kpi hd-kpi-amber">
         <div class="hd-kpi-icon">
@@ -317,7 +317,7 @@
             <div class="hd-kpi-val">{{ $myStats['upcoming_bookings'] }}</div>
             <div class="hd-kpi-lbl">My Bookings</div>
         </div>
-        <a href="{{ url('/rooms') }}" class="hd-kpi-link">Book â†’</a>
+        <a href="{{ url('/rooms') }}" class="hd-kpi-link">Book →</a>
     </div>
 </div>
 
@@ -327,7 +327,7 @@
     <div class="card hd-training-card">
         <div class="card-header">
             <h3>My Training Activity</h3>
-            <a href="{{ url('/training') }}" class="btn btn-sm btn-ghost">View All â†’</a>
+            <a href="{{ url('/training') }}" class="btn btn-sm btn-ghost">View All →</a>
         </div>
         @if ($recentTraining->isEmpty())
             <div class="hd-empty">No training records yet.</div>
@@ -339,7 +339,7 @@
                 <div class="hd-act-body">
                     <div class="hd-act-title">
                         <a href="{{ url('/training?view=course&course_id=' . $t->course_id) }}" style="text-decoration:none;"><code class="training-code training-code-link" style="font-size:.72rem;">{{ $t->training_code }}</code></a>
-                        {{ substr($t->training_title,0,55) }}â€¦
+                        {{ substr($t->training_title,0,55) }}…
                     </div>
                     <div class="hd-act-meta">
                         <span class="hd-type-chip {{ strtolower($t->resolved_type ?? 'external') }}">{{ $t->resolved_type ?? 'External' }}</span>
@@ -373,7 +373,7 @@
         <div class="card" style="margin-bottom:1rem;">
             <div class="card-header">
                 <h3>Today's Room Schedule</h3>
-                <a href="{{ url('/rooms') }}" class="btn btn-sm btn-ghost">Full View â†’</a>
+                <a href="{{ url('/rooms') }}" class="btn btn-sm btn-ghost">Full View →</a>
             </div>
             @if ($todayBookings->isEmpty())
                 <div class="hd-empty">No meetings scheduled for today.</div>
@@ -473,7 +473,7 @@
             });
         });
 
-        // Entrance animation â€” stagger the slices, then play it whenever the
+        // Entrance animation — stagger the slices, then play it whenever the
         // chart scrolls into view (replays each time it is "directed to").
         slices.forEach(function(s, i) { s.style.animationDelay = (0.06 * i) + 's'; });
 
@@ -500,7 +500,7 @@
 
 @section('styles')
 <style>
-/* â€”â€” Welcome Banner â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Welcome Banner ————————————————————————————————————————————————— */
 .hd-banner {
     display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(135deg, var(--navy) 0%, #254a78 60%, #1a6aa8 100%);
@@ -514,7 +514,7 @@
 .hd-date     { font-size: .82rem; color: rgba(255,255,255,.65); margin-top: .2rem; }
 .hd-clock    { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .05em; color: var(--sky); }
 
-/* â€”â€” KPI Row â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— KPI Row ———————————————————————————————————————————————————————— */
 .hd-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
 .hd-kpi {
     background: var(--surface); border-radius: 12px; padding: 1rem 1.1rem;
@@ -550,12 +550,12 @@
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
-/* â€”â€” Mid Row â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Mid Row ———————————————————————————————————————————————————————— */
 .hd-mid-row { display: grid; grid-template-columns: 1fr 360px; gap: 1rem; align-items: start; }
 .hd-right-col { display: flex; flex-direction: column; gap: 0; }
 .hd-training-card .hd-training-body { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .9rem; }
 
-/* â€”â€” Compact Training Overview â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Compact Training Overview ——————————————————————————————————————— */
 .hd-to-type-row { display: flex; gap: .5rem; }
 .hd-to-chip { flex: 1; display: flex; align-items: center; gap: .4rem; background: var(--bg); border-radius: 8px; padding: .45rem .6rem; font-size: .8rem; }
 .hd-to-chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -580,12 +580,12 @@
 .hd-to-dept-bar-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
 .hd-to-dept-bar { height: 100%; border-radius: 99px; transition: width .6s; }
 
-/* â€”â€” SVG Donut Pie (shared: trend + departments) â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— SVG Donut Pie (shared: trend + departments) ———————————————————— */
 .hd-to-pie-wrap { display: flex; flex-direction: column; align-items: center; gap: .65rem; }
 .hd-sv-pie { width: 150px; height: 150px; flex-shrink: 0; overflow: visible; }
 .hd-sv-pie.hd-sv-pie-lg { width: 200px; height: 200px; }
 
-/* â€”â€” Departments side layout â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Departments side layout ———————————————————————————————————————— */
 .hd-to-pie-side { flex-direction: row !important; align-items: center; gap: 1.25rem; }
 .hd-dept-right { display: flex; flex-direction: column; gap: .55rem; flex: 1; min-width: 0; }
 .hd-dept-right .hd-to-pie-legend { flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; gap: .32rem; }
@@ -611,7 +611,7 @@
 .hd-to-pie-leg-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 .hd-to-pie-leg-cnt { font-weight: 700; color: var(--text); }
 
-/* â€”â€” Donut entrance animation (plays when scrolled/navigated into view) â€”â€” */
+/* —— Donut entrance animation (plays when scrolled/navigated into view) —— */
 .hd-sv-pie .hd-sv-slice {
     opacity: 0;
     transform-box: view-box;
@@ -645,14 +645,14 @@
     }
 }
 
-/* â€”â€” Year badge â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Year badge ————————————————————————————————————————————————————— */
 .hd-year-badge {
     display: inline-block; background: var(--sky-light); color: var(--sky-dark);
     font-size: .72rem; font-weight: 700; padding: .1rem .5rem; border-radius: 20px;
     margin-left: .4rem; vertical-align: middle;
 }
 
-/* â€”â€” Type split â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Type split ————————————————————————————————————————————————————— */
 .hd-type-split { display: flex; flex-direction: column; gap: .6rem; }
 .hd-type-item  { display: flex; flex-direction: column; gap: .2rem; }
 .hd-type-top   { display: flex; align-items: center; gap: .4rem; font-size: .83rem; }
@@ -663,10 +663,10 @@
 .hd-type-bar-fill  { height: 100%; border-radius: 99px; transition: width .6s; }
 .hd-pill-track { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; display: flex; }
 
-/* â€”â€” 6-month trend â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— 6-month trend —————————————————————————————————————————————————— */
 .hd-trend-label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: .6rem; }
 
-/* â€”â€” Donut pie chart (shared: trend + departments) â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Donut pie chart (shared: trend + departments) —————————————————— */
 .hd-pie-wrap { display: flex; align-items: center; gap: 1.25rem; }
 .hd-pie {
     width: 130px; height: 130px; border-radius: 50%; flex-shrink: 0;
@@ -688,7 +688,7 @@
 .hd-leg-cnt  { font-size: .78rem; font-weight: 700; color: var(--text); flex-shrink: 0; }
 .hd-leg-pct  { font-size: .72rem; font-weight: 600; color: var(--muted); width: 38px; text-align: right; flex-shrink: 0; }
 
-/* â€”â€” Booking list â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Booking list ——————————————————————————————————————————————————— */
 .hd-booking-list { padding: .5rem .75rem .75rem; display: flex; flex-direction: column; gap: .4rem; }
 .hd-booking-row {
     display: flex; align-items: center; gap: .65rem;
@@ -701,7 +701,7 @@
 .hd-bk-room  { font-size: .82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hd-bk-purpose { font-size: .74rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* â€”â€” Requests list â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Requests list —————————————————————————————————————————————————— */
 .hd-req-list { padding: .5rem .75rem .75rem; display: flex; flex-direction: column; gap: .4rem; }
 .hd-req-row  { display: flex; align-items: center; gap: .65rem; padding: .5rem .25rem; border-bottom: 1px solid var(--border); }
 .hd-req-row:last-child { border-bottom: none; }
@@ -711,7 +711,7 @@
 .hd-req-field { font-size: .74rem; color: var(--muted); }
 .hd-req-age  { font-size: .72rem; color: var(--muted); background: var(--bg); padding: .15rem .4rem; border-radius: 6px; flex-shrink: 0; }    
 
-/* â€”â€” Activity list (staff) â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Activity list (staff) —————————————————————————————————————————— */
 .hd-activity-list { padding: .5rem 1.25rem; display: flex; flex-direction: column; gap: 0; }
 .hd-activity-row  { display: flex; align-items: flex-start; gap: .75rem; padding: .7rem 0; border-bottom: 1px solid var(--border); }
 .hd-activity-row:last-child { border-bottom: none; }
@@ -726,10 +726,10 @@
 .hd-type-chip.internal { background: #f0fdf4; color: #15803d; }
 .hd-comp-bar-wrap { padding: .75rem 1.25rem 1rem; border-top: 1px solid var(--border); }
 
-/* â€”â€” Empty state â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Empty state ———————————————————————————————————————————————————— */
 .hd-empty { padding: 1.5rem; text-align: center; color: var(--muted); font-size: .85rem; }
 
-/* â€”â€” Responsive â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€” */
+/* —— Responsive ————————————————————————————————————————————————————— */
 @media (max-width: 1100px) {
     .hd-kpi-row { grid-template-columns: repeat(2, 1fr); }
     .hd-mid-row { grid-template-columns: 1fr; }
