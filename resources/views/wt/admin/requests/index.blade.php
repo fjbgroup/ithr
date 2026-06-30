@@ -3472,6 +3472,180 @@
         border-color: #e2e8f0 !important;
         color: #38bdf8 !important;
     }
+
+    /* Final readable Approval Inbox override */
+    body .content-surface .approval-inbox .approval-page-header .page-title-standard {
+        font-size: 30px !important;
+        line-height: 1.08 !important;
+    }
+
+    body .content-surface .approval-inbox .approval-page-header .page-subtitle-standard {
+        font-size: 14px !important;
+        line-height: 1.45 !important;
+        letter-spacing: 0.12em !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-header {
+        padding: 22px 26px !important;
+        gap: 16px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-icon {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 14px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-icon i {
+        font-size: 18px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-title {
+        font-size: 17px !important;
+        line-height: 1.25 !important;
+        letter-spacing: 0.04em !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-subtitle {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        letter-spacing: 0.03em !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-count {
+        min-height: 40px !important;
+        padding: 9px 16px !important;
+        font-size: 13px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-body {
+        padding: 22px 24px 24px !important;
+    }
+
+    body .content-surface .approval-inbox table.dataTable thead th,
+    body .content-surface .approval-inbox .pending-queue-card table.dataTable thead th {
+        padding: 17px 18px !important;
+        font-size: 13px !important;
+        line-height: 1.25 !important;
+        letter-spacing: 0.06em !important;
+    }
+
+    body .content-surface .approval-inbox table.dataTable tbody td,
+    body .content-surface .approval-inbox .pending-queue-card table.dataTable tbody td {
+        padding: 18px !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-card,
+    body .content-surface .approval-inbox .request-summary-card {
+        border-radius: 14px !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-item,
+    body .content-surface .approval-inbox .request-summary-card .request-meta-block {
+        padding: 14px 16px !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-name,
+    body .content-surface .approval-inbox .request-summary-title,
+    body .content-surface .approval-inbox .approval-body-title {
+        overflow: visible !important;
+        text-overflow: clip !important;
+        white-space: normal !important;
+        font-size: 16px !important;
+        line-height: 1.35 !important;
+        font-weight: 900 !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-meta,
+    body .content-surface .approval-inbox .request-summary-note,
+    body .content-surface .approval-inbox .approval-body-meta,
+    body .content-surface .approval-inbox .approval-date {
+        font-size: 13px !important;
+        line-height: 1.55 !important;
+        font-weight: 750 !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-label,
+    body .content-surface .approval-inbox .summary-label,
+    body .content-surface .approval-inbox .request-meta-label {
+        font-size: 11px !important;
+        line-height: 1.25 !important;
+        letter-spacing: 0.06em !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-value,
+    body .content-surface .approval-inbox .summary-value,
+    body .content-surface .approval-inbox .request-meta-value {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        font-weight: 850 !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-avatar {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 16px !important;
+    }
+
+    body .content-surface .approval-inbox .request-pill {
+        min-height: 28px !important;
+        padding: 6px 11px !important;
+        font-size: 11px !important;
+        line-height: 1.1 !important;
+    }
+
+    body .content-surface .approval-inbox .approval-action-row {
+        max-width: 168px !important;
+        gap: 9px !important;
+    }
+
+    body .content-surface .approval-inbox .approval-action-btn,
+    body .content-surface .approval-inbox #requestsTable .approval-action-btn,
+    body .content-surface .approval-inbox .pending-queue-card .approval-action-btn {
+        min-height: 42px !important;
+        padding: 10px 14px !important;
+        border-radius: 11px !important;
+        font-size: 12px !important;
+        line-height: 1.15 !important;
+        letter-spacing: 0.04em !important;
+    }
+
+    body .content-surface .approval-inbox .dataTables_wrapper .dataTables_length,
+    body .content-surface .approval-inbox .dataTables_wrapper .dataTables_filter,
+    body .content-surface .approval-inbox .dataTables_wrapper .dataTables_length label,
+    body .content-surface .approval-inbox .dataTables_wrapper .dataTables_filter label {
+        font-size: 13px !important;
+        line-height: 1.3 !important;
+    }
+
+    body .content-surface .approval-inbox .dataTables_wrapper .dataTables_length select,
+    body .content-surface .approval-inbox .dataTables_wrapper .dataTables_filter input {
+        min-height: 40px !important;
+        font-size: 13px !important;
+    }
+
+    @media (max-width: 700px) {
+        body .content-surface .approval-inbox .approval-page-header {
+            padding: 16px !important;
+        }
+
+        body .content-surface .approval-inbox .approval-page-header .page-title-standard {
+            font-size: 24px !important;
+        }
+
+        body .content-surface .approval-inbox .pending-queue-header,
+        body .content-surface .approval-inbox .pending-queue-body {
+            padding: 16px !important;
+        }
+
+        body .content-surface .approval-inbox .requestor-name,
+        body .content-surface .approval-inbox .request-summary-title,
+        body .content-surface .approval-inbox .approval-body-title {
+            font-size: 15px !important;
+        }
+    }
 </style>
 @endpush
 
