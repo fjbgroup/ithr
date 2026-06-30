@@ -2772,6 +2772,50 @@ body .content-surface :is(
     text-align: center !important;
 }
 
+body .content-surface #specialTable :is(th, td):last-child {
+    width: 210px !important;
+    min-width: 210px !important;
+}
+
+body .content-surface #specialTable .special-action-buttons {
+    display: inline-flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    max-width: 194px !important;
+    white-space: normal !important;
+}
+
+body .content-surface #specialTable .special-action-buttons .btn,
+body .content-surface #specialTable td > .btn {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    letter-spacing: .02em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface #specialTable .special-action-buttons .btn i,
+body .content-surface #specialTable td > .btn i {
+    width: 14px !important;
+    min-width: 14px !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
 body .content-surface :is(
     .inventory-table-footer,
     .repair-table-footer,
@@ -3094,6 +3138,43 @@ body .content-surface :is(
 
 body .content-surface .inventory-table-frame > .clean-admin-filter + #mainTableContainer.inventory-table-shell {
     margin-top: 10px !important;
-    
+}
+
+html:not(.dark) body .content-surface .special-filter-panel,
+html[data-theme="light"] body .content-surface .special-filter-panel {
+    border-color: #d8e1ed !important;
+    background: #ffffff !important;
+    color: #172033 !important;
+}
+
+html:not(.dark) body .content-surface .special-filter-panel :is(label, .special-filter-field label),
+html[data-theme="light"] body .content-surface .special-filter-panel :is(label, .special-filter-field label) {
+    color: #64748b !important;
+}
+
+html:not(.dark) body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
+html[data-theme="light"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset) {
+    border-color: #cbd5e1 !important;
+    background: #f8fafc !important;
+    color: #172033 !important;
+}
+
+html.dark body .content-surface .special-filter-panel,
+html[data-theme="dark"] body .content-surface .special-filter-panel {
+    border-color: rgba(148, 163, 184, .18) !important;
+    background: #0f172a !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface .special-filter-panel :is(label, .special-filter-field label),
+html[data-theme="dark"] body .content-surface .special-filter-panel :is(label, .special-filter-field label) {
+    color: #8ea0b8 !important;
+}
+
+html.dark body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
+html[data-theme="dark"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset) {
+    border-color: rgba(148, 163, 184, .26) !important;
+    background: #111827 !important;
+    color: #e5edf7 !important;
 }
 </style>
