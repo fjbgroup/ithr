@@ -717,6 +717,9 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     @endif
 
     <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
+    <a href="{{ route('it.role-metric') }}" class="nav-link {{ request()->routeIs('it.role-metric') ? 'active' : '' }}">
+      <i class="bi bi-table"></i> Role Metric
+    </a>
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
     </a>
