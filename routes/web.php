@@ -18,6 +18,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\RoleMetricController;
 
 Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'index'])->name('home');
 Route::get('/hr', [RoomController::class, 'landing'])->name('hr.home');
@@ -145,6 +146,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('chatbot/message', [ChatbotController::class, 'chat'])->name('chatbot.message');
     Route::post('chatbot/clear', [ChatbotController::class, 'clearHistory'])->name('chatbot.clear');
+
+    Route::get('role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
 });
 
 // QR attendance — public (no auth session required; credentials submitted in the form)
