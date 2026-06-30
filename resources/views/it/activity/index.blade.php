@@ -20,6 +20,8 @@
     --aly-hover:     #f8fafc;
     --aly-thead:     #f8fafc;
     font-family: 'Inter', sans-serif;
+    margin-left: -16px;
+    margin-right: 16px;
 }
 .aly-wrap.aly-dark {
     --aly-surface:   #1a1e2a;
@@ -79,7 +81,15 @@
     background: var(--aly-surface);
     border: 1px solid var(--aly-border);
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+@media (max-width: 768px) {
+    .aly-wrap {
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 /* Card header */
@@ -167,6 +177,17 @@ table#activityTable thead th {
 }
 table#activityTable thead th:first-child { padding-left: 20px !important; }
 table#activityTable thead th:last-child  { padding-right: 20px !important; }
+table#activityTable thead th:first-child,
+table#activityTable tbody td:first-child {
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    padding-right: 4px !important;
+}
+table#activityTable thead th:nth-child(2),
+table#activityTable tbody td:nth-child(2) {
+    padding-left: 4px !important;
+}
 table#activityTable tbody tr { border-top: 1px solid var(--aly-border-lt); transition: background .1s; }
 table#activityTable tbody tr:hover td { background: var(--aly-hover) !important; }
 table#activityTable tbody td {
@@ -506,4 +527,3 @@ $(document).ready(function () {
 });
 </script>
 @endpush
-
