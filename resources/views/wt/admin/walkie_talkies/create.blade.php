@@ -177,42 +177,56 @@
 
                 <div class="form-group">
                     <label class="form-label">Location</label>
-                    <select name="location" class="form-input page-tag-select" data-placeholder="Type or select location">
-                        <option value=""></option>
+                    @php($currentLocation = strtoupper((string) old('location', $defaults['location'] ?? '')))
+                    <input
+                        type="text"
+                        name="location"
+                        class="form-input"
+                        value="{{ $currentLocation }}"
+                        list="walkieLocationOptions"
+                        placeholder="Type or search location"
+                        autocomplete="off">
+                    <datalist id="walkieLocationOptions">
                         @foreach($walkieLocations as $location)
-                        <option value="{{ $location }}" @selected(old('location', $defaults['location'] ?? null) === $location)>{{ $location }}</option>
+                        <option value="{{ $location }}"></option>
                         @endforeach
-                        @if(old('location') && !$walkieLocations->contains(old('location')))
-                        <option value="{{ old('location') }}" selected>{{ old('location') }}</option>
-                        @endif
-                    </select>
+                    </datalist>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Executive</label>
                     @php($currentExecutive = strtoupper((string) old('executive', $defaults['executive'] ?? '')))
-                    <select name="executive" class="form-input page-tag-select" data-placeholder="Type or search executive">
-                        <option value=""></option>
+                    <input
+                        type="text"
+                        name="executive"
+                        class="form-input"
+                        value="{{ $currentExecutive }}"
+                        list="walkieExecutiveOptions"
+                        placeholder="Type or search executive"
+                        autocomplete="off">
+                    <datalist id="walkieExecutiveOptions">
                         @foreach($executiveOptions as $executiveName)
-                        <option value="{{ $executiveName }}" @selected($currentExecutive === $executiveName)>{{ $executiveName }}</option>
+                        <option value="{{ $executiveName }}"></option>
                         @endforeach
-                        @if($currentExecutive !== '' && !$executiveOptions->contains($currentExecutive))
-                        <option value="{{ $currentExecutive }}" selected>{{ $currentExecutive }}</option>
-                        @endif
-                    </select>
+                    </datalist>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Position</label>
-                    <select name="position" class="form-input page-tag-select" data-placeholder="Type or select position">
-                        <option value=""></option>
+                    @php($currentPosition = strtoupper((string) old('position', $defaults['position'] ?? '')))
+                    <input
+                        type="text"
+                        name="position"
+                        class="form-input"
+                        value="{{ $currentPosition }}"
+                        list="walkiePositionOptions"
+                        placeholder="Type or search position"
+                        autocomplete="off">
+                    <datalist id="walkiePositionOptions">
                         @foreach($walkiePositions as $position)
-                        <option value="{{ $position }}" @selected(old('position', $defaults['position'] ?? null) === $position)>{{ $position }}</option>
+                        <option value="{{ $position }}"></option>
                         @endforeach
-                        @if(old('position') && !$walkiePositions->contains(old('position')))
-                        <option value="{{ old('position') }}" selected>{{ old('position') }}</option>
-                        @endif
-                    </select>
+                    </datalist>
                 </div>
 
                 @endunless
@@ -245,15 +259,20 @@
 
                 <div class="form-group">
                     <label class="form-label">Tracking REF</label>
-                    <select name="tracking_ref" class="form-input page-tag-select" data-placeholder="Type or select tracking ref">
-                        <option value=""></option>
+                    @php($currentTrackingRef = strtoupper((string) old('tracking_ref', $defaults['tracking_ref'] ?? '')))
+                    <input
+                        type="text"
+                        name="tracking_ref"
+                        class="form-input"
+                        value="{{ $currentTrackingRef }}"
+                        list="walkieTrackingRefOptions"
+                        placeholder="Type or search tracking ref"
+                        autocomplete="off">
+                    <datalist id="walkieTrackingRefOptions">
                         @foreach($walkieTrackingRefs as $trackingRef)
-                        <option value="{{ $trackingRef }}" @selected(old('tracking_ref', $defaults['tracking_ref'] ?? null) === $trackingRef)>{{ $trackingRef }}</option>
+                        <option value="{{ $trackingRef }}"></option>
                         @endforeach
-                        @if(old('tracking_ref') && !$walkieTrackingRefs->contains(old('tracking_ref')))
-                        <option value="{{ old('tracking_ref') }}" selected>{{ old('tracking_ref') }}</option>
-                        @endif
-                    </select>
+                    </datalist>
                 </div>
 
                 <div class="form-group">

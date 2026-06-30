@@ -376,17 +376,23 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           style="display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:{{ $effectiveRole === 'admin_it' ? '#fff' : 'var(--muted)' }};background:{{ $effectiveRole === 'admin_it' ? 'var(--navy)' : 'transparent' }};text-decoration:none;transition:all .15s">
           <i class="fas fa-user-shield" style="font-size:10px"></i> ICT
         </a>
-        <form action="{{ route('wt.switch_executive_account') }}" method="POST" style="display:flex;align-items:center">
+        <form id="executiveSwitcherForm" action="{{ route('wt.switch_executive_account') }}" method="POST" style="display:flex;align-items:center">
           @csrf
-          <select name="executive_user_id" onchange="if(this.value) this.form.submit()"
-            style="border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;outline:none;padding:4px 8px;cursor:pointer;font-family:'Inter',sans-serif;text-transform:uppercase;max-width:180px">
-            <option value="">Executive Account</option>
+          <input type="hidden" name="executive_user_id" id="executiveSwitcherUserId">
+          <input type="text"
+            id="executiveSwitcherSearch"
+            list="executiveSwitcherOptions"
+            placeholder="Executive Account"
+            autocomplete="off"
+            style="border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;outline:none;padding:4px 8px;cursor:text;font-family:'Inter',sans-serif;text-transform:uppercase;max-width:180px">
+          <datalist id="executiveSwitcherOptions">
             @foreach($executiveSwitcherAccounts as $executiveAccount)
-              <option value="{{ $executiveAccount->user_id ?? $executiveAccount->id }}">
-                {{ strtoupper($executiveAccount->full_name ?: ($executiveAccount->staff_id ?? '')) }}{{ $executiveAccount->department ? ' - ' . strtoupper($executiveAccount->department) : '' }}
-              </option>
+              @php($executiveSwitcherName = strtoupper(trim((string) $executiveAccount->full_name)))
+              @if($executiveSwitcherName !== '')
+                <option value="{{ $executiveSwitcherName }}" data-user-id="{{ $executiveAccount->user_id ?? $executiveAccount->id }}"></option>
+              @endif
             @endforeach
-          </select>
+          </datalist>
         </form>
       </div>
       @endif
@@ -1604,6 +1610,26 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+
+  // Executive account switcher search
+  var executiveSwitcherInput = document.getElementById('executiveSwitcherSearch');
+  var executiveSwitcherHidden = document.getElementById('executiveSwitcherUserId');
+  var executiveSwitcherOptions = document.getElementById('executiveSwitcherOptions');
+  var executiveSwitcherForm = document.getElementById('executiveSwitcherForm');
+  if (executiveSwitcherInput && executiveSwitcherHidden && executiveSwitcherOptions && executiveSwitcherForm) {
+    executiveSwitcherInput.addEventListener('input', function() {
+      var selectedName = String(this.value || '').trim().toUpperCase();
+      var matchedOption = Array.from(executiveSwitcherOptions.options).find(function(option) {
+        return String(option.value || '').trim().toUpperCase() === selectedName;
+      });
+
+      executiveSwitcherHidden.value = matchedOption ? (matchedOption.dataset.userId || '') : '';
+
+      if (executiveSwitcherHidden.value) {
+        executiveSwitcherForm.submit();
+      }
+    });
+  }
 
   // Sidebar info popovers
   document.addEventListener('click', function(event) {
