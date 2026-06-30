@@ -10,6 +10,72 @@
 
 @include('wt.admin.partials.inventory-management-ui')
 
+<style>
+    body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+        border: 1px solid #cbd8e6 !important;
+        border-radius: 10px 10px 0 0 !important;
+        overflow: hidden !important;
+        background: #ffffff !important;
+    }
+
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        min-width: 100% !important;
+    }
+
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th {
+        height: 52px !important;
+        padding: 0 16px !important;
+        background: #f8fafc !important;
+        border-top: 0 !important;
+        border-right: 1px solid #d8e1ed !important;
+        border-bottom: 1px solid #d8e1ed !important;
+        border-left: 0 !important;
+        color: #526781 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.02em !important;
+        line-height: 1.1 !important;
+        text-align: center !important;
+        text-transform: uppercase !important;
+        vertical-align: middle !important;
+        white-space: nowrap !important;
+    }
+
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th:first-child {
+        border-top-left-radius: 10px !important;
+    }
+
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th:last-child {
+        border-right: 0 !important;
+        border-top-right-radius: 10px !important;
+    }
+
+    html.dark body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
+        border-color: #334155 !important;
+        background: #111827 !important;
+    }
+
+    html.dark body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th {
+        background: #1f2937 !important;
+        border-color: #334155 !important;
+        color: #dbeafe !important;
+    }
+
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td {
+        text-align: center !important;
+    }
+
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td .inventory-item-title,
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td .line-clamp-1,
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td .maintenance-action-stack,
+    body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td .flex {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+</style>
+
 <div class="maintenance-page-shell">
 <div class="page-header-block flex flex-col md:flex-row md:items-center md:justify-between gap-4">
     <div>
@@ -84,6 +150,14 @@
 <div class="clean-admin-table-shell" id="mainTableContainer">
     <div class="clean-admin-table-scroll">
     <table id="maintTable" class="clean-admin-table table-auto w-full text-left">
+        <colgroup>
+            <col style="width:10%">
+            <col style="width:10%">
+            <col style="width:17%">
+            <col style="width:12%">
+            <col style="width:31%">
+            <col style="width:20%">
+        </colgroup>
         <thead>
             <tr>
                 <th class="px-2 py-1 text-center">Radio ID</th>
@@ -91,7 +165,7 @@
                 <th class="px-2 py-1 text-center" style="text-align:center !important;">Serial No.</th>
                 <th class="px-2 py-1 text-center" style="text-align:center !important;">Model</th>
                 <th class="px-2 py-1 text-center">Issue / Received</th>
-                <th class="px-2 py-1 text-center maintenance-action-col">Action</th>
+                <th class="px-2 py-1 text-center maintenance-action-col" style="text-align:center !important;">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -116,7 +190,7 @@
                     <div class="inventory-item-title">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $r->received_date ?? '-' }}</div>
                 </td>
-                <td class="maintenance-action-col">
+                <td class="maintenance-action-col" style="text-align:center !important;">
                     <div class="maintenance-action-stack">
                         <button type="button" class="wt-btn wt-btn-sm maintenance-action-view" onclick="openGlobalMaintenanceTimeline('{{ $r->maintenance_id }}')">
                             <i class="fa-solid fa-eye"></i>

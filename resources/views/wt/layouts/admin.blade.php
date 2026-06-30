@@ -440,10 +440,10 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) thead th {
           height: 36px !important;
           padding: 9px 10px !important;
-          background: #eef3f8 !important;
+          background: #f8fafc !important;
           border: 1px solid #cbd5e1 !important;
           border-radius: 0 !important;
-          color: #1e293b !important;
+          color: #526781 !important;
           font-size: 12px !important;
           font-weight: 900 !important;
           letter-spacing: .03em !important;
@@ -465,9 +465,32 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           font-weight: 700 !important;
           line-height: 1.25 !important;
           overflow: hidden !important;
+          text-align: center !important;
           text-overflow: ellipsis !important;
           vertical-align: middle !important;
           white-space: nowrap !important;
+        }
+        body .content-surface :is(#walkiesTable, #duplicateTable, #specialTable, .clean-admin-table) tbody td :is(
+          .inventory-item-title,
+          .inventory-assigned-primary,
+          .inventory-assigned-meta,
+          .dup-change-id-val,
+          .dup-change-id-empty,
+          .line-clamp-1,
+          .font-black,
+          .text-slate-500
+        ) {
+          text-align: center !important;
+        }
+        body .content-surface :is(#walkiesTable, #duplicateTable, #specialTable, .clean-admin-table) tbody td :is(
+          .inventory-action-buttons,
+          .dup-actions,
+          .special-action-buttons,
+          .clean-admin-actions,
+          .inline-flex,
+          .flex
+        ) {
+          justify-content: center !important;
         }
         body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) tbody tr:hover td {
           background: #f8fafc !important;
@@ -482,9 +505,11 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         }
         body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):nth-child(3) {
           width: 14% !important;
+          text-align: center !important;
         }
         body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):nth-child(4) {
           width: 14% !important;
+          text-align: center !important;
         }
         body .content-surface :is(#walkiesTable, #maintTable, #maintenanceTable, #duplicateTable, #specialTable, .clean-admin-table) :is(th, td):last-child {
           width: 15% !important;
@@ -565,9 +590,9 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th {
           height: 36px !important;
           padding: 9px 10px !important;
-          background: #eef3f8 !important;
+          background: #f8fafc !important;
           border: 1px solid #cbd5e1 !important;
-          color: #1e293b !important;
+          color: #526781 !important;
           font-size: 12px !important;
           font-weight: 900 !important;
           letter-spacing: .03em !important;
@@ -579,8 +604,8 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         }
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td,
         body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td,
-        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table .maintenance-action-col,
-        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table .maintenance-action-col {
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td.maintenance-action-col,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td.maintenance-action-col {
           height: 42px !important;
           min-width: 0 !important;
           max-width: none !important;
@@ -601,11 +626,11 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(2),
         body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(2) { width: 12% !important; text-align: center !important; }
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(3),
-        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(3) { width: 16% !important; text-align: left !important; }
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(3) { width: 16% !important; text-align: center !important; }
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(4),
-        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(4) { width: 16% !important; text-align: left !important; }
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(4) { width: 16% !important; text-align: center !important; }
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(5),
-        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(5) { width: 29% !important; text-align: left !important; }
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(5) { width: 29% !important; text-align: center !important; }
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table :is(th, td):nth-child(6),
         body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table :is(th, td):nth-child(6),
         body .content-surface .maintenance-page-shell #maintTable.clean-admin-table .maintenance-action-col,
@@ -613,6 +638,20 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           width: 15% !important;
           min-width: 0 !important;
           max-width: none !important;
+          text-align: center !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th,
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table thead th.maintenance-action-col,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table thead th.maintenance-action-col {
+          background: #f8fafc !important;
+          border: 1px solid #cbd5e1 !important;
+          color: #526781 !important;
+          font-weight: 900 !important;
+          text-align: center !important;
+        }
+        body .content-surface .maintenance-page-shell #maintTable.clean-admin-table tbody td,
+        body .content-surface .maintenance-page-shell #maintenanceTable.clean-admin-table tbody td {
           text-align: center !important;
         }
         body .content-surface .maintenance-page-shell #maintTable .maintenance-action-stack,
@@ -816,15 +855,15 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         }
         body .content-surface #specialTable :is(th, td):nth-child(3) {
           width: 15% !important;
-          text-align: left !important;
+          text-align: center !important;
         }
         body .content-surface #specialTable :is(th, td):nth-child(4) {
           width: 12% !important;
-          text-align: left !important;
+          text-align: center !important;
         }
         body .content-surface #specialTable :is(th, td):nth-child(5) {
           width: 31% !important;
-          text-align: left !important;
+          text-align: center !important;
         }
         body .content-surface #specialTable :is(th, td):nth-child(6) {
           width: 8% !important;
@@ -1469,7 +1508,7 @@ async function openGlobalWalkieTimelineUrl(url) {
       ['Walkie ID', summary.walkie_id||'-'],['Radio ID', summary.radio_id||'-'],['Serial No.', summary.serial_number||'-'],
       ['Model', summary.model||'-'],['Status', summary.status||'-'],['Ownership Type', summary.ownership_type||'-'],
       ['Current Ownership', summary.ownership||'-'],['Shared With', summary.shared_with||'-'],['Position', summary.position||'-'],
-      ['Department', summary.department||'-'],['Received Date', summary.received_date||'-'],['Repair Date', summary.repair_date||'-'],
+      ['Department', summary.department||'-'],['Executive', summary.executive||'-'],['Received Date', summary.received_date||'-'],['Repair Date', summary.repair_date||'-'],
       ['Temporary Radio ID', summary.temporary_radio_id||'-'],['Tracking Ref', summary.tracking_ref||'-'],
       ['Need Change ID', summary.need_to_change_id||'-'],['Change Done', summary.id_change_done||'-'],
       ['Ownership Type To Be', summary.ownership_type_to_be||'-'],['Special Use', summary.is_special_use||'-'],
