@@ -31,12 +31,12 @@
 :root {
   --sidebar-bg:        #f8fafc;
   --sidebar-hover:     #f1f5f9;
-  --sidebar-active-bg: #e0f2fe;
+  --sidebar-active-bg: #2563eb;
   --sidebar-text:      #334155;
   --sidebar-head:      #1e293b;
   --sidebar-border:    #e2e8f0;
   --sidebar-muted:     #64748b;
-  --sidebar-active-tx: #0284c7;
+  --sidebar-active-tx: #ffffff;
   --sidebar-w:         250px;
   --accent:            #0284c7;
   --accent-h:          #0369a1;
@@ -64,12 +64,12 @@
 html.dark{
   --sidebar-bg:        #1a2235;
   --sidebar-hover:     #263042;
-  --sidebar-active-bg: rgba(56,189,248,.14);
+  --sidebar-active-bg: #2563eb;
   --sidebar-text:      #cbd5e1;
   --sidebar-head:      #f1f5f9;
   --sidebar-border:    #374151;
   --sidebar-muted:     #94a3b8;
-  --sidebar-active-tx: #38bdf8;
+  --sidebar-active-tx: #ffffff;
   --bg:                #111827;
   --body-bg:           #111827;
   --white:             #1f2937;
@@ -125,7 +125,13 @@ body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;
 .sidebar-nav>div>button{color:var(--sidebar-text)!important}
 .sidebar-nav>div>button.sb-active{color:var(--sidebar-active-tx)!important}
 .sidebar-nav>div>button:hover{background:var(--sidebar-hover)!important}
-.nav-link.active{background:var(--sidebar-active-bg);color:var(--sidebar-active-tx);font-weight:600}
+.nav-link.active{
+  background:var(--sidebar-active-bg);
+  color:var(--sidebar-active-tx);
+  font-weight:700;
+  box-shadow:0 6px 16px rgba(37,99,235,.24);
+}
+.nav-link.active i{color:inherit}
 .nav-link .badge-count, button .badge-count{
   margin-left:auto;background:var(--red);color:#fff;
   border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;flex-shrink:0;
@@ -435,15 +441,16 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 
   <nav class="sidebar-nav">
     <div class="nav-section-label" style="margin-top:4px">Main</div>
-    <a href="{{ route('it.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+    <a href="{{ route('it.dashboard') }}" class="nav-link {{ request()->routeIs('it.dashboard') ? 'active' : '' }}">
       <i class="bi bi-speedometer2"></i> Dashboard
     </a>
 
     <div class="nav-section-label">Inventory</div>
 
     @php
-      $itActive = request()->routeIs('inventory.*') || request()->routeIs('non-it.*');
-      $itPending = request()->routeIs('inventory.index') && request()->get('view') === 'pending_requests';
+      $itActive = request()->routeIs('it.inventory.*') || request()->routeIs('it.non-it.*');
+      $itPending = request()->routeIs('it.inventory.index') && request()->get('view') === 'pending_requests';
+      $itMyRequests = request()->routeIs('it.inventory.index') && request()->get('view') === 'my_requests';
     @endphp
 
     @if($user->isAdmin())
@@ -461,11 +468,11 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
           style="font-size:11px;transition:transform .2s;{{ $itActive ? 'transform:rotate(180deg)' : '' }}"></i>
       </button>
       <div id="itAssetsMenu" style="{{ $itActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('inventory.index') && !request()->get('view') ? 'active' : '' }}"
+        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('it.inventory.index') && !request()->get('view') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
         </a>
-        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('non-it.index') ? 'active' : '' }}"
+        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('it.non-it.index') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
         </a>
@@ -490,16 +497,16 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
           style="font-size:11px;transition:transform .2s;{{ $itActive ? 'transform:rotate(180deg)' : '' }}"></i>
       </button>
       <div id="itAssetsMenu" style="{{ $itActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('inventory.index') ? 'active' : '' }}"
+        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('it.inventory.index') && !$itMyRequests ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
         </a>
-        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('non-it.index') ? 'active' : '' }}"
+        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('it.non-it.index') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
         </a>
         @if(!$user->isReadOnlyViewer())
-        <a href="{{ route('it.inventory.index') }}?view=my_requests" class="nav-link"
+        <a href="{{ route('it.inventory.index') }}?view=my_requests" class="nav-link {{ $itMyRequests ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-clock-history" style="font-size:14px"></i> My Requests
         </a>
@@ -518,20 +525,20 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     </script>
 
     {{-- Write Off — all users --}}
-    <a href="{{ route('it.writeoff.index') }}" class="nav-link {{ request()->routeIs('writeoff.index') || request()->routeIs('writeoff.hou-sign') || request()->routeIs('writeoff.gm-sign') || request()->routeIs('writeoff.ceo-approve') || request()->routeIs('writeoff.assign-hou') ? 'active' : '' }}">
+    <a href="{{ route('it.writeoff.index') }}" class="nav-link {{ request()->routeIs('it.writeoff.*') ? 'active' : '' }}">
       <i class="bi bi-pen-fill"></i> Write Off
     </a>
 
     {{-- Write Off Inventory — Finance Admin only --}}
     @if($user->isFinanceAdmin())
-    <a href="{{ route('it.writeoff-inventory.index') }}" class="nav-link {{ request()->routeIs('writeoff-inventory.*') ? 'active' : '' }}">
+    <a href="{{ route('it.writeoff-inventory.index') }}" class="nav-link {{ request()->routeIs('it.writeoff-inventory.*') ? 'active' : '' }}">
       <i class="bi bi-clipboard2-x-fill"></i> Write Off Inventory
     </a>
     @endif
 
     {{-- E-Waste — Admin + Finance only --}}
     @if($user->isAdminOrFinance())
-    @php $ewActive = request()->routeIs('ewaste.*') || request()->routeIs('ewaste.collected'); @endphp
+    @php $ewActive = request()->routeIs('it.ewaste.*'); @endphp
     <div>
       <button onclick="toggleEwaste()" id="ewasteToggle" class="{{ $ewActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
@@ -545,11 +552,11 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
           style="font-size:11px;transition:transform .2s;{{ $ewActive ? 'transform:rotate(180deg)' : '' }}"></i>
       </button>
       <div id="ewasteMenu" style="{{ $ewActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.ewaste.index') }}" class="nav-link {{ request()->routeIs('ewaste.index') ? 'active' : '' }}"
+        <a href="{{ route('it.ewaste.index') }}" class="nav-link {{ request()->routeIs('it.ewaste.index') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-recycle" style="font-size:14px"></i> E-Waste Items
         </a>
-        <a href="{{ route('it.ewaste.collected') }}" class="nav-link {{ request()->routeIs('ewaste.collected') ? 'active' : '' }}"
+        <a href="{{ route('it.ewaste.collected') }}" class="nav-link {{ request()->routeIs('it.ewaste.collected') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-patch-check-fill" style="font-size:14px"></i> Collected Proofs
         </a>
@@ -566,7 +573,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     </script>
 
     {{-- Disposal — Admin + Finance only --}}
-    @php $dispActive = request()->routeIs('disposal.*'); @endphp
+    @php $dispActive = request()->routeIs('it.disposal.*'); @endphp
     <div>
       <button onclick="toggleDisposal()" id="disposalToggle" class="{{ $dispActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
@@ -580,11 +587,11 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
           style="font-size:11px;transition:transform .2s;{{ $dispActive ? 'transform:rotate(180deg)' : '' }}"></i>
       </button>
       <div id="disposalMenu" style="{{ $dispActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.disposal.index') }}" class="nav-link {{ request()->routeIs('disposal.index') ? 'active' : '' }}"
+        <a href="{{ route('it.disposal.index') }}" class="nav-link {{ request()->routeIs('it.disposal.index') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-box-arrow-right" style="font-size:14px"></i> Disposal Items
         </a>
-        <a href="{{ route('it.disposal.proofs') }}" class="nav-link {{ request()->routeIs('disposal.proofs') ? 'active' : '' }}"
+        <a href="{{ route('it.disposal.proofs') }}" class="nav-link {{ request()->routeIs('it.disposal.proofs') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-patch-check-fill" style="font-size:14px"></i> Collected Proofs
         </a>
@@ -601,7 +608,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     </script>
 
     {{-- Reports — Admin + Finance only --}}
-    @php $rptActive = request()->routeIs('reports.*'); @endphp
+    @php $rptActive = request()->routeIs('it.reports.*'); @endphp
     <div>
       <button onclick="toggleReports()" id="reportsToggle" class="{{ $rptActive ? 'sb-active' : '' }}"
         style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
@@ -615,11 +622,11 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
           style="font-size:11px;transition:transform .2s;{{ $rptActive ? 'transform:rotate(180deg)' : '' }}"></i>
       </button>
       <div id="reportsMenu" style="{{ $rptActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.reports.it') }}" class="nav-link {{ request()->routeIs('reports.it') ? 'active' : '' }}"
+        <a href="{{ route('it.reports.it') }}" class="nav-link {{ request()->routeIs('it.reports.it') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
         </a>
-        <a href="{{ route('it.reports.non-it') }}" class="nav-link {{ request()->routeIs('reports.non-it') ? 'active' : '' }}"
+        <a href="{{ route('it.reports.non-it') }}" class="nav-link {{ request()->routeIs('it.reports.non-it') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-archive" style="font-size:14px"></i> Non-IT Assets
         </a>
@@ -639,7 +646,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     {{-- Request Form — all users --}}
     <div class="nav-section-label">Request Form</div>
     @php
-      $itrActive = request()->routeIs('it-request-form') || request()->routeIs('it-request-form.drafts');
+      $itrActive = request()->routeIs('it.it-request-form') || request()->routeIs('it.it-request-form.*');
     @endphp
     @if(!$user->isAdmin() && $itDraftCount > 0)
     <div>
@@ -655,11 +662,11 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
           style="font-size:11px;transition:transform .2s;{{ $itrActive ? 'transform:rotate(180deg)' : '' }}"></i>
       </button>
       <div id="itrMenu" style="{{ $itrActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
-        <a href="{{ route('it.it-request-form') }}" class="nav-link {{ request()->routeIs('it-request-form') ? 'active' : '' }}"
+        <a href="{{ route('it.it-request-form') }}" class="nav-link {{ request()->routeIs('it.it-request-form') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-plus-circle" style="font-size:14px"></i> New Request
         </a>
-        <a href="{{ route('it.it-request-form.drafts') }}" class="nav-link {{ request()->routeIs('it-request-form.drafts') ? 'active' : '' }}"
+        <a href="{{ route('it.it-request-form.drafts') }}" class="nav-link {{ request()->routeIs('it.it-request-form.drafts') ? 'active' : '' }}"
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-floppy-fill" style="font-size:14px"></i> Saved Drafts
           <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-weight:700;margin-left:4px">{{ $itDraftCount }}</span>
@@ -686,18 +693,18 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     <div class="nav-section-label">Admin</div>
 
     @if($user->isAdmin())
-    <a href="{{ route('it.users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+    <a href="{{ route('it.users.index') }}" class="nav-link {{ request()->routeIs('it.users.*') ? 'active' : '' }}">
       <i class="bi bi-people-fill"></i> Manage Users
     </a>
     @endif
 
     @if($user->isAdmin())
-    <a href="{{ route('it.activity.index') }}" class="nav-link {{ request()->routeIs('activity.*') ? 'active' : '' }}">
+    <a href="{{ route('it.activity.index') }}" class="nav-link {{ request()->routeIs('it.activity.*') ? 'active' : '' }}">
       <i class="bi bi-clock-history"></i> Activity Log
     </a>
     @endif
 
-    <a href="{{ route('it.email-settings.index') }}" class="nav-link {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">
+    <a href="{{ route('it.email-settings.index') }}" class="nav-link {{ request()->routeIs('it.email-settings.*') ? 'active' : '' }}">
       <i class="bi bi-envelope-fill"></i> Email {{ $user->isAdmin() ? 'Settings' : 'Notifications' }}
     </a>
     @endif
@@ -705,7 +712,7 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     {{-- Masterdata section --}}
     @if($user->isAdminOrFinance())
     <div class="nav-section-label">Masterdata</div>
-    @php $mdActive = request()->routeIs('masterdata.*') || request()->routeIs('asset-classes.*') || request()->routeIs('brands.*') || request()->routeIs('locations.*'); @endphp
+    @php $mdActive = request()->routeIs('it.masterdata.*') || request()->routeIs('it.asset-classes.*') || request()->routeIs('it.brands.*') || request()->routeIs('it.locations.*'); @endphp
     <a href="{{ route('it.masterdata.index') }}" class="nav-link {{ $mdActive ? 'active' : '' }}">
       <i class="bi bi-collection-fill"></i> Masterdata
     </a>
@@ -717,6 +724,9 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     @endif
 
     <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
+    <a href="{{ route('it.role-metric') }}" class="nav-link {{ request()->routeIs('it.role-metric') ? 'active' : '' }}">
+      <i class="bi bi-table"></i> Role Metric
+    </a>
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
     </a>

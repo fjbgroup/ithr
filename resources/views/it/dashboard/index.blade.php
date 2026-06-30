@@ -17,6 +17,8 @@
 .ds-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .ds-num{font-size:30px;font-weight:800;color:var(--text);line-height:1;font-family:'Inter',sans-serif}
 .ds-lbl{font-size:12px;color:var(--muted);margin-top:5px;font-weight:500}
+.ds-card-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.25}
+.ds-card-sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
 
 .ds-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:clip;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
 .ds-box-head{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:60px;z-index:5;background:var(--surface)}
@@ -103,6 +105,46 @@
   </div>
 </div>
 
+
+<!-- ═══ COMMON ROLE CARDS ═══ -->
+<div class="row g-4 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <a href="{{ route('it.inventory.index') }}" class="ds-card">
+      <div class="ds-icon" style="background:rgba(2,132,199,.12);color:#0284c7"><i class="bi bi-box-seam"></i></div>
+      <div>
+        <div class="ds-card-title">IT Assets</div>
+        <div class="ds-card-sub">View inventory records</div>
+      </div>
+    </a>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <a href="{{ route('it.non-it.index') }}" class="ds-card">
+      <div class="ds-icon" style="background:rgba(20,184,166,.12);color:#0f766e"><i class="bi bi-boxes"></i></div>
+      <div>
+        <div class="ds-card-title">Non-IT Assets</div>
+        <div class="ds-card-sub">View non-IT records</div>
+      </div>
+    </a>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <a href="{{ route('it.writeoff.index') }}" class="ds-card">
+      <div class="ds-icon" style="background:rgba(245,158,11,.14);color:#d97706"><i class="bi bi-pen-fill"></i></div>
+      <div>
+        <div class="ds-card-title">Write Off</div>
+        <div class="ds-card-sub">Open write-off workflow</div>
+      </div>
+    </a>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <a href="{{ route('it.role-metric') }}" class="ds-card">
+      <div class="ds-icon" style="background:rgba(99,102,241,.13);color:#4f46e5"><i class="bi bi-table"></i></div>
+      <div>
+        <div class="ds-card-title">Role Metric</div>
+        <div class="ds-card-sub">Read access matrix</div>
+      </div>
+    </a>
+  </div>
+</div>
 
 <!-- ═══ CHART ROW ═══ -->
 <div class="row g-4 mb-4">
@@ -438,4 +480,3 @@
 })();
 </script>
 @endpush
-

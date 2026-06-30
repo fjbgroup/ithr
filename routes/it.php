@@ -22,6 +22,7 @@ use App\Http\Controllers\IT\NonItAssetController;
 use App\Http\Controllers\IT\NotificationController;
 use App\Http\Controllers\IT\ProfileController;
 use App\Http\Controllers\IT\ReportController;
+use App\Http\Controllers\IT\RoleMetricController;
 use App\Http\Controllers\IT\UserController;
 use App\Http\Controllers\IT\WriteoffController;
 use App\Http\Controllers\IT\WriteoffInventoryController;
@@ -54,6 +55,7 @@ Route::prefix('it')->name('it.')->group(function () {
         Route::middleware('it.must.change.pass')->group(function () {
 
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+            Route::get('/role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
 
             // IT Inventory
             Route::get('/inventory',                      [InventoryController::class, 'index'])->name('inventory.index');
