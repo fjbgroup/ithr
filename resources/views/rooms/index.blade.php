@@ -205,10 +205,15 @@
         .rb-m-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
         .rb-m-stack thead { display: none !important; }
         .rb-m-stack tbody { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        /* flex column on tr forces td children to stretch to full row width reliably
+           (display:block alone on td still uses table column-width algorithm in many browsers) */
         .rb-m-stack tbody tr {
-            display: block !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
             width: 100% !important;
             box-sizing: border-box !important;
+            overflow: hidden !important;
             border: 1px solid var(--border) !important;
             border-radius: 10px;
             margin: 0 0 .75rem;
@@ -218,12 +223,14 @@
         .rb-m-stack tbody td {
             display: block !important;
             width: 100% !important;
+            min-width: 0 !important;
             box-sizing: border-box !important;
             padding: .2rem 0 !important;
             border: none !important;
             text-align: left !important;
             white-space: normal !important;
             word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
         }
         .rb-m-stack tbody td[data-label]::before {
             content: attr(data-label);
@@ -258,6 +265,8 @@
         .rb-grid-corner, .rb-room-meta-col { width: 90px !important; padding: 0.4rem !important; }
         .rb-rm-name { font-size: 0.75rem !important; }
         .rb-timeline-col { background-size: calc(100% / 7) 100% !important; } /* fewer grid lines on small screens */
+        /* topbar shrinks to 48px on very small screens */
+        .rb-fab { top: calc(48px + env(safe-area-inset-top, 0px) + .6rem); }
     }
 
     @media (max-width: 360px) {
@@ -328,8 +337,12 @@
             align-items: center !important;
             gap: .5rem !important;
             margin-bottom: .75rem;
+            padding-right: calc(52px + 1.4rem); /* clear the FAB button */
         }
         .pub-controls > div:last-child { display: none !important; }
+
+        /* Prevent FAB from covering the approval section header badge */
+        .rb-approval-header { padding-right: calc(52px + 1.5rem) !important; }
         .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; }
         .pub-datepicker-lbl { flex: 1; justify-content: center; }
         .pub-datepicker-lbl .pub-date-text { font-size: .82rem; }
