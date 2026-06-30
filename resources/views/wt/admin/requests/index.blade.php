@@ -3741,10 +3741,10 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-bell text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title">{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Pending IT Approval Requests' : 'Pending Executive Approval Requests' }}</h4>
-            <p class="pending-queue-subtitle">Review new walkie talkie applications awaiting action</p>
+            <h4 class="pending-queue-title" style="font-size:21px!important;line-height:1.22!important;font-weight:900!important;letter-spacing:.04em!important;margin:0!important">{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Pending IT Approval Requests' : 'Pending Executive Approval Requests' }}</h4>
+            <p class="pending-queue-subtitle" style="font-size:15px!important;line-height:1.5!important;margin-top:6px!important">Review new walkie talkie applications awaiting action</p>
         </div>
-        <span class="pending-queue-count"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingRequests->count() }} Pending</span>
+        <span class="pending-queue-count" style="min-height:46px!important;padding:10px 18px!important;font-size:15px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.03em!important"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingRequests->count() }} Pending</span>
     </div>
     <div class="pending-queue-body">
         <table id="requestsTable" class="w-full text-left display nowrap">
@@ -4098,10 +4098,10 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-rotate-left text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title">Pending Returns</h4>
-            <p class="pending-queue-subtitle">Confirm returned units before inventory is updated</p>
+            <h4 class="pending-queue-title" style="font-size:21px!important;line-height:1.22!important;font-weight:900!important;letter-spacing:.04em!important;margin:0!important">Pending Returns</h4>
+            <p class="pending-queue-subtitle" style="font-size:15px!important;line-height:1.5!important;margin-top:6px!important">Confirm returned units before inventory is updated</p>
         </div>
-        <span class="pending-queue-count"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingReturns->count() }} Pending</span>
+        <span class="pending-queue-count" style="min-height:46px!important;padding:10px 18px!important;font-size:15px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.03em!important"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingReturns->count() }} Pending</span>
     </div>
     <div class="pending-queue-body">
         <table id="returnsTable" class="w-full text-left display nowrap">
@@ -4237,10 +4237,10 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-triangle-exclamation text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title">Pending Report Faulty</h4>
-            <p class="pending-queue-subtitle">Check faulty reports waiting for ICT or executive approval</p>
+            <h4 class="pending-queue-title" style="font-size:21px!important;line-height:1.22!important;font-weight:900!important;letter-spacing:.04em!important;margin:0!important">Pending Report Faulty</h4>
+            <p class="pending-queue-subtitle" style="font-size:15px!important;line-height:1.5!important;margin-top:6px!important">Check faulty reports waiting for ICT or executive approval</p>
         </div>
-        <span class="pending-queue-count"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingDamageReports->count() }} Pending</span>
+        <span class="pending-queue-count" style="min-height:46px!important;padding:10px 18px!important;font-size:15px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.03em!important"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingDamageReports->count() }} Pending</span>
     </div>
     <div class="pending-queue-body">
         <table id="damagesTable" class="w-full text-left display nowrap">
