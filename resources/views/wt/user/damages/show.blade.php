@@ -19,6 +19,10 @@
 .fshow-info-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:6px}
 .fshow-info-val{font-size:13px;font-weight:700;color:var(--text)}
 .fshow-info-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.fshow-note{font-size:13px;font-weight:600;line-height:1.75;color:var(--text);white-space:pre-line;overflow-wrap:anywhere}
+.fshow-note-panel{border-color:rgba(14,165,233,.28);background:rgba(14,165,233,.05)}
+.fshow-note-panel .fshow-info-label{color:#0369a1}
+.fshow-note-secondary{margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
 </style>
 @endpush
 
@@ -142,15 +146,18 @@
       <div class="col-12">
         <div class="fshow-info-cell">
           <div class="fshow-info-label">Problem Reported</div>
-          <div class="fshow-info-val" style="font-weight:600;line-height:1.6">{{ $record->problem_possible ?: ($record->issue_description ?: '-') }}</div>
+          <div class="fshow-note">{!! nl2br(e($record->problem_possible ?: ($record->issue_description ?: '-'))) !!}</div>
         </div>
       </div>
       <div class="col-12">
-        <div class="fshow-info-cell">
+        <div class="fshow-info-cell fshow-note-panel">
           <div class="fshow-info-label">Remarks / Replacement Details</div>
-          <div class="fshow-info-val" style="font-weight:600;line-height:1.6">{{ $record->remarks ?: 'No additional remarks.' }}</div>
+          <div class="fshow-note">{!! nl2br(e($record->remarks ?: 'No additional remarks.')) !!}</div>
           @if($record->temporary_spare_request_note)
-          <div class="fshow-info-sub" style="color:#0369a1;margin-top:6px">Temporary WT: {{ $record->temporary_spare_request_note }}</div>
+          <div class="fshow-note-secondary">
+            <div class="fshow-info-label" style="margin-bottom:4px">Temporary WT Note</div>
+            <div class="fshow-note" style="color:#0369a1">{!! nl2br(e($record->temporary_spare_request_note)) !!}</div>
+          </div>
           @endif
         </div>
       </div>

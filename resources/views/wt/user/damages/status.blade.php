@@ -13,6 +13,11 @@
 .fs-badge{display:inline-flex;padding:2px 10px;border-radius:20px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border:1px solid}
 .fs-record{padding:16px 20px;border-bottom:1px solid var(--border)}
 .fs-record:last-child{border-bottom:none}
+.fs-readable-line{margin-top:6px;font-size:12px;font-weight:600;line-height:1.65;color:var(--muted);white-space:pre-line;overflow-wrap:anywhere}
+.fs-note-panel{margin-top:10px;border:1px solid rgba(14,165,233,.22);border-radius:10px;background:rgba(14,165,233,.05);padding:10px 12px}
+.fs-note-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:#0369a1;margin-bottom:4px}
+.fs-note-body{font-size:12px;font-weight:650;line-height:1.7;color:var(--text);white-space:pre-line;overflow-wrap:anywhere}
+.fs-note-body.is-blue{color:#0369a1}
 </style>
 @endpush
 
@@ -98,7 +103,7 @@
           @endif
         </div>
         <div style="font-size:13px;font-weight:700;color:var(--text)">{{ $record->model ?: 'NO MODEL' }}{{ $record->radio_id ? ' - '.$record->radio_id : '' }}</div>
-        <div style="margin-top:3px;font-size:11px;color:var(--muted)">{{ $record->problem_possible ?: ($record->issue_description ?: 'No problem details saved yet.') }}</div>
+        <div class="fs-readable-line">{!! nl2br(e($record->problem_possible ?: ($record->issue_description ?: 'No problem details saved yet.'))) !!}</div>
         <div style="margin-top:3px;font-size:10px;color:var(--muted)">
           Reporter: {{ $record->reporter_name ?: '-' }} &bull; Submitted: {{ $record->received_date ? \Carbon\Carbon::parse($record->received_date)->format('d M Y') : '-' }}
           @if($record->ict_received_at) &bull; ICT Received: {{ \Carbon\Carbon::parse($record->ict_received_at)->format('d M Y') }} @endif
@@ -112,10 +117,16 @@
         </div>
         @endif
         @if(!empty($record->remarks))
-        <div style="margin-top:4px;font-size:10px;font-weight:600;color:var(--accent)">{{ $record->remarks }}</div>
+        <div class="fs-note-panel">
+          <div class="fs-note-label">ICT Note / Remarks</div>
+          <div class="fs-note-body">{!! nl2br(e($record->remarks)) !!}</div>
+        </div>
         @endif
         @if(!empty($record->temporary_spare_request_note))
-        <div style="margin-top:4px;font-size:10px;font-weight:600;color:#0369a1">Temporary WT: {{ $record->temporary_spare_request_note }}</div>
+        <div class="fs-note-panel">
+          <div class="fs-note-label">Temporary WT Note</div>
+          <div class="fs-note-body is-blue">{!! nl2br(e($record->temporary_spare_request_note)) !!}</div>
+        </div>
         @endif
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">

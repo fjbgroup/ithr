@@ -92,6 +92,44 @@
     .dark .faulty-report-label {
         color: #94a3b8;
     }
+    .faulty-report-readable {
+        color: #334155;
+        font-size: 12px;
+        font-weight: 650;
+        line-height: 1.75;
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+    }
+    .dark .faulty-report-readable {
+        color: #cbd5e1;
+    }
+    .faulty-report-note-box {
+        border-radius: 10px;
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        padding: 12px 14px;
+    }
+    .dark .faulty-report-note-box {
+        border-color: rgba(59, 130, 246, 0.45);
+        background: rgba(30, 64, 175, 0.2);
+    }
+    .faulty-report-note-title {
+        color: #0369a1;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+    .dark .faulty-report-note-title {
+        color: #7dd3fc;
+    }
+    .faulty-report-field:is(textarea) {
+        min-height: 86px;
+        font-size: 12px;
+        font-weight: 650;
+        line-height: 1.6;
+        resize: vertical;
+    }
     .faulty-report-pagination {
         display: flex;
         align-items: center;
@@ -266,25 +304,25 @@
 
                     <div class="mt-4">
                         <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Problem Reported</p>
-                        <p class="mt-1 text-[11px] font-bold leading-5 text-slate-600 dark:text-slate-300">
-                            {{ $record->problem_possible ?: ($record->issue ?: $record->issue_description ?: '-') }}
+                        <p class="faulty-report-readable mt-1">
+                            {!! nl2br(e($record->problem_possible ?: ($record->issue ?: $record->issue_description ?: '-'))) !!}
                         </p>
                     </div>
 
                     @if($record->remarks)
-                    <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-                        <p class="text-[9px] font-black uppercase tracking-widest text-amber-700">Latest Note Visible To User</p>
-                        <p class="mt-1 text-[11px] font-bold leading-5 text-amber-800">{{ $record->remarks }}</p>
+                    <div class="faulty-report-note-box mt-4">
+                        <p class="faulty-report-note-title">Latest Note Visible To User</p>
+                        <p class="faulty-report-readable mt-1">{!! nl2br(e($record->remarks)) !!}</p>
                     </div>
                     @endif
 
                     @if($record->temporary_spare_requested && ! $record->temporarySpareWalkie)
-                    <div class="mt-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 dark:border-sky-900/60 dark:bg-sky-950/30">
+                    <div class="faulty-report-note-box mt-4">
                         <p class="text-[9px] font-black uppercase tracking-widest text-sky-700 dark:text-sky-300">User Requested Temporary WT</p>
-                        <p class="mt-1 text-[11px] font-bold leading-5 text-sky-900 dark:text-sky-100">
+                        <p class="faulty-report-readable mt-1">
                             Please assign a SPARE / NEW WT below if stock is available.
                             @if($record->temporary_spare_request_note)
-                                Note: {{ $record->temporary_spare_request_note }}
+                                <br>Note: {!! nl2br(e($record->temporary_spare_request_note)) !!}
                             @endif
                         </p>
                     </div>
@@ -576,4 +614,3 @@
     });
 </script>
 @endpush
-
