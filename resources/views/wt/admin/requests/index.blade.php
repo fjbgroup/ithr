@@ -3101,52 +3101,52 @@
         }
     }
 
-    /* ── Match history page sizing ── */
+    /* Match standard WT admin panel sizing */
     .approval-inbox .pending-queue-card {
-        border-radius: 16px !important;
+        border-radius: 18px !important;
         background: var(--approval-panel) !important;
         box-shadow: none !important;
         border: 1px solid var(--approval-line) !important;
-        margin-bottom: 16px !important;
+        margin-bottom: 22px !important;
     }
     .approval-inbox .pending-queue-header {
-        padding: 14px 18px !important;
-        gap: 12px !important;
+        padding: 18px 22px !important;
+        gap: 14px !important;
         background: rgba(15, 23, 42, 0.35) !important;
         border-bottom: 1px solid var(--approval-line) !important;
         min-height: unset !important;
     }
     .approval-inbox .pending-queue-icon {
-        width: 30px !important;
-        height: 30px !important;
-        border-radius: 10px !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 12px !important;
     }
     .approval-inbox .pending-queue-icon i {
-        font-size: 13px !important;
+        font-size: 16px !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 11px !important;
+        font-size: 14px !important;
         font-weight: 900 !important;
-        letter-spacing: 0.08em !important;
-        line-height: 1.15 !important;
+        letter-spacing: 0.06em !important;
+        line-height: 1.2 !important;
     }
     .approval-inbox .pending-queue-subtitle {
-        margin-top: 3px !important;
-        font-size: 9px !important;
+        margin-top: 5px !important;
+        font-size: 11px !important;
         font-weight: 800 !important;
-        letter-spacing: 0.06em !important;
-        line-height: 1.3 !important;
+        letter-spacing: 0.04em !important;
+        line-height: 1.35 !important;
     }
     .approval-inbox .pending-queue-count {
-        min-height: 28px !important;
-        padding: 5px 10px !important;
-        gap: 7px !important;
-        font-size: 9px !important;
+        min-height: 34px !important;
+        padding: 7px 13px !important;
+        gap: 8px !important;
+        font-size: 11px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
     }
     .approval-inbox .pending-queue-body {
-        padding: 12px 16px 16px !important;
+        padding: 18px 20px 20px !important;
     }
     .approval-inbox table.dataTable,
     .approval-inbox .pending-queue-card table.dataTable {
@@ -3156,15 +3156,15 @@
     }
     .approval-inbox table.dataTable thead th,
     .approval-inbox .pending-queue-card table.dataTable thead th {
-        padding: 13px 14px !important;
-        font-size: 9px !important;
+        padding: 15px 16px !important;
+        font-size: 11px !important;
         font-weight: 800 !important;
-        letter-spacing: 0.14em !important;
+        letter-spacing: 0.1em !important;
         line-height: 1.1 !important;
     }
     .approval-inbox table.dataTable tbody td,
     .approval-inbox .pending-queue-card table.dataTable tbody td {
-        padding: 14px !important;
+        padding: 16px !important;
         font-size: unset !important;
         line-height: unset !important;
     }
@@ -3202,35 +3202,35 @@
     .approval-inbox .requestor-name,
     .approval-inbox .request-summary-title,
     .approval-inbox .approval-body-title {
-        font-size: 10px !important;
+        font-size: 12px !important;
         font-weight: 800 !important;
-        line-height: 1.2 !important;
+        line-height: 1.25 !important;
     }
     .approval-inbox .requestor-meta,
     .approval-inbox .request-summary-note,
     .approval-inbox .approval-body-meta {
-        font-size: 9px !important;
-        line-height: 1.35 !important;
+        font-size: 10px !important;
+        line-height: 1.45 !important;
     }
     .approval-inbox .requestor-label,
     .approval-inbox .summary-label,
     .approval-inbox .request-meta-label {
-        font-size: 8px !important;
-        letter-spacing: 0.1em !important;
+        font-size: 9px !important;
+        letter-spacing: 0.08em !important;
         line-height: 1.1 !important;
     }
     .approval-inbox .requestor-value,
     .approval-inbox .summary-value,
     .approval-inbox .request-meta-value {
-        font-size: 10px !important;
+        font-size: 12px !important;
         font-weight: 800 !important;
-        line-height: 1.35 !important;
+        line-height: 1.4 !important;
     }
     .approval-inbox .requestor-avatar {
-        width: 30px !important;
-        height: 30px !important;
+        width: 36px !important;
+        height: 36px !important;
         border-radius: 999px !important;
-        font-size: 12px !important;
+        font-size: 14px !important;
     }
     .approval-inbox .requestor-card,
     .approval-inbox .request-summary-card {
@@ -3239,33 +3239,33 @@
     }
     .approval-inbox .requestor-item,
     .approval-inbox .request-summary-card .request-meta-block {
-        padding: 10px 12px !important;
+        padding: 12px 14px !important;
         border-radius: unset !important;
     }
     .approval-inbox .request-pill {
-        min-height: 20px !important;
-        padding: 3px 7px !important;
-        font-size: 7px !important;
+        min-height: 24px !important;
+        padding: 4px 9px !important;
+        font-size: 9px !important;
         line-height: 1 !important;
-        border-radius: 6px !important;
+        border-radius: 8px !important;
     }
     .approval-inbox .request-badges {
-        gap: 5px !important;
-        margin-top: 6px !important;
-        padding: 0 12px 12px !important;
+        gap: 7px !important;
+        margin-top: 8px !important;
+        padding: 0 14px 14px !important;
     }
     .approval-inbox .approval-action-btn {
-        min-height: 30px !important;
-        padding: 6px 10px !important;
-        border-radius: 9px !important;
-        font-size: 9px !important;
+        min-height: 36px !important;
+        padding: 8px 12px !important;
+        border-radius: 10px !important;
+        font-size: 10px !important;
         font-weight: 900 !important;
-        letter-spacing: 0.09em !important;
+        letter-spacing: 0.07em !important;
         line-height: 1 !important;
     }
     .approval-inbox .approval-action-row {
-        gap: 6px !important;
-        max-width: 120px !important;
+        gap: 8px !important;
+        max-width: 138px !important;
     }
     .approval-inbox .dataTables_wrapper .dataTables_length,
     .approval-inbox .dataTables_wrapper .dataTables_filter {
