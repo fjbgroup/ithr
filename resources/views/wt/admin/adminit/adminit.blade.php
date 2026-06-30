@@ -70,7 +70,10 @@
         margin-right: -10px;
     }
     .adminit-staff-table .overflow-x-auto {
-        padding: 6px 8px 10px;
+        padding: 18px 22px 24px;
+    }
+    .adminit-staff-table .dataTables_wrapper {
+        padding: 4px 2px 0;
     }
     @media (max-width: 768px) {
         .adminit-staff-table {
@@ -78,7 +81,7 @@
             margin-right: 0;
         }
         .adminit-staff-table .overflow-x-auto {
-            padding: 4px;
+            padding: 14px 12px 18px;
         }
     }
     .adminit-staff-table table.dataTable {
