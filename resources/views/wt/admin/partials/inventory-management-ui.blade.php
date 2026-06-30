@@ -2220,11 +2220,23 @@ html:not(.dark) body .content-surface:has(.inventory-management-ui),
 html:not(.dark) body .content-surface:has(.inventory-page-shell),
 html:not(.dark) body .content-surface:has(.maintenance-page-shell),
 html:not(.dark) body .content-surface:has(.special-page-shell),
-html:not(.dark) body .content-surface:has(.duplicate-page) {
+html:not(.dark) body .content-surface:has(.duplicate-page),
+html[data-theme="light"] body .content-surface:has(.inventory-management-ui),
+html[data-theme="light"] body .content-surface:has(.inventory-page-shell),
+html[data-theme="light"] body .content-surface:has(.maintenance-page-shell),
+html[data-theme="light"] body .content-surface:has(.special-page-shell),
+html[data-theme="light"] body .content-surface:has(.duplicate-page) {
     background: #f4f7fb !important;
 }
 
 html:not(.dark) body .content-surface :is(
+    .inventory-page-header .page-title-standard,
+    .maintenance-page-shell .page-title-standard,
+    .special-page-shell .page-title-standard,
+    .duplicate-hero .page-title-standard,
+    .wt-data-page-title
+),
+html[data-theme="light"] body .content-surface :is(
     .inventory-page-header .page-title-standard,
     .maintenance-page-shell .page-title-standard,
     .special-page-shell .page-title-standard,
@@ -2245,11 +2257,39 @@ html:not(.dark) body .content-surface :is(
     .duplicate-filter-field label,
     .unused-filter-field label,
     .wt-data-field label
+),
+html[data-theme="light"] body .content-surface :is(
+    .inventory-page-header .page-subtitle-standard,
+    .maintenance-page-shell .page-subtitle-standard,
+    .special-page-shell .page-subtitle-standard,
+    .duplicate-hero .page-subtitle-standard,
+    .wt-data-page-subtitle,
+    .clean-admin-label,
+    .special-filter-field label,
+    .duplicate-filter-field label,
+    .unused-filter-field label,
+    .wt-data-field label
 ) {
     color: #64748b !important;
 }
 
 html:not(.dark) body .content-surface :is(
+    .inventory-page-header .wt-btn,
+    .maintenance-page-shell > .page-header-block .wt-btn,
+    .special-page-shell > .page-header-block .wt-btn,
+    .duplicate-hero .wt-btn,
+    .wt-data-page-actions .wt-btn,
+    .clean-admin-filter,
+    .special-filter-panel,
+    .duplicate-search-panel,
+    .unused-filter-panel,
+    .inventory-table-shell,
+    .clean-admin-table-shell,
+    .special-table-shell,
+    .duplicate-table-shell,
+    .unused-table-shell
+),
+html[data-theme="light"] body .content-surface :is(
     .inventory-page-header .wt-btn,
     .maintenance-page-shell > .page-header-block .wt-btn,
     .special-page-shell > .page-header-block .wt-btn,
@@ -2286,6 +2326,23 @@ html:not(.dark) body .content-surface :is(
     .wt-data-input,
     .wt-data-select,
     .wt-data-reset
+),
+html[data-theme="light"] body .content-surface :is(
+    .clean-admin-input,
+    .clean-admin-select,
+    .clean-admin-reset,
+    .special-filter-input,
+    .special-filter-select,
+    .special-filter-reset,
+    .duplicate-search,
+    .duplicate-filter-select,
+    .duplicate-filter-reset,
+    .unused-filter-input,
+    .unused-filter-select,
+    .unused-filter-reset,
+    .wt-data-input,
+    .wt-data-select,
+    .wt-data-reset
 ) {
     border-color: #cbd5e1 !important;
     background: #f8fafc !important;
@@ -2294,6 +2351,17 @@ html:not(.dark) body .content-surface :is(
 
 html:not(.dark) body .content-surface :is(
     #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable,
+    #duplicateTable,
+    .clean-admin-table,
+    .unused-table,
+    .wt-data table
+) thead th,
+html[data-theme="light"] body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
     #maintenanceTable,
     #specialTable,
     #duplicateTable,
@@ -2308,6 +2376,7 @@ html:not(.dark) body .content-surface :is(
 
 html:not(.dark) body .content-surface :is(
     #walkiesTable,
+    #maintTable,
     #maintenanceTable,
     #specialTable,
     #duplicateTable,
@@ -2323,10 +2392,123 @@ html:not(.dark) body .content-surface :is(
     .special-table-footer,
     .wt-data-footer,
     .adminit-table-footer
+),
+html[data-theme="light"] body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable,
+    #duplicateTable,
+    .clean-admin-table,
+    .unused-table,
+    .wt-data table
+) tbody td,
+html[data-theme="light"] body .content-surface :is(
+    .inventory-table-footer,
+    .repair-table-footer,
+    .unused-pagination-bar,
+    .duplicate-table-footer,
+    .special-table-footer,
+    .wt-data-footer,
+    .adminit-table-footer
 ) {
     border-color: #e2e8f0 !important;
     background: #ffffff !important;
     color: #1f2937 !important;
+}
+
+html.dark body .content-surface:has(.inventory-management-ui),
+html.dark body .content-surface:has(.inventory-page-shell),
+html.dark body .content-surface:has(.maintenance-page-shell),
+html.dark body .content-surface:has(.special-page-shell),
+html.dark body .content-surface:has(.duplicate-page),
+html[data-theme="dark"] body .content-surface:has(.inventory-management-ui),
+html[data-theme="dark"] body .content-surface:has(.inventory-page-shell),
+html[data-theme="dark"] body .content-surface:has(.maintenance-page-shell),
+html[data-theme="dark"] body .content-surface:has(.special-page-shell),
+html[data-theme="dark"] body .content-surface:has(.duplicate-page) {
+    background: #0b1220 !important;
+}
+
+html.dark body .content-surface :is(
+    .inventory-page-header .page-title-standard,
+    .maintenance-page-shell .page-title-standard,
+    .special-page-shell .page-title-standard,
+    .duplicate-hero .page-title-standard,
+    .wt-data-page-title
+),
+html[data-theme="dark"] body .content-surface :is(
+    .inventory-page-header .page-title-standard,
+    .maintenance-page-shell .page-title-standard,
+    .special-page-shell .page-title-standard,
+    .duplicate-hero .page-title-standard,
+    .wt-data-page-title
+) {
+    color: #f8fafc !important;
+}
+
+html.dark body .content-surface :is(
+    .inventory-page-header .page-subtitle-standard,
+    .maintenance-page-shell .page-subtitle-standard,
+    .special-page-shell .page-subtitle-standard,
+    .duplicate-hero .page-subtitle-standard,
+    .wt-data-page-subtitle,
+    .clean-admin-label,
+    .special-filter-field label,
+    .duplicate-filter-field label,
+    .unused-filter-field label,
+    .wt-data-field label
+),
+html[data-theme="dark"] body .content-surface :is(
+    .inventory-page-header .page-subtitle-standard,
+    .maintenance-page-shell .page-subtitle-standard,
+    .special-page-shell .page-subtitle-standard,
+    .duplicate-hero .page-subtitle-standard,
+    .wt-data-page-subtitle,
+    .clean-admin-label,
+    .special-filter-field label,
+    .duplicate-filter-field label,
+    .unused-filter-field label,
+    .wt-data-field label
+) {
+    color: #93a4ba !important;
+}
+
+html.dark body .content-surface :is(
+    .inventory-page-header .wt-btn,
+    .maintenance-page-shell > .page-header-block .wt-btn,
+    .special-page-shell > .page-header-block .wt-btn,
+    .duplicate-hero .wt-btn,
+    .wt-data-page-actions .wt-btn,
+    .clean-admin-filter,
+    .special-filter-panel,
+    .duplicate-search-panel,
+    .unused-filter-panel,
+    .inventory-table-shell,
+    .clean-admin-table-shell,
+    .special-table-shell,
+    .duplicate-table-shell,
+    .unused-table-shell
+),
+html[data-theme="dark"] body .content-surface :is(
+    .inventory-page-header .wt-btn,
+    .maintenance-page-shell > .page-header-block .wt-btn,
+    .special-page-shell > .page-header-block .wt-btn,
+    .duplicate-hero .wt-btn,
+    .wt-data-page-actions .wt-btn,
+    .clean-admin-filter,
+    .special-filter-panel,
+    .duplicate-search-panel,
+    .unused-filter-panel,
+    .inventory-table-shell,
+    .clean-admin-table-shell,
+    .special-table-shell,
+    .duplicate-table-shell,
+    .unused-table-shell
+) {
+    border-color: rgba(148, 163, 184, .18) !important;
+    background: #0f172a !important;
+    color: #e5edf7 !important;
 }
 
 /* Duplicated ID requested override: force inline filters and clean centered table grid. */

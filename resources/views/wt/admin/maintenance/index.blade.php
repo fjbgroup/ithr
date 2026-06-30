@@ -14,6 +14,7 @@
     body .content-surface .maintenance-page-shell #mainTableContainer.clean-admin-table-shell {
         border: 1px solid #cbd8e6 !important;
         border-radius: 10px 10px 0 0 !important;
+        margin-top: 18px !important;
         overflow: hidden !important;
         background: #ffffff !important;
     }
