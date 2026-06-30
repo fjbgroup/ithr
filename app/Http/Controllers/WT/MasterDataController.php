@@ -33,12 +33,13 @@ class MasterDataController extends Controller
 
         $counts = collect(MasterData::CATEGORIES)
             ->keys()
-            ->mapWithKeys(fn ($category) => [$category => MasterData::category($category)->count()])
+            ->mapWithKeys(fn ($category) => [$category => MasterData::category($category)->visible()->count()])
             ->all();
 
         $usage = $this->usageCounts($activeTab);
 
         $rows = MasterData::category($activeTab)
+            ->visible()
             ->when($search !== '', fn ($query) => $query->where('value', 'LIKE', "%{$search}%"))
             ->orderBy('value')
             ->get()
@@ -71,6 +72,12 @@ class MasterDataController extends Controller
         ]);
 
         $value = $this->normalize($validated['value']);
+
+        if (MasterData::isBlockedValue($category, $value)) {
+            return redirect()
+                ->route('wt.admin.masterData.index', ['tab' => $category])
+                ->with('error', '"' . $value . '" is a person name, not a position.');
+        }
 
         MasterData::create([
             'category' => $category,
