@@ -69,6 +69,10 @@
         margin-left: -10px;
         margin-right: -10px;
     }
+    .adminit-staff-table .adminit-section-header {
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
     .adminit-staff-table .overflow-x-auto {
         padding: 18px 22px 24px;
     }
@@ -82,6 +86,10 @@
         }
         .adminit-staff-table .overflow-x-auto {
             padding: 14px 12px 18px;
+        }
+        .adminit-staff-table .adminit-section-header {
+            padding-left: 18px !important;
+            padding-right: 18px !important;
         }
     }
     .adminit-staff-table table.dataTable {
