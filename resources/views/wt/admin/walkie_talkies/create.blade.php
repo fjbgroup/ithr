@@ -191,7 +191,7 @@
                 <div class="form-group">
                     <label class="form-label">Executive</label>
                     @php($currentExecutive = strtoupper((string) old('executive', $defaults['executive'] ?? '')))
-                    <select name="executive" class="form-input page-smart-select" data-placeholder="Search executive">
+                    <select name="executive" class="form-input page-tag-select" data-placeholder="Type or search executive">
                         <option value=""></option>
                         @foreach($executiveOptions as $executiveName)
                         <option value="{{ $executiveName }}" @selected($currentExecutive === $executiveName)>{{ $executiveName }}</option>

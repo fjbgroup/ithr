@@ -48,15 +48,18 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .smart-select + .select2-container,
-    .admin-select + .select2-container {
+    .admin-select + .select2-container,
+    .person-select + .select2-container {
         width: 100% !important;
     }
     .smart-select + .select2-container,
-    .admin-select + .select2-container {
+    .admin-select + .select2-container,
+    .person-select + .select2-container {
         width: 100% !important;
     }
     .smart-select + .select2-container .select2-selection--single,
-    .admin-select + .select2-container .select2-selection--single {
+    .admin-select + .select2-container .select2-selection--single,
+    .person-select + .select2-container .select2-selection--single {
         min-height: 42px;
         border-radius: 0.75rem !important;
         border: 1px solid var(--border) !important;
@@ -66,7 +69,8 @@
         align-items: center !important;
     }
     .smart-select + .select2-container .select2-selection__rendered,
-    .admin-select + .select2-container .select2-selection__rendered {
+    .admin-select + .select2-container .select2-selection__rendered,
+    .person-select + .select2-container .select2-selection__rendered {
         color: var(--text) !important;
         font-size: 11px !important;
         font-weight: 700 !important;
@@ -76,11 +80,13 @@
         text-transform: uppercase;
     }
     .smart-select + .select2-container .select2-selection__placeholder,
-    .admin-select + .select2-container .select2-selection__placeholder {
+    .admin-select + .select2-container .select2-selection__placeholder,
+    .person-select + .select2-container .select2-selection__placeholder {
         color: var(--muted) !important;
     }
     .smart-select + .select2-container .select2-selection__arrow,
-    .admin-select + .select2-container .select2-selection__arrow {
+    .admin-select + .select2-container .select2-selection__arrow,
+    .person-select + .select2-container .select2-selection__arrow {
         height: 100% !important;
         right: 12px !important;
     }
@@ -438,14 +444,16 @@
         height: auto !important;
     }
     .damage-form-page .smart-select + .select2-container .select2-selection--single,
-    .damage-form-page .admin-select + .select2-container .select2-selection--single {
+    .damage-form-page .admin-select + .select2-container .select2-selection--single,
+    .damage-form-page .person-select + .select2-container .select2-selection--single {
         min-height: 28px !important;
         height: 28px !important;
         border-radius: 7px !important;
         padding: 2px 8px !important;
     }
     .damage-form-page .smart-select + .select2-container .select2-selection__rendered,
-    .damage-form-page .admin-select + .select2-container .select2-selection__rendered {
+    .damage-form-page .admin-select + .select2-container .select2-selection__rendered,
+    .damage-form-page .person-select + .select2-container .select2-selection__rendered {
         font-size: 9.5px !important;
     }
     .damage-form-page .damage-muted-panel,
@@ -494,11 +502,6 @@
     .damage-form-page .problem-checklist-grid {
         row-gap: 3px !important;
         column-gap: 28px !important;
-    }
-    .damage-form-page .damage-device-center-column,
-    .damage-form-page .damage-device-center-column .form-label,
-    .damage-form-page .damage-device-center-column input {
-        text-align: center !important;
     }
     @media (max-width: 768px) {
         .damage-form-page .damage-card {
@@ -723,8 +726,9 @@
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $personMetaByName = $formOptionLists['person_meta_by_name'] ?? [];
+    $nameOnly = fn ($name) => preg_match('/[A-Z]/', strtoupper((string) $name)) === 1;
     $managedUserNames = $managedUsers
-        ->map(fn ($user) => strtoupper((string) ($user->full_name ?: $user->username)))
+        ->map(fn ($user) => strtoupper(trim((string) $user->full_name)))
         ->filter()
         ->values();
     $extraManagedNames = collect($formOptionLists['ownership_names'] ?? [])
@@ -732,6 +736,18 @@
         ->map(fn ($name) => strtoupper(trim((string) $name)))
         ->filter()
         ->reject(fn ($name) => $managedUserNames->contains($name))
+        ->unique()
+        ->sort()
+        ->values();
+    $handoverPersonOptions = collect([
+            old('handover_person', $draftRecord->handover_person ?? ''),
+            old('pickup_person', $draftRecord->pickup_person ?? ''),
+            $currentUser->full_name ?? '',
+        ])
+        ->merge($managedUserNames)
+        ->merge($extraManagedNames)
+        ->map(fn ($name) => strtoupper(trim((string) $name)))
+        ->filter(fn ($name) => $name !== '' && $nameOnly($name))
         ->unique()
         ->sort()
         ->values();
@@ -1083,9 +1099,26 @@
             </p>
         </div>
         <div class="wt-form-row mb-3">
+            @php
+                $selectedHandoverPerson = strtoupper(old('handover_person', $draftRecord->handover_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username))));
+                $selectedPickupPerson = strtoupper(old('pickup_person', $draftRecord->pickup_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username))));
+            @endphp
             <div>
                 <label class="form-label">Who handovers to ICT <span class="text-red-500">*</span></label>
-                <input type="text" name="handover_person" value="{{ strtoupper(old('handover_person', $draftRecord->handover_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                <select name="handover_person" class="person-select w-full" data-placeholder="Search handover name..." required>
+                    <option value=""></option>
+                    @foreach($handoverPersonOptions as $personName)
+                        @php
+                            $personMeta = $personMetaByName[$personName] ?? [];
+                            $personPhone = $personMeta['phone'] ?? '';
+                            $personDepartment = strtoupper($personMeta['department'] ?? '');
+                        @endphp
+                        <option value="{{ $personName }}" data-phone="{{ $personPhone }}" data-department="{{ $personDepartment }}" @selected($selectedHandoverPerson === $personName)>{{ $personName }}</option>
+                    @endforeach
+                    @if($selectedHandoverPerson && ! $handoverPersonOptions->contains($selectedHandoverPerson))
+                        <option value="{{ $selectedHandoverPerson }}" selected>{{ $selectedHandoverPerson }}</option>
+                    @endif
+                </select>
                 @error('handover_person')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
@@ -1108,7 +1141,20 @@
             </div>
             <div>
                 <label class="form-label">Pickup's Name <span class="text-red-500">*</span></label>
-                <input type="text" name="pickup_person" value="{{ strtoupper(old('pickup_person', $draftRecord->pickup_person ?? (($isAdminRoute && $mode === 'staff') ? '' : ($currentUser->full_name ?: $currentUser->username)))) }}" placeholder="E.G. AHMAD BIN ALI" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
+                <select name="pickup_person" id="pickup_person" class="person-select w-full" data-placeholder="Search pickup name..." required>
+                    <option value=""></option>
+                    @foreach($handoverPersonOptions as $personName)
+                        @php
+                            $personMeta = $personMetaByName[$personName] ?? [];
+                            $personPhone = $personMeta['phone'] ?? '';
+                            $personDepartment = strtoupper($personMeta['department'] ?? '');
+                        @endphp
+                        <option value="{{ $personName }}" data-phone="{{ $personPhone }}" data-department="{{ $personDepartment }}" @selected($selectedPickupPerson === $personName)>{{ $personName }}</option>
+                    @endforeach
+                    @if($selectedPickupPerson && ! $handoverPersonOptions->contains($selectedPickupPerson))
+                        <option value="{{ $selectedPickupPerson }}" selected>{{ $selectedPickupPerson }}</option>
+                    @endif
+                </select>
                 @error('pickup_person')
                     <p class="mt-2 text-[10px] font-bold text-red-600">{{ $message }}</p>
                 @enderror
@@ -1126,9 +1172,8 @@
             </div>
         </div>
 
-        <div data-faulty-device-section>
         {{-- Device Details --}}
-        <h3 style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">
+        <h3 data-faulty-device-section style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-bottom:8px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-left:10px;border-left:3px solid var(--accent)">
             {{ $isAdminRoute ? '2. ' : '' }}Device Details <span class="text-red-500">*</span>
         </h3>
         @if($responsibleWalkies->isNotEmpty() && !($prefillModel || $prefillRadioId || $prefillSerialNumber))
@@ -1204,7 +1249,6 @@
         @error('device_details')
             <p class="-mt-3 mb-5 text-[10px] font-bold text-red-600">{{ $message }}</p>
         @enderror
-        </div>
 
         <div class="damage-muted-panel mb-6 bg-sky-50 border border-dashed border-sky-200 rounded-xl p-4">
             <div class="flex flex-col md:flex-row md:items-start gap-4">
@@ -1776,11 +1820,30 @@
             }
         });
 
+        $('.person-select').select2({
+            tags: true,
+            width: '100%',
+            allowClear: true,
+            dropdownCssClass: 'damage-select2-dropdown staff-account-dropdown',
+            placeholder: function() {
+                return $(this).data('placeholder') || 'Search name...';
+            },
+            createTag: function(params) {
+                const term = $.trim(params.term);
+                if (term === '') return null;
+                return { id: term.toUpperCase(), text: term.toUpperCase(), newTag: true };
+            },
+            insertTag: function(data, tag) {
+                data.unshift(tag);
+            }
+        });
+
         const managedUserSelect = document.getElementById('managed_user_select');
         const targetUserId = document.getElementById('target_user_id');
         const reporterName = document.getElementById('reporter_name');
         const phoneNo = document.getElementById('phone_no');
         const pickupPhoneNo = document.getElementById('pickup_phone_no');
+        const pickupPerson = document.getElementById('pickup_person');
         const department = document.getElementById('department');
         const sector = document.getElementById('sector');
         const bayFrom = document.getElementById('bay_from');
@@ -1829,6 +1892,18 @@
 
         phoneNo?.addEventListener('input', syncMainPhoneToPickup);
         pickupPhoneNo?.addEventListener('input', syncPickupPhoneToMain);
+
+        if (pickupPerson) {
+            $(pickupPerson).on('change select2:select', function () {
+                const option = pickupPerson.options[pickupPerson.selectedIndex];
+                const selectedPhone = option?.dataset?.phone || '';
+
+                if (selectedPhone && pickupPhoneNo) {
+                    setFieldValue(pickupPhoneNo, selectedPhone);
+                    syncPickupPhoneToMain();
+                }
+            });
+        }
 
         if (responsibleWalkieSelect && useResponsibleWalkie) {
             useResponsibleWalkie.addEventListener('click', function () {

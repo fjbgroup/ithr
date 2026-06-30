@@ -753,6 +753,27 @@
 
 </div>
 
+<datalist id="executive-name-options">
+    @foreach($accounts as $account)
+        @php
+            $executiveName = strtoupper((string) ($account->full_name ?: $account->username));
+            $executiveDepartment = strtoupper((string) ($account->department ?: $account->dept_name ?: ''));
+            $executivePosition = strtoupper((string) ($account->position ?: ''));
+            $executiveStaffId = strtoupper((string) ($account->staff_id ?: $account->staff_no ?: $account->username));
+        @endphp
+        @if($executiveName)
+            <option
+                value="{{ $executiveName }}"
+                data-staff-id="{{ $executiveStaffId }}"
+                data-username="{{ $account->username }}"
+                data-department="{{ $executiveDepartment }}"
+                data-position="{{ $executivePosition }}">
+                {{ trim($executiveStaffId . ' ' . $executiveDepartment) }}
+            </option>
+        @endif
+    @endforeach
+</datalist>
+
 <div id="createExecutiveModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="account-modal-card">
         <div class="account-modal-header">
@@ -804,8 +825,8 @@
                         <input type="text" id="wt_field_staff_id" name="staff_id" value="{{ old('staff_id') }}" required>
                     </div>
                     <div class="account-field md:col-span-2">
-                        <label>Full Name</label>
-                        <input type="text" id="wt_field_full_name" name="full_name" value="{{ old('full_name') }}" data-preserve-case="true" required>
+                        <label>Executive Name</label>
+                        <input type="text" id="wt_field_full_name" name="full_name" list="executive-name-options" value="{{ old('full_name') }}" placeholder="Search executive name..." data-preserve-case="true" autocomplete="off" required>
                     </div>
                     <div class="account-field">
                         <label>Department</label>
@@ -858,8 +879,8 @@
                     <input type="text" name="username" id="edit_username" class="navy-input w-full px-4 py-3 rounded-xl border" autocapitalize="off" autocomplete="off" spellcheck="false" data-preserve-case="true" required>
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Full Name</label>
-                    <input type="text" name="full_name" id="edit_full_name" class="navy-input w-full px-4 py-3 rounded-xl border" data-preserve-case="true">
+                    <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Executive Name</label>
+                    <input type="text" name="full_name" id="edit_full_name" list="executive-name-options" class="navy-input w-full px-4 py-3 rounded-xl border" placeholder="Search executive name..." data-preserve-case="true" autocomplete="off">
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Department</label>
@@ -1052,9 +1073,102 @@
         const results = document.getElementById('wtStaffResults');
         const banner  = document.getElementById('wtStaffBanner');
         const label   = document.getElementById('wtStaffBannerLabel');
+        const nameOptions = document.getElementById('executive-name-options');
+        const createNameInput = document.getElementById('wt_field_full_name');
+        const editNameInput = document.getElementById('edit_full_name');
         let timer;
+        let nameSearchTimer;
 
         if (!input) return;
+
+        function normalizeValue(value) {
+            return String(value || '').trim().toUpperCase();
+        }
+
+        function setControlValue(id, value) {
+            const field = document.getElementById(id);
+            if (!field) return;
+
+            const normalizedValue = value || '';
+            if (field.tagName === 'SELECT' && normalizedValue) {
+                const hasOption = Array.from(field.options).some(option => option.value === normalizedValue);
+                if (!hasOption) {
+                    field.add(new Option(normalizedValue, normalizedValue, true, true));
+                }
+            }
+
+            field.value = normalizedValue;
+        }
+
+        function upsertExecutiveNameOption(s) {
+            if (!nameOptions || !s || !s.name) return;
+
+            const name = normalizeValue(s.name);
+            let option = Array.from(nameOptions.options).find(item => normalizeValue(item.value) === name);
+            if (!option) {
+                option = document.createElement('option');
+                option.value = name;
+                nameOptions.appendChild(option);
+            }
+
+            option.dataset.staffId = normalizeValue(s.staff_no);
+            option.dataset.username = normalizeValue(s.staff_no);
+            option.dataset.department = normalizeValue(s.dept_name);
+            option.dataset.position = normalizeValue(s.position);
+            option.label = [option.dataset.staffId, option.dataset.department].filter(Boolean).join(' ');
+            option.textContent = option.label;
+        }
+
+        function findExecutiveNameOption(value) {
+            if (!nameOptions) return null;
+            const selectedName = normalizeValue(value);
+            return Array.from(nameOptions.options).find(option => normalizeValue(option.value) === selectedName) || null;
+        }
+
+        function applyExecutiveNameSelection(mode, value) {
+            const option = findExecutiveNameOption(value);
+            if (!option) return;
+
+            if (mode === 'edit') {
+                setControlValue('edit_staff_id', option.dataset.staffId || '');
+                setControlValue('edit_username', option.dataset.username || option.dataset.staffId || '');
+                setControlValue('edit_department', option.dataset.department || '');
+                setControlValue('edit_position', option.dataset.position || '');
+                return;
+            }
+
+            setControlValue('wt_field_staff_id', option.dataset.staffId || '');
+            setControlValue('wt_field_department', option.dataset.department || '');
+            setControlValue('wt_field_position', option.dataset.position || '');
+            document.getElementById('wt_field_password')?.removeAttribute('required');
+            document.getElementById('wt_field_password_confirmation')?.removeAttribute('required');
+        }
+
+        function refreshExecutiveNameOptions(query) {
+            const q = String(query || '').trim();
+            if (q.length < 2) return;
+
+            clearTimeout(nameSearchTimer);
+            nameSearchTimer = setTimeout(function () {
+                fetch('{{ route('wt.admin.users.staffSearch') }}?q=' + encodeURIComponent(q), {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(r => r.json())
+                .then(data => data.forEach(upsertExecutiveNameOption));
+            }, 220);
+        }
+
+        [createNameInput, editNameInput].forEach(function (nameInput) {
+            if (!nameInput) return;
+
+            nameInput.addEventListener('input', function () {
+                refreshExecutiveNameOptions(this.value);
+            });
+
+            nameInput.addEventListener('change', function () {
+                applyExecutiveNameSelection(this.id === 'edit_full_name' ? 'edit' : 'create', this.value);
+            });
+        });
 
         input.addEventListener('input', function () {
             clearTimeout(timer);
@@ -1107,6 +1221,7 @@
         }
 
         window.wtSelectStaff = function (s) {
+            upsertExecutiveNameOption(s);
             document.getElementById('wt_field_staff_id').value    = s.staff_no;
             document.getElementById('wt_field_full_name').value   = s.name;
             document.getElementById('wt_field_department').value  = s.dept_name;
