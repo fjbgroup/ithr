@@ -2960,34 +2960,34 @@
         display: none !important;
     }
     body .content-surface .approval-inbox .approval-page-header {
-        min-height: 0 !important;
-        margin-bottom: 14px !important;
-        padding: 0 2px 10px !important;
+        min-height: 96px !important;
+        margin-bottom: 24px !important;
+        padding: 18px 24px !important;
         border: 0 !important;
         border-left: 0 !important;
-        border-radius: 12px !important;
-        background: transparent !important;
+        border-radius: 13px !important;
+        background: linear-gradient(90deg, rgba(31, 41, 55, 0.98), rgba(30, 41, 59, 0.98)) !important;
         box-shadow: none !important;
         display: flex !important;
-        align-items: flex-start !important;
+        align-items: center !important;
         justify-content: space-between !important;
-        gap: 12px !important;
+        gap: 18px !important;
     }
     body .content-surface .approval-inbox .approval-page-header .page-title-standard {
         color: #f8fafc !important;
-        font-size: 16px !important;
-        line-height: 1.15 !important;
-        font-weight: 800 !important;
+        font-size: 28px !important;
+        line-height: 1 !important;
+        font-weight: 900 !important;
         letter-spacing: 0 !important;
     }
     body .content-surface .approval-inbox .approval-page-header .page-subtitle-standard {
-        margin-top: 7px !important;
+        margin-top: 8px !important;
         max-width: none !important;
         color: #a8b6c8 !important;
-        font-size: 9px !important;
-        line-height: 1.35 !important;
+        font-size: 13px !important;
+        line-height: 1.25 !important;
         font-weight: 900 !important;
-        letter-spacing: 0.18em !important;
+        letter-spacing: 0.2em !important;
         text-transform: uppercase !important;
     }
     body .content-surface .approval-inbox .approval-header-actions {
@@ -3016,19 +3016,19 @@
         white-space: nowrap !important;
     }
     body .content-surface .approval-inbox .approval-page-header .wt-btn {
-        min-height: 28px !important;
-        padding: 0 11px !important;
+        min-height: 52px !important;
+        padding: 0 20px !important;
         border: 1px solid #2f5d86 !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         background: transparent !important;
         color: #e5e7eb !important;
         box-shadow: none !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 6px !important;
-        font-size: 11px !important;
-        font-weight: 700 !important;
+        gap: 8px !important;
+        font-size: 15px !important;
+        font-weight: 900 !important;
         letter-spacing: 0 !important;
         line-height: 1 !important;
         text-transform: none !important;
@@ -3058,41 +3058,99 @@
 
     body .content-surface .approval-inbox .pending-queue-card {
         padding: 0 !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        background: transparent !important;
+        border: 1px solid var(--approval-line) !important;
+        border-radius: 18px !important;
+        background: var(--approval-panel) !important;
         box-shadow: none !important;
+        margin-bottom: 22px !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-header,
     html:not(.dark) body .content-surface .approval-inbox .pending-queue-header {
         min-height: 0 !important;
-        margin: 0 0 8px !important;
-        padding: 0 2px !important;
+        margin: 0 !important;
+        padding: 18px 22px !important;
         border: 0 !important;
+        border-bottom: 1px solid var(--approval-line) !important;
         border-radius: 0 !important;
-        background: transparent !important;
+        background: rgba(15, 23, 42, 0.35) !important;
         box-shadow: none !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-icon {
-        width: 22px !important;
-        height: 22px !important;
-        border-radius: 7px !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 12px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-icon i {
+        font-size: 16px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-title {
+        font-size: 14px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.06em !important;
+        line-height: 1.2 !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-subtitle {
+        margin-top: 5px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.04em !important;
+        line-height: 1.35 !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-count {
-        min-height: 22px !important;
-        padding: 4px 9px !important;
-        font-size: 8px !important;
+        min-height: 34px !important;
+        padding: 7px 13px !important;
+        font-size: 11px !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-body {
+        padding: 18px 20px 20px !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-card table.dataTable thead th,
     body .content-surface .approval-inbox table.dataTable thead th {
-        padding: 8px 12px !important;
-        font-size: 9px !important;
+        padding: 15px 16px !important;
+        font-size: 11px !important;
         line-height: 1 !important;
-        letter-spacing: 0.04em !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    body .content-surface .approval-inbox .pending-queue-card table.dataTable tbody td,
+    body .content-surface .approval-inbox table.dataTable tbody td {
+        padding: 16px !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-name,
+    body .content-surface .approval-inbox .request-summary-title,
+    body .content-surface .approval-inbox .approval-body-title {
+        font-size: 12px !important;
+        line-height: 1.25 !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-meta,
+    body .content-surface .approval-inbox .request-summary-note,
+    body .content-surface .approval-inbox .approval-body-meta {
+        font-size: 10px !important;
+        line-height: 1.45 !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-label,
+    body .content-surface .approval-inbox .summary-label,
+    body .content-surface .approval-inbox .request-meta-label {
+        font-size: 9px !important;
+        letter-spacing: 0.08em !important;
+    }
+
+    body .content-surface .approval-inbox .requestor-value,
+    body .content-surface .approval-inbox .summary-value,
+    body .content-surface .approval-inbox .request-meta-value {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
     }
 
     @media (max-width: 700px) {
@@ -3338,6 +3396,12 @@
         --approval-panel-soft: #f8fafc;
         --approval-line: #d8e1ed;
         color: #172033 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .approval-page-header,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-page-header {
+        background: #ffffff !important;
+        border: 1px solid #d8e1ed !important;
     }
 
     html:not(.dark) body .content-surface .approval-inbox .approval-page-header .page-title-standard,
