@@ -202,18 +202,18 @@
         .rb-pending-acts .btn { flex: 1 !important; justify-content: center !important; }
 
         /* Table → card transformation.
-           NOTE: selectors use `.table.rb-m-stack` (specificity 0,2,2) so they out-rank the
+           NOTE: selectors use `table.table.rb-m-stack.rb-m-stack` (specificity 0,3,1) so they out-rank the
            global UI standardizer (components/ui/standardizer.blade.php), whose
-           `:where(.content-area…) :is(.table,…) tbody td` rule (0,1,3) otherwise caps every
+           `:where(.content-area…) :is(.table,…) tbody td` rule (0,2,3) otherwise caps every
            cell with `max-width:1px; white-space:nowrap; overflow:hidden`, collapsing the
            stacked mobile cards into a ~1px sliver. The max-width/height/overflow resets below
            explicitly undo that rule. */
-        .table.rb-m-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
-        .table.rb-m-stack thead { display: none !important; }
-        .table.rb-m-stack tbody { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        table.table.rb-m-stack.rb-m-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        table.table.rb-m-stack.rb-m-stack thead { display: none !important; }
+        table.table.rb-m-stack.rb-m-stack tbody { display: block !important; width: 100% !important; box-sizing: border-box !important; }
         /* flex column on tr forces td children to stretch to full row width reliably
            (display:block alone on td still uses table column-width algorithm in many browsers) */
-        .table.rb-m-stack tbody tr {
+        table.table.rb-m-stack.rb-m-stack tbody tr {
             display: flex !important;
             flex-direction: column !important;
             align-items: stretch !important;
@@ -226,7 +226,7 @@
             padding: .85rem 1rem;
             background: var(--surface);
         }
-        .table.rb-m-stack tbody td {
+        table.table.rb-m-stack.rb-m-stack tbody td {
             display: block !important;
             width: 100% !important;
             min-width: 0 !important;
@@ -242,7 +242,7 @@
             word-wrap: break-word !important;
             overflow-wrap: break-word !important;
         }
-        .table.rb-m-stack tbody td[data-label]::before {
+        table.table.rb-m-stack.rb-m-stack tbody td[data-label]::before {
             content: attr(data-label);
             display: block;
             font-size: .6rem;
@@ -252,7 +252,7 @@
             letter-spacing: .04em;
             margin-bottom: .15rem;
         }
-        .table.rb-m-stack tbody td.rb-td-actions {
+        table.table.rb-m-stack.rb-m-stack tbody td.rb-td-actions {
             margin-top: .6rem;
             padding-top: .6rem !important;
             border-top: 1px solid #f1f5f9 !important;
@@ -260,8 +260,8 @@
             flex-wrap: wrap;
             gap: .4rem;
         }
-        .table.rb-m-stack tbody td.rb-td-actions .btn { flex: 1; justify-content: center; }
-        .table.rb-m-stack tbody td.rb-td-hide { display: none; }
+        table.table.rb-m-stack.rb-m-stack tbody td.rb-td-actions .btn { flex: 1; justify-content: center; }
+        table.table.rb-m-stack.rb-m-stack tbody td.rb-td-hide { display: none; }
     }
 
     /* 480px — very small screens */
@@ -549,10 +549,10 @@
             border-top: 1px solid #f1f5f9 !important;
             display: flex !important; flex-wrap: wrap !important; gap: .4rem !important;
         }
-        table.rb-m-stack > tbody > tr > td.rb-td-hide { display: none !important; }
+        table.table.rb-m-stack.rb-m-stack > tbody > tr > td.rb-td-hide { display: none !important; }
 
         /* Prevent any inline-block child div from overflowing the td */
-        table.rb-m-stack tbody td > div { max-width: 100%; box-sizing: border-box; }
+        table.table.rb-m-stack.rb-m-stack tbody td > div { max-width: 100%; box-sizing: border-box; }
     }
 </style>
 @endsection
