@@ -189,6 +189,12 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </a>
     @endif
 
+    <div class="nav-section-label">Guides</div>
+    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}">
+      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}</span>
+      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
+    </a>
+
     <div class="nav-section-label">{{ $isAdminItView ? 'Management' : 'Personal Assets' }}</div>
 
     @if($isAdminItView)
@@ -305,10 +311,6 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     <a href="{{ route('wt.admin.profile') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.profile') ? 'active-sidebar' : '' }}" title="My Profile">
       <i class="fas fa-user-circle" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Profile</span>
       @include('wt.partials.sidebar-info', ['text' => 'View and update your account profile information.'])
-    </a>
-    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="User Manual">
-      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>User Manual</span>
-      @include('wt.partials.sidebar-info', ['text' => 'View step-by-step WT System guidance for ICT and executive users.'])
     </a>
     <a href="{{ route('wt.admin.policies') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.policies') ? 'active-sidebar' : '' }}" title="Role Permissions Matrix">
       <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>

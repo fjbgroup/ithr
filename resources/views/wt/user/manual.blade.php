@@ -5,6 +5,12 @@
 
 @section('content')
 
+@php
+  $manualRole = auth('wt')->user()?->wt_role;
+  $manualIsIct = $manualRole === 'admin_it';
+  $manualIsExecutive = $manualRole === 'admin';
+@endphp
+
 <style>
   .manual-page {
     display: grid;
@@ -81,6 +87,11 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
+  }
+
+  .manual-page.role-executive .manual-card-executive,
+  .manual-page.role-user .manual-card-executive {
+    order: -1;
   }
 
   .manual-card,
@@ -261,11 +272,11 @@
   }
 </style>
 
-<div class="manual-page">
+<div class="manual-page {{ $manualIsIct ? 'role-ict' : ($manualIsExecutive ? 'role-executive' : 'role-user') }}">
   <section class="manual-hero">
     <div>
-      <h1 class="manual-title">WT User Manual</h1>
-      <p class="manual-subtitle">Guidance for ICT and Executive users</p>
+      <h1 class="manual-title">{{ $manualIsIct ? 'ICT User Manual' : ($manualIsExecutive ? 'Executive User Manual' : 'WT User Manual') }}</h1>
+      <p class="manual-subtitle">{{ $manualIsIct ? 'ICT approval, inventory, and system control guide' : ($manualIsExecutive ? 'Executive request, review, and status guide' : 'Guidance for ICT and Executive users') }}</p>
     </div>
     <div class="manual-role-switch" aria-label="Manual sections">
       <a class="manual-role-chip" href="#ict-manual"><i class="fa-solid fa-screwdriver-wrench"></i> ICT</a>
@@ -274,7 +285,7 @@
   </section>
 
   <div class="manual-grid">
-    <section class="manual-card" id="ict-manual">
+    <section class="manual-card manual-card-ict" id="ict-manual">
       <div class="manual-card-head">
         <span class="manual-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
         <div>
@@ -291,7 +302,7 @@
       </ul>
     </section>
 
-    <section class="manual-card" id="executive-manual">
+    <section class="manual-card manual-card-executive" id="executive-manual">
       <div class="manual-card-head">
         <span class="manual-icon"><i class="fa-solid fa-user-tie"></i></span>
         <div>
