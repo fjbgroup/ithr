@@ -271,7 +271,7 @@
             const res = await fetch(CHAT_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
-                body: JSON.stringify({ message }),
+                body: JSON.stringify({ message, system: 'wt' }),
             });
 
             typingEl.remove();

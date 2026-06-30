@@ -14,10 +14,19 @@ use Illuminate\Support\Facades\Http;
 
 class ChatbotController extends Controller
 {
-    private function systemPrompt(): string
+    private function systemPrompt(?string $system): string
     {
         $today   = now()->format('Y-m-d');
         $dayName = now()->format('l');
+
+        if ($system === 'wt') {
+            return <<<PROMPT
+You are a helpful Walkie Talkie Management Assistant for an operations system. Today is {$dayName}, {$today}.
+
+You assist staff with Walkie Talkie inventory, maintenance reports, replacement requests, policies, and checking on faulty units.
+Be concise and friendly. You cannot book meeting rooms or handle HR requests.
+PROMPT;
+        }
 
         return <<<PROMPT
 You are a helpful HR Assistant for an HR Admin System. Today is {$dayName}, {$today}.
@@ -44,14 +53,17 @@ PROMPT;
 
     public function chat(Request $request)
     {
-        $request->validate(['message' => 'required|string|max:2000']);
+        $request->validate([
+            'message' => 'required|string|max:2000',
+            'system'  => 'nullable|string',
+        ]);
 
         $history = session('chatbot_history', []);
         $history[] = ['role' => 'user', 'content' => $request->message];
 
-        $systemContent = $this->systemPrompt();
+        $systemContent = $this->systemPrompt($request->system);
 
-        if ($this->isBookingRelated($request->message, $history)) {
+        if ($request->system !== 'wt' && $this->isBookingRelated($request->message, $history)) {
             $roomContext = $this->buildRoomContext($request->message, $history);
             if ($roomContext) {
                 $systemContent .= "\n\n## Available meeting rooms\n" . $roomContext;
