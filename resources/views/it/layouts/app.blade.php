@@ -58,6 +58,33 @@
   --shadow-lg:         0 8px 30px rgba(0,0,0,.12);
   --table-hover:       #f0f9ff;
 }
+/* Dark mode — keyed off the `dark` class the early head-script sets synchronously,
+   so the sidebar (and the rest of the shell) renders dark at first paint instead of
+   relying solely on the JS theme pass. Values mirror DARK_VARS below. */
+html.dark{
+  --sidebar-bg:        #1a2235;
+  --sidebar-hover:     #263042;
+  --sidebar-active-bg: rgba(56,189,248,.14);
+  --sidebar-text:      #cbd5e1;
+  --sidebar-head:      #f1f5f9;
+  --sidebar-border:    #374151;
+  --sidebar-muted:     #94a3b8;
+  --sidebar-active-tx: #38bdf8;
+  --bg:                #111827;
+  --body-bg:           #111827;
+  --white:             #1f2937;
+  --surface:           #1f2937;
+  --surface2:          #263042;
+  --border:            #374151;
+  --text:              #d1d5db;
+  --muted:             #6b7280;
+  --table-hover:       rgba(255,255,255,.04);
+  --form-input-bg:     #263042;
+  --form-input-border: #374151;
+  --form-input-color:  #d1d5db;
+  --table-head-bg:     #1a2235;
+  --table-head-color:  #9ca3af;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
@@ -93,7 +120,11 @@ body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;
   transition:all .15s;margin-bottom:2px;
 }
 .nav-link i{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.nav-link:hover{background:var(--sidebar-hover);color:#1e293b}
+.nav-link:hover{background:var(--sidebar-hover);color:var(--sidebar-head)}
+/* collapsible section buttons follow the sidebar theme (override inline color) */
+.sidebar-nav>div>button{color:var(--sidebar-text)!important}
+.sidebar-nav>div>button.sb-active{color:var(--sidebar-active-tx)!important}
+.sidebar-nav>div>button:hover{background:var(--sidebar-hover)!important}
 .nav-link.active{background:var(--sidebar-active-bg);color:var(--sidebar-active-tx);font-weight:600}
 .nav-link .badge-count, button .badge-count{
   margin-left:auto;background:var(--red);color:#fff;
@@ -811,8 +842,14 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 
 // ── THEME ──
 const DARK_VARS = {
-  '--sidebar-bg':    '#f8fafc',
-  '--sidebar-hover': '#f1f5f9',
+  '--sidebar-bg':        '#1a2235',
+  '--sidebar-hover':     '#263042',
+  '--sidebar-active-bg': 'rgba(56,189,248,.14)',
+  '--sidebar-text':      '#cbd5e1',
+  '--sidebar-head':      '#f1f5f9',
+  '--sidebar-border':    '#374151',
+  '--sidebar-muted':     '#94a3b8',
+  '--sidebar-active-tx': '#38bdf8',
   '--bg':            '#111827',
   '--body-bg':       '#111827',
   '--white':         '#1f2937',
@@ -829,8 +866,14 @@ const DARK_VARS = {
   '--table-head-color': '#9ca3af',
 };
 const LIGHT_VARS = {
-  '--sidebar-bg':    '#f8fafc',
-  '--sidebar-hover': '#f1f5f9',
+  '--sidebar-bg':        '#f8fafc',
+  '--sidebar-hover':     '#f1f5f9',
+  '--sidebar-active-bg': '#e0f2fe',
+  '--sidebar-text':      '#334155',
+  '--sidebar-head':      '#1e293b',
+  '--sidebar-border':    '#e2e8f0',
+  '--sidebar-muted':     '#64748b',
+  '--sidebar-active-tx': '#0284c7',
   '--bg':            '#f1f5f9',
   '--body-bg':       '#f1f5f9',
   '--white':         '#ffffff',
