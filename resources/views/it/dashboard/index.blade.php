@@ -65,7 +65,7 @@
 @php $user = auth('it')->user(); @endphp
 
 <!-- ═══ SYSTEM STATUS BAR ═══ -->
-<div style="background:linear-gradient(135deg,#0f2542,#1a3a5c,#0e3460);border-radius:14px;margin-bottom:24px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.18)">
+<div style="background:linear-gradient(160deg,#FFB84D 0%,#F7941D 50%,#C96800 100%);border-radius:14px;margin-bottom:24px;overflow:hidden;box-shadow:0 8px 28px rgba(247,148,29,.32)">
   <div style="display:flex;align-items:center;flex-wrap:wrap;gap:0;padding:22px 28px">
 
     <!-- Greeting -->
@@ -73,33 +73,33 @@
       <div style="font-size:20px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1.2" id="dsGreeting">
         Good Morning, {{ $user->full_name }}
       </div>
-      <div style="font-size:12px;color:#93c5fd;margin-top:5px;font-weight:500">
+      <div style="font-size:12px;color:rgba(255,255,255,.78);margin-top:5px;font-weight:500">
         {{ now()->format('l, d F Y') }} &nbsp;·&nbsp; {{ $user->isAdmin() ? 'IT Admin' : $user->getItRoleLabel() }}
       </div>
     </div>
 
     <!-- Stats -->
-    <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.12);border-right:1px solid rgba(255,255,255,.12);margin:0 28px">
+    <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.24);border-right:1px solid rgba(255,255,255,.24);margin:0 28px">
       <div style="padding:0 28px;text-align:center">
-        <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Total Assets</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Total Assets</div>
         <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
       </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.24)"></div>
       <div style="padding:0 28px;text-align:center">
-        <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Active</div>
-        <div style="font-size:26px;font-weight:800;color:#4ade80;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Active</div>
+        <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
       </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,.24)"></div>
       <div style="padding:0 28px;text-align:center">
-        <div style="font-size:11px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Pending</div>
-        <div style="font-size:26px;font-weight:800;color:{{ $pendingAll > 0 ? '#fbbf24' : 'rgba(255,255,255,.35)' }};font-family:'Inter',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Pending</div>
+        <div style="font-size:26px;font-weight:800;color:{{ $pendingAll > 0 ? '#fff7ed' : 'rgba(255,255,255,.42)' }};font-family:'Inter',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
       </div>
     </div>
 
     <!-- Live Clock -->
     <div style="text-align:right">
-      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#60c8ff;font-family:'Inter',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
-      <div style="font-size:10px;color:#93c5fd;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
+      <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.74);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
     </div>
 
   </div>
