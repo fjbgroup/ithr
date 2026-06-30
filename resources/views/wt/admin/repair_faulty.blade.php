@@ -160,7 +160,7 @@
                 <td class="maintenance-action-col">
                     <div class="clean-admin-actions">
                         <button type="button" class="wt-btn wt-btn-sm" onclick="openGlobalMaintenanceTimeline('{{ $record->maintenance_id }}')">
-                            View
+                            <i class="fa-solid fa-eye"></i>
                         </button>
                         @if(auth('wt')->user()->wt_role === 'admin_it')
                         <button type="button" 
@@ -180,12 +180,14 @@
                                 '{{ addslashes($record->remarks ?? '') }}',
                                 '{{ $record->status }}'
                             )">
-                            Edit
+                            <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <form action="{{ route('wt.admin.maintenance.destroy', $record->maintenance_id) }}" method="POST" style="display:inline;" data-modern-confirm="Delete maintenance record for {{ $record->radio_id ?? '-' }}?">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="wt-btn wt-btn-danger wt-btn-sm">Delete</button>
+                            <button type="submit" class="wt-btn wt-btn-danger wt-btn-sm">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </form>
                         @endif
                     </div>

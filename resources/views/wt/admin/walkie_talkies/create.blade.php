@@ -1,6 +1,7 @@
 ﻿@extends('wt.layouts.admin')
 
-@section('title', 'Add Walkie Talkie')
+@section('title', $pageTitle ?? 'Add Walkie Talkie')
+@section('page_title', $pageTitle ?? 'Add Walkie Talkie')
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -445,7 +446,7 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         align-items: start;
-        gap: 24px 24px;
+        gap: 26px 24px;
     }
 
     .form-group {
@@ -461,8 +462,8 @@
     }
 
     .form-section-title {
-        margin: 8px 0 -4px;
-        padding: 18px 0 0;
+        margin: 14px 0 -2px;
+        padding: 20px 0 0;
         border-top: 1px solid #dde6f0;
         color: #334155;
         font-size: 12px;
@@ -512,6 +513,7 @@
         padding: 13px 14px;
         font-size: 13px;
         font-weight: 700;
+        line-height: 1.35;
         color: #334155;
         outline: none;
         transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;

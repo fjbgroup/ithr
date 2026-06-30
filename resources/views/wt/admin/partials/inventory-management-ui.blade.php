@@ -3261,4 +3261,150 @@ html[data-theme="dark"] body .content-surface .special-page-shell + .wt-data .wt
     background: #111827 !important;
     color: #e5edf7 !important;
 }
+
+body .content-surface #specialTable :is(th, td):last-child {
+    width: 180px !important;
+    min-width: 180px !important;
+}
+
+body .content-surface #specialTable .special-action-buttons {
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface #specialTable .special-action-buttons form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn),
+body .content-surface #specialTable td > .btn {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+}
+
+body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn) span,
+body .content-surface #specialTable td > .btn span {
+    display: none !important;
+}
+
+body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn) i,
+body .content-surface #specialTable td > .btn i {
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+body .content-surface :is(
+    #duplicateTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable
+) :is(
+    .dup-actions,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .special-action-buttons
+) {
+    display: inline-flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface :is(
+    #duplicateTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable
+) :is(
+    .dup-actions,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .special-action-buttons
+) form {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+body .content-surface :is(
+    #duplicateTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable
+) :is(
+    .dup-actions,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .special-action-buttons
+) :is(.btn, .wt-btn) {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+}
+
+body .content-surface :is(
+    #duplicateTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable
+) :is(
+    .dup-actions,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .special-action-buttons
+) :is(.btn, .wt-btn) span {
+    display: none !important;
+}
+
+body .content-surface :is(
+    #duplicateTable,
+    #maintTable,
+    #maintenanceTable,
+    #specialTable
+) :is(
+    .dup-actions,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .special-action-buttons
+) :is(.btn, .wt-btn) i {
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
 </style>

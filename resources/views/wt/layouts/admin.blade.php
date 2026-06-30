@@ -306,12 +306,10 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <i class="fas fa-user-circle" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Profile</span>
       @include('wt.partials.sidebar-info', ['text' => 'View and update your account profile information.'])
     </a>
-    @if(!$isAdminItView)
-    <a href="javascript:void(0)" onclick="openPoliciesModal()" class="nav-link has-info" title="Policies">
-      <i class="fa-solid fa-file-contract" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Policies</span>
-      @include('wt.partials.sidebar-info', ['text' => 'Read the policies and rules for walkie talkie usage.'])
+    <a href="{{ route('wt.admin.policies') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.policies') ? 'active-sidebar' : '' }}" title="Role Permissions Matrix">
+      <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>
+      @include('wt.partials.sidebar-info', ['text' => 'View WT System access permissions for ICT and executive users.'])
     </a>
-    @endif
 
     {{-- System Control (IT only) --}}
     @if($isAdminItView)
