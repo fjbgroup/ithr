@@ -2772,6 +2772,50 @@ body .content-surface :is(
     text-align: center !important;
 }
 
+body .content-surface #specialTable :is(th, td):last-child {
+    width: 210px !important;
+    min-width: 210px !important;
+}
+
+body .content-surface #specialTable .special-action-buttons {
+    display: inline-flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    max-width: 194px !important;
+    white-space: normal !important;
+}
+
+body .content-surface #specialTable .special-action-buttons .btn,
+body .content-surface #specialTable td > .btn {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    letter-spacing: .02em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface #specialTable .special-action-buttons .btn i,
+body .content-surface #specialTable td > .btn i {
+    width: 14px !important;
+    min-width: 14px !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
 body .content-surface :is(
     .inventory-table-footer,
     .repair-table-footer,

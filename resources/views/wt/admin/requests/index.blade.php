@@ -3331,6 +3331,83 @@
         gap: unset !important;
         font-size: unset !important;
     }
+
+    html:not(.dark) body .content-surface .approval-inbox,
+    html[data-theme="light"] body .content-surface .approval-inbox {
+        --approval-panel: #ffffff;
+        --approval-panel-soft: #f8fafc;
+        --approval-line: #d8e1ed;
+        color: #172033 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .approval-page-header .page-title-standard,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-page-header .page-title-standard {
+        color: #172033 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .approval-page-header .page-subtitle-standard,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-page-header .page-subtitle-standard {
+        color: #64748b !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .approval-page-header .wt-btn,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-page-header .wt-btn {
+        border-color: #cbd5e1 !important;
+        background: #ffffff !important;
+        color: #334155 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .approval-page-header .wt-btn:hover,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-page-header .wt-btn:hover {
+        border-color: #93c5fd !important;
+        background: #eff6ff !important;
+        color: #1e3a8a !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .pending-queue-card,
+    html[data-theme="light"] body .content-surface .approval-inbox .pending-queue-card,
+    html:not(.dark) body .content-surface .approval-inbox .pending-queue-body,
+    html[data-theme="light"] body .content-surface .approval-inbox .pending-queue-body,
+    html:not(.dark) body .content-surface .approval-inbox .dataTables_wrapper,
+    html[data-theme="light"] body .content-surface .approval-inbox .dataTables_wrapper {
+        background: #ffffff !important;
+        border-color: #d8e1ed !important;
+        color: #172033 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .pending-queue-header,
+    html[data-theme="light"] body .content-surface .approval-inbox .pending-queue-header {
+        background: #ffffff !important;
+        border-bottom-color: #d8e1ed !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox table.dataTable thead th,
+    html[data-theme="light"] body .content-surface .approval-inbox table.dataTable thead th {
+        background: #f4f7fb !important;
+        border-color: #d8e1ed !important;
+        color: #64748b !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox table.dataTable tbody td,
+    html[data-theme="light"] body .content-surface .approval-inbox table.dataTable tbody td {
+        background: #ffffff !important;
+        border-color: #e2e8f0 !important;
+        color: #1f2937 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .approval-empty-state,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-empty-state,
+    html:not(.dark) body .content-surface .approval-inbox .approval-empty-state span,
+    html[data-theme="light"] body .content-surface .approval-inbox .approval-empty-state span {
+        color: #94a3b8 !important;
+    }
+
+    html:not(.dark) body .content-surface .approval-inbox .empty-visual,
+    html[data-theme="light"] body .content-surface .approval-inbox .empty-visual {
+        background: #f8fafc !important;
+        border-color: #e2e8f0 !important;
+        color: #38bdf8 !important;
+    }
 </style>
 @endpush
 
@@ -5264,4 +5341,3 @@
 
 </script>
 @endpush
-

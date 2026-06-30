@@ -119,6 +119,21 @@
                             <i class="fa-solid fa-edit"></i>
                             <span>Edit</span>
                         </a>
+                        @if((int) ($record->special_use_returned ?? 0) === 0)
+                        <form action="{{ route('wt.admin.walkies.update.returned', $record->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Mark {{ $record->radio_id ?: 'this unit' }} as handed over / returned?">
+                            @csrf
+                            <input type="hidden" name="special_use_returned" value="1">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fa-solid fa-handshake"></i>
+                                <span>Handover</span>
+                            </button>
+                        </form>
+                        @else
+                        <button type="button" class="btn btn-secondary btn-sm" disabled title="This special use unit has already been handed over">
+                            <i class="fa-solid fa-handshake"></i>
+                            <span>Done</span>
+                        </button>
+                        @endif
                         <form action="{{ route('wt.admin.walkies.destroy', $record->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Delete this record?">
                             @csrf
                             @method('DELETE')
