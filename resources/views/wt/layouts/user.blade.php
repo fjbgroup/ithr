@@ -93,8 +93,8 @@
       @include('wt.partials.sidebar-info', ['text' => 'View and update your account profile information.'])
     </a>
     <a href="{{ route('wt.user.policies') }}" class="nav-link has-info {{ request()->routeIs('wt.user.policies') ? 'sidebar-active' : '' }}">
-      <i class="fa-solid fa-file-contract" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Policies</span>
-      @include('wt.partials.sidebar-info', ['text' => 'Read the rules and guidelines for using company walkie talkies.'])
+      <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>
+      @include('wt.partials.sidebar-info', ['text' => 'View WT System access permissions for ICT and executive users.'])
     </a>
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>

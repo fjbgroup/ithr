@@ -147,21 +147,21 @@
                             @if(auth('wt')->user()->wt_role === 'admin_it')
                             <div class="dup-actions">
                                 <button type="button" class="btn btn-info" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
-                                    <i class="fa-solid fa-eye"></i><span>View</span>
+                                    <i class="fa-solid fa-eye"></i>
                                 </button>
                                 <a href="{{ route('wt.admin.walkies.edit', ['walkie' => $r->walkie_id, 'source' => 'duplicate']) }}" class="btn btn-primary">
-                                    <i class="fa-solid fa-edit"></i><span>Edit</span>
+                                    <i class="fa-solid fa-edit"></i>
                                 </a>
                                 <form action="{{ route('wt.admin.walkies.destroy', $r->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Delete duplicated ID record for {{ $r->radio_id ?? '-' }}?">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-danger">
-                                        <i class="fa-solid fa-trash"></i><span>Delete</span>
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                             </div>
                             @else
                             <button type="button" class="btn btn-info" onclick="openGlobalWalkieTimeline('{{ $r->walkie_id }}')">
-                                <i class="fa-solid fa-eye"></i><span>View</span>
+                                <i class="fa-solid fa-eye"></i>
                             </button>
                             @endif
                         </td>

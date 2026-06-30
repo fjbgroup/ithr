@@ -195,11 +195,9 @@
                     <div class="maintenance-action-stack">
                         <button type="button" class="wt-btn wt-btn-sm maintenance-action-view" onclick="openGlobalMaintenanceTimeline('{{ $r->maintenance_id }}')">
                             <i class="fa-solid fa-eye"></i>
-                            <span>View</span>
                         </button>
                         <a href="{{ route('wt.admin.maintenance.edit', $r->maintenance_id) }}" class="wt-btn wt-btn-sm maintenance-action-edit">
                             <i class="fa-solid fa-pen-to-square"></i>
-                            <span>Edit</span>
                         </a>
                         @if(auth('wt')->user()->wt_role === 'admin_it')
                             <form action="{{ route('wt.admin.maintenance.destroy', $r->maintenance_id) }}" method="POST" data-modern-confirm="Delete maintenance record for {{ $r->radio_id ?? '-' }}?">
@@ -207,7 +205,6 @@
                                 @method('DELETE')
                                 <button type="submit" class="wt-btn wt-btn-sm wt-btn-danger maintenance-action-delete">
                                     <i class="fa-solid fa-trash"></i>
-                                    <span>Delete</span>
                                 </button>
                             </form>
                         @endif

@@ -1,6 +1,7 @@
 ﻿@extends('wt.layouts.admin')
 
-@section('title', 'Add Walkie Talkie')
+@section('title', $pageTitle ?? 'Add Walkie Talkie')
+@section('page_title', $pageTitle ?? 'Add Walkie Talkie')
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -73,6 +74,8 @@
 
         <div class="walkie-form-body">
             <div class="form-grid">
+                <div class="form-section-title form-group-full">Unit Identity</div>
+
                 <div class="form-group">
                     <label class="form-label">Radio ID <span class="required">*</span></label>
                     <select name="radio_id" class="form-input page-tag-select" data-placeholder="Type or select radio id" required>
@@ -143,6 +146,8 @@
                 </div>
 
                 @unless($inventoryOnly)
+                <div class="form-section-title form-group-full">Assignment Details</div>
+
                 <div class="form-group">
                     <label class="form-label">Ownership Name</label>
                     @php($currentOwnership = old('ownership', $defaults['ownership'] ?? null))
@@ -202,6 +207,8 @@
                 </div>
 
                 @endunless
+
+                <div class="form-section-title form-group-full">Tracking & Status</div>
 
                 @unless($inventoryOnly)
                     <div class="form-group">
@@ -312,6 +319,7 @@
                 </div>
 
                 <div class="form-group form-group-full">
+                    <div class="form-section-title">Remarks</div>
                     <label class="form-label">Remark</label>
                     <textarea name="remark" class="form-input form-textarea" placeholder="Additional notes...">{{ old('remark', $defaults['remark'] ?? '') }}</textarea>
                 </div>
@@ -329,9 +337,9 @@
     .walkie-create-shell {
         background: #ffffff;
         border: 1px solid #e2e8f0;
-        border-radius: 30px;
+        border-radius: 22px;
         overflow: hidden;
-        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
     }
 
     .dark .walkie-create-shell {
@@ -343,29 +351,29 @@
     .walkie-form-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        gap: 16px;
-        padding: 28px 36px 22px;
-        border-bottom: 1px solid #f1f5f9;
-        background: linear-gradient(180deg, #ffffff 0%, #fffaf5 100%);
+        align-items: center;
+        gap: 20px;
+        padding: 30px 48px;
+        border-bottom: 1px solid #e8edf4;
+        background: #ffffff;
     }
 
     .walkie-form-title {
         margin: 0;
-        font-size: 16px;
+        font-size: 18px;
         line-height: 1.2;
         font-weight: 900;
-        letter-spacing: -0.02em;
+        letter-spacing: 0.02em;
         color: #1e293b;
         text-transform: uppercase;
     }
 
     .walkie-form-subtitle {
-        margin-top: 6px;
-        font-size: 11px;
-        line-height: 1.5;
+        margin-top: 8px;
+        font-size: 12px;
+        line-height: 1.55;
         color: #64748b;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .walkie-form-mode-actions {
@@ -377,27 +385,27 @@
 
     .walkie-mode-link {
         display: inline-flex;
-        min-height: 34px;
+        min-height: 40px;
         align-items: center;
         justify-content: center;
-        gap: 7px;
+        gap: 8px;
         border-radius: 10px;
         border: 1px solid #dbe3ee;
         background: #ffffff;
-        padding: 8px 11px;
+        padding: 0 15px;
         color: #334155;
-        font-size: 9px;
+        font-size: 11px;
         font-weight: 900;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         white-space: nowrap;
         transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
 
     .walkie-mode-link:hover {
-        border-color: #8b5e3c;
-        background: #fff7ed;
-        color: #7c4a24;
+        border-color: #0284c7;
+        background: #eff6ff;
+        color: #075985;
     }
 
     .dark .walkie-form-header {
@@ -426,8 +434,8 @@
     }
 
     .walkie-form-body {
-        padding: 28px 36px;
-        background: #fff;
+        padding: 34px 48px 42px;
+        background: #f8fafc;
     }
 
     .dark .walkie-form-body {
@@ -436,16 +444,16 @@
 
     .form-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         align-items: start;
-        gap: 20px 18px;
+        gap: 26px 24px;
     }
 
     .form-group {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 9px;
     }
 
     .form-group-full {
@@ -454,15 +462,21 @@
     }
 
     .form-section-title {
-        margin-top: 4px;
-        padding-top: 18px;
-        border-top: 1px solid #e2e8f0;
-        color: #475569;
-        font-size: 11px;
+        margin: 14px 0 -2px;
+        padding: 20px 0 0;
+        border-top: 1px solid #dde6f0;
+        color: #334155;
+        font-size: 12px;
         font-weight: 900;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.14em;
         line-height: 1.2;
         text-transform: uppercase;
+    }
+
+    .form-grid > .form-section-title:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
     }
 
     .dark .form-section-title {
@@ -472,12 +486,12 @@
 
     .form-label {
         margin: 0;
-        font-size: 10px;
+        font-size: 10.5px;
         font-weight: 900;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.1em;
         line-height: 1.25;
         text-transform: uppercase;
-        color: #78716c;
+        color: #64748b;
         overflow-wrap: anywhere;
     }
 
@@ -492,22 +506,23 @@
     .form-input {
         width: 100%;
         max-width: 100%;
-        min-height: 46px;
-        border-radius: 16px;
-        border: 1px solid #e7e5e4;
-        background: #fffaf5;
-        padding: 12px 14px;
-        font-size: 12px;
+        min-height: 48px;
+        border-radius: 12px;
+        border: 1px solid #d8e1ed;
+        background: #ffffff;
+        padding: 13px 14px;
+        font-size: 13px;
         font-weight: 700;
+        line-height: 1.35;
         color: #334155;
         outline: none;
         transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
     }
 
     .form-input:focus {
-        border-color: #8b5e3c;
+        border-color: #0284c7;
         background: #fff;
-        box-shadow: 0 0 0 4px rgba(139, 94, 60, 0.10);
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.11);
     }
 
     .dark .form-input {
@@ -527,7 +542,7 @@
     }
 
     .form-textarea {
-        min-height: 120px;
+        min-height: 132px;
         resize: vertical;
     }
 
@@ -538,11 +553,11 @@
 
     .select2-container--default .select2-selection--single,
     .select2-container--default .select2-selection--multiple {
-        min-height: 46px;
-        border-radius: 16px;
-        border: 1px solid #e7e5e4;
-        background: #fffaf5;
-        padding: 6px 14px;
+        min-height: 48px;
+        border-radius: 12px;
+        border: 1px solid #d8e1ed;
+        background: #ffffff;
+        padding: 7px 14px;
         display: flex;
         align-items: center;
         box-shadow: none;
@@ -558,9 +573,9 @@
     .select2-container--default.select2-container--focus .select2-selection--multiple,
     .select2-container--default.select2-container--open .select2-selection--single,
     .select2-container--default.select2-container--open .select2-selection--multiple {
-        border-color: #8b5e3c;
+        border-color: #0284c7;
         background: #fff;
-        box-shadow: 0 0 0 4px rgba(139, 94, 60, 0.10);
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.11);
     }
 
     .dark .select2-container--default.select2-container--focus .select2-selection--single,
@@ -575,7 +590,7 @@
     .select2-container--default .select2-selection--single .select2-selection__rendered,
     .select2-container--default .select2-selection--multiple .select2-selection__rendered {
         color: #334155;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
         line-height: 1.4;
         padding-left: 0;
@@ -599,7 +614,7 @@
     }
 
     .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 44px;
+        height: 46px;
         right: 12px;
     }
 
@@ -648,13 +663,13 @@
     }
 
     .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-        background: #8b5e3c;
+        background: #0284c7;
         color: #fff;
     }
 
     .select2-container--default .select2-results__option--selected {
-        background: #f5efe6;
-        color: #6b4423;
+        background: #e0f2fe;
+        color: #075985;
     }
 
     .dark .select2-container--default .select2-results__option--selected {
@@ -667,9 +682,9 @@
         align-items: center;
         justify-content: flex-end;
         gap: 12px;
-        padding: 20px 36px 28px;
-        border-top: 1px solid #f1f5f9;
-        background: #f8fafc;
+        padding: 22px 48px;
+        border-top: 1px solid #e8edf4;
+        background: #ffffff;
     }
 
     .dark .walkie-form-footer {
@@ -689,12 +704,28 @@
         border: 1px solid #fecaca;
     }
 
+    @media (max-width: 1100px) {
+        .form-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
     @media (max-width: 768px) {
+        .walkie-form-header {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
         .walkie-form-header,
         .walkie-form-body,
         .walkie-form-footer {
             padding-left: 18px;
             padding-right: 18px;
+        }
+
+        .walkie-form-header {
+            padding-top: 22px;
+            padding-bottom: 20px;
         }
 
         .walkie-form-footer {
@@ -703,7 +734,7 @@
 
         .form-grid {
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: 18px;
         }
 
         .walkie-form-footer > * {
