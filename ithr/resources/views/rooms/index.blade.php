@@ -145,6 +145,30 @@
         .dash-cart-panel { flex: none !important; margin-top: 1rem; }
 
 
+        /* 2. CONTROLS STRIP — single date-nav row */
+        .pub-view-tabs { display: none !important; }
+        .pub-controls {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: .75rem !important;
+            margin-bottom: .75rem;
+        }
+        .pub-controls > div:last-child { 
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: flex-start !important;
+            gap: .5rem !important;
+            margin: 0 !important;
+        }
+        .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; width: 100%; }
+        .pub-datepicker-lbl { flex: 1; justify-content: center; }
+        .pub-datepicker-lbl span { display: none; }
+        .pub-datepicker-lbl input[type=date] { font-size: .82rem; flex: 1; text-align: center; }
+        .rb-today-btn { padding: .28rem .6rem; font-size: .78rem; white-space: nowrap; }
+        .rb-desktop-new-booking { display: none !important; }
+
+        .rb-approval-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.5rem; }
+
         /* Day view */
         .rb-grid-corner, .rb-room-meta-col { width: 110px !important; padding: 0.5rem !important; }
         .rb-rm-name { font-size: 0.8rem !important; word-break: break-word; }
@@ -171,7 +195,7 @@
     /* 640px — table → card layout */
     @media (max-width: 640px) {
         /* Pending action buttons stretch full width */
-        .rb-pending-acts { width: 100% !important; justify-content: stretch !important; }
+        .rb-pending-acts { width: 100% !important; gap: .4rem !important; }
         .rb-pending-acts .btn { flex: 1 !important; justify-content: center !important; }
 
         /* Table → card transformation */
@@ -294,20 +318,6 @@
         .rb-mob-nav-item svg { width: 22px; height: 22px; flex-shrink: 0; }
 
         /* 2. CONTROLS STRIP — single date-nav row */
-        .pub-view-tabs { display: none !important; }
-        .pub-controls {
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            gap: .5rem !important;
-            margin-bottom: .75rem;
-        }
-        .pub-controls > div:last-child { display: none !important; }
-        .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; }
-        .pub-datepicker-lbl { flex: 1; justify-content: center; }
-        .pub-datepicker-lbl span { display: none; }
-        .pub-datepicker-lbl input[type=date] { font-size: .82rem; flex: 1; text-align: center; }
-        .rb-today-btn { padding: .28rem .6rem; font-size: .78rem; white-space: nowrap; }
 
         /* 3. FLOATING ACTION BUTTON */
         .rb-fab {
@@ -855,7 +865,7 @@
             </button>
             @endif
             @canwrite
-            <button class="btn btn-primary btn-sm" onclick="openRoomBookingModal('', '')">
+            <button class="btn btn-primary btn-sm rb-desktop-new-booking" onclick="openRoomBookingModal('', '')">
                 + New Booking
             </button>
             @endcanwrite

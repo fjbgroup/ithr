@@ -911,7 +911,7 @@
             <thead>
                 <tr>
                     @foreach($compactColumns as $column)
-                        <th>{{ strtoupper($columnLabels[$column['key']] ?? str_replace('_', ' ', $column['label'])) }}</th>
+                        <th @class(['text-center' => in_array($column['key'], ['serial_number', 'model'], true)]) style="{{ in_array($column['key'], ['serial_number', 'model'], true) ? 'text-align:center !important;' : '' }}">{{ strtoupper($columnLabels[$column['key']] ?? str_replace('_', ' ', $column['label'])) }}</th>
                     @endforeach
                     <th></th>
                 </tr>
@@ -927,7 +927,10 @@
                                     $value = (int) $value === 1 ? 'YES' : 'NO';
                                 }
                             @endphp
-                            <td class="{{ in_array($key, $wrapColumns, true) ? 'wrap-cell' : '' }}">
+                            <td @class([
+                                'wrap-cell' => in_array($key, $wrapColumns, true),
+                                'text-center' => in_array($key, ['serial_number', 'model'], true),
+                            ]) style="{{ in_array($key, ['serial_number', 'model'], true) ? 'text-align:center !important;' : '' }}">
                                 {{ filled($value) ? $value : '-' }}
                             </td>
                         @endforeach

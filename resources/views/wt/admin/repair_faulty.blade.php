@@ -77,8 +77,8 @@
         <thead>
             <tr>
                 <th class="px-2 py-1 text-center">Radio ID</th>
-                <th class="px-2 py-1 text-center">Serial No</th>
-                <th class="px-2 py-1 text-center">Model</th>
+                <th class="px-2 py-1 text-center" style="text-align:center !important;">Serial No</th>
+                <th class="px-2 py-1 text-center" style="text-align:center !important;">Model</th>
                 <th class="px-2 py-1 text-center">Ownership Type</th>
                 <th class="px-2 py-1 text-center">Department</th>
                 <th class="px-2 py-1 text-center">Date Received</th>
@@ -110,8 +110,8 @@
                 data-status="{{ $record->done ? 'DONE' : strtoupper((string) $record->status) }}"
                 data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->walkieTalkie->ownership_type ?? '') . ' ' . ($record->department_name ?? '') . ' ' . ($record->location ?? $record->walkieTalkie->location ?? '') . ' ' . ($record->received_date ?? '') . ' ' . ($record->reporter_name ?? '') . ' ' . ($record->reporter_staff_id ?? '') . ' ' . ($record->issue ?? '') . ' ' . ($record->issue_description ?? '') . ' ' . ($record->finish_date ?? '') . ' ' . ($record->remarks ?? '') . ' ' . ($record->status ?? ''))) }}">
                 <td>{{ $record->radio_id ?? '-' }}</td>
-                <td>{{ $record->serial_number ?? '-' }}</td>
-                <td>{{ $record->model ?? '-' }}</td>
+                <td class="text-center" style="text-align:center !important;">{{ $record->serial_number ?? '-' }}</td>
+                <td class="text-center" style="text-align:center !important;">{{ $record->model ?? '-' }}</td>
                 <td>
                     @php
                         $ownershipType = strtoupper(trim((string) ($record->walkieTalkie->ownership_type ?? $record->ownership_type ?? '')));

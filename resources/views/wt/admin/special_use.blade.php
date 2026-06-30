@@ -101,8 +101,8 @@
             data-search="{{ strtoupper(trim(($record->radio_id ?? '') . ' ' . ($record->status ?? '') . ' ' . ($record->serial_number ?? '') . ' ' . ($record->model ?? '') . ' ' . ($record->location ?? '') . ' ' . ($record->ownership_type ?? '') . ' ' . ($record->ownership ?? '') . ' ' . ($record->department ?? '') . ' ' . ($record->remark ?? '') . ' ' . ((int) ($record->special_use_returned ?? 0) === 1 ? 'YES RETURNED' : 'NO NOT RETURNED'))) }}">
             <td>{{ $record->radio_id ?: '-' }}</td>
             <td><span class="inline-flex rounded border border-slate-600 bg-slate-800 px-2 py-1 text-[10px] font-black uppercase">{{ $record->status ?: '-' }}</span></td>
-            <td>{{ $record->serial_number ?: '-' }}</td>
-            <td>{{ $record->model ?: '-' }}</td>
+            <td class="text-center" style="text-align:center !important;">{{ $record->serial_number ?: '-' }}</td>
+            <td class="text-center" style="text-align:center !important;">{{ $record->model ?: '-' }}</td>
             <td>
                 <div class="font-black text-slate-900 dark:text-slate-100">{{ $record->ownership ?: '-' }}</div>
                 <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $record->department ?: '-' }} / {{ $record->ownership_type ?: '-' }}</div>
