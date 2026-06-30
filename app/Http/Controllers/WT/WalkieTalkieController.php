@@ -8,6 +8,7 @@ use App\Models\WT\Handover;
 use App\Models\WT\WalkieTalkie;
 use App\Models\WT\MasterData;
 use App\Models\WT\MaintenanceRecord;
+use App\Models\WT\User;
 use App\Models\WT\UserActivityLog;
 use App\Models\Staff;
 use App\Services\TemporaryRequestExpiryService;
@@ -108,6 +109,20 @@ class WalkieTalkieController extends Controller
             ->values();
     }
 
+    private function executiveOptions()
+    {
+        return User::query()
+            ->where('wt_role', 'admin')
+            ->whereNotNull('full_name')
+            ->where('full_name', '!=', '')
+            ->orderBy('full_name')
+            ->pluck('full_name')
+            ->map(fn ($name) => $this->normalizeValue($name))
+            ->filter()
+            ->unique()
+            ->values();
+    }
+
     private function normalizeInventoryStatus(?string $value): string
     {
         $status = $this->normalizeValue($value);
@@ -140,6 +155,7 @@ class WalkieTalkieController extends Controller
             'walkieModels' => $this->mergeMasterData('model', $walkies->pluck('model')),
             'walkieOwnerships' => $walkies->pluck('ownership')->filter()->unique()->sort()->values(),
             'staffOwnerships' => $this->staffOwnershipOptions(),
+            'executiveOptions' => $this->executiveOptions(),
             'walkieDepartments' => $this->mergeMasterData('department', $walkies->pluck('department')),
             'walkieLocations' => $this->mergeMasterData('location', $walkies->pluck('location')->merge(collect(['T4', 'T5', 'GT', 'LBSB']))),
             'walkiePositions' => $this->mergeMasterData('position', $walkies->pluck('position')),

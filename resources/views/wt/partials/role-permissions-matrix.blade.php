@@ -16,7 +16,7 @@
         ['module' => 'Users control', 'ict' => 'Manage users', 'executive' => 'Not available'],
         ['module' => 'Master data', 'ict' => 'Manage master data', 'executive' => 'Not available'],
         ['module' => 'System logs and audit trail', 'ict' => 'View audit logs', 'executive' => 'Not available'],
-        ['module' => 'Profile, policy, and role matrix', 'ict' => 'View information', 'executive' => 'View information'],
+        ['module' => 'Profile, policy, and role matrix', 'ict' => 'Manage all access', 'executive' => 'Manage own profile'],
     ];
 
     $permissionTone = function ($value) {
