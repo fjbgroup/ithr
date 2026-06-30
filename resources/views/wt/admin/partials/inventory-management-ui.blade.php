@@ -3091,4 +3091,9 @@ body .content-surface :is(
 ) {
     margin-top: 8px !important;
 }
+
+body .content-surface .inventory-table-frame > .clean-admin-filter + #mainTableContainer.inventory-table-shell {
+    margin-top: 10px !important;
+    
+}
 </style>
