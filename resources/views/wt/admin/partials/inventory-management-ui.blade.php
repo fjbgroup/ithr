@@ -2378,7 +2378,7 @@ body .content-surface .duplicate-table-shell #duplicateTable th,
 body .content-surface .duplicate-table-shell #duplicateTable td,
 .duplicate-table-shell #duplicateTable td {
     border: 1px solid #2d3748 !important;
-    text-align: left !important;
+    text-align: center !important;
     vertical-align: middle !important;
 }
 
@@ -2549,9 +2549,16 @@ body .content-surface :is(
     font-size: 10px !important;
     font-weight: 650 !important;
     line-height: 1.1 !important;
-    text-align: left !important;
+    text-align: center !important;
     white-space: nowrap !important;
     vertical-align: middle !important;
+}
+
+body .content-surface #duplicateTable tbody td:nth-child(5),
+body .content-surface #duplicateTable tbody td:nth-child(6),
+body .content-surface #duplicateTable tbody td:nth-child(5) :is(.dup-change-id-val, .dup-change-id-empty),
+body .content-surface #duplicateTable tbody td:nth-child(6) .dup-done-badge {
+    text-align: center !important;
 }
 
 body .content-surface :is(

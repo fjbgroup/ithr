@@ -928,6 +928,7 @@
             const summaryItems = [
                 ['Owner', summary.ownership || '-'],
                 ['Department', summary.department || '-'],
+                ['Executive', summary.executive || '-'],
                 ['Location', summary.location || '-'],
                 ['Status', summary.status || 'UNKNOWN'],
             ];
@@ -1058,6 +1059,7 @@
                 `Ownership Type: ${walkie.ownership_type || '-'}`,
                 `Owner: ${walkie.owner || '-'}`,
                 `Department: ${walkie.department || '-'}`,
+                `Executive: ${walkie.executive || '-'}`,
                 `Location: ${walkie.location || '-'}`,
                 `URL: ${walkie.url || window.location.href}`,
             ].join('\n');
@@ -1074,6 +1076,7 @@
                 ['Status', walkie.status || '-'],
                 ['Owner', walkie.owner || '-'],
                 ['Department', walkie.department || '-'],
+                ['Executive', walkie.executive || '-'],
             ];
 
             detailHost.innerHTML = items.map(([label, value]) => `

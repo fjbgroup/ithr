@@ -21,6 +21,7 @@ class WalkieTalkie extends Model
         'position',
         'department',
         'location',
+        'executive',
         'temporary_radio_id',
         'remark',
         'tracking_ref',

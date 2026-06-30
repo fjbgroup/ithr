@@ -184,6 +184,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Executive</label>
+                    <input type="text" name="executive" class="form-input" value="{{ strtoupper(old('executive', $defaults['executive'] ?? '')) }}" placeholder="Enter executive name">
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Position</label>
                     <select name="position" class="form-input page-tag-select" data-placeholder="Type or select position">
                         <option value=""></option>
@@ -430,15 +435,13 @@
     }
 
     .form-grid {
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 22px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        align-items: start;
+        gap: 20px 18px;
     }
 
     .form-group {
-        flex: 1 1 0;
         min-width: 0;
         display: flex;
         flex-direction: column;
@@ -446,7 +449,7 @@
     }
 
     .form-group-full {
-        flex: 1 1 0;
+        grid-column: 1 / -1;
         min-width: 0;
     }
 
@@ -472,8 +475,10 @@
         font-size: 10px;
         font-weight: 900;
         letter-spacing: 0.14em;
+        line-height: 1.25;
         text-transform: uppercase;
         color: #78716c;
+        overflow-wrap: anywhere;
     }
 
     .dark .form-label {
@@ -486,6 +491,7 @@
 
     .form-input {
         width: 100%;
+        max-width: 100%;
         min-height: 46px;
         border-radius: 16px;
         border: 1px solid #e7e5e4;
@@ -527,6 +533,7 @@
 
     .select2-container {
         width: 100% !important;
+        max-width: 100% !important;
     }
 
     .select2-container--default .select2-selection--single,
@@ -692,6 +699,11 @@
 
         .walkie-form-footer {
             flex-direction: column-reverse;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
         .walkie-form-footer > * {
