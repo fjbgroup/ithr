@@ -6,6 +6,7 @@
 /* ── DESIGN TOKENS ── */
 :root {
   --sidebar-w:        250px;
+  --sidebar-collapsed-w: 72px;
   --sidebar-bg:       #ffffff;
   --sidebar-border:   #e2e8f0;
   --sidebar-text:     #475569;
@@ -390,9 +391,9 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
 .user-role { font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: var(--sidebar-active-icon); margin-top: 1px; }
 
 /* Collapsed desktop sidebar */
-body.sidebar-collapsed .sidebar { width: 72px; }
+body.sidebar-collapsed .sidebar { width: var(--sidebar-collapsed-w); }
 body.sidebar-collapsed .main-content { margin-left: 0; }
-body.sidebar-collapsed .topbar { left: auto; }
+body.sidebar-collapsed .topbar { left: var(--sidebar-collapsed-w); }
 
 /* Brand row — center logo, collapse toggle overlays it on hover */
 body.sidebar-collapsed .sidebar-brand-row { padding: 14px 8px; justify-content: center; gap: 0; position: relative; }
@@ -492,6 +493,7 @@ body.sidebar-collapsed .dropdown-trigger.active-sidebar i:not(.dropdown-chevron)
   overflow-y: auto;
   overflow-x: hidden;
   display: flex; flex-direction: column;
+  padding-top: 56px;
 }
 
 .topbar {
@@ -499,8 +501,9 @@ body.sidebar-collapsed .dropdown-trigger.active-sidebar i:not(.dropdown-chevron)
   border-bottom: 1px solid var(--topbar-border);
   padding: 6px 20px; min-height: 56px;
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  position: sticky; top: 0; z-index: 90;
-  flex-shrink: 0; width: 100%; box-sizing: border-box;
+  position: fixed; top: 0; left: var(--sidebar-w); right: 0; z-index: 90;
+  flex-shrink: 0; box-sizing: border-box;
+  transition: left .22s ease;
 }
 html.dark .topbar { background: var(--topbar-bg); border-bottom-color: var(--topbar-border); }
 
