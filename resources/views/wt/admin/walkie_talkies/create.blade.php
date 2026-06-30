@@ -190,7 +190,16 @@
 
                 <div class="form-group">
                     <label class="form-label">Executive</label>
-                    <input type="text" name="executive" class="form-input" value="{{ strtoupper(old('executive', $defaults['executive'] ?? '')) }}" placeholder="Enter executive name">
+                    @php($currentExecutive = strtoupper((string) old('executive', $defaults['executive'] ?? '')))
+                    <select name="executive" class="form-input page-smart-select" data-placeholder="Search executive">
+                        <option value=""></option>
+                        @foreach($executiveOptions as $executiveName)
+                        <option value="{{ $executiveName }}" @selected($currentExecutive === $executiveName)>{{ $executiveName }}</option>
+                        @endforeach
+                        @if($currentExecutive !== '' && !$executiveOptions->contains($currentExecutive))
+                        <option value="{{ $currentExecutive }}" selected>{{ $currentExecutive }}</option>
+                        @endif
+                    </select>
                 </div>
 
                 <div class="form-group">

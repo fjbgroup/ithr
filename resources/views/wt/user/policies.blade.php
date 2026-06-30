@@ -164,11 +164,36 @@
   }
 
   .policy-note-title {
-    margin: 0 0 12px;
+    margin: 0;
     color: var(--text);
     font-size: 14px;
     font-weight: 900;
     letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .policy-note-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .policy-edit-btn {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid #bfdbfe;
+    border-radius: 9px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 0 14px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .08em;
     text-transform: uppercase;
   }
 
@@ -204,7 +229,7 @@
       min-width: 0;
     }
 
-    .role-matrix-title {
+  .role-matrix-title {
       font-size: 19px;
     }
   }
@@ -226,7 +251,15 @@
   @include('wt.partials.role-permissions-matrix')
 
   <div class="policy-note-card">
-    <h2 class="policy-note-title">Walkie Talkie Usage Policies</h2>
+    <div class="policy-note-head">
+      <h2 class="policy-note-title">Walkie Talkie Usage Policies</h2>
+      @if(request()->routeIs('wt.admin.policies') && auth('wt')->user()?->wt_role === 'admin_it')
+      <button type="button" class="policy-edit-btn" data-policy-edit-trigger onclick="toggleWalkiePolicyEdit(this)">
+        <i class="fa-solid fa-pen-to-square"></i>
+        Edit
+      </button>
+      @endif
+    </div>
     @include('wt.partials.walkie-policy-content')
   </div>
 </div>

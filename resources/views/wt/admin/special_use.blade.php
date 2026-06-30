@@ -111,35 +111,35 @@
             <td>
                 @if(auth('wt')->user()->wt_role === 'admin_it')
                     <div class="special-action-buttons">
-                        <button type="button" class="btn btn-info btn-sm" title="View Details" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">
+                        <button type="button" class="btn btn-info btn-sm special-action-icon-btn" title="View Details" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">
                             <i class="fa-solid fa-eye"></i>
                         </button>
-                        <a href="{{ route('wt.admin.walkies.edit', ['walkie' => $record->walkie_id, 'source' => 'special_use']) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('wt.admin.walkies.edit', ['walkie' => $record->walkie_id, 'source' => 'special_use']) }}" class="btn btn-primary btn-sm special-action-icon-btn">
                             <i class="fa-solid fa-edit"></i>
                         </a>
                         @if((int) ($record->special_use_returned ?? 0) === 0)
                         <form action="{{ route('wt.admin.walkies.update.returned', $record->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Mark {{ $record->radio_id ?: 'this unit' }} as handed over / returned?">
                             @csrf
                             <input type="hidden" name="special_use_returned" value="1">
-                            <button type="submit" class="btn btn-success btn-sm">
+                            <button type="submit" class="btn btn-success btn-sm special-action-icon-btn">
                                 <i class="fa-solid fa-handshake"></i>
                             </button>
                         </form>
                         @else
-                        <button type="button" class="btn btn-secondary btn-sm" disabled title="This special use unit has already been handed over">
+                        <button type="button" class="btn btn-secondary btn-sm special-action-icon-btn" disabled title="This special use unit has already been handed over">
                             <i class="fa-solid fa-handshake"></i>
                         </button>
                         @endif
                         <form action="{{ route('wt.admin.walkies.destroy', $record->walkie_id) }}" method="POST" class="inline" data-modern-confirm="Delete this record?">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">
+                            <button type="submit" class="btn btn-danger btn-sm special-action-icon-btn">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </form>
                     </div>
                 @else
-                    <button type="button" class="btn btn-info btn-sm" title="View Details" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">
+                    <button type="button" class="btn btn-info btn-sm special-action-icon-btn" title="View Details" onclick="openGlobalWalkieTimeline('{{ $record->walkie_id }}')">
                         <i class="fa-solid fa-eye"></i>
                     </button>
                 @endif
@@ -591,5 +591,61 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 @include('wt.admin.partials.inventory-tools-table-skin')
+
+<style id="special-use-action-buttons-final">
+body .content-surface #specialTable :is(th, td):last-child {
+    width: 96px !important;
+    min-width: 96px !important;
+    max-width: 96px !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    text-align: center !important;
+}
+
+body .content-surface #specialTable .special-action-buttons {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    width: auto !important;
+    max-width: 92px !important;
+    white-space: nowrap !important;
+}
+
+body .content-surface #specialTable .special-action-buttons form {
+    display: inline-flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+body .content-surface #specialTable .special-action-buttons .special-action-icon-btn,
+body .content-surface #specialTable td > .special-action-icon-btn {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+    height: 18px !important;
+    min-height: 18px !important;
+    max-height: 18px !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+}
+
+body .content-surface #specialTable .special-action-buttons .special-action-icon-btn i,
+body .content-surface #specialTable td > .special-action-icon-btn i {
+    margin: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+}
+</style>
 
 @endsection

@@ -132,6 +132,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
             Route::delete('/master-data/{masterData}', [MasterDataController::class, 'destroy'])->name('masterData.destroy');
             Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity.index');
             Route::get('/database-backup', [DatabaseBackupController::class, 'download'])->name('database.backup');
+            Route::post('/policies', [UserDashboardController::class, 'updatePolicies'])->name('policies.update');
             Route::get('/it', [AdminITController::class, 'index'])->name('it.index');
         });
     });

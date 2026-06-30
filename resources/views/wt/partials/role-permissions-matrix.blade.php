@@ -1,6 +1,6 @@
 @php
     $permissionRows = [
-        ['module' => 'Dashboard and WT summary', 'ict' => 'View system summary', 'executive' => 'View own summary'],
+        ['module' => 'Main landing page', 'ict' => 'View system dashboard', 'executive' => 'My inventory page'],
         ['module' => 'Inventory list and unit timeline', 'ict' => 'Manage all units', 'executive' => 'View assigned units'],
         ['module' => 'Add, edit, import, and delete walkie records', 'ict' => 'Manage records', 'executive' => 'Not available'],
         ['module' => 'Under repair and faulty units', 'ict' => 'Manage repair records', 'executive' => 'Submit faulty report'],
@@ -16,7 +16,7 @@
         ['module' => 'Users control', 'ict' => 'Manage users', 'executive' => 'Not available'],
         ['module' => 'Master data', 'ict' => 'Manage master data', 'executive' => 'Not available'],
         ['module' => 'System logs and audit trail', 'ict' => 'View audit logs', 'executive' => 'Not available'],
-        ['module' => 'Profile, policy, and role matrix', 'ict' => 'View information', 'executive' => 'View information'],
+        ['module' => 'Profile, policy, and role matrix', 'ict' => 'Manage all access', 'executive' => 'Manage own profile'],
     ];
 
     $permissionTone = function ($value) {
