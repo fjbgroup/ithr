@@ -3263,8 +3263,9 @@ html[data-theme="dark"] body .content-surface .special-page-shell + .wt-data .wt
 }
 
 body .content-surface #specialTable :is(th, td):last-child {
-    width: 180px !important;
-    min-width: 180px !important;
+    width: 112px !important;
+    min-width: 112px !important;
+    max-width: 112px !important;
 }
 
 body .content-surface #specialTable .special-action-buttons {
@@ -3272,7 +3273,7 @@ body .content-surface #specialTable .special-action-buttons {
     flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
+    gap: 2px !important;
     max-width: none !important;
     white-space: nowrap !important;
 }
@@ -3284,13 +3285,13 @@ body .content-surface #specialTable .special-action-buttons form {
 
 body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn),
 body .content-surface #specialTable td > .btn {
-    width: 28px !important;
-    min-width: 28px !important;
-    max-width: 28px !important;
-    height: 28px !important;
-    min-height: 28px !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
     padding: 0 !important;
-    border-radius: 6px !important;
+    border-radius: 5px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -3310,7 +3311,7 @@ body .content-surface #specialTable td > .btn i {
     width: auto !important;
     min-width: 0 !important;
     margin: 0 !important;
-    font-size: 12px !important;
+    font-size: 10px !important;
     line-height: 1 !important;
 }
 
@@ -3405,6 +3406,39 @@ body .content-surface :is(
     min-width: 0 !important;
     margin: 0 !important;
     font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+/* Final Special Use action sizing override. Keep this after generic inventory action rules. */
+body .content-surface #specialTable :is(th, td):last-child {
+    width: 112px !important;
+    min-width: 112px !important;
+    max-width: 112px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+}
+
+body .content-surface #specialTable .special-action-buttons {
+    gap: 2px !important;
+    max-width: 104px !important;
+}
+
+body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn),
+body .content-surface #specialTable td > .btn {
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 0 !important;
+    border-radius: 5px !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+}
+
+body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn) i,
+body .content-surface #specialTable td > .btn i {
+    font-size: 10px !important;
     line-height: 1 !important;
 }
 </style>

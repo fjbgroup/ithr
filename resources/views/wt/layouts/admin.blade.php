@@ -868,8 +868,37 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           text-align: center !important;
         }
         body .content-surface #specialTable :is(th, td):nth-child(7) {
-          width: 15% !important;
+          width: 112px !important;
+          min-width: 112px !important;
+          max-width: 112px !important;
           text-align: center !important;
+        }
+        body .content-surface #specialTable .special-action-buttons {
+          gap: 2px !important;
+          max-width: 104px !important;
+          white-space: nowrap !important;
+        }
+        body .content-surface #specialTable .special-action-buttons form {
+          display: inline-flex !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn),
+        body .content-surface #specialTable td > .btn {
+          width: 22px !important;
+          min-width: 22px !important;
+          max-width: 22px !important;
+          height: 22px !important;
+          min-height: 22px !important;
+          padding: 0 !important;
+          border-radius: 5px !important;
+          font-size: 0 !important;
+          line-height: 1 !important;
+        }
+        body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn) i,
+        body .content-surface #specialTable td > .btn i {
+          font-size: 10px !important;
+          line-height: 1 !important;
         }
         body .content-surface :is(
           .page-header-block,
