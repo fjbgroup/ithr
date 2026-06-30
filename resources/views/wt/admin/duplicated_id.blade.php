@@ -131,8 +131,8 @@
                         <td>
                             <span class="dup-status-badge {{ $statusClass }}">{{ $r->status ?: '-' }}</span>
                         </td>
-                        <td>{{ $r->serial_number ?: '-' }}</td>
-                        <td>{{ $r->model ?: '-' }}</td>
+                        <td class="text-center" style="text-align:center !important;">{{ $r->serial_number ?: '-' }}</td>
+                        <td class="text-center" style="text-align:center !important;">{{ $r->model ?: '-' }}</td>
                         <td>
                             @if($r->need_to_change_id)
                                 <span class="dup-change-id-val">{{ $r->need_to_change_id }}</span>

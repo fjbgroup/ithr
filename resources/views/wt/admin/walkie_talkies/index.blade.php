@@ -294,11 +294,11 @@
                         <td class="inventory-status-col">
                             <span class="clean-admin-pill inventory-status-badge" data-status="{{ $statusValue }}">{{ $statusValue }}</span>
                         </td>
-                        <td class="inventory-serial-col">
+                        <td class="inventory-serial-col text-center" style="text-align:center !important;">
                             {{ $w->serial_number ?: '-' }}
                         </td>
-                        <td class="inventory-model-col">
-                            <div class="inventory-item-title">{{ $w->model ?: 'NO MODEL' }}</div>
+                        <td class="inventory-model-col text-center" style="text-align:center !important;">
+                            <div class="inventory-item-title" style="text-align:center !important;">{{ $w->model ?: 'NO MODEL' }}</div>
                         </td>
                         <td class="inventory-assigned-col">
                             <div class="inventory-assigned-primary">{{ $w->ownership ?: '-' }}</div>

@@ -88,8 +88,8 @@
             <tr>
                 <th class="px-2 py-1 text-center">Radio ID</th>
                 <th class="px-2 py-1 text-center">Status</th>
-                <th class="px-2 py-1 text-center">Serial No.</th>
-                <th class="px-2 py-1 text-center">Model</th>
+                <th class="px-2 py-1 text-center" style="text-align:center !important;">Serial No.</th>
+                <th class="px-2 py-1 text-center" style="text-align:center !important;">Model</th>
                 <th class="px-2 py-1 text-center">Issue / Received</th>
                 <th class="px-2 py-1 text-center maintenance-action-col">Action</th>
             </tr>
@@ -110,8 +110,8 @@
                     @endphp
                     <span class="clean-admin-pill">{{ $r->status }}</span>
                 </td>
-                <td>{{ $r->serial_number ?? '-' }}</td>
-                <td>{{ $r->model ?? '-' }}</td>
+                <td class="text-center" style="text-align:center !important;">{{ $r->serial_number ?? '-' }}</td>
+                <td class="text-center" style="text-align:center !important;">{{ $r->model ?? '-' }}</td>
                 <td>
                     <div class="inventory-item-title">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $r->received_date ?? '-' }}</div>

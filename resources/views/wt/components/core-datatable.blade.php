@@ -113,7 +113,7 @@
                 <thead class="border-b border-gray-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
                     <tr class="h-12">
                         @foreach($columns as $column)
-                            <th class="truncate px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                            <th class="truncate px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" style="{{ in_array($column['key'], ['serial_no', 'model'], true) ? 'text-align:center !important;' : '' }}">
                                 {{ $column['label'] }}
                             </th>
                         @endforeach
@@ -137,7 +137,10 @@
                             <tr class="h-12 border-b border-gray-100 transition hover:bg-slate-50/50 dark:border-slate-800 dark:hover:bg-slate-800/60" data-core-row data-status="{{ $rowStatus }}" data-search="{{ $rowSearch }}">
                                 @foreach($columns as $column)
                                     @php($value = $valueFor($row, $column['key']))
-                                    <td class="truncate px-4 py-3 text-sm text-slate-800 dark:text-slate-200">
+                                    <td @class([
+                                        'truncate px-4 py-3 text-sm text-slate-800 dark:text-slate-200',
+                                        'text-center' => in_array($column['key'], ['serial_no', 'model'], true),
+                                    ]) style="{{ in_array($column['key'], ['serial_no', 'model'], true) ? 'text-align:center !important;' : '' }}">
                                         @if($column['key'] === 'status')
                                             <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
                                                 {{ filled($value) ? $value : '-' }}

@@ -495,6 +495,11 @@
         row-gap: 3px !important;
         column-gap: 28px !important;
     }
+    .damage-form-page .damage-device-center-column,
+    .damage-form-page .damage-device-center-column .form-label,
+    .damage-form-page .damage-device-center-column input {
+        text-align: center !important;
+    }
     @media (max-width: 768px) {
         .damage-form-page .damage-card {
             padding: 8px !important;
@@ -1182,7 +1187,7 @@
         <div id="damageDeviceDetailList" class="mb-6 space-y-4"></div>
         @else
             <div class="wt-form-row mb-6">
-                <div>
+                <div class="damage-device-center-column">
                     <label class="form-label">Model <span class="text-red-500">*</span></label>
                     <input type="text" name="model" id="damage_model" value="{{ old('model', $draftRecord->model ?? '') }}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                 </div>
@@ -1190,7 +1195,7 @@
                     <label class="form-label">Radio ID <span class="text-red-500">*</span></label>
                     <input type="text" name="radio_id" id="damage_radio_id" value="{{ old('radio_id', $draftRecord->radio_id ?? '') }}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                 </div>
-                <div>
+                <div class="damage-device-center-column">
                     <label class="form-label">Serial No <span class="text-red-500">*</span></label>
                     <input type="text" name="serial_number" id="damage_serial_number" value="{{ old('serial_number', $draftRecord->serial_number ?? '') }}" placeholder="Enter serial number if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                 </div>
@@ -2293,7 +2298,7 @@
                 row.innerHTML = `
                     <div class="mb-3 border-b border-stone-100 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-800 dark:border-slate-700 dark:text-slate-100">Walkie Talkie Details ${index + 1}</div>
                     <div class="wt-form-row">
-                        <div>
+                        <div class="damage-device-center-column">
                             <label class="form-label">Model <span class="text-red-500">*</span></label>
                             <input type="text" name="device_details[${index}][model]" data-device-model value="${escapeHtml(saved.model || '')}" placeholder="Enter model if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
@@ -2301,7 +2306,7 @@
                             <label class="form-label">Radio ID <span class="text-red-500">*</span></label>
                             <input type="text" name="device_details[${index}][radio_id]" data-device-radio-id value="${escapeHtml(saved.radio_id || '')}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
-                        <div>
+                        <div class="damage-device-center-column">
                             <label class="form-label">Serial No <span class="text-red-500">*</span></label>
                             <input type="text" name="device_details[${index}][serial_number]" data-device-serial-number value="${escapeHtml(saved.serial_number || '')}" placeholder="Enter serial number if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
                         </div>
