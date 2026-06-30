@@ -1,7 +1,7 @@
 ﻿@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
-@section('title', 'Role Permissions Matrix')
-@section('page_title', 'Role Permissions Matrix')
+@section('title', 'WT Role Access Matrix')
+@section('page_title', 'WT Role Access Matrix')
 
 @section('content')
 
@@ -213,13 +213,13 @@
 <div class="role-matrix-page">
   <div class="role-matrix-header">
     <div>
-      <h1 class="role-matrix-title">Role Permissions Matrix</h1>
-      <p class="role-matrix-subtitle">A detailed breakdown of WT System access for ICT and Executive users.</p>
+      <h1 class="role-matrix-title">WT Role Access Matrix</h1>
+      <p class="role-matrix-subtitle">Access guide for ICT and Executive users across WT System modules.</p>
     </div>
     <div class="role-matrix-legend" aria-label="Permission legend">
-      <span class="legend-chip"><i class="fas fa-check"></i> Full / Manage</span>
-      <span class="legend-chip"><i class="fas fa-eye"></i> View / Own</span>
-      <span class="legend-chip"><i class="fas fa-minus"></i> No Access</span>
+      <span class="legend-chip"><i class="fas fa-check"></i> Manage / Submit</span>
+      <span class="legend-chip"><i class="fas fa-eye"></i> View / Own Records</span>
+      <span class="legend-chip"><i class="fas fa-minus"></i> Not Available</span>
     </div>
   </div>
 

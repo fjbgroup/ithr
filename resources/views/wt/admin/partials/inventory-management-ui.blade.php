@@ -297,7 +297,7 @@ body .content-surface :is(
     flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
+    gap: 4px !important;
 }
 
 body .content-surface :is(
@@ -3155,13 +3155,13 @@ body .content-surface :is(
     .special-action-buttons,
     .unused-actions
 ) :is(.btn, .wt-btn, .unused-action-btn) {
-    width: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    height: 34px !important;
-    min-height: 34px !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
     padding: 0 !important;
-    border-radius: 8px !important;
+    border-radius: 6px !important;
     gap: 0 !important;
     font-size: 0 !important;
 }
@@ -3203,7 +3203,7 @@ body .content-surface #specialTable td > .btn i {
     width: auto !important;
     min-width: 0 !important;
     margin: 0 !important;
-    font-size: 14px !important;
+    font-size: 12px !important;
     line-height: 1 !important;
 }
 
@@ -3272,7 +3272,7 @@ body .content-surface #specialTable .special-action-buttons {
     flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
+    gap: 4px !important;
     max-width: none !important;
     white-space: nowrap !important;
 }
@@ -3284,13 +3284,13 @@ body .content-surface #specialTable .special-action-buttons form {
 
 body .content-surface #specialTable .special-action-buttons :is(.btn, .wt-btn),
 body .content-surface #specialTable td > .btn {
-    width: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    height: 34px !important;
-    min-height: 34px !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
     padding: 0 !important;
-    border-radius: 8px !important;
+    border-radius: 6px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -3310,7 +3310,7 @@ body .content-surface #specialTable td > .btn i {
     width: auto !important;
     min-width: 0 !important;
     margin: 0 !important;
-    font-size: 14px !important;
+    font-size: 12px !important;
     line-height: 1 !important;
 }
 

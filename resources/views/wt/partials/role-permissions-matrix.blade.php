@@ -1,31 +1,32 @@
 @php
     $permissionRows = [
-        ['module' => 'Dashboard overview', 'ict' => 'Full', 'executive' => 'Full'],
-        ['module' => 'Inventory list and unit timeline', 'ict' => 'Manage', 'executive' => 'View'],
-        ['module' => 'Add, edit, import, and delete walkie records', 'ict' => 'Full', 'executive' => 'No'],
-        ['module' => 'Under repair, faulty, duplicate ID, and special use tools', 'ict' => 'Manage', 'executive' => 'View / submit'],
-        ['module' => 'Request walkie talkie', 'ict' => 'Submit', 'executive' => 'Submit'],
-        ['module' => 'Return unit', 'ict' => 'Submit / process', 'executive' => 'Submit'],
-        ['module' => 'Report faulty or damaged unit', 'ict' => 'Submit / process', 'executive' => 'Submit'],
-        ['module' => 'Approval inbox', 'ict' => 'Final approval', 'executive' => 'Department approval'],
-        ['module' => 'Approval history', 'ict' => 'Full', 'executive' => 'No'],
-        ['module' => 'Handover and pickup records', 'ict' => 'Manage', 'executive' => 'Own records'],
-        ['module' => 'My inventory and request status', 'ict' => 'Own records', 'executive' => 'Own records'],
-        ['module' => 'All status tracking and reports', 'ict' => 'Full', 'executive' => 'Relevant records'],
-        ['module' => 'Users control', 'ict' => 'Manage', 'executive' => 'No'],
-        ['module' => 'Master data', 'ict' => 'Manage', 'executive' => 'No'],
-        ['module' => 'System logs and audit trail', 'ict' => 'View', 'executive' => 'No'],
-        ['module' => 'Profile, policy, and permission matrix', 'ict' => 'View', 'executive' => 'View'],
+        ['module' => 'Dashboard and WT summary', 'ict' => 'View system summary', 'executive' => 'View own summary'],
+        ['module' => 'Inventory list and unit timeline', 'ict' => 'Manage all units', 'executive' => 'View assigned units'],
+        ['module' => 'Add, edit, import, and delete walkie records', 'ict' => 'Manage records', 'executive' => 'Not available'],
+        ['module' => 'Under repair and faulty units', 'ict' => 'Manage repair records', 'executive' => 'Submit faulty report'],
+        ['module' => 'Duplicated ID records', 'ict' => 'Manage ID changes', 'executive' => 'Not available'],
+        ['module' => 'Special use, spare, and temporary units', 'ict' => 'Manage special units', 'executive' => 'Not available'],
+        ['module' => 'Walkie talkie request', 'ict' => 'Submit request', 'executive' => 'Submit request'],
+        ['module' => 'Return unit', 'ict' => 'Submit and process', 'executive' => 'Submit return'],
+        ['module' => 'Approval inbox', 'ict' => 'Final ICT approval', 'executive' => 'Executive approval'],
+        ['module' => 'Approval history', 'ict' => 'View all history', 'executive' => 'Not available'],
+        ['module' => 'Handover and pickup records', 'ict' => 'Manage handover', 'executive' => 'Own records only'],
+        ['module' => 'My inventory and request status', 'ict' => 'Own records only', 'executive' => 'Own records only'],
+        ['module' => 'All status tracking and reports', 'ict' => 'View all records', 'executive' => 'Relevant records only'],
+        ['module' => 'Users control', 'ict' => 'Manage users', 'executive' => 'Not available'],
+        ['module' => 'Master data', 'ict' => 'Manage master data', 'executive' => 'Not available'],
+        ['module' => 'System logs and audit trail', 'ict' => 'View audit logs', 'executive' => 'Not available'],
+        ['module' => 'Profile, policy, and role matrix', 'ict' => 'View information', 'executive' => 'View information'],
     ];
 
     $permissionTone = function ($value) {
         $value = strtolower($value);
 
-        if (str_contains($value, 'no')) {
+        if (str_contains($value, 'not available')) {
             return 'none';
         }
 
-        if (str_contains($value, 'view') || str_contains($value, 'own') || str_contains($value, 'limited') || str_contains($value, 'relevant')) {
+        if (str_contains($value, 'view') || str_contains($value, 'own') || str_contains($value, 'relevant')) {
             return 'partial';
         }
 

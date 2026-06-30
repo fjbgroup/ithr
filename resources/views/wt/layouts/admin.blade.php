@@ -722,7 +722,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
-          gap: 6px !important;
+          gap: 4px !important;
           width: auto !important;
           max-width: 100% !important;
           margin: 0 !important;
@@ -757,18 +757,18 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
-          gap: 5px !important;
-          width: 66px !important;
-          min-width: 66px !important;
-          max-width: 66px !important;
+          gap: 0 !important;
+          width: 28px !important;
+          min-width: 28px !important;
+          max-width: 28px !important;
           height: 28px !important;
           min-height: 28px !important;
-          padding: 0 7px !important;
+          padding: 0 !important;
           border: 1px solid transparent !important;
-          border-radius: 7px !important;
+          border-radius: 6px !important;
           box-shadow: none !important;
           color: #ffffff !important;
-          font-size: 10px !important;
+          font-size: 0 !important;
           font-weight: 900 !important;
           letter-spacing: 0 !important;
           line-height: 1 !important;
@@ -795,11 +795,11 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
-          width: 12px !important;
-          min-width: 12px !important;
-          height: 12px !important;
+          width: auto !important;
+          min-width: 0 !important;
+          height: auto !important;
           margin: 0 !important;
-          font-size: 11px !important;
+          font-size: 12px !important;
           line-height: 1 !important;
           transform: none !important;
         }
@@ -815,7 +815,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           .special-action-buttons .btn span,
           .special-action-buttons .wt-btn span
         ) {
-          display: inline-block !important;
+          display: none !important;
           min-width: 0 !important;
           overflow: hidden !important;
           text-overflow: ellipsis !important;
