@@ -70,15 +70,21 @@
 }
 .icon-check {
     color: #10b981; /* Emerald */
-    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .icon-cross {
     color: #ef4444; /* Red */
-    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .icon-partial {
     color: #f59e0b; /* Amber */
-    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .role-badge-custom {
     display: inline-flex;
@@ -139,69 +145,69 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                             <span class="feature-name">View Own Profile</span>
                             <span class="feature-desc">Access to personal information, travel, and training records.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">View Global Staff Directory</span>
                             <span class="feature-desc">Can view profiles and contact info of all other staff members.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Edit Staff Data</span>
                             <span class="feature-desc">Directly modify any staff profile, family information, or positions.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Submit Update Requests</span>
                             <span class="feature-desc">Request HR to update personal information (requires approval).</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Resolve Update Requests</span>
                             <span class="feature-desc">Approve or reject data modification requests from staff.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Book Meeting Rooms</span>
                             <span class="feature-desc">Submit a reservation for any available meeting room.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Approve Room Bookings</span>
                             <span class="feature-desc">Approve or reject pending meeting room reservations.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td>
-                            <span class="partial-tooltip" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
-                                <i class="fa-solid fa-circle-half-stroke icon-partial"></i>
+                            <span class="partial-tooltip icon-partial" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                             </span>
                         </td>
                         <td>
-                            <span class="partial-tooltip" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
-                                <i class="fa-solid fa-circle-half-stroke icon-partial"></i>
+                            <span class="partial-tooltip icon-partial" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                             </span>
                         </td>
                     </tr>
@@ -210,40 +216,40 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                             <span class="feature-name">Manage User Accounts</span>
                             <span class="feature-desc">Change roles, reset passwords, or block system access.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Manage Master Data</span>
                             <span class="feature-desc">Configure departments, settings, and structural master data.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">System Audit Logs</span>
                             <span class="feature-desc">View the security and activity logs of the entire system.</span>
                         </td>
-                        <td><i class="fa-solid fa-check icon-check"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
-                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div style="padding: 1rem 1.25rem; background: var(--row-alt); border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted); display: flex; gap: 1.5rem; justify-content: center;">
             <span style="display: flex; align-items: center; gap: 0.35rem;">
-                <i class="fa-solid fa-check icon-check" style="font-size: 0.85rem;"></i> Full Access
+                <span class="icon-check" style="width: 14px; height: 14px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> Full Access
             </span>
             <span style="display: flex; align-items: center; gap: 0.35rem;">
-                <i class="fa-solid fa-circle-half-stroke icon-partial" style="font-size: 0.85rem;"></i> Conditional Access
+                <span class="icon-partial" style="width: 14px; height: 14px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg></span> Conditional Access
             </span>
             <span style="display: flex; align-items: center; gap: 0.35rem;">
-                <i class="fa-solid fa-xmark icon-cross" style="font-size: 0.85rem;"></i> No Access
+                <span class="icon-cross" style="width: 14px; height: 14px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span> No Access
             </span>
         </div>
     </div>
