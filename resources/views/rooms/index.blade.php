@@ -481,6 +481,61 @@
     [data-theme="dark"] .rb-mob-nav  { background: #1e293b; border-top-color: var(--border); }
     [data-theme="dark"] .rb-mob-room-card { background: #1e293b; }
     [data-theme="dark"] .rb-fab      { background: #1d4ed8; box-shadow: 0 4px 18px rgba(29,78,216,.4); }
+
+    /* ── MOBILE: Fix card layout overflow clipping ──────────────────────────
+       Without this, .rb-approval-wrap's overflow:hidden (set inline in the
+       canApprove conditional block) clips the table cards, and .table-responsive
+       scroll regions cannot extend beyond the clipping ancestor, leaving only a
+       sliver of each card visible.
+    ──────────────────────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+        /* Let the approval panel, grid container, and any .card that wraps a
+           table show full-width cards — all have overflow:hidden which clips */
+        .rb-approval-wrap,
+        .rb-grid-container,
+        .card                                     { overflow: visible !important; }
+        /* Cards stack vertically — no horizontal scroll wrapper needed */
+        .rb-panel-body .table-responsive,
+        .card-body > .table-responsive,
+        .rb-grid-container > .table-responsive    { overflow: visible !important; }
+
+        /* Use more-specific selectors (table.rb-m-stack) to guarantee the
+           table→card conversion beats the browser's native table layout,
+           including in Safari/Mobile Chrome which can resist display overrides. */
+        table.rb-m-stack                          { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        table.rb-m-stack > thead                  { display: none !important; }
+        table.rb-m-stack > tbody                  { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        table.rb-m-stack > tbody > tr {
+            display: flex !important; flex-direction: column !important;
+            align-items: stretch !important; width: 100% !important;
+            box-sizing: border-box !important; overflow: hidden !important;
+            border: 1px solid var(--border) !important; border-radius: 10px !important;
+            margin: 0 0 .75rem !important; padding: .85rem 1rem !important;
+            background: var(--surface) !important;
+        }
+        table.rb-m-stack > tbody > tr > td {
+            display: block !important; width: 100% !important;
+            min-width: 0 !important; box-sizing: border-box !important;
+            padding: .2rem 0 !important; border: none !important;
+            text-align: left !important; white-space: normal !important;
+            word-wrap: break-word !important; overflow-wrap: break-word !important;
+        }
+        table.rb-m-stack > tbody > tr > td[data-label]::before {
+            content: attr(data-label);
+            display: block; font-size: .6rem; font-weight: 800;
+            text-transform: uppercase; color: #94a3b8;
+            letter-spacing: .04em; margin-bottom: .15rem;
+        }
+        table.rb-m-stack > tbody > tr > td.rb-td-actions {
+            margin-top: .6rem !important; padding-top: .6rem !important;
+            border-top: 1px solid #f1f5f9 !important;
+            display: flex !important; flex-wrap: wrap !important; gap: .4rem !important;
+        }
+        table.rb-m-stack > tbody > tr > td.rb-td-hide { display: none !important; }
+
+        /* Prevent any inline-block child div from overflowing the td */
+        table.rb-m-stack tbody td > div { max-width: 100%; box-sizing: border-box; }
+    }
 </style>
 @endsection
 
