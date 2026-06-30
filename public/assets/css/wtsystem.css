@@ -303,14 +303,14 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
 .approval-new-badge { margin-left: 6px; }
 
 /* Footer / user card */
-.sidebar-footer { padding: 12px 10px; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; }
+.sidebar-footer { padding: 12px 10px; border-top: 1px solid var(--sidebar-border); flex-shrink: 0; }
 .user-card {
   display: flex; align-items: center; gap: 10px;
   padding: 8px 10px; border-radius: 8px;
-  background: rgba(255,255,255,.05);
+  background: var(--sidebar-hover-bg);
   text-decoration: none; transition: background var(--transition); cursor: default;
 }
-.user-card:hover { background: rgba(255,255,255,.09); }
+.user-card:hover { background: var(--sidebar-active-bg); }
 .user-avatar {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--accent);
@@ -318,8 +318,8 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
   font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
 }
 .user-info { min-width: 0; flex: 1; }
-.user-name { font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-role { font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: #38bdf8; margin-top: 1px; }
+.user-name { font-size: 12px; font-weight: 600; color: var(--sidebar-brand-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 9.5px; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: var(--sidebar-active-icon); margin-top: 1px; }
 
 /* Collapsed desktop sidebar */
 body.sidebar-collapsed .sidebar { width: 72px; }
@@ -330,7 +330,7 @@ body.sidebar-collapsed .topbar { left: 72px; }
 body.sidebar-collapsed .sidebar-brand-row { padding: 14px 8px; justify-content: center; gap: 0; position: relative; }
 body.sidebar-collapsed .sidebar-brand { flex: 0 0 auto; }
 body.sidebar-collapsed .brand-name { display: none !important; }
-body.sidebar-collapsed .sidebar-collapse-toggle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 9px; background: rgba(15,23,42,.55); }
+body.sidebar-collapsed .sidebar-collapse-toggle { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 9px; background: var(--sidebar-hover-bg); }
 body.sidebar-collapsed .sidebar-collapse-toggle i { transform: rotate(180deg); }
 
 /* Nav — block layout, padding-based (matches IT system approach) */
