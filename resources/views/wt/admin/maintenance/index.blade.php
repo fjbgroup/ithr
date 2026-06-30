@@ -84,6 +84,14 @@
 <div class="clean-admin-table-shell" id="mainTableContainer">
     <div class="clean-admin-table-scroll">
     <table id="maintTable" class="clean-admin-table table-auto w-full text-left">
+        <colgroup>
+            <col style="width:10%">
+            <col style="width:10%">
+            <col style="width:17%">
+            <col style="width:12%">
+            <col style="width:31%">
+            <col style="width:20%">
+        </colgroup>
         <thead>
             <tr>
                 <th class="px-2 py-1 text-center">Radio ID</th>
@@ -91,7 +99,7 @@
                 <th class="px-2 py-1 text-center" style="text-align:center !important;">Serial No.</th>
                 <th class="px-2 py-1 text-center" style="text-align:center !important;">Model</th>
                 <th class="px-2 py-1 text-center">Issue / Received</th>
-                <th class="px-2 py-1 text-center maintenance-action-col">Action</th>
+                <th class="px-2 py-1 text-center maintenance-action-col" style="text-align:center !important;">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -116,7 +124,7 @@
                     <div class="inventory-item-title">{{ $r->issue ?? $r->issue_description ?? '-' }}</div>
                     <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">{{ $r->received_date ?? '-' }}</div>
                 </td>
-                <td class="maintenance-action-col">
+                <td class="maintenance-action-col" style="text-align:center !important;">
                     <div class="maintenance-action-stack">
                         <button type="button" class="wt-btn wt-btn-sm maintenance-action-view" onclick="openGlobalMaintenanceTimeline('{{ $r->maintenance_id }}')">
                             <i class="fa-solid fa-eye"></i>
