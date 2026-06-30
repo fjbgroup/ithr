@@ -110,6 +110,74 @@ body {
 }
 html.dark body { background: var(--body-bg); color: var(--text); }
 
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body :is(.content-surface, .table-card, .card, .modal-content, .dropdown-menu, .navy-panel, .clean-admin-table-shell, .inventory-table-shell) {
+  background-color: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+body :is(table, .table, .dataTable) {
+  color: var(--text);
+}
+
+body :is(table, .table, .dataTable) :is(th, td) {
+  border-color: var(--border);
+}
+
+body :is(table, .table, .dataTable) thead :is(th, td) {
+  background-color: var(--table-head-bg);
+  color: var(--table-head-color);
+}
+
+body :is(table, .table, .dataTable) tbody :is(th, td) {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+body :is(.text-muted, .small, small, .form-text, .dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate) {
+  color: var(--muted) !important;
+}
+
+body :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea, .form-control, .form-select) {
+  background-color: var(--form-input-bg);
+  border-color: var(--form-input-border);
+  color: var(--form-input-color);
+}
+
+body :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea, .form-control, .form-select)::placeholder {
+  color: var(--muted);
+  opacity: 0.9;
+}
+
+body :is(.select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple) {
+  background-color: var(--form-input-bg) !important;
+  border-color: var(--form-input-border) !important;
+  color: var(--form-input-color) !important;
+}
+
+body .select2-container--default .select2-selection__rendered {
+  color: var(--form-input-color) !important;
+}
+
+body .select2-dropdown,
+body .select2-results__option {
+  background-color: var(--menu-bg) !important;
+  color: var(--text) !important;
+}
+
+body .select2-results__option--highlighted.select2-results__option--selectable {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
 /* Ensure all form elements inherit Inter — browsers default to system font otherwise */
 input, select, textarea, button { font-family: inherit; font-size: 12px; }
 

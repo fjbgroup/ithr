@@ -9,8 +9,11 @@
 <script>
   (function () {
     try {
-      var savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme');
-      var theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
+      var theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+      localStorage.setItem('fjb-theme', theme);
+      localStorage.setItem('color-theme', theme);
+      localStorage.setItem('theme', theme);
       document.documentElement.classList.toggle('dark', theme === 'dark');
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.style.colorScheme = theme;
@@ -252,11 +255,19 @@ if (themeToggleBtn) {
   });
 }
 
-(function(){
-  const t = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+function resolveSavedTheme() {
+  const fjbTheme = localStorage.getItem('fjb-theme');
+  const colorTheme = localStorage.getItem('color-theme');
+  const legacyTheme = localStorage.getItem('theme');
+  const t = [fjbTheme, colorTheme, legacyTheme].find(value => value === 'dark' || value === 'light') || 'light';
   localStorage.setItem('fjb-theme', t);
   localStorage.setItem('color-theme', t);
   localStorage.setItem('theme', t);
+  return t;
+}
+
+(function(){
+  const t = resolveSavedTheme();
   applyTheme(t === 'dark');
 })();
 
