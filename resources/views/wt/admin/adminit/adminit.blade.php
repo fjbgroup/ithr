@@ -65,6 +65,22 @@
     .adminit-staff-table .dataTables_wrapper {
         width: 100% !important;
     }
+    .adminit-staff-table {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    .adminit-staff-table .overflow-x-auto {
+        padding: 6px 8px 10px;
+    }
+    @media (max-width: 768px) {
+        .adminit-staff-table {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .adminit-staff-table .overflow-x-auto {
+            padding: 4px;
+        }
+    }
     .adminit-staff-table table.dataTable {
         table-layout: auto;
     }
