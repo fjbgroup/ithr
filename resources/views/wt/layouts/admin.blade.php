@@ -162,7 +162,6 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     $faultyNavOnThreeMonths = request()->routeIs('wt.admin.reports.faulty3Months');
     $faultyManagementOpen = $faultyNavOnUserReports || $faultyNavOnThreeMonths;
     $requestCreateOpen = request()->routeIs('wt.admin.requests.create') || request()->routeIs('wt.admin.requests.create.*') || request()->routeIs('wt.admin.requests.store') || request()->routeIs('wt.admin.requests.store.*') || request()->routeIs('wt.admin.requests.staffSearch');
-    $systemControlOpen = request()->routeIs('wt.admin.users.*') || request()->routeIs('wt.admin.passwordResetRequests.*') || request()->routeIs('wt.admin.activity.*') || request()->routeIs('wt.admin.masterData.*') || request()->routeIs('wt.admin.database.backup') || request()->routeIs('wt.admin.it.index');
 @endphp
 
 {{-- Mobile overlay --}}
@@ -314,28 +313,21 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </a>
     @endif
 
-    {{-- Executive Tools (IT only) --}}
+    {{-- System Control (IT only) --}}
     @if($isAdminItView)
-    <div class="nav-section-label">Executive Tools (IT)</div>
-    <div class="dropdown-wrapper {{ $systemControlOpen ? 'open' : '' }}">
-      <button type="button" class="dropdown-trigger has-info {{ $systemControlOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="System Control">
-        <i class="fas fa-sliders-h" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
-        <span style="flex:1">System Control</span>
-        @include('wt.partials.sidebar-info', ['text' => 'Open system management tools for user accounts and activity logs.'])
-        <i class="fas fa-chevron-right dropdown-chevron"></i>
-      </button>
-      <div class="dropdown-content">
-        <a href="{{ route('wt.admin.users.index') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.users.*') ? 'active' : '' }}">
-          <i class="fas fa-users" style="font-size:12px;width:14px"></i> Users Control
-        </a>
-        <a href="{{ route('wt.admin.masterData.index') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.masterData.*') ? 'active' : '' }}">
-          <i class="fas fa-database" style="font-size:12px;width:14px"></i> Master Data
-        </a>
-        <a href="{{ route('wt.admin.activity.index') }}" class="sub-nav-link {{ request()->routeIs('wt.admin.activity.*') ? 'active' : '' }}">
-          <i class="fas fa-clipboard-list" style="font-size:12px;width:14px"></i> System Logs
-        </a>
-      </div>
-    </div>
+    <div class="nav-section-label">System Control</div>
+    <a href="{{ route('wt.admin.users.index') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.users.*') ? 'active-sidebar' : '' }}" title="Users Control">
+      <i class="fas fa-users" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Users Control</span>
+      @include('wt.partials.sidebar-info', ['text' => 'Manage WT system user accounts and access roles.'])
+    </a>
+    <a href="{{ route('wt.admin.masterData.index') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.masterData.*') ? 'active-sidebar' : '' }}" title="Master Data">
+      <i class="fas fa-database" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Master Data</span>
+      @include('wt.partials.sidebar-info', ['text' => 'Manage dropdown options and master records used across the WT system.'])
+    </a>
+    <a href="{{ route('wt.admin.activity.index') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.activity.*') ? 'active-sidebar' : '' }}" title="System Logs">
+      <i class="fas fa-clipboard-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>System Logs</span>
+      @include('wt.partials.sidebar-info', ['text' => 'Review WT system activity logs and audit actions.'])
+    </a>
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
