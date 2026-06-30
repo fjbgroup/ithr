@@ -70,14 +70,14 @@
         margin-right: -10px;
     }
     .adminit-staff-table .adminit-section-header {
-        padding-left: 28px !important;
-        padding-right: 28px !important;
+        padding-left: 44px !important;
+        padding-right: 44px !important;
     }
     .adminit-staff-table .overflow-x-auto {
-        padding: 18px 22px 24px;
+        padding: 24px 42px 30px;
     }
     .adminit-staff-table .dataTables_wrapper {
-        padding: 4px 2px 0;
+        padding: 6px 0 0;
     }
     @media (max-width: 768px) {
         .adminit-staff-table {
@@ -85,11 +85,11 @@
             margin-right: 0;
         }
         .adminit-staff-table .overflow-x-auto {
-            padding: 14px 12px 18px;
+            padding: 18px 18px 22px;
         }
         .adminit-staff-table .adminit-section-header {
-            padding-left: 18px !important;
-            padding-right: 18px !important;
+            padding-left: 24px !important;
+            padding-right: 24px !important;
         }
     }
     .adminit-staff-table table.dataTable {
