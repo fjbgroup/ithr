@@ -3141,38 +3141,55 @@ body .content-surface .inventory-table-frame > .clean-admin-filter + #mainTableC
 }
 
 html:not(.dark) body .content-surface .special-filter-panel,
+html:not(.dark) body .content-surface .special-page-shell + .wt-data .wt-data-filter,
 html[data-theme="light"] body .content-surface .special-filter-panel {
     border-color: #d8e1ed !important;
     background: #ffffff !important;
     color: #172033 !important;
 }
 
+html[data-theme="light"] body .content-surface .special-page-shell + .wt-data .wt-data-filter {
+    border-color: #d8e1ed !important;
+    background: #ffffff !important;
+    color: #172033 !important;
+}
+
 html:not(.dark) body .content-surface .special-filter-panel :is(label, .special-filter-field label),
-html[data-theme="light"] body .content-surface .special-filter-panel :is(label, .special-filter-field label) {
+html:not(.dark) body .content-surface .special-page-shell + .wt-data .wt-data-filter label,
+html[data-theme="light"] body .content-surface .special-filter-panel :is(label, .special-filter-field label),
+html[data-theme="light"] body .content-surface .special-page-shell + .wt-data .wt-data-filter label {
     color: #64748b !important;
 }
 
 html:not(.dark) body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
-html[data-theme="light"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset) {
+html:not(.dark) body .content-surface .special-page-shell + .wt-data .wt-data-filter :is(input, select, button, .wt-data-input, .wt-data-select, .wt-data-reset),
+html[data-theme="light"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
+html[data-theme="light"] body .content-surface .special-page-shell + .wt-data .wt-data-filter :is(input, select, button, .wt-data-input, .wt-data-select, .wt-data-reset) {
     border-color: #cbd5e1 !important;
     background: #f8fafc !important;
     color: #172033 !important;
 }
 
 html.dark body .content-surface .special-filter-panel,
-html[data-theme="dark"] body .content-surface .special-filter-panel {
+html.dark body .content-surface .special-page-shell + .wt-data .wt-data-filter,
+html[data-theme="dark"] body .content-surface .special-filter-panel,
+html[data-theme="dark"] body .content-surface .special-page-shell + .wt-data .wt-data-filter {
     border-color: rgba(148, 163, 184, .18) !important;
     background: #0f172a !important;
     color: #e5edf7 !important;
 }
 
 html.dark body .content-surface .special-filter-panel :is(label, .special-filter-field label),
-html[data-theme="dark"] body .content-surface .special-filter-panel :is(label, .special-filter-field label) {
+html.dark body .content-surface .special-page-shell + .wt-data .wt-data-filter label,
+html[data-theme="dark"] body .content-surface .special-filter-panel :is(label, .special-filter-field label),
+html[data-theme="dark"] body .content-surface .special-page-shell + .wt-data .wt-data-filter label {
     color: #8ea0b8 !important;
 }
 
 html.dark body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
-html[data-theme="dark"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset) {
+html.dark body .content-surface .special-page-shell + .wt-data .wt-data-filter :is(input, select, button, .wt-data-input, .wt-data-select, .wt-data-reset),
+html[data-theme="dark"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
+html[data-theme="dark"] body .content-surface .special-page-shell + .wt-data .wt-data-filter :is(input, select, button, .wt-data-input, .wt-data-select, .wt-data-reset) {
     border-color: rgba(148, 163, 184, .26) !important;
     background: #111827 !important;
     color: #e5edf7 !important;
