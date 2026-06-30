@@ -722,7 +722,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
-          gap: 6px !important;
+          gap: 4px !important;
           width: auto !important;
           max-width: 100% !important;
           margin: 0 !important;
@@ -758,14 +758,14 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           align-items: center !important;
           justify-content: center !important;
           gap: 0 !important;
-          width: 34px !important;
-          min-width: 34px !important;
-          max-width: 34px !important;
-          height: 34px !important;
-          min-height: 34px !important;
+          width: 28px !important;
+          min-width: 28px !important;
+          max-width: 28px !important;
+          height: 28px !important;
+          min-height: 28px !important;
           padding: 0 !important;
           border: 1px solid transparent !important;
-          border-radius: 7px !important;
+          border-radius: 6px !important;
           box-shadow: none !important;
           color: #ffffff !important;
           font-size: 0 !important;
@@ -799,7 +799,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
           min-width: 0 !important;
           height: auto !important;
           margin: 0 !important;
-          font-size: 14px !important;
+          font-size: 12px !important;
           line-height: 1 !important;
           transform: none !important;
         }
