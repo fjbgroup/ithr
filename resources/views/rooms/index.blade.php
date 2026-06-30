@@ -29,6 +29,11 @@
     .rbdp-weekdays span { text-align:center; font-size:.68rem; font-weight:800; color:#94a3b8; text-transform:uppercase; }
     .rbdp-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:.25rem; }
     .rbdp-cell { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:600; color:#334155; border-radius:9px; cursor:pointer; transition:background .12s, color .12s; }
+
+    /* Hide floating buttons when a modal is open */
+    body.rb-modal-open .rb-fab,
+    body.rb-modal-open #chatbot-fab { display: none !important; }
+
     .rbdp-cell.empty { cursor:default; }
     .rbdp-cell:not(.empty):hover { background:#E6F1FB; color:#185FA5; }      /* light blue on hover */
     .rbdp-cell.today { color:#185FA5; font-weight:800; }
@@ -1974,12 +1979,14 @@
             m.classList.add('active');
             document.getElementById('modalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('rb-modal-open');
         }
     }
     function closeModal() {
         document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
         document.getElementById('modalOverlay').classList.remove('active');
         document.body.style.overflow = '';
+        document.body.classList.remove('rb-modal-open');
     }
 
     function rbTogglePanel(btn, panelId) {
