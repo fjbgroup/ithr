@@ -31,7 +31,7 @@
 :root {
   --sidebar-bg:        #f8fafc;
   --sidebar-hover:     #f1f5f9;
-  --sidebar-active-bg: #2563eb;
+  --sidebar-active-bg: linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%);
   --sidebar-text:      #334155;
   --sidebar-head:      #1e293b;
   --sidebar-border:    #e2e8f0;
@@ -64,7 +64,7 @@
 html.dark{
   --sidebar-bg:        #1a2235;
   --sidebar-hover:     #263042;
-  --sidebar-active-bg: #2563eb;
+  --sidebar-active-bg: linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%);
   --sidebar-text:      #cbd5e1;
   --sidebar-head:      #f1f5f9;
   --sidebar-border:    #374151;
@@ -129,9 +129,10 @@ body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;
   background:var(--sidebar-active-bg);
   color:var(--sidebar-active-tx);
   font-weight:700;
-  box-shadow:0 6px 16px rgba(37,99,235,.24);
+  box-shadow:0 6px 16px rgba(247,148,29,.28);
 }
 .nav-link.active i{color:inherit}
+.sidebar-nav>div>button.sb-active{box-shadow:0 6px 16px rgba(247,148,29,.28)}
 .nav-link .badge-count, button .badge-count{
   margin-left:auto;background:var(--red);color:#fff;
   border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;flex-shrink:0;
@@ -774,13 +775,13 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
       <div style="position:relative" id="notifWrap">
         <button id="notifBell" onclick="toggleNotifDropdown()"
           style="position:relative;width:36px;height:36px;border-radius:8px;background:transparent;border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s"
-          onmouseover="this.style.background='var(--body-bg)';this.style.color='var(--navy)'"
+          onmouseover="this.style.background='var(--body-bg)';this.style.color='var(--accent)'"
           onmouseout="this.style.background='transparent';this.style.color='var(--muted)'">
           <i class="bi bi-bell-fill" style="font-size:16px"></i>
-          <span id="notifBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;background:#dc2626;color:#fff;border-radius:9px;font-size:10px;font-weight:700;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff"></span>
+          <span id="notifBadge" style="display:none;position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;background:#dc2626;color:#fff;border-radius:9px;font-size:10px;font-weight:700;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--surface)"></span>
         </button>
-        <div id="notifDropdown" style="display:none;position:absolute;top:calc(100% + 10px);right:0;width:340px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.13);z-index:7000;overflow:hidden">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+        <div id="notifDropdown" style="display:none;position:absolute;top:calc(100% + 10px);right:0;width:340px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.22);z-index:7000;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface)">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Notifications</div>
             <div style="display:flex;align-items:center;gap:10px">
               <button onclick="markAllRead()" style="background:none;border:none;cursor:pointer;font-size:11px;font-weight:600;color:var(--accent);font-family:inherit">Mark all read</button>
@@ -854,12 +855,12 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 const DARK_VARS = {
   '--sidebar-bg':        '#1a2235',
   '--sidebar-hover':     '#263042',
-  '--sidebar-active-bg': 'rgba(56,189,248,.14)',
+  '--sidebar-active-bg': 'linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%)',
   '--sidebar-text':      '#cbd5e1',
   '--sidebar-head':      '#f1f5f9',
   '--sidebar-border':    '#374151',
   '--sidebar-muted':     '#94a3b8',
-  '--sidebar-active-tx': '#38bdf8',
+  '--sidebar-active-tx': '#ffffff',
   '--bg':            '#111827',
   '--body-bg':       '#111827',
   '--white':         '#1f2937',
@@ -878,12 +879,12 @@ const DARK_VARS = {
 const LIGHT_VARS = {
   '--sidebar-bg':        '#f8fafc',
   '--sidebar-hover':     '#f1f5f9',
-  '--sidebar-active-bg': '#e0f2fe',
+  '--sidebar-active-bg': 'linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%)',
   '--sidebar-text':      '#334155',
   '--sidebar-head':      '#1e293b',
   '--sidebar-border':    '#e2e8f0',
   '--sidebar-muted':     '#64748b',
-  '--sidebar-active-tx': '#0284c7',
+  '--sidebar-active-tx': '#ffffff',
   '--bg':            '#f1f5f9',
   '--body-bg':       '#f1f5f9',
   '--white':         '#ffffff',
@@ -1015,18 +1016,18 @@ $(document).ready(function () {
 
   function renderList(items) {
     if (!items.length) {
-      listEl.innerHTML = '<div style="padding:32px 16px;text-align:center;color:#94a3b8;font-size:13px">No notifications yet.</div>';
+      listEl.innerHTML = '<div style="padding:32px 16px;text-align:center;color:var(--muted);font-size:13px">No notifications yet.</div>';
       return;
     }
     listEl.innerHTML = items.map(function(n) {
       var ic   = typeIcon(n.type);
       var read = !!n.is_read;
-      return '<div onclick="openNotif('+n.id+',\''+encodeURIComponent(n.link||'')+'\',\''+n.type+'\')" style="display:flex;gap:12px;align-items:flex-start;padding:12px 18px;border-bottom:1px solid #f8fafc;cursor:pointer;background:'+(read?'#fff':'#f0f9ff')+';transition:background .12s" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\''+(read?'#fff':'#f0f9ff')+'\'">'
+      return '<div onclick="openNotif('+n.id+',\''+encodeURIComponent(n.link||'')+'\',\''+n.type+'\')" style="display:flex;gap:12px;align-items:flex-start;padding:12px 18px;border-bottom:1px solid var(--border);cursor:pointer;background:'+(read?'var(--surface)':'var(--table-hover)')+';transition:background .12s" onmouseover="this.style.background=\'var(--body-bg)\'" onmouseout="this.style.background=\''+(read?'var(--surface)':'var(--table-hover)')+'\'">'
         + '<div style="width:34px;height:34px;border-radius:8px;background:'+ic[0]+'18;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px"><i class="bi '+ic[1]+'" style="color:'+ic[0]+';font-size:15px"></i></div>'
         + '<div style="flex:1;min-width:0">'
-        + '<div style="font-size:12px;font-weight:'+(read?'500':'700')+';color:#1e293b;line-height:1.4">'+n.title+'</div>'
-        + '<div style="font-size:11px;color:#64748b;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+n.message+'</div>'
-        + '<div style="font-size:10px;color:#94a3b8;margin-top:4px">'+timeAgo(n.created_at)+'</div>'
+        + '<div style="font-size:12px;font-weight:'+(read?'500':'700')+';color:var(--text);line-height:1.4">'+n.title+'</div>'
+        + '<div style="font-size:11px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+n.message+'</div>'
+        + '<div style="font-size:10px;color:var(--muted);margin-top:4px">'+timeAgo(n.created_at)+'</div>'
         + '</div>'
         + (read ? '' : '<div style="width:7px;height:7px;border-radius:50%;background:#0284c7;flex-shrink:0;margin-top:6px"></div>')
         + '</div>';
@@ -1047,7 +1048,7 @@ $(document).ready(function () {
     fetch('{{ route("it.notifications.ajax") }}?action=list')
       .then(r => r.json())
       .then(renderList)
-      .catch(function(){ listEl.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:13px">Could not load notifications.</div>'; });
+      .catch(function(){ listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Could not load notifications.</div>'; });
   }
 
   window.toggleNotifDropdown = function() {
@@ -1107,15 +1108,15 @@ $(document).ready(function () {
 </style>
 
 <div id="eggModal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(10,18,32,.75);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px">
-  <div id="eggCard" style="background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:430px;box-shadow:0 32px 80px rgba(0,0,0,.45);font-family:'Inter',sans-serif;position:relative;overflow:hidden">
+  <div id="eggCard" style="background:var(--surface);border:1px solid rgba(247,148,29,.28);border-radius:20px;width:100%;max-width:430px;box-shadow:0 32px 80px rgba(0,0,0,.45),0 10px 28px rgba(247,148,29,.18);font-family:'Inter',sans-serif;position:relative;overflow:hidden">
 
     {{-- Header --}}
-    <div style="background:linear-gradient(135deg,#142b47 0%,#1a4b8c 100%);padding:28px 28px 22px;text-align:center;border-radius:20px 20px 0 0">
+    <div style="background:linear-gradient(160deg,#FFB84D 0%,#F7941D 50%,#C96800 100%);padding:28px 28px 22px;text-align:center;border-radius:20px 20px 0 0">
       <div style="margin:0 auto 14px;width:72px;height:72px;display:flex;align-items:center;justify-content:center">
         <img id="eggLogoImg" src="" alt="FJB Logo" style="width:68px;height:68px;object-fit:contain">
       </div>
       <div style="color:#fff;font-size:18px;font-weight:800;letter-spacing:.02em">FJB Inventory System</div>
-      <div style="color:rgba(255,255,255,.5);font-size:12px;margin-top:5px;font-weight:500">Internal Management Platform</div>
+      <div style="color:rgba(255,255,255,.76);font-size:12px;margin-top:5px;font-weight:500">Internal Management Platform</div>
     </div>
 
     {{-- Body --}}
@@ -1157,8 +1158,8 @@ $(document).ready(function () {
     {{-- Footer --}}
     <div style="padding:16px 28px 22px;text-align:center">
       <button id="eggClose"
-        style="background:#142b47;color:#fff;border:none;border-radius:9px;padding:9px 36px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s"
-        onmouseover="this.style.background='#1e3f6e'" onmouseout="this.style.background='#142b47'">
+        style="background:linear-gradient(135deg,#FFB84D 0%,#F7941D 60%,#C96800 100%);color:#fff;border:none;border-radius:9px;padding:9px 36px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:filter .15s,transform .15s;box-shadow:0 4px 14px rgba(247,148,29,.35)"
+        onmouseover="this.style.filter='brightness(1.08)';this.style.transform='translateY(-1px)'" onmouseout="this.style.filter='none';this.style.transform='none'">
         Close
       </button>
     </div>
