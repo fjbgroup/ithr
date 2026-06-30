@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Role Permissions & Capabilities')
+@section('title', 'Role Permissions Matrix')
 
 @section('styles')
 <style>
@@ -34,9 +34,13 @@
 }
 .role-matrix-table th, .role-matrix-table td {
     padding: 1rem 1.25rem;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid var(--border);
     font-size: 0.85rem;
+}
+.role-matrix-table th:first-child,
+.role-matrix-table td:first-child {
+    text-align: left;
 }
 .role-matrix-table th {
     background: var(--table-head-bg);
@@ -45,27 +49,36 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.75rem;
+    white-space: nowrap;
+}
+.role-matrix-table td.feature-name {
+    font-weight: 600;
+    color: var(--text);
+}
+.role-matrix-table td.feature-desc {
+    display: block;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
 }
 .role-matrix-table tr:last-child td {
     border-bottom: none;
 }
-.role-matrix-table td.role-name {
-    font-weight: 600;
-    color: var(--text);
-    width: 200px;
-    vertical-align: top;
+.role-matrix-table tr:hover td {
+    background: var(--row-alt);
 }
-.role-matrix-table td ul {
-    margin: 0;
-    padding-left: 1.2rem;
-    color: var(--text);
+.icon-check {
+    color: #10b981; /* Emerald */
+    font-size: 1.1rem;
 }
-.role-matrix-table td ul li {
-    margin-bottom: 0.4rem;
-    line-height: 1.4;
+.icon-cross {
+    color: #ef4444; /* Red */
+    font-size: 1.1rem;
 }
-.role-matrix-table td ul li:last-child {
-    margin-bottom: 0;
+.icon-partial {
+    color: #f59e0b; /* Amber */
+    font-size: 1.1rem;
 }
 .role-badge-custom {
     display: inline-flex;
@@ -85,14 +98,22 @@
 html.dark .role-admin { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
 html.dark .role-exec { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
 html.dark .role-staff { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+/* Tooltip for partial permissions */
+.partial-tooltip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted #f59e0b;
+}
 </style>
 @endsection
 
 @section('content')
 <div class="role-matrix-container">
     <div class="role-matrix-header">
-        <h1>System Role Capabilities</h1>
-        <p>A breakdown of what each user role can view, edit, and manage within the HR system.</p>
+        <h1>Role Permissions Matrix</h1>
+        <p>A detailed breakdown of feature access and administrative capabilities for each user role.</p>
     </div>
 
     <div class="role-matrix-card">
@@ -100,55 +121,130 @@ html.dark .role-staff { background: rgba(34, 197, 94, 0.15); color: #86efac; }
             <table class="role-matrix-table">
                 <thead>
                     <tr>
-                        <th>Role</th>
-                        <th>Permissions & Capabilities</th>
+                        <th style="width: 40%">Module / Feature</th>
+                        <th style="width: 20%">
+                            <span class="role-badge-custom role-admin" style="margin-bottom:0">Admin</span>
+                        </th>
+                        <th style="width: 20%">
+                            <span class="role-badge-custom role-exec" style="margin-bottom:0">Executive (CEO/GM/HOU)</span>
+                        </th>
+                        <th style="width: 20%">
+                            <span class="role-badge-custom role-staff" style="margin-bottom:0">Staff</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="role-name">
-                            <span class="role-badge-custom role-admin">Admin (IT & HR)</span>
+                        <td>
+                            <span class="feature-name">View Own Profile</span>
+                            <span class="feature-desc">Access to personal information, travel, and training records.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">View Global Staff Directory</span>
+                            <span class="feature-desc">Can view profiles and contact info of all other staff members.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">Edit Staff Data</span>
+                            <span class="feature-desc">Directly modify any staff profile, family information, or positions.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">Submit Update Requests</span>
+                            <span class="feature-desc">Request HR to update personal information (requires approval).</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">Resolve Update Requests</span>
+                            <span class="feature-desc">Approve or reject data modification requests from staff.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">Book Meeting Rooms</span>
+                            <span class="feature-desc">Submit a reservation for any available meeting room.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">Approve Room Bookings</span>
+                            <span class="feature-desc">Approve or reject pending meeting room reservations.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td>
+                            <span class="partial-tooltip" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
+                                <i class="fa-solid fa-circle-half-stroke icon-partial"></i>
+                            </span>
                         </td>
                         <td>
-                            <ul>
-                                <li><strong>Full Data Access:</strong> Can view, add, edit, and delete all staff and family records.</li>
-                                <li><strong>Master Data Management:</strong> Can manage departments, positions, and core system options.</li>
-                                <li><strong>User Accounts:</strong> Manage user roles, passwords, 2FA settings, and system access blocks.</li>
-                                <li><strong>Training & IR:</strong> Full management of training records, QR attendance, and Incident Reports (IR).</li>
-                                <li><strong>Approvals:</strong> Can bypass standard approval workflows (e.g., meeting rooms) and resolve user update requests.</li>
-                                <li><strong>Audit Log:</strong> IT Admins have access to the system audit trail.</li>
-                            </ul>
+                            <span class="partial-tooltip" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
+                                <i class="fa-solid fa-circle-half-stroke icon-partial"></i>
+                            </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="role-name">
-                            <span class="role-badge-custom role-exec">CEO / GM / Head of Unit</span>
-                        </td>
                         <td>
-                            <ul>
-                                <li><strong>Oversight Access:</strong> Can view all staff registry profiles, family details, and training/travel records across the company.</li>
-                                <li><strong>Reporting:</strong> Can generate and export company-wide reports.</li>
-                                <li><strong>Approvals (PIC):</strong> Can approve or reject meeting room bookings if designated as the Person-In-Charge for specific rooms.</li>
-                                <li><strong>Read-Only Bounds:</strong> Cannot edit staff data directly or access system administration (Master Data / User Accounts).</li>
-                            </ul>
+                            <span class="feature-name">Manage User Accounts</span>
+                            <span class="feature-desc">Change roles, reset passwords, or block system access.</span>
                         </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
                     </tr>
                     <tr>
-                        <td class="role-name">
-                            <span class="role-badge-custom role-staff">Staff</span>
-                        </td>
                         <td>
-                            <ul>
-                                <li><strong>Self-Service Profile:</strong> Can view their own profile and family records.</li>
-                                <li><strong>Update Requests:</strong> Cannot edit their own data directly, but can submit <em>Update Requests</em> for HR to review and approve.</li>
-                                <li><strong>Meeting Rooms:</strong> Can book available meeting rooms (subject to PIC approval).</li>
-                                <li><strong>My Travel & Training:</strong> Can view their own travel requests and attend training sessions.</li>
-                                <li><strong>Restricted View:</strong> Cannot view other staff members' data or access administrative modules.</li>
-                            </ul>
+                            <span class="feature-name">Manage Master Data</span>
+                            <span class="feature-desc">Configure departments, settings, and structural master data.</span>
                         </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="feature-name">System Audit Logs</span>
+                            <span class="feature-desc">View the security and activity logs of the entire system.</span>
+                        </td>
+                        <td><i class="fa-solid fa-check icon-check"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
+                        <td><i class="fa-solid fa-xmark icon-cross"></i></td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div style="padding: 1rem 1.25rem; background: var(--row-alt); border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted); display: flex; gap: 1.5rem; justify-content: center;">
+            <span style="display: flex; align-items: center; gap: 0.35rem;">
+                <i class="fa-solid fa-check icon-check" style="font-size: 0.85rem;"></i> Full Access
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.35rem;">
+                <i class="fa-solid fa-circle-half-stroke icon-partial" style="font-size: 0.85rem;"></i> Conditional Access
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.35rem;">
+                <i class="fa-solid fa-xmark icon-cross" style="font-size: 0.85rem;"></i> No Access
+            </span>
         </div>
     </div>
 </div>
