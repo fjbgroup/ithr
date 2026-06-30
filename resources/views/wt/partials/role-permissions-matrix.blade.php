@@ -1,6 +1,6 @@
 @php
     $permissionRows = [
-        ['module' => 'Dashboard and WT summary', 'ict' => 'View system summary', 'executive' => 'View own summary'],
+        ['module' => 'Main landing page', 'ict' => 'View system dashboard', 'executive' => 'My inventory page'],
         ['module' => 'Inventory list and unit timeline', 'ict' => 'Manage all units', 'executive' => 'View assigned units'],
         ['module' => 'Add, edit, import, and delete walkie records', 'ict' => 'Manage records', 'executive' => 'Not available'],
         ['module' => 'Under repair and faulty units', 'ict' => 'Manage repair records', 'executive' => 'Submit faulty report'],
