@@ -3501,21 +3501,22 @@
     }
 
     body .content-surface .approval-inbox .pending-queue-title {
-        font-size: 17px !important;
-        line-height: 1.25 !important;
+        font-size: 21px !important;
+        line-height: 1.22 !important;
         letter-spacing: 0.04em !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-subtitle {
-        font-size: 13px !important;
+        font-size: 15px !important;
         line-height: 1.5 !important;
-        letter-spacing: 0.03em !important;
+        letter-spacing: 0.02em !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-count {
-        min-height: 40px !important;
-        padding: 9px 16px !important;
-        font-size: 13px !important;
+        min-height: 46px !important;
+        padding: 10px 18px !important;
+        font-size: 15px !important;
+        letter-spacing: 0.03em !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-body {
@@ -3524,16 +3525,16 @@
 
     body .content-surface .approval-inbox table.dataTable thead th,
     body .content-surface .approval-inbox .pending-queue-card table.dataTable thead th {
-        padding: 17px 18px !important;
-        font-size: 13px !important;
+        padding: 18px 20px !important;
+        font-size: 14px !important;
         line-height: 1.25 !important;
-        letter-spacing: 0.06em !important;
+        letter-spacing: 0.05em !important;
     }
 
     body .content-surface .approval-inbox table.dataTable tbody td,
     body .content-surface .approval-inbox .pending-queue-card table.dataTable tbody td {
-        padding: 18px !important;
-        font-size: 14px !important;
+        padding: 20px !important;
+        font-size: 15px !important;
         line-height: 1.5 !important;
     }
 
@@ -3553,7 +3554,7 @@
         overflow: visible !important;
         text-overflow: clip !important;
         white-space: normal !important;
-        font-size: 16px !important;
+        font-size: 18px !important;
         line-height: 1.35 !important;
         font-weight: 900 !important;
     }
@@ -3562,7 +3563,7 @@
     body .content-surface .approval-inbox .request-summary-note,
     body .content-surface .approval-inbox .approval-body-meta,
     body .content-surface .approval-inbox .approval-date {
-        font-size: 13px !important;
+        font-size: 14px !important;
         line-height: 1.55 !important;
         font-weight: 750 !important;
     }
@@ -3570,15 +3571,15 @@
     body .content-surface .approval-inbox .requestor-label,
     body .content-surface .approval-inbox .summary-label,
     body .content-surface .approval-inbox .request-meta-label {
-        font-size: 11px !important;
+        font-size: 12px !important;
         line-height: 1.25 !important;
-        letter-spacing: 0.06em !important;
+        letter-spacing: 0.05em !important;
     }
 
     body .content-surface .approval-inbox .requestor-value,
     body .content-surface .approval-inbox .summary-value,
     body .content-surface .approval-inbox .request-meta-value {
-        font-size: 14px !important;
+        font-size: 15px !important;
         line-height: 1.5 !important;
         font-weight: 850 !important;
     }
@@ -3590,10 +3591,18 @@
     }
 
     body .content-surface .approval-inbox .request-pill {
-        min-height: 28px !important;
-        padding: 6px 11px !important;
-        font-size: 11px !important;
+        min-height: 32px !important;
+        padding: 7px 13px !important;
+        font-size: 13px !important;
         line-height: 1.1 !important;
+    }
+
+    body .content-surface .approval-inbox :is(.pending-nav-badge, .approval-new-badge, .faulty-report-count-pill) {
+        min-height: 32px !important;
+        padding: 7px 13px !important;
+        font-size: 13px !important;
+        line-height: 1.1 !important;
+        letter-spacing: 0.04em !important;
     }
 
     body .content-surface .approval-inbox .approval-action-row {
@@ -3604,10 +3613,10 @@
     body .content-surface .approval-inbox .approval-action-btn,
     body .content-surface .approval-inbox #requestsTable .approval-action-btn,
     body .content-surface .approval-inbox .pending-queue-card .approval-action-btn {
-        min-height: 42px !important;
-        padding: 10px 14px !important;
+        min-height: 46px !important;
+        padding: 11px 16px !important;
         border-radius: 11px !important;
-        font-size: 12px !important;
+        font-size: 13px !important;
         line-height: 1.15 !important;
         letter-spacing: 0.04em !important;
     }
