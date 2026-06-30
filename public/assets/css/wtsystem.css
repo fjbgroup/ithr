@@ -391,8 +391,8 @@ html.dark ::-webkit-scrollbar-thumb { background: #334155; }
 
 /* Collapsed desktop sidebar */
 body.sidebar-collapsed .sidebar { width: 72px; }
-body.sidebar-collapsed .main-content { margin-left: 72px; }
-body.sidebar-collapsed .topbar { left: 72px; }
+body.sidebar-collapsed .main-content { margin-left: 0; }
+body.sidebar-collapsed .topbar { left: auto; }
 
 /* Brand row — center logo, collapse toggle overlays it on hover */
 body.sidebar-collapsed .sidebar-brand-row { padding: 14px 8px; justify-content: center; gap: 0; position: relative; }
