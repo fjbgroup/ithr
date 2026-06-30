@@ -58,6 +58,33 @@
   --shadow-lg:         0 8px 30px rgba(0,0,0,.12);
   --table-hover:       #f0f9ff;
 }
+/* Dark mode — keyed off the `dark` class the early head-script sets synchronously,
+   so the sidebar (and the rest of the shell) renders dark at first paint instead of
+   relying solely on the JS theme pass. Values mirror DARK_VARS below. */
+html.dark{
+  --sidebar-bg:        #1a2235;
+  --sidebar-hover:     #263042;
+  --sidebar-active-bg: rgba(56,189,248,.14);
+  --sidebar-text:      #cbd5e1;
+  --sidebar-head:      #f1f5f9;
+  --sidebar-border:    #374151;
+  --sidebar-muted:     #94a3b8;
+  --sidebar-active-tx: #38bdf8;
+  --bg:                #111827;
+  --body-bg:           #111827;
+  --white:             #1f2937;
+  --surface:           #1f2937;
+  --surface2:          #263042;
+  --border:            #374151;
+  --text:              #d1d5db;
+  --muted:             #6b7280;
+  --table-hover:       rgba(255,255,255,.04);
+  --form-input-bg:     #263042;
+  --form-input-border: #374151;
+  --form-input-color:  #d1d5db;
+  --table-head-bg:     #1a2235;
+  --table-head-color:  #9ca3af;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--body-bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
