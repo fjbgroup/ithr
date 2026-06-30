@@ -3140,6 +3140,73 @@ body .content-surface .inventory-table-frame > .clean-admin-filter + #mainTableC
     margin-top: 10px !important;
 }
 
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table
+) :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .dup-actions,
+    .special-action-buttons,
+    .unused-actions
+) :is(.btn, .wt-btn, .unused-action-btn) {
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table
+) :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .dup-actions,
+    .special-action-buttons,
+    .unused-actions
+) :is(.btn, .wt-btn, .unused-action-btn) span {
+    display: none !important;
+}
+
+body .content-surface :is(
+    #walkiesTable,
+    #maintTable,
+    #maintenanceTable,
+    #duplicateTable,
+    #specialTable,
+    .unused-table
+) :is(
+    .inventory-action-buttons,
+    .maintenance-action-stack,
+    .clean-admin-actions,
+    .dup-actions,
+    .special-action-buttons,
+    .unused-actions
+) :is(.btn, .wt-btn, .unused-action-btn) i,
+body .content-surface #specialTable td > .btn i {
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
 html:not(.dark) body .content-surface .special-filter-panel,
 html:not(.dark) body .content-surface .special-page-shell + .wt-data .wt-data-filter,
 html[data-theme="light"] body .content-surface .special-filter-panel {
