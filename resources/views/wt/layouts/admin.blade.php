@@ -105,6 +105,11 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 @stack('final_styles')
 </head>
 <body id="main-body">
+<script>
+  if (localStorage.getItem('wt-sb-collapsed') === '1' && window.innerWidth > 768) {
+    document.body.classList.add('sidebar-collapsed');
+  }
+</script>
 
 @php
     $actualRole = Auth::guard('wt')->user()->wt_role;
@@ -172,6 +177,9 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       </div>
       <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
     </a>
+    <button class="sidebar-collapse-toggle" onclick="toggleWTSidebar()" aria-label="Toggle Sidebar" title="Collapse Sidebar">
+      <i class="fas fa-chevron-left"></i>
+    </button>
   </div>
 
   <nav class="sidebar-nav">
@@ -1643,6 +1651,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, 4000);
 });
+  function toggleWTSidebar() {
+    document.body.classList.toggle('sidebar-collapsed');
+    let isCollapsed = document.body.classList.contains('sidebar-collapsed');
+    localStorage.setItem('wt-sb-collapsed', isCollapsed ? '1' : '0');
+  }
 </script>
 
 @include('wt.partials.assistant-chatbox', ['assistantRole' => $effectiveRole])

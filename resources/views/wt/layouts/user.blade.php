@@ -36,6 +36,11 @@
 @stack('styles')
 </head>
 <body id="main-body">
+<script>
+  if (localStorage.getItem('wt-sb-collapsed') === '1' && window.innerWidth > 768) {
+    document.body.classList.add('sidebar-collapsed');
+  }
+</script>
 
 @php
     $actualRole = Auth::guard('wt')->user()->wt_role;
@@ -55,12 +60,17 @@
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <a href="{{ request()->fullUrl() }}" class="sidebar-brand" title="Refresh page">
-    <div style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:#fff;border:1px solid rgba(255,255,255,.18)">
-      <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
-    </div>
-    <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
-  </a>
+  <div class="sidebar-brand-row flex items-center gap-x-3 pl-4 pr-3">
+    <a href="{{ request()->fullUrl() }}" class="sidebar-brand flex min-w-0 flex-1 items-center gap-x-3" title="Refresh page">
+      <div class="sidebar-logo-shell flex shrink-0 items-center justify-center">
+        <img src="{{ asset('assets/images/fjb-logo.svg') }}" alt="FJB" class="sidebar-brand-logo" onerror="this.onerror=null;this.src='{{ asset('assets/img/logo_transparent.png') }}'">
+      </div>
+      <div class="brand-name">WT System<span>Walkie Talkie Management</span></div>
+    </a>
+    <button class="sidebar-collapse-toggle" onclick="toggleWTSidebar()" aria-label="Toggle Sidebar" title="Collapse Sidebar">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+  </div>
 
   <nav class="sidebar-nav">
     <div class="nav-section-label" style="margin-top:4px">Asset Interactive</div>
@@ -365,6 +375,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, 4000);
 });
+  function toggleWTSidebar() {
+    document.body.classList.toggle('sidebar-collapsed');
+    let isCollapsed = document.body.classList.contains('sidebar-collapsed');
+    localStorage.setItem('wt-sb-collapsed', isCollapsed ? '1' : '0');
+  }
 </script>
 
 @include('wt.partials.assistant-chatbox', ['assistantRole' => $effectiveRole])
