@@ -198,14 +198,20 @@
     /* 768px — table → card layout (matches mobile bottom-nav / FAB breakpoint) */
     @media (max-width: 768px) {
         /* Pending action buttons stretch full width */
-        .rb-pending-acts { width: 100% !important; justify-content: stretch !important; }
+        .rb-pending-acts { width: 100% !important; gap: .4rem !important; }
         .rb-pending-acts .btn { flex: 1 !important; justify-content: center !important; }
 
-        /* Table → card transformation */
-        .rb-m-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
-        .rb-m-stack thead { display: none !important; }
-        .rb-m-stack tbody { display: block !important; width: 100% !important; box-sizing: border-box !important; }
-        .rb-m-stack tbody tr {
+        /* Table → card transformation.
+           NOTE: selectors use `.table.rb-m-stack` (specificity 0,2,2) so they out-rank the
+           global UI standardizer (components/ui/standardizer.blade.php), whose
+           `:where(.content-area…) :is(.table,…) tbody td` rule (0,1,3) otherwise caps every
+           cell with `max-width:1px; white-space:nowrap; overflow:hidden`, collapsing the
+           stacked mobile cards into a ~1px sliver. The max-width/height/overflow resets below
+           explicitly undo that rule. */
+        .table.rb-m-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        .table.rb-m-stack thead { display: none !important; }
+        .table.rb-m-stack tbody { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+        .table.rb-m-stack tbody tr {
             display: block !important;
             width: 100% !important;
             box-sizing: border-box !important;
@@ -215,17 +221,21 @@
             padding: .85rem 1rem;
             background: var(--surface);
         }
-        .rb-m-stack tbody td {
+        .table.rb-m-stack tbody td {
             display: block !important;
             width: 100% !important;
+            max-width: none !important;     /* defeats standardizer max-width:1px */
+            height: auto !important;        /* defeats standardizer height:36px !important */
             box-sizing: border-box !important;
             padding: .2rem 0 !important;
             border: none !important;
             text-align: left !important;
-            white-space: normal !important;
+            white-space: normal !important; /* defeats standardizer white-space:nowrap !important */
+            overflow: visible !important;   /* defeats standardizer overflow:hidden */
+            text-overflow: clip !important;
             word-wrap: break-word !important;
         }
-        .rb-m-stack tbody td[data-label]::before {
+        .table.rb-m-stack tbody td[data-label]::before {
             content: attr(data-label);
             display: block;
             font-size: .6rem;
@@ -235,7 +245,7 @@
             letter-spacing: .04em;
             margin-bottom: .15rem;
         }
-        .rb-m-stack tbody td.rb-td-actions {
+        .table.rb-m-stack tbody td.rb-td-actions {
             margin-top: .6rem;
             padding-top: .6rem !important;
             border-top: 1px solid #f1f5f9 !important;
@@ -243,8 +253,8 @@
             flex-wrap: wrap;
             gap: .4rem;
         }
-        .rb-m-stack tbody td.rb-td-actions .btn { flex: 1; justify-content: center; }
-        .rb-m-stack tbody td.rb-td-hide { display: none; }
+        .table.rb-m-stack tbody td.rb-td-actions .btn { flex: 1; justify-content: center; }
+        .table.rb-m-stack tbody td.rb-td-hide { display: none; }
     }
 
     /* 480px — very small screens */
@@ -323,17 +333,25 @@
         /* 2. CONTROLS STRIP — single date-nav row */
         .pub-view-tabs { display: none !important; }
         .pub-controls {
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            gap: .5rem !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: .75rem !important;
             margin-bottom: .75rem;
         }
-        .pub-controls > div:last-child { display: none !important; }
-        .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; }
+        .pub-controls > div:last-child { 
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: flex-start !important;
+            gap: .5rem !important;
+            margin: 0 !important;
+        }
+        .pub-date-nav { flex: 1; justify-content: space-between; gap: .3rem; width: 100%; }
         .pub-datepicker-lbl { flex: 1; justify-content: center; }
         .pub-datepicker-lbl .pub-date-text { font-size: .82rem; }
         .rb-today-btn { padding: .28rem .6rem; font-size: .78rem; white-space: nowrap; }
+        .rb-desktop-new-booking { display: none !important; }
+
+        .rb-approval-header { flex-direction: column !important; align-items: flex-start !important; gap: 0.5rem; }
 
         /* 3. FLOATING ACTION BUTTON */
         .rb-fab {
@@ -898,7 +916,7 @@
                 <svg id="rb-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </button>
             @canwrite
-            <button class="btn btn-primary btn-sm" data-requires-active onclick="openRoomBookingModal('', '')">
+            <button class="btn btn-primary btn-sm rb-desktop-new-booking" data-requires-active onclick="openRoomBookingModal('', '')">
                 + New Booking
             </button>
             @endcanwrite
