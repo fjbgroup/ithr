@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'Faulty Monthly Report')
 
@@ -172,7 +172,7 @@
 @push('styles')
 <style>
     .faulty-report-page {
-        color: #e5eefc;
+        color: var(--text);
     }
 
     .faulty-report-header {
@@ -184,7 +184,7 @@
     }
 
     .faulty-report-eyebrow {
-        color: #7fa4d8;
+        color: var(--muted);
         font-size: 0.68rem;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -193,7 +193,7 @@
     }
 
     .faulty-report-title {
-        color: #ffffff;
+        color: var(--text);
         font-size: 1.35rem;
         font-weight: 900;
         letter-spacing: 0;
@@ -201,7 +201,7 @@
     }
 
     .faulty-report-subtitle {
-        color: #9fb0c9;
+        color: var(--muted);
         font-size: 0.78rem;
         font-weight: 700;
         margin-top: 0.25rem;
@@ -228,7 +228,7 @@
     }
 
     .faulty-period-filter span {
-        color: #8fa3bf;
+        color: var(--muted);
         font-size: 0.58rem;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -239,9 +239,9 @@
         min-width: 7.5rem;
         height: 2.35rem;
         border-radius: 8px;
-        border: 1px solid rgba(132, 157, 195, 0.24);
-        background: #111b2c;
-        color: #e5eefc;
+        border: 1px solid var(--border);
+        background: var(--form-input-bg);
+        color: var(--form-input-color);
         font-size: 0.76rem;
         font-weight: 800;
         padding: 0 0.75rem;
@@ -249,8 +249,8 @@
     }
 
     .faulty-period-filter select:focus {
-        border-color: rgba(124, 197, 223, 0.65);
-        box-shadow: 0 0 0 3px rgba(34, 139, 163, 0.16);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.16);
     }
 
     .faulty-period-filter button {
@@ -279,10 +279,10 @@
     .faulty-kpi-card,
     .faulty-panel,
     .faulty-table-panel {
-        background: #111b2c;
-        border: 1px solid rgba(132, 157, 195, 0.22);
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: 8px;
-        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+        box-shadow: var(--shadow);
     }
 
     .faulty-kpi-card {
@@ -298,14 +298,14 @@
         border-radius: 8px;
         display: grid;
         place-items: center;
-        color: #7cc5df;
-        background: rgba(34, 139, 163, 0.16);
-        border: 1px solid rgba(124, 197, 223, 0.18);
+        color: var(--accent);
+        background: rgba(var(--accent-rgb), 0.16);
+        border: 1px solid rgba(var(--accent-rgb), 0.18);
     }
 
     .faulty-kpi-card p,
     .faulty-panel-head span {
-        color: #8fa3bf;
+        color: var(--muted);
         font-size: 0.62rem;
         font-weight: 900;
         letter-spacing: 0.12em;
@@ -314,7 +314,7 @@
 
     .faulty-kpi-card strong {
         display: block;
-        color: #ffffff;
+        color: var(--text);
         font-size: 1.45rem;
         font-weight: 900;
         line-height: 1.1;
@@ -322,7 +322,7 @@
     }
 
     .faulty-kpi-card span {
-        color: #95a7bf;
+        color: var(--muted);
         font-size: 0.72rem;
         font-weight: 700;
     }
@@ -348,7 +348,7 @@
     }
 
     .faulty-panel-head h4 {
-        color: #ffffff;
+        color: var(--text);
         font-size: 0.9rem;
         font-weight: 900;
         letter-spacing: 0;
@@ -362,18 +362,18 @@
     .faulty-empty-state {
         margin-bottom: 0.8rem;
         padding: 0.9rem;
-        border: 1px dashed rgba(148, 163, 184, 0.28);
+        border: 1px dashed var(--border);
         border-radius: 8px;
-        color: #9fb0c9;
+        color: var(--muted);
         font-size: 0.78rem;
         font-weight: 800;
         text-align: center;
     }
 
     #faultyReportTable thead th {
-        background: #162437;
-        color: #bcd3f2;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        background: var(--table-head-bg);
+        color: var(--table-head-color);
+        border-bottom: 1px solid var(--border);
         font-size: 0.62rem;
         font-weight: 900;
         letter-spacing: 0.08em;
@@ -382,8 +382,8 @@
     }
 
     #faultyReportTable tbody td {
-        color: #d5dfef;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
         font-size: 0.78rem;
         font-weight: 700;
         padding: 0.8rem;
@@ -392,14 +392,14 @@
 
     .faulty-main-cell strong {
         display: block;
-        color: #f8fbff;
+        color: var(--text);
         font-size: 0.8rem;
         font-weight: 900;
     }
 
     .faulty-main-cell span {
         display: block;
-        color: #8fa3bf;
+        color: var(--muted);
         font-size: 0.67rem;
         font-weight: 800;
         margin-top: 0.12rem;
