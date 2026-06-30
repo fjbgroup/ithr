@@ -3138,6 +3138,43 @@ body .content-surface :is(
 
 body .content-surface .inventory-table-frame > .clean-admin-filter + #mainTableContainer.inventory-table-shell {
     margin-top: 10px !important;
-    
+}
+
+html:not(.dark) body .content-surface .special-filter-panel,
+html[data-theme="light"] body .content-surface .special-filter-panel {
+    border-color: #d8e1ed !important;
+    background: #ffffff !important;
+    color: #172033 !important;
+}
+
+html:not(.dark) body .content-surface .special-filter-panel :is(label, .special-filter-field label),
+html[data-theme="light"] body .content-surface .special-filter-panel :is(label, .special-filter-field label) {
+    color: #64748b !important;
+}
+
+html:not(.dark) body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
+html[data-theme="light"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset) {
+    border-color: #cbd5e1 !important;
+    background: #f8fafc !important;
+    color: #172033 !important;
+}
+
+html.dark body .content-surface .special-filter-panel,
+html[data-theme="dark"] body .content-surface .special-filter-panel {
+    border-color: rgba(148, 163, 184, .18) !important;
+    background: #0f172a !important;
+    color: #e5edf7 !important;
+}
+
+html.dark body .content-surface .special-filter-panel :is(label, .special-filter-field label),
+html[data-theme="dark"] body .content-surface .special-filter-panel :is(label, .special-filter-field label) {
+    color: #8ea0b8 !important;
+}
+
+html.dark body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset),
+html[data-theme="dark"] body .content-surface .special-filter-panel :is(input, select, button, .special-filter-input, .special-filter-select, .special-filter-reset) {
+    border-color: rgba(148, 163, 184, .26) !important;
+    background: #111827 !important;
+    color: #e5edf7 !important;
 }
 </style>
