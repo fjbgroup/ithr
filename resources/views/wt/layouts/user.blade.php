@@ -92,6 +92,10 @@
       <i class="fa-solid fa-user-circle" style="width:20px;text-align:center;flex-shrink:0"></i> <span>My Profile</span>
       @include('wt.partials.sidebar-info', ['text' => 'View and update your account profile information.'])
     </a>
+    <a href="{{ route('wt.user.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.user.manual') ? 'sidebar-active' : '' }}">
+      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>User Manual</span>
+      @include('wt.partials.sidebar-info', ['text' => 'View step-by-step WT System guidance for ICT and executive users.'])
+    </a>
     <a href="{{ route('wt.user.policies') }}" class="nav-link has-info {{ request()->routeIs('wt.user.policies') ? 'sidebar-active' : '' }}">
       <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>
       @include('wt.partials.sidebar-info', ['text' => 'View WT System access permissions for ICT and executive users.'])

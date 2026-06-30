@@ -45,6 +45,11 @@ class UserDashboardController extends Controller
         ]);
     }
 
+    public function manual()
+    {
+        return view('wt.user.manual');
+    }
+
     public function updatePolicies(Request $request)
     {
         abort_unless(auth('wt')->user()?->wt_role === 'admin_it', 403);
@@ -122,4 +127,3 @@ class UserDashboardController extends Controller
         ];
     }
 }
-
