@@ -178,14 +178,17 @@
                 <div class="form-group">
                     <label class="form-label">Location</label>
                     @php($currentLocation = strtoupper((string) old('location', $defaults['location'] ?? '')))
-                    <input
-                        type="text"
-                        name="location"
-                        class="form-input"
-                        value="{{ $currentLocation }}"
-                        list="walkieLocationOptions"
-                        placeholder="Type or search location"
-                        autocomplete="off">
+                    <div class="walkie-combo-field">
+                        <input
+                            type="text"
+                            name="location"
+                            class="form-input walkie-combo-input"
+                            value="{{ $currentLocation }}"
+                            list="walkieLocationOptions"
+                            placeholder="Type or search location"
+                            autocomplete="off">
+                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
+                    </div>
                     <datalist id="walkieLocationOptions">
                         @foreach($walkieLocations as $location)
                         <option value="{{ $location }}"></option>
@@ -196,14 +199,17 @@
                 <div class="form-group">
                     <label class="form-label">Executive</label>
                     @php($currentExecutive = strtoupper((string) old('executive', $defaults['executive'] ?? '')))
-                    <input
-                        type="text"
-                        name="executive"
-                        class="form-input"
-                        value="{{ $currentExecutive }}"
-                        list="walkieExecutiveOptions"
-                        placeholder="Type or search executive"
-                        autocomplete="off">
+                    <div class="walkie-combo-field">
+                        <input
+                            type="text"
+                            name="executive"
+                            class="form-input walkie-combo-input"
+                            value="{{ $currentExecutive }}"
+                            list="walkieExecutiveOptions"
+                            placeholder="Type or search executive"
+                            autocomplete="off">
+                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
+                    </div>
                     <datalist id="walkieExecutiveOptions">
                         @foreach($executiveOptions as $executiveName)
                         <option value="{{ $executiveName }}"></option>
@@ -214,14 +220,17 @@
                 <div class="form-group">
                     <label class="form-label">Position</label>
                     @php($currentPosition = strtoupper((string) old('position', $defaults['position'] ?? '')))
-                    <input
-                        type="text"
-                        name="position"
-                        class="form-input"
-                        value="{{ $currentPosition }}"
-                        list="walkiePositionOptions"
-                        placeholder="Type or search position"
-                        autocomplete="off">
+                    <div class="walkie-combo-field">
+                        <input
+                            type="text"
+                            name="position"
+                            class="form-input walkie-combo-input"
+                            value="{{ $currentPosition }}"
+                            list="walkiePositionOptions"
+                            placeholder="Type or search position"
+                            autocomplete="off">
+                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
+                    </div>
                     <datalist id="walkiePositionOptions">
                         @foreach($walkiePositions as $position)
                         <option value="{{ $position }}"></option>
@@ -260,14 +269,17 @@
                 <div class="form-group">
                     <label class="form-label">Tracking REF</label>
                     @php($currentTrackingRef = strtoupper((string) old('tracking_ref', $defaults['tracking_ref'] ?? '')))
-                    <input
-                        type="text"
-                        name="tracking_ref"
-                        class="form-input"
-                        value="{{ $currentTrackingRef }}"
-                        list="walkieTrackingRefOptions"
-                        placeholder="Type or search tracking ref"
-                        autocomplete="off">
+                    <div class="walkie-combo-field">
+                        <input
+                            type="text"
+                            name="tracking_ref"
+                            class="form-input walkie-combo-input"
+                            value="{{ $currentTrackingRef }}"
+                            list="walkieTrackingRefOptions"
+                            placeholder="Type or search tracking ref"
+                            autocomplete="off">
+                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
+                    </div>
                     <datalist id="walkieTrackingRefOptions">
                         @foreach($walkieTrackingRefs as $trackingRef)
                         <option value="{{ $trackingRef }}"></option>
@@ -547,6 +559,29 @@
         transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
     }
 
+    .walkie-combo-field {
+        position: relative;
+    }
+
+    .walkie-combo-input {
+        padding-right: 42px;
+        text-transform: uppercase;
+    }
+
+    .walkie-combo-icon {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #334155;
+        font-size: 11px;
+        pointer-events: none;
+    }
+
+    .dark .walkie-combo-icon {
+        color: #cbd5e1;
+    }
+
     .form-input:focus {
         border-color: #0284c7;
         background: #fff;
@@ -785,9 +820,10 @@
 
                 if (searchField) {
                     searchField.removeAttribute('readonly');
+                    searchField.removeAttribute('disabled');
                     searchField.focus();
                 }
-            }, 0);
+            }, 80);
         }
 
         $('.page-tag-select').each(function() {
@@ -797,6 +833,7 @@
                 width: '100%',
                 tags: true,
                 allowClear: !$select.prop('required'),
+                minimumResultsForSearch: 0,
                 placeholder: $select.data('placeholder') || 'Type or select option',
                 createTag: function(params) {
                     const term = $.trim(params.term);
