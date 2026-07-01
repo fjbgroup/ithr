@@ -286,8 +286,8 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </a>
 
     {{-- Request Walkie Talkie --}}
-    <div class="dropdown-wrapper {{ $requestCreateOpen ? 'open' : '' }}">
-      <button type="button" class="dropdown-trigger has-info {{ $requestCreateOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Request Walkie Talkie">
+    <div class="dropdown-wrapper request-wt-dropdown {{ $requestCreateOpen ? 'open' : '' }}">
+      <button type="button" class="dropdown-trigger has-info {{ $requestCreateOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Request Walkie Talkie" aria-expanded="{{ $requestCreateOpen ? 'true' : 'false' }}">
         <i class="fas fa-plus-circle" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Request Walkie Talkie</span>
         @include('wt.partials.sidebar-info', ['text' => 'Submit a walkie talkie request for yourself or on behalf of a recipient. ICT will assign the available unit later.'])

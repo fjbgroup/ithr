@@ -237,21 +237,48 @@
         margin-top: 2px !important;
     }
     #allDamagesTable {
-        table-layout: fixed;
+        min-width: 1080px !important;
+        table-layout: fixed !important;
+        width: 100% !important;
     }
     #allDamagesTable th,
     #allDamagesTable td {
         white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     #allDamagesTable th:nth-child(1),
     #allDamagesTable td:nth-child(1) {
-        width: 82px !important;
+        width: 100px !important;
+    }
+    #allDamagesTable th:nth-child(2),
+    #allDamagesTable td:nth-child(2) {
+        width: 165px !important;
+    }
+    #allDamagesTable th:nth-child(3),
+    #allDamagesTable td:nth-child(3) {
+        width: 155px !important;
+    }
+    #allDamagesTable th:nth-child(4),
+    #allDamagesTable td:nth-child(4) {
+        width: 205px !important;
+    }
+    #allDamagesTable th:nth-child(5),
+    #allDamagesTable td:nth-child(5) {
+        width: 220px !important;
     }
     #allDamagesTable th:nth-child(6),
-    #allDamagesTable td:nth-child(6),
+    #allDamagesTable td:nth-child(6) {
+        width: 130px !important;
+    }
     #allDamagesTable th:nth-child(7),
     #allDamagesTable td:nth-child(7) {
-        width: 106px !important;
+        width: 110px !important;
+    }
+    .all-status-compact .dataTables_scrollHeadInner,
+    .all-status-compact .dataTables_scrollHeadInner table,
+    .all-status-compact .dataTables_scrollBody table {
+        width: 100% !important;
     }
     @media (max-width: 1368px) {
         .all-status-compact {
@@ -950,6 +977,12 @@
         $('#status-section-' + tabId).removeClass('hidden');
         // Activate current button
         $('#tab-btn-' + tabId).addClass('active');
+        setTimeout(function () {
+            const tableSelector = tabId === 'damages' ? '#allDamagesTable' : '#allRequestsTable';
+            if ($.fn.DataTable && $.fn.DataTable.isDataTable(tableSelector)) {
+                $(tableSelector).DataTable().columns.adjust();
+            }
+        }, 0);
         
         // Save to URL if needed or just keep local
         localStorage.setItem('last_status_tab', tabId);
@@ -973,7 +1006,9 @@
                 emptyTable: "No records found.",
                 zeroRecords: "No matching records found."
             },
-            responsive: true
+            autoWidth: false,
+            scrollX: true,
+            responsive: false
         };
 
         const reqTable = $('#allRequestsTable').DataTable({
@@ -982,10 +1017,25 @@
                 { targets: -1, orderable: false, searchable: false }
             ]
         });
-        const damTable = $('#allDamagesTable').DataTable(tableOptions);
+        const damTable = $('#allDamagesTable').DataTable({
+            ...tableOptions,
+            columnDefs: [
+                { targets: 0, width: '100px' },
+                { targets: 1, width: '165px' },
+                { targets: 2, width: '155px' },
+                { targets: 3, width: '205px' },
+                { targets: 4, width: '220px' },
+                { targets: 5, width: '130px' },
+                { targets: 6, width: '110px', orderable: false, searchable: false }
+            ]
+        });
 
         mountAdminTableFooter(reqTable);
         mountAdminTableFooter(damTable);
+        setTimeout(function () {
+            reqTable.columns.adjust();
+            damTable.columns.adjust();
+        }, 0);
     });
 </script>
 @endpush
