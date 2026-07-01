@@ -1320,6 +1320,51 @@
         background: #FDFBF7 !important;
         color: #0284c7 !important;
     }
+    .longterm-modern.match-report-faulty .longterm-request-details-grid {
+        display: grid !important;
+        grid-template-columns: minmax(170px, 2fr) minmax(640px, 8fr) minmax(260px, 3fr) !important;
+        align-items: start !important;
+        gap: 14px 20px !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-owner-group {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-owner-group #temporaryPicList,
+    .longterm-modern.match-report-faulty .longterm-owner-group .longterm-owner-card,
+    .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
+        width: 100% !important;
+        max-width: none !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
+        grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-meta-group {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-meta-group > div {
+        width: 100% !important;
+        max-width: none !important;
+    }
+    @media (max-width: 1180px) {
+        .longterm-modern.match-report-faulty .longterm-request-details-grid {
+            grid-template-columns: minmax(150px, 1fr) minmax(0, 3fr) !important;
+        }
+        .longterm-modern.match-report-faulty .longterm-meta-group {
+            grid-column: 1 / -1 !important;
+        }
+        .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
+            grid-template-columns: repeat(2, minmax(210px, 1fr)) !important;
+        }
+    }
+    @media (max-width: 860px) {
+        .longterm-modern.match-report-faulty .longterm-request-details-grid,
+        .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
 </style>
 <div class="px-1 sm:px-2 admin-request-shell match-report-faulty {{ $isTemporaryRequest ? '' : 'longterm-modern' }}">
 @if($isTemporaryRequest)
@@ -1417,7 +1462,7 @@
                 ? 'Temporary request is for short-term usage. Fill the usage period, purpose, and quantity before adding ownership profiles.'
                 : 'Long-term request is for regular or permanent usage. Fill the quantity and purpose, then complete one ownership profile for each unit requested.' }}
         </p>
-        <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : '' }}">
+        <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : 'longterm-request-details-grid' }}">
             @if($isTemporaryRequest)
             <div class="temporary-request-basics">
                 <div class="temporary-duration-group">
@@ -1451,7 +1496,7 @@
             </div>
             @endif
             @unless($isTemporaryRequest)
-            <div>
+            <div class="longterm-quantity-group">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
                 <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
                     <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
@@ -1459,7 +1504,7 @@
                     <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
                 </div>
             </div>
-            <div>
+            <div class="longterm-owner-group">
                 <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <div>
                         <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
@@ -1497,7 +1542,7 @@
                     <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="executive-request-inline-row flex flex-col md:flex-row md:items-end justify-start gap-4 w-full">
+            <div class="executive-request-inline-row longterm-meta-group flex flex-col md:flex-row md:items-end justify-start gap-4 w-full">
                 <div class="executive-date-group w-full md:w-52 min-w-0">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Start Date</label>
                     <input type="date" name="request_date" value="{{ old('request_date', date('Y-m-d')) }}" class="executive-row-control w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>
