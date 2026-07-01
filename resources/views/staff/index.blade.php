@@ -13,8 +13,8 @@
 .staff-name-cell { display: flex; align-items: center; gap: .6rem; }
 .staff-name-primary {
     font-weight: 600; font-size: .82rem; line-height: 1.25;
-    color: var(--text); max-width: 170px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;
+    color: var(--text);
+    display: block; word-break: break-word;
     transition: color .15s; text-decoration: none;
 }
 .staff-name-primary:hover { color: #6366f1; }
@@ -226,7 +226,11 @@
 
                             {{-- Company badge --}}
                             <td>
-                                <span class="company-badge company-{{ strtolower($s->company) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $s->company }}</span>
+                                @php
+                                    $co = $companies->firstWhere('name', $s->company) ?? $companies->firstWhere('code', $s->company);
+                                    $coCode = $co ? $co->code : $s->company;
+                                @endphp
+                                <span class="company-badge company-{{ strtolower($coCode) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $coCode }}</span>
                             </td>
 
                             {{-- Date Joined --}}
