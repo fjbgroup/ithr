@@ -11,6 +11,7 @@
     }
     .admin-request-card {
         padding: 20px 22px;
+        overflow: visible !important;
     }
     .request-form-accordion {
         display: grid;
@@ -19,7 +20,7 @@
     .request-form-accordion-section {
         border: 1px solid rgba(2, 132, 199, 0.18);
         border-radius: 14px;
-        overflow: hidden;
+        overflow: visible;
         background: rgba(248, 250, 252, 0.58);
     }
     .request-form-accordion-toggle {
@@ -125,6 +126,10 @@
         overflow: hidden;
         box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
         background: #fffaf5 !important;
+        z-index: 9999 !important;
+    }
+    .select2-container--open {
+        z-index: 9999 !important;
     }
     .select2-container--default .select2-results > .select2-results__options {
         background: #fffaf5 !important;
@@ -479,6 +484,13 @@
         width: 100% !important;
         max-width: 100% !important;
         display: block !important;
+    }
+    .longterm-owner-group,
+    #temporaryPicList,
+    .longterm-owner-card,
+    .temporary-unit-card,
+    .owner-details-grid {
+        overflow: visible !important;
     }
     .owner-details-grid .select2-container--default .select2-selection--single {
         position: relative;
