@@ -462,6 +462,10 @@ body.sidebar-collapsed .dropdown-trigger.active-sidebar i:not(.dropdown-chevron)
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0; position: relative; z-index: 2;
 }
+.nav-info-slot,
+.nav-info-popover {
+  display: none !important;
+}
 .nav-info-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 14px; height: 14px; border-radius: 999px;

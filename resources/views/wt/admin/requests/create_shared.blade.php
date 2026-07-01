@@ -815,6 +815,31 @@
         width: 100% !important;
         max-width: 100% !important;
     }
+    .temporary-duration-group .temporary-day-counter {
+        width: min(100%, 180px) !important;
+        max-width: 180px !important;
+        min-height: 28px !important;
+        height: 28px !important;
+        border-radius: 8px !important;
+    }
+    .temporary-duration-group .temporary-day-counter .temporary-day-step {
+        width: 34px !important;
+        flex: 0 0 34px !important;
+        min-height: 28px !important;
+        height: 28px !important;
+        font-size: 9px !important;
+        color: #0284c7 !important;
+    }
+    .temporary-duration-group .temporary-day-counter input {
+        display: block !important;
+        flex: 1 1 auto !important;
+        min-width: 40px !important;
+        min-height: 28px !important;
+        height: 28px !important;
+        padding: 0 8px !important;
+        text-align: center !important;
+        font-size: 11px !important;
+    }
     .temporary-signature-wrap {
         flex: 1 1 320px;
         width: min(100%, 420px);
@@ -1553,10 +1578,10 @@
             <div class="temporary-request-basics">
                 <div class="temporary-duration-group">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">How Many Days</label>
-                    <div class="flex overflow-hidden rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 focus-within:ring-2 focus-within:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900">
-                        <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-r border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="-1" aria-label="Decrease days">-</button>
-                        <input type="number" id="temporary_duration_days" name="duration_days" min="1" max="365" inputmode="numeric" placeholder="Type days" value="{{ old('duration_days', 1) }}" class="w-full border-0 bg-transparent px-4 py-2.5 text-[12px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                        <button type="button" class="temporary-day-step flex w-11 items-center justify-center border-l border-[#0284c7]/20 text-sm font-black text-stone-600 hover:bg-[#0284c7]/10 dark:border-slate-700 dark:text-slate-200" data-step="1" aria-label="Increase days">+</button>
+                    <div class="temporary-day-counter flex overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
+                        <button type="button" class="temporary-day-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease days">-</button>
+                        <input type="number" id="temporary_duration_days" name="duration_days" min="1" max="365" inputmode="numeric" placeholder="Type days" value="{{ old('duration_days', 1) }}" class="w-full border-0 bg-transparent text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
+                        <button type="button" class="temporary-day-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase days">+</button>
                     </div>
                     <p class="mt-1 text-[9px] font-bold text-stone-400 dark:text-slate-500">Type the number of days, or use - / +. End date will update automatically.</p>
                 </div>
@@ -2418,7 +2443,6 @@
                 row.innerHTML = `
                     <div class="temporary-unit-header">
                         <p class="temporary-unit-title">Owner Per Unit ${index + 1}</p>
-                        <span class="temporary-unit-chip">1 Unit</span>
                     </div>
                     <div class="owner-details-grid wt-form-row">
                         <div class="owner-profile-group-title">
