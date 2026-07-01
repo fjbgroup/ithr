@@ -451,7 +451,7 @@
         border-radius: 7px !important;
         border: 1px solid rgba(139, 94, 60, 0.3) !important;
         background: #ffffff !important;
-        padding: 5px 28px 5px 8px !important;
+        padding: 5px 8px !important;
         color: #1e293b !important;
         font-size: 9.5px !important;
         font-weight: 800 !important;
@@ -469,15 +469,7 @@
         box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2) !important;
     }
     .corporate-combobox-toggle {
-        position: absolute !important;
-        right: 10px !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        color: #64748b !important;
-        font-size: 9px !important;
-        line-height: 1 !important;
-        pointer-events: none !important;
-        z-index: 10 !important;
+        display: none !important;
     }
     .corporate-combobox + select + .select2-container,
     .corporate-combobox + .select2-container {
