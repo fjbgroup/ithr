@@ -549,7 +549,7 @@
                     {{-- Ownership --}}
                     <div class="form-group">
                         <label class="form-label">Ownership Name</label>
-                        <select name="ownership" id="add_ownership" class="form-input modal-smart-select" data-placeholder="Select staff">
+                        <select name="ownership" id="add_ownership" class="form-input modal-tag-select" data-placeholder="Type or select ownership name">
                             <option value=""></option>
                             @foreach($staffOwnerships as $ownership)
                             <option value="{{ $ownership }}" @selected(old('ownership') === $ownership)>{{ $ownership }}</option>
@@ -764,7 +764,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership</label>
-                        <select name="ownership" id="edit_ownership" class="form-input modal-smart-select" data-placeholder="Select staff">
+                        <select name="ownership" id="edit_ownership" class="form-input modal-tag-select" data-placeholder="Type or select ownership name">
                             <option value=""></option>
                             @foreach($staffOwnerships as $ownership)
                             <option value="{{ $ownership }}">{{ $ownership }}</option>

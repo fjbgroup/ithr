@@ -14,7 +14,6 @@ use App\Models\Staff;
 use App\Services\TemporaryRequestExpiryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\Database\QueryException;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\WalkieTalkieImport;
@@ -94,11 +93,6 @@ class WalkieTalkieController extends Controller
             ->values();
     }
 
-    /**
-     * Ownership of a walkie must reference an existing staff record, so the
-     * ownership-name dropdowns are sourced from the staff table rather than
-     * free-text. Names are returned as stored on the staff record.
-     */
     private function staffOwnershipOptions()
     {
         return Staff::query()
@@ -107,6 +101,17 @@ class WalkieTalkieController extends Controller
             ->orderBy('name')
             ->pluck('name')
             ->unique()
+            ->values();
+    }
+
+    private function ownershipNameOptions($existingValues)
+    {
+        return $this->staffOwnershipOptions()
+            ->merge($existingValues)
+            ->map(fn ($value) => trim((string) $value))
+            ->filter()
+            ->unique()
+            ->sort()
             ->values();
     }
 
@@ -155,8 +160,13 @@ class WalkieTalkieController extends Controller
             'walkieSerials' => $walkies->pluck('serial_number')->filter()->unique()->sort()->values(),
             'walkieModels' => $this->mergeMasterData('model', $walkies->pluck('model')),
             'walkieOwnerships' => $walkies->pluck('ownership')->filter()->unique()->sort()->values(),
-            'staffOwnerships' => $this->staffOwnershipOptions(),
-            'executiveOptions' => $this->executiveOptions(),
+            'staffOwnerships' => $this->ownershipNameOptions($walkies->pluck('ownership')),
+            'executiveOptions' => $this->executiveOptions()
+                ->merge($walkies->pluck('executive')->map(fn ($name) => $this->normalizeValue($name)))
+                ->filter()
+                ->unique()
+                ->sort()
+                ->values(),
             'walkieDepartments' => $this->mergeMasterData('department', $walkies->pluck('department')),
             'walkieLocations' => $this->mergeMasterData('location', $walkies->pluck('location')->merge(collect(['T4', 'T5', 'GT', 'LBSB']))),
             'walkiePositions' => $this->mergeMasterData('position', $walkies->pluck('position')),
@@ -174,6 +184,22 @@ class WalkieTalkieController extends Controller
                 ['value' => '1', 'label' => 'YES'],
             ]),
         ];
+    }
+
+    private function rememberMasterDataValues(array $values): void
+    {
+        foreach ($values as $category => $value) {
+            $normalized = $this->normalizeValue($value);
+
+            if ($normalized === '' || MasterData::isBlockedValue($category, $normalized)) {
+                continue;
+            }
+
+            MasterData::firstOrCreate([
+                'category' => $category,
+                'value' => $normalized,
+            ]);
+        }
     }
 
     private function timelineDate(?string $value): ?array
@@ -953,9 +979,9 @@ public function repairFaulty()
             'status' => 'nullable|string|in:' . implode(',', self::ALLOWED_STATUSES),
             'serial_number' => 'required|string|max:100',
             'model' => 'required|string|max:100',
-            'ownership_type' => 'required|string|in:' . implode(',', self::ALLOWED_OWNERSHIP_TYPES),
+            'ownership_type' => 'required|string|max:100',
             'shared_with' => 'nullable|string|max:255|required_if:ownership_type,SHARED',
-            'ownership' => ['nullable', 'string', 'max:255', Rule::exists('staff', 'name')],
+            'ownership' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'location' => 'nullable|string|max:50',
@@ -973,8 +999,6 @@ public function repairFaulty()
             'wt_warranty_end_date' => 'nullable|date|after_or_equal:wt_warranty_start_date',
             'battery_warranty_start_date' => 'nullable|date',
             'battery_warranty_end_date' => 'nullable|date|after_or_equal:battery_warranty_start_date',
-        ], [
-            'ownership.exists' => 'Ownership name must match an existing staff record.',
         ]);
 
         $radioId = $this->normalizeValue($validated['radio_id']);
@@ -1024,6 +1048,18 @@ public function repairFaulty()
             'wt_warranty_end_date' => $validated['wt_warranty_end_date'] ?? null,
             'battery_warranty_start_date' => $validated['battery_warranty_start_date'] ?? null,
             'battery_warranty_end_date' => $validated['battery_warranty_end_date'] ?? null,
+        ]);
+
+        $this->rememberMasterDataValues([
+            'model' => $walkie->model,
+            'ownership_type' => $walkie->ownership_type,
+            'department' => $walkie->department,
+            'location' => $walkie->location,
+            'position' => $walkie->position,
+        ]);
+
+        $this->rememberMasterDataValues([
+            'ownership_type' => $walkie->ownership_type_to_be,
         ]);
 
         if (in_array($walkie->status, ['REPAIRING', 'FAULTY', 'B.E.R'], true)) {
@@ -1085,9 +1121,9 @@ public function repairFaulty()
             'status' => 'nullable|string|in:' . implode(',', self::ALLOWED_STATUSES),
             'serial_number' => 'required|string|max:100|unique:walkie_talkies,serial_number,' . $walkie->walkie_id . ',walkie_id',
             'model' => 'required|string|max:100',
-            'ownership_type' => 'required|string|in:' . implode(',', self::ALLOWED_OWNERSHIP_TYPES),
+            'ownership_type' => 'required|string|max:100',
             'shared_with' => 'nullable|string|max:255|required_if:ownership_type,SHARED',
-            'ownership' => ['nullable', 'string', 'max:255', Rule::exists('staff', 'name')],
+            'ownership' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'location' => 'nullable|string|max:50',
@@ -1105,8 +1141,6 @@ public function repairFaulty()
             'wt_warranty_end_date' => 'nullable|date|after_or_equal:wt_warranty_start_date',
             'battery_warranty_start_date' => 'nullable|date',
             'battery_warranty_end_date' => 'nullable|date|after_or_equal:battery_warranty_start_date',
-        ], [
-            'ownership.exists' => 'Ownership name must match an existing staff record.',
         ]);
 
         $walkie->update([
@@ -1137,6 +1171,18 @@ public function repairFaulty()
             'wt_warranty_end_date' => $validated['wt_warranty_end_date'] ?? null,
             'battery_warranty_start_date' => $validated['battery_warranty_start_date'] ?? null,
             'battery_warranty_end_date' => $validated['battery_warranty_end_date'] ?? null,
+        ]);
+
+        $this->rememberMasterDataValues([
+            'model' => $walkie->model,
+            'ownership_type' => $walkie->ownership_type,
+            'department' => $walkie->department,
+            'location' => $walkie->location,
+            'position' => $walkie->position,
+        ]);
+
+        $this->rememberMasterDataValues([
+            'ownership_type' => $walkie->ownership_type_to_be,
         ]);
 
         UserActivityLog::create([

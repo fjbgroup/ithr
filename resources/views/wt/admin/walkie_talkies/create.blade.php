@@ -151,7 +151,7 @@
                 <div class="form-group">
                     <label class="form-label">Ownership Name</label>
                     @php($currentOwnership = old('ownership', $defaults['ownership'] ?? null))
-                    <select name="ownership" class="form-input page-smart-select" data-placeholder="Select staff">
+                    <select name="ownership" class="form-input page-tag-select" data-placeholder="Type or select ownership name">
                         <option value=""></option>
                         @foreach($staffOwnerships as $ownership)
                         <option value="{{ $ownership }}" @selected($currentOwnership === $ownership)>{{ $ownership }}</option>
