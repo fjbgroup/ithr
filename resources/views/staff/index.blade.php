@@ -203,7 +203,7 @@
                             {{-- Employee: avatar + name + ID --}}
                             <td>
                                 <div class="staff-name-cell">
-                                    <div class="staff-avatar" style="background:{{ $palettes[$idx]['bg'] }};color:{{ $palettes[$idx]['fg'] }};">{{ $initials }}</div>
+                                    <div class="staff-avatar" style="background:{{ $pal['bg'] }};color:{{ $pal['fg'] }};">{{ $initials }}</div>
                                     <div style="min-width:0;">
                                         <a href="{{ route('staff.show', $s->id) }}" class="staff-name-primary" title="{{ $s->name }}" {!! !$s->is_active ? 'style="color:var(--danger);white-space:normal;word-break:break-word;display:block;"' : 'style="white-space:normal;word-break:break-word;display:block;"' !!}>{{ $s->name }}</a>
                                         <span class="staff-id-sub">
