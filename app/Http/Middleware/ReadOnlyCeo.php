@@ -15,6 +15,9 @@ class ReadOnlyCeo
     private array $allowed = [
         'logout',
         'notifications.mark-read',
+        'rooms.bookings.store',
+        'rooms.bookings.update',
+        'rooms.bookings.cancel-request',
     ];
 
     public function handle(Request $request, Closure $next): Response
