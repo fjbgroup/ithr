@@ -130,7 +130,7 @@
     }
 
     .repair-form-header {
-        padding: 28px 36px 22px;
+        padding: 22px 30px 18px;
         border-bottom: 1px solid #243041;
         background: linear-gradient(180deg, #172033 0%, #111827 100%);
     }
@@ -154,7 +154,7 @@
     }
 
     .repair-form-body {
-        padding: 28px 36px;
+        padding: 22px 30px;
         background: #111827;
     }
 
@@ -162,14 +162,14 @@
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: flex-start;
-        gap: 18px 22px;
+        gap: 14px 18px;
     }
 
     .repair-form-group {
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
 
     .repair-form-group-full {
@@ -177,8 +177,8 @@
     }
 
     .repair-form-section {
-        margin-top: 2px;
-        padding: 9px 12px;
+        margin-top: 0;
+        padding: 7px 10px;
         border-left: 4px solid #38bdf8;
         border-radius: 11px;
         background: rgba(14, 165, 233, 0.12);
@@ -227,8 +227,8 @@
     }
 
     .repair-textarea {
-        height: 118px;
-        min-height: 118px;
+        height: 96px;
+        min-height: 96px;
         resize: vertical;
         line-height: 1.45;
     }
@@ -237,8 +237,8 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 12px;
-        padding: 20px 36px 28px;
+        gap: 10px;
+        padding: 16px 30px 22px;
         border-top: 1px solid #243041;
         background: #0f172a;
     }
