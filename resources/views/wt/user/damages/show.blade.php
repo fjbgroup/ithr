@@ -104,7 +104,6 @@
           <div class="fshow-info-label">Ownership / Deployment</div>
           <div class="fshow-info-val">{{ strtoupper($record->ownership_type ?: '-') }}</div>
           <div class="fshow-info-sub">Shared With: {{ strtoupper($record->shared_with ?: '-') }}</div>
-          <div class="fshow-info-sub">Sector: {{ strtoupper($record->sector ?: '-') }}</div>
           <div class="fshow-info-sub">Location: {{ strtoupper($record->location ?: '-') }}</div>
         </div>
       </div>

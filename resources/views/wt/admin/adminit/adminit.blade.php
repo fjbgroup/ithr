@@ -480,6 +480,102 @@
         border-top-color: rgba(96, 165, 250, 0.18);
         background: #121c2e;
     }
+    #viewUserModal {
+        top: 56px;
+        right: 0;
+        bottom: 0;
+        left: var(--sidebar-w);
+        width: auto;
+        height: auto;
+        z-index: 90;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+    }
+    .view-account-card {
+        display: flex;
+        width: min(760px, 100%);
+        max-height: calc(100vh - 112px);
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: var(--shadow-lg);
+    }
+    .view-account-header {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        background: var(--soft-surface);
+    }
+    .view-account-body {
+        min-height: 0;
+        overflow-y: auto;
+        padding: 18px 20px;
+    }
+    .view-account-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .view-account-field {
+        min-height: 78px;
+        border-radius: 12px;
+        border: 1px solid var(--form-input-border);
+        background: var(--form-input-bg);
+        padding: 14px 16px;
+    }
+    .view-account-field span:first-child {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .view-account-field span:last-child {
+        display: block;
+        overflow-wrap: anywhere;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1.35;
+    }
+    .view-account-footer {
+        display: flex;
+        flex-shrink: 0;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 14px 20px;
+        border-top: 1px solid var(--border);
+        background: var(--soft-surface);
+    }
+    html.dark .view-account-card {
+        border-color: rgba(96, 165, 250, 0.28);
+        background: #182338;
+        box-shadow: 0 28px 70px rgba(2, 6, 23, 0.58);
+    }
+    html.dark .view-account-header,
+    html.dark .view-account-footer {
+        border-color: rgba(96, 165, 250, 0.18);
+        background: #121c2e;
+    }
+    @media (max-width: 900px) {
+        #viewUserModal {
+            top: 56px;
+            left: 0;
+            padding: 16px;
+        }
+        .view-account-grid {
+            grid-template-columns: 1fr;
+        }
+    }
     html:not(.dark) #wtStaffSearchInput,
     html[data-theme="light"] #wtStaffSearchInput {
         border-color: #dbe5f2 !important;
@@ -921,9 +1017,9 @@
 </div>
 
 
-<div id="viewUserModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-    <div class="w-full max-w-2xl bg-white rounded-[28px] border border-stone-200 shadow-2xl overflow-hidden">
-        <div class="px-6 py-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
+<div id="viewUserModal" class="fixed bg-stone-900/60 backdrop-blur-sm hidden flex">
+    <div class="view-account-card">
+        <div class="view-account-header">
             <div>
                 <h3 class="text-lg font-black text-[#142b47]">View Account</h3>
                 <p class="text-xs text-stone-400 mt-1">Account details for <span id="view_full_name_heading" class="font-bold text-[#0284c7]"></span>.</p>
@@ -933,48 +1029,48 @@
             </button>
         </div>
 
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">ID No.</span>
-                    <span id="view_staff_id" class="block text-sm font-black text-slate-700"></span>
+        <div class="view-account-body">
+            <div class="view-account-grid">
+                <div class="view-account-field">
+                    <span>ID No.</span>
+                    <span id="view_staff_id"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Username</span>
-                    <span id="view_username" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Username</span>
+                    <span id="view_username"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3 md:col-span-2">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Name</span>
-                    <span id="view_full_name" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field md:col-span-2">
+                    <span>Name</span>
+                    <span id="view_full_name"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Department</span>
-                    <span id="view_department" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Department</span>
+                    <span id="view_department"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Position</span>
-                    <span id="view_position" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Position</span>
+                    <span id="view_position"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Role</span>
-                    <span id="view_role" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Role</span>
+                    <span id="view_role"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Requests / Handovers</span>
-                    <span id="view_usage" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Requests / Handovers</span>
+                    <span id="view_usage"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Created</span>
-                    <span id="view_created" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Created</span>
+                    <span id="view_created"></span>
                 </div>
-                <div class="navy-input rounded-xl border px-4 py-3">
-                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Last Activity</span>
-                    <span id="view_last_activity" class="block text-sm font-black text-slate-700"></span>
+                <div class="view-account-field">
+                    <span>Last Activity</span>
+                    <span id="view_last_activity"></span>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 pt-5">
-                <button type="button" onclick="closeViewUserModal()" class="navy-btn navy-btn-soft">Close</button>
-            </div>
+        </div>
+        <div class="view-account-footer">
+            <button type="button" onclick="closeViewUserModal()" class="navy-btn navy-btn-soft">Close</button>
         </div>
     </div>
 </div>

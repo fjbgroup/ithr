@@ -369,7 +369,6 @@
     $isTemporaryRequest = $isTemporaryRequest ?? ($requestVariant === 'temporary');
     $formAction = $isTemporaryRequest ? route('wt.admin.requests.store.temporary') : route('wt.admin.requests.store');
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $selectedDepartment = old('department', $currentUser->department);

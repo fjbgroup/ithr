@@ -3863,7 +3863,6 @@
                                                 <div class="unit-detail-grid">
                                                     <span>Dept: {{ $pic['department'] ?? ($req->department ?: '-') }}</span>
                                                     <span>Phone: {{ $pic['phone_no'] ?? '-' }}</span>
-                                                    <span>Sector: {{ $pic['sector'] ?? ($req->sector ?: '-') }}</span>
                                                     <span>Location: {{ $pic['location'] ?? ($req->location ?: '-') }}</span>
                                                     @if(! empty($pic['shared_with']) || ! empty($req->shared_with))
                                                         <span>Shared: {{ $pic['shared_with'] ?? $req->shared_with }}</span>
@@ -4034,10 +4033,6 @@
                                 <div class="damage-form-value">{{ strtoupper($pic['shared_with'] ?? '-') }}</div>
                             </div>
                             @endif
-                            <div>
-                                <div class="damage-form-label">Sector</div>
-                                <div class="damage-form-value">{{ strtoupper($pic['sector'] ?? '-') }}</div>
-                            </div>
                             <div>
                                 <div class="damage-form-label">Location</div>
                                 <div class="damage-form-value">{{ strtoupper($pic['location'] ?? '-') }}</div>
@@ -4404,10 +4399,6 @@
                     <div class="damage-form-field">
                         <div class="damage-form-label">Shared With</div>
                         <div class="damage-form-value">{{ strtoupper($report->shared_with ?: '-') }}</div>
-                    </div>
-                    <div class="damage-form-field">
-                        <div class="damage-form-label">Sector</div>
-                        <div class="damage-form-value">{{ strtoupper($report->sector ?: '-') }}</div>
                     </div>
                     <div class="damage-form-field">
                         <div class="damage-form-label">Location</div>

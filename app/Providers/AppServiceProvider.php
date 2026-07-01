@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Pagination\Paginator;
 use App\Services\AuditLogger;
 use App\Models\IT\EmailSetting;
+use App\Support\WtFormOptions;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('vendor.pagination.it-system');
 
         Blade::anonymousComponentPath(resource_path('views/wt/components'), 'wt');
+
+        view()->composer('wt.*', function ($view) {
+            $view->with('formOptionLists', app(WtFormOptions::class)->lists());
+        });
 
         // Global email master switch — when an Admin (IT) disables email sending,
         // cancel every outgoing message system-wide. Returning false from the

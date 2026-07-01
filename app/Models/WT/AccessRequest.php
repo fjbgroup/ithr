@@ -34,7 +34,6 @@ class AccessRequest extends Model
         'accessories',
         'submit_to_admin_id',
         'handled_by',
-        'sector',
         'location',
         'event_name',
         'quantity',

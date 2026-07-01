@@ -141,7 +141,7 @@
                                 <span>{{ $record->reporter_staff_id ?: $record->phone_no ?: 'No staff ID' }}</span>
                             </div>
                         </td>
-                        <td>{{ $record->department_name ?: $record->sector ?: '-' }}</td>
+                        <td>{{ $record->department_name ?: '-' }}</td>
                         <td class="max-w-[280px] whitespace-normal">
                             {{ \Illuminate\Support\Str::limit($record->issue_description ?: $record->issue ?: $record->problem_possible ?: '-', 120) }}
                         </td>
@@ -535,4 +535,3 @@
     });
 </script>
 @endpush
-

@@ -289,7 +289,6 @@
     $currentUser = auth('wt')->user();
     $nameOptions = $formOptionLists['names'] ?? [];
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $profileName = old('requestor_name', $currentUser->full_name ?: $currentUser->username);

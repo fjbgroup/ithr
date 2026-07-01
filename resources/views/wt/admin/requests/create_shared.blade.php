@@ -905,7 +905,6 @@
         ->sort()
         ->values();
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $oldPicDetails = collect(old('pic_details', []))->values();
@@ -1599,7 +1598,6 @@
                 <div class="temporary-purpose-group">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
                     <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
-                    <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                     <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                     <input type="hidden" id="request_justification_fallback" name="justifications" value="{{ old('justifications', old('event_name')) }}">
                     <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
@@ -1616,7 +1614,6 @@
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark / Purpose</label>
                     <textarea name="justifications" rows="1" placeholder="Long-term usage, department coordination, or shared daily usage" class="executive-row-control executive-row-textarea w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 py-2 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>{{ old('justifications') }}</textarea>
                 </div>
-                <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                 <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                 <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
             </div>
@@ -1663,11 +1660,6 @@
                 <datalist id="picDepartmentOptions">
                     @foreach($departmentOptions as $department)
                     <option value="{{ $department }}"></option>
-                    @endforeach
-                </datalist>
-                <datalist id="picSectorOptions">
-                    @foreach($sectorOptions as $sector)
-                    <option value="{{ $sector }}"></option>
                     @endforeach
                 </datalist>
                 <datalist id="picLocationOptions">
@@ -1738,11 +1730,6 @@
             <datalist id="picDepartmentOptions">
                 @foreach($departmentOptions as $department)
                 <option value="{{ $department }}"></option>
-                @endforeach
-            </datalist>
-            <datalist id="picSectorOptions">
-                @foreach($sectorOptions as $sector)
-                <option value="{{ $sector }}"></option>
                 @endforeach
             </datalist>
             <datalist id="picLocationOptions">
@@ -2011,7 +1998,6 @@
         const ownershipNameOptions = @json($ownershipNameOptions);
         const pickupPersonOptions = @json($pickupPersonOptions);
         const departmentOptions = @json($departmentOptions);
-        const sectorOptions = @json($sectorOptions);
         const locationOptions = @json($locationOptions);
         const bayOptions = @json($bayOptions);
         const staffSearchUrl = @json(route('wt.admin.requests.staffSearch'));
@@ -2529,7 +2515,6 @@
                 phone_no: row.querySelector('[data-pic-phone]')?.value || '',
                 department: row.querySelector('[data-pic-department]')?.value || '',
                 ownership_type: row.querySelector('[data-pic-ownership-type]')?.value || '',
-                sector: row.querySelector('[data-pic-sector]')?.value || '',
                 bay_from: row.querySelector('[data-pic-bay]')?.value || '',
                 location: row.querySelector('[data-pic-location]')?.value || '',
                 shared_with: row.querySelector('[data-pic-shared-with]')?.value || '',
@@ -2590,12 +2575,6 @@
                             <p>Tell ICT where this unit will normally be used or issued.</p>
                         </div>
                         <div>
-                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Sector <span class="text-red-500">*</span></label>
-                            <select name="pic_details[${index}][sector]" data-pic-sector data-placeholder="Type or select sector" class="pic-tag-select w-full" required>
-                                ${renderOptions(sectorOptions, saved.sector || '', 'Type or select sector')}
-                            </select>
-                        </div>
-                        <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Location <span class="text-red-500">*</span></label>
                             <select name="pic_details[${index}][location]" data-pic-location data-placeholder="Type or select location" class="pic-tag-select w-full" required>
                                 ${renderOptions(locationOptions, saved.location || '', 'Type or select location')}
@@ -2644,11 +2623,10 @@
         function syncRequestFallbackFields() {
             const ownershipFallback = document.getElementById('request_ownership_type');
             const sharedWithFallback = document.getElementById('request_shared_with');
-            const sectorFallback = document.getElementById('request_sector_fallback');
             const bayFallback = document.getElementById('request_bay_fallback');
             const locationFallback = document.getElementById('request_location_fallback');
 
-            if (!ownershipFallback && !sharedWithFallback && !sectorFallback && !bayFallback && !locationFallback) {
+            if (!ownershipFallback && !sharedWithFallback && !bayFallback && !locationFallback) {
                 return;
             }
 
@@ -2656,7 +2634,6 @@
             const firstOwnership = firstRow?.querySelector('[data-pic-ownership-type]')?.value || 'Individual';
             const firstSharedWith = firstRow?.querySelector('[data-pic-shared-with]')?.value || '';
             const firstName = firstRow?.querySelector('[data-pic-name]')?.value || '';
-            const firstSector = firstRow?.querySelector('[data-pic-sector]')?.value || '';
             const firstBay = firstRow?.querySelector('[data-pic-bay]')?.value || '';
             const firstLocation = firstRow?.querySelector('[data-pic-location]')?.value || '';
 
@@ -2668,10 +2645,6 @@
                 sharedWithFallback.value = String(firstOwnership || '').toUpperCase() === 'SHARED'
                     ? (firstSharedWith || firstName)
                     : '';
-            }
-
-            if (sectorFallback) {
-                sectorFallback.value = firstSector;
             }
 
             if (bayFallback) {
@@ -2799,7 +2772,7 @@
         });
 
         $('input[name="quantity"]').on('input change', renderTemporaryPicRows);
-        $('#temporaryPicList').on('input change', '[data-pic-name], [data-pic-sector], [data-pic-bay], [data-pic-location], [data-pic-shared-with]', syncRequestFallbackFields);
+        $('#temporaryPicList').on('input change', '[data-pic-name], [data-pic-bay], [data-pic-location], [data-pic-shared-with]', syncRequestFallbackFields);
         $('#temporaryPicList').on('change select2:select', '[data-pic-name]', function () {
             fillPhoneFromName(this, '[data-pic-phone]');
             fillDepartmentFromName(this);

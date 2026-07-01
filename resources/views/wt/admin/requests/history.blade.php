@@ -713,7 +713,7 @@
                         <div class="history-form-value">
                             {{ strtoupper($pic['name'] ?? '-') }} / {{ strtoupper($pic['phone_no'] ?? '-') }}<br>
                             {{ strtoupper($pic['department'] ?? '-') }} / {{ strtoupper($pic['ownership_type'] ?? '-') }}<br>
-                            {{ strtoupper($pic['sector'] ?? '-') }} / {{ strtoupper($pic['location'] ?? '-') }}<br>
+                            LOCATION: {{ strtoupper($pic['location'] ?? '-') }}<br>
                             PICKUP: {{ strtoupper($pic['pickup_person'] ?? '-') }} / {{ strtoupper($pic['pickup_phone_no'] ?? '-') }}
                         </div>
                     </div>
@@ -750,8 +750,8 @@
                         <div class="history-form-value">{{ strtoupper($history->bay_from ?: '-') }}</div>
                     </div>
                     <div class="history-form-field">
-                        <div class="history-form-label">Sector / Location</div>
-                        <div class="history-form-value">{{ strtoupper($history->sector ?: '-') }} / {{ strtoupper($history->location ?: '-') }}</div>
+                        <div class="history-form-label">Location</div>
+                        <div class="history-form-value">{{ strtoupper($history->location ?: '-') }}</div>
                     </div>
                 </div>
             </div>
@@ -870,10 +870,6 @@
                     <div class="history-form-field">
                         <div class="history-form-label">Shared With</div>
                         <div class="history-form-value">{{ strtoupper($historyDamage->shared_with ?: '-') }}</div>
-                    </div>
-                    <div class="history-form-field">
-                        <div class="history-form-label">Sector</div>
-                        <div class="history-form-value">{{ strtoupper($historyDamage->sector ?: '-') }}</div>
                     </div>
                     <div class="history-form-field">
                         <div class="history-form-label">Location</div>

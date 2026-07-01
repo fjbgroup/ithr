@@ -563,8 +563,8 @@
                         <div class="damage-status-value">{{ $isTemporaryRequest ? ($requestDays . ' ' . \Illuminate\Support\Str::plural('day', $requestDays) . ', ' . $requestQty . ' ' . \Illuminate\Support\Str::plural('unit', $requestQty)) : ($requestQty . ' ' . \Illuminate\Support\Str::plural('unit', $requestQty)) }}</div>
                     </div>
                     <div class="damage-status-detail">
-                        <div class="damage-status-label">Sector / Location</div>
-                        <div class="damage-status-value">{{ strtoupper($request->sector ?: '-') }} / {{ strtoupper($request->location ?: '-') }}</div>
+                        <div class="damage-status-label">Location</div>
+                        <div class="damage-status-value">{{ strtoupper($request->location ?: '-') }}</div>
                     </div>
                 </div>
             </div>

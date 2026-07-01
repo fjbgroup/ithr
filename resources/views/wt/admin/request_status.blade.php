@@ -402,8 +402,8 @@
                         <div class="request-form-value">{{ strtoupper($request->bay_from ?: '-') }}</div>
                     </div>
                     <div class="request-form-field">
-                        <div class="request-form-label">Sector / Location</div>
-                        <div class="request-form-value">{{ strtoupper($request->sector ?: '-') }} / {{ strtoupper($request->location ?: '-') }}</div>
+                        <div class="request-form-label">Location</div>
+                        <div class="request-form-value">{{ strtoupper($request->location ?: '-') }}</div>
                     </div>
                 </div>
             </div>
@@ -497,5 +497,4 @@
 </script>
 @endpush
 @endsection
-
 
