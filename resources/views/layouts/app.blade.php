@@ -689,7 +689,10 @@ function liveSearch(form, resultId, delay) {
             var url = form.action + '?' + p.toString();
             el.style.transition = 'opacity .15s';
             el.style.opacity = '.45';
-            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            fetch(url, { 
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                cache: 'no-store'
+            })
                 .then(function(r) { return r.text(); })
                 .then(function(html) {
                     var doc = new DOMParser().parseFromString(html, 'text/html');
