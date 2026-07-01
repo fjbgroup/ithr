@@ -377,7 +377,7 @@
         width: 100%;
         background: rgba(2, 132, 199, 0.06);
         border-radius: 8px;
-        padding: 10px 16px 10px 22px;
+        padding: 10px 16px 10px 44px;
     }
     .owner-profile-group-title p:first-child {
         color: #0284c7 !important;
