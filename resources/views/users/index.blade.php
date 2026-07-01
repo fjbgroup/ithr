@@ -173,10 +173,6 @@
                         @endif
                         @canwrite
                         <button class="btn btn-sm btn-outline" onclick="editUser({{ json_encode($u) }})">Edit</button>
-                        <form method="POST" action="{{ route('users.reset_password', $u->id) }}" style="display:inline;" onsubmit="return confirm('Reset password to \'password\' for {{ $u->name }}?');">
-                            @csrf
-                            <button type="submit" class="btn btn-sm btn-outline" style="color:#b45309; border-color:#fcd34d; background:#fffbeb;">Reset PW</button>
-                        </form>
                         @endcanwrite
                     </td>
                 </tr>
@@ -236,6 +232,7 @@
             </div>
         </form>
         <div id="editDangerZone" style="display:none;border-top:1px solid var(--border);padding:.9rem 1.5rem;gap:.5rem;align-items:center;flex-wrap:wrap;">
+            <button type="button" id="editResetPwBtn" class="btn btn-sm btn-outline" style="color:#b45309; border-color:#fcd34d; background:#fffbeb;">Reset Password</button>
             <button type="button" id="editDisableBtn" class="btn btn-sm" style="background:#fef3c7;color:#92400e;">Disable</button>
             <button type="button" id="editStaffBtn" class="btn btn-sm" style="display:none;background:#fce7f3;color:#9d174d;">Set Inactive</button>
             <div style="flex:1;"></div>
@@ -299,6 +296,10 @@
         </form>
     </div>
 </div>
+
+<form id="resetPwUserForm" method="POST" action="" style="display:none;">
+    @csrf
+</form>
 
 <script>
 const existingStaffNos = {!! json_encode($users->pluck('staff_no')->filter()->values()) !!};
@@ -416,6 +417,9 @@ function editUser(u) {
             staffBtn.style.display = 'none';
         }
 
+        // Reset PW button
+        document.getElementById('editResetPwBtn').onclick = function() { confirmResetUserPassword(u.id, u.name); };
+
         // Delete button
         document.getElementById('editDeleteBtn').onclick = function() { closeModal(); confirmDeleteUser(u.id); };
     } else {
@@ -428,6 +432,13 @@ function editUser(u) {
 function confirmDeleteUser(id) {
     document.getElementById('deleteUserForm').action = '{{ url('users') }}/' + id;
     openModal('deleteUserModal');
+}
+
+function confirmResetUserPassword(id, name) {
+    if (confirm('Reset password to \'password\' for ' + name + '?')) {
+        document.getElementById('resetPwUserForm').action = '{{ url('users') }}/' + id + '/reset-password';
+        document.getElementById('resetPwUserForm').submit();
+    }
 }
 
 function filterUsers() {
