@@ -162,7 +162,7 @@
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
         align-items: flex-start;
-        gap: 12px 10px;
+        gap: 12px 6px;
     }
 
     .repair-form-group {
@@ -194,7 +194,7 @@
     }
 
     .repair-form-note-group {
-        grid-column: span 4;
+        grid-column: span 3;
         align-self: stretch;
     }
 
