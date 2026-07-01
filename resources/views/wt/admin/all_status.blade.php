@@ -584,6 +584,16 @@
                         <div class="damage-status-label">Requested / Assigned Accessories</div>
                         <div class="damage-status-value">{{ $request->accessories ?: 'To be selected by ICT' }}</div>
                     </div>
+                    <div class="damage-status-detail">
+                        <div class="damage-status-label">Executive Signature</div>
+                        <div class="damage-status-value">
+                            @if($request->request_signature)
+                                <img src="{{ $request->request_signature }}" alt="Executive signature" class="max-h-24 rounded-lg border border-stone-200 bg-white p-2 dark:border-slate-700">
+                            @else
+                                No signature captured.
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
 

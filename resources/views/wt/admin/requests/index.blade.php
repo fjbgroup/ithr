@@ -4080,6 +4080,16 @@
                         <div class="damage-form-label">Requested / Assigned Accessories</div>
                         <div class="damage-form-value">{{ $req->accessories ?: 'To be selected by ICT' }}</div>
                     </div>
+                    <div class="damage-form-field damage-form-field-wide">
+                        <div class="damage-form-label">Executive Signature</div>
+                        <div class="damage-form-value">
+                            @if($req->request_signature)
+                                <img src="{{ $req->request_signature }}" alt="Executive signature" class="max-h-24 rounded-lg border border-stone-200 bg-white p-2 dark:border-slate-700">
+                            @else
+                                No signature captured.
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
 

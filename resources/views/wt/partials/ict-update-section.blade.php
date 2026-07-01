@@ -38,9 +38,12 @@
             <div class="{{ $valueClass }}">{{ strtoupper($request->assigned_serial_number ?: '-') }}</div>
         </div>
         <div class="{{ $wideFieldClass }}">
+            <div class="{{ $labelClass }}">Assigned Accessories</div>
+            <div class="{{ $valueClass }}">{{ $request->accessories ?: 'No accessories assigned yet.' }}</div>
+        </div>
+        <div class="{{ $wideFieldClass }}">
             <div class="{{ $labelClass }}">ICT Remark / Update</div>
             <div class="{{ $valueClass }} whitespace-pre-line">{{ $request->approval_remark ?: 'No ICT update yet.' }}</div>
         </div>
     </div>
 </div>
-

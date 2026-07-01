@@ -125,6 +125,10 @@
         <div style="font-size:11px;color:var(--muted)">Department: <span style="color:var(--text);font-weight:600">{{ $request->department ?: '-' }}</span></div>
         <div style="font-size:11px;color:var(--muted)">Position: <span style="color:var(--text);font-weight:600">{{ $request->position ?: '-' }}</span></div>
         <div style="font-size:11px;color:var(--muted)">{{ $isRepairRequest ? 'Unit Info' : 'Radio ID' }}: <span style="color:var(--text);font-weight:600">{{ $request->radio_id ?: '-' }}</span></div>
+        @if(!$isRepairRequest)
+        <div style="font-size:11px;color:var(--muted)">Serial No: <span style="color:var(--text);font-weight:600">{{ $request->assigned_serial_number ?: '-' }}</span></div>
+        <div style="font-size:11px;color:var(--muted)">Accessories: <span style="color:var(--text);font-weight:600">{{ $request->accessories ?: 'To be selected by ICT' }}</span></div>
+        @endif
         @if(!empty($request->approval_remark))
         <div style="font-size:11px;color:var(--muted)">Remark by Approval: <span style="color:var(--text);font-weight:600">{{ $request->approval_remark }}</span></div>
         @endif

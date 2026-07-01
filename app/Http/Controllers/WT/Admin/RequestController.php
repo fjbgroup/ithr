@@ -568,6 +568,8 @@ class RequestController extends Controller
             'assignment_details.*.shared_with' => 'nullable|string|max:255',
             'assignment_details.*.department' => 'required|string|max:255',
             'assignment_details.*.position' => 'nullable|string|max:255',
+            'accessories' => 'nullable|array',
+            'accessories.*' => 'string|max:255',
             'approval_remark' => 'nullable|string|max:2000',
         ]);
         $req = AccessRequest::with('handover')->findOrFail($id);
@@ -613,6 +615,11 @@ class RequestController extends Controller
         $serialNumbers = $selectedWalkies->pluck('serial_number')->filter()->values();
         $approvalRemark = trim((string) ($validated['approval_remark'] ?? ''));
         $assignmentDetails = collect($validated['assignment_details'] ?? []);
+        $approvedAccessories = collect($validated['accessories'] ?? [])
+            ->map(fn ($accessory) => trim((string) $accessory))
+            ->filter()
+            ->unique()
+            ->values();
 
         $scheduleSummary = '';
         if ($req->request_type === 'temporary_walkie_talkie') {
@@ -631,7 +638,7 @@ class RequestController extends Controller
             'assigned_radio_ids' => $radioIds->all(),
             'assigned_serial_number' => $serialNumbers->implode(', '),
             'assigned_serial_numbers' => $serialNumbers->all(),
-            'accessories' => $request->has('accessories') ? implode(', ', $request->accessories) : $req->accessories,
+            'accessories' => $approvedAccessories->isNotEmpty() ? $approvedAccessories->implode(', ') : null,
             'approval_remark' => $approvalRemark !== '' ? $approvalRemark : null,
             'handled_by' => auth('wt')->id(),
         ]);
@@ -677,6 +684,9 @@ class RequestController extends Controller
 
         if ($approvalRemark !== '') {
             $pickupMessage .= " ICT remark: {$approvalRemark}";
+        }
+        if ($approvedAccessories->isNotEmpty()) {
+            $pickupMessage .= " Accessories: {$approvedAccessories->implode(', ')}.";
         }
 
         SystemNotifier::notifyUser(
