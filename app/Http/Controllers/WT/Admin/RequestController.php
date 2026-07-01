@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WT\Admin;
 use App\Http\Controllers\WT\Controller;
 use Illuminate\Http\Request;
 use App\Models\WT\AccessRequest;
+use App\Models\WT\MasterData;
 use App\Models\WT\MaintenanceRecord;
 use App\Models\WT\User;
 use App\Models\WT\WalkieTalkie;
@@ -214,7 +215,11 @@ class RequestController extends Controller
             ->values();
         $walkieOwnerships = $walkies->pluck('ownership')->filter()->unique()->sort()->values();
         $walkieDepartments = $walkies->pluck('department')->filter()->unique()->sort()->values();
-        $walkiePositions = $walkies->pluck('position')->filter()->unique()->sort()->values();
+        $walkiePositions = $walkies->pluck('position')
+            ->filter(fn ($value) => ! MasterData::isBlockedValue('position', $value))
+            ->unique()
+            ->sort()
+            ->values();
         $ownershipTypeOptions = collect(['INDIVIDUAL', 'SHARED', 'SPARE'])
             ->merge(
                 $walkies->pluck('ownership_type')

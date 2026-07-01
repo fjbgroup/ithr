@@ -362,15 +362,38 @@
     .owner-details-grid > div {
         min-width: 0;
     }
-    .owner-details-grid > div:not(.owner-note-row) {
+    .owner-details-grid > div:not(.owner-note-row):not(.owner-profile-group-title) {
         justify-self: start;
         width: 100%;
         max-width: none;
     }
-    .owner-details-grid > div:not(.owner-note-row) :is(input:not([type="hidden"]), select, textarea),
-    .owner-details-grid > div:not(.owner-note-row) .select2-container {
+    .owner-details-grid > div:not(.owner-note-row):not(.owner-profile-group-title) :is(input:not([type="hidden"]), select, textarea),
+    .owner-details-grid > div:not(.owner-note-row):not(.owner-profile-group-title) .select2-container {
         width: 100% !important;
         max-width: 100% !important;
+    }
+    .owner-profile-group-title {
+        grid-column: 1 / -1;
+        width: 100%;
+        border-left: 3px solid #0284c7;
+        background: rgba(2, 132, 199, 0.06);
+        border-radius: 8px;
+        padding: 8px 10px;
+    }
+    .owner-profile-group-title p:first-child {
+        color: #0284c7 !important;
+        font-size: 9px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.13em !important;
+        line-height: 1.2 !important;
+        text-transform: uppercase;
+    }
+    .owner-profile-group-title p:last-child {
+        color: #64748b !important;
+        font-size: 9px !important;
+        font-weight: 700 !important;
+        line-height: 1.45 !important;
+        margin-top: 3px !important;
     }
     .owner-note-row {
         max-width: 1180px;
@@ -877,6 +900,65 @@
     .match-report-faulty .admin-request-card .select2-container .select2-selection__rendered { font-size: 9.5px !important; line-height: 1.2 !important; }
     .match-report-faulty .admin-request-card button,
     .match-report-faulty .admin-request-card .request-submit-btn { min-height: 28px !important; padding: 7px 14px !important; border-radius: 8px !important; font-size: 9px !important; }
+    .request-flow-guide {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin: 0 0 12px;
+    }
+    .request-flow-step {
+        border: 1px solid rgba(2, 132, 199, 0.16);
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 10px 12px;
+    }
+    .request-flow-step strong {
+        display: block;
+        color: #0284c7;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        line-height: 1.25;
+        text-transform: uppercase;
+    }
+    .request-flow-step span {
+        display: block;
+        margin-top: 4px;
+        color: #475569;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.45;
+    }
+    .request-section-help {
+        margin: -2px 0 10px;
+        border: 1px solid rgba(2, 132, 199, 0.12);
+        border-radius: 9px;
+        background: rgba(2, 132, 199, 0.05);
+        color: #475569 !important;
+        padding: 9px 11px;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        line-height: 1.55 !important;
+    }
+    .dark .request-flow-step,
+    .dark .request-section-help {
+        border-color: rgba(51, 65, 85, 0.9);
+        background: rgba(15, 23, 42, 0.55);
+    }
+    .dark .request-flow-step span,
+    .dark .request-section-help {
+        color: #cbd5e1;
+    }
+    @media (max-width: 900px) {
+        .request-flow-guide {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+    @media (max-width: 560px) {
+        .request-flow-guide {
+            grid-template-columns: 1fr;
+        }
+    }
 
     .longterm-modern.match-report-faulty { width: 100% !important; max-width: 1470px !important; }
     html.dark .admin-request-shell.match-report-faulty,
@@ -1282,6 +1364,25 @@
         </p>
     </div>
 
+    <div class="request-flow-guide">
+        <div class="request-flow-step">
+            <strong>1. Executive</strong>
+            <span>Confirm the requester details. These are filled from your account.</span>
+        </div>
+        <div class="request-flow-step">
+            <strong>2. {{ $isTemporaryRequest ? 'Temporary Use' : 'Request Need' }}</strong>
+            <span>{{ $isTemporaryRequest ? 'Set the date, duration, purpose, and quantity needed.' : 'Set quantity, start date, and the purpose for long-term use.' }}</span>
+        </div>
+        <div class="request-flow-step">
+            <strong>3. Ownership</strong>
+            <span>Add the owner profile for each unit: owner, location, and pickup person.</span>
+        </div>
+        <div class="request-flow-step">
+            <strong>4. Submit</strong>
+            <span>Sign and submit. ICT will review and assign the actual walkie talkie unit.</span>
+        </div>
+    </div>
+
     <form action="{{ $formAction }}" method="POST" class="space-y-6">
         @csrf
         <input type="hidden" name="request_scope" value="on_behalf">
@@ -1294,6 +1395,7 @@
         @endunless
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">1. Executive Details</h4>
+        <p class="request-section-help">This section confirms who is submitting the request. No action is needed unless your profile details are wrong.</p>
         <div class="wt-form-row">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Name</label>
@@ -1310,6 +1412,11 @@
         </div>
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">{{ $isTemporaryRequest ? '2. Temporary Request Details' : '2. Long Term Request Details' }}</h4>
+        <p class="request-section-help">
+            {{ $isTemporaryRequest
+                ? 'Temporary request is for short-term usage. Fill the usage period, purpose, and quantity before adding ownership profiles.'
+                : 'Long-term request is for regular or permanent usage. Fill the quantity and purpose, then complete one ownership profile for each unit requested.' }}
+        </p>
         <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : '' }}">
             @if($isTemporaryRequest)
             <div class="temporary-request-basics">
@@ -1422,6 +1529,7 @@
 
         @if($isTemporaryRequest)
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">3. Ownership Information</h4>
+        <p class="request-section-help">For each requested unit, complete the owner profile in order: owner details, usage location, then pickup contact.</p>
         <div class="temporary-owner-card">
             <div class="temporary-owner-summary mb-4">
                 <div>
@@ -1472,6 +1580,7 @@
         </div>
 
         <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">4. Executive Signature</h4>
+        <p class="request-section-help">Sign here after checking all request and ownership details. The request will go to ICT for review.</p>
         <div class="temporary-signature-row flex flex-col md:flex-row md:flex-nowrap md:items-start">
             <div class="temporary-signature-wrap">
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
@@ -1603,6 +1712,10 @@
                     window.dispatchEvent(new Event('resize'));
                 }
             }, true);
+
+            if (sections[0]) {
+                openSection(sections[0]);
+            }
         }
 
         mountRequestFormAccordion();
@@ -2152,21 +2265,32 @@
                 row.setAttribute('data-pic-row', '1');
                 row.innerHTML = `
                     <div class="temporary-unit-header">
-                        <p class="temporary-unit-title">Ownership Profile</p>
-                        <span class="temporary-unit-chip">Unit ${index + 1}</span>
-                    </div>
-                    <div class="theme-note-panel longterm-note-box mb-4 rounded-xl border border-stone-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Profile Note</p>
-                        <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">Search an existing ownership name or type a new one. Each walkie talkie unit must have one ownership profile.</p>
+                        <p class="temporary-unit-title">Unit ${index + 1} Ownership Profile</p>
+                        <span class="temporary-unit-chip">${isTemporaryRequest ? 'Temporary' : 'Long Term'}</span>
                     </div>
                     <div class="owner-details-grid wt-form-row">
+                        <div class="owner-profile-group-title">
+                            <p>A. Owner Details</p>
+                            <p>Choose who this walkie talkie is for. Staff details will auto-fill when available.</p>
+                        </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Name <span class="text-red-500">*</span></label>
                             <input type="hidden" name="pic_details[${index}][staff_no]" data-pic-staff-no value="${escapeAttribute(saved.staff_no || '')}">
                             <select name="pic_details[${index}][name]" data-pic-name data-placeholder="Search staff name or ID..." class="pic-tag-select w-full" required>
                                 ${renderOptions(ownershipNameOptions, saved.name || '', 'Search staff name or ID...')}
                             </select>
-                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search the staff record and pick the owner - department &amp; phone auto-fill. If the staff is not listed, you can still type the name manually.</p>
+                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search staff name or ID. You can type manually if the staff is not listed.</p>
+                        </div>
+                        <div>
+                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Type <span class="text-red-500">*</span></label>
+                            <select name="pic_details[${index}][ownership_type]" data-pic-ownership-type class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
+                                ${renderOptions(ownershipTypeOptions, saved.ownership_type || '', 'Select ownership type')}
+                            </select>
+                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Individual = one owner. Shared = used by a team or area.</p>
+                        </div>
+                        <div data-pic-shared-with-group class="${String(saved.ownership_type || '').toUpperCase() === 'SHARED' ? '' : 'hidden'}">
+                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Shared With <span class="text-red-500">*</span></label>
+                            <input type="text" data-pic-shared-with value="${escapeAttribute(saved.shared_with || (index === 0 ? oldRequestSharedWith : ''))}" placeholder="E.G. NAME / TEAM / DEPARTMENT" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Phone No</label>
@@ -2179,20 +2303,20 @@
                                 ${renderOptions(departmentOptions, saved.department || '', 'Type or select department')}
                             </select>
                         </div>
-                        <div>
-                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Type <span class="text-red-500">*</span></label>
-                            <select name="pic_details[${index}][ownership_type]" data-pic-ownership-type class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200" required>
-                                ${renderOptions(ownershipTypeOptions, saved.ownership_type || '', 'Select ownership type')}
-                            </select>
-                        </div>
-                        <div data-pic-shared-with-group class="${String(saved.ownership_type || '').toUpperCase() === 'SHARED' ? '' : 'hidden'}">
-                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Shared With <span class="text-red-500">*</span></label>
-                            <input type="text" data-pic-shared-with value="${escapeAttribute(saved.shared_with || (index === 0 ? oldRequestSharedWith : ''))}" placeholder="E.G. NAME / TEAM / DEPARTMENT" class="w-full rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-4 py-2.5 text-[11px] font-bold uppercase outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                        <div class="owner-profile-group-title">
+                            <p>B. Usage Location</p>
+                            <p>Tell ICT where this unit will normally be used or issued.</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Sector <span class="text-red-500">*</span></label>
                             <select name="pic_details[${index}][sector]" data-pic-sector data-placeholder="Type or select sector" class="pic-tag-select w-full" required>
                                 ${renderOptions(sectorOptions, saved.sector || '', 'Type or select sector')}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Location <span class="text-red-500">*</span></label>
+                            <select name="pic_details[${index}][location]" data-pic-location data-placeholder="Type or select location" class="pic-tag-select w-full" required>
+                                ${renderOptions(locationOptions, saved.location || '', 'Type or select location')}
                             </select>
                         </div>
                         <div>
@@ -2202,15 +2326,9 @@
                             </select>
                             <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Leave blank if not applicable.</p>
                         </div>
-                        <div>
-                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Location <span class="text-red-500">*</span></label>
-                            <select name="pic_details[${index}][location]" data-pic-location data-placeholder="Type or select location" class="pic-tag-select w-full" required>
-                                ${renderOptions(locationOptions, saved.location || '', 'Type or select location')}
-                            </select>
-                        </div>
-                        <div class="owner-note-row longterm-note-box rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-950/70 md:col-span-3">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-[#0284c7] dark:text-[#38bdf8]">Pickup Info</p>
-                            <p class="mt-1 text-[10px] font-bold leading-5 text-slate-600 dark:text-slate-300">This unit is for the ownership name entered above. Pick up the approved walkie talkie at ICT Department after ICT approves this request.</p>
+                        <div class="owner-profile-group-title">
+                            <p>C. Pickup Contact</p>
+                            <p>Choose the person who will collect the approved walkie talkie from ICT Department.</p>
                         </div>
                         <div class="owner-pickup-field">
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Who Will Pick Up This Walkie Talkie? <span class="text-red-500">*</span></label>

@@ -87,6 +87,7 @@ class WalkieTalkieController extends Controller
         return MasterData::valuesFor($category)
             ->merge($existingValues)
             ->map(fn ($value) => $this->normalizeValue($value))
+            ->reject(fn ($value) => MasterData::isBlockedValue($category, $value))
             ->filter()
             ->unique()
             ->sort()
@@ -643,6 +644,7 @@ class WalkieTalkieController extends Controller
             'hiddenFields' => [],
             'formAction' => route('wt.admin.walkies.store'),
             'formMethod' => 'POST',
+            'showModeActions' => true,
         ]));
     }
 
@@ -667,6 +669,7 @@ class WalkieTalkieController extends Controller
             'inventoryOnly' => true,
             'formAction' => route('wt.admin.walkies.store'),
             'formMethod' => 'POST',
+            'showModeActions' => true,
         ]));
     }
 

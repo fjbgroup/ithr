@@ -11,10 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script>
-        const savedTheme = localStorage.getItem('color-theme');
+        const savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
         const initialTheme = savedTheme === 'dark' || savedTheme === 'light'
             ? savedTheme
-            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            : 'light';
+        localStorage.setItem('fjb-theme', initialTheme);
+        localStorage.setItem('color-theme', initialTheme);
+        localStorage.setItem('theme', initialTheme);
         document.documentElement.classList.toggle('dark', initialTheme === 'dark');
         document.documentElement.dataset.theme = initialTheme;
     </script>
@@ -318,5 +321,4 @@
 
 </body>
 </html>
-
 

@@ -65,6 +65,32 @@
     .adminit-staff-table .dataTables_wrapper {
         width: 100% !important;
     }
+    .adminit-staff-table {
+        width: min(100%, 1380px);
+        margin-left: auto;
+        margin-right: auto;
+    }
+    body .content-surface .ict-users-control .adminit-staff-table > .adminit-section-header {
+        padding: 22px 34px !important;
+        border-bottom: 1px solid var(--border) !important;
+    }
+    .adminit-staff-table .overflow-x-auto {
+        padding: 22px 34px 28px;
+    }
+    .adminit-staff-table .dataTables_wrapper {
+        padding: 0;
+    }
+    @media (max-width: 768px) {
+        .adminit-staff-table {
+            width: 100%;
+        }
+        .adminit-staff-table .overflow-x-auto {
+            padding: 16px 18px 22px;
+        }
+        body .content-surface .ict-users-control .adminit-staff-table > .adminit-section-header {
+            padding: 18px 20px !important;
+        }
+    }
     .adminit-staff-table table.dataTable {
         table-layout: auto;
     }

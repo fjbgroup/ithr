@@ -23,9 +23,32 @@ class MasterData extends Model
         'ownership_type' => 'Ownership Type',
     ];
 
+    private const BLOCKED_VALUES = [
+        'position' => ['JAILANI'],
+    ];
+
     public function scopeCategory($query, string $category)
     {
         return $query->where('category', $category);
+    }
+
+    public function scopeVisible($query)
+    {
+        foreach (self::BLOCKED_VALUES as $category => $values) {
+            $query->where(function ($query) use ($category, $values) {
+                $query->where('category', '!=', $category)
+                    ->orWhereNotIn('value', $values);
+            });
+        }
+
+        return $query;
+    }
+
+    public static function isBlockedValue(string $category, mixed $value): bool
+    {
+        $normalized = strtoupper(trim((string) $value));
+
+        return in_array($normalized, self::BLOCKED_VALUES[$category] ?? [], true);
     }
 
     /**
@@ -35,6 +58,7 @@ class MasterData extends Model
     {
         return static::query()
             ->where('category', $category)
+            ->visible()
             ->orderBy('value')
             ->pluck('value');
     }

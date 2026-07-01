@@ -11,8 +11,11 @@
 
   (function () {
     try {
-      var savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme');
-      var theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var savedTheme = localStorage.getItem('fjb-theme') || localStorage.getItem('color-theme') || localStorage.getItem('theme');
+      var theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
+      localStorage.setItem('fjb-theme', theme);
+      localStorage.setItem('color-theme', theme);
+      localStorage.setItem('theme', theme);
       var vars = theme === 'dark' ? {
         '--body-bg': '#0f172a',
         '--surface': '#1e293b',
@@ -188,6 +191,12 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
     @endif
+
+    <div class="nav-section-label">Guides</div>
+    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}">
+      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}</span>
+      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
+    </a>
 
     <div class="nav-section-label">{{ $isAdminItView ? 'Management' : 'Personal Assets' }}</div>
 
@@ -1197,15 +1206,20 @@ if (themeToggleBtn) {
   themeToggleBtn.addEventListener('click', function() { toggleTheme(); });
 }
 
-// Initialize theme: prefer fjb-theme, fall back to color-theme
-(function(){
+function resolveSavedTheme() {
   const fjbTheme = localStorage.getItem('fjb-theme');
   const colorTheme = localStorage.getItem('color-theme');
   const legacyTheme = localStorage.getItem('theme');
-  const theme = fjbTheme || colorTheme || legacyTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  if (!fjbTheme) localStorage.setItem('fjb-theme', theme);
+  const theme = [fjbTheme, colorTheme, legacyTheme].find(value => value === 'dark' || value === 'light') || 'light';
+  localStorage.setItem('fjb-theme', theme);
   localStorage.setItem('color-theme', theme);
   localStorage.setItem('theme', theme);
+  return theme;
+}
+
+// Initialize theme: use the saved user choice, defaulting to light.
+(function(){
+  const theme = resolveSavedTheme();
   applyTheme(theme === 'dark');
 })();
 

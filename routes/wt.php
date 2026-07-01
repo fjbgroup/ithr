@@ -86,6 +86,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::post('/damages/{damage}/temporary-spare', [InteractionController::class, 'requestTemporarySpare'])->name('damages.temporarySpare');
         Route::get('/damages/{bucket}', [InteractionController::class, 'damageStatusPage'])->whereIn('bucket', ['pending', 'drafts', 'completed'])->name('damages.status');
         Route::post('/damages', [InteractionController::class, 'storeDamage'])->name('damages.store');
+        Route::get('/manual', [UserDashboardController::class, 'manual'])->name('manual');
         Route::get('/policies', [UserDashboardController::class, 'policies'])->name('policies');
 
         Route::post('/requests/{id}/reject', [RequestController::class, 'reject'])->name('requests.reject');
@@ -161,6 +162,7 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::get('/damages/{bucket}', [InteractionController::class, 'damageStatusPage'])->whereIn('bucket', ['pending', 'drafts', 'completed'])->name('damages.status');
         Route::post('/damages', [InteractionController::class, 'storeDamage'])->name('damages.store');
 
+        Route::get('/manual', [UserDashboardController::class, 'manual'])->name('manual');
         Route::get('/policies', [UserDashboardController::class, 'policies'])->name('policies');
     });
 });

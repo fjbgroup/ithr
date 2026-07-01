@@ -61,6 +61,7 @@ class AdminITController extends Controller
             'pageTitle' => 'Management ICT',
             'roleCounts' => $roleCounts,
             'users' => $users,
+            'accounts' => $users,
             'pendingPasswordResetRequests' => $pendingPasswordResetRequests,
         ]);
     }
@@ -353,5 +354,4 @@ class AdminITController extends Controller
         return back()->with('success', 'Password reset request rejected.');
     }
 }
-
 

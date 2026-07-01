@@ -6,22 +6,23 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 <style>
     .activity-table-shell {
-        background: #243047;
-        border-color: rgba(148, 163, 184, 0.18);
+        background: var(--surface) !important;
+        border-color: var(--border) !important;
+        color: var(--text) !important;
     }
     .activity-table-shell table.dataTable,
     .activity-table-shell .dataTables_wrapper {
         width: 100% !important;
-        color: #dbe7ff;
+        color: var(--text) !important;
     }
     .activity-table-shell table.dataTable {
         table-layout: auto;
     }
     .activity-table-shell table.dataTable thead th {
         white-space: nowrap;
-        color: #a9bddf !important;
-        background: #25324a !important;
-        border-bottom-color: rgba(148, 163, 184, 0.12) !important;
+        color: var(--table-head-color) !important;
+        background: var(--table-head-bg) !important;
+        border-color: var(--border) !important;
     }
     .activity-table-shell .activity-details-cell {
         min-width: 320px;
@@ -29,51 +30,104 @@
         white-space: normal;
         word-break: break-word;
         line-height: 1.5;
-        color: #bfd0ec !important;
+        color: var(--text) !important;
     }
     .activity-table-shell .dataTables_wrapper .dataTables_length label,
     .activity-table-shell .dataTables_wrapper .dataTables_filter label,
     .activity-table-shell .dataTables_wrapper .dataTables_info,
     .activity-table-shell .dataTables_wrapper .dataTables_paginate {
-        color: #dbe7ff !important;
+        color: var(--muted) !important;
     }
     .activity-table-shell .dataTables_wrapper .dataTables_length select,
     .activity-table-shell .dataTables_wrapper .dataTables_filter input {
-        color: #f8fbff !important;
-        background: #182238 !important;
-        border: 1px solid rgba(96, 165, 250, 0.18) !important;
+        color: var(--form-input-color) !important;
+        background: var(--form-input-bg) !important;
+        border: 1px solid var(--form-input-border) !important;
     }
     .activity-table-shell .dataTables_wrapper table.dataTable tbody tr {
-        background: #2c3951 !important;
+        background: var(--row-surface) !important;
     }
     .activity-table-shell .dataTables_wrapper table.dataTable tbody tr:nth-child(even) {
-        background: #26334a !important;
+        background: var(--row-alt) !important;
     }
     .activity-table-shell .dataTables_wrapper table.dataTable tbody tr:hover {
-        background: #32425d !important;
+        background: var(--table-hover) !important;
     }
     .activity-table-shell .dataTables_wrapper table.dataTable tbody td {
-        color: #e6efff !important;
-        border-bottom-color: rgba(148, 163, 184, 0.08) !important;
+        color: var(--text) !important;
+        border-color: var(--border) !important;
+        background: transparent !important;
     }
     .activity-table-shell .dataTables_wrapper table.dataTable tbody td:first-child .font-bold {
-        color: #f6d39a !important;
+        color: var(--text) !important;
     }
     .activity-table-shell .dataTables_wrapper table.dataTable tbody td:first-child .font-mono {
-        color: #9fb4d7 !important;
+        color: var(--muted) !important;
+    }
+    .activity-table-shell .activity-account-cell {
+        color: var(--accent) !important;
+    }
+    .activity-table-shell .activity-module-badge {
+        background: rgba(2, 132, 199, 0.10) !important;
+        color: #0369a1 !important;
+        border: 1px solid rgba(2, 132, 199, 0.18);
+    }
+    html.dark .activity-table-shell .activity-module-badge {
+        background: rgba(56, 189, 248, 0.14) !important;
+        color: #7dd3fc !important;
+        border-color: rgba(125, 211, 252, 0.22);
+    }
+    .activity-action-badge {
+        border: 1px solid transparent;
+    }
+    .activity-action-neutral {
+        background: var(--soft-surface) !important;
+        color: var(--muted) !important;
+        border-color: var(--border);
+    }
+    .activity-action-success {
+        background: #dcfce7 !important;
+        color: #166534 !important;
+        border-color: #bbf7d0;
+    }
+    .activity-action-info {
+        background: #dbeafe !important;
+        color: #1d4ed8 !important;
+        border-color: #bfdbfe;
+    }
+    .activity-action-danger {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        border-color: #fecaca;
+    }
+    html.dark .activity-action-success {
+        background: rgba(34, 197, 94, 0.18) !important;
+        color: #86efac !important;
+        border-color: rgba(134, 239, 172, 0.26);
+    }
+    html.dark .activity-action-info {
+        background: rgba(59, 130, 246, 0.20) !important;
+        color: #93c5fd !important;
+        border-color: rgba(147, 197, 253, 0.28);
+    }
+    html.dark .activity-action-danger {
+        background: rgba(239, 68, 68, 0.18) !important;
+        color: #fca5a5 !important;
+        border-color: rgba(252, 165, 165, 0.28);
     }
     .activity-table-shell .dataTables_wrapper .paginate_button {
-        color: #dbe7ff !important;
+        color: var(--muted) !important;
     }
     .activity-table-shell .dataTables_wrapper .paginate_button.current,
     .activity-table-shell .dataTables_wrapper .paginate_button.current:hover {
         color: #ffffff !important;
-        background: #35507b !important;
+        background: var(--accent) !important;
         border-color: transparent !important;
     }
     .activity-table-shell .dataTables_wrapper .paginate_button:hover {
-        background: #2d4264 !important;
-        border-color: transparent !important;
+        background: var(--table-hover) !important;
+        border-color: var(--border) !important;
+        color: var(--text) !important;
     }
 </style>
 @endpush
@@ -108,23 +162,23 @@
                         <span class="font-bold text-stone-800">{{ \Carbon\Carbon::parse($log->created_at)->format('d M Y') }}</span><br>
                         <span class="text-[10px] text-stone-400 font-mono">{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }}</span>
                     </td>
-                    <td class="px-4 py-4 font-bold text-[#A67B5B]">
+                    <td class="activity-account-cell px-4 py-4 font-bold">
                         {{ $log->username }}
                     </td>
                     <td class="px-4 py-4">
-                        <span class="px-3 py-1 bg-stone-100 text-stone-600 rounded-full text-[9px] font-black uppercase tracking-tighter">
+                        <span class="activity-module-badge px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter">
                             {{ str_replace('_', ' ', $log->event_type) }}
                         </span>
                     </td>
                     <td class="px-4 py-4 text-center">
                         @php
                             $action = strtolower($log->event_action);
-                            $bg = 'bg-stone-100'; $text = 'text-stone-500';
-                            if($action == 'insert' || $action == 'add' || $action == 'login') { $bg = 'bg-emerald-50'; $text = 'text-emerald-600'; }
-                            elseif($action == 'update' || $action == 'edit') { $bg = 'bg-blue-50'; $text = 'text-blue-600'; }
-                            elseif($action == 'delete' || $action == 'remove' || $action == 'logout') { $bg = 'bg-red-50'; $text = 'text-red-600'; }
+                            $actionClass = 'activity-action-neutral';
+                            if($action == 'insert' || $action == 'add' || $action == 'login') { $actionClass = 'activity-action-success'; }
+                            elseif($action == 'update' || $action == 'edit') { $actionClass = 'activity-action-info'; }
+                            elseif($action == 'delete' || $action == 'remove' || $action == 'logout') { $actionClass = 'activity-action-danger'; }
                         @endphp
-                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter {{ $bg }} {{ $text }}">
+                        <span class="activity-action-badge px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter {{ $actionClass }}">
                             {{ $log->event_action }}
                         </span>
                     </td>
@@ -169,4 +223,3 @@
     });
 </script>
 @endpush
-

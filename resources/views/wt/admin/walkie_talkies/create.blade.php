@@ -55,7 +55,7 @@
                 <h2 class="walkie-form-title">{{ $formTitle ?? 'New Unit Registration' }}</h2>
                 <p class="walkie-form-subtitle">{{ $formSubtitle ?? 'Complete the form below and save when ready.' }}</p>
             </div>
-            @if(($formMethod ?? 'POST') === 'POST')
+            @if(($showModeActions ?? false) && ($formMethod ?? 'POST') === 'POST')
             <div class="walkie-form-mode-actions">
                 @if($inventoryOnly)
                     <a href="{{ route('wt.admin.walkies.create') }}" class="walkie-mode-link">
@@ -178,64 +178,43 @@
                 <div class="form-group">
                     <label class="form-label">Location</label>
                     @php($currentLocation = strtoupper((string) old('location', $defaults['location'] ?? '')))
-                    <div class="walkie-combo-field">
-                        <input
-                            type="text"
-                            name="location"
-                            class="form-input walkie-combo-input"
-                            value="{{ $currentLocation }}"
-                            list="walkieLocationOptions"
-                            placeholder="Type or search location"
-                            autocomplete="off">
-                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
-                    </div>
-                    <datalist id="walkieLocationOptions">
+                    <select name="location" class="form-input page-combo-select" data-placeholder="Type or search location">
+                        <option value=""></option>
                         @foreach($walkieLocations as $location)
-                        <option value="{{ $location }}"></option>
+                        <option value="{{ $location }}" @selected($currentLocation === $location)>{{ $location }}</option>
                         @endforeach
-                    </datalist>
+                        @if($currentLocation !== '' && !$walkieLocations->contains($currentLocation))
+                        <option value="{{ $currentLocation }}" selected>{{ $currentLocation }}</option>
+                        @endif
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Executive</label>
                     @php($currentExecutive = strtoupper((string) old('executive', $defaults['executive'] ?? '')))
-                    <div class="walkie-combo-field">
-                        <input
-                            type="text"
-                            name="executive"
-                            class="form-input walkie-combo-input"
-                            value="{{ $currentExecutive }}"
-                            list="walkieExecutiveOptions"
-                            placeholder="Type or search executive"
-                            autocomplete="off">
-                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
-                    </div>
-                    <datalist id="walkieExecutiveOptions">
+                    <select name="executive" class="form-input page-combo-select" data-placeholder="Type or search executive">
+                        <option value=""></option>
                         @foreach($executiveOptions as $executiveName)
-                        <option value="{{ $executiveName }}"></option>
+                        <option value="{{ $executiveName }}" @selected($currentExecutive === $executiveName)>{{ $executiveName }}</option>
                         @endforeach
-                    </datalist>
+                        @if($currentExecutive !== '' && !$executiveOptions->contains($currentExecutive))
+                        <option value="{{ $currentExecutive }}" selected>{{ $currentExecutive }}</option>
+                        @endif
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Position</label>
                     @php($currentPosition = strtoupper((string) old('position', $defaults['position'] ?? '')))
-                    <div class="walkie-combo-field">
-                        <input
-                            type="text"
-                            name="position"
-                            class="form-input walkie-combo-input"
-                            value="{{ $currentPosition }}"
-                            list="walkiePositionOptions"
-                            placeholder="Type or search position"
-                            autocomplete="off">
-                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
-                    </div>
-                    <datalist id="walkiePositionOptions">
+                    <select name="position" class="form-input page-combo-select" data-placeholder="Type or search position">
+                        <option value=""></option>
                         @foreach($walkiePositions as $position)
-                        <option value="{{ $position }}"></option>
+                        <option value="{{ $position }}" @selected($currentPosition === $position)>{{ $position }}</option>
                         @endforeach
-                    </datalist>
+                        @if($currentPosition !== '' && !$walkiePositions->contains($currentPosition))
+                        <option value="{{ $currentPosition }}" selected>{{ $currentPosition }}</option>
+                        @endif
+                    </select>
                 </div>
 
                 @endunless
@@ -269,22 +248,15 @@
                 <div class="form-group">
                     <label class="form-label">Tracking REF</label>
                     @php($currentTrackingRef = strtoupper((string) old('tracking_ref', $defaults['tracking_ref'] ?? '')))
-                    <div class="walkie-combo-field">
-                        <input
-                            type="text"
-                            name="tracking_ref"
-                            class="form-input walkie-combo-input"
-                            value="{{ $currentTrackingRef }}"
-                            list="walkieTrackingRefOptions"
-                            placeholder="Type or search tracking ref"
-                            autocomplete="off">
-                        <i class="fas fa-chevron-down walkie-combo-icon"></i>
-                    </div>
-                    <datalist id="walkieTrackingRefOptions">
+                    <select name="tracking_ref" class="form-input page-combo-select" data-placeholder="Type or search tracking ref">
+                        <option value=""></option>
                         @foreach($walkieTrackingRefs as $trackingRef)
-                        <option value="{{ $trackingRef }}"></option>
+                        <option value="{{ $trackingRef }}" @selected($currentTrackingRef === $trackingRef)>{{ $trackingRef }}</option>
                         @endforeach
-                    </datalist>
+                        @if($currentTrackingRef !== '' && !$walkieTrackingRefs->contains($currentTrackingRef))
+                        <option value="{{ $currentTrackingRef }}" selected>{{ $currentTrackingRef }}</option>
+                        @endif
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -559,29 +531,6 @@
         transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
     }
 
-    .walkie-combo-field {
-        position: relative;
-    }
-
-    .walkie-combo-input {
-        padding-right: 42px;
-        text-transform: uppercase;
-    }
-
-    .walkie-combo-icon {
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #334155;
-        font-size: 11px;
-        pointer-events: none;
-    }
-
-    .dark .walkie-combo-icon {
-        color: #cbd5e1;
-    }
-
     .form-input:focus {
         border-color: #0284c7;
         background: #fff;
@@ -835,6 +784,38 @@
                 allowClear: !$select.prop('required'),
                 minimumResultsForSearch: 0,
                 placeholder: $select.data('placeholder') || 'Type or select option',
+                createTag: function(params) {
+                    const term = $.trim(params.term);
+
+                    if (term === '') {
+                        return null;
+                    }
+
+                    const normalizedTerm = term.toUpperCase();
+
+                    return {
+                        id: normalizedTerm,
+                        text: normalizedTerm,
+                        newTag: true
+                    };
+                },
+                insertTag: function(data, tag) {
+                    data.unshift(tag);
+                }
+            });
+
+            $select.on('select2:open', focusOpenSelect2Search);
+        });
+
+        $('.page-combo-select').each(function() {
+            const $select = $(this);
+
+            $select.select2({
+                width: '100%',
+                tags: true,
+                allowClear: !$select.prop('required'),
+                minimumResultsForSearch: 0,
+                placeholder: $select.data('placeholder') || 'Type or search option',
                 createTag: function(params) {
                     const term = $.trim(params.term);
 
