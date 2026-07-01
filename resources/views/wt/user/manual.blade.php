@@ -1,9 +1,126 @@
 @extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
-@section('title', 'WT User Manual')
-@section('page_title', 'WT User Manual')
+@section('title', 'WT System User Manual')
+@section('page_title', 'WT System User Manual')
 
 @section('content')
+<style>
+  .readme-manual { width:100%;max-width:1120px;margin:0 auto;border:1px solid var(--border);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);color:var(--text);overflow:hidden; }
+  .readme-manual-header { padding:28px 32px 22px;border-bottom:1px solid var(--border);background:var(--soft-surface,#f8fafc); }
+  .readme-manual-title { margin:0;color:var(--text);font-size:28px;font-weight:900;line-height:1.1;letter-spacing:0; }
+  .readme-manual-lead { margin:10px 0 0;max-width:760px;color:var(--muted);font-size:14px;font-weight:700;line-height:1.6; }
+  .readme-manual-body { padding:28px 32px 36px; }
+  .readme-manual h2 { margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--text);font-size:20px;font-weight:900;letter-spacing:0; }
+  .readme-manual h2:first-child { margin-top:0; }
+  .readme-manual h3 { margin:22px 0 10px;color:var(--text);font-size:15px;font-weight:900;letter-spacing:.04em;text-transform:uppercase; }
+  .readme-manual p,.readme-manual li { color:var(--text);font-size:13px;font-weight:700;line-height:1.65; }
+  .readme-manual ol,.readme-manual ul { margin:0 0 14px 20px;padding:0; }
+  .readme-manual li + li { margin-top:5px; }
+  .readme-manual code { border:1px solid var(--border);border-radius:6px;background:var(--body-bg);padding:2px 6px;color:var(--text);font-size:12px;font-weight:900; }
+  .readme-manual table { width:100%;margin:12px 0 18px;border-collapse:collapse;overflow:hidden;border:1px solid var(--border);border-radius:10px; }
+  .readme-manual th,.readme-manual td { padding:12px 14px;border:1px solid var(--border);color:var(--text);font-size:12px;line-height:1.5;text-align:left;vertical-align:top; }
+  .readme-manual th { background:var(--soft-surface,#f8fafc);color:var(--muted);font-weight:900;letter-spacing:.08em;text-transform:uppercase; }
+  .readme-toc { display:flex;flex-wrap:wrap;gap:8px;margin-top:18px; }
+  .readme-toc a { display:inline-flex;min-height:34px;align-items:center;border:1px solid var(--border);border-radius:999px;background:var(--surface);padding:0 12px;color:var(--text);font-size:11px;font-weight:900;letter-spacing:.06em;text-decoration:none;text-transform:uppercase; }
+  .readme-toc a:hover { border-color:var(--accent);color:var(--accent); }
+  .readme-callout { margin:18px 0;border-left:4px solid #0284c7;border-radius:10px;background:rgba(2,132,199,.08);padding:14px 16px; }
+  @media (max-width:768px) {
+    .readme-manual-header,.readme-manual-body { padding:20px; }
+    .readme-manual-title { font-size:22px; }
+    .readme-manual table { display:block;overflow-x:auto;white-space:nowrap; }
+  }
+</style>
+
+<article class="readme-manual">
+  <header class="readme-manual-header">
+    <h1 class="readme-manual-title">WT System User Manual</h1>
+    <p class="readme-manual-lead">This page works like a README inside the system. It explains how each user role should use the Walkie Talkie Management system, from login to requests, approvals, inventory, returns, faulty reports, and profile updates.</p>
+    <nav class="readme-toc" aria-label="Manual sections">
+      <a href="#login-and-navigation">Login</a>
+      <a href="#user-roles">Roles</a>
+      <a href="#ict-user-manual">ICT</a>
+      <a href="#executive-admin-user-manual">Executive/Admin</a>
+      <a href="#user-manual">User</a>
+      <a href="#common-tips">Tips</a>
+      <a href="#suggested-training-flow">Training Flow</a>
+    </nav>
+  </header>
+
+  <div class="readme-manual-body">
+    <h2 id="login-and-navigation">Login And Navigation</h2>
+    <ol>
+      <li>Open the WT System login page at <code>/wt</code>.</li>
+      <li>Enter your username and password.</li>
+      <li>Use the left sidebar to open modules.</li>
+      <li>Use the top-right role switcher if your ICT account can switch between ICT and Executive view.</li>
+      <li>Use <code>My Profile</code> to update your name, phone number, department, and position.</li>
+      <li>Use <code>Sign Out</code> when finished.</li>
+    </ol>
+
+    <h2 id="user-roles">User Roles</h2>
+    <table>
+      <thead><tr><th>Role</th><th>Main Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>ICT</td><td>Manage inventory, approvals, maintenance, users, master data, and audit records.</td></tr>
+        <tr><td>Executive/Admin</td><td>Submit requests, review requests, forward approved items to ICT, and monitor status.</td></tr>
+        <tr><td>User</td><td>Submit requests, returns, handovers, and faulty reports for personal WT usage.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="ict-user-manual">ICT User Manual</h2>
+    <h3>1. Dashboard</h3>
+    <ol><li>Login as an ICT account.</li><li>Open <code>Dashboard</code>.</li><li>Review the summary cards for requests, inventory, faulty reports, and system activity.</li><li>Use sidebar shortcuts to continue to the required module.</li></ol>
+    <h3>2. Manage Inventory</h3>
+    <ol><li>Open <code>Inventory Tools</code>.</li><li>Select <code>Inventory List</code>.</li><li>Search or filter the walkie talkie records.</li><li>Use row actions to view, edit, update status, or open a unit timeline.</li><li>To add units, use the create/import options available in the inventory page.</li><li>Use <code>Duplicated ID</code> to handle duplicate radio ID records.</li><li>Use <code>Special Use</code> for units assigned to special cases.</li></ol>
+    <h3>3. Handle Approvals</h3>
+    <ol><li>Open <code>Approvals</code>.</li><li>Select <code>Pending</code>.</li><li>Review each request, return, or faulty report.</li><li>Click <code>View Form</code> where available to inspect full details.</li><li>Approve, reject, confirm return, or forward based on the action shown.</li><li>Open <code>History</code> to review past decisions.</li></ol>
+    <h3>4. Manage Faulty Reports</h3>
+    <ol><li>Open <code>Faulty Reports</code>.</li><li>Select <code>User Reports</code>.</li><li>Review submitted faulty or damage reports.</li><li>Receive faulty WT units when they arrive at ICT.</li><li>Update repair status and remarks.</li><li>Return the original unit or assign temporary spare handling where applicable.</li><li>Select <code>Monthly Report</code> to review faulty trends for the last three months.</li></ol>
+    <h3>5. Manage Users</h3>
+    <ol><li>Open <code>System Control</code>.</li><li>Select <code>Users Control</code>.</li><li>Use <code>Add Account</code> to create or grant an Executive account.</li><li>Search staff by name or staff number to auto-fill details.</li><li>Use <code>More</code> on a user row to <code>View</code>, <code>Edit</code>, <code>Reset Password</code>, or <code>Delete</code>.</li><li>Review pending forgot-password requests and approve or reject them.</li></ol>
+    <h3>6. Manage Master Data</h3>
+    <ol><li>Open <code>Master Data</code>.</li><li>Add or edit dropdown options used across request forms.</li><li>Keep department, position, location, bay, and similar option lists clean.</li><li>Delete only unused or incorrect records.</li></ol>
+    <h3>7. Review Logs And Backup</h3>
+    <ol><li>Open <code>System Logs</code> to review WT system activity.</li><li>Use activity filters/search to inspect user actions.</li><li>Use database backup only when an authorized backup is required.</li></ol>
+
+    <h2 id="executive-admin-user-manual">Executive/Admin User Manual</h2>
+    <h3>1. Dashboard</h3>
+    <ol><li>Login as an Executive/Admin account.</li><li>Open <code>Dashboard</code>.</li><li>Review pending approval counts, request status, and quick action areas.</li></ol>
+    <h3>2. Submit A Walkie Talkie Request</h3>
+    <ol><li>Open <code>Request Walkie Talkie</code>.</li><li>Choose <code>Long Term Request</code> or <code>Temporary Request</code>.</li><li>Fill in ownership or recipient details.</li><li>Enter quantity, purpose, date, location, and pickup details.</li><li>Complete the signature area if required.</li><li>Submit the form to send it for approval.</li></ol>
+    <h3>3. Review And Forward Requests</h3>
+    <ol><li>Open <code>Approvals</code>.</li><li>Select <code>Pending</code>.</li><li>Click a request row or <code>View Form</code> to inspect the submitted details.</li><li>Approve and forward valid requests to ICT.</li><li>Reject requests that are incomplete or incorrect, adding remarks when prompted.</li></ol>
+    <h3>4. Return A Unit</h3>
+    <ol><li>Open <code>Return Unit</code>.</li><li>Search for the assigned unit or request.</li><li>Fill in return person and return details.</li><li>Submit the return.</li><li>Monitor return progress in status pages.</li></ol>
+    <h3>5. Report A Faulty Unit</h3>
+    <ol><li>Open <code>Report Faulty</code>.</li><li>Select the affected walkie talkie unit.</li><li>Fill in reporter details, issue description, and evidence if required.</li><li>Submit the faulty report.</li><li>Monitor the report status from the relevant status page.</li></ol>
+    <h3>6. Check My Inventory And Status</h3>
+    <ol><li>Open <code>My Inventory</code> to view assigned WT units.</li><li>Use available action buttons to return or report faulty units.</li><li>Open <code>All Status</code> or <code>Request Status</code> to track requests, returns, and faulty reports.</li></ol>
+
+    <h2 id="user-manual">User Manual</h2>
+    <h3>1. Dashboard</h3>
+    <ol><li>Login as a User account.</li><li>Open <code>Dashboard</code>.</li><li>Use the dashboard cards or sidebar to create requests, return units, report faulty units, or check status.</li></ol>
+    <h3>2. Submit A WT Request</h3>
+    <ol><li>Open <code>Create Request</code>.</li><li>Choose the approver if requested.</li><li>Fill in your name, staff ID, department, position, ownership type, bay if applicable, location, purpose, and justification.</li><li>Sign the request if the form asks for a signature.</li><li>Submit the request.</li><li>Open <code>Request Status</code> to track approval progress.</li></ol>
+    <h3>3. Submit A Handover</h3>
+    <ol><li>Open <code>Handover</code>.</li><li>Select or enter the WT unit details.</li><li>Fill in the handover recipient and required notes.</li><li>Submit the handover form.</li></ol>
+    <h3>4. Return A Unit</h3>
+    <ol><li>Open <code>Return Unit</code>.</li><li>Search for your assigned unit.</li><li>Confirm the return information.</li><li>Submit the return request.</li><li>Track the status until ICT confirms the return.</li></ol>
+    <h3>5. Report Faulty</h3>
+    <ol><li>Open <code>Report Faulty</code>.</li><li>Select the faulty WT unit.</li><li>Describe the issue clearly.</li><li>Add evidence if requested.</li><li>Submit the report.</li><li>Check <code>Pending</code>, <code>Drafts</code>, or <code>Completed</code> faulty-report buckets to track progress.</li></ol>
+    <h3>6. Update Profile</h3>
+    <ol><li>Open <code>My Profile</code>.</li><li>Update full name, phone number, department, or position.</li><li>Click <code>Save Changes</code>.</li><li>Keep profile information current because request forms may use it.</li></ol>
+
+    <h2 id="common-tips">Common Tips</h2>
+    <ol><li>Use search boxes in tables to find records quickly.</li><li>Use the <code>More</code> action button when a table row has several actions.</li><li>If a form cannot submit, check required fields and validation messages.</li><li>If a dropdown option is missing, ICT can add it from <code>Master Data</code>.</li><li>For approval issues, check <code>History</code>, <code>All Status</code>, or <code>System Logs</code>.</li><li>For account access issues, contact ICT or submit forgot-password where available.</li></ol>
+    <div class="readme-callout"><p>Important: users should keep profile details updated because request forms and approval records may reuse name, department, position, and phone information.</p></div>
+
+    <h2 id="suggested-training-flow">Suggested Training Flow</h2>
+    <ol><li>Start with login and profile update.</li><li>Demonstrate one long-term request.</li><li>Demonstrate one temporary request.</li><li>Demonstrate approval and forwarding to ICT.</li><li>Demonstrate inventory assignment or status update.</li><li>Demonstrate return and faulty report handling.</li><li>End with status tracking and logs.</li></ol>
+  </div>
+</article>
+
+@if(false)
 
 @php
   $manualRole = auth('wt')->user()?->wt_role;
@@ -357,4 +474,5 @@
   </section>
 </div>
 
+@endif
 @endsection

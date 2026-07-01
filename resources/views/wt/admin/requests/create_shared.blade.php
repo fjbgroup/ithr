@@ -1571,7 +1571,7 @@
         <p class="request-section-help">
             {{ $isTemporaryRequest
                 ? 'Temporary request is for short-term usage. Fill the usage period, purpose, and quantity before adding ownership profiles.'
-                : 'Long-term request is for regular or permanent usage. Fill the start date, purpose, and executive signature before adding ownership profiles.' }}
+                : 'Long-term request is for regular or permanent usage. Fill the start date and purpose before adding ownership profiles.' }}
         </p>
         <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : 'longterm-request-details-grid' }}">
             @if($isTemporaryRequest)
@@ -1615,20 +1615,6 @@
                 <div class="executive-remark-group w-full md:w-72 min-w-0">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark / Purpose</label>
                     <textarea name="justifications" rows="1" placeholder="Long-term usage, department coordination, or shared daily usage" class="executive-row-control executive-row-textarea w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 py-2 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>{{ old('justifications') }}</textarea>
-                </div>
-                <div class="executive-signature-group w-full md:w-80 min-w-0">
-                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
-                    <div class="executive-signature-pad" data-executive-signature-pad>
-                        <canvas></canvas>
-                        <div class="executive-signature-actions">
-                            <span class="executive-signature-hint">Sign inside the box</span>
-                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="request_signature" data-executive-signature-input>
-                    @error('request_signature')
-                        <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
-                    @enderror
                 </div>
                 <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                 <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
@@ -1690,6 +1676,27 @@
                     @endforeach
                 </datalist>
                 @error('pic_details')
+                    <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        @endunless
+
+        @unless($isTemporaryRequest)
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">4. Executive Signature</h4>
+        <p class="request-section-help">Sign here after checking all request and ownership details. The request will go to ICT for review.</p>
+        <div class="temporary-signature-row flex flex-col md:flex-row md:flex-nowrap md:items-start">
+            <div class="temporary-signature-wrap">
+                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
+                <div class="executive-signature-pad" data-executive-signature-pad>
+                    <canvas></canvas>
+                    <div class="executive-signature-actions">
+                        <span class="executive-signature-hint">Sign inside the box</span>
+                        <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                    </div>
+                </div>
+                <input type="hidden" name="request_signature" data-executive-signature-input>
+                @error('request_signature')
                     <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
                 @enderror
             </div>

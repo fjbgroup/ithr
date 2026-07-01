@@ -19,7 +19,6 @@
     .profile-field { min-width:0; }
     .profile-field-sm { grid-column:span 2; }
     .profile-field-md { grid-column:span 3; }
-    .profile-field-lg { grid-column:span 6; }
     .profile-label-clean { margin-bottom:7px;display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
     .profile-input-clean { width:100%;min-height:42px;border-radius:10px;border:1px solid var(--border);background:var(--form-input-bg);padding:9px 12px;color:var(--text);font-size:12px;font-weight:800;outline:none;transition:border-color .16s ease,box-shadow .16s ease; }
     .profile-input-clean:focus { border-color:var(--accent) !important;box-shadow:0 0 0 3px rgba(2,132,199,.12) !important; }
@@ -46,8 +45,7 @@
         .profile-summary-name { font-size:13px; }
         .profile-details-grid { grid-template-columns:1fr; }
         .profile-field-sm,
-        .profile-field-md,
-        .profile-field-lg { grid-column:span 1; }
+        .profile-field-md { grid-column:span 1; }
         .profile-pill { width:100%;justify-content:flex-start; }
         .profile-save-clean { width:100%; }
     }
@@ -103,11 +101,11 @@
                     <label class="profile-label-clean">Phone No</label>
                     <input type="text" name="phone_no" value="{{ old('phone_no', Auth::guard('wt')->user()->phone_no) }}" placeholder="Enter phone number" class="profile-input-clean">
                 </div>
-                <div class="profile-field profile-field-lg">
+                <div class="profile-field profile-field-sm">
                     <label class="profile-label-clean">Full Name</label>
                     <input type="text" name="full_name" value="{{ strtoupper((string) old('full_name', Auth::guard('wt')->user()->full_name)) }}" placeholder="Enter your full name" class="uppercase-input profile-input-clean" required>
                 </div>
-                <div class="profile-field profile-field-md">
+                <div class="profile-field profile-field-sm">
                     <label class="profile-label-clean">Department</label>
                     <select name="department" class="profile-select w-full" data-placeholder="Type or select department" required>
                         <option value=""></option>
@@ -119,7 +117,7 @@
                         @endif
                     </select>
                 </div>
-                <div class="profile-field profile-field-md">
+                <div class="profile-field profile-field-sm">
                     <label class="profile-label-clean">Position</label>
                     <select name="position" class="profile-select w-full" data-placeholder="Type or select position" required>
                         <option value=""></option>
