@@ -377,7 +377,11 @@
         width: 100%;
         background: rgba(2, 132, 199, 0.06);
         border-radius: 8px;
-        padding: 10px 16px 10px 44px;
+        box-sizing: border-box !important;
+        padding: 10px 16px 10px 12px !important;
+    }
+    .owner-profile-group-title p {
+        padding-left: 0 !important;
     }
     .owner-profile-group-title p:first-child {
         color: #0284c7 !important;
@@ -422,13 +426,16 @@
     }
     .corporate-combobox {
         position: relative;
-        width: min(100%, var(--form-lg-w, 520px)) !important;
-        max-width: min(100%, var(--form-lg-w, 520px)) !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .corporate-combobox select {
         display: none !important;
     }
     .corporate-combobox-input {
+        box-sizing: border-box !important;
+        display: block !important;
         width: 100% !important;
         max-width: 100% !important;
         min-height: 28px !important;
@@ -436,7 +443,7 @@
         border-radius: 7px !important;
         border: 1px solid rgba(139, 94, 60, 0.3) !important;
         background: #ffffff !important;
-        padding: 5px 24px 5px 8px !important;
+        padding: 5px 30px 5px 8px !important;
         color: #1e293b !important;
         font-size: 9.5px !important;
         font-weight: 800 !important;
@@ -454,11 +461,12 @@
     }
     .corporate-combobox-toggle {
         position: absolute;
-        right: 8px;
+        right: 10px;
         top: 50%;
         transform: translateY(-50%);
         color: #64748b;
         font-size: 9px;
+        line-height: 1;
         pointer-events: none;
     }
     .owner-details-grid .corporate-combobox {
@@ -467,11 +475,21 @@
     }
     .owner-details-grid .select2-container--default .select2-selection--single {
         position: relative;
-        padding-right: 24px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        padding-right: 28px !important;
     }
     .owner-details-grid .select2-container--default .select2-selection--single .select2-selection__arrow {
-        right: 5px !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 8px !important;
+        bottom: 0 !important;
+        height: 100% !important;
         width: 16px !important;
+    }
+    .owner-details-grid .select2-container--default .select2-selection--single .select2-selection__rendered {
+        max-width: 100% !important;
+        padding-right: 24px !important;
     }
     .corporate-combobox-menu {
         position: absolute;
@@ -1370,29 +1388,30 @@
         grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
     }
     .longterm-modern.match-report-faulty .longterm-meta-group {
-        display: flex !important;
-        flex-direction: row !important;
+        display: grid !important;
+        grid-template-columns: minmax(230px, 0.8fr) minmax(300px, 1fr) minmax(360px, 1.25fr) !important;
         align-items: flex-start !important;
-        justify-content: flex-start !important;
-        flex-wrap: nowrap !important;
-        gap: 16px !important;
-        width: auto !important;
+        column-gap: 80px !important;
+        row-gap: 10px !important;
+        width: 100% !important;
         max-width: 100% !important;
     }
     .longterm-modern.match-report-faulty .longterm-meta-group .executive-date-group {
-        flex: 0 0 230px !important;
-        width: 230px !important;
-        max-width: 230px !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .longterm-modern.match-report-faulty .longterm-meta-group .executive-remark-group {
-        flex: 0 0 300px !important;
-        width: 300px !important;
-        max-width: 300px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-meta-group .executive-remark-group textarea,
+    .longterm-modern.match-report-faulty .longterm-meta-group .executive-signature-group .executive-signature-pad {
+        width: 100% !important;
+        max-width: 100% !important;
     }
     .longterm-modern.match-report-faulty .longterm-meta-group .executive-signature-group {
-        flex: 0 0 360px !important;
-        width: 360px !important;
-        max-width: 360px !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     @media (max-width: 1180px) {
         .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
