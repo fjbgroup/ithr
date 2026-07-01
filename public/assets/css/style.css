@@ -2168,3 +2168,32 @@ html.dark .audit-card          { background: var(--surface); }
 html.dark .chatbot-panel { background: var(--surface); border-color: var(--border); }
 html.dark .chatbot-msg-bot { background: var(--bg); }
 html.dark .chatbot-input  { background: var(--surface); border-color: var(--border); color: var(--text); }
+
+/* ── Role Matrix Modal ── */
+.role-matrix-container { max-width: 1000px; margin: 0 auto; }
+.role-matrix-header { margin-bottom: 1.5rem; }
+.role-matrix-header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+.role-matrix-header p { font-size: 0.85rem; color: var(--muted); }
+.role-matrix-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.role-matrix-table { width: 100%; border-collapse: collapse; }
+.role-matrix-table th, .role-matrix-table td { padding: 1rem 1.25rem; text-align: center; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.role-matrix-table th:first-child, .role-matrix-table td:first-child { text-align: left; }
+.role-matrix-table th { background: var(--table-head-bg); color: var(--table-head-color); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; white-space: nowrap; }
+.role-matrix-table td.feature-name { font-weight: 600; color: var(--text); }
+.role-matrix-table td.feature-desc { display: block; font-weight: 400; font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+.role-matrix-table tr:last-child td { border-bottom: none; }
+.role-matrix-table tr:hover td { background: var(--table-row-alt); }
+.icon-check { color: #10b981; display: inline-flex; align-items: center; justify-content: center; }
+.icon-cross { color: #ef4444; display: inline-flex; align-items: center; justify-content: center; }
+.icon-partial { color: #f59e0b; display: inline-flex; align-items: center; justify-content: center; }
+.role-badge-custom { display: inline-flex; align-items: center; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 700; background: #eff6ff; color: #3b82f6; margin-bottom: 0.5rem; }
+.role-admin-it { background: #eff6ff; color: #3b82f6; }
+.role-admin-hr { background: #fef2f2; color: #ef4444; }
+.role-exec { background: #fffbeb; color: #f59e0b; }
+.role-staff { background: #f0fdf4; color: #22c55e; }
+html.dark .role-admin-it { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+html.dark .role-admin-hr { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+html.dark .role-exec { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+html.dark .role-staff { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
+.partial-tooltip { position: relative; cursor: help; border-bottom: 1px dotted #f59e0b; }

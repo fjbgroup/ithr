@@ -281,9 +281,9 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
         </a>
         @endif
         <div class="nav-divider" style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
-        <a href="{{ route('role-metric') }}" class="nav-item {{ request()->is('role-metric*') ? 'active' : '' }}">
+        <a href="javascript:void(0)" onclick="openModal('roleMatrixModal')" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-            Role Metric
+            Role Matrix
         </a>
         <a href="{{ route('it.dashboard') }}" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
@@ -716,6 +716,9 @@ function liveSearch(form, resultId, delay) {
     form.querySelectorAll('select').forEach(function(s) { s.addEventListener('change', function() { clearTimeout(t); run(); }); });
 }
 </script>
+
+@include('partials.role-matrix-modal')
+
 @yield('scripts')
 <script>
 (function() {
