@@ -388,20 +388,24 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         <form id="executiveSwitcherForm" action="{{ route('wt.switch_executive_account') }}" method="POST" style="display:flex;align-items:center">
           @csrf
           <input type="hidden" name="executive_user_id" id="executiveSwitcherUserId">
-          <input type="text"
-            id="executiveSwitcherSearch"
-            list="executiveSwitcherOptions"
-            placeholder="Executive Account"
-            autocomplete="off"
-            style="border:none;background:transparent;color:var(--muted);font-size:10px;font-weight:700;outline:none;padding:4px 8px;cursor:text;font-family:'Inter',sans-serif;text-transform:uppercase;max-width:180px">
-          <datalist id="executiveSwitcherOptions">
-            @foreach($executiveSwitcherAccounts as $executiveAccount)
-              @php($executiveSwitcherName = strtoupper(trim((string) $executiveAccount->full_name)))
-              @if($executiveSwitcherName !== '')
-                <option value="{{ $executiveSwitcherName }}" data-user-id="{{ $executiveAccount->user_id ?? $executiveAccount->id }}"></option>
-              @endif
-            @endforeach
-          </datalist>
+          <div class="executive-account-menu" id="executiveAccountMenu">
+            <button type="button" class="executive-account-toggle" id="executiveAccountToggle" aria-expanded="false">
+              Executive Account
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="executive-account-list hidden" id="executiveAccountList">
+              @forelse($executiveSwitcherAccounts as $executiveAccount)
+                @php($executiveSwitcherName = strtoupper(trim((string) ($executiveAccount->name ?: $executiveAccount->username ?: ''))))
+                @if($executiveSwitcherName !== '')
+                  <button type="button" class="executive-account-option" data-executive-user-id="{{ $executiveAccount->id }}">
+                    {{ $executiveSwitcherName }}
+                  </button>
+                @endif
+              @empty
+                <span class="executive-account-empty">No executive accounts</span>
+              @endforelse
+            </div>
+          </div>
         </form>
       </div>
       @endif
@@ -1627,22 +1631,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Executive account switcher search
-  var executiveSwitcherInput = document.getElementById('executiveSwitcherSearch');
+  // Executive account switcher fixed menu
+  var executiveAccountMenu = document.getElementById('executiveAccountMenu');
+  var executiveAccountToggle = document.getElementById('executiveAccountToggle');
+  var executiveAccountList = document.getElementById('executiveAccountList');
   var executiveSwitcherHidden = document.getElementById('executiveSwitcherUserId');
-  var executiveSwitcherOptions = document.getElementById('executiveSwitcherOptions');
   var executiveSwitcherForm = document.getElementById('executiveSwitcherForm');
-  if (executiveSwitcherInput && executiveSwitcherHidden && executiveSwitcherOptions && executiveSwitcherForm) {
-    executiveSwitcherInput.addEventListener('input', function() {
-      var selectedName = String(this.value || '').trim().toUpperCase();
-      var matchedOption = Array.from(executiveSwitcherOptions.options).find(function(option) {
-        return String(option.value || '').trim().toUpperCase() === selectedName;
+  if (executiveAccountMenu && executiveAccountToggle && executiveAccountList && executiveSwitcherHidden && executiveSwitcherForm) {
+    executiveAccountToggle.addEventListener('click', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var willOpen = executiveAccountList.classList.contains('hidden');
+      executiveAccountList.classList.toggle('hidden', !willOpen);
+      executiveAccountToggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    executiveAccountList.querySelectorAll('[data-executive-user-id]').forEach(function(button) {
+      button.addEventListener('click', function() {
+        executiveSwitcherHidden.value = this.dataset.executiveUserId || '';
+        if (executiveSwitcherHidden.value) {
+          executiveSwitcherForm.submit();
+        }
       });
+    });
 
-      executiveSwitcherHidden.value = matchedOption ? (matchedOption.dataset.userId || '') : '';
-
-      if (executiveSwitcherHidden.value) {
-        executiveSwitcherForm.submit();
+    document.addEventListener('click', function(event) {
+      if (!executiveAccountMenu.contains(event.target)) {
+        executiveAccountList.classList.add('hidden');
+        executiveAccountToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }

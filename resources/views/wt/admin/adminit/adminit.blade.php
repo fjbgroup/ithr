@@ -914,10 +914,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Position</label>
-                    <select name="position" id="edit_position" class="navy-input w-full px-4 py-3 rounded-xl border">
-                        <option value="">Select position</option>
-                        <option value="EXECUTIVE">EXECUTIVE</option>
-                    </select>
+                    <input type="text" name="position" id="edit_position" list="position-options" class="navy-input w-full px-4 py-3 rounded-xl border" placeholder="Type or select position">
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Role</label>

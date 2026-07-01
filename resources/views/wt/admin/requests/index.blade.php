@@ -4603,7 +4603,7 @@
 
                 <div>
                     <label class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-300">Model <span class="text-red-300">*</span></label>
-                    <select name="model" id="quick_model" class="quick-wt-input quick-wt-smart-select" data-placeholder="Select model" required>
+                    <select name="model" id="quick_model" class="quick-wt-input quick-wt-tag-select" data-placeholder="Type or select model" required>
                         <option value=""></option>
                         @foreach($walkieModels as $model)
                             <option value="{{ $model }}">{{ $model }}</option>
