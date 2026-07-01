@@ -227,8 +227,16 @@
                             {{-- Company badge --}}
                             <td>
                                 @php
-                                    $co = $companies->firstWhere('name', $s->company) ?? $companies->firstWhere('code', $s->company);
-                                    $coCode = $co ? $co->code : $s->company;
+                                    $rawCo = trim($s->company);
+                                    $cleanCo = strtolower(str_replace('..', '', $rawCo));
+                                    $co = $companies->first(function($c) use ($cleanCo, $rawCo) {
+                                        if (strcasecmp($c->code, $rawCo) === 0) return true;
+                                        if (strcasecmp($c->name, $rawCo) === 0) return true;
+                                        if ($cleanCo && str_contains(strtolower($c->name), trim($cleanCo))) return true;
+                                        if (str_contains(strtolower($c->name), strtolower($rawCo))) return true;
+                                        return false;
+                                    });
+                                    $coCode = $co ? $co->code : $rawCo;
                                 @endphp
                                 <span class="company-badge company-{{ strtolower($coCode) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $coCode }}</span>
                             </td>
