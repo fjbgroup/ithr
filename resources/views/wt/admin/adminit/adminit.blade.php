@@ -65,28 +65,36 @@
     .adminit-staff-table .dataTables_wrapper {
         width: 100% !important;
     }
+    .adminit-reset-table,
     .adminit-staff-table {
         width: min(100%, 1380px);
         margin-left: auto;
         margin-right: auto;
     }
+    body .content-surface .ict-users-control .adminit-reset-table > .adminit-section-header,
     body .content-surface .ict-users-control .adminit-staff-table > .adminit-section-header {
         padding: 22px 34px !important;
         border-bottom: 1px solid var(--border) !important;
     }
+    .adminit-reset-table .overflow-x-auto,
     .adminit-staff-table .overflow-x-auto {
         padding: 22px 34px 28px;
+        background: var(--surface) !important;
     }
+    .adminit-reset-table .dataTables_wrapper,
     .adminit-staff-table .dataTables_wrapper {
         padding: 0;
     }
     @media (max-width: 768px) {
+        .adminit-reset-table,
         .adminit-staff-table {
             width: 100%;
         }
+        .adminit-reset-table .overflow-x-auto,
         .adminit-staff-table .overflow-x-auto {
             padding: 16px 18px 22px;
         }
+        body .content-surface .ict-users-control .adminit-reset-table > .adminit-section-header,
         body .content-surface .ict-users-control .adminit-staff-table > .adminit-section-header {
             padding: 18px 20px !important;
         }
@@ -323,6 +331,8 @@
         transform: translateY(-1px);
     }
     .account-modal-card {
+        display: flex;
+        flex-direction: column;
         width: min(560px, calc(100vw - 32px));
         max-height: calc(100vh - 112px);
         overflow: hidden;
@@ -330,6 +340,12 @@
         border: 1px solid var(--border);
         background: var(--surface);
         box-shadow: var(--shadow-lg);
+    }
+    .account-modal-card > form {
+        display: flex;
+        min-height: 0;
+        flex: 1;
+        flex-direction: column;
     }
     #createExecutiveModal {
         top: 56px;
@@ -400,8 +416,11 @@
         color: #ffffff;
     }
     .account-modal-body {
-        max-height: calc(100vh - 178px);
+        flex: 1;
+        min-height: 0;
+        max-height: none;
         overflow-y: auto;
+        overscroll-behavior: contain;
         padding: 16px;
     }
     .account-field label {
@@ -434,6 +453,7 @@
     }
     .account-modal-footer {
         display: flex;
+        flex-shrink: 0;
         justify-content: flex-end;
         gap: 8px;
         padding: 12px 16px;
@@ -681,12 +701,32 @@
                                 <div class="relative flex justify-center">
                                     <button
                                         type="button"
-                                        class="navy-icon-btn w-8 h-8 rounded-full transition text-xs"
+                                        class="navy-icon-btn min-w-[74px] h-8 px-3 rounded-full transition text-xs inline-flex items-center justify-center gap-2"
+                                        title="More actions"
+                                        aria-label="More actions for {{ $account->full_name ?: $account->username }}"
                                         onclick="toggleActionMenu(event, 'action-menu-{{ $account->user_id }}')">
+                                        <span class="font-black text-[10px] uppercase tracking-[0.08em]">More</span>
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
 
                                     <div id="action-menu-{{ $account->user_id }}" class="adminit-action-menu hidden w-52 rounded-2xl border border-stone-200 bg-white shadow-2xl overflow-hidden">
+                                        <button
+                                            type="button"
+                                            class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
+                                            data-staff-id="{{ $account->staff_id ?: '-' }}"
+                                            data-username="{{ $account->username ?: '-' }}"
+                                            data-full-name="{{ $account->full_name ?: $account->username }}"
+                                            data-department="{{ $account->department ?: '-' }}"
+                                            data-position="{{ $account->position ?: '-' }}"
+                                            data-role="{{ $roleLabel }}"
+                                            data-requests="{{ $account->request_count ?? 0 }}"
+                                            data-handovers="{{ $account->handover_count ?? 0 }}"
+                                            data-created="{{ $account->created_at ? \Carbon\Carbon::parse($account->created_at)->format('d M Y H:i') : '-' }}"
+                                            data-last-activity="{{ $account->last_activity_at ? \Carbon\Carbon::parse($account->last_activity_at)->format('d M Y H:i') : 'No activity' }}"
+                                            onclick="openViewUserModalFromButton(this); closeAllActionMenus();">
+                                            <i class="fas fa-eye w-4"></i>
+                                            <span>View</span>
+                                        </button>
                                         <button
                                             type="button"
                                             class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
@@ -719,7 +759,7 @@
             </div>
         </div>
 
-    <div class="adminit-reset-table bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+    <div class="adminit-reset-table bg-white rounded-3xl border border-stone-200 shadow-sm overflow-hidden">
         <div class="adminit-section-header flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 border-b border-stone-200 bg-stone-50/70">
             <div>
                 <h3 class="adminit-section-heading">Pending Forgot Password Requests</h3>
@@ -881,6 +921,64 @@
 </div>
 
 
+<div id="viewUserModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-[28px] border border-stone-200 shadow-2xl overflow-hidden">
+        <div class="px-6 py-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-black text-[#142b47]">View Account</h3>
+                <p class="text-xs text-stone-400 mt-1">Account details for <span id="view_full_name_heading" class="font-bold text-[#0284c7]"></span>.</p>
+            </div>
+            <button type="button" onclick="closeViewUserModal()" class="text-stone-400 hover:text-slate-700">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">ID No.</span>
+                    <span id="view_staff_id" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Username</span>
+                    <span id="view_username" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3 md:col-span-2">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Name</span>
+                    <span id="view_full_name" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Department</span>
+                    <span id="view_department" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Position</span>
+                    <span id="view_position" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Role</span>
+                    <span id="view_role" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Requests / Handovers</span>
+                    <span id="view_usage" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Created</span>
+                    <span id="view_created" class="block text-sm font-black text-slate-700"></span>
+                </div>
+                <div class="navy-input rounded-xl border px-4 py-3">
+                    <span class="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Last Activity</span>
+                    <span id="view_last_activity" class="block text-sm font-black text-slate-700"></span>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 pt-5">
+                <button type="button" onclick="closeViewUserModal()" class="navy-btn navy-btn-soft">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="editUserModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="w-full max-w-xl bg-white rounded-[28px] border border-stone-200 shadow-2xl overflow-hidden">
         <div class="px-6 py-5 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
@@ -1025,6 +1123,30 @@
             menu.style.left = `${left}px`;
             menu.style.top = `${top}px`;
         }
+    }
+
+    function setViewUserText(id, value) {
+        const target = document.getElementById(id);
+        if (target) target.textContent = value || '-';
+    }
+
+    function openViewUserModalFromButton(button) {
+        const data = button.dataset;
+        setViewUserText('view_full_name_heading', data.fullName);
+        setViewUserText('view_staff_id', data.staffId);
+        setViewUserText('view_username', data.username);
+        setViewUserText('view_full_name', data.fullName);
+        setViewUserText('view_department', data.department);
+        setViewUserText('view_position', data.position);
+        setViewUserText('view_role', data.role);
+        setViewUserText('view_usage', `${data.requests || 0} requests / ${data.handovers || 0} handovers`);
+        setViewUserText('view_created', data.created);
+        setViewUserText('view_last_activity', data.lastActivity);
+        document.getElementById('viewUserModal').classList.remove('hidden');
+    }
+
+    function closeViewUserModal() {
+        document.getElementById('viewUserModal').classList.add('hidden');
     }
 
     function openEditUserModal(userId, staffId, username, fullName, department, position, role) {

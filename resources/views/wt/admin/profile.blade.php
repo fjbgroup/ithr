@@ -6,10 +6,12 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .profile-page-shell { width:100%;max-width:1280px;margin:0 auto; }
-    .profile-summary { border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:28px 20px 18px;box-shadow:0 14px 36px rgba(15,23,42,.08); }
+    .profile-summary { border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:18px 20px;box-shadow:0 14px 36px rgba(15,23,42,.08); }
+    .profile-summary-inline { display:flex;align-items:center;justify-content:flex-start;gap:14px;flex-wrap:wrap;text-align:left; }
     .profile-summary-name { color:var(--text);font-size:15px;font-weight:900;text-transform:uppercase;line-height:1.2; }
     .profile-summary-role { margin-top:5px;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.16em;text-transform:uppercase; }
-    .profile-summary-identity { display:flex;flex-direction:column;justify-content:center;align-self:stretch; }
+    .profile-summary-identity { display:flex;min-width:220px;flex-direction:column;justify-content:center;align-self:center;text-align:left; }
+    .profile-pill-row { display:flex;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:wrap;min-width:0; }
     .profile-pill { display:inline-flex;min-height:32px;align-items:center;gap:7px;border-radius:999px;border:1px solid var(--border);background:var(--body-bg);padding:7px 12px;color:var(--text);font-size:10px;font-weight:900;text-transform:uppercase; }
     .profile-form-card { margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:20px;box-shadow:0 14px 36px rgba(15,23,42,.08); }
     .profile-form-title { margin-bottom:16px;color:var(--text);font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase; }
@@ -34,6 +36,8 @@
     @media (max-width: 768px) {
         .profile-summary,
         .profile-form-card { padding:16px; }
+        .profile-summary-inline { align-items:flex-start;gap:10px; }
+        .profile-summary-identity { min-width:100%; }
         .profile-summary-name { font-size:13px; }
         .profile-pill { width:100%;justify-content:flex-start; }
         .profile-save-clean { width:100%; }
@@ -60,14 +64,12 @@
     @endif
 
     <div class="profile-summary">
-        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div class="flex items-center">
-                <div class="profile-summary-identity">
-                    <h4 class="profile-summary-name">{{ strtoupper(Auth::guard('wt')->user()->full_name ?: Auth::guard('wt')->user()->username) }}</h4>
-                    <p class="profile-summary-role">{{ Auth::guard('wt')->user()->wt_role === 'admin_it' ? 'ICT Department' : 'Executive Account' }}</p>
-                </div>
+        <div class="profile-summary-inline">
+            <div class="profile-summary-identity">
+                <h4 class="profile-summary-name">{{ strtoupper(Auth::guard('wt')->user()->full_name ?: Auth::guard('wt')->user()->username) }}</h4>
+                <p class="profile-summary-role">{{ Auth::guard('wt')->user()->wt_role === 'admin_it' ? 'ICT Department' : 'Executive Account' }}</p>
             </div>
-            <div class="flex flex-wrap gap-1.5">
+            <div class="profile-pill-row">
                 <span class="profile-pill"><i class="fas fa-id-badge"></i>{{ Auth::guard('wt')->user()->staff_id ?: '-' }}</span>
                 <span class="profile-pill"><i class="fas fa-user"></i>{{ Auth::guard('wt')->user()->username ?: '-' }}</span>
                 <span class="profile-pill"><i class="fas fa-building"></i>{{ Auth::guard('wt')->user()->department ?: 'No Department' }}</span>
