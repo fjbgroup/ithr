@@ -479,6 +479,10 @@
         pointer-events: none !important;
         z-index: 10 !important;
     }
+    .corporate-combobox + select + .select2-container,
+    .corporate-combobox + .select2-container {
+        display: none !important;
+    }
     .owner-details-grid .corporate-combobox {
         width: 100% !important;
         max-width: 100% !important;
@@ -2210,7 +2214,7 @@
 
             const toggle = document.createElement('span');
             toggle.className = 'corporate-combobox-toggle';
-            toggle.innerHTML = '<i class="fa-solid fa-caret-down"></i>';
+            toggle.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
 
             const menu = document.createElement('div');
             menu.className = 'corporate-combobox-menu';
@@ -2306,7 +2310,7 @@
 
             const toggle = document.createElement('span');
             toggle.className = 'corporate-combobox-toggle';
-            toggle.innerHTML = '<i class="fa-solid fa-caret-down"></i>';
+            toggle.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
 
             const menu = document.createElement('div');
             menu.className = 'corporate-combobox-menu';
@@ -2437,7 +2441,7 @@
 
             const toggle = document.createElement('span');
             toggle.className = 'corporate-combobox-toggle';
-            toggle.innerHTML = '<i class="fa-solid fa-caret-down"></i>';
+            toggle.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
 
             const menu = document.createElement('div');
             menu.className = 'corporate-combobox-menu';
