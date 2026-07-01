@@ -655,22 +655,24 @@ function renderNotifList(items) {
 }
 
 function markAllNotifRead() {
+    // Visually clear all unread items
     const items = document.querySelectorAll('#notifList .notif-item.unread');
-    if (!items.length) return;
+    items.forEach(el => el.classList.remove('unread'));
 
     const ids = Array.from(items).map(el => parseInt(el.dataset.notifId)).filter(Boolean);
-    const types = new Set(Array.from(items).map(el => el.dataset.notifType));
-
-    items.forEach(el => el.classList.remove('unread'));
     ids.forEach(id => { notifReadIds.add(id); notifSeenIds.add(id); });
 
+    // Clear all badges
     document.getElementById('notifBellBadge')?.remove();
-    types.forEach(type => document.getElementById('nav-badge-' + type)?.remove());
+    ['booking', 'request', 'travel'].forEach(type => {
+        document.getElementById('nav-badge-' + type)?.remove();
+    });
 
+    // Send request to server
     fetch('{{ url("notifications/mark-read") }}', {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-        body: JSON.stringify({ids})
+        body: JSON.stringify({all: true})
     });
 }
 </script>

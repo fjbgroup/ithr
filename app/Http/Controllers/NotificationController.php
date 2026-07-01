@@ -28,11 +28,17 @@ class NotificationController extends Controller
 
     public function markRead(Request $request)
     {
-        $ids = $request->input('ids', []);
-        
-        Notification::whereIn('id', $ids)
-            ->where('user_id', Auth::id())
-            ->update(['is_read' => true]);
+        if ($request->input('all')) {
+            Notification::where('user_id', Auth::id())
+                ->update(['is_read' => true]);
+        } else {
+            $ids = $request->input('ids', []);
+            if (!empty($ids)) {
+                Notification::whereIn('id', $ids)
+                    ->where('user_id', Auth::id())
+                    ->update(['is_read' => true]);
+            }
+        }
             
         return response()->json(['success' => true]);
     }
