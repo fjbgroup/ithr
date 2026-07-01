@@ -179,7 +179,6 @@ class StaffController extends Controller
                     'department_id' => $staff->department_id,
                     'position' => $staff->position,
                     'company' => $staff->company,
-                    'is_active' => $staff->is_active,
                 ]);
             }
         });
