@@ -155,8 +155,27 @@
         font-size: 9px !important;
     }
     .all-status-compact .status-table-card {
-        padding: 6px !important;
+        padding: 12px !important;
+        border: 1px solid #dbeafe !important;
+        border-radius: 14px !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08) !important;
+    }
+    .dark .all-status-compact .status-table-card {
+        border-color: #334155 !important;
+        background: rgba(30, 41, 59, 0.72) !important;
+        box-shadow: none !important;
+    }
+    .all-status-compact .dataTables_wrapper {
+        border: 1px solid #dbeafe !important;
         border-radius: 12px !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+    }
+    .dark .all-status-compact .dataTables_wrapper {
+        border-color: #334155 !important;
+        background: #0f172a !important;
     }
     .all-status-compact table.dataTable thead th,
     .all-status-compact table.dataTable tbody td {
@@ -173,8 +192,22 @@
     }
     .all-status-compact .dataTables_wrapper .dataTables_length,
     .all-status-compact .dataTables_wrapper .dataTables_filter {
-        margin-bottom: 4px !important;
-        padding: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 10px 12px 8px !important;
+        background: #ffffff !important;
+    }
+    .dark .all-status-compact .dataTables_wrapper .dataTables_length,
+    .dark .all-status-compact .dataTables_wrapper .dataTables_filter {
+        background: #0f172a !important;
+    }
+    .all-status-compact .dataTables_wrapper .dataTables_info,
+    .all-status-compact .dataTables_wrapper .dataTables_paginate {
+        padding: 10px 12px 12px !important;
+        background: #ffffff !important;
+    }
+    .dark .all-status-compact .dataTables_wrapper .dataTables_info,
+    .dark .all-status-compact .dataTables_wrapper .dataTables_paginate {
+        background: #0f172a !important;
     }
     .all-status-compact .dataTables_wrapper .dataTables_length select,
     .all-status-compact .dataTables_wrapper .dataTables_filter input {
@@ -957,4 +990,3 @@
 </script>
 @endpush
 @endsection
-
