@@ -164,6 +164,7 @@ class StaffController extends Controller
             'management_level' => 'nullable|string',
             'job_level' => 'nullable|string',
             'job_category' => 'nullable|string',
+            'is_active' => 'required|boolean',
         ]);
 
         DB::transaction(function () use ($staff, $validated) {
@@ -178,6 +179,7 @@ class StaffController extends Controller
                     'department_id' => $staff->department_id,
                     'position' => $staff->position,
                     'company' => $staff->company,
+                    'is_active' => $staff->is_active,
                 ]);
             }
         });
