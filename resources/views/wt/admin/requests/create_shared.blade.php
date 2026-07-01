@@ -375,10 +375,9 @@
     .owner-profile-group-title {
         grid-column: 1 / -1;
         width: 100%;
-        border-left: 3px solid #0284c7;
         background: rgba(2, 132, 199, 0.06);
         border-radius: 8px;
-        padding: 8px 10px 8px 16px;
+        padding: 8px 10px;
     }
     .owner-profile-group-title p:first-child {
         color: #0284c7 !important;
