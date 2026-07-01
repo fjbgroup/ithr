@@ -63,17 +63,17 @@
 
                 <div class="repair-form-section repair-form-group-full">Repair Timeline</div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Received Date <span class="required">*</span></label>
                     <input type="date" name="received_date" class="repair-form-input" required value="{{ old('received_date', $editRecord->received_date ?? date('Y-m-d')) }}">
                 </div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Repair Date</label>
                     <input type="date" name="repair_date" class="repair-form-input" value="{{ old('repair_date', $editRecord->repair_date ?? '') }}">
                 </div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Status <span class="required">*</span></label>
                     <select name="status" class="repair-form-input repair-smart-select" required>
                         @foreach(['UNDER REPAIR', 'FAULTY', 'B.E.R', 'READY TO COLLECT', 'ALREADY FIXED', 'DONE'] as $status)
@@ -84,7 +84,7 @@
                     </select>
                 </div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Done?</label>
                     <select name="done" class="repair-form-input repair-smart-select">
                         <option value="0" {{ (string) old('done', isset($editRecord) ? ((int) $editRecord->done) : '0') === '0' ? 'selected' : '' }}>NO (Pending)</option>
@@ -93,7 +93,7 @@
                 </div>
 
                 @if(isset($editRecord))
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Finish Date</label>
                     <input type="date" name="finish_date" class="repair-form-input" value="{{ old('finish_date', $editRecord->finish_date ?? '') }}">
                 </div>
@@ -160,9 +160,9 @@
 
     .repair-form-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(12, minmax(0, 1fr));
         align-items: flex-start;
-        gap: 14px 18px;
+        gap: 12px 10px;
     }
 
     .repair-form-group {
@@ -174,6 +174,10 @@
 
     .repair-form-group-full {
         grid-column: 1 / -1;
+    }
+
+    .repair-timeline-field {
+        grid-column: span 2;
     }
 
     .repair-form-section {
@@ -190,6 +194,7 @@
     }
 
     .repair-form-note-group {
+        grid-column: span 6;
         align-self: stretch;
     }
 
@@ -357,6 +362,11 @@
     @media (max-width: 768px) {
         .repair-form-grid {
             grid-template-columns: 1fr;
+        }
+
+        .repair-timeline-field,
+        .repair-form-note-group {
+            grid-column: 1 / -1;
         }
 
         .repair-form-header,
