@@ -138,7 +138,7 @@
                     <th>Staff No</th>
                     <th>Department</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th style="width: 180px; min-width: 180px; text-align: right; white-space: nowrap;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -167,7 +167,7 @@
                         <br><span class="status-badge" style="font-size:.68rem;margin-top:.25rem;background:#fee2e2;color:#991b1b;">HR Inactive</span>
                         @endif
                     </td>
-                    <td class="td-actions">
+                    <td class="td-actions" style="white-space: nowrap; text-align: right;">
                         @if ($u->isStaff() && $u->staff_id)
                         <a href="{{ route('users.show', $u->id) }}" class="btn btn-sm btn-ghost">View</a>
                         @endif
@@ -232,6 +232,7 @@
             </div>
         </form>
         <div id="editDangerZone" style="display:none;border-top:1px solid var(--border);padding:.9rem 1.5rem;gap:.5rem;align-items:center;flex-wrap:wrap;">
+            <button type="button" id="editResetPwBtn" class="btn btn-sm btn-outline" style="color:#b45309; border-color:#fcd34d; background:#fffbeb;">Reset Password</button>
             <button type="button" id="editDisableBtn" class="btn btn-sm" style="background:#fef3c7;color:#92400e;">Disable</button>
             <button type="button" id="editStaffBtn" class="btn btn-sm" style="display:none;background:#fce7f3;color:#9d174d;">Set Inactive</button>
             <div style="flex:1;"></div>
@@ -295,6 +296,10 @@
         </form>
     </div>
 </div>
+
+<form id="resetPwUserForm" method="POST" action="" style="display:none;">
+    @csrf
+</form>
 
 <script>
 const existingStaffNos = {!! json_encode($users->pluck('staff_no')->filter()->values()) !!};
@@ -412,6 +417,9 @@ function editUser(u) {
             staffBtn.style.display = 'none';
         }
 
+        // Reset PW button
+        document.getElementById('editResetPwBtn').onclick = function() { confirmResetUserPassword(u.id, u.name); };
+
         // Delete button
         document.getElementById('editDeleteBtn').onclick = function() { closeModal(); confirmDeleteUser(u.id); };
     } else {
@@ -424,6 +432,13 @@ function editUser(u) {
 function confirmDeleteUser(id) {
     document.getElementById('deleteUserForm').action = '{{ url('users') }}/' + id;
     openModal('deleteUserModal');
+}
+
+function confirmResetUserPassword(id, name) {
+    if (confirm('Reset password to \'password\' for ' + name + '?')) {
+        document.getElementById('resetPwUserForm').action = '{{ url('users') }}/' + id + '/reset-password';
+        document.getElementById('resetPwUserForm').submit();
+    }
 }
 
 function filterUsers() {

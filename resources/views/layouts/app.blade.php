@@ -918,5 +918,19 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 })();
 </script>
+<!-- Back to Top Button -->
+<button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 85px; z-index: 8000; background-color: #38bdf8; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); align-items: center; justify-content: center; transition: transform 0.2s ease, opacity 0.3s ease;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
+<script>
+    window.addEventListener('scroll', function() {
+        var btn = document.getElementById('backToTopBtn');
+        if (window.scrollY > 300) {
+            btn.style.display = 'flex';
+        } else {
+            btn.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>

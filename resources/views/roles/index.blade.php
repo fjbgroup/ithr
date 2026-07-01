@@ -97,11 +97,13 @@
     color: #3b82f6;
     margin-bottom: 0.5rem;
 }
-.role-admin { background: #fef2f2; color: #ef4444; }
+.role-admin-it { background: #eff6ff; color: #3b82f6; }
+.role-admin-hr { background: #fef2f2; color: #ef4444; }
 .role-exec { background: #fffbeb; color: #f59e0b; }
 .role-staff { background: #f0fdf4; color: #22c55e; }
 
-html.dark .role-admin { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+html.dark .role-admin-it { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+html.dark .role-admin-hr { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
 html.dark .role-exec { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
 html.dark .role-staff { background: rgba(34, 197, 94, 0.15); color: #86efac; }
 html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02); }
@@ -127,14 +129,17 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
             <table class="role-matrix-table">
                 <thead>
                     <tr>
-                        <th style="width: 40%">Module / Feature</th>
-                        <th style="width: 20%">
-                            <span class="role-badge-custom role-admin" style="margin-bottom:0">Admin</span>
+                        <th style="width: 32%">Module / Feature</th>
+                        <th style="width: 17%">
+                            <span class="role-badge-custom role-admin-it" style="margin-bottom:0">Admin (IT)</span>
                         </th>
-                        <th style="width: 20%">
-                            <span class="role-badge-custom role-exec" style="margin-bottom:0">Executive (CEO/GM/HOU)</span>
+                        <th style="width: 17%">
+                            <span class="role-badge-custom role-admin-hr" style="margin-bottom:0">Admin (HR)</span>
                         </th>
-                        <th style="width: 20%">
+                        <th style="width: 17%">
+                            <span class="role-badge-custom role-exec" style="margin-bottom:0">Executive</span>
+                        </th>
+                        <th style="width: 17%">
                             <span class="role-badge-custom role-staff" style="margin-bottom:0">Staff</span>
                         </th>
                     </tr>
@@ -148,12 +153,14 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">View Global Staff Directory</span>
                             <span class="feature-desc">Can view profiles and contact info of all other staff members.</span>
                         </td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
@@ -163,6 +170,7 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                             <span class="feature-name">Edit Staff Data</span>
                             <span class="feature-desc">Directly modify any staff profile, family information, or positions.</span>
                         </td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
@@ -175,12 +183,14 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Resolve Update Requests</span>
                             <span class="feature-desc">Approve or reject data modification requests from staff.</span>
                         </td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
@@ -193,12 +203,14 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Approve Room Bookings</span>
                             <span class="feature-desc">Approve or reject pending meeting room reservations.</span>
                         </td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td>
                             <span class="partial-tooltip icon-partial" title="Only if designated as the Person-In-Charge (PIC) for a specific room.">
@@ -219,12 +231,14 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>
                     <tr>
                         <td>
                             <span class="feature-name">Manage Master Data</span>
                             <span class="feature-desc">Configure departments, settings, and structural master data.</span>
                         </td>
+                        <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
@@ -235,6 +249,7 @@ html.dark .role-matrix-table tr:hover td { background: rgba(255, 255, 255, 0.02)
                             <span class="feature-desc">View the security and activity logs of the entire system.</span>
                         </td>
                         <td><span class="icon-check"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span></td>
+                        <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                         <td><span class="icon-cross"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></td>
                     </tr>

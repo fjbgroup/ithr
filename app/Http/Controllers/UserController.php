@@ -188,6 +188,19 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User status updated.');
     }
 
+    public function resetPassword(Request $request, User $user)
+    {
+        $user->password = Hash::make('password');
+        $user->save();
+
+        AuditLogger::log('update', 'users',
+            'Reset password for ' . $user->name . ' to default.',
+            ['user_id' => $user->id]
+        );
+
+        return redirect()->route('users.index')->with('success', 'Password reset successfully for ' . $user->name . '.');
+    }
+
     public function accountSecurity()
     {
         return view('users.account_security');

@@ -132,6 +132,7 @@ Route::middleware('auth')->group(function () {
     Route::post('system/totp-toggle', [UserController::class, 'toggleTotp'])->name('system.totp.toggle')->middleware('role:admin_it');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
     Route::patch('users/{user}/toggle-staff-status', [UserController::class, 'toggleStaffStatus'])->name('users.toggle_staff_status');
+    Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset_password');
     Route::resource('users', UserController::class);
     Route::resource('ir', IRController::class)->middleware('role:admin_it,admin_hr,ceo');
 

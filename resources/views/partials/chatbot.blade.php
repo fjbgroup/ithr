@@ -247,13 +247,20 @@
         if (isOpen) {
             win.classList.remove('open');
             fab.classList.remove('open');
+            sessionStorage.removeItem('chatbot_open');
         } else {
             win.classList.add('open');
             fab.classList.add('open');
+            sessionStorage.setItem('chatbot_open', '1');
             document.getElementById('chatbot-input').focus();
             scrollToBottom();
         }
     };
+
+    function saveChatHistory() {
+        const msgs = document.getElementById('chatbot-messages');
+        sessionStorage.setItem('chatbot_history', msgs.innerHTML);
+    }
 
     window.sendChatMessage = async function() {
         const input = document.getElementById('chatbot-input');
@@ -302,6 +309,7 @@
         });
         const msgs = document.getElementById('chatbot-messages');
         msgs.innerHTML = '<div class="chat-msg assistant">Conversation cleared. How can I help you?</div>';
+        saveChatHistory();
     };
 
     function appendMessage(role, html) {
@@ -311,6 +319,7 @@
         div.innerHTML = html;
         msgs.appendChild(div);
         scrollToBottom();
+        saveChatHistory();
     }
 
     function showTyping() {
@@ -352,6 +361,18 @@
     document.addEventListener('DOMContentLoaded', function() {
         const input = document.getElementById('chatbot-input');
         if (!input) return;
+
+        const msgs = document.getElementById('chatbot-messages');
+        const history = sessionStorage.getItem('chatbot_history');
+        if (history) {
+            msgs.innerHTML = history;
+        }
+
+        if (sessionStorage.getItem('chatbot_open') === '1') {
+            document.getElementById('chatbot-window').classList.add('open');
+            document.getElementById('chatbot-fab').classList.add('open');
+            scrollToBottom();
+        }
 
         input.addEventListener('input', function() { autoResizeTextarea(this); });
         input.addEventListener('keydown', function(e) {
