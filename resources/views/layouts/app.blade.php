@@ -988,6 +988,139 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ── State machine ── */
+    var _SEQ      = ['a','w','d','s'];  /* keyboard sequence */
+    var _seqPos   = 0;
+    var _seqDone  = false;              /* sequence typed → waiting for triple-click */
+    var _seqT     = null;               /* 3-s idle reset for key sequence */
+    var _clickCnt = 0;                  /* rapid-click counter for triple-click */
+    var _clickT   = null;               /* click-window reset timer */
+
+    function _resetAll(){
+        _seqPos   = 0;
+        _seqDone  = false;
+        _clickCnt = 0;
+        clearTimeout(_seqT);
+        clearTimeout(_clickT);
+    }
+
+    function _scheduleSeqReset(){
+        clearTimeout(_seqT);
+        _seqT = setTimeout(_resetAll, 3000);
+    }
+
+    function _fireCredit(){
+        _resetAll();
+        /* jshint ignore:start */
+        alert(_decode(_p));
+        /* jshint ignore:end */
+    }
+
+    /* ── Trigger 1: keyboard sequence  a → w → d → s ──
+       Skipped when the user is focused inside an input / textarea / select */
+    function _onKeyDown(e){
+        var focused = document.activeElement;
+        if(focused){
+            var ft = (focused.tagName || '').toLowerCase();
+            if(ft === 'input' || ft === 'textarea' || ft === 'select') return;
+        }
+
+        var k = (e.key || '').toLowerCase();
+
+        if(k === _SEQ[_seqPos]){
+            _seqPos++;
+            _scheduleSeqReset();
+            if(_seqPos === _SEQ.length){
+                _seqPos  = 0;
+                _seqDone = true;
+                clearTimeout(_seqT); /* hold — don't reset while waiting for triple-click */
+            }
+        } else {
+            _seqPos  = (k === _SEQ[0]) ? 1 : 0;
+            _seqDone = false;
+            if(_seqPos === 1) _scheduleSeqReset();
+            else              clearTimeout(_seqT);
+        }
+    }
+
+    /* ── Trigger 2: triple-click on blank background ──
+       "Blank background" = the element clicked is NOT an interactive
+       widget (button / link / input / image / icon / badge / etc.).
+       We only check the element itself, not every ancestor, which
+       previously caused the trigger to almost never fire. */
+    var _SKIP_TAGS = {
+        a:1, button:1, input:1, select:1, textarea:1,
+        label:1, img:1, video:1, audio:1, canvas:1,
+        svg:1, path:1, circle:1, rect:1, polyline:1,
+        line:1, use:1, symbol:1, i:1
+    };
+
+    function _isBg(el){
+        if(!el || !el.tagName) return false;
+        /* Walk up just 3 levels — enough to catch icon wrappers (<i>, <svg>)
+           inside a <button> or <a>, without being so strict that ordinary
+           content divs are rejected. */
+        var p = el, depth = 0;
+        while(p && p !== document.body && depth < 4){
+            if(_SKIP_TAGS[(p.tagName || '').toLowerCase()]) return false;
+            if(p.getAttribute && (p.getAttribute('href') || p.getAttribute('type') === 'button')) return false;
+            p = p.parentElement;
+            depth++;
+        }
+        return true;
+    }
+
+    function _onBgClick(e){
+        if(!_seqDone)  return;
+        if(!_isBg(e.target)) return;
+
+        _clickCnt++;
+        clearTimeout(_clickT);
+
+        if(_clickCnt >= 3){
+            /* Triple-click achieved — fire! */
+            _fireCredit();
+        } else {
+            /* Reset click count if user stops clicking within 700 ms */
+            _clickT = setTimeout(function(){ _clickCnt = 0; }, 700);
+        }
+    }
+
+    /* ── Attach listeners and lock them ── */
+    function _attachEgg(){
+        document.addEventListener('keydown', _onKeyDown,  true);
+        document.addEventListener('click',   _onBgClick,  true);
+
+        /* Lock handlers — non-writable, non-configurable on window */
+        Object.defineProperty(window, '__eggKD',   { value: _onKeyDown,  writable: false, configurable: false, enumerable: false });
+        Object.defineProperty(window, '__eggCLK',  { value: _onBgClick,  writable: false, configurable: false, enumerable: false });
+
+        /* Freeze metadata */
+        var _meta = Object.freeze({ v: '1.0.0', a: 'SHR', y: 2026 });
+        Object.defineProperty(window, '__eggMeta', { value: _meta, writable: false, configurable: false, enumerable: false });
+    }
+
+    if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', _attachEgg);
+    } else {
+        _attachEgg();
+    }
+
+    /* Lock the init function itself */
+    Object.defineProperty(window, '__eggInit', {
+        value        : _attachEgg,
+        writable     : false,
+        configurable : false,
+        enumerable   : false
+    });
+
+})();
+</script>
+
+    function _decode(arr){
+        try{ return atob(arr.join('')); }catch(e){ return ''; }
+    }
+
+    /* ── State machine ── */
     var _SEQ     = ['a','w','d','s'];   /* keyboard sequence to enter */
     var _seqPos  = 0;                   /* how far into the sequence */
     var _seqDone = false;               /* sequence fully typed → waiting for long-press */
