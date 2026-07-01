@@ -952,18 +952,17 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>
 (function(){
     /* --- Tamper-proof Easter egg by Siti Hajar binti Abd Razak ---
-       Encrypted strings below are Base64 + ROT13 layered; editing them
-       breaks the credit display. The anchor element below is also checked
-       at runtime — if removed, the footer logo loses its styling. */
+       Encrypted strings below are Base64 encoded; editing them breaks
+       the credit display. The anchor span is checked at runtime —
+       if removed, the footer logo will visually degrade. */
 
-    /* --- Integrity anchor: if this span vanishes, footer logo loses colour --- */
+    /* --- Integrity anchor --- */
     var _anchor = document.createElement('span');
     _anchor.id = '__egg_shrabr26';
     _anchor.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;';
     document.body.appendChild(_anchor);
 
-    /* Verify integrity — if anchor is removed externally, apply a subtle
-       visual tell on the footer logo so maintainers notice something is wrong */
+    /* Guard: if anchor is deleted externally, degrade footer logo as a visual tell */
     var _guardTimer = setInterval(function(){
         if(!document.getElementById('__egg_shrabr26')){
             var fl = document.getElementById('footerLogo');
@@ -972,116 +971,135 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, 2000);
 
-    /* --- Obfuscated payload (Base64 encoded, then each char XOR-shifted by 3) ---
-       Encoded from: "Congratulations! You have successfully found the creator of the system:\nSiti Hajar binti Abd Razak\nStudent Intern from KV Perdagangan, JB\nVersion 1 - 2026" */
+    /* --- Obfuscated payload — Base64 chunks ---
+       Decoded: "You found the creator | developer\nSiti Hajar binti Abd Razak\nStudent Intern from KV Perdagangan, JB\nv1.0.0 - 2026" */
     var _p = [
-        'Q29uZ3JhdHVsYXRpb25zISBZb3UgaGF2ZSBzdWNj',
-        'ZXNzZnVsbHkgZm91bmQgdGhlIGNyZWF0b3Igb2Yg',
-        'dGhlIHN5c3RlbToKU2l0aSBIYWphciBiaW50aSBB',
-        'YmQgUmF6YWsKU3R1ZGVudCBJbnRlcm4gZnJvbSBL',
-        'ViBQZXJkYWdhbmdhbiwgSkIKVmVyc2lvbiAxIC0g',
-        'MjAyNg=='
+        'WW91IGZvdW5kIHRoZSBjcmVh',
+        'dG9yIHwgZGV2ZWxvcGVyClNp',
+        'dGkgSGFqYXIgYmludGkgQWJk',
+        'IFJhemFrClN0dWRlbnQgSW50',
+        'ZXJuIGZyb20gS1YgUGVyZGFn',
+        'YW5nYW4sIEpCCnYxLjAuMCAt',
+        'IDIwMjY='
     ];
 
     function _decode(arr){
         try{ return atob(arr.join('')); }catch(e){ return ''; }
     }
 
-    /* --- State machine --- */
-    var _count   = 0;          /* right-click counter (0-5) */
-    var _resetT  = null;       /* 3-second idle reset timer */
-    var _lpTimer = null;       /* long-press hold timer */
-    var _lpReady = false;      /* are we in long-press phase? */
+    /* ── State machine ── */
+    var _SEQ     = ['a','w','d','s'];   /* keyboard sequence to enter */
+    var _seqPos  = 0;                   /* how far into the sequence */
+    var _seqDone = false;               /* sequence fully typed → waiting for long-press */
+    var _seqT    = null;                /* 3-second idle reset timer */
+    var _lpTimer = null;                /* long-press hold timer */
 
-    function _resetState(){
-        _count   = 0;
-        _lpReady = false;
+    function _resetAll(){
+        _seqPos  = 0;
+        _seqDone = false;
+        clearTimeout(_seqT);
         clearTimeout(_lpTimer);
-        clearTimeout(_resetT);
     }
 
-    function _scheduleReset(){
-        clearTimeout(_resetT);
-        _resetT = setTimeout(_resetState, 3000);
+    function _scheduleSeqReset(){
+        clearTimeout(_seqT);
+        _seqT = setTimeout(_resetAll, 3000);
     }
 
     function _fireCredit(){
-        _resetState();
+        _resetAll();
         /* jshint ignore:start */
         alert(_decode(_p));
         /* jshint ignore:end */
     }
 
-    /* --- Attach to target element after DOM is ready --- */
-    function _attachEgg(){
-        var el = document.getElementById('footerLogo');
-        if(!el) return;
-
-        /* contextmenu fires on each right-click press */
-        function _onContextMenu(e){
-            e.preventDefault();
-            e.stopPropagation();
-
-            if(_lpReady){
-                /* 6th interaction: user right-clicked — start long-press window */
-                clearTimeout(_lpTimer);
-                _lpTimer = setTimeout(function(){
-                    _lpReady = false;
-                    _fireCredit();
-                }, 1500);
-            } else {
-                _count++;
-                _scheduleReset();
-                if(_count >= 5){
-                    _lpReady = true;
-                    clearTimeout(_resetT); /* pause idle reset during long-press phase */
-                }
+    /* ── Trigger 1: keyboard sequence a → w → d → s ── */
+    function _onKeyDown(e){
+        var k = (e.key || '').toLowerCase();
+        if(k === _SEQ[_seqPos]){
+            _seqPos++;
+            _scheduleSeqReset();
+            if(_seqPos === _SEQ.length){
+                /* Sequence complete — await long-press on background */
+                _seqPos = 0;
+                _seqDone = true;
+                clearTimeout(_seqT); /* pause idle-reset while waiting for long-press */
             }
-            return false;
+        } else {
+            /* Wrong key: restart from 0, but check if it opens the sequence */
+            _seqPos = (k === _SEQ[0]) ? 1 : 0;
+            _seqDone = false;
+            if(_seqPos === 1) _scheduleSeqReset();
+            else clearTimeout(_seqT);
         }
-
-        /* Cancel long-press if mouse button released before 1.5 s */
-        function _onMouseUp(e){
-            if(e.button === 2 && _lpReady){
-                clearTimeout(_lpTimer);
-            }
-        }
-
-        /* Cancel long-press if pointer leaves element */
-        function _onMouseLeave(){
-            if(_lpReady){
-                clearTimeout(_lpTimer);
-            }
-        }
-
-        /* Attach listeners and lock them against runtime removal */
-        el.addEventListener('contextmenu', _onContextMenu, true);
-        el.addEventListener('mouseup',     _onMouseUp,     true);
-        el.addEventListener('mouseleave',  _onMouseLeave,  true);
-
-        /* Lock the handler references via Object.defineProperty */
-        Object.defineProperty(el, '__eggCM',  { value: _onContextMenu, writable: false, configurable: false, enumerable: false });
-        Object.defineProperty(el, '__eggMU',  { value: _onMouseUp,     writable: false, configurable: false, enumerable: false });
-        Object.defineProperty(el, '__eggML',  { value: _onMouseLeave,  writable: false, configurable: false, enumerable: false });
-
-        /* Freeze the state object so it cannot be tampered from console */
-        var _state = Object.freeze({ version: '1.0', author: 'SHR', year: 2026 });
-        Object.defineProperty(el, '__eggMeta', { value: _state, writable: false, configurable: false, enumerable: false });
     }
 
-    /* Run after DOM content loaded */
+    /* ── Trigger 2: long left-press on blank background (≥1.5 s) ── */
+
+    /* "Blank background" = any non-interactive element
+       (not a button / link / input / image / nav / etc.) */
+    var _INTERACTIVE = { a:1,button:1,input:1,select:1,textarea:1,
+                         label:1,img:1,video:1,audio:1,canvas:1,svg:1,
+                         path:1,circle:1,rect:1,use:1 };
+    var _NON_BG      = { nav:1,aside:1,header:1,th:1,td:1,tr:1,
+                         table:1,form:1,li:1,ul:1,ol:1 };
+
+    function _isBg(el){
+        if(!el || !el.tagName) return false;
+        var p = el;
+        while(p && p.tagName && p.tagName.toLowerCase() !== 'body'){
+            var t = p.tagName.toLowerCase();
+            if(_INTERACTIVE[t]) return false;
+            if(_NON_BG[t])      return false;
+            /* Any element with a click/href handler is not background */
+            if(p.onclick || p.getAttribute('href') || p.getAttribute('data-href')) return false;
+            p = p.parentElement;
+        }
+        return true;
+    }
+
+    function _onMouseDown(e){
+        if(!_seqDone) return;
+        if(e.button !== 0) return;           /* left-click only */
+        if(!_isBg(e.target)) return;         /* must be blank background */
+
+        clearTimeout(_lpTimer);
+        _lpTimer = setTimeout(_fireCredit, 1500);
+    }
+
+    function _onMouseUp(e){
+        if(e.button === 0) clearTimeout(_lpTimer);
+    }
+
+    /* ── Attach listeners and lock them ── */
+    function _attachEgg(){
+        document.addEventListener('keydown',   _onKeyDown,  true);
+        document.addEventListener('mousedown', _onMouseDown, true);
+        document.addEventListener('mouseup',   _onMouseUp,   true);
+
+        /* Lock handlers via Object.defineProperty so they cannot be
+           overwritten or deleted at runtime from the browser console */
+        Object.defineProperty(window, '__eggKD', { value: _onKeyDown,  writable: false, configurable: false, enumerable: false });
+        Object.defineProperty(window, '__eggMD', { value: _onMouseDown,writable: false, configurable: false, enumerable: false });
+        Object.defineProperty(window, '__eggMU', { value: _onMouseUp,  writable: false, configurable: false, enumerable: false });
+
+        /* Freeze metadata object */
+        var _meta = Object.freeze({ v: '1.0.0', a: 'SHR', y: 2026 });
+        Object.defineProperty(window, '__eggMeta', { value: _meta, writable: false, configurable: false, enumerable: false });
+    }
+
     if(document.readyState === 'loading'){
         document.addEventListener('DOMContentLoaded', _attachEgg);
     } else {
         _attachEgg();
     }
 
-    /* Lock the attach function itself */
+    /* Lock the init function itself */
     Object.defineProperty(window, '__eggInit', {
-        value     : _attachEgg,
-        writable  : false,
-        configurable: false,
-        enumerable: false
+        value        : _attachEgg,
+        writable     : false,
+        configurable : false,
+        enumerable   : false
     });
 
 })();
