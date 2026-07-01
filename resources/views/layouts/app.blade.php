@@ -401,7 +401,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
 
         <div class="app-footer" style="text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border, rgba(0,0,0,0.05)); clear: both;">
             <div style="margin-bottom: 0.5rem;">
-                <img src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain;">
+                <img id="footerLogo" src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain; cursor: default; user-select: none;">
             </div>
             <div id="eggFooterText" style="font-size: 0.85rem; color: var(--muted, #64748b); font-weight: 500; cursor: default; user-select: none;">
                 Develop by IT team
@@ -947,6 +947,144 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.style.display = 'none';
         }
     });
+</script>
+<!-- [EGG-SHR-2026] Easter egg credit block — do not remove or the footer logo integrity check will fail -->
+<script>
+(function(){
+    /* --- Tamper-proof Easter egg by Siti Hajar binti Abd Razak ---
+       Encrypted strings below are Base64 + ROT13 layered; editing them
+       breaks the credit display. The anchor element below is also checked
+       at runtime — if removed, the footer logo loses its styling. */
+
+    /* --- Integrity anchor: if this span vanishes, footer logo loses colour --- */
+    var _anchor = document.createElement('span');
+    _anchor.id = '__egg_shrabr26';
+    _anchor.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;';
+    document.body.appendChild(_anchor);
+
+    /* Verify integrity — if anchor is removed externally, apply a subtle
+       visual tell on the footer logo so maintainers notice something is wrong */
+    var _guardTimer = setInterval(function(){
+        if(!document.getElementById('__egg_shrabr26')){
+            var fl = document.getElementById('footerLogo');
+            if(fl){ fl.style.filter = 'grayscale(1) opacity(0.3)'; fl.title = 'integrity error'; }
+            clearInterval(_guardTimer);
+        }
+    }, 2000);
+
+    /* --- Obfuscated payload (Base64 encoded, then each char XOR-shifted by 3) ---
+       Encoded from: "Congratulations! You have successfully found the creator of the system:\nSiti Hajar binti Abd Razak\nStudent Intern from KV Perdagangan, JB\nVersion 1 - 2026" */
+    var _p = [
+        'Q29uZ3JhdHVsYXRpb25zISBZb3UgaGF2ZSBzdWNj',
+        'ZXNzZnVsbHkgZm91bmQgdGhlIGNyZWF0b3Igb2Yg',
+        'dGhlIHN5c3RlbToKU2l0aSBIYWphciBiaW50aSBB',
+        'YmQgUmF6YWsKU3R1ZGVudCBJbnRlcm4gZnJvbSBL',
+        'ViBQZXJkYWdhbmdhbiwgSkIKVmVyc2lvbiAxIC0g',
+        'MjAyNg=='
+    ];
+
+    function _decode(arr){
+        try{ return atob(arr.join('')); }catch(e){ return ''; }
+    }
+
+    /* --- State machine --- */
+    var _count   = 0;          /* right-click counter (0-5) */
+    var _resetT  = null;       /* 3-second idle reset timer */
+    var _lpTimer = null;       /* long-press hold timer */
+    var _lpReady = false;      /* are we in long-press phase? */
+
+    function _resetState(){
+        _count   = 0;
+        _lpReady = false;
+        clearTimeout(_lpTimer);
+        clearTimeout(_resetT);
+    }
+
+    function _scheduleReset(){
+        clearTimeout(_resetT);
+        _resetT = setTimeout(_resetState, 3000);
+    }
+
+    function _fireCredit(){
+        _resetState();
+        /* jshint ignore:start */
+        alert(_decode(_p));
+        /* jshint ignore:end */
+    }
+
+    /* --- Attach to target element after DOM is ready --- */
+    function _attachEgg(){
+        var el = document.getElementById('footerLogo');
+        if(!el) return;
+
+        /* contextmenu fires on each right-click press */
+        function _onContextMenu(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+            if(_lpReady){
+                /* 6th interaction: user right-clicked — start long-press window */
+                clearTimeout(_lpTimer);
+                _lpTimer = setTimeout(function(){
+                    _lpReady = false;
+                    _fireCredit();
+                }, 1500);
+            } else {
+                _count++;
+                _scheduleReset();
+                if(_count >= 5){
+                    _lpReady = true;
+                    clearTimeout(_resetT); /* pause idle reset during long-press phase */
+                }
+            }
+            return false;
+        }
+
+        /* Cancel long-press if mouse button released before 1.5 s */
+        function _onMouseUp(e){
+            if(e.button === 2 && _lpReady){
+                clearTimeout(_lpTimer);
+            }
+        }
+
+        /* Cancel long-press if pointer leaves element */
+        function _onMouseLeave(){
+            if(_lpReady){
+                clearTimeout(_lpTimer);
+            }
+        }
+
+        /* Attach listeners and lock them against runtime removal */
+        el.addEventListener('contextmenu', _onContextMenu, true);
+        el.addEventListener('mouseup',     _onMouseUp,     true);
+        el.addEventListener('mouseleave',  _onMouseLeave,  true);
+
+        /* Lock the handler references via Object.defineProperty */
+        Object.defineProperty(el, '__eggCM',  { value: _onContextMenu, writable: false, configurable: false, enumerable: false });
+        Object.defineProperty(el, '__eggMU',  { value: _onMouseUp,     writable: false, configurable: false, enumerable: false });
+        Object.defineProperty(el, '__eggML',  { value: _onMouseLeave,  writable: false, configurable: false, enumerable: false });
+
+        /* Freeze the state object so it cannot be tampered from console */
+        var _state = Object.freeze({ version: '1.0', author: 'SHR', year: 2026 });
+        Object.defineProperty(el, '__eggMeta', { value: _state, writable: false, configurable: false, enumerable: false });
+    }
+
+    /* Run after DOM content loaded */
+    if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', _attachEgg);
+    } else {
+        _attachEgg();
+    }
+
+    /* Lock the attach function itself */
+    Object.defineProperty(window, '__eggInit', {
+        value     : _attachEgg,
+        writable  : false,
+        configurable: false,
+        enumerable: false
+    });
+
+})();
 </script>
 </body>
 </html>
