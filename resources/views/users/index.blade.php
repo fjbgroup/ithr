@@ -173,6 +173,10 @@
                         @endif
                         @canwrite
                         <button class="btn btn-sm btn-outline" onclick="editUser({{ json_encode($u) }})">Edit</button>
+                        <form method="POST" action="{{ route('users.reset_password', $u->id) }}" style="display:inline;" onsubmit="return confirm('Reset password to \'password\' for {{ $u->name }}?');">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-outline" style="color:#b45309; border-color:#fcd34d; background:#fffbeb;">Reset PW</button>
+                        </form>
                         @endcanwrite
                     </td>
                 </tr>
