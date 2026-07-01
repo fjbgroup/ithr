@@ -4,6 +4,9 @@
 
     @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    @endpush
+
+    @push('scripts')
     <script>
         (function () {
             if ('scrollRestoration' in history) {
@@ -913,6 +916,7 @@
 
     @include('wt.admin.partials.inventory-management-ui')
 
+    @push('scripts')
     <script>
         const walkieTimelineData = @json($walkieTimelines ?? []);
         const inventoryActionData = @json($walkieActions ?? []);
@@ -1844,5 +1848,6 @@
             window.paintInventoryTableTheme = paintInventoryTableTheme;
         })();
     </script>
+    @endpush
 
     @endsection

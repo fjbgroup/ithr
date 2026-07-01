@@ -779,6 +779,7 @@
     }
 </style>
 
+@push('scripts')
 <script>
     $(document).ready(function() {
         function focusOpenSelect2Search() {
@@ -911,4 +912,5 @@
         syncTemporaryRadioField();
     });
 </script>
+@endpush
 @endsection
