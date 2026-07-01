@@ -203,9 +203,9 @@
                             {{-- Employee: avatar + name + ID --}}
                             <td>
                                 <div class="staff-name-cell">
-                                    <div class="staff-avatar" style="background:{{ $pal['bg'] }};color:{{ $pal['fg'] }};">{{ $initials }}</div>
+                                    <div class="staff-avatar" style="background:{{ $palettes[$idx]['bg'] }};color:{{ $palettes[$idx]['fg'] }};">{{ $initials }}</div>
                                     <div style="min-width:0;">
-                                        <a href="{{ route('staff.show', $s->id) }}" class="staff-name-primary" title="{{ $s->name }}" {!! !$s->is_active ? 'style="color:var(--danger);"' : '' !!}>{{ $s->name }}</a>
+                                        <a href="{{ route('staff.show', $s->id) }}" class="staff-name-primary" title="{{ $s->name }}" {!! !$s->is_active ? 'style="color:var(--danger);white-space:normal;word-break:break-word;display:block;"' : 'style="white-space:normal;word-break:break-word;display:block;"' !!}>{{ $s->name }}</a>
                                         <span class="staff-id-sub">
                                             {{ $s->staff_no }}
                                             @if(!$s->is_active)
@@ -228,16 +228,37 @@
                             <td>
                                 @php
                                     $rawCo = trim($s->company);
-                                    $cleanCo = strtolower(str_replace('..', '', $rawCo));
-                                    $co = $companies->first(function($c) use ($cleanCo, $rawCo) {
-                                        if (strcasecmp($c->code, $rawCo) === 0) return true;
-                                        if (strcasecmp($c->name, $rawCo) === 0) return true;
-                                        if ($cleanCo && str_contains(strtolower($c->name), trim($cleanCo))) return true;
-                                        if (str_contains(strtolower($c->name), strtolower($rawCo))) return true;
-                                        if (strcasecmp($cleanCo, 'fgvb') === 0 && strcasecmp($c->code, 'fbsb') === 0) return true;
-                                        return false;
-                                    });
-                                    $coCode = $co ? $co->code : $rawCo;
+                                    $coMap = [
+                                        '4810 FGV Johor Bulkers Sdn Bhd' => 'FJB',
+                                        'FGV Johor Bulkers Sdn Bhd' => 'FJB',
+                                        'FJB' => 'FJB',
+                                        '4300 FGV Bulkers Sdn Bhd' => 'FGVB',
+                                        'FGV Bulkers Sdn Bhd' => 'FGVB',
+                                        'FGV Bulkers Sdn Bhd ..' => 'FGVB',
+                                        'FGVB' => 'FGVB',
+                                        'FBSB' => 'FGVB',
+                                        '4850 Langsat Bulkers Sdn Bhd' => 'LBSB',
+                                        'Langsat Bulkers Sdn Bhd' => 'LBSB',
+                                        'LBSB' => 'LBSB',
+                                        '4310 FGV Grains Terminal Sdn' => 'FGT',
+                                        'FGV Grains Terminal Sdn' => 'FGT',
+                                        'FGT' => 'FGT'
+                                    ];
+                                    
+                                    $coCode = $coMap[$rawCo] ?? null;
+                                    
+                                    if (!$coCode) {
+                                        $cleanCo = strtolower(str_replace('..', '', $rawCo));
+                                        $co = $companies->first(function($c) use ($cleanCo, $rawCo) {
+                                            if (strcasecmp($c->code, $rawCo) === 0) return true;
+                                            if (strcasecmp($c->name, $rawCo) === 0) return true;
+                                            if ($cleanCo && str_contains(strtolower($c->name), trim($cleanCo))) return true;
+                                            if (str_contains(strtolower($c->name), strtolower($rawCo))) return true;
+                                            if (strcasecmp($cleanCo, 'fgvb') === 0 && strcasecmp($c->code, 'fbsb') === 0) return true;
+                                            return false;
+                                        });
+                                        $coCode = $co ? $co->code : $rawCo;
+                                    }
                                 @endphp
                                 <span class="company-badge company-{{ strtolower($coCode) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $coCode }}</span>
                             </td>

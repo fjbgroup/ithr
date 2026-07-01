@@ -912,7 +912,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Signature in the browser console
     console.log(
-        '%c✦ FJB HR System ✦%c\nCrafted by %cALIF TEOH%c\nPsst… try the Konami code ↑↑↓↓â†→â†→ B A',
+        '%c✦ FJB HR System ✦%c\nCrafted by %cALIF TEOH%c\nPsst… try the Konami code ↑↑↓↓←→←→ B A',
         'font-size:15px;font-weight:700;color:#38bdf8',
         'color:#94a3b8',
         'font-size:14px;font-weight:700;color:#0f223b;background:#7dd3fc;padding:2px 8px;border-radius:4px',
@@ -921,7 +921,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 </script>
 <!-- Back to Top Button -->
-<button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Go to top" style="display: none; position: fixed; bottom: 20px; right: 85px; z-index: 8000; background-color: #38bdf8; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); align-items: center; justify-content: center; transition: transform 0.2s ease, opacity 0.3s ease;">
+<button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Go to top" style="display: none; position: fixed; bottom: 20px; left: 30px; z-index: 8000; background-color: #38bdf8; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); align-items: center; justify-content: center; transition: transform 0.2s ease, opacity 0.3s ease;">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
 </button>
 <script>
