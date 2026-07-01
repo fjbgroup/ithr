@@ -413,6 +413,52 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
 .sb-tooltip{position:fixed;transform:translateY(-50%);background:#1e293b;color:#fff;padding:.4rem .65rem;border-radius:7px;font-size:.75rem;font-weight:600;white-space:nowrap;z-index:2000;pointer-events:none;opacity:0;transition:opacity .12s ease;box-shadow:0 6px 16px rgba(0,0,0,.22)}
 .sb-tooltip.show{opacity:1}
 .sb-tooltip::before{content:'';position:absolute;right:100%;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:#1e293b}
+
+/* ── ROLE METRIC POPUP ── */
+.nav-action{width:100%;border:0;background:transparent;font-family:inherit;text-align:left;cursor:pointer}
+.rm-modal{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,42,.58);backdrop-filter:blur(4px)}
+.rm-modal.is-open{display:flex}
+.rm-modal-card{width:min(1180px,calc(100vw - 48px));max-height:calc(100vh - 48px);overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 24px 70px rgba(0,0,0,.35);display:flex;flex-direction:column}
+.rm-modal-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface)}
+.rm-modal-heading{font-size:14px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
+.rm-modal-close{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--body-bg);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.rm-modal-close:hover{border-color:var(--accent);color:var(--accent)}
+.rm-modal-body{padding:18px;overflow:auto}
+.rm-wrap{max-width:1180px;margin:0 auto}
+.rm-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.rm-kicker{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px}
+.rm-title{font-size:24px;font-weight:800;color:var(--text);line-height:1.2}
+.rm-sub{font-size:13px;color:var(--muted);margin-top:6px;max-width:720px}
+.rm-readonly{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap}
+.rm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.07)}
+.rm-table{width:100%;border-collapse:collapse;font-size:13px}
+.rm-table th{padding:13px 14px;background:var(--table-head-bg,#e2e8f0);color:var(--table-head-color,#475569);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}
+.rm-table th:first-child,.rm-table td:first-child{text-align:left}
+.rm-table td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle;text-align:center;color:var(--text)}
+.rm-table tbody tr:last-child td{border-bottom:none}
+.rm-table tbody tr:hover td{background:var(--table-hover)}
+.rm-feature{font-weight:750;color:var(--text);display:block}
+.rm-desc{font-size:11px;color:var(--muted);display:block;margin-top:3px;line-height:1.45}
+.rm-role{display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;line-height:1.2}
+.rm-admin{background:rgba(14,165,233,.13);color:#0284c7}
+.rm-finance{background:rgba(245,158,11,.14);color:#d97706}
+.rm-hou{background:rgba(99,102,241,.13);color:#4f46e5}
+.rm-gm{background:rgba(20,184,166,.13);color:#0f766e}
+.rm-ceo{background:rgba(239,68,68,.13);color:#dc2626}
+.rm-user{background:rgba(34,197,94,.13);color:#16a34a}
+.rm-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:15px}
+.rm-yes{color:#16a34a;background:rgba(34,197,94,.1)}
+.rm-no{color:#dc2626;background:rgba(239,68,68,.1)}
+.rm-partial{color:#d97706;background:rgba(245,158,11,.12);cursor:help}
+.rm-note{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:13px 16px;background:var(--body-bg);border-top:1px solid var(--border);font-size:12px;color:var(--muted);font-weight:650}
+.rm-note span{display:inline-flex;align-items:center;gap:7px}
+html.dark .rm-admin{background:rgba(56,189,248,.15);color:#7dd3fc}
+html.dark .rm-finance{background:rgba(245,158,11,.15);color:#fcd34d}
+html.dark .rm-hou{background:rgba(129,140,248,.15);color:#c4b5fd}
+html.dark .rm-gm{background:rgba(45,212,191,.15);color:#5eead4}
+html.dark .rm-ceo{background:rgba(248,113,113,.15);color:#fca5a5}
+html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
+@media(max-width:900px){.rm-modal{padding:12px}.rm-modal-card{width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.rm-modal-body{padding:14px}.rm-head{align-items:flex-start;flex-direction:column}.rm-card{overflow-x:auto}.rm-table{min-width:980px}}
 </style>
 <script>
 (function(){
@@ -725,9 +771,9 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
     @endif
 
     <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
-    <a href="{{ route('it.role-metric') }}" class="nav-link {{ request()->routeIs('it.role-metric') ? 'active' : '' }}">
+    <button type="button" class="nav-link nav-action" data-role-metric-trigger>
       <i class="bi bi-table"></i> Role Metric
-    </a>
+    </button>
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
     </a>
@@ -827,6 +873,20 @@ html.sidebar-collapsed .sidebar-nav > div > button.sb-active i:first-of-type {
         <div style="font-size: 0.85rem; color: var(--muted, #64748b); font-weight: 500;">
             Develop by IT team
         </div>
+    </div>
+  </div>
+</div>
+
+<div class="rm-modal" id="roleMetricModal" aria-hidden="true">
+  <div class="rm-modal-card" role="dialog" aria-modal="true" aria-labelledby="roleMetricTitle">
+    <div class="rm-modal-bar">
+      <div class="rm-modal-heading" id="roleMetricTitle"><i class="bi bi-table"></i> Role Metric</div>
+      <button type="button" class="rm-modal-close" data-role-metric-close aria-label="Close role metric">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="rm-modal-body">
+      @include('it.role-metric._matrix')
     </div>
   </div>
 </div>
@@ -1223,6 +1283,37 @@ $(document).ready(function () {
 </style>
 <script>
 (function(){
+  var roleMetricModal = document.getElementById('roleMetricModal');
+  function openRoleMetric() {
+    if (!roleMetricModal) return;
+    roleMetricModal.classList.add('is-open');
+    roleMetricModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeRoleMetric() {
+    if (!roleMetricModal) return;
+    roleMetricModal.classList.remove('is-open');
+    roleMetricModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('[data-role-metric-trigger]').forEach(function (trigger) {
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      openRoleMetric();
+    });
+  });
+  document.querySelectorAll('[data-role-metric-close]').forEach(function (closeButton) {
+    closeButton.addEventListener('click', closeRoleMetric);
+  });
+  if (roleMetricModal) {
+    roleMetricModal.addEventListener('click', function (e) {
+      if (e.target === roleMetricModal) closeRoleMetric();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && roleMetricModal && roleMetricModal.classList.contains('is-open')) closeRoleMetric();
+  });
+
   document.addEventListener('click', function(e) {
     var a = e.target.closest('a');
     if (!a) return;
