@@ -1884,6 +1884,7 @@ select.itr-input { appearance: none; cursor: pointer; background-image: url("dat
     <p style="color:#64748b;margin:0 0 24px;line-height:1.6;font-size:.95rem;">You have unsaved changes on this form. Would you like to save them as a draft before leaving?</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
       <button id="itr-nav-cancel-btn" type="button" style="padding:10px 22px;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;color:#374151;font-weight:600;cursor:pointer;font-size:.9rem;">Cancel</button>
+      <button id="itr-nav-discard-btn" type="button" style="padding:10px 22px;border-radius:8px;border:1.5px solid #dc2626;background:#fff;color:#dc2626;font-weight:600;cursor:pointer;font-size:.9rem;">Discard</button>
       <button id="itr-nav-draft-btn" type="button" style="padding:10px 22px;border-radius:8px;border:none;background:#2563eb;color:#fff;font-weight:600;cursor:pointer;font-size:.9rem;"><i class="bi bi-floppy"></i> Save as Draft</button>
     </div>
   </div>
@@ -2422,6 +2423,7 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
 (function() {
   // Move modal to <body> so position:fixed isn't broken by a transformed ancestor
   document.body.appendChild(document.getElementById('itr-nav-confirm-modal'));
+  var pendingNavHref = null;
 
   function _step2Active() {
     var s2 = document.getElementById('step2');
@@ -2440,11 +2442,19 @@ document.getElementById('form-hardware').addEventListener('submit', function(e) 
     } catch(ex) { return; }
     e.preventDefault();
     e.stopPropagation();
+    pendingNavHref = dest.href;
     document.getElementById('itr-nav-confirm-modal').style.display = 'flex';
   }, true);
 
   document.getElementById('itr-nav-cancel-btn').addEventListener('click', function() {
+    pendingNavHref = null;
     document.getElementById('itr-nav-confirm-modal').style.display = 'none';
+  });
+
+  document.getElementById('itr-nav-discard-btn').addEventListener('click', function() {
+    sessionStorage.removeItem('itr_form_state');
+    document.getElementById('itr-nav-confirm-modal').style.display = 'none';
+    if (pendingNavHref) window.location.href = pendingNavHref;
   });
 
   document.getElementById('itr-nav-draft-btn').addEventListener('click', function() {
