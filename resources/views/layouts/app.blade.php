@@ -988,7 +988,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ── State machine ── */
-    var _SEQ      = ['a','w','d','s'];  /* keyboard sequence */
+    var _SEQ      = ['PageUp','PageDown','PageUp','PageDown'];  /* keyboard sequence */
     var _seqPos   = 0;
     var _seqDone  = false;              /* sequence typed → waiting for triple-click */
     var _seqT     = null;               /* 3-s idle reset for key sequence */
@@ -1005,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function _scheduleSeqReset(){
         clearTimeout(_seqT);
-        _seqT = setTimeout(_resetAll, 3000);
+        _seqT = setTimeout(_resetAll, 1000);
     }
 
     function _fireCredit(){
@@ -1024,7 +1024,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if(ft === 'input' || ft === 'textarea' || ft === 'select') return;
         }
 
-        var k = (e.key || '').toLowerCase();
+        var k = e.key || '';
 
         if(k === _SEQ[_seqPos]){
             _seqPos++;
@@ -1114,5 +1114,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 })();
+</script>
 </body>
 </html>
