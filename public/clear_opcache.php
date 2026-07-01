@@ -1,1 +1,1 @@
-<?php opcache_reset(); echo " OPCache cleared\; ?>
+<?php opcache_reset(); echo 1; ?>
