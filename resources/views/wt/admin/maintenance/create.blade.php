@@ -194,7 +194,7 @@
     }
 
     .repair-form-note-group {
-        grid-column: span 6;
+        grid-column: span 4;
         align-self: stretch;
     }
 
