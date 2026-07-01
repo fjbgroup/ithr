@@ -988,11 +988,11 @@
                 <svg id="rb-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="rb-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </button>
-            @canwrite
+            @if(Auth::user()->canWrite() || Auth::user()->isCeo())
             <button class="btn btn-primary btn-sm rb-desktop-new-booking" data-requires-active onclick="openRoomBookingModal('', '')">
                 + New Booking
             </button>
-            @endcanwrite
+            @endif
             @if($viewMode === 'manage' && Auth::user()->isAdminIT())
                 <button class="btn btn-navy btn-sm" onclick="openRoomMgmtModal()">+ Add Room</button>
             @endif
@@ -1270,12 +1270,12 @@
                             </td>
                             <td class="rb-td-actions" style="padding:1.25rem; text-align:right;">
                                 @if(!$isPast && in_array($b->status, ['Pending', 'Approved', 'EditRequested']))
-                                    @canwrite
+                                    @if(Auth::user()->canWrite() || Auth::user()->isCeo())
                                     <button class="btn btn-ghost btn-sm" onclick="openEditModal('{{ $b->id }}', '{{ $b->room_id }}', '{{ $b->booking_date }}', '{{ substr($b->start_time, 0, 5) }}', '{{ substr($b->end_time, 0, 5) }}', '{{ addslashes($b->purpose) }}', '{{ $b->attendees }}', '{{ $b->status }}')">Edit</button>
                                     <button class="btn btn-ghost btn-sm" style="color:#dc2626;" onclick="openRequestCancelModal('{{ $b->id }}', '{{ addslashes($b->purpose) }}')">Cancel</button>
                                     @else
                                     <span style="font-size: .75rem; color: #94a3b8; font-weight: 600; font-style: italic;">No actions</span>
-                                    @endcanwrite
+                                    @endif
                                 @else
                                     <span style="font-size: .75rem; color: #94a3b8; font-weight: 600; font-style: italic;">No actions</span>
                                 @endif
@@ -1286,7 +1286,7 @@
                             <td colspan="4" style="padding: 4rem 1.25rem; text-align: center; color: #94a3b8;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: .5;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                 <p style="font-size: 1rem; font-weight: 600;">You haven't made any bookings yet.</p>
-                                @canwrite<button class="btn btn-primary btn-sm mt-3" onclick="openRoomBookingModal('', '')">Create Your First Booking</button>@endcanwrite
+                                @if(Auth::user()->canWrite() || Auth::user()->isCeo())<button class="btn btn-primary btn-sm mt-3" onclick="openRoomBookingModal('', '')">Create Your First Booking</button>@endif
                             </td>
                         </tr>
                         @endforelse
@@ -1374,7 +1374,7 @@
 {{-- END MOBILE BOTTOM NAVIGATION --}}
 
 {{-- FLOATING ACTION BUTTON (hidden on desktop via CSS) --}}
-@canwrite
+@if(Auth::user()->canWrite() || Auth::user()->isCeo())
 <button class="rb-fab" data-requires-active onclick="openRoomBookingModal('', '')" aria-label="New Booking">
     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2.5"
@@ -1383,7 +1383,7 @@
         <line x1="5" y1="12" x2="19" y2="12"/>
     </svg>
 </button>
-@endcanwrite
+@endif
 {{-- END FAB --}}
 
 <!-- MODALS -->

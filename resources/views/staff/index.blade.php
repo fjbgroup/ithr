@@ -13,8 +13,8 @@
 .staff-name-cell { display: flex; align-items: center; gap: .6rem; }
 .staff-name-primary {
     font-weight: 600; font-size: .82rem; line-height: 1.25;
-    color: var(--text); max-width: 170px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;
+    color: var(--text);
+    display: block; word-break: break-word;
     transition: color .15s; text-decoration: none;
 }
 .staff-name-primary:hover { color: #6366f1; }
@@ -226,7 +226,20 @@
 
                             {{-- Company badge --}}
                             <td>
-                                <span class="company-badge company-{{ strtolower($s->company) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $s->company }}</span>
+                                @php
+                                    $rawCo = trim($s->company);
+                                    $cleanCo = strtolower(str_replace('..', '', $rawCo));
+                                    $co = $companies->first(function($c) use ($cleanCo, $rawCo) {
+                                        if (strcasecmp($c->code, $rawCo) === 0) return true;
+                                        if (strcasecmp($c->name, $rawCo) === 0) return true;
+                                        if ($cleanCo && str_contains(strtolower($c->name), trim($cleanCo))) return true;
+                                        if (str_contains(strtolower($c->name), strtolower($rawCo))) return true;
+                                        if (strcasecmp($cleanCo, 'fgvb') === 0 && strcasecmp($c->code, 'fbsb') === 0) return true;
+                                        return false;
+                                    });
+                                    $coCode = $co ? $co->code : $rawCo;
+                                @endphp
+                                <span class="company-badge company-{{ strtolower($coCode) }}" style="font-size:.62rem;padding:.1rem .35rem;">{{ $coCode }}</span>
                             </td>
 
                             {{-- Date Joined --}}
