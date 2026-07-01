@@ -1346,13 +1346,29 @@
         grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
     }
     .longterm-modern.match-report-faulty .longterm-meta-group {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 12px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        flex-wrap: nowrap !important;
+        gap: 16px !important;
+        width: auto !important;
+        max-width: 100% !important;
     }
-    .longterm-modern.match-report-faulty .longterm-meta-group > div {
-        width: 100% !important;
-        max-width: none !important;
+    .longterm-modern.match-report-faulty .longterm-meta-group .executive-date-group {
+        flex: 0 0 230px !important;
+        width: 230px !important;
+        max-width: 230px !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-meta-group .executive-remark-group {
+        flex: 0 0 300px !important;
+        width: 300px !important;
+        max-width: 300px !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-meta-group .executive-signature-group {
+        flex: 0 0 360px !important;
+        width: 360px !important;
+        max-width: 360px !important;
     }
     @media (max-width: 1180px) {
         .longterm-modern.match-report-faulty .longterm-ownership-section {
@@ -1367,6 +1383,17 @@
         .longterm-modern.match-report-faulty .longterm-ownership-section,
         .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
             grid-template-columns: 1fr !important;
+        }
+        .longterm-modern.match-report-faulty .longterm-meta-group {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        .longterm-modern.match-report-faulty .longterm-meta-group .executive-date-group,
+        .longterm-modern.match-report-faulty .longterm-meta-group .executive-remark-group,
+        .longterm-modern.match-report-faulty .longterm-meta-group .executive-signature-group {
+            flex-basis: auto !important;
+            width: 100% !important;
+            max-width: none !important;
         }
     }
 </style>
