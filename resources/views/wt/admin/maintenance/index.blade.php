@@ -75,6 +75,183 @@
         justify-content: center !important;
         text-align: center !important;
     }
+
+    #editModal .repair-edit-card {
+        width: min(760px, calc(100vw - 32px));
+        max-height: calc(100vh - 88px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 18px;
+        border: 1px solid #dbe5f2;
+        background: #ffffff;
+        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.24);
+        padding: 0 !important;
+    }
+
+    #editModal .repair-edit-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 22px;
+        border-bottom: 1px solid #e5edf6;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    #editModal .repair-edit-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    #editModal .repair-edit-icon {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        border: 1px solid rgba(2, 132, 199, 0.22);
+        background: rgba(2, 132, 199, 0.1);
+        color: #0284c7;
+    }
+
+    #editModal .repair-edit-body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 20px 22px 22px;
+        background: #f8fafc;
+    }
+
+    #editModal .repair-edit-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    #editModal .repair-edit-section {
+        grid-column: 1 / -1;
+        margin: 2px 0 0;
+        padding: 9px 12px;
+        border-left: 4px solid #0284c7;
+        border-radius: 10px;
+        background: #eaf6fc;
+        color: #0369a1;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    #editModal .repair-edit-field {
+        min-width: 0;
+    }
+
+    #editModal .repair-edit-field-full {
+        grid-column: 1 / -1;
+    }
+
+    #editModal .repair-edit-spacer {
+        min-height: 1px;
+    }
+
+    #editModal .repair-edit-field .modal-form-label {
+        display: block;
+        margin-bottom: 7px;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    #editModal .repair-edit-field .modal-form-input {
+        width: 100%;
+        min-height: 44px;
+        border-radius: 12px;
+        border: 1px solid #d8e1ed;
+        background: #ffffff;
+        padding: 10px 12px;
+        color: #1e293b;
+        font-size: 12px;
+        font-weight: 800;
+        outline: none;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    #editModal .repair-edit-field .modal-form-input:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.11);
+    }
+
+    #editModal .repair-edit-field textarea.modal-form-input {
+        min-height: 96px;
+        resize: vertical;
+        line-height: 1.45;
+    }
+
+    #editModal .repair-edit-footer {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 14px 22px;
+        border-top: 1px solid #e5edf6;
+        background: #ffffff;
+    }
+
+    html.dark #editModal .repair-edit-card {
+        border-color: #334155;
+        background: #111827;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5);
+    }
+
+    html.dark #editModal .repair-edit-header,
+    html.dark #editModal .repair-edit-footer {
+        border-color: #334155;
+        background: #0f172a;
+    }
+
+    html.dark #editModal .repair-edit-body {
+        background: #111827;
+    }
+
+    html.dark #editModal .repair-edit-section {
+        background: rgba(2, 132, 199, 0.16);
+        color: #7dd3fc;
+    }
+
+    html.dark #editModal .repair-edit-field .modal-form-label {
+        color: #cbd5e1;
+    }
+
+    html.dark #editModal .repair-edit-field .modal-form-input {
+        border-color: #334155;
+        background: #0f172a;
+        color: #f8fafc;
+    }
+
+    @media (max-width: 720px) {
+        #editModal .repair-edit-grid {
+            grid-template-columns: 1fr;
+        }
+
+        #editModal .repair-edit-spacer {
+            display: none;
+        }
+
+        #editModal .repair-edit-header,
+        #editModal .repair-edit-body,
+        #editModal .repair-edit-footer {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }
 </style>
 
 <div class="maintenance-page-shell">
@@ -296,11 +473,16 @@
 
 {{-- ===================== EDIT MODAL ===================== --}}
 <div id="editModal" class="modal-overlay" onclick="closeEditOutside(event)">
-    <div class="modal-box p-8">
-        <div class="modal-header">
-            <div>
-                <h2 class="modal-title">Update Repair Record</h2>
-                <p class="modal-subtitle" id="editModalSubtitle">Updating record...</p>
+    <div class="modal-box repair-edit-card">
+        <div class="modal-header repair-edit-header">
+            <div class="repair-edit-heading">
+                <span class="repair-edit-icon">
+                    <i class="fas fa-screwdriver-wrench text-sm"></i>
+                </span>
+                <div class="min-w-0">
+                    <h2 class="modal-title">Update Repair Record</h2>
+                    <p class="modal-subtitle" id="editModalSubtitle">Updating record...</p>
+                </div>
             </div>
             <button onclick="closeEditModal()" class="modal-close-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
@@ -310,17 +492,25 @@
         <form method="POST" id="editMaintenanceForm" class="flex flex-col h-full overflow-hidden">
             @csrf
             @method('PATCH')
-            <div class="modal-body p-6">
-                <div class="modal-form-grid">
-                    <div class="modal-form-group">
+            <div class="modal-body repair-edit-body">
+                <div class="repair-edit-grid">
+                    <div class="repair-edit-section">Timeline</div>
+                    <div class="repair-edit-field">
                         <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Received Date <span class="text-red-500">*</span></label>
                         <input type="date" name="received_date" id="edit_received_date" class="modal-form-input focus:border-stone-800" required>
                     </div>
-                    <div class="modal-form-group">
+                    <div class="repair-edit-field">
                         <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Repair Date</label>
                         <input type="date" name="repair_date" id="edit_repair_date" class="modal-form-input focus:border-stone-800">
                     </div>
-                    <div class="modal-form-group">
+                    <div class="repair-edit-field">
+                        <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Finish Date</label>
+                        <input type="date" name="finish_date" id="edit_finish_date" class="modal-form-input focus:border-stone-800">
+                    </div>
+                    <div class="repair-edit-spacer" aria-hidden="true"></div>
+
+                    <div class="repair-edit-section">Repair Status</div>
+                    <div class="repair-edit-field">
                         <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Status <span class="text-red-500">*</span></label>
                         <select name="status" id="edit_status" class="modal-form-input focus:border-stone-800" required>
                             <option value="UNDER REPAIR">UNDER REPAIR</option>
@@ -331,28 +521,26 @@
                             <option value="DONE">DONE</option>
                         </select>
                     </div>
-                    <div class="modal-form-group">
+                    <div class="repair-edit-field">
                         <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Mark Done</label>
                         <select name="done" id="edit_done" class="modal-form-input focus:border-stone-800">
                             <option value="0">NO (Pending)</option>
                             <option value="1">YES</option>
                         </select>
                     </div>
-                    <div class="modal-form-group" style="grid-column: span 2;">
-                        <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Finish Date</label>
-                        <input type="date" name="finish_date" id="edit_finish_date" class="modal-form-input focus:border-stone-800">
+
+                    <div class="repair-edit-section">Repair Notes</div>
+                    <div class="repair-edit-field repair-edit-field-full">
+                        <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Issue Description <span class="text-red-500">*</span></label>
+                        <textarea name="issue" id="edit_issue" class="modal-form-input focus:border-stone-800" required></textarea>
                     </div>
-                    <div class="modal-form-group" style="grid-column: span 2;">
-                        <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Issue Decription <span class="text-red-500">*</span></label>
-                        <textarea name="issue" id="edit_issue" class="modal-form-input focus:border-stone-800" style="height:55px; resize:none;" required></textarea>
-                    </div>
-                    <div class="modal-form-group" style="grid-column: span 2;">
+                    <div class="repair-edit-field repair-edit-field-full">
                         <label class="modal-form-label text-stone-500 font-bold uppercase tracking-wider">Remarks</label>
-                        <textarea name="remarks" id="edit_remarks" class="modal-form-input focus:border-stone-800" style="height:55px; resize:none;"></textarea>
+                        <textarea name="remarks" id="edit_remarks" class="modal-form-input focus:border-stone-800"></textarea>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer bg-stone-50/50 border-t border-stone-100 flex justify-end gap-3 p-4">
+            <div class="modal-footer repair-edit-footer">
                 <button type="button" onclick="closeEditModal()" class="text-[11px] font-bold text-stone-400 hover:text-stone-600 uppercase tracking-widest transition">Cancel</button>
                 <button type="submit" class="flex items-center gap-2 px-6 py-2.5 bg-[#1e293b] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#0f172a] transition-all border border-blue-400/20">
                     <i class="fas fa-check text-[8px]"></i>
