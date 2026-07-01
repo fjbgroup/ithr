@@ -162,7 +162,7 @@
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
         align-items: flex-start;
-        gap: 12px 6px;
+        gap: 12px 8px;
     }
 
     .repair-form-group {
