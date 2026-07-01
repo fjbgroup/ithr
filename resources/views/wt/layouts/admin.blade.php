@@ -286,8 +286,8 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </a>
 
     {{-- Request Walkie Talkie --}}
-    <div class="dropdown-wrapper {{ $requestCreateOpen ? 'open' : '' }}">
-      <button type="button" class="dropdown-trigger has-info {{ $requestCreateOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Request Walkie Talkie">
+    <div class="dropdown-wrapper request-wt-dropdown {{ $requestCreateOpen ? 'open' : '' }}">
+      <button type="button" class="dropdown-trigger has-info {{ $requestCreateOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Request Walkie Talkie" aria-expanded="{{ $requestCreateOpen ? 'true' : 'false' }}">
         <i class="fas fa-plus-circle" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Request Walkie Talkie</span>
         @include('wt.partials.sidebar-info', ['text' => 'Submit a walkie talkie request for yourself or on behalf of a recipient. ICT will assign the available unit later.'])
@@ -1424,13 +1424,15 @@ function closeSidebarInfoPopovers() {
   });
 }
 function positionSidebarInfoPopover(button, popover) {
-  var spacing = 12, vp = 16;
+  var spacing = 10, vp = 12;
   var rect = button.getBoundingClientRect();
+  var sidebar = button.closest('.sidebar, aside, nav');
+  var sidebarRect = sidebar ? sidebar.getBoundingClientRect() : null;
   popover.classList.remove('hidden');
   popover.style.visibility = 'hidden';
-  var maxW = Math.min(280, window.innerWidth - (vp * 2));
-  popover.style.width = Math.max(220, maxW) + 'px';
-  var left = rect.right + spacing;
+  var maxW = Math.min(240, window.innerWidth - (vp * 2));
+  popover.style.width = Math.max(190, maxW) + 'px';
+  var left = (sidebarRect ? sidebarRect.right : rect.right) + spacing;
   var pw = popover.offsetWidth;
   if (left + pw > window.innerWidth - vp) left = rect.left - pw - spacing;
   left = Math.max(vp, Math.min(left, window.innerWidth - vp - pw));

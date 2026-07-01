@@ -1547,6 +1547,8 @@ class InteractionController extends Controller
                 'department' => $request->department,
                 'position' => $request->position,
                 'radio_id' => $request->radio_id,
+                'assigned_serial_number' => $request->assigned_serial_number,
+                'accessories' => $request->accessories,
                 'is_temporary' => $request->request_type === 'temporary_walkie_talkie',
                 'quantity' => $request->quantity,
                 'duration_days' => $request->duration_days,

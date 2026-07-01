@@ -155,8 +155,27 @@
         font-size: 9px !important;
     }
     .all-status-compact .status-table-card {
-        padding: 6px !important;
+        padding: 12px !important;
+        border: 1px solid #dbeafe !important;
+        border-radius: 14px !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08) !important;
+    }
+    .dark .all-status-compact .status-table-card {
+        border-color: #334155 !important;
+        background: rgba(30, 41, 59, 0.72) !important;
+        box-shadow: none !important;
+    }
+    .all-status-compact .dataTables_wrapper {
+        border: 1px solid #dbeafe !important;
         border-radius: 12px !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+    }
+    .dark .all-status-compact .dataTables_wrapper {
+        border-color: #334155 !important;
+        background: #0f172a !important;
     }
     .all-status-compact table.dataTable thead th,
     .all-status-compact table.dataTable tbody td {
@@ -173,8 +192,22 @@
     }
     .all-status-compact .dataTables_wrapper .dataTables_length,
     .all-status-compact .dataTables_wrapper .dataTables_filter {
-        margin-bottom: 4px !important;
-        padding: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 10px 12px 8px !important;
+        background: #ffffff !important;
+    }
+    .dark .all-status-compact .dataTables_wrapper .dataTables_length,
+    .dark .all-status-compact .dataTables_wrapper .dataTables_filter {
+        background: #0f172a !important;
+    }
+    .all-status-compact .dataTables_wrapper .dataTables_info,
+    .all-status-compact .dataTables_wrapper .dataTables_paginate {
+        padding: 10px 12px 12px !important;
+        background: #ffffff !important;
+    }
+    .dark .all-status-compact .dataTables_wrapper .dataTables_info,
+    .dark .all-status-compact .dataTables_wrapper .dataTables_paginate {
+        background: #0f172a !important;
     }
     .all-status-compact .dataTables_wrapper .dataTables_length select,
     .all-status-compact .dataTables_wrapper .dataTables_filter input {
@@ -204,21 +237,48 @@
         margin-top: 2px !important;
     }
     #allDamagesTable {
-        table-layout: fixed;
+        min-width: 1080px !important;
+        table-layout: fixed !important;
+        width: 100% !important;
     }
     #allDamagesTable th,
     #allDamagesTable td {
         white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     #allDamagesTable th:nth-child(1),
     #allDamagesTable td:nth-child(1) {
-        width: 82px !important;
+        width: 100px !important;
+    }
+    #allDamagesTable th:nth-child(2),
+    #allDamagesTable td:nth-child(2) {
+        width: 165px !important;
+    }
+    #allDamagesTable th:nth-child(3),
+    #allDamagesTable td:nth-child(3) {
+        width: 155px !important;
+    }
+    #allDamagesTable th:nth-child(4),
+    #allDamagesTable td:nth-child(4) {
+        width: 205px !important;
+    }
+    #allDamagesTable th:nth-child(5),
+    #allDamagesTable td:nth-child(5) {
+        width: 220px !important;
     }
     #allDamagesTable th:nth-child(6),
-    #allDamagesTable td:nth-child(6),
+    #allDamagesTable td:nth-child(6) {
+        width: 130px !important;
+    }
     #allDamagesTable th:nth-child(7),
     #allDamagesTable td:nth-child(7) {
-        width: 106px !important;
+        width: 110px !important;
+    }
+    .all-status-compact .dataTables_scrollHeadInner,
+    .all-status-compact .dataTables_scrollHeadInner table,
+    .all-status-compact .dataTables_scrollBody table {
+        width: 100% !important;
     }
     @media (max-width: 1368px) {
         .all-status-compact {
@@ -523,6 +583,16 @@
                     <div class="damage-status-detail">
                         <div class="damage-status-label">Requested / Assigned Accessories</div>
                         <div class="damage-status-value">{{ $request->accessories ?: 'To be selected by ICT' }}</div>
+                    </div>
+                    <div class="damage-status-detail">
+                        <div class="damage-status-label">Executive Signature</div>
+                        <div class="damage-status-value">
+                            @if($request->request_signature)
+                                <img src="{{ $request->request_signature }}" alt="Executive signature" class="max-h-24 rounded-lg border border-stone-200 bg-white p-2 dark:border-slate-700">
+                            @else
+                                No signature captured.
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -917,6 +987,12 @@
         $('#status-section-' + tabId).removeClass('hidden');
         // Activate current button
         $('#tab-btn-' + tabId).addClass('active');
+        setTimeout(function () {
+            const tableSelector = tabId === 'damages' ? '#allDamagesTable' : '#allRequestsTable';
+            if ($.fn.DataTable && $.fn.DataTable.isDataTable(tableSelector)) {
+                $(tableSelector).DataTable().columns.adjust();
+            }
+        }, 0);
         
         // Save to URL if needed or just keep local
         localStorage.setItem('last_status_tab', tabId);
@@ -940,7 +1016,9 @@
                 emptyTable: "No records found.",
                 zeroRecords: "No matching records found."
             },
-            responsive: true
+            autoWidth: false,
+            scrollX: true,
+            responsive: false
         };
 
         const reqTable = $('#allRequestsTable').DataTable({
@@ -949,12 +1027,26 @@
                 { targets: -1, orderable: false, searchable: false }
             ]
         });
-        const damTable = $('#allDamagesTable').DataTable(tableOptions);
+        const damTable = $('#allDamagesTable').DataTable({
+            ...tableOptions,
+            columnDefs: [
+                { targets: 0, width: '100px' },
+                { targets: 1, width: '165px' },
+                { targets: 2, width: '155px' },
+                { targets: 3, width: '205px' },
+                { targets: 4, width: '220px' },
+                { targets: 5, width: '130px' },
+                { targets: 6, width: '110px', orderable: false, searchable: false }
+            ]
+        });
 
         mountAdminTableFooter(reqTable);
         mountAdminTableFooter(damTable);
+        setTimeout(function () {
+            reqTable.columns.adjust();
+            damTable.columns.adjust();
+        }, 0);
     });
 </script>
 @endpush
 @endsection
-
