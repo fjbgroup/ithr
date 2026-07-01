@@ -61,6 +61,8 @@
                 </div>
                 @endif
 
+                <div class="repair-form-section repair-form-group-full">Repair Timeline</div>
+
                 <div class="repair-form-group">
                     <label class="repair-form-label">Received Date <span class="required">*</span></label>
                     <input type="date" name="received_date" class="repair-form-input" required value="{{ old('received_date', $editRecord->received_date ?? date('Y-m-d')) }}">
@@ -91,18 +93,20 @@
                 </div>
 
                 @if(isset($editRecord))
-                <div class="repair-form-group repair-form-group-full">
+                <div class="repair-form-group">
                     <label class="repair-form-label">Finish Date</label>
                     <input type="date" name="finish_date" class="repair-form-input" value="{{ old('finish_date', $editRecord->finish_date ?? '') }}">
                 </div>
                 @endif
 
-                <div class="repair-form-group repair-form-group-full">
+                <div class="repair-form-section repair-form-group-full">Repair Notes</div>
+
+                <div class="repair-form-group repair-form-note-group">
                     <label class="repair-form-label">Issue Description <span class="required">*</span></label>
                     <textarea name="issue" class="repair-form-input repair-textarea" placeholder="e.g. Broken PTT" required>{{ old('issue', $editRecord->issue ?? $editRecord->issue_description ?? '') }}</textarea>
                 </div>
 
-                <div class="repair-form-group repair-form-group-full">
+                <div class="repair-form-group repair-form-note-group">
                     <label class="repair-form-label">Remarks</label>
                     <textarea name="remarks" class="repair-form-input repair-textarea" placeholder="Notes...">{{ old('remarks', $editRecord->remarks ?? '') }}</textarea>
                 </div>
@@ -155,15 +159,13 @@
     }
 
     .repair-form-grid {
-        display: flex;
-        flex-wrap: nowrap;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: flex-start;
-        justify-content: flex-start;
-        gap: 22px;
+        gap: 18px 22px;
     }
 
     .repair-form-group {
-        flex: 1 1 0;
         min-width: 0;
         display: flex;
         flex-direction: column;
@@ -171,8 +173,24 @@
     }
 
     .repair-form-group-full {
-        flex: 1 1 0;
-        min-width: 0;
+        grid-column: 1 / -1;
+    }
+
+    .repair-form-section {
+        margin-top: 2px;
+        padding: 9px 12px;
+        border-left: 4px solid #38bdf8;
+        border-radius: 11px;
+        background: rgba(14, 165, 233, 0.12);
+        color: #bae6fd;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .repair-form-note-group {
+        align-self: stretch;
     }
 
     .repair-form-label {
@@ -190,7 +208,7 @@
 
     .repair-form-input {
         width: 100%;
-        min-height: 46px;
+        height: 46px;
         border-radius: 16px;
         border: 1px solid #334155;
         background: #0f172a;
@@ -209,8 +227,10 @@
     }
 
     .repair-textarea {
-        min-height: 120px;
+        height: 118px;
+        min-height: 118px;
         resize: vertical;
+        line-height: 1.45;
     }
 
     .repair-form-footer {
@@ -294,6 +314,11 @@
         color: #334155 !important;
     }
 
+    html:not(.dark) body .content-surface .repair-form-section {
+        background: #eaf6fc !important;
+        color: #0369a1 !important;
+    }
+
     html:not(.dark) body .content-surface .repair-form-input {
         background: #ffffff !important;
         border-color: #cbd5e1 !important;
@@ -330,6 +355,10 @@
     }
 
     @media (max-width: 768px) {
+        .repair-form-grid {
+            grid-template-columns: 1fr;
+        }
+
         .repair-form-header,
         .repair-form-body,
         .repair-form-footer {
@@ -348,4 +377,3 @@
     }
 </style>
 @endsection
-
