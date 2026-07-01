@@ -681,23 +681,31 @@ function liveSearch(form, resultId, delay) {
     var el = document.getElementById(resultId);
     if (!el) return;
     var t;
+    var ready = false;
+    // Delay activation so browser auto-restore of form fields doesn't trigger an AJAX reload
+    setTimeout(function() { ready = true; }, 600);
     function run() {
+        if (!ready) return;
         clearTimeout(t);
         t = setTimeout(function() {
             var p = new URLSearchParams();
             new FormData(form).forEach(function(v, k) { p.append(k, v); });
+            p.set('_t', Date.now()); // cache buster
             var url = form.action + '?' + p.toString();
             el.style.transition = 'opacity .15s';
             el.style.opacity = '.45';
             fetch(url, { 
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Cache-Control': 'no-cache, no-store' },
                 cache: 'no-store'
             })
                 .then(function(r) { return r.text(); })
                 .then(function(html) {
                     var doc = new DOMParser().parseFromString(html, 'text/html');
                     var fresh = doc.getElementById(resultId);
-                    if (fresh) { el.innerHTML = fresh.innerHTML; history.replaceState(null, '', url); }
+                    // Strip _t param from display URL
+                    p.delete('_t');
+                    var displayUrl = form.action + (p.toString() ? '?' + p.toString() : '');
+                    if (fresh) { el.innerHTML = fresh.innerHTML; history.replaceState(null, '', displayUrl); }
                 })
                 .catch(function() {})
                 .finally(function() { el.style.opacity = ''; });
