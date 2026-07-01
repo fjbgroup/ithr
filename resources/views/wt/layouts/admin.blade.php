@@ -1424,13 +1424,15 @@ function closeSidebarInfoPopovers() {
   });
 }
 function positionSidebarInfoPopover(button, popover) {
-  var spacing = 12, vp = 16;
+  var spacing = 10, vp = 12;
   var rect = button.getBoundingClientRect();
+  var sidebar = button.closest('.sidebar, aside, nav');
+  var sidebarRect = sidebar ? sidebar.getBoundingClientRect() : null;
   popover.classList.remove('hidden');
   popover.style.visibility = 'hidden';
-  var maxW = Math.min(280, window.innerWidth - (vp * 2));
-  popover.style.width = Math.max(220, maxW) + 'px';
-  var left = rect.right + spacing;
+  var maxW = Math.min(240, window.innerWidth - (vp * 2));
+  popover.style.width = Math.max(190, maxW) + 'px';
+  var left = (sidebarRect ? sidebarRect.right : rect.right) + spacing;
   var pw = popover.offsetWidth;
   if (left + pw > window.innerWidth - vp) left = rect.left - pw - spacing;
   left = Math.max(vp, Math.min(left, window.innerWidth - vp - pw));

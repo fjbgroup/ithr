@@ -430,6 +430,12 @@
         width: 100% !important;
         max-width: 100% !important;
     }
+    .corporate-combobox-control {
+        position: relative;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
     .corporate-combobox select {
         display: none !important;
     }
@@ -443,13 +449,14 @@
         border-radius: 7px !important;
         border: 1px solid rgba(139, 94, 60, 0.3) !important;
         background: #ffffff !important;
-        padding: 5px 30px 5px 8px !important;
+        padding: 5px 34px 5px 8px !important;
         color: #1e293b !important;
         font-size: 9.5px !important;
         font-weight: 800 !important;
         line-height: 1.2 !important;
         text-transform: uppercase;
         outline: none !important;
+        appearance: none !important;
     }
     .corporate-combobox-input::placeholder {
         color: #94a3b8 !important;
@@ -461,7 +468,7 @@
     }
     .corporate-combobox-toggle {
         position: absolute;
-        right: 10px;
+        right: 12px;
         top: 50%;
         transform: translateY(-50%);
         color: #64748b;
@@ -2161,6 +2168,9 @@
             const wrapper = document.createElement('div');
             wrapper.className = 'corporate-combobox';
 
+            const control = document.createElement('div');
+            control.className = 'corporate-combobox-control';
+
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'corporate-combobox-input';
@@ -2177,7 +2187,8 @@
             menu.className = 'corporate-combobox-menu';
 
             select.parentNode.insertBefore(wrapper, select);
-            wrapper.append(input, toggle, menu, select);
+            control.append(input, toggle, menu);
+            wrapper.append(control, select);
 
             const optionRows = () => Array.from(select.options)
                 .filter((option) => option.value)
@@ -2253,6 +2264,9 @@
             const wrapper = document.createElement('div');
             wrapper.className = 'corporate-combobox';
 
+            const control = document.createElement('div');
+            control.className = 'corporate-combobox-control';
+
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'corporate-combobox-input';
@@ -2269,7 +2283,8 @@
             menu.className = 'corporate-combobox-menu';
 
             select.parentNode.insertBefore(wrapper, select);
-            wrapper.append(input, toggle, menu, select);
+            control.append(input, toggle, menu);
+            wrapper.append(control, select);
 
             let searchTimer = null;
             let currentResults = [];
