@@ -234,6 +234,7 @@
                                         if (strcasecmp($c->name, $rawCo) === 0) return true;
                                         if ($cleanCo && str_contains(strtolower($c->name), trim($cleanCo))) return true;
                                         if (str_contains(strtolower($c->name), strtolower($rawCo))) return true;
+                                        if (strcasecmp($cleanCo, 'fgvb') === 0 && strcasecmp($c->code, 'fbsb') === 0) return true;
                                         return false;
                                     });
                                     $coCode = $co ? $co->code : $rawCo;
