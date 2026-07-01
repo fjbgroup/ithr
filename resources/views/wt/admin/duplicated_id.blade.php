@@ -2,6 +2,14 @@
 
 @section('title', 'Duplicated ID Management')
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+@endpush
+
 @section('content')
 
 @include('wt.admin.partials.inventory-management-ui')
@@ -215,7 +223,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Model (MC)</label>
-                        <select name="model" class="form-input">
+                        <select name="model" class="form-input ict-tag-select" data-placeholder="Type or select model">
                             <option value="">-- Leave Empty --</option>
                             @foreach($walkieModels as $m)
                             <option value="{{ $m }}">{{ $m }}</option>
@@ -224,7 +232,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Current Ownership Type</label>
-                        <select name="ownership_type" class="form-input ownership-type-control">
+                        <select name="ownership_type" class="form-input ownership-type-control ict-tag-select" data-placeholder="Type or select ownership type">
                             @foreach($ownershipTypeOptions as $ot)
                             <option value="{{ $ot }}">{{ $ot }}</option>
                             @endforeach
@@ -244,7 +252,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Location</label>
-                        <select name="location" class="form-input">
+                        <select name="location" class="form-input ict-tag-select" data-placeholder="Type or select location">
                             <option value="">-- None --</option>
                             @foreach($locationOptions as $location)
                             <option value="{{ $location }}">{{ $location }}</option>
@@ -264,7 +272,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership Type To Be</label>
-                        <select name="ownership_type_to_be" class="form-input">
+                        <select name="ownership_type_to_be" class="form-input ict-tag-select" data-placeholder="Type or select target ownership type">
                             <option value="">-- None --</option>
                             @foreach($ownershipTypeOptions as $tot)
                             <option value="{{ $tot }}">{{ $tot }}</option>
@@ -307,7 +315,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Model <span class="required">*</span></label>
-                        <select name="model" id="edit_model" class="form-input" required>
+                        <select name="model" id="edit_model" class="form-input ict-tag-select" data-placeholder="Type or select model" required>
                             @foreach($walkieModels as $editModel)
                             <option value="{{ $editModel }}">{{ $editModel }}</option>
                             @endforeach
@@ -323,7 +331,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership Type <span class="required">*</span></label>
-                        <select name="ownership_type" id="edit_ownership_type" class="form-input ownership-type-control" required>
+                        <select name="ownership_type" id="edit_ownership_type" class="form-input ownership-type-control ict-tag-select" data-placeholder="Type or select ownership type" required>
                             @foreach($ownershipTypeOptions as $editOwnershipType)
                             <option value="{{ $editOwnershipType }}">{{ $editOwnershipType }}</option>
                             @endforeach
@@ -347,7 +355,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Location</label>
-                        <select name="location" id="edit_location" class="form-input">
+                        <select name="location" id="edit_location" class="form-input ict-tag-select" data-placeholder="Type or select location">
                             <option value="">-- None --</option>
                             @foreach($locationOptions as $location)
                             <option value="{{ $location }}">{{ $location }}</option>
@@ -375,7 +383,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership Type To Be</label>
-                        <select name="ownership_type_to_be" id="edit_ownership_type_to_be" class="form-input">
+                        <select name="ownership_type_to_be" id="edit_ownership_type_to_be" class="form-input ict-tag-select" data-placeholder="Type or select target ownership type">
                             <option value="">Select target...</option>
                             @foreach($ownershipTypeOptions as $t)
                             <option value="{{ $t }}">{{ $t }}</option>
@@ -578,26 +586,73 @@ $(document).ready(function () {
     /* Default sort: Radio ID ascending */
     updateSortHeaders();
     applyFilter();
+    initIctTagSelects(document);
 });
+
+function initIctTagSelects(scope) {
+    if (!window.jQuery || !$.fn.select2) return;
+
+    $(scope || document).find('.ict-tag-select').each(function() {
+        const $select = $(this);
+        if ($select.hasClass('select2-hidden-accessible')) {
+            return;
+        }
+
+        $select.select2({
+            width: '100%',
+            tags: true,
+            allowClear: !$select.prop('required'),
+            dropdownParent: $select.closest('.modal-box').length ? $select.closest('.modal-box') : $(document.body),
+            placeholder: $select.data('placeholder') || 'Type or select option',
+            createTag: function(params) {
+                const term = $.trim(params.term);
+                if (term === '') return null;
+                const value = term.toUpperCase();
+                return { id: value, text: value, newTag: true };
+            },
+            insertTag: function(data, tag) {
+                data.unshift(tag);
+            }
+        });
+    });
+}
+
+function setIctTagSelectValue(id, value, fallback) {
+    const select = document.getElementById(id);
+    if (!select) return;
+
+    const normalized = String(value || fallback || '').trim().toUpperCase();
+    if (normalized !== '' && !Array.from(select.options).some((option) => option.value.toUpperCase() === normalized)) {
+        select.add(new Option(normalized, normalized, true, true));
+    }
+
+    select.value = normalized;
+    if (window.jQuery && $(select).hasClass('select2-hidden-accessible')) {
+        $(select).trigger('change');
+    } else {
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+}
 
 function openEditModal(id,radio,serialNumber,model,status,ownershipType,ownership,position,department,location,temporaryRadioId,trackingRef,remark,needToChangeId,idChangeDone,ownershipTypeToBe){
     const form=document.getElementById('editWalkieForm');
     form.action="{{ route('wt.admin.walkies.updateMeta',['walkie'=>'__ID__']) }}".replace('__ID__',id);
     document.getElementById('edit_radio_id').value=radio||'';
     document.getElementById('edit_serial_number').value=serialNumber||'';
-    document.getElementById('edit_model').value=model||'';
+    initIctTagSelects(document.getElementById('editModal'));
+    setIctTagSelectValue('edit_model', model, '');
     document.getElementById('edit_status').value=status||'';
-    document.getElementById('edit_ownership_type').value=ownershipType||'';
+    setIctTagSelectValue('edit_ownership_type', ownershipType, '');
     document.getElementById('edit_ownership').value=ownership||'';
     document.getElementById('edit_position').value=position||'';
     document.getElementById('edit_department').value=department||'';
-    document.getElementById('edit_location').value=location||'';
+    setIctTagSelectValue('edit_location', location, '');
     document.getElementById('edit_temporary_radio_id').value=temporaryRadioId||'';
     document.getElementById('edit_tracking_ref').value=trackingRef||'';
     document.getElementById('edit_remark').value=remark||'';
     document.getElementById('edit_need_to_change_id').value=needToChangeId||'';
     document.getElementById('edit_id_change_done').value=idChangeDone||'0';
-    document.getElementById('edit_ownership_type_to_be').value=ownershipTypeToBe||'';
+    setIctTagSelectValue('edit_ownership_type_to_be', ownershipTypeToBe, '');
     document.getElementById('editModal').classList.add('active');
     document.body.style.overflow='hidden';
 }
@@ -616,7 +671,7 @@ document.querySelectorAll('.ownership-type-control').forEach(s=>{ s.addEventList
 function openImportModal(){ document.getElementById('importModal').classList.add('active'); document.body.style.overflow='hidden'; }
 function closeImportModal(){ document.getElementById('importModal').classList.remove('active'); document.body.style.overflow=''; }
 function closeImportModalOutside(e){ if(e.target===document.getElementById('importModal')) closeImportModal(); }
-function openAddModal(){ document.getElementById('addModal').classList.add('active'); document.body.style.overflow='hidden'; }
+function openAddModal(){ initIctTagSelects(document.getElementById('addModal')); document.getElementById('addModal').classList.add('active'); document.body.style.overflow='hidden'; }
 function closeAddModal(){ document.getElementById('addModal').classList.remove('active'); document.body.style.overflow=''; }
 function closeAddModalOutside(e){ if(e.target===document.getElementById('addModal')) closeAddModal(); }
 function updateFileName(input){

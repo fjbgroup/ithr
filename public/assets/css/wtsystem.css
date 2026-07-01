@@ -638,6 +638,92 @@ html.dark .topbar-role-switcher { background: #1f2937; border-color: #374151; }
   padding: 4px 8px; cursor: pointer; font-family: inherit;
   text-transform: uppercase; max-width: 180px;
 }
+.executive-account-menu {
+  position: relative;
+}
+.executive-account-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  padding: 4px 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.executive-account-toggle:hover,
+.executive-account-toggle[aria-expanded="true"] {
+  background: var(--sidebar-active-bg);
+  color: var(--accent);
+}
+.executive-account-toggle i {
+  font-size: 9px;
+}
+.executive-account-list {
+  position: absolute;
+  z-index: 2100;
+  top: calc(100% + 10px);
+  left: 50%;
+  width: 375px;
+  max-width: min(86vw, 375px);
+  max-height: 340px;
+  overflow-y: auto;
+  transform: translateX(-50%);
+  border: 1px solid rgba(15, 23, 42, .18);
+  border-radius: 10px;
+  background: #111818;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, .22);
+  padding: 12px 0;
+}
+.executive-account-list::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #111818;
+}
+.executive-account-option,
+.executive-account-empty {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.25;
+  padding: 12px 18px;
+  text-align: left;
+  text-transform: uppercase;
+}
+.executive-account-option {
+  cursor: pointer;
+}
+.executive-account-option:hover,
+.executive-account-option:focus {
+  background: #0284c7;
+  color: #ffffff;
+  outline: none;
+}
+.executive-account-empty {
+  color: #94a3b8;
+}
+html.dark .executive-account-toggle:hover,
+html.dark .executive-account-toggle[aria-expanded="true"] {
+  background: rgba(2,132,199,.18);
+  color: #e0f2fe;
+}
 
 .topbar-return-btn {
   display: inline-flex; align-items: center; gap: 6px;

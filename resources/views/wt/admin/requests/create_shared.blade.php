@@ -2408,6 +2408,105 @@
             });
         }
 
+        function enhanceFreeTextSelect(select) {
+            if (!select || select.dataset.freeTextComboboxReady === '1') return;
+
+            select.dataset.freeTextComboboxReady = '1';
+            const inputRequired = select.required;
+            select.required = false;
+            select.classList.add('hidden');
+            select.style.display = 'none';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'corporate-combobox';
+
+            const control = document.createElement('div');
+            control.className = 'corporate-combobox-control';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'corporate-combobox-input';
+            input.placeholder = select.dataset.placeholder || 'Type or select option';
+            input.autocomplete = 'off';
+            input.value = select.value || '';
+            input.required = inputRequired;
+
+            const toggle = document.createElement('span');
+            toggle.className = 'corporate-combobox-toggle';
+            toggle.innerHTML = '<i class="fa-solid fa-caret-down"></i>';
+
+            const menu = document.createElement('div');
+            menu.className = 'corporate-combobox-menu';
+
+            select.parentNode.insertBefore(wrapper, select);
+            control.append(input, toggle, menu);
+            wrapper.append(control, select);
+
+            const optionRows = () => Array.from(select.options)
+                .map((option) => String(option.value || option.textContent || '').trim())
+                .filter((value) => value !== '');
+
+            const renderMenu = () => {
+                const query = input.value.trim().toUpperCase();
+                const seen = new Set();
+                const matches = optionRows()
+                    .map((value) => value.toUpperCase())
+                    .filter((value) => {
+                        if (!value || seen.has(value)) return false;
+                        seen.add(value);
+                        return query === '' || value.includes(query);
+                    })
+                    .slice(0, 14);
+
+                menu.innerHTML = matches.length
+                    ? matches.map((value, index) => `
+                        <button type="button" class="corporate-combobox-option" data-free-text-index="${index}">
+                            <span class="corporate-combobox-name">${escapeHtml(value)}</span>
+                        </button>
+                    `).join('')
+                    : '<div class="corporate-combobox-name px-4 py-3 text-slate-400">No match - type the new value.</div>';
+
+                Array.from(menu.querySelectorAll('[data-free-text-index]')).forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const value = matches[Number(button.dataset.freeTextIndex)] || '';
+                        input.value = value;
+                        ensureSelectValue(select, value);
+                        menu.style.display = 'none';
+                    });
+                });
+
+                menu.style.display = 'block';
+            };
+
+            input.addEventListener('input', () => {
+                ensureSelectValue(select, input.value);
+                renderMenu();
+            });
+            input.addEventListener('change', () => {
+                ensureSelectValue(select, input.value);
+            });
+            input.addEventListener('focus', renderMenu);
+            input.addEventListener('click', renderMenu);
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    ensureSelectValue(select, input.value);
+                    menu.style.display = 'none';
+                }
+
+                if (event.key === 'Escape') {
+                    menu.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!wrapper.contains(event.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            ensureSelectValue(select, input.value);
+        }
+
         function renderTemporaryPicRows() {
             const quantityField = document.querySelector('input[name="quantity"]');
             const list = document.getElementById('temporaryPicList');
@@ -2669,22 +2768,7 @@
                 return;
             }
 
-            $(tagSelects).select2({
-                tags: true,
-                width: '100%',
-                placeholder: function() {
-                    return $(this).data('placeholder') || 'Type or select option';
-                },
-                allowClear: true,
-                createTag: function(params) {
-                    const term = $.trim(params.term);
-                    if (term === '') return null;
-                    return { id: term.toUpperCase(), text: term.toUpperCase(), newTag: true };
-                },
-                insertTag: function(data, tag) {
-                    data.unshift(tag);
-                }
-            });
+            tagSelects.forEach(enhanceFreeTextSelect);
         }
 
         initTagSelect('.smart-select');

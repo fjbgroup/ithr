@@ -1010,21 +1010,21 @@
                     </div>
                     <div class="unused-use-field">
                         <label>Model</label>
-                        <select name="model" id="used_model" required>
-                            <option value="">Select model</option>
+                        <input type="text" name="model" id="used_model" list="unused_model_options" placeholder="Type or select model" required>
+                        <datalist id="unused_model_options">
                             @foreach($walkieModels as $model)
-                                <option value="{{ $model }}">{{ $model }}</option>
+                                <option value="{{ $model }}"></option>
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="unused-use-field">
                         <label>Ownership Type</label>
-                        <select name="ownership_type" id="used_ownership_type" required onchange="toggleUsedSharedWith()">
-                            <option value="">Select type</option>
+                        <input type="text" name="ownership_type" id="used_ownership_type" list="unused_ownership_type_options" placeholder="Type or select type" required oninput="toggleUsedSharedWith()" onchange="toggleUsedSharedWith()">
+                        <datalist id="unused_ownership_type_options">
                             @foreach($ownershipTypeOptions as $ot)
-                            <option value="{{ $ot }}">{{ $ot }}</option>
+                            <option value="{{ $ot }}"></option>
                             @endforeach
-                        </select>
+                        </datalist>
                     </div>
                     <div class="unused-use-field full" id="used_shared_with_group" style="display:none;">
                         <label>Shared With</label>
@@ -1067,8 +1067,6 @@
         document.getElementById('used_serial_number').value = button.dataset.serialNumber || '';
         document.getElementById('used_model').value = button.dataset.model || '';
         const ownershipType = (button.dataset.ownershipType || '').toUpperCase();
-        // The select is populated from master data; assigning a value that
-        // isn't an option simply leaves it unselected.
         document.getElementById('used_ownership_type').value = ownershipType;
         document.getElementById('used_shared_with').value = button.dataset.sharedWith || '';
         document.getElementById('used_ownership').value = button.dataset.ownership || '';
