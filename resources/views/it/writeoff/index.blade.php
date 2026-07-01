@@ -6,6 +6,177 @@
 @section('content')
 @php $user = auth('it')->user(); @endphp
 
+<style>
+  .wo-hou-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .wo-hou-table th {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+  .wo-hou-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .wo-hou-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .wo-hou-submission {
+    min-width: 260px;
+  }
+  .wo-hou-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    min-width: 0;
+  }
+  .wo-hou-title {
+    font-size: 13px;
+    font-weight: 750;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wo-hou-count {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: rgba(2,132,199,.10);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+  }
+  .wo-hou-asset-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 100%;
+  }
+  .wo-hou-asset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 260px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--body-bg);
+    padding: 5px 8px;
+    font-size: 11px;
+    color: var(--text);
+  }
+  .wo-hou-asset-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wo-hou-asset-no {
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .wo-hou-more {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 2px;
+  }
+  .wo-hou-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--accent);
+    padding: 5px 9px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .wo-hou-open-btn:hover {
+    background: var(--body-bg);
+    border-color: rgba(2,132,199,.35);
+  }
+  .wo-hou-person {
+    font-size: 12px;
+    font-weight: 650;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wo-hou-date {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .wo-hou-action {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .wo-hou-modal-asset {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 150px 120px;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 10px 12px;
+  }
+  @media (max-width: 760px) {
+    .wo-hou-table,
+    .wo-hou-table thead,
+    .wo-hou-table tbody,
+    .wo-hou-table tr,
+    .wo-hou-table th,
+    .wo-hou-table td {
+      display: block;
+      width: 100%;
+    }
+    .wo-hou-table thead {
+      display: none;
+    }
+    .wo-hou-table tr {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .wo-hou-table td {
+      padding: 4px 0;
+      border-bottom: 0;
+    }
+    .wo-hou-action {
+      text-align: left;
+      padding-top: 10px !important;
+    }
+    .wo-hou-title-row {
+      flex-wrap: wrap;
+    }
+    .wo-hou-modal-asset {
+      grid-template-columns: 28px minmax(0, 1fr);
+    }
+    .wo-hou-modal-asset-meta {
+      grid-column: 2;
+    }
+  }
+</style>
+
 <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px">
   <div>
     <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Write Off Authorisation</h4>
@@ -162,18 +333,21 @@
     </div>
   </div>
   <div style="overflow-x:auto">
-    <table class="table data-table" style="width:100%">
-      <thead><tr>
-        <th>#</th><th>Write-Off Submission</th><th>Items</th><th>Submitted By</th><th>Date</th><th>Action</th>
-      </tr></thead>
+    <table class="wo-hou-table">
+      <thead>
+        <tr>
+          <th style="width:52%">Submission</th>
+          <th style="width:22%">Submitted By</th>
+          <th style="width:12%">Date</th>
+          <th style="width:14%;text-align:right">Action</th>
+        </tr>
+      </thead>
       <tbody>
         @php
           $houGrouped = $myHouQueue->groupBy(fn($i) => $i->batch_id ?: ('single_'.$i->id));
-          $houRowNum = 0;
         @endphp
         @forelse($houGrouped as $batchKey => $houGroup)
         @php
-          $houRowNum++;
           $houFirst = $houGroup->first();
           $houIsBatch = $houGroup->count() > 1;
           $houItemsData = $houGroup->map(fn($i) => [
@@ -188,37 +362,49 @@
           ])->values()->toJson();
         @endphp
         <tr>
-          <td>{{ $houRowNum }}</td>
-          <td>
-            @if($houIsBatch)
-              <div style="font-weight:600;color:var(--text)">Bulk Write-Off</div>
-              <div style="font-size:11px;color:var(--muted);margin-bottom:6px">{{ $houGroup->count() }} assets submitted together</div>
-              <div style="background:var(--body-bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;max-height:110px;overflow-y:auto">
-                @foreach($houGroup as $gi)
-                <div style="font-size:11px;padding:2px 0;{{ !$loop->last ? 'border-bottom:1px solid var(--border);' : '' }}color:var(--text)">
-                  {{ $gi->description }} <span style="font-size:10px;color:var(--muted);font-family:monospace">{{ $gi->asset_number ?: '' }}</span>
-                </div>
-                @endforeach
+          <td class="wo-hou-submission">
+            <div class="wo-hou-title-row">
+              <div class="wo-hou-title" title="{{ $houIsBatch ? 'Bulk Write-Off' : $houFirst->description }}">
+                {{ $houIsBatch ? 'Bulk Write-Off' : $houFirst->description }}
               </div>
-            @else
-              <div style="font-weight:500">{{ $houFirst->description }}</div>
-              <div style="font-size:11px;color:var(--muted)">{{ $houFirst->asset_class }}</div>
-            @endif
+              <span class="wo-hou-count">{{ $houGroup->count() }} {{ $houGroup->count() === 1 ? 'item' : 'items' }}</span>
+              <button type="button"
+                class="wo-hou-open-btn"
+                data-items="{{ $houItemsData }}"
+                data-title="{{ e($houIsBatch ? 'Bulk Write-Off' : $houFirst->description) }}"
+                onclick="openHouAssetsModal(this)">
+                <i class="bi bi-box-arrow-up-right"></i> Open
+              </button>
+            </div>
+            <div class="wo-hou-asset-list">
+              @foreach($houGroup->take(2) as $gi)
+                <span class="wo-hou-asset" title="{{ $gi->description }}{{ $gi->asset_number ? ' - '.$gi->asset_number : '' }}">
+                  <span class="wo-hou-asset-name">{{ $gi->description ?: 'Asset' }}</span>
+                  @if($gi->asset_number)
+                    <span class="wo-hou-asset-no">{{ $gi->asset_number }}</span>
+                  @endif
+                </span>
+              @endforeach
+              @if($houGroup->count() > 2)
+                <span class="wo-hou-more">+{{ $houGroup->count() - 2 }} more</span>
+              @endif
+            </div>
           </td>
-          <td><span style="background:rgba(2,132,199,.1);color:var(--accent);border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700">{{ $houGroup->count() }}</span></td>
-          <td>{{ $houFirst->creator?->full_name ?? '—' }}</td>
-          <td style="font-size:12px;color:var(--muted)">{{ $houFirst->created_at?->format('d M Y') }}</td>
           <td>
+            <div class="wo-hou-person" title="{{ $houFirst->creator?->full_name ?? '—' }}">{{ $houFirst->creator?->full_name ?? '—' }}</div>
+          </td>
+          <td class="wo-hou-date">{{ $houFirst->created_at?->format('d M Y') }}</td>
+          <td class="wo-hou-action">
             <button type="button"
               data-items="{{ $houItemsData }}"
               onclick="openHouFormModal(this)"
-              class="btn-primary-custom" style="padding:5px 14px;font-size:11px;white-space:nowrap">
+              class="btn-primary-custom" style="padding:7px 12px;font-size:11px;white-space:nowrap">
               <i class="bi bi-file-earmark-text"></i> Sign Form
             </button>
           </td>
         </tr>
         @empty
-        <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No pending write-offs for your review.</td></tr>
+        <tr><td colspan="4" style="text-align:center;padding:32px;color:var(--muted)">No pending write-offs for your review.</td></tr>
         @endforelse
       </tbody>
     </table>
@@ -250,6 +436,25 @@
 </div>
 @endif
 @endif
+
+{{-- HOU Asset List Modal --}}
+<div id="houAssetsModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9100;align-items:center;justify-content:center;padding:20px">
+  <div style="width:100%;max-width:720px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 24px 70px rgba(0,0,0,.28);overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;border-bottom:1px solid var(--border);background:var(--surface)">
+      <div style="min-width:0">
+        <div id="houAssetsModalTitle" style="font-size:15px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Submission Assets</div>
+        <div id="houAssetsModalMeta" style="font-size:12px;color:var(--muted);margin-top:3px"></div>
+      </div>
+      <button type="button" onclick="closeHouAssetsModal()" style="width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--muted);font-size:20px;line-height:1;cursor:pointer">&times;</button>
+    </div>
+    <div style="padding:16px 18px;max-height:60vh;overflow-y:auto">
+      <div id="houAssetsModalList" style="display:grid;gap:8px"></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--border);background:var(--body-bg)">
+      <button type="button" onclick="closeHouAssetsModal()" class="btn-secondary-custom" style="font-size:12px;padding:7px 14px">Close</button>
+    </div>
+  </div>
+</div>
 
 {{-- ══════════════════════════════════════════════════════════════
      SECTION C: GM QUEUE
@@ -1704,6 +1909,43 @@ function buildSignDocItemTable(tbodyId, items) {
 }
 
 // ── HOU Form Modal ────────────────────────────────────────────
+function openHouAssetsModal(btn) {
+  var items = JSON.parse(btn.dataset.items || '[]');
+  var title = btn.dataset.title || 'Submission Assets';
+  var modal = document.getElementById('houAssetsModal');
+  var list = document.getElementById('houAssetsModalList');
+  var titleEl = document.getElementById('houAssetsModalTitle');
+  var metaEl = document.getElementById('houAssetsModalMeta');
+
+  titleEl.textContent = title;
+  metaEl.textContent = items.length + ' listed asset' + (items.length === 1 ? '' : 's');
+  list.innerHTML = '';
+
+  items.forEach(function(item, i) {
+    var row = document.createElement('div');
+    row.className = 'wo-hou-modal-asset';
+    row.innerHTML =
+      '<div style="width:24px;height:24px;border-radius:50%;background:rgba(2,132,199,.10);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800">' + (i + 1) + '</div>' +
+      '<div style="min-width:0">' +
+        '<div style="font-size:13px;font-weight:750;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escHtml(item.description || 'Asset') + '">' + escHtml(item.description || 'Asset') + '</div>' +
+        '<div style="font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escHtml(item.asset_class || '-') + '</div>' +
+      '</div>' +
+      '<div class="wo-hou-modal-asset-meta" style="font-size:11px;color:var(--text);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escHtml(item.asset_number || '-') + '">' + escHtml(item.asset_number || '-') + '</div>' +
+      '<div class="wo-hou-modal-asset-meta" style="font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escHtml(item.serial_number || '-') + '">' + escHtml(item.serial_number || '-') + '</div>';
+    list.appendChild(row);
+  });
+
+  if (!items.length) {
+    list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:24px">No assets found for this submission.</div>';
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeHouAssetsModal() {
+  document.getElementById('houAssetsModal').style.display = 'none';
+}
+
 function openHouFormModal(btn) {
   var items = JSON.parse(btn.dataset.items);
   var ids   = items.map(function(i){ return i.id; }).join(',');
@@ -1793,4 +2035,3 @@ function openAssignHOU(id) {
 
 </script>
 @endpush
-

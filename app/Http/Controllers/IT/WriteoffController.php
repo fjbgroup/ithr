@@ -25,7 +25,7 @@ class WriteoffController extends Controller
             ? route('it.profile.signature.image')
             : '';
 
-        // â”€â”€ HOU â”€â”€
+        // HOU
         $myHouQueue = $myHouCount = $houHistory = $houHistoryCount = null;
         if ($user->isHOU()) {
             $myHouQueue     = EwasteItem::with(['creator', 'inventoryItem'])
@@ -41,7 +41,7 @@ class WriteoffController extends Controller
             $houHistoryCount = $houHistory->count();
         }
 
-        // â”€â”€ GM â”€â”€
+        // GM
         $myGmQueue = $myGmCount = $gmHistory = $gmHistoryCount = null;
         if ($user->isGM()) {
             $myGmQueue   = EwasteItem::with(['creator', 'houUser'])
@@ -57,7 +57,7 @@ class WriteoffController extends Controller
             $gmHistoryCount = $gmHistory->count();
         }
 
-        // â”€â”€ CEO â”€â”€
+        // CEO
         $myCeoQueue = $myCeoCount = $ceoHistory = $ceoHistoryCount = null;
         if ($user->isCEO()) {
             $myCeoQueue      = EwasteItem::with(['creator', 'houUser'])
@@ -72,7 +72,7 @@ class WriteoffController extends Controller
             $ceoHistoryCount = $ceoHistory->count();
         }
 
-        // â”€â”€ Finance Admin â”€â”€
+        // Finance Admin
         $faPending = collect(); $faPendingCount = 0; $faProcessed = collect();
         if ($user->isFinanceAdmin()) {
             $faPending      = EwasteItem::with(['creator', 'houUser'])
@@ -88,7 +88,7 @@ class WriteoffController extends Controller
                 ->orderByDesc('updated_at')->limit(100)->get();
         }
 
-        // â”€â”€ Pending Final Approval (all roles) â”€â”€
+        // Pending Final Approval (all roles)
         $woQueue = EwasteItem::with(['creator', 'houUser'])
             ->where('disposal_status', 'Pending')
             ->where(fn($q) => $q->whereNull('ceo_status')->orWhere('ceo_status', 'Pending'))
@@ -98,7 +98,7 @@ class WriteoffController extends Controller
             ->get();
         $woCount = $woQueue->count();
 
-        // â”€â”€ My Write-Offs (non-HOU/GM/CEO) â”€â”€
+        // My Write-Offs (non-HOU/GM/CEO)
         // Only show submissions from the past 3 months that haven't been dismissed
         $myWoItems = collect(); $myWoCount = 0;
         if (!$user->isHOU() && !$user->isGM() && !$user->isCEO()) {
@@ -109,7 +109,7 @@ class WriteoffController extends Controller
             $myWoCount = $myWoItems->count();
         }
 
-        // â”€â”€ Form display items (loaded from URL params when user comes from inventory page) â”€â”€
+        // Form display items (loaded from URL params when user comes from inventory page)
         $woItem = $nitItem = null;
         $bulkItems = $bulkNitItems = collect();
         $bulkIdsRaw = trim(request('bulk_ids', ''));
@@ -176,7 +176,7 @@ class WriteoffController extends Controller
         EwasteItem::whereIn('id', $ewIds)->where('checked_by_user_id', $user->id)->where('hou_status', 'Pending')
             ->update(['hou_status' => 'Checked', 'hou_signed_name' => $user->full_name, 'hou_sig_img' => $sigImg, 'hou_signed_at' => now(), 'hou_remark' => $remark, 'gm1_user_id' => $gm1, 'gm2_user_id' => $gm2, 'current_gm_user_id' => $curGm, 'gm_assigned_at' => now(), 'gm_status' => 'Pending']);
         ActivityLogService::log('HOU_CHECKED', 'ewaste', $ewId, 'HOU checked write-off: ' . $ew->description);
-        if ($curGm) NotificationService::notifyUser($curGm, 'writeoff', 'âœï¸ Write-Off Awaiting GM Signature', $user->full_name . ' (HOU) has checked the write-off for "' . $ew->description . '" â€” please review and sign.', route('it.writeoff.index'));
+        if ($curGm) NotificationService::notifyUser($curGm, 'writeoff', 'Write-Off Awaiting GM Signature', $user->full_name . ' (HOU) has checked the write-off for "' . $ew->description . '" - please review and sign.', route('it.writeoff.index'));
         return redirect()->route('it.writeoff.index')->with('success', 'Write-off forwarded to GM.');
     }
 
@@ -201,7 +201,7 @@ class WriteoffController extends Controller
                 ->update(['gm_status' => 'Rejected', 'disposal_status' => 'Rejected', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark]);
             ActivityLogService::log('GM_REJECTED', 'ewaste', $ewId, 'GM rejected write-off: ' . $ew->description);
             if ($ew->created_by) NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off.', route('it.writeoff.index'));
-            if ($ew->checked_by_user_id) NotificationService::notifyUser($ew->checked_by_user_id, 'writeoff', 'âŒ Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off that you had checked.', route('it.writeoff.index'));
+            if ($ew->checked_by_user_id) NotificationService::notifyUser($ew->checked_by_user_id, 'writeoff', 'Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off that you had checked.', route('it.writeoff.index'));
             return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) rejected.');
         }
 
@@ -209,7 +209,7 @@ class WriteoffController extends Controller
         EwasteItem::whereIn('id', $ewIds)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')
             ->update(['gm_status' => 'Checked', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark, 'ceo_user_id' => $ceo?->id, 'ceo_status' => 'Pending']);
         ActivityLogService::log('GM_CHECKED', 'ewaste', $ewId, 'GM checked write-off: ' . $ew->description);
-        if ($ceo) NotificationService::notifyUser($ceo->id, 'writeoff', 'âœï¸ Write-Off Awaiting Your CEO Approval', $user->full_name . ' (General Manager) signed ' . count($ewIds) . ' write-off item(s) â€” please review and approve or reject.', route('it.writeoff.index'));
+        if ($ceo) NotificationService::notifyUser($ceo->id, 'writeoff', 'Write-Off Awaiting Your CEO Approval', $user->full_name . ' (General Manager) signed ' . count($ewIds) . ' write-off item(s) - please review and approve or reject.', route('it.writeoff.index'));
         return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) forwarded to CEO.');
     }
 
@@ -247,7 +247,7 @@ class WriteoffController extends Controller
         foreach (array_unique($items->pluck('created_by')->filter()->all()) as $creatorId) {
             NotificationService::notifyUserWithEmail($creatorId, 'writeoff', 'Write-Off Approved by CEO', $user->full_name . ' (CEO) approved your write-off item(s). It will be forwarded to Finance for processing.', route('it.writeoff.index'));
         }
-        NotificationService::notifyAdmins('writeoff', 'âœ… Write-Off Approved by CEO', 'CEO approved ' . count($ewIds) . ' write-off item(s).', route('it.writeoff.index'));
+        NotificationService::notifyAdmins('writeoff', 'Write-Off Approved by CEO', 'CEO approved ' . count($ewIds) . ' write-off item(s).', route('it.writeoff.index'));
         return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) approved.');
     }
 
@@ -263,7 +263,7 @@ class WriteoffController extends Controller
 
         foreach ($ewIds as $id) {
             EwasteItem::where('id', $id)->update(['checked_by_user_id' => $houId, 'hou_status' => 'Pending']);
-            NotificationService::notifyUser($houId, 'writeoff', 'âœï¸ Write-Off Assigned to You', 'A write-off has been assigned for your review.', route('it.writeoff.index'));
+            NotificationService::notifyUser($houId, 'writeoff', 'Write-Off Assigned to You', 'A write-off has been assigned for your review.', route('it.writeoff.index'));
         }
         ActivityLogService::log('ASSIGN_HOU', 'ewaste', 0, 'Assigned ' . count($ewIds) . ' write-off items to HOU: ' . $houUser->full_name);
         return back()->with('success', 'Write-off assigned to HOU.');
@@ -403,7 +403,7 @@ class WriteoffController extends Controller
         $count = count($created);
         ActivityLogService::log('SUBMIT_WRITEOFF', 'ewaste', $created[0]->id, 'Submitted ' . $count . ' item(s) for write-off.');
 
-        NotificationService::notifyUser($houId, 'writeoff', 'âœï¸ Write-Off Awaiting Your Signature',
+        NotificationService::notifyUser($houId, 'writeoff', 'Write-Off Awaiting Your Signature',
             $user->full_name . ' submitted ' . $count . ' item(s) for write-off. Please review and sign.',
             route('it.writeoff.index'));
 
@@ -515,7 +515,7 @@ class WriteoffController extends Controller
             $label = count($ewIds) > 1 ? count($ewIds) . ' write-off item(s)' : '"' . $firstItem->description . '"';
             NotificationService::notifyUser(
                 $firstItem->created_by, 'writeoff',
-                'âœ… Write-Off Routed to ' . ($finStatus === 'EWaste' ? 'E-Waste' : 'Disposal'),
+                'Write-Off Routed to ' . ($finStatus === 'EWaste' ? 'E-Waste' : 'Disposal'),
                 $user->full_name . ' (Finance) has routed the write-off for ' . $label . ' to ' . ($finStatus === 'EWaste' ? 'E-Waste' : 'Disposal') . '.',
                 route('it.writeoff.index')
             );
@@ -559,5 +559,3 @@ class WriteoffController extends Controller
         return back();
     }
 }
-
-
