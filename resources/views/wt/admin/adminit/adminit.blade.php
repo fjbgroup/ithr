@@ -3,6 +3,7 @@
 @section('title', 'ICT')
 
 @push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .ict-users-control .bg-white {
         background: var(--surface) !important;
@@ -433,7 +434,8 @@
         text-transform: uppercase;
     }
     .account-field input,
-    .account-field select {
+    .account-field select,
+    .account-field .select2-container--default .select2-selection--single {
         width: 100%;
         min-height: 34px;
         border-radius: 9px;
@@ -444,6 +446,90 @@
         font-size: 11px;
         font-weight: 700;
         transition: all 0.18s ease;
+    }
+    .account-field .select2-container {
+        width: 100% !important;
+    }
+    .account-tag-select + .select2-container {
+        width: 100% !important;
+    }
+    .account-tag-select + .select2-container .select2-selection--single {
+        min-height: 46px;
+        border-radius: 12px;
+        border: 1px solid #dbe5f2;
+        background: #ffffff;
+        padding: 8px 36px 8px 14px;
+        display: flex;
+        align-items: center;
+    }
+    .account-tag-select + .select2-container .select2-selection__rendered {
+        color: #1e293b !important;
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1.2 !important;
+        padding: 0 !important;
+        text-transform: uppercase;
+    }
+    .account-tag-select + .select2-container .select2-selection__placeholder {
+        color: #94a3b8 !important;
+    }
+    .account-tag-select + .select2-container .select2-selection__arrow {
+        height: 100% !important;
+        right: 12px !important;
+    }
+    html.dark .account-tag-select + .select2-container .select2-selection--single {
+        border-color: #334155;
+        background: #0f172a;
+    }
+    html.dark .account-tag-select + .select2-container .select2-selection__rendered {
+        color: #f8fafc !important;
+    }
+    .account-field .select2-container--default .select2-selection--single {
+        display: flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 30px 0 11px;
+    }
+    .account-field .select2-container--default .select2-selection__rendered {
+        width: 100%;
+        color: var(--form-input-color);
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.2 !important;
+        padding: 0 !important;
+        text-transform: uppercase;
+    }
+    .account-field .select2-container--default .select2-selection__placeholder {
+        color: var(--muted);
+    }
+    .account-field .select2-container--default .select2-selection__arrow {
+        height: 100%;
+        right: 9px;
+    }
+    .account-select-dropdown {
+        z-index: 10000 !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 12px !important;
+        overflow: hidden;
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+    }
+    .account-select-dropdown .select2-search--dropdown {
+        padding: 10px;
+    }
+    .account-select-dropdown .select2-search__field {
+        border: 1px solid var(--form-input-border) !important;
+        border-radius: 9px !important;
+        padding: 8px 10px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        text-transform: uppercase;
+        outline: none;
+    }
+    .account-select-dropdown .select2-results__option {
+        padding: 10px 12px;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
     }
     .account-field input:focus,
     .account-field select:focus {
@@ -915,6 +1001,24 @@
 
 </div>
 
+@php
+    $accountDepartmentOptions = collect($formOptionLists['departments'] ?? [])
+        ->merge($accounts->pluck('department'))
+        ->merge($accounts->pluck('dept_name'))
+        ->filter()
+        ->map(fn ($value) => strtoupper(trim((string) $value)))
+        ->unique()
+        ->sort()
+        ->values();
+    $accountPositionOptions = collect($formOptionLists['positions'] ?? [])
+        ->merge($accounts->pluck('position'))
+        ->filter()
+        ->map(fn ($value) => strtoupper(trim((string) $value)))
+        ->unique()
+        ->sort()
+        ->values();
+@endphp
+
 <datalist id="executive-name-options">
     @foreach($accounts as $account)
         @php
@@ -992,11 +1096,29 @@
                     </div>
                     <div class="account-field">
                         <label>Department</label>
-                        <input type="text" id="wt_field_department" name="department" list="department-options" value="{{ old('department') }}" required>
+                        @php($currentCreateDepartment = strtoupper((string) old('department', '')))
+                        <select id="wt_field_department" name="department" class="account-tag-select" data-placeholder="Type or select department" required>
+                            <option value=""></option>
+                            @foreach($accountDepartmentOptions as $departmentOption)
+                            <option value="{{ $departmentOption }}" @selected($currentCreateDepartment === $departmentOption)>{{ $departmentOption }}</option>
+                            @endforeach
+                            @if($currentCreateDepartment !== '' && !$accountDepartmentOptions->contains($currentCreateDepartment))
+                            <option value="{{ $currentCreateDepartment }}" selected>{{ $currentCreateDepartment }}</option>
+                            @endif
+                        </select>
                     </div>
                     <div class="account-field">
                         <label>Position</label>
-                        <input type="text" id="wt_field_position" name="position" value="{{ old('position') }}" placeholder="E.G. OPERATOR" required>
+                        @php($currentCreatePosition = strtoupper((string) old('position', '')))
+                        <select id="wt_field_position" name="position" class="account-tag-select" data-placeholder="Type or select position" required>
+                            <option value=""></option>
+                            @foreach($accountPositionOptions as $positionOption)
+                            <option value="{{ $positionOption }}" @selected($currentCreatePosition === $positionOption)>{{ $positionOption }}</option>
+                            @endforeach
+                            @if($currentCreatePosition !== '' && !$accountPositionOptions->contains($currentCreatePosition))
+                            <option value="{{ $currentCreatePosition }}" selected>{{ $currentCreatePosition }}</option>
+                            @endif
+                        </select>
                     </div>
                     <div class="account-field">
                         <label>Password <span style="color:#94a3b8;font-weight:400;text-transform:none;letter-spacing:0">(optional if staff exists)</span></label>
@@ -1104,11 +1226,21 @@
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Department</label>
-                    <input type="text" name="department" id="edit_department" list="department-options" class="navy-input w-full px-4 py-3 rounded-xl border">
+                    <select name="department" id="edit_department" class="navy-input account-tag-select w-full px-4 py-3 rounded-xl border" data-placeholder="Type or select department">
+                        <option value=""></option>
+                        @foreach($accountDepartmentOptions as $departmentOption)
+                        <option value="{{ $departmentOption }}">{{ $departmentOption }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Position</label>
-                    <input type="text" name="position" id="edit_position" list="position-options" class="navy-input w-full px-4 py-3 rounded-xl border" placeholder="Type or select position">
+                    <select name="position" id="edit_position" class="navy-input account-tag-select w-full px-4 py-3 rounded-xl border" data-placeholder="Type or select position">
+                        <option value=""></option>
+                        @foreach($accountPositionOptions as $positionOption)
+                        <option value="{{ $positionOption }}">{{ $positionOption }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Role</label>
@@ -1159,6 +1291,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     function openCreateExecutiveModal() {
         document.getElementById('createExecutiveModal').classList.remove('hidden');
@@ -1250,8 +1383,8 @@
         document.getElementById('edit_staff_id').value = staffId || '';
         document.getElementById('edit_username').value = username || '';
         document.getElementById('edit_full_name').value = fullName || '';
-        document.getElementById('edit_department').value = department || '';
-        document.getElementById('edit_position').value = position || '';
+        setAccountSelectValue('edit_department', department || '');
+        setAccountSelectValue('edit_position', position || '');
         document.getElementById('edit_role').value = role || 'admin';
         document.getElementById('editUserModal').classList.remove('hidden');
     }
@@ -1302,6 +1435,72 @@
     window.addEventListener('scroll', closeAllActionMenus, true);
     window.addEventListener('resize', closeAllActionMenus);
 
+    function normalizeAccountSelectValue(value) {
+        return String(value || '').trim().toUpperCase();
+    }
+
+    function setAccountSelectValue(id, value) {
+        const field = document.getElementById(id);
+        if (!field) return;
+
+        const normalizedValue = normalizeAccountSelectValue(value);
+        if (field.tagName === 'SELECT' && normalizedValue) {
+            const hasOption = Array.from(field.options).some(option => normalizeAccountSelectValue(option.value) === normalizedValue);
+            if (!hasOption) {
+                field.add(new Option(normalizedValue, normalizedValue, true, true));
+            }
+        }
+
+        field.value = normalizedValue;
+        if (window.jQuery && $(field).hasClass('select2-hidden-accessible')) {
+            $(field).trigger('change.select2');
+        }
+    }
+
+    function initAccountTagSelects() {
+        if (!window.jQuery || !$.fn.select2) return;
+
+        $('.account-tag-select').each(function () {
+            const $select = $(this);
+
+            if ($select.hasClass('select2-hidden-accessible')) {
+                $select.select2('destroy');
+            }
+
+            $select.select2({
+                width: '100%',
+                tags: true,
+                allowClear: !$select.prop('required'),
+                minimumResultsForSearch: 0,
+                placeholder: $select.data('placeholder') || 'Type or select option',
+                dropdownParent: $select.closest('#createExecutiveModal, #editUserModal'),
+                dropdownCssClass: 'account-select-dropdown',
+                createTag: function (params) {
+                    const term = $.trim(params.term);
+                    if (term === '') return null;
+
+                    const normalizedTerm = term.toUpperCase();
+                    return { id: normalizedTerm, text: normalizedTerm, newTag: true };
+                },
+                insertTag: function (data, tag) {
+                    data.unshift(tag);
+                }
+            });
+
+            $select.off('select2:open.accountFocus').on('select2:open.accountFocus', function () {
+                window.setTimeout(function () {
+                    const searchField = document.querySelector('.select2-container--open .select2-search__field');
+                    if (searchField) {
+                        searchField.removeAttribute('readonly');
+                        searchField.focus();
+                    }
+                }, 0);
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAccountTagSelects);
+
     @if($errors->any() && old('form_context') === 'create_executive')
     document.addEventListener('DOMContentLoaded', function () {
         openCreateExecutiveModal();
@@ -1339,6 +1538,9 @@
             }
 
             field.value = normalizedValue;
+            if (window.jQuery && $(field).hasClass('select2-hidden-accessible')) {
+                $(field).trigger('change.select2');
+            }
         }
 
         function upsertExecutiveNameOption(s) {
@@ -1465,8 +1667,8 @@
             upsertExecutiveNameOption(s);
             document.getElementById('wt_field_staff_id').value    = s.staff_no;
             document.getElementById('wt_field_full_name').value   = s.name;
-            document.getElementById('wt_field_department').value  = s.dept_name;
-            document.getElementById('wt_field_position').value    = s.position || '';
+            setControlValue('wt_field_department', s.dept_name);
+            setControlValue('wt_field_position', s.position || '');
             // Password becomes optional when granting access to existing HR staff
             document.getElementById('wt_field_password').removeAttribute('required');
             document.getElementById('wt_field_password_confirmation').removeAttribute('required');
@@ -1478,7 +1680,7 @@
 
         window.wtClearStaff = function () {
             ['wt_field_staff_id','wt_field_full_name','wt_field_department','wt_field_position'].forEach(function (id) {
-                document.getElementById(id).value = '';
+                setControlValue(id, '');
             });
             // Restore password as required
             document.getElementById('wt_field_password').setAttribute('required', '');
