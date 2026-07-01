@@ -205,8 +205,13 @@
                                 <div class="staff-name-cell">
                                     <div class="staff-avatar" style="background:{{ $pal['bg'] }};color:{{ $pal['fg'] }};">{{ $initials }}</div>
                                     <div style="min-width:0;">
-                                        <a href="{{ route('staff.show', $s->id) }}" class="staff-name-primary" title="{{ $s->name }}">{{ $s->name }}</a>
-                                        <span class="staff-id-sub">{{ $s->staff_no }}</span>
+                                        <a href="{{ route('staff.show', $s->id) }}" class="staff-name-primary" title="{{ $s->name }}" {!! !$s->is_active ? 'style="color:var(--danger);"' : '' !!}>{{ $s->name }}</a>
+                                        <span class="staff-id-sub">
+                                            {{ $s->staff_no }}
+                                            @if(!$s->is_active)
+                                                <span style="color:var(--danger);font-weight:bold;margin-left:4px;">[INACTIVE]</span>
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                             </td>
@@ -359,6 +364,13 @@
                 <div class="form-group form-full"><label>Job Level — Primary Position</label><input type="text" name="job_level" id="f_job_level"></div>
                 <div class="form-group"><label>Job Category</label><input type="text" name="job_category" id="f_job_category"></div>
                 <div class="form-group"><label>Last Promotion Date</label><input type="date" name="last_promotion_date" id="f_last_promotion_date"></div>
+                <div class="form-group form-full" id="group_is_active" style="display:none; margin-top:.5rem; padding-top:.5rem; border-top:1px dashed var(--border);">
+                    <label style="color:var(--danger);">Account Status</label>
+                    <select name="is_active" id="f_is_active">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive (Resigned / Deactivated)</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
@@ -504,6 +516,8 @@ function openAddModal() {
     document.getElementById('methodField').innerHTML = '';
     document.getElementById('staffForm').reset();
     document.getElementById('f_id').value = '';
+    document.getElementById('f_is_active').value = '1';
+    document.getElementById('group_is_active').style.display = 'none';
     openModal('addStaffModal');
 }
 
@@ -531,6 +545,9 @@ function editStaff(data) {
     document.getElementById('f_job_level').value = data.job_level || '';
     document.getElementById('f_job_category').value = data.job_category || '';
     document.getElementById('f_last_promotion_date').value = data.last_promotion_date || '';
+    
+    document.getElementById('f_is_active').value = data.is_active ? '1' : '0';
+    document.getElementById('group_is_active').style.display = 'block';
 
     openModal('addStaffModal');
 }
