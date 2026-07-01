@@ -15,6 +15,10 @@
     .profile-pill { display:inline-flex;min-height:32px;align-items:center;gap:7px;border-radius:999px;border:1px solid var(--border);background:var(--body-bg);padding:7px 12px;color:var(--text);font-size:10px;font-weight:900;text-transform:uppercase; }
     .profile-form-card { margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface);padding:20px;box-shadow:0 14px 36px rgba(15,23,42,.08); }
     .profile-form-title { margin-bottom:16px;color:var(--text);font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase; }
+    .profile-details-grid { display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px 18px;align-items:end; }
+    .profile-field { min-width:0; }
+    .profile-field-sm { grid-column:span 2; }
+    .profile-field-md { grid-column:span 3; }
     .profile-label-clean { margin-bottom:7px;display:block;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
     .profile-input-clean { width:100%;min-height:42px;border-radius:10px;border:1px solid var(--border);background:var(--form-input-bg);padding:9px 12px;color:var(--text);font-size:12px;font-weight:800;outline:none;transition:border-color .16s ease,box-shadow .16s ease; }
     .profile-input-clean:focus { border-color:var(--accent) !important;box-shadow:0 0 0 3px rgba(2,132,199,.12) !important; }
@@ -39,6 +43,9 @@
         .profile-summary-inline { align-items:flex-start;gap:10px; }
         .profile-summary-identity { min-width:100%; }
         .profile-summary-name { font-size:13px; }
+        .profile-details-grid { grid-template-columns:1fr; }
+        .profile-field-sm,
+        .profile-field-md { grid-column:span 1; }
         .profile-pill { width:100%;justify-content:flex-start; }
         .profile-save-clean { width:100%; }
     }
@@ -81,24 +88,24 @@
         <form action="{{ route('wt.admin.profile.update') }}" method="POST">
             @csrf
             <h4 class="profile-form-title">Personal Details</h4>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div>
+            <div class="profile-details-grid">
+                <div class="profile-field profile-field-sm">
                     <label class="profile-label-clean">Staff ID</label>
                     <input type="text" value="{{ Auth::guard('wt')->user()->staff_id }}" class="profile-input-clean" readonly disabled>
                 </div>
-                <div>
+                <div class="profile-field profile-field-sm">
                     <label class="profile-label-clean">Username</label>
                     <input type="text" value="{{ Auth::guard('wt')->user()->username }}" class="profile-input-clean" readonly disabled>
                 </div>
-                <div class="md:col-span-2">
-                    <label class="profile-label-clean">Full Name</label>
-                    <input type="text" name="full_name" value="{{ strtoupper((string) old('full_name', Auth::guard('wt')->user()->full_name)) }}" placeholder="Enter your full name" class="uppercase-input profile-input-clean" required>
-                </div>
-                <div class="md:col-span-2">
+                <div class="profile-field profile-field-sm">
                     <label class="profile-label-clean">Phone No</label>
                     <input type="text" name="phone_no" value="{{ old('phone_no', Auth::guard('wt')->user()->phone_no) }}" placeholder="Enter phone number" class="profile-input-clean">
                 </div>
-                <div>
+                <div class="profile-field profile-field-md">
+                    <label class="profile-label-clean">Full Name</label>
+                    <input type="text" name="full_name" value="{{ strtoupper((string) old('full_name', Auth::guard('wt')->user()->full_name)) }}" placeholder="Enter your full name" class="uppercase-input profile-input-clean" required>
+                </div>
+                <div class="profile-field profile-field-md">
                     <label class="profile-label-clean">Department</label>
                     <select name="department" class="profile-select w-full" data-placeholder="Type or select department" required>
                         <option value=""></option>
@@ -110,7 +117,7 @@
                         @endif
                     </select>
                 </div>
-                <div>
+                <div class="profile-field profile-field-md">
                     <label class="profile-label-clean">Position</label>
                     <select name="position" class="profile-select w-full" data-placeholder="Type or select position" required>
                         <option value=""></option>

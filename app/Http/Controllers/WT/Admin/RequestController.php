@@ -359,7 +359,7 @@ class RequestController extends Controller
             'duration_days' => $isTemporaryRequest
                 ? 'nullable|integer|min:1|max:365'
                 : 'nullable|integer|min:1|max:365',
-            'sector' => $isDraft ? 'nullable|string|max:255' : 'required|string|max:255',
+            'sector' => 'nullable|string|max:255',
             'location' => $isDraft ? 'nullable|string|max:255' : 'required|string|max:255',
             'event_name' => $isTemporaryRequest
                 ? ($isDraft ? 'nullable|string|max:255' : 'required|string|max:255')

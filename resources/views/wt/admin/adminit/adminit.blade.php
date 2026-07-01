@@ -865,7 +865,7 @@
                 {{-- Staff search --}}
                 <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(96,165,250,0.18)">
                     <label style="display:block;margin-bottom:6px;color:#9fb0c8;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase">
-                        Search HR Staff to Auto-fill
+                        Search Staff to Auto-fill
                     </label>
                     <div style="position:relative">
                         <input type="text" id="wtStaffSearchInput" autocomplete="off"
