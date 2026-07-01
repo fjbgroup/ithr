@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', $isTemporaryRequest ? 'Executive Temporary Request' : 'Executive Long Term Request')
 
@@ -429,12 +429,14 @@
         box-sizing: border-box !important;
         width: 100% !important;
         max-width: 100% !important;
+        display: block !important;
     }
     .corporate-combobox-control {
         position: relative;
         box-sizing: border-box !important;
         width: 100% !important;
         max-width: 100% !important;
+        display: block !important;
     }
     .corporate-combobox select {
         display: none !important;
@@ -449,7 +451,7 @@
         border-radius: 7px !important;
         border: 1px solid rgba(139, 94, 60, 0.3) !important;
         background: #ffffff !important;
-        padding: 5px 34px 5px 8px !important;
+        padding: 5px 28px 5px 8px !important;
         color: #1e293b !important;
         font-size: 9.5px !important;
         font-weight: 800 !important;
@@ -467,18 +469,20 @@
         box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2) !important;
     }
     .corporate-combobox-toggle {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #64748b;
-        font-size: 9px;
-        line-height: 1;
-        pointer-events: none;
+        position: absolute !important;
+        right: 10px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        color: #64748b !important;
+        font-size: 9px !important;
+        line-height: 1 !important;
+        pointer-events: none !important;
+        z-index: 10 !important;
     }
     .owner-details-grid .corporate-combobox {
         width: 100% !important;
         max-width: 100% !important;
+        display: block !important;
     }
     .owner-details-grid .select2-container--default .select2-selection--single {
         position: relative;
