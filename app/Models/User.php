@@ -90,7 +90,12 @@ class User extends Authenticatable
     public function isGM(): bool             { return $this->role === 'gm'; }
     public function isSignatory(): bool      { return in_array($this->role, ['hou', 'gm']); }
     public function isReadOnlyViewer(): bool { return in_array($this->role, ['hou', 'gm', 'ceo']); }
-    public function canWrite(): bool         { return !$this->isCeo(); }
+    public function canWrite(): bool         { return !$this->isCeo() && !$this->isDeactivatedStaff(); }
+
+    public function isDeactivatedStaff(): bool
+    {
+        return $this->role === 'staff' && $this->staff && !$this->staff->is_active;
+    }
 
     public function getRoleLabel(): string
     {

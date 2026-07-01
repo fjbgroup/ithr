@@ -24,11 +24,12 @@ class ReadOnlyCeo
         }
 
         if ($request->user()
-            && $request->user()->isCeo()
+            && ($request->user()->isCeo() || $request->user()->isDeactivatedStaff())
             && !in_array($request->method(), ['GET', 'HEAD', 'OPTIONS'])
             && !$request->routeIs(...$this->allowed)
         ) {
-            return redirect()->back()->with('error', 'You have read-only access.');
+            $msg = $request->user()->isCeo() ? 'You have read-only access.' : 'Your account is deactivated. You have read-only access to your records.';
+            return redirect()->back()->with('error', $msg);
         }
 
         return $next($request);
