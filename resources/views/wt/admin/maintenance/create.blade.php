@@ -160,10 +160,9 @@
 
     .repair-form-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(260px, 440px));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: flex-start;
-        justify-content: flex-start;
-        gap: 14px 14px;
+        gap: 14px 18px;
     }
 
     .repair-form-group {
