@@ -138,7 +138,7 @@
                     <th>Staff No</th>
                     <th>Department</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th style="width: 180px; min-width: 180px; text-align: right; white-space: nowrap;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -167,7 +167,7 @@
                         <br><span class="status-badge" style="font-size:.68rem;margin-top:.25rem;background:#fee2e2;color:#991b1b;">HR Inactive</span>
                         @endif
                     </td>
-                    <td class="td-actions">
+                    <td class="td-actions" style="white-space: nowrap; text-align: right;">
                         @if ($u->isStaff() && $u->staff_id)
                         <a href="{{ route('users.show', $u->id) }}" class="btn btn-sm btn-ghost">View</a>
                         @endif
