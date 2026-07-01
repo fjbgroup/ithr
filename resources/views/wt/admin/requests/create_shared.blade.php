@@ -375,10 +375,9 @@
     .owner-profile-group-title {
         grid-column: 1 / -1;
         width: 100%;
-        border-left: 3px solid #0284c7;
         background: rgba(2, 132, 199, 0.06);
         border-radius: 8px;
-        padding: 8px 10px;
+        padding: 10px 16px 10px 44px;
     }
     .owner-profile-group-title p:first-child {
         color: #0284c7 !important;
@@ -1328,13 +1327,38 @@
     }
     .longterm-modern.match-report-faulty .longterm-ownership-section {
         display: grid !important;
-        grid-template-columns: minmax(170px, 2fr) minmax(0, 10fr) !important;
+        grid-template-columns: 1fr !important;
         align-items: start !important;
-        gap: 14px 20px !important;
+        gap: 14px !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-quantity-group {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-end !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        gap: 12px 28px !important;
+        width: 100% !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-quantity-control {
+        flex: 0 0 235px !important;
+        max-width: 235px !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-quantity-owner-note {
+        display: grid !important;
+        gap: 4px !important;
+        flex: 1 1 280px !important;
+        padding-bottom: 2px !important;
     }
     .longterm-modern.match-report-faulty .longterm-owner-group {
         min-width: 0 !important;
         width: 100% !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-owner-group > .mb-3 {
+        justify-content: flex-end !important;
+    }
+    .longterm-modern.match-report-faulty .longterm-owner-group > .mb-3 > div {
+        display: none !important;
     }
     .longterm-modern.match-report-faulty .longterm-owner-group #temporaryPicList,
     .longterm-modern.match-report-faulty .longterm-owner-group .longterm-owner-card,
@@ -1371,9 +1395,6 @@
         max-width: 360px !important;
     }
     @media (max-width: 1180px) {
-        .longterm-modern.match-report-faulty .longterm-ownership-section {
-            grid-template-columns: minmax(150px, 1fr) minmax(0, 3fr) !important;
-        }
         .longterm-modern.match-report-faulty .longterm-owner-group .owner-details-grid {
             grid-template-columns: repeat(2, minmax(210px, 1fr)) !important;
         }
@@ -1387,6 +1408,14 @@
         .longterm-modern.match-report-faulty .longterm-meta-group {
             flex-direction: column !important;
             align-items: stretch !important;
+        }
+        .longterm-modern.match-report-faulty .longterm-quantity-group {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        .longterm-modern.match-report-faulty .longterm-quantity-control {
+            flex-basis: auto !important;
+            max-width: 100% !important;
         }
         .longterm-modern.match-report-faulty .longterm-meta-group .executive-date-group,
         .longterm-modern.match-report-faulty .longterm-meta-group .executive-remark-group,
@@ -1562,11 +1591,17 @@
         <p class="request-section-help">Set the quantity requested, then complete one ownership profile for each walkie talkie unit.</p>
         <div class="longterm-ownership-section">
             <div class="longterm-quantity-group">
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
-                <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
-                    <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-3 py-1.5 text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
-                    <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
+                <div class="longterm-quantity-control">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Quantity</label>
+                    <div class="flex max-w-[220px] overflow-hidden rounded-lg border border-[#0284c7]/20 bg-white focus-within:ring-2 focus-within:ring-[#0284c7]/15 dark:border-slate-700 dark:bg-slate-900">
+                        <button type="button" class="temporary-quantity-step flex items-center justify-center border-r border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="-1" aria-label="Decrease quantity">-</button>
+                        <input type="number" name="quantity" min="1" max="999" inputmode="numeric" value="{{ old('quantity', 1) }}" class="w-full border-0 bg-transparent px-3 py-1.5 text-center text-[11px] font-black text-slate-800 outline-none dark:text-slate-200" required>
+                        <button type="button" class="temporary-quantity-step flex items-center justify-center border-l border-[#0284c7]/15 text-xs font-black hover:bg-[#0284c7]/10 dark:border-slate-700" data-step="1" aria-label="Increase quantity">+</button>
+                    </div>
+                </div>
+                <div class="longterm-quantity-owner-note">
+                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 uppercase tracking-widest">Owner Per Unit</label>
+                    <p class="mt-1 text-[9px] font-bold text-stone-500 dark:text-slate-400">1 unit = 1 owner. Add owner and pickup contact for each unit.</p>
                 </div>
             </div>
             <div class="longterm-owner-group">
@@ -2348,8 +2383,8 @@
                 row.setAttribute('data-pic-row', '1');
                 row.innerHTML = `
                     <div class="temporary-unit-header">
-                        <p class="temporary-unit-title">Unit ${index + 1} Ownership Profile</p>
-                        <span class="temporary-unit-chip">${isTemporaryRequest ? 'Temporary' : 'Long Term'}</span>
+                        <p class="temporary-unit-title">Owner Per Unit ${index + 1}</p>
+                        <span class="temporary-unit-chip">1 Unit</span>
                     </div>
                     <div class="owner-details-grid wt-form-row">
                         <div class="owner-profile-group-title">

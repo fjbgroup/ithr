@@ -64,7 +64,7 @@ class WriteoffInventoryController extends Controller
             if ($item->created_by) {
                 NotificationService::notifyUser(
                     $item->created_by, 'writeoff',
-                    'â™»ï¸ Write-Off Routed to E-Waste',
+                    'Write-Off Routed to E-Waste',
                     'The write-off for "'.$item->description.'" has been reviewed by Finance and routed to E-Waste.',
                     route('it.ewaste.index')
                 );
@@ -111,7 +111,7 @@ class WriteoffInventoryController extends Controller
             if ($item->created_by) {
                 NotificationService::notifyUser(
                     $item->created_by, 'writeoff',
-                    'ðŸ—‘ï¸ Write-Off Routed to Disposal',
+                    'Write-Off Routed to Disposal',
                     'The write-off for "'.$item->description.'" has been reviewed by Finance and routed to Disposal.',
                     route('it.disposal.index')
                 );
@@ -144,7 +144,7 @@ class WriteoffInventoryController extends Controller
             if ($item->created_by) {
                 NotificationService::notifyUser(
                     $item->created_by, 'writeoff',
-                    'â™»ï¸ Write-Off Routed to E-Waste',
+                    'Write-Off Routed to E-Waste',
                     'The write-off for "' . $item->description . '" has been reviewed by Finance and routed to E-Waste.',
                     route('it.ewaste.index')
                 );
@@ -189,7 +189,7 @@ class WriteoffInventoryController extends Controller
             if ($item->created_by) {
                 NotificationService::notifyUser(
                     $item->created_by, 'writeoff',
-                    'ðŸ—‘ï¸ Write-Off Routed to Disposal',
+                    'Write-Off Routed to Disposal',
                     'The write-off for "' . $item->description . '" has been reviewed by Finance and routed to Disposal.',
                     route('it.disposal.index')
                 );
@@ -201,4 +201,3 @@ class WriteoffInventoryController extends Controller
         return redirect()->route('writeoff-inventory.index')->with('error', 'Item not found or already processed.');
     }
 }
-

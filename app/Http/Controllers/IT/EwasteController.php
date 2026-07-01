@@ -339,7 +339,7 @@ class EwasteController extends Controller
         return redirect()->route('ewaste.collected')->with('success', 'Item reverted back to Approved.');
     }
 
-    // â”€â”€ GM timeout auto-reassignment (called from writeoff flow) â”€â”€
+    // GM timeout auto-reassignment (called from writeoff flow)
     public function reassignExpiredGMs(): void
     {
         $expired = EwasteItem::where('disposal_status', 'Pending')
@@ -352,11 +352,10 @@ class EwasteController extends Controller
             $nextGm = ($ew->current_gm_user_id == $ew->gm1_user_id) ? $ew->gm2_user_id : $ew->gm1_user_id;
             if ($nextGm) {
                 $ew->update(['current_gm_user_id' => $nextGm, 'gm_assigned_at' => now()]);
-                NotificationService::notifyUser($nextGm, 'writeoff', 'âœï¸ Write-Off Awaiting Your GM Signature',
+                NotificationService::notifyUser($nextGm, 'writeoff', 'Write-Off Awaiting Your GM Signature',
                     'A write-off for "'.$ew->description.'" has been reassigned to you (previous GM did not respond within 3 days).',
                     route('it.writeoff.index'));
             }
         }
     }
 }
-
