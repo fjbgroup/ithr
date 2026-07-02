@@ -107,7 +107,9 @@
   $stat_total   = \App\Models\IT\InventoryItem::count();
   $stat_active  = \App\Models\IT\InventoryItem::where('item_status', 'Active')->count();
   $stat_ewaste  = \App\Models\IT\EwasteItem::whereIn('disposal_status', ['Approved','Collected'])->count();
-  $stat_pending = \App\Models\IT\EwasteItem::where('disposal_status', 'Pending')->count();
+  $stat_pending = \App\Models\IT\InventoryItem::where('item_status', 'Pending for Write-Off')
+    ->orWhereHas('ewasteItems', fn($q) => $q->where('disposal_status', 'Pending'))
+    ->count();
 
   $all_locations = $locations->pluck('name');
 @endphp
@@ -465,15 +467,11 @@
             </form>
             @elseif(!$user->isReadOnlyViewer())
             @if($staffRowLocked)
-            <span title="{{ $isPendingWriteoff ? 'Pending for Write-Off' : 'Already in E-Waste module' }}" style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px;cursor:not-allowed">
-              <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
-            </span>
-            <span title="{{ $isPendingWriteoff ? 'Pending for Write-Off' : 'Already in E-Waste module' }}" style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;cursor:not-allowed">
-              Request Edit
-            </span>
-            <span title="{{ $isPendingWriteoff ? 'Pending for Write-Off' : 'Already in E-Waste module' }}" style="font-size:13px;color:#94a3b8;background:rgba(148,163,184,.12);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center;cursor:not-allowed">
-              <i class="bi bi-trash"></i>
-            </span>
+              @if($isPendingWriteoff)
+              <span title="Write-off in process" style="font-size:11px;font-weight:700;color:#d97706;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px;cursor:default">
+                <i class="bi bi-hourglass-split" aria-hidden="true" style="font-size:11px"></i> Pending Approval
+              </span>
+              @endif
             @else
             @if($itCanWriteoff)
               @if(isset($pendingEwIds[$item->id]))

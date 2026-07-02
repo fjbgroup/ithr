@@ -140,6 +140,40 @@
     background: var(--surface);
     padding: 10px 12px;
   }
+  .wo-staff-form-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0,0,0,.65);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    z-index: 99999;
+  }
+  .wo-staff-form-card {
+    position: sticky;
+    top: 20px;
+    width: 100%;
+    max-width: 860px;
+    max-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  .wo-staff-form-body {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .wo-staff-form-footer {
+    flex: 0 0 auto;
+  }
   .pfa-hou-list {
     display: grid;
     gap: 12px;
@@ -1967,17 +2001,18 @@ function woToggleBatch(id) {
 ══════════════════════════════════════════════════════════════ --}}
 
 {{-- APPLICATION FOR ASSET DISPOSAL Modal --}}
-<div id="woFormModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:99999;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto">
-  <div style="background:#fff;border-radius:12px;width:100%;max-width:860px;margin:auto;box-shadow:0 24px 60px rgba(0,0,0,.35);font-family:Arial,sans-serif">
+<div id="woFormModal" class="wo-staff-form-modal">
+  <div class="wo-staff-form-card">
 
     {{-- Header --}}
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #ddd">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #ddd;flex:0 0 auto">
       <span style="font-weight:700;font-size:14px;color:#142b47">
         <i class="bi bi-file-earmark-text-fill" style="color:#38bdf8;margin-right:6px"></i>Write-Off Form
       </span>
       <button onclick="closeWOFormModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#9ca3af;line-height:1">&times;</button>
     </div>
 
+    <div class="wo-staff-form-body">
     {{-- Print Area --}}
     <div id="woPrintArea" style="padding:28px 32px">
       {{-- Company Header --}}
@@ -2078,9 +2113,10 @@ function woToggleBatch(id) {
         <div style="font-size:11px;margin-top:10px">Date : <span style="display:inline-block;border-bottom:1px solid #000;width:140px;margin-left:4px"></span></div>
       </div>
     </div>{{-- /woPrintArea --}}
+    </div>
 
     {{-- Modal Footer --}}
-    <div style="padding:14px 20px;border-top:1px solid #e5e7eb;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:#f9fafb;border-radius:0 0 12px 12px">
+    <div class="wo-staff-form-footer" style="padding:14px 20px;border-top:1px solid #e5e7eb;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:#f9fafb;border-radius:0 0 12px 12px">
       <button type="button" onclick="printWOForm()"
         style="display:inline-flex;align-items:center;gap:7px;background:#fff;color:#374151;border:1.5px solid #d1d5db;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer">
         <i class="bi bi-printer-fill"></i> Print Form

@@ -32,12 +32,11 @@
       <tbody>
       @foreach($items as $row)
       @php
+        $nitPendingWriteoff = in_array($row->item_status, ['Pending for Write-Off', 'Pending to E-Waste/Disposal'], true);
+        $nitInDisposalModule = $row->item_status === 'Disposed' || $row->location === 'Disposal';
         $nitRowLocked = !$user->isAdminOrFinance()
           && !$user->isReadOnlyViewer()
-          && (
-            in_array($row->item_status, ['Pending for Write-Off', 'Pending to E-Waste/Disposal', 'Disposed'], true)
-            || $row->location === 'Disposal'
-          );
+          && ($nitPendingWriteoff || $nitInDisposalModule);
       @endphp
       <tr>
         <td><input type="checkbox" class="nit-row-check" value="{{ $row->id }}"
@@ -93,18 +92,11 @@
             @else
             {{-- Staff — buttons sized to match IT Assets (inventory) --}}
             @if($nitRowLocked)
-            <span title="{{ $row->item_status === 'Pending for Write-Off' ? 'Pending for Write-Off' : 'Already in Disposal module' }}"
-              style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px;cursor:not-allowed">
-              <i class="bi bi-trash3-fill" style="font-size:11px"></i> Dispose
-            </span>
-            <span title="{{ $row->item_status === 'Pending for Write-Off' ? 'Pending for Write-Off' : 'Already in Disposal module' }}"
-              style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;cursor:not-allowed">
-              Request Edit
-            </span>
-            <span title="{{ $row->item_status === 'Pending for Write-Off' ? 'Pending for Write-Off' : 'Already in Disposal module' }}"
-              style="font-size:13px;color:#94a3b8;background:rgba(148,163,184,.12);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center;cursor:not-allowed">
-              <i class="bi bi-trash"></i>
-            </span>
+              @if($nitPendingWriteoff)
+              <span title="Write-off in process" style="font-size:11px;font-weight:700;color:#d97706;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px;cursor:default">
+                <i class="bi bi-hourglass-split" aria-hidden="true" style="font-size:11px"></i> Pending Approval
+              </span>
+              @endif
             @else
             @if($nitCanDispose)
             <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"

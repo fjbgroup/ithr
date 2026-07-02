@@ -621,8 +621,8 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     </a>
     @endif
 
-    {{-- E-Waste — Admin + Finance only --}}
-    @if($user->isAdminOrFinance())
+    {{-- E-Waste — Admin/Finance manage, HOU/GM/CEO view only --}}
+    @if($user->isAdminOrFinance() || $user->isReadOnlyViewer())
     @php $ewActive = request()->routeIs('it.ewaste.*'); @endphp
     <div class="nav-group" id="navGroupEwaste">
         <div class="nav-group-toggle {{ $ewActive ? 'open has-active' : '' }}"
@@ -646,7 +646,7 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
         </div>
       </div>
 
-    {{-- Disposal — Admin + Finance only --}}
+    {{-- Disposal — Admin/Finance manage, HOU/GM/CEO view only --}}
     @php $dispActive = request()->routeIs('it.disposal.*'); @endphp
     <div class="nav-group" id="navGroupDisposal">
         <div class="nav-group-toggle {{ $dispActive ? 'open has-active' : '' }}"
@@ -670,7 +670,10 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
         </div>
       </div>
 
+    @endif
+
     {{-- Reports — Admin + Finance only --}}
+    @if($user->isAdminOrFinance())
     @php $rptActive = request()->routeIs('it.reports.*'); @endphp
     <div class="nav-group" id="navGroupReports">
         <div class="nav-group-toggle {{ $rptActive ? 'open has-active' : '' }}"

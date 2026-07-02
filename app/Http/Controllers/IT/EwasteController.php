@@ -32,15 +32,18 @@ class EwasteController extends Controller
             }
         }
 
-        $items        = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
-        $assetClasses = AssetClass::where('type', 'it')->orderBy('sort_order')->pluck('name');
+        $items         = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
+        $assetClasses  = AssetClass::where('type', 'it')->orderBy('sort_order')->pluck('name');
+        $totalEwaste   = EwasteItem::where('disposal_status', '!=', 'Pending')->count();
+        $activeEwaste  = EwasteItem::where('disposal_status', 'Approved')->count();
+        $collectedEwaste = EwasteItem::where('disposal_status', 'Collected')->count();
 
         if ($request->boolean('partial')) {
             $user = Auth::guard('it')->user();
             return response(view('it.ewaste.partials.live-table', compact('items', 'user'))->render());
         }
 
-        return view('it.ewaste.index', compact('items', 'assetClasses'));
+        return view('it.ewaste.index', compact('items', 'assetClasses', 'totalEwaste', 'activeEwaste', 'collectedEwaste'));
     }
 
     public function autocomplete(Request $request)

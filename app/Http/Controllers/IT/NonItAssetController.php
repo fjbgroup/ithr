@@ -11,6 +11,7 @@ use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NonItAssetController extends Controller
 {
@@ -105,6 +106,8 @@ class NonItAssetController extends Controller
     public function store(Request $request)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isReadOnlyViewer()) abort(403);
+
         $data = $request->validate([
             'asset_number'     => 'nullable|string|max:50',
             'asset_class'      => 'required|string|max:100',
@@ -142,7 +145,11 @@ class NonItAssetController extends Controller
     public function update(Request $request, int $id)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isReadOnlyViewer()) abort(403);
         $item = NonItAsset::findOrFail($id);
+        $lockedForStaff = in_array($item->item_status, ['Pending for Write-Off', 'Pending to E-Waste/Disposal', 'Disposed'], true)
+            || $item->location === 'Disposal';
+        if (!$user->isAdminOrFinance() && $lockedForStaff) abort(403);
 
         $data = $request->validate([
             'asset_number'     => 'nullable|string|max:50',
@@ -190,10 +197,31 @@ class NonItAssetController extends Controller
     {
         $user = Auth::guard('it')->user();
         $item = NonItAsset::findOrFail($id);
+        $lockedForStaff = in_array($item->item_status, ['Pending for Write-Off', 'Pending to E-Waste/Disposal', 'Disposed'], true)
+            || $item->location === 'Disposal';
+        if (!$user->isAdminOrFinance() && $lockedForStaff) abort(403);
 
         if ($user->isAdminOrFinance()) {
-            ActivityLogService::log('DELETE', 'non_it_asset', $id, 'Deleted: '.$item->description);
-            $item->delete();
+            DB::transaction(function () use ($item, $id) {
+                \App\Models\IT\EwasteItem::where('asset_source', 'NIT')
+                    ->where('disposal_status', 'Pending')
+                    ->where(function ($q) use ($id) {
+                        $q->where('notes', 'NIT_ID:' . $id)
+                          ->orWhere('notes', 'like', 'NIT_ID:' . $id . '|%')
+                          ->orWhere('notes', 'like', '%|NIT_ID:' . $id . '|%')
+                          ->orWhere('notes', 'like', '%|NIT_ID:' . $id);
+                    })
+                    ->delete();
+                EditAssetRequest::where('asset_type', 'non_it')
+                    ->where('asset_id', $id)
+                    ->where('status', 'Pending')
+                    ->delete();
+                \App\Models\IT\DeleteRequest::where('non_it_id', $id)
+                    ->where('status', 'Pending')
+                    ->delete();
+                ActivityLogService::log('DELETE', 'non_it_asset', $id, 'Deleted: '.$item->description);
+                $item->delete();
+            });
             return redirect()->route('it.non-it.index')->with('success', 'Asset deleted.');
         }
 
@@ -222,8 +250,26 @@ class NonItAssetController extends Controller
         foreach ($ids as $id) {
             $item = NonItAsset::find($id);
             if ($item) {
-                ActivityLogService::log('DELETE', 'non_it_asset', $id, 'Bulk deleted: '.$item->description);
-                $item->delete();
+                DB::transaction(function () use ($item, $id) {
+                    \App\Models\IT\EwasteItem::where('asset_source', 'NIT')
+                        ->where('disposal_status', 'Pending')
+                        ->where(function ($q) use ($id) {
+                            $q->where('notes', 'NIT_ID:' . $id)
+                              ->orWhere('notes', 'like', 'NIT_ID:' . $id . '|%')
+                              ->orWhere('notes', 'like', '%|NIT_ID:' . $id . '|%')
+                              ->orWhere('notes', 'like', '%|NIT_ID:' . $id);
+                        })
+                        ->delete();
+                    EditAssetRequest::where('asset_type', 'non_it')
+                        ->where('asset_id', $id)
+                        ->where('status', 'Pending')
+                        ->delete();
+                    \App\Models\IT\DeleteRequest::where('non_it_id', $id)
+                        ->where('status', 'Pending')
+                        ->delete();
+                    ActivityLogService::log('DELETE', 'non_it_asset', $id, 'Bulk deleted: '.$item->description);
+                    $item->delete();
+                });
                 $count++;
             }
         }
@@ -304,4 +350,3 @@ class NonItAssetController extends Controller
         return response()->json(['inserted' => $inserted, 'skipped' => $skipped, 'errors' => $errors]);
     }
 }
-

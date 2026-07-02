@@ -15,6 +15,7 @@ use App\Services\IT\ActivityLogService;
 use App\Services\IT\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
@@ -38,6 +39,23 @@ class InventoryController extends Controller
                 'created_by'       => $ew->created_by,
             ]);
             $ew->update(['original_inventory_id' => $inv->id]);
+        }
+
+        $selectLocationItems = InventoryItem::where(function ($q) {
+                $q->whereNull('location')->orWhere('location', '');
+            })
+            ->where(function ($q) {
+                $q->where('item_status', '!=', 'Active')
+                  ->orWhereHas('ewasteItems', fn($ew) => $ew->whereIn('disposal_status', ['Approved', 'Collected', 'Rejected']));
+            })
+            ->get();
+        foreach ($selectLocationItems as $item) {
+            $item->ewasteItems()
+                ->whereIn('disposal_status', ['Approved', 'Collected', 'Rejected'])
+                ->delete();
+            if ($item->item_status !== 'Active') {
+                $item->update(['item_status' => 'Active']);
+            }
         }
 
         $query  = InventoryItem::with(['ewasteItems' => fn($q) => $q->orderByDesc('id')]);
@@ -148,6 +166,7 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isReadOnlyViewer()) abort(403);
 
         $data = $request->validate([
             'asset_number'     => 'nullable|string|max:50',
@@ -187,7 +206,10 @@ class InventoryController extends Controller
     public function update(Request $request, int $id)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isReadOnlyViewer()) abort(403);
         $item = InventoryItem::findOrFail($id);
+        $ewStatus = $item->ewasteItems()->latest('id')->value('disposal_status');
+        if (!$user->isAdminOrFinance() && ($item->item_status === 'Pending for Write-Off' || $ewStatus !== null)) abort(403);
 
         $data = $request->validate([
             'asset_number'     => 'nullable|string|max:50',
@@ -207,6 +229,14 @@ class InventoryController extends Controller
             'warranty_date'    => 'nullable|date',
             'notes'            => 'nullable|string',
         ]);
+
+        if (array_key_exists('location', $data) && trim((string) $data['location']) === '') {
+            $data['location'] = null;
+            $data['item_status'] = 'Active';
+            $item->ewasteItems()
+                ->whereIn('disposal_status', ['Approved', 'Collected', 'Rejected'])
+                ->delete();
+        }
 
         if ($user->isAdmin()) {
             $item->update($data);
@@ -228,11 +258,27 @@ class InventoryController extends Controller
     public function destroy(int $id)
     {
         $user = Auth::guard('it')->user();
+        if ($user->isReadOnlyViewer()) abort(403);
         $item = InventoryItem::findOrFail($id);
+        $ewStatus = $item->ewasteItems()->latest('id')->value('disposal_status');
+        if (!$user->isAdminOrFinance() && ($item->item_status === 'Pending for Write-Off' || $ewStatus !== null)) abort(403);
 
         if ($user->isAdmin()) {
-            ActivityLogService::log('DELETE', 'inventory', $id, 'Deleted asset: '.$item->description);
-            $item->delete();
+            DB::transaction(function () use ($item, $id) {
+                EwasteItem::where('original_inventory_id', $id)
+                    ->where('disposal_status', 'Pending')
+                    ->delete();
+                EwasteRequest::where('inventory_id', $id)->where('status', 'Pending')->delete();
+                EditAssetRequest::where(function ($q) {
+                        $q->whereNull('asset_type')->orWhere('asset_type', 'it');
+                    })
+                    ->where('asset_id', $id)
+                    ->where('status', 'Pending')
+                    ->delete();
+                DeleteRequest::where('inventory_id', $id)->where('status', 'Pending')->delete();
+                ActivityLogService::log('DELETE', 'inventory', $id, 'Deleted asset: '.$item->description);
+                $item->delete();
+            });
             return back()->with('success', 'Asset deleted.');
         }
 
@@ -258,8 +304,21 @@ class InventoryController extends Controller
         foreach ($ids as $id) {
             $item = InventoryItem::find($id);
             if ($item) {
-                ActivityLogService::log('DELETE', 'inventory', $id, 'Bulk deleted: '.$item->description);
-                $item->delete();
+                DB::transaction(function () use ($item, $id) {
+                    EwasteItem::where('original_inventory_id', $id)
+                        ->where('disposal_status', 'Pending')
+                        ->delete();
+                    EwasteRequest::where('inventory_id', $id)->where('status', 'Pending')->delete();
+                    EditAssetRequest::where(function ($q) {
+                            $q->whereNull('asset_type')->orWhere('asset_type', 'it');
+                        })
+                        ->where('asset_id', $id)
+                        ->where('status', 'Pending')
+                        ->delete();
+                    DeleteRequest::where('inventory_id', $id)->where('status', 'Pending')->delete();
+                    ActivityLogService::log('DELETE', 'inventory', $id, 'Bulk deleted: '.$item->description);
+                    $item->delete();
+                });
                 $count++;
             }
         }
@@ -268,6 +327,9 @@ class InventoryController extends Controller
 
     public function importTemplate()
     {
+        $user = Auth::guard('it')->user();
+        if (!$user->isAdminOrFinance()) abort(403);
+
         $headers = ['Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment; filename="it_assets_template.csv"'];
         $csv = "Asset Number,Asset Class,F/A Code,Description,Serial Number,Brand,Model,Location,Years Purchase,Total Cost,Accumulated,NBV AT,Notes\n";
         $csv .= "OEPC1401,PC,4100000047,HP EliteOne 800 G2 AIO,SGH629QBBY,HP,EliteOne 800 G2,Server Room 1,2018,5000.00,2000.00,3000.00,Sample row\n";

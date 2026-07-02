@@ -63,7 +63,7 @@ class RequestController extends Controller
 
         if ($req->asset_type === 'it') {
             $item = InventoryItem::findOrFail($req->asset_id);
-            $item->update([
+            $data = [
                 'asset_number'     => $req->asset_number,
                 'asset_class'      => $req->asset_class,
                 'fa_code'          => $req->fa_code,
@@ -80,7 +80,15 @@ class RequestController extends Controller
                 'accumulated'      => $req->accumulated,
                 'nbv_at'           => $req->nbv_at,
                 'notes'            => $req->notes,
-            ]);
+            ];
+            if (trim((string) $data['location']) === '') {
+                $data['location'] = null;
+                $data['item_status'] = 'Active';
+                $item->ewasteItems()
+                    ->whereIn('disposal_status', ['Approved', 'Collected', 'Rejected'])
+                    ->delete();
+            }
+            $item->update($data);
             $route = route('it.inventory.index', ['view' => 'pending_requests']);
             $logType = 'inventory';
             $logId = $item->id;
@@ -218,4 +226,3 @@ class RequestController extends Controller
         return redirect()->route('it.inventory.index', ['view' => 'my_requests'])->with('success', 'Request retracted.');
     }
 }
-
