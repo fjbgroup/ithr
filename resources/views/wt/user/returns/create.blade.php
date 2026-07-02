@@ -66,6 +66,15 @@
     .return-found-field p:first-child { margin:0 0 4px;font-size:8px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted); }
     .return-found-field p:last-child { margin:0;font-size:11px;font-weight:900;text-transform:uppercase;color:var(--text); }
     .return-form-alert { display:none;border:1px solid #fecaca;border-radius:7px;background:#fef2f2;padding:10px 12px;color:#b91c1c;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase; }
+    .return-manual-box { margin-top:14px;border:1px dashed var(--border);border-radius:8px;background:var(--body-bg);padding:12px; }
+    .return-manual-head { display:flex;align-items:center;justify-content:space-between;gap:12px; }
+    .return-manual-copy { margin:4px 0 0;font-size:9px;font-weight:800;line-height:1.45;color:var(--muted); }
+    .return-manual-toggle { display:inline-flex;align-items:center;gap:8px;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--text);cursor:pointer; }
+    .return-manual-toggle input { width:16px;height:16px;accent-color:var(--navy); }
+    .return-manual-fields { display:none;margin-top:12px;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px; }
+    .return-manual-fields.is-open { display:grid; }
+    .return-manual-fields .wide { grid-column:1 / -1; }
+    .return-note-input { min-height:68px;resize:vertical; }
     .return-person-field { position:relative; }
     .return-person-combobox { position:relative; }
     .return-person-toggle { position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:10px;pointer-events:none; }
@@ -82,6 +91,8 @@
     .return-signature-clear { border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;padding:6px 10px; }
     @media (max-width: 640px) {
         .return-assignment-cell { grid-template-columns:1fr;gap:3px; }
+        .return-manual-head { align-items:flex-start;flex-direction:column; }
+        .return-manual-fields { grid-template-columns:1fr; }
     }
     @media (min-width: 992px) {
         .return-form-grid { grid-template-columns: 1fr 340px !important; }
@@ -164,6 +175,58 @@
                         <div class="return-found-field">
                             <p>Department</p>
                             <p id="manualFoundDepartment">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="return-manual-box">
+                    <div class="return-manual-head">
+                        <div>
+                            <h4 class="return-section-title" style="margin-bottom:0"><i class="fa-solid fa-pen-to-square"></i> Manual Unit Entry</h4>
+                            <p class="return-manual-copy">Use this only when the walkie talkie does not appear in the system search.</p>
+                        </div>
+                        <label class="return-manual-toggle">
+                            <input type="checkbox" id="manualReturnToggle" name="manual_return" value="1">
+                            Enter Manually
+                        </label>
+                    </div>
+
+                    <div class="return-manual-fields" id="manualReturnFields">
+                        <div>
+                            <label class="form-label">Radio ID</label>
+                            <input type="text" name="manual_radio_id" id="manualRadioIdInput" class="return-date-input" placeholder="Radio ID">
+                        </div>
+                        <div>
+                            <label class="form-label">Serial No</label>
+                            <input type="text" name="manual_serial_number" class="return-date-input" placeholder="Serial number">
+                        </div>
+                        <div>
+                            <label class="form-label">Model</label>
+                            <input type="text" name="manual_model" class="return-date-input" placeholder="Model">
+                        </div>
+                        <div>
+                            <label class="form-label">Staff ID</label>
+                            <input type="text" name="manual_staff_id" class="return-date-input" placeholder="Staff ID">
+                        </div>
+                        <div>
+                            <label class="form-label">Ownership Name</label>
+                            <input type="text" name="manual_ownership_name" id="manualOwnershipInput" class="return-date-input" placeholder="Current holder name">
+                        </div>
+                        <div>
+                            <label class="form-label">Department</label>
+                            <input type="text" name="manual_department" id="manualDepartmentInput" class="return-date-input" placeholder="Department">
+                        </div>
+                        <div>
+                            <label class="form-label">Position</label>
+                            <input type="text" name="manual_position" class="return-date-input" placeholder="Position">
+                        </div>
+                        <div>
+                            <label class="form-label">Location</label>
+                            <input type="text" name="manual_location" class="return-date-input" placeholder="Location">
+                        </div>
+                        <div class="wide">
+                            <label class="form-label">Remark</label>
+                            <textarea name="manual_note" class="return-date-input return-note-input" placeholder="Enter remark"></textarea>
                         </div>
                     </div>
                 </div>
@@ -347,6 +410,58 @@
                     @endforeach
                 </div>
                 <div id="returnUnitSearchEmpty" class="return-search-empty mt-3">No matching unit found.</div>
+
+                <div class="return-manual-box">
+                    <div class="return-manual-head">
+                        <div>
+                            <h4 class="return-section-title" style="margin-bottom:0"><i class="fa-solid fa-pen-to-square"></i> Manual Unit Entry</h4>
+                            <p class="return-manual-copy">Use this only when the walkie talkie does not appear in the system list.</p>
+                        </div>
+                        <label class="return-manual-toggle">
+                            <input type="checkbox" id="manualReturnToggle" name="manual_return" value="1">
+                            Enter Manually
+                        </label>
+                    </div>
+
+                    <div class="return-manual-fields" id="manualReturnFields">
+                        <div>
+                            <label class="form-label">Radio ID</label>
+                            <input type="text" name="manual_radio_id" id="manualRadioIdInput" class="return-date-input" placeholder="Radio ID">
+                        </div>
+                        <div>
+                            <label class="form-label">Serial No</label>
+                            <input type="text" name="manual_serial_number" class="return-date-input" placeholder="Serial number">
+                        </div>
+                        <div>
+                            <label class="form-label">Model</label>
+                            <input type="text" name="manual_model" class="return-date-input" placeholder="Model">
+                        </div>
+                        <div>
+                            <label class="form-label">Staff ID</label>
+                            <input type="text" name="manual_staff_id" class="return-date-input" placeholder="Staff ID">
+                        </div>
+                        <div>
+                            <label class="form-label">Ownership Name</label>
+                            <input type="text" name="manual_ownership_name" id="manualOwnershipInput" class="return-date-input" placeholder="Current holder name">
+                        </div>
+                        <div>
+                            <label class="form-label">Department</label>
+                            <input type="text" name="manual_department" id="manualDepartmentInput" class="return-date-input" placeholder="Department">
+                        </div>
+                        <div>
+                            <label class="form-label">Position</label>
+                            <input type="text" name="manual_position" class="return-date-input" placeholder="Position">
+                        </div>
+                        <div>
+                            <label class="form-label">Location</label>
+                            <input type="text" name="manual_location" class="return-date-input" placeholder="Location">
+                        </div>
+                        <div class="wide">
+                            <label class="form-label">Remark</label>
+                            <textarea name="manual_note" class="return-date-input return-note-input" placeholder="Enter remark"></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="return-panel h-fit">
@@ -430,6 +545,11 @@
         const manualFoundSerial = document.getElementById('manualFoundSerial');
         const manualFoundName = document.getElementById('manualFoundName');
         const manualFoundDepartment = document.getElementById('manualFoundDepartment');
+        const manualReturnToggle = document.getElementById('manualReturnToggle');
+        const manualReturnFields = document.getElementById('manualReturnFields');
+        const manualRadioIdInput = document.getElementById('manualRadioIdInput');
+        const manualOwnershipInput = document.getElementById('manualOwnershipInput');
+        const manualDepartmentInput = document.getElementById('manualDepartmentInput');
         const manualReturnSearchUrl = @json($returnSearchUrl);
         const returnPrefillQuery = @json((string) request()->query('q', ''));
 
@@ -526,6 +646,31 @@
             radio.addEventListener('change', () => syncSelectedUnit(radio));
         });
 
+        function isManualReturnEnabled() {
+            return Boolean(manualReturnToggle && manualReturnToggle.checked);
+        }
+
+        if (manualReturnToggle && manualReturnFields) {
+            manualReturnToggle.addEventListener('change', function () {
+                manualReturnFields.classList.toggle('is-open', manualReturnToggle.checked);
+
+                if (manualReturnToggle.checked) {
+                    document.querySelectorAll('.return-unit-radio:checked').forEach((radio) => {
+                        radio.checked = false;
+                        syncSelectedUnit(radio);
+                    });
+
+                    if (manualAccessRequestId) {
+                        manualAccessRequestId.value = '';
+                    }
+
+                    if (manualRadioIdInput) {
+                        manualRadioIdInput.focus();
+                    }
+                }
+            });
+        }
+
         const searchInput = document.getElementById('returnUnitSearch');
         const searchEmpty = document.getElementById('returnUnitSearchEmpty');
         const unitItems = Array.from(document.querySelectorAll('[data-return-unit-item]'));
@@ -569,6 +714,14 @@
         function selectManualReturnResult(result) {
             if (!result || !manualAccessRequestId) {
                 return;
+            }
+
+            if (manualReturnToggle) {
+                manualReturnToggle.checked = false;
+            }
+
+            if (manualReturnFields) {
+                manualReturnFields.classList.remove('is-open');
             }
 
             manualAccessRequestId.value = result.id || '';
@@ -809,8 +962,12 @@
             returnUnitForm.addEventListener('submit', function (event) {
                 const selectedUnit = document.querySelector('.return-unit-radio:checked');
                 const selectedManualUnit = manualAccessRequestId && manualAccessRequestId.value.trim() !== '';
+                const selectedManualEntry = isManualReturnEnabled();
                 const requiredFields = [
-                    { field: selectedUnit || (selectedManualUnit ? manualAccessRequestId : null), message: 'Please search and select one walkie talkie unit to return.' },
+                    { field: selectedUnit || (selectedManualUnit ? manualAccessRequestId : null) || (selectedManualEntry ? manualReturnToggle : null), message: 'Please search and select one walkie talkie unit to return, or enter it manually.' },
+                    { field: selectedManualEntry ? manualRadioIdInput : returnUnitForm.querySelector('[name="access_request_id"]'), message: 'Please enter the walkie talkie radio ID.' },
+                    { field: selectedManualEntry ? manualOwnershipInput : returnUnitForm.querySelector('[name="access_request_id"]'), message: 'Please enter the current holder name.' },
+                    { field: selectedManualEntry ? manualDepartmentInput : returnUnitForm.querySelector('[name="access_request_id"]'), message: 'Please enter the unit department.' },
                     { field: returnUnitForm.querySelector('[name="return_date"]'), message: 'Please enter return date.' },
                     { field: returnPersonInput, message: 'Please enter who returned this unit.' },
                     { field: returnDepartmentInput, message: 'Please enter returner department.' },
