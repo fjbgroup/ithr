@@ -93,6 +93,12 @@
 @php
     $isAdminRoute = request()->routeIs('wt.admin.*');
     $mode = $mode ?? ($isAdminRoute ? 'self' : 'self');
+    $returnStoreUrl = $isAdminRoute
+        ? route($routePrefix . '.returns.store', ['mode' => $mode], false)
+        : route($routePrefix . '.returns.store', [], false);
+    $returnSearchUrl = $isAdminRoute
+        ? route($routePrefix . '.returns.search', ['mode' => $mode], false)
+        : route($routePrefix . '.returns.search', [], false);
     $returnPeople = $returnPeople ?? collect();
     $returnPeopleOptions = $returnPeople->map(function ($person) {
         return [
@@ -130,7 +136,7 @@
     @endif
 
     @if($activeAssets->isEmpty())
-        <form action="{{ $isAdminRoute ? route($routePrefix . '.returns.store', ['mode' => $mode]) : route($routePrefix . '.returns.store') }}" method="POST" class="return-form-grid" style="display:grid;grid-template-columns:1fr;gap:16px;padding:16px" id="returnUnitForm" novalidate>
+        <form action="{{ $returnStoreUrl }}" method="POST" class="return-form-grid" style="display:grid;grid-template-columns:1fr;gap:16px;padding:16px" id="returnUnitForm" novalidate>
             @csrf
             <div class="return-panel">
                 <h4 class="return-section-title"><i class="fa-solid fa-magnifying-glass"></i> Search Assignment</h4>
@@ -218,7 +224,7 @@
             </div>
         </form>
     @else
-        <form action="{{ $isAdminRoute ? route($routePrefix . '.returns.store', ['mode' => $mode]) : route($routePrefix . '.returns.store') }}" method="POST" class="return-form-grid" style="display:grid;grid-template-columns:1fr;gap:16px;padding:16px" id="returnUnitForm" novalidate>
+        <form action="{{ $returnStoreUrl }}" method="POST" class="return-form-grid" style="display:grid;grid-template-columns:1fr;gap:16px;padding:16px" id="returnUnitForm" novalidate>
             @csrf
 
             <div class="return-panel">
@@ -229,6 +235,9 @@
                 <div style="display:grid;gap:12px" id="returnUnitList">
                     @foreach($activeAssets as $asset)
                     @php
+                        $isDirectWalkieReturn = (bool) ($asset->direct_walkie_return ?? false);
+                        $assetKey = $isDirectWalkieReturn ? 'direct_walkie_' . $asset->walkie_inventory_id : $asset->id;
+                        $assetLabel = $isDirectWalkieReturn ? 'Direct Inventory' : 'Request #' . str_pad($asset->id, 5, '0', STR_PAD_LEFT);
                         $assignedWalkieIds = is_array($asset->assigned_walkie_inventory_ids) ? $asset->assigned_walkie_inventory_ids : [];
                         $walkieIds = collect($assignedWalkieIds)->filter()->values();
                         if ($walkieIds->isEmpty() && $asset->walkie_inventory_id) {
@@ -259,13 +268,14 @@
                         $unitDepartment = !empty($unitPic['department'])
                             ? $unitPic['department']
                             : ($asset->department ?: '-');
+                        $unitInputId = 'asset_' . \Illuminate\Support\Str::slug((string) $assetKey, '_') . '_unit_' . $unitIndex;
                     @endphp
-                    <div style="position:relative" data-return-unit-item data-return-search="{{ strtoupper('REQUEST ' . str_pad($asset->id, 5, '0', STR_PAD_LEFT) . ' ' . $radioId . ' ' . ($serials->get($unitIndex) ?: '') . ' ' . $unitOwnership . ' ' . $unitOwnershipType . ' ' . $unitDepartment . ' ' . ($asset->event_name ?: 'Walkie Talkie Request') . ' ' . ($asset->request_date ? \Carbon\Carbon::parse($asset->request_date)->format('d M Y') : '')) }}">
+                    <div style="position:relative" data-return-unit-item data-return-search="{{ strtoupper($assetLabel . ' ' . $radioId . ' ' . ($serials->get($unitIndex) ?: '') . ' ' . $unitOwnership . ' ' . $unitOwnershipType . ' ' . $unitDepartment . ' ' . ($asset->event_name ?: 'Walkie Talkie Request') . ' ' . ($asset->request_date ? \Carbon\Carbon::parse($asset->request_date)->format('d M Y') : '')) }}">
                         <input
                             type="radio"
                             name="access_request_id"
-                            id="asset_{{ $asset->id }}_unit_{{ $unitIndex }}"
-                            value="{{ $asset->id }}"
+                            id="{{ $unitInputId }}"
+                            value="{{ $assetKey }}"
                             class="return-unit-radio"
                             style="position:absolute;width:1px;height:1px;opacity:0"
                             data-return-walkie-id="{{ $walkieIds->get($unitIndex) }}"
@@ -273,10 +283,10 @@
                             data-return-serial-number="{{ $serials->get($unitIndex) }}"
                             required
                         >
-                        <label for="asset_{{ $asset->id }}_unit_{{ $unitIndex }}" class="return-unit-card" data-return-unit-card>
+                        <label for="{{ $unitInputId }}" class="return-unit-card" data-return-unit-card>
                             <div class="return-assignment-head">
                                 <div style="min-width:0">
-                                    <p style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin:0">Request #{{ str_pad($asset->id, 5, '0', STR_PAD_LEFT) }}</p>
+                                    <p style="font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin:0">{{ $assetLabel }}</p>
                                     <p class="return-unit-title" style="margin-top:4px;font-size:13px;font-weight:900;margin-bottom:0">
                                         Radio ID {{ $radioId }} To Return
                                     </p>
@@ -420,7 +430,8 @@
         const manualFoundSerial = document.getElementById('manualFoundSerial');
         const manualFoundName = document.getElementById('manualFoundName');
         const manualFoundDepartment = document.getElementById('manualFoundDepartment');
-        const manualReturnSearchUrl = @json($isAdminRoute ? route($routePrefix . '.returns.search', ['mode' => $mode]) : route($routePrefix . '.returns.search'));
+        const manualReturnSearchUrl = @json($returnSearchUrl);
+        const returnPrefillQuery = @json((string) request()->query('q', ''));
 
         function setupReturnSignaturePad(container) {
             const canvas = container.querySelector('canvas');
@@ -520,7 +531,7 @@
         const unitItems = Array.from(document.querySelectorAll('[data-return-unit-item]'));
 
         if (searchInput) {
-            searchInput.addEventListener('input', function () {
+            function filterReturnUnits() {
                 const query = searchInput.value.trim().toUpperCase();
                 let visibleCount = 0;
 
@@ -535,7 +546,24 @@
                 if (searchEmpty) {
                     searchEmpty.style.display = visibleCount === 0 ? 'block' : 'none';
                 }
-            });
+            }
+
+            searchInput.addEventListener('input', filterReturnUnits);
+
+            if (returnPrefillQuery) {
+                searchInput.value = returnPrefillQuery;
+                filterReturnUnits();
+
+                const firstVisibleRadio = unitItems
+                    .filter((item) => item.style.display !== 'none')
+                    .map((item) => item.querySelector('.return-unit-radio'))
+                    .find(Boolean);
+
+                if (firstVisibleRadio) {
+                    firstVisibleRadio.checked = true;
+                    syncSelectedUnit(firstVisibleRadio);
+                }
+            }
         }
 
         function selectManualReturnResult(result) {
@@ -687,6 +715,11 @@
         }
 
         if (manualReturnSearch) {
+            if (returnPrefillQuery) {
+                manualReturnSearch.value = returnPrefillQuery;
+                setTimeout(runManualReturnSearch, 150);
+            }
+
             manualReturnSearch.addEventListener('keydown', function (event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();

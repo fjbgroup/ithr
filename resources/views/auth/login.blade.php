@@ -24,6 +24,7 @@
     --lg-card:   #fff;
     --lg-input:  #f8fafc;
     --lg-input-focus: #fff;
+    --lg-bg:     linear-gradient(135deg, #f1f3f5 0%, #e9ecef 55%, #dee2e6 100%);
   }
   html.dark {
     --lg-border: #334155;
@@ -32,6 +33,7 @@
     --lg-card:   #1e293b;
     --lg-input:  #0f172a;
     --lg-input-focus: #1e293b;
+    --lg-bg:     linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   }
 
   .auth-page {
@@ -40,7 +42,7 @@
     align-items: center;
     justify-content: center;
     padding: 1.25rem;
-    background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 55%, #dee2e6 100%);
+    background: var(--lg-bg);
     background-attachment: fixed;
   }
 
@@ -151,6 +153,17 @@
     color: var(--lg-text);
     margin-bottom: .45rem;
   }
+  .auth-theme-toggle {
+    position: absolute; top: 1.5rem; right: 1.5rem; z-index: 1000;
+    background: var(--lg-input); border: 1px solid var(--lg-border); color: var(--lg-muted);
+    cursor: pointer; padding: 10px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; outline: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .auth-theme-toggle:hover { color: var(--lg-text); border-color: var(--lg-sky); box-shadow: 0 4px 12px rgba(56,189,248,0.15); }
+  html:not(.dark) .auth-theme-toggle .icon-sun { display: none; }
+  html.dark .auth-theme-toggle .icon-moon { display: none; }
   .auth-input-wrap { position: relative; }
   .auth-input-wrap > svg.lead {
     position: absolute;
@@ -252,9 +265,23 @@
     .auth-mobile-brand p { font-size: .85rem; color: var(--lg-muted); margin-top: .25rem; }
     .auth-main-head { display: none; }
   }
+  .switch-system { text-align: center; margin-top: .75rem; }
+  .switch-system-title { font-size: 10px; color: var(--lg-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .switch-system-links { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .sys-badge { display: inline-flex; align-items: center; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .sys-badge.active { border: 1px solid rgba(0,0,0,.08); color: #3d4d5c; background: rgba(0,0,0,.03); cursor: default; }
+  .sys-badge.link { border: 1px solid rgba(0,0,0,.15); color: #64748b; text-decoration: none; background: rgba(0,0,0,.06); transition: all .2s; }
+  .sys-badge.link:hover { background: rgba(0,0,0,.15); color: #334155; }
+  html.dark .sys-badge.active { border: 1px solid rgba(255,255,255,.08); color: #cbd5e1; background: rgba(255,255,255,.05); }
+  html.dark .sys-badge.link { border: 1px solid rgba(255,255,255,.15); color: #94a3b8; background: rgba(255,255,255,.06); }
+  html.dark .sys-badge.link:hover { background: rgba(255,255,255,.15); color: #e2e8f0; }
 </style>
 </head>
 <body class="auth-page">
+  <button onclick="toggleTheme()" class="auth-theme-toggle" aria-label="Toggle theme">
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+  </button>
   <div class="auth-shell">
 
     <!-- Showcase -->
@@ -369,18 +396,12 @@
         </a>
       </div>
 
-      <div style="text-align:center;margin-top:.75rem;">
-        <div style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
-        <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
-          <span style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:600;color:#3d4d5c;background:rgba(255,255,255,.03);cursor:default;">
-            HR System
-          </span>
-          <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
-            WT System
-          </a>
-          <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
-            IT System
-          </a>
+      <div class="switch-system">
+        <div class="switch-system-title">Switch System</div>
+        <div class="switch-system-links">
+          <span class="sys-badge active">HR System</span>
+          <a href="{{ url('/wt') }}" class="sys-badge link">WT System</a>
+          <a href="{{ url('/it/login') }}" class="sys-badge link">IT System</a>
         </div>
       </div>
     </main>
@@ -397,6 +418,15 @@
     btn.innerHTML = showing
       ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>'
       : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const next = isDark ? 'light' : 'dark';
+    document.documentElement.classList.toggle('dark', next === 'dark');
+    localStorage.setItem('fjb-theme', next);
+    localStorage.setItem('color-theme', next);
+    localStorage.setItem('theme', next);
   }
 </script>
 </body>

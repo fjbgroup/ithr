@@ -155,6 +155,26 @@ input::placeholder{color:#94a3b8;}
 .switch-links a:hover{color:#F7941D;}
 .switch-links .sep{color:#cbd5e1;font-size:11px;}
 .switch-links .current{color:#F7941D;font-weight:700;}
+
+/* Dark Mode Overrides */
+html.dark body { background: linear-gradient(135deg,#0f172a 0%,#1e293b 100%); }
+html.dark .card-right { background: #1e293b; }
+html.dark .form-title { color: #f8fafc; }
+html.dark .form-sub { color: #94a3b8; }
+html.dark .field label { color: #cbd5e1; }
+html.dark input[type="text"], html.dark input[type="email"], html.dark input[type="password"] {
+  background: #0f172a; border-color: #334155; color: #f8fafc;
+}
+html.dark input:focus { border-color: #F7941D; background: #0f172a; box-shadow: 0 0 0 3px rgba(247,148,29,.25); }
+html.dark .access-card { background: #1e293b; }
+html.dark .access-title { color: #f8fafc; }
+html.dark .access-copy { color: #cbd5e1; }
+html.dark .back-link { color: #cbd5e1; }
+html.dark .switch-label { color: #94a3b8; }
+html.dark .switch-links a { color: #cbd5e1; }
+html.dark .switch-links .current { color: #F7941D; }
+html.dark .alert-error { background: rgba(220, 38, 38, 0.15); border-color: rgba(220, 38, 38, 0.3); color: #fca5a5; }
+html.dark .alert-success { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); color: #86efac; }
 </style>
 
 <div class="card">

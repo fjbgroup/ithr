@@ -900,22 +900,49 @@ public function repairFaulty()
             ->unique()
             ->values();
 
-        $records = WalkieTalkie::whereRaw('UPPER(TRIM(status)) = ?', ['IN USE'])
-            ->where(function ($query) use ($ownerNames, $ownerSearchTokens, $activeAssignedIds) {
-                if ($ownerNames->isNotEmpty()) {
-                    $query->whereIn(DB::raw('UPPER(TRIM(ownership))'), $ownerNames->all());
+        $activeAssignedRadioIds = $candidateRequests
+            ->flatMap(function (AccessRequest $request) {
+                $assignedRadioIds = collect($request->assigned_radio_ids ?? []);
 
-                    if ($ownerSearchTokens->isNotEmpty()) {
-                        $query->orWhere(function ($tokenQuery) use ($ownerSearchTokens) {
-                            foreach ($ownerSearchTokens as $token) {
-                                $tokenQuery->whereRaw("UPPER(COALESCE(ownership, '')) LIKE ?", ['%' . $token . '%']);
-                            }
-                        });
-                    }
+                if ($assignedRadioIds->isEmpty() && $request->radio_id) {
+                    $assignedRadioIds->push($request->radio_id);
+                }
+
+                return $assignedRadioIds;
+            })
+            ->map(fn ($id) => strtoupper(trim((string) $id)))
+            ->filter()
+            ->unique()
+            ->values();
+
+        $records = WalkieTalkie::whereRaw('UPPER(TRIM(status)) = ?', ['IN USE'])
+            ->where(function ($query) use ($ownerNames, $ownerSearchTokens, $activeAssignedIds, $activeAssignedRadioIds) {
+                if ($ownerNames->isNotEmpty()) {
+                    $query->where(function ($nameQuery) use ($ownerNames, $ownerSearchTokens) {
+                        $nameQuery
+                            ->whereIn(DB::raw('UPPER(TRIM(ownership))'), $ownerNames->all())
+                            ->orWhereIn(DB::raw('UPPER(TRIM(executive))'), $ownerNames->all());
+
+                        if ($ownerSearchTokens->isNotEmpty()) {
+                            $nameQuery->orWhere(function ($tokenQuery) use ($ownerSearchTokens) {
+                                foreach ($ownerSearchTokens as $token) {
+                                    $tokenQuery->where(function ($fieldQuery) use ($token) {
+                                        $fieldQuery
+                                            ->whereRaw("UPPER(COALESCE(ownership, '')) LIKE ?", ['%' . $token . '%'])
+                                            ->orWhereRaw("UPPER(COALESCE(executive, '')) LIKE ?", ['%' . $token . '%']);
+                                    });
+                                }
+                            });
+                        }
+                    });
                 }
 
                 if ($activeAssignedIds->isNotEmpty()) {
                     $query->orWhereIn('walkie_id', $activeAssignedIds->all());
+                }
+
+                if ($activeAssignedRadioIds->isNotEmpty()) {
+                    $query->orWhereIn(DB::raw('UPPER(TRIM(radio_id))'), $activeAssignedRadioIds->all());
                 }
             })
             ->orderBy('radio_id')
