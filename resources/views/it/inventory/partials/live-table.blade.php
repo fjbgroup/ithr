@@ -18,6 +18,10 @@
       @forelse($items as $item)
       @php
         $ew = $item->ewasteItems->sortByDesc('id')->first();
+        $ewStatus = $ew?->disposal_status;
+        $isPendingWriteoff = $item->item_status === 'Pending for Write-Off' || $ewStatus === 'Pending';
+        $isInEwasteModule = $ew && $ewStatus !== 'Pending';
+        $staffRowLocked = !$user->isAdminOrFinance() && !$user->isReadOnlyViewer() && ($isPendingWriteoff || $isInEwasteModule);
         if ($ew) {
             $display_status = match($ew->disposal_status) {
                 'Pending'   => 'Pending E-Waste',
@@ -32,7 +36,8 @@
       <tr>
         <td>
           <input type="checkbox" class="row-check" value="{{ $item->id }}"
-            {{ (!$user->isAdmin() && $display_status !== 'Active') ? 'disabled style="cursor:not-allowed;opacity:.3;width:15px;height:15px"' : 'style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"' }}>
+            {{ $staffRowLocked ? 'disabled' : '' }}
+            style="{{ $staffRowLocked ? 'cursor:not-allowed;opacity:.35;' : 'cursor:pointer;' }}accent-color:var(--accent);width:15px;height:15px">
         </td>
         <td>
           <a href="{{ route('it.asset.show', $item->id) }}"
@@ -47,31 +52,29 @@
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->total_cost ? number_format($item->total_cost, 2) : '—' }}</td>
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->accumulated ? number_format($item->accumulated, 2) : '—' }}</td>
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->nbv_at ? number_format($item->nbv_at, 2) : '—' }}</td>
-        <td style="width:1%;white-space:nowrap">
+        <td class="it-inventory-qr-cell">
           <button onclick="openQRModal({{ $item->id }},{{ json_encode($item->asset_number) }},{{ json_encode($item->description) }},{{ json_encode($item->asset_class) }},{{ json_encode($item->serial_number) }},{{ json_encode($item->brand) }},{{ json_encode($item->model) }},{{ json_encode($item->location) }})"
             style="font-size:12px;color:#7c3aed;background:rgba(124,58,237,.1);border:none;border-radius:6px;padding:4px 7px;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center" title="View QR Code">
             <i class="bi bi-qr-code" style="font-size:13px"></i>
           </button>
         </td>
-        <td style="width:1%;white-space:nowrap">
-          <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
-            {{-- Write-off button --}}
-            @if(($display_status === 'Active' || $user->isAdmin()) && !$user->isReadOnlyViewer())
+        <td class="it-inventory-actions-cell">
+          <div class="it-inventory-action-buttons">
+            @php
+              $itCanWriteoff = !in_array($display_status, ['Pending E-Waste', 'E-Waste', 'Collected', 'Disposed'], true);
+            @endphp
+            @if($user->isAdminOrFinance())
+            @if(($itCanWriteoff || $user->isAdmin()) && !$user->isReadOnlyViewer())
             <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}"
               style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px"
               title="Write off to E-Waste or Disposal">
-              <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste / Disposal
+              <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
             </a>
             @endif
-            {{-- Edit button --}}
-            @if(!$user->isReadOnlyViewer() && ($display_status === 'Active' || $user->isAdmin()))
             <button onclick="openEditModal({{ $item->id }})"
               style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">
-              {{ $user->isAdminOrFinance() ? 'Edit' : 'Request Edit' }}
+              Edit
             </button>
-            @endif
-            {{-- Delete button --}}
-            @if($user->isAdmin())
             <form method="POST" action="{{ route('it.inventory.destroy', $item->id) }}" style="display:inline"
                   onsubmit="return confirm('Delete asset &quot;{{ addslashes($item->description) }}&quot;? This cannot be undone.')">
               @csrf
@@ -81,9 +84,48 @@
                 <i class="bi bi-trash"></i>
               </button>
             </form>
-            @elseif($display_status === 'Active' && !$user->isReadOnlyViewer())
+            @elseif(!$user->isReadOnlyViewer())
+            @if($staffRowLocked)
+            <span title="{{ $isPendingWriteoff ? 'Pending for Write-Off' : 'Already in E-Waste module' }}" style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px;cursor:not-allowed">
+              <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
+            </span>
+            <span title="{{ $isPendingWriteoff ? 'Pending for Write-Off' : 'Already in E-Waste module' }}" style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;cursor:not-allowed">
+              Request Edit
+            </span>
+            <span title="{{ $isPendingWriteoff ? 'Pending for Write-Off' : 'Already in E-Waste module' }}" style="font-size:13px;color:#94a3b8;background:rgba(148,163,184,.12);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center;cursor:not-allowed">
+              <i class="bi bi-trash"></i>
+            </span>
+            @else
+            @if($itCanWriteoff)
+              @if(isset($pendingEwIds[$item->id]))
+              <span title="E-Waste Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+                <i class="bi bi-hourglass-split"></i>
+              </span>
+              @else
+              <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}"
+                style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px"
+                title="Request E-Waste or Disposal">
+                <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
+              </a>
+              @endif
+            @endif
+            @if(isset($pendingEditIds[$item->id]))
+            <span title="Edit Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+              <i class="bi bi-hourglass-split"></i>
+            </span>
+            @else
+            <button onclick="openEditModal({{ $item->id }})"
+              style="font-size:11px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">
+              Request Edit
+            </button>
+            @endif
+            @if(isset($pendingDeleteIds[$item->id]))
+            <span title="Delete Request Pending" style="font-size:13px;color:#d97706;background:rgba(245,158,11,.1);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center">
+              <i class="bi bi-hourglass-split"></i>
+            </span>
+            @else
             <form method="POST" action="{{ route('it.inventory.destroy', $item->id) }}" style="display:inline"
-                  onsubmit="return confirm('Delete asset &quot;{{ addslashes($item->description) }}&quot;? This cannot be undone.')">
+                  onsubmit="return confirm('Submit a delete request for this asset?')">
               @csrf
               @method('DELETE')
               <button type="submit" title="Request Delete"
@@ -91,6 +133,8 @@
                 <i class="bi bi-trash"></i>
               </button>
             </form>
+            @endif
+            @endif
             @endif
           </div>
         </td>
