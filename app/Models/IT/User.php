@@ -28,7 +28,7 @@ class User extends BaseUser
     public function isItValidator(): bool    { return (bool) ($this->attributes['is_it_validator'] ?? false); }
     public function isStaff(): bool          { return $this->it_role === 'user'; }
     public function isHOU(): bool            { return $this->it_role === 'hou'; }
-    public function isGM(): bool             { return $this->it_role === 'gm'; }
+    public function isGM(): bool             { return $this->it_role === 'gm' || $this->role === 'gm'; }
     public function isCEO(): bool            { return $this->it_role === 'ceo'; }
 
     // ── IT-specific relationships ─────────────────────────────────────────

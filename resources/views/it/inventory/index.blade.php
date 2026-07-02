@@ -430,11 +430,12 @@
         </td>
         <td style="width:1%;white-space:nowrap">
           <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
-            {{-- E-Waste button --}}
+            {{-- Write-off button --}}
             @if(($display_status === 'Active' || $user->isAdmin()) && !$user->isReadOnlyViewer())
             <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}"
-              style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
-              <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste
+              style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px"
+              title="Write off to E-Waste or Disposal">
+              <i class="bi bi-recycle" style="font-size:11px"></i> E-Waste / Disposal
             </a>
             @endif
             {{-- Edit button --}}
@@ -1135,4 +1136,3 @@ makeAutocomplete('addModelInput', 'modelSuggestions', '{{ route("it.inventory.mo
 })();
 </script>
 @endpush
-

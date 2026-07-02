@@ -45,13 +45,23 @@ class WriteoffController extends Controller
         $myGmQueue = $myGmCount = $gmHistory = $gmHistoryCount = null;
         if ($user->isGM()) {
             $myGmQueue   = EwasteItem::with(['creator', 'houUser'])
-                ->where('current_gm_user_id', $user->id)
+                ->where('hou_status', 'Checked')
                 ->where('gm_status', 'Pending')
                 ->where('disposal_status', 'Pending')
+                ->where(function ($q) use ($user) {
+                    $q->where('current_gm_user_id', $user->id)
+                        ->orWhere('gm1_user_id', $user->id)
+                        ->orWhere('gm2_user_id', $user->id)
+                        ->orWhereNull('current_gm_user_id');
+                })
                 ->orderBy('gm_assigned_at')->get();
             $myGmCount   = $myGmQueue->count();
             $gmHistory   = EwasteItem::with(['creator', 'houUser'])
-                ->where(fn($q) => $q->where('gm1_user_id', $user->id)->orWhere('gm2_user_id', $user->id))
+                ->where(function ($q) use ($user) {
+                    $q->where('gm1_user_id', $user->id)
+                        ->orWhere('gm2_user_id', $user->id)
+                        ->orWhere('current_gm_user_id', $user->id);
+                })
                 ->whereIn('gm_status', ['Checked', 'Rejected'])
                 ->orderByDesc('gm_signed_at')->limit(50)->get();
             $gmHistoryCount = $gmHistory->count();
@@ -168,7 +178,9 @@ class WriteoffController extends Controller
             return redirect()->route('it.writeoff.index')->with('success', 'Write-off rejected.');
         }
 
-        $gms  = User::where('it_role', 'gm')->orderBy('id')->take(2)->pluck('id');
+        $gms  = User::where('is_active', true)
+            ->where(fn($q) => $q->where('it_role', 'gm')->orWhere('role', 'gm'))
+            ->orderBy('id')->take(2)->pluck('id');
         $gm1  = $gms[0] ?? null;
         $gm2  = $gms[1] ?? null;
         $curGm = $gm1 ?? $gm2;
@@ -191,14 +203,25 @@ class WriteoffController extends Controller
         $remark = $request->gm_remark ?? '';
         $sigImg = $request->gm_sig_img ?? '';
 
-        $ew = EwasteItem::where('id', $ewId)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')->first();
+        $gmScope = function ($q) use ($user) {
+            $q->where('current_gm_user_id', $user->id)
+                ->orWhere('gm1_user_id', $user->id)
+                ->orWhere('gm2_user_id', $user->id)
+                ->orWhereNull('current_gm_user_id');
+        };
+
+        $ew = EwasteItem::where('id', $ewId)
+            ->where('hou_status', 'Checked')
+            ->where('gm_status', 'Pending')
+            ->where($gmScope)
+            ->first();
         if (!$ew) return back()->with('error', 'Item not found.');
 
         if ($action === 'reject') {
-            $toRevert = EwasteItem::whereIn('id', $ewIds)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')->get();
+            $toRevert = EwasteItem::whereIn('id', $ewIds)->where('hou_status', 'Checked')->where('gm_status', 'Pending')->where($gmScope)->get();
             foreach ($toRevert as $r) { $this->setAssetStatus($r, 'Active'); }
-            EwasteItem::whereIn('id', $ewIds)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')
-                ->update(['gm_status' => 'Rejected', 'disposal_status' => 'Rejected', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark]);
+            EwasteItem::whereIn('id', $ewIds)->where('hou_status', 'Checked')->where('gm_status', 'Pending')->where($gmScope)
+                ->update(['current_gm_user_id' => $user->id, 'gm_status' => 'Rejected', 'disposal_status' => 'Rejected', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark]);
             ActivityLogService::log('GM_REJECTED', 'ewaste', $ewId, 'GM rejected write-off: ' . $ew->description);
             if ($ew->created_by) NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off.', route('it.writeoff.index'));
             if ($ew->checked_by_user_id) NotificationService::notifyUser($ew->checked_by_user_id, 'writeoff', 'Write-Off Rejected by GM', $user->full_name . ' (GM) rejected the write-off that you had checked.', route('it.writeoff.index'));
@@ -206,8 +229,8 @@ class WriteoffController extends Controller
         }
 
         $ceo = User::where('it_role', 'ceo')->first();
-        EwasteItem::whereIn('id', $ewIds)->where('current_gm_user_id', $user->id)->where('gm_status', 'Pending')
-            ->update(['gm_status' => 'Checked', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark, 'ceo_user_id' => $ceo?->id, 'ceo_status' => 'Pending']);
+        EwasteItem::whereIn('id', $ewIds)->where('hou_status', 'Checked')->where('gm_status', 'Pending')->where($gmScope)
+            ->update(['current_gm_user_id' => $user->id, 'gm_status' => 'Checked', 'gm_signed_name' => $user->full_name, 'gm_sig_img' => $sigImg, 'gm_signed_at' => now(), 'gm_remark' => $remark, 'ceo_user_id' => $ceo?->id, 'ceo_status' => 'Pending']);
         ActivityLogService::log('GM_CHECKED', 'ewaste', $ewId, 'GM checked write-off: ' . $ew->description);
         if ($ceo) NotificationService::notifyUser($ceo->id, 'writeoff', 'Write-Off Awaiting Your CEO Approval', $user->full_name . ' (General Manager) signed ' . count($ewIds) . ' write-off item(s) - please review and approve or reject.', route('it.writeoff.index'));
         return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) forwarded to CEO.');
