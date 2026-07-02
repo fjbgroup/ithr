@@ -136,6 +136,16 @@ function toggleNavGroup(groupId) {
     const children = group.querySelector('.nav-group-children');
     const isOpen   = toggle.classList.contains('open');
 
+    // Close all other nav groups to prevent overlapping popups
+    document.querySelectorAll('.nav-group').forEach(function(g) {
+        if (g.id !== groupId) {
+            const t = g.querySelector('.nav-group-toggle');
+            const c = g.querySelector('.nav-group-children');
+            if (t) t.classList.remove('open');
+            if (c) c.classList.remove('open');
+        }
+    });
+
     toggle.classList.toggle('open', !isOpen);
     children.classList.toggle('open', !isOpen);
 }
