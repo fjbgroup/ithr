@@ -145,10 +145,14 @@ Route::middleware('auth')->group(function () {
         Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit-log.index');
     });
 
-    Route::post('chatbot/message', [ChatbotController::class, 'chat'])->name('chatbot.message');
-    Route::post('chatbot/clear', [ChatbotController::class, 'clearHistory'])->name('chatbot.clear');
+
 
     Route::get('role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
+});
+
+Route::middleware('auth:web,wt')->group(function () {
+    Route::post('chatbot/message', [ChatbotController::class, 'chat'])->name('chatbot.message');
+    Route::post('chatbot/clear', [ChatbotController::class, 'clearHistory'])->name('chatbot.clear');
 });
 
 // QR attendance — public (no auth session required; credentials submitted in the form)
