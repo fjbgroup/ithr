@@ -1337,9 +1337,12 @@ html.dark .global-walkie-history-detail { color: #94a3b8; }
    SCROLL CONTROLS
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 #systemScrollControls {
-  position: fixed; right: 16px; bottom: 16px;
+  position: fixed; left: calc(var(--sidebar-w) + 16px); right: auto; bottom: 16px;
   display: flex; flex-direction: column; gap: 5px;
   z-index: 200; opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+body.sidebar-collapsed #systemScrollControls {
+  left: calc(var(--sidebar-collapsed-w) + 16px);
 }
 #systemScrollControls.is-visible { opacity: 1; pointer-events: auto; }
 .system-scroll-btn {
@@ -1657,8 +1660,13 @@ body .content-surface .inventory-page-shell #walkiesTable {
   }
 
   #systemScrollControls {
-    right: 10px;
-    bottom: 10px;
+    left: 10px;
+    right: auto;
+    bottom: 82px;
+  }
+
+  body.sidebar-collapsed #systemScrollControls {
+    left: 10px;
   }
 }
 

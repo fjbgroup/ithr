@@ -1438,7 +1438,7 @@
             table.style.minWidth = '0';
             if (actionHeader) {
                 actionHeader.removeAttribute('data-label');
-                actionHeader.innerHTML = '';
+                actionHeader.textContent = 'ACTION';
                 actionHeader.style.position = 'static';
                 actionHeader.style.right = 'auto';
                 actionHeader.style.left = 'auto';
