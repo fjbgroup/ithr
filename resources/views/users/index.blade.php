@@ -129,7 +129,7 @@
 
 <div class="card card-sticky">
     <div class="table-wrap table-wrap-sticky">
-        <table class="table table-sticky">
+        <table class="table table-sticky users-table">
             <thead>
                 <tr>
                     <th>Name</th>
