@@ -287,32 +287,45 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
         </a>
         @endif
 
-        @if(Auth::user()->isAdmin() || Auth::user()->isCeo())
-        <div class="nav-divider"></div>
-        <a href="{{ url('/master-data') }}" class="nav-item {{ request()->is('master-data*') ? 'active' : '' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-            Master Data
-        </a>
-        @if(Auth::user()->isAdminIT() || Auth::user()->isCeo())
-        <a href="{{ url('/users') }}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>
-            User Accounts
-        </a>
-        <a href="{{ route('audit-log.index') }}" class="nav-item {{ request()->is('audit-log*') ? 'active' : '' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Audit Log
-        </a>
-        @endif
-        @endif
-        @if(Auth::user()->isHrUser())
-        <a href="{{ route('account.security') }}" class="nav-item {{ request()->is('account/security') ? 'active' : '' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Account Security
-            @if(!Auth::user()->hasTotpSetup())
-                <span class="badge-count" style="background:#f59e0b;">!</span>
-            @endif
-        </a>
-        @endif
+                  @php
+              $sysSecActive = request()->is('master-data*') || request()->is('users*') || request()->is('audit-log*') || request()->is('account/security*');
+          @endphp
+          @if(Auth::user()->isAdmin() || Auth::user()->isCeo() || Auth::user()->isHrUser())
+          <div class="nav-divider"></div>
+          <div class="nav-group" id="navGroupSystemSecurity">
+              <div class="nav-group-toggle {{ $sysSecActive ? 'open has-active' : '' }}" onclick="toggleNavGroup('navGroupSystemSecurity')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>System Security</span>
+                  @if(Auth::user()->isHrUser() && !Auth::user()->hasTotpSetup())
+                      <span class="badge-count" style="background:#f59e0b;">!</span>
+                  @endif
+                  <svg class="toggle-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+              </div>
+              <div class="nav-group-children {{ $sysSecActive ? 'open' : '' }}">
+                  <div class="nav-group-children-inner">
+                      @if(Auth::user()->isAdmin() || Auth::user()->isCeo())
+                      <a href="{{ url('/master-data') }}" class="nav-child {{ request()->is('master-data*') ? 'active' : '' }}">Master Data</a>
+                      @endif
+                      
+                      @if(Auth::user()->isAdminIT() || Auth::user()->isCeo())
+                      <a href="{{ url('/users') }}" class="nav-child {{ request()->is('users*') ? 'active' : '' }}">User Accounts</a>
+                      <a href="{{ route('audit-log.index') }}" class="nav-child {{ request()->is('audit-log*') ? 'active' : '' }}">Audit Log</a>
+                      @endif
+                      
+                      @if(Auth::user()->isHrUser())
+                      <a href="{{ route('account.security') }}" class="nav-child {{ request()->is('account/security*') ? 'active' : '' }}">
+                          Account Security
+                          @if(!Auth::user()->hasTotpSetup())
+                              <span class="badge-count" style="background:#f59e0b; margin-left: 6px;">!</span>
+                          @endif
+                      </a>
+                      @endif
+                  </div>
+              </div>
+          </div>
+          @endif
         <div class="nav-divider" style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
         <a href="javascript:void(0)" onclick="openModal('roleMatrixModal')" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
