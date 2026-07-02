@@ -79,7 +79,7 @@
     </div>
 
     <!-- Stats -->
-    <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.24);border-right:1px solid rgba(255,255,255,.24);margin:0 28px">
+    <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.24);border-right:1px solid rgba(255,255,255,.24);margin:0 28px" id="itDashboardStats" data-auto-refresh="true">
       <div style="padding:0 28px;text-align:center">
         <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Total Assets</div>
         <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
@@ -270,7 +270,7 @@
         </div>
         <a href="{{ route('it.inventory.index') }}" style="font-size:11px;font-weight:700;color:#0284c7;text-decoration:none">View all →</a>
       </div>
-      <div class="table-responsive">
+      <div class="table-responsive" id="recentAssetsTableWrap" data-auto-refresh="true">
         <table class="ds-tbl">
           <thead><tr><th>Asset #</th><th>Class</th><th>Description</th><th>Status</th></tr></thead>
           <tbody>

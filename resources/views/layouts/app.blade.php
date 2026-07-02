@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="refresh" content="30">
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ config('app.name', 'HR Admin System') }}</title>
 @include('partials.favicons')
@@ -1402,5 +1401,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 </style>
+
+<script>
+// Background Auto-Refresh Script (Hot Swap)
+(function() {
+    setInterval(() => {
+        // Only run if the document is visible to save resources
+        if (document.visibilityState !== 'visible') return;
+
+        fetch(window.location.href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.text())
+            .then(html => {
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                
+                // 1. Update Notification Badge without disrupting dropdown state
+                const newBadge = doc.getElementById('notifBellBadge');
+                const oldBadge = document.getElementById('notifBellBadge');
+                const bellBtn = document.getElementById('notifBellBtn');
+                
+                if (newBadge) {
+                    if (oldBadge) {
+                        if (oldBadge.textContent !== newBadge.textContent) {
+                            oldBadge.outerHTML = newBadge.outerHTML;
+                        }
+                    } else if (bellBtn) {
+                        bellBtn.insertAdjacentHTML('beforeend', newBadge.outerHTML);
+                    }
+                } else if (oldBadge) {
+                    oldBadge.remove();
+                }
+                
+                // 2. Update all data-auto-refresh elements by ID
+                document.querySelectorAll('[data-auto-refresh="true"]').forEach(el => {
+                    if (el.id) {
+                        const newEl = doc.getElementById(el.id);
+                        if (newEl) {
+                            el.innerHTML = newEl.innerHTML;
+                        }
+                    }
+                });
+            })
+            .catch(e => console.error('Auto-refresh failed:', e));
+    }, 30000);
+})();
+</script>
 </body>
 </html>

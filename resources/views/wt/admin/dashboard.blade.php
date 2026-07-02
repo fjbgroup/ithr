@@ -273,7 +273,7 @@
         <div class="flex flex-col gap-3 mb-6 border-b border-stone-50 dark:border-slate-700/50 pb-3 lg:flex-row lg:items-center lg:justify-between">
             <h4 class="card-title text-stone-800 dark:text-slate-200">Walkie Talkie by Status</h4>
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-                <div class="total-wt-badge inline-flex items-center gap-2 rounded-lg border px-3 py-2">
+                <div class="total-wt-badge inline-flex items-center gap-2 rounded-lg border px-3 py-2" id="totalWtBadge" data-auto-refresh="true">
                     <i class="fas fa-walkie-talkie text-[11px]"></i>
                     <span class="card-meta">Total Walkie Talkie</span>
                     <span class="total-wt-value text-sm font-black leading-none">{{ number_format($totalWalkie ?? 0) }}</span>
@@ -298,7 +298,7 @@
         </div>
 
         @if(($recentActivities ?? collect())->isNotEmpty())
-            <div class="activity-list">
+            <div class="activity-list" id="recentActivitiesList" data-auto-refresh="true">
                 @foreach($recentActivities as $activity)
                     @php
                         $activityUser = $activity->user;
