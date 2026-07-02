@@ -458,10 +458,18 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 text-center">
-                            <button type="button" onclick="openRequestStatusModal('requestStatusModal-{{ $request->id }}')" class="all-status-action-btn">
-                                <i class="fa-solid fa-eye"></i>
-                                View Form
-                            </button>
+                            <div class="flex flex-col items-center gap-2">
+                                <button type="button" onclick="openRequestStatusModal('requestStatusModal-{{ $request->id }}')" class="all-status-action-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                    View Form
+                                </button>
+                                @if($request->status === 'Pending Executive Pickup' && ! $request->handover)
+                                <a href="{{ route('wt.admin.handover.pickup', $request->id) }}" class="all-status-action-btn" style="background:#16a34a;color:#fff;border-color:#16a34a">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    Pickup
+                                </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach

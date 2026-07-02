@@ -762,13 +762,11 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     </a>
     @endif
 
-    {{-- Documentation section --}}
-    <div class="nav-section-label">Documentation</div>
+    <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
+    <div class="nav-section-label">Help</div>
     <a href="{{ route('it.user-manual.index') }}" class="nav-link {{ request()->routeIs('it.user-manual.index') ? 'active' : '' }}">
       <i class="bi bi-book"></i> User Manual
     </a>
-
-    <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
     <button type="button" class="nav-link nav-action" data-role-metric-trigger>
       <i class="bi bi-table"></i> Role Metric
     </button>

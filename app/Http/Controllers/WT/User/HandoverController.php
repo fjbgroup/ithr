@@ -11,6 +11,9 @@ use App\Models\WT\User;
 use App\Services\SystemNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class HandoverController extends Controller
 {
@@ -35,11 +38,11 @@ class HandoverController extends Controller
 
     public function index()
     {
-        $isIctView = request()->routeIs('admin.*')
+        $isIctView = request()->routeIs('wt.admin.*')
             && auth('wt')->user()->wt_role === 'admin_it'
             && session('view_mode', auth('wt')->user()->wt_role) === 'admin_it';
 
-        if (request()->routeIs('admin.*') && ! $isIctView && auth('wt')->user()->wt_role === 'admin_it') {
+        if (request()->routeIs('wt.admin.*') && ! $isIctView && auth('wt')->user()->wt_role === 'admin_it') {
             return redirect()
                 ->route('wt.admin.requests.index')
                 ->with('error', 'ICT direct handover is only available in ICT mode.');
@@ -111,7 +114,7 @@ class HandoverController extends Controller
         }
 
         $pendingHandoverRequests = AccessRequest::where('user_id', auth('wt')->id())
-            ->where('status', 'Approved')
+            ->whereIn('status', ['Pending Executive Pickup', 'Approved'])
             ->orderByDesc('id')
             ->get();
 
@@ -131,7 +134,7 @@ class HandoverController extends Controller
                 $query->whereNull('request_type')
                     ->orWhereIn('request_type', ['walkie_talkie', 'temporary_walkie_talkie']);
             })
-            ->whereIn('status', ['Pending Admin Approval', 'Pending IT Approval', 'Approved', 'Rejected'])
+            ->whereIn('status', ['Pending Admin Approval', 'Pending IT Approval', 'Pending Executive Pickup', 'Approved', 'Rejected'])
             ->orderByDesc('id')
             ->get();
 
@@ -140,11 +143,11 @@ class HandoverController extends Controller
 
     public function store(Request $request)
     {
-        $isIctView = $request->routeIs('admin.*')
+        $isIctView = $request->routeIs('wt.admin.*')
             && auth('wt')->user()->wt_role === 'admin_it'
             && session('view_mode', auth('wt')->user()->wt_role) === 'admin_it';
 
-        if ($request->routeIs('admin.*') && ! $isIctView && $request->input('handover_mode') === 'ict_direct') {
+        if ($request->routeIs('wt.admin.*') && ! $isIctView && $request->input('handover_mode') === 'ict_direct') {
             return redirect()
                 ->route('wt.admin.requests.index')
                 ->with('error', 'Executives do not perform handovers. ICT will notify the individual after approval.');
@@ -162,8 +165,8 @@ class HandoverController extends Controller
         ]);
 
         $accessRequest = AccessRequest::where('id', $validated['access_request_id'])
-            ->where('status', 'Approved')
-            ->when($request->routeIs('admin.*'), function ($query) {
+            ->whereIn('status', ['Pending Executive Pickup', 'Approved'])
+            ->when($request->routeIs('wt.admin.*'), function ($query) {
                 $query->where(function ($inner) {
                     $inner->where('user_id', auth('wt')->id())
                         ->orWhere('submit_to_admin_id', auth('wt')->id());
@@ -174,7 +177,7 @@ class HandoverController extends Controller
             ->firstOrFail();
 
         if (Handover::where('access_request_id', $accessRequest->id)->exists()) {
-            return redirect()->route($request->routeIs('admin.*') ? 'admin.all.status' : 'login')
+            return redirect()->route($request->routeIs('wt.admin.*') ? 'wt.admin.all.status' : 'wt.login')
                 ->with('error', 'Handover for this approved request has already been submitted.');
         }
 
@@ -225,7 +228,7 @@ class HandoverController extends Controller
             });
 
             return redirect()
-                ->route($request->routeIs('admin.*') ? 'admin.all.status' : 'login')
+                ->route($request->routeIs('wt.admin.*') ? 'wt.admin.all.status' : 'wt.user.handover.index')
                 ->with('success', 'Pickup marked as not yet.');
         }
 
@@ -303,7 +306,261 @@ class HandoverController extends Controller
             ? 'Representative pickup submitted successfully.'
             : 'Pickup confirmation submitted successfully.';
 
-        return redirect()->route($request->routeIs('admin.*') ? 'admin.all.status' : 'login')->with('success', $message);
+        return redirect()->route($request->routeIs('wt.admin.*') ? 'wt.admin.all.status' : 'wt.user.handover.index')->with('success', $message);
+    }
+
+    public function showPickup(AccessRequest $accessRequest)
+    {
+        $accessRequest = $this->authorizedPickupRequest($accessRequest)
+            ->load(['handover', 'handler']);
+
+        if ($accessRequest->handover) {
+            return redirect()
+                ->route(request()->routeIs('wt.admin.*') ? 'wt.admin.all.status' : 'wt.user.handover.index')
+                ->with('error', 'Pickup for this request has already been signed.');
+        }
+
+        $assignedWalkies = $this->assignedWalkiesFor($accessRequest);
+        $currentUser = auth('wt')->user();
+        $savedSignatureUrl = $currentUser->signature_img && Storage::disk('public')->exists($currentUser->signature_img)
+            ? route(request()->routeIs('wt.admin.*') ? 'wt.admin.profile.signature.image' : 'wt.user.profile.signature.image')
+            : null;
+
+        return view('wt.user.handover.pickup', [
+            'accessRequest' => $accessRequest,
+            'assignedWalkies' => $assignedWalkies,
+            'savedSignatureUrl' => $savedSignatureUrl,
+            'policyContent' => $this->loadPolicyContent(),
+            'routePrefix' => request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user',
+        ]);
+    }
+
+    public function storePickup(Request $request, AccessRequest $accessRequest)
+    {
+        $accessRequest = $this->authorizedPickupRequest($accessRequest)
+            ->load(['handover', 'handler']);
+
+        if ($accessRequest->handover) {
+            return redirect()
+                ->route($request->routeIs('wt.admin.*') ? 'wt.admin.all.status' : 'wt.user.handover.index')
+                ->with('error', 'Pickup for this request has already been signed.');
+        }
+
+        $validated = $request->validate([
+            'pickup_recipient_name' => 'required|string|max:255',
+            'pickup_recipient_signature_source' => 'required|in:draw,saved,upload',
+            'pickup_recipient_signature' => 'required_unless:pickup_recipient_signature_source,saved|nullable|string',
+            'handover_by_name' => 'required|string|max:255',
+            'handover_by_signature_source' => 'required|in:draw,saved,upload',
+            'handover_by_signature' => 'required_unless:handover_by_signature_source,saved|nullable|string',
+            'policy_acceptance' => 'accepted',
+        ]);
+
+        $recipientSignature = $this->resolveSubmittedSignature(
+            $validated['pickup_recipient_signature_source'],
+            $validated['pickup_recipient_signature'] ?? null
+        );
+        $handoverSignature = $this->resolveSubmittedSignature(
+            $validated['handover_by_signature_source'],
+            $validated['handover_by_signature'] ?? null
+        );
+
+        $assignedWalkies = $this->assignedWalkiesFor($accessRequest);
+        if ($assignedWalkies->isEmpty()) {
+            return back()
+                ->withInput()
+                ->withErrors(['access_request_id' => 'No assigned WT unit was found for this approved request.']);
+        }
+
+        DB::transaction(function () use ($accessRequest, $assignedWalkies, $validated, $recipientSignature, $handoverSignature) {
+            $now = now();
+            $radioIds = $assignedWalkies->pluck('radio_id')->filter()->values();
+            $serialNumbers = $assignedWalkies->pluck('serial_number')->filter()->values();
+
+            Handover::create([
+                'access_request_id' => $accessRequest->id,
+                'user_id' => auth('wt')->id(),
+                'radio_id' => $radioIds->implode(', '),
+                'walkie_talkie_id' => $radioIds->implode(', '),
+                'staff_name' => $accessRequest->full_name,
+                'shared_with' => $accessRequest->shared_with,
+                'staff_no' => $accessRequest->staff_id ?? '',
+                'position' => $accessRequest->position,
+                'department' => $accessRequest->department,
+                'notes' => 'Pickup signed by recipient. Accessories: ' . ($accessRequest->accessories ?: 'None listed'),
+                'pickup_recipient_name' => $validated['pickup_recipient_name'],
+                'pickup_recipient_signature' => $recipientSignature,
+                'pickup_recipient_signed_at' => $now,
+                'handover_by_name' => $validated['handover_by_name'],
+                'handover_by_signature' => $handoverSignature,
+                'handover_by_signed_at' => $now,
+                'accessories_snapshot' => $accessRequest->accessories,
+                'policy_accepted_at' => $now,
+                'pickup_completed_at' => $now,
+                'issued_at' => $now,
+            ]);
+
+            $accessRequest->update([
+                'status' => 'Approved',
+            ]);
+
+            $assignedWalkies->each(function (WalkieTalkie $walkie) use ($accessRequest) {
+                $walkie->update([
+                    'status' => 'IN USE',
+                    'remark' => trim((string) $walkie->remark) !== ''
+                        ? $walkie->remark . ' | Pickup signed for request #' . $accessRequest->id
+                        : 'Pickup signed for request #' . $accessRequest->id,
+                ]);
+            });
+
+            UserActivityLog::create([
+                'user_id' => auth('wt')->id(),
+                'username' => auth('wt')->user()->username,
+                'event_type' => 'action',
+                'event_action' => 'Pickup Signature',
+                'event_details' => "Pickup signed for Request #{$accessRequest->id}. Radio {$radioIds->implode(', ')} / Serial {$serialNumbers->implode(', ')}",
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'created_at' => $now,
+            ]);
+
+            $itUsers = User::where('wt_role', 'admin_it')->get();
+            SystemNotifier::notifyUsers(
+                $itUsers,
+                'Pickup Signed',
+                "Pickup for Request #{$accessRequest->id} has been signed by {$validated['pickup_recipient_name']}.",
+                'approved'
+            );
+
+            if ($accessRequest->submit_to_admin_id && (int) $accessRequest->submit_to_admin_id !== (int) auth('wt')->id()) {
+                SystemNotifier::notifyUser(
+                    (int) $accessRequest->submit_to_admin_id,
+                    'Pickup Signed',
+                    "Pickup for Request #{$accessRequest->id} has been signed by {$validated['pickup_recipient_name']}.",
+                    'approved'
+                );
+            }
+        });
+
+        return redirect()
+            ->route($request->routeIs('wt.admin.*') ? 'wt.admin.all.status' : 'wt.user.handover.index')
+            ->with('success', 'Pickup signature saved. WT handover has been completed.');
+    }
+
+    private function authorizedPickupRequest(AccessRequest $accessRequest): AccessRequest
+    {
+        $query = AccessRequest::query()
+            ->whereKey($accessRequest->id)
+            ->whereIn('status', ['Pending Executive Pickup', 'Approved']);
+
+        if (request()->routeIs('wt.admin.*')) {
+            $query->where(function ($inner) {
+                $inner->where('user_id', auth('wt')->id())
+                    ->orWhere('submit_to_admin_id', auth('wt')->id())
+                    ->orWhere(function ($adminIt) {
+                        $adminIt->whereNotNull('handled_by')
+                            ->where('handled_by', auth('wt')->id());
+                    });
+            });
+        } else {
+            $query->where('user_id', auth('wt')->id());
+        }
+
+        return $query->firstOrFail();
+    }
+
+    private function assignedWalkiesFor(AccessRequest $accessRequest)
+    {
+        $assignedWalkieIds = collect($accessRequest->assigned_walkie_inventory_ids ?? [])
+            ->map(fn ($walkieId) => (int) $walkieId)
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($assignedWalkieIds->isEmpty() && $accessRequest->walkie_inventory_id) {
+            $assignedWalkieIds = collect([(int) $accessRequest->walkie_inventory_id]);
+        }
+
+        if ($assignedWalkieIds->isEmpty()) {
+            return collect();
+        }
+
+        return WalkieTalkie::query()
+            ->whereIn('walkie_id', $assignedWalkieIds)
+            ->orderBy('radio_id')
+            ->get();
+    }
+
+    private function resolveSubmittedSignature(string $source, ?string $submittedSignature): string
+    {
+        if ($source === 'saved') {
+            $user = auth('wt')->user();
+            if (! $user->signature_img || ! Storage::disk('public')->exists($user->signature_img)) {
+                throw ValidationException::withMessages([
+                    'pickup_recipient_signature' => 'No saved profile signature was found. Please draw or upload a signature.',
+                ]);
+            }
+
+            $path = $user->signature_img;
+            $mime = Storage::disk('public')->mimeType($path) ?: 'image/png';
+            $data = base64_encode(Storage::disk('public')->get($path));
+
+            return "data:{$mime};base64,{$data}";
+        }
+
+        $signature = trim((string) $submittedSignature);
+        if (! preg_match('/^data:image\/(png|jpeg|jpg|gif|webp);base64,/', $signature)) {
+            throw ValidationException::withMessages([
+                'pickup_recipient_signature' => 'Invalid signature image. Please draw or upload a valid signature.',
+            ]);
+        }
+
+        $imageData = base64_decode(substr($signature, strpos($signature, ',') + 1), true);
+        if ($imageData === false || strlen($imageData) > 2 * 1024 * 1024) {
+            throw ValidationException::withMessages([
+                'pickup_recipient_signature' => 'Signature image is invalid or larger than 2MB.',
+            ]);
+        }
+
+        return $signature;
+    }
+
+    private function loadPolicyContent(): array
+    {
+        $default = [
+            'en' => [
+                'This policy is established to ensure that walkie talkies at FGV Johor Bulkers Sdn Bhd are used in an orderly, controlled manner and for official purposes only.',
+                'Walkie talkies are company property and must be used for official purposes only.',
+                'All requests must be submitted through the assigned supervisor using the provided system.',
+                'Users are responsible for keeping the walkie talkie in good, clean, and safe condition.',
+                'The equipment must not be loaned to another party without supervisor approval.',
+                'Any loss, damage, or issue must be reported immediately through the provided system.',
+                'The company only covers improvement or repair costs caused by normal wear and tear or manufacturing defects.',
+                'If damage or loss is caused by negligence, misuse, or failure to follow usage instructions, the user is fully responsible for the repair or replacement cost.',
+            ],
+            'bm' => [
+                'Polisi ini diwujudkan untuk memastikan penggunaan walkie talkie di FGV Johor Bulkers Sdn Bhd adalah teratur, terkawal dan digunakan bagi tujuan rasmi sahaja.',
+                'Walkie talkie adalah hak milik syarikat dan hanya untuk kegunaan rasmi sahaja.',
+                'Semua permohonan hendaklah dibuat melalui penyelia masing-masing menggunakan sistem yang disediakan.',
+                'Pengguna bertanggungjawab memastikan walkie talkie sentiasa berada dalam keadaan baik, bersih dan selamat.',
+                'Peralatan tidak boleh dipinjamkan kepada pihak lain tanpa kelulusan penyelia.',
+                'Sebarang kehilangan, kerosakan atau masalah hendaklah dilaporkan segera melalui sistem yang disediakan.',
+                'Syarikat hanya menanggung kos penambahbaikan bagi kerosakan akibat penggunaan biasa (wear and tear) atau kecacatan pembuatan.',
+                'Sekiranya kerosakan atau kehilangan berpunca daripada kecuaian, penyalahgunaan atau kegagalan mematuhi arahan penggunaan, pengguna bertanggungjawab menanggung sepenuhnya kos pembaikan atau penggantian peralatan.',
+            ],
+        ];
+
+        $path = storage_path('app/wt/policies.json');
+        if (! is_file($path)) {
+            return $default;
+        }
+
+        $stored = json_decode((string) file_get_contents($path), true);
+
+        return [
+            'en' => is_array($stored['en'] ?? null) ? array_values(array_filter($stored['en'])) : $default['en'],
+            'bm' => is_array($stored['bm'] ?? null) ? array_values(array_filter($stored['bm'])) : $default['bm'],
+        ];
     }
 
     private function storeIctDirectHandover(Request $request)
@@ -329,7 +586,7 @@ class HandoverController extends Controller
         if (! empty($validated['access_request_id'])) {
             $accessRequest = AccessRequest::query()
                 ->where('id', $validated['access_request_id'])
-                ->where('status', 'Approved')
+                ->whereIn('status', ['Pending Executive Pickup', 'Approved'])
                 ->firstOrFail();
 
             if (Handover::where('access_request_id', $accessRequest->id)->exists()) {
@@ -435,5 +692,3 @@ class HandoverController extends Controller
             ->with('success', 'Walkie talkie handover recorded and the unit is now marked as IN USE.');
     }
 }
-
-

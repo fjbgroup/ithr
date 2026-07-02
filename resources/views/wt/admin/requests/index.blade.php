@@ -3905,7 +3905,7 @@
                                         'requested_pickup_at' => $req->requested_pickup_at ? \Carbon\Carbon::parse($req->requested_pickup_at)->format('Y-m-d H:i') : null,
                                     ];
                                 @endphp
-                                <button type="button" onclick='openApproveModal(@json($approvalPayload))' class="approval-action-btn approval-action-approve">Assign WT</button>
+                                <button type="button" onclick='openApproveModal(@json($approvalPayload))' class="approval-action-btn approval-action-approve">Approve and Handover</button>
                             @else
                                 <form action="{{ route('wt.admin.requests.forwardToIT', $req->id) }}" method="POST" onsubmit="return confirm('Approve this request and forward it to ICT?');">
                                     @csrf
@@ -4559,7 +4559,7 @@
 
             <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
                 <button type="button" onclick="closeApproveModal()" class="approval-action-btn">Cancel</button>
-                <button type="submit" id="approveSubmitBtn" class="approval-action-btn approval-action-approve" disabled>Confirm Approval</button>
+                <button type="submit" id="approveSubmitBtn" class="approval-action-btn approval-action-approve" disabled>Approve and Handover</button>
             </div>
         </form>
     </div>

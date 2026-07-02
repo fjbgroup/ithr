@@ -36,7 +36,7 @@
         return match ($request->status) {
             'Draft'                                       => ['text' => 'Draft',              'bg' => 'rgba(100,116,139,.1)',  'color' => '#475569', 'border' => 'rgba(100,116,139,.3)'],
             'Pending Admin Approval', 'Pending IT Approval' => ['text' => !empty($request->return_status) ? 'Return Processing' : 'Processing', 'bg' => 'rgba(245,158,11,.1)', 'color' => '#d97706', 'border' => 'rgba(245,158,11,.3)'],
-            'Pending Staff Pickup'                        => ['text' => 'Ready To Collect',   'bg' => 'rgba(14,165,233,.1)',   'color' => '#0369a1', 'border' => 'rgba(14,165,233,.3)'],
+            'Pending Staff Pickup', 'Pending Executive Pickup' => ['text' => 'Ready To Collect',   'bg' => 'rgba(14,165,233,.1)',   'color' => '#0369a1', 'border' => 'rgba(14,165,233,.3)'],
             'Approved'                                    => ['text' => 'Approved',            'bg' => 'rgba(34,197,94,.1)',    'color' => '#16a34a', 'border' => 'rgba(34,197,94,.3)'],
             'Returned'                                    => ['text' => 'Returned / History',  'bg' => 'rgba(99,102,241,.1)',   'color' => '#4338ca', 'border' => 'rgba(99,102,241,.3)'],
             'Rejected'                                    => ['text' => 'Rejected',            'bg' => 'rgba(239,68,68,.1)',    'color' => '#dc2626', 'border' => 'rgba(239,68,68,.3)'],
@@ -136,6 +136,13 @@
         <div style="font-size:11px;color:var(--muted)">Note: <span style="color:var(--text);font-weight:600">{{ $request->note }}</span></div>
         @endif
       </div>
+      @if(!$isRepairRequest && $request->status === 'Pending Executive Pickup')
+      <div style="margin-top:12px;display:flex;justify-content:flex-end">
+        <a href="{{ route('wt.user.handover.pickup', $request->id) }}" class="btn-primary-custom" style="background:#16a34a">
+          <i class="fa-solid fa-pen-to-square"></i> Pickup
+        </a>
+      </div>
+      @endif
     </div>
     @empty
     <div style="padding:32px;text-align:center;color:var(--muted);font-size:13px">No request status records found.</div>

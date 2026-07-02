@@ -77,6 +77,8 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::post('/requests/temporary-store', [RequestController::class, 'storeTemporary'])->name('requests.store.temporary');
         Route::get('/handover', [HandoverController::class, 'index'])->middleware('wt.role:admin_it')->name('handover.index');
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
+        Route::get('/handover/{accessRequest}/pickup', [HandoverController::class, 'showPickup'])->name('handover.pickup');
+        Route::post('/handover/{accessRequest}/pickup', [HandoverController::class, 'storePickup'])->name('handover.pickup.store');
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
         Route::get('/returns/search', [InteractionController::class, 'searchReturn'])->name('returns.search');
         Route::post('/returns', [InteractionController::class, 'storeReturn'])->name('returns.store');
@@ -156,6 +158,8 @@ Route::prefix('wt')->name('wt.')->group(function () {
 
         Route::get('/handover', [HandoverController::class, 'index'])->name('handover.index');
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
+        Route::get('/handover/{accessRequest}/pickup', [HandoverController::class, 'showPickup'])->name('handover.pickup');
+        Route::post('/handover/{accessRequest}/pickup', [HandoverController::class, 'storePickup'])->name('handover.pickup.store');
 
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
         Route::get('/returns/search', [InteractionController::class, 'searchReturn'])->name('returns.search');

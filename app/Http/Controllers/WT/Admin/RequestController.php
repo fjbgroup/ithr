@@ -627,7 +627,7 @@ class RequestController extends Controller
         }
 
         $req->update([
-            'status' => 'Approved',
+            'status' => 'Pending Executive Pickup',
             'radio_id' => $radioIds->implode(', '),
             'walkie_inventory_id' => $primaryWalkie->walkie_id,
             'assigned_walkie_inventory_ids' => $selectedIds->all(),
@@ -676,13 +676,17 @@ class RequestController extends Controller
         $preferredPickup = $req->requested_pickup_at
             ? ' Preferred pickup: ' . \Carbon\Carbon::parse($req->requested_pickup_at)->format('d M Y H:i') . '.'
             : '';
-        $pickupMessage = "Request #{$req->id} has been approved for {$requiredQuantity} {$unitLabel} for {$req->full_name}. Your walkie talkie is ready to collect at ICT Department." . $preferredPickup . $scheduleSummary;
+        $pickupLink = $req->user_id ? route('wt.user.handover.pickup', $req->id) : null;
+        $pickupMessage = "Request #{$req->id} has been approved for {$requiredQuantity} {$unitLabel} for {$req->full_name}. Your walkie talkie is ready to collect at ICT Department. Please open Pickup and sign the handover form." . $preferredPickup . $scheduleSummary;
 
         if ($approvalRemark !== '') {
             $pickupMessage .= " ICT remark: {$approvalRemark}";
         }
         if ($approvedAccessories->isNotEmpty()) {
             $pickupMessage .= " Accessories: {$approvedAccessories->implode(', ')}.";
+        }
+        if ($pickupLink) {
+            $pickupMessage .= " Pickup link: {$pickupLink}";
         }
 
         SystemNotifier::notifyUser(
@@ -698,8 +702,8 @@ class RequestController extends Controller
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
-            'event_action' => 'Approve',
-            'event_details' => "ICT approved request #{$req->id} and assigned {$requiredQuantity} {$unitLabel}: Radio {$radioIds->implode(', ')} / Serial {$serialNumbers->implode(', ')}" . ($approvalRemark !== '' ? " with remark: {$approvalRemark}" : ''),
+            'event_action' => 'Approve and Handover',
+            'event_details' => "ICT approved request #{$req->id}, prepared handover, and assigned {$requiredQuantity} {$unitLabel}: Radio {$radioIds->implode(', ')} / Serial {$serialNumbers->implode(', ')}" . ($approvalRemark !== '' ? " with remark: {$approvalRemark}" : ''),
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'created_at' => now(),
@@ -707,7 +711,7 @@ class RequestController extends Controller
         
         return redirect()
             ->route('wt.admin.requests.index')
-            ->with('success', 'Request approved successfully.');
+            ->with('success', 'Request approved and prepared for pickup handover.');
     }
 
     public function reject(Request $request, $id)
