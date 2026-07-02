@@ -405,14 +405,28 @@ html.sidebar-collapsed .nav-group-children.open .nav-link {
 html.sidebar-collapsed .nav-group-children.open .nav-link i {
   margin-right: 8px !important;
 }
+
+/* ── NAV GROUP TOGGLE COLORS (Global & Collapsed) ── */
+.sidebar-nav .nav-group-toggle > i:first-child {
+  color: var(--sidebar-text);
+}
+.sidebar-nav .nav-group-toggle.has-active {
+  background: var(--sidebar-active-bg) !important;
+}
+.sidebar-nav .nav-group-toggle.has-active > span,
+.sidebar-nav .nav-group-toggle.has-active > i:first-child {
+  color: var(--sidebar-active-tx) !important;
+}
+
 html.sidebar-collapsed .nav-group-toggle.open,
 html.sidebar-collapsed .nav-group-toggle.has-active {
-  background: rgba(2,132,199,.25) !important;
+  background: var(--sidebar-active-bg) !important;
 }
 html.sidebar-collapsed .nav-group-toggle.open i:first-child,
 html.sidebar-collapsed .nav-group-toggle.has-active i:first-child {
-  color: #38bdf8 !important;
+  color: var(--sidebar-active-tx) !important;
 }
+
 html.sidebar-collapsed .sidebar-footer .user-card{justify-content:center!important;padding:10px 0!important}
 html.sidebar-collapsed .sidebar-footer .user-info{display:none!important}
 html.sidebar-collapsed .sidebar-footer .user-avatar{margin:0!important}
