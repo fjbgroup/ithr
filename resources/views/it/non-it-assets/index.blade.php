@@ -625,9 +625,18 @@
       </tr></thead>
       <tbody>
       @foreach($items as $row)
+      @php
+        $nitRowLocked = !$user->isAdminOrFinance()
+          && !$user->isReadOnlyViewer()
+          && (
+            in_array($row->item_status, ['Pending for Write-Off', 'Pending to E-Waste/Disposal', 'Disposed'], true)
+            || $row->location === 'Disposal'
+          );
+      @endphp
       <tr>
         <td><input type="checkbox" class="nit-row-check" value="{{ $row->id }}"
-          style="cursor:pointer;accent-color:var(--accent);width:15px;height:15px"></td>
+          {{ $nitRowLocked ? 'disabled' : '' }}
+          style="{{ $nitRowLocked ? 'cursor:not-allowed;opacity:.35;' : 'cursor:pointer;' }}accent-color:var(--accent);width:15px;height:15px"></td>
         <td>
           @if($user->isAdminOrFinance())
           <a href="#" onclick="openNitEditFormById({{ $row->id }});return false"
@@ -677,6 +686,20 @@
             </form>
             @else
             {{-- Staff — buttons sized to match IT Assets (inventory) --}}
+            @if($nitRowLocked)
+            <span title="{{ $row->item_status === 'Pending for Write-Off' ? 'Pending for Write-Off' : 'Already in Disposal module' }}"
+              style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:4px;cursor:not-allowed">
+              <i class="bi bi-trash3-fill" style="font-size:11px"></i> Dispose
+            </span>
+            <span title="{{ $row->item_status === 'Pending for Write-Off' ? 'Pending for Write-Off' : 'Already in Disposal module' }}"
+              style="font-size:11px;font-weight:700;color:#94a3b8;background:rgba(148,163,184,.12);border:1px solid rgba(148,163,184,.25);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;cursor:not-allowed">
+              Request Edit
+            </span>
+            <span title="{{ $row->item_status === 'Pending for Write-Off' ? 'Pending for Write-Off' : 'Already in Disposal module' }}"
+              style="font-size:13px;color:#94a3b8;background:rgba(148,163,184,.12);border-radius:6px;padding:4px 7px;display:inline-flex;align-items:center;cursor:not-allowed">
+              <i class="bi bi-trash"></i>
+            </span>
+            @else
             @if($nitCanDispose)
             <a href="{{ route('it.writeoff.index') }}?nit_id={{ $row->id }}" title="Dispose"
               style="font-size:11px;font-weight:700;color:#dc2626;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
@@ -706,6 +729,7 @@
                 <i class="bi bi-trash"></i>
               </button>
             </form>
+            @endif
             @endif
             @endif
           </div>
@@ -942,7 +966,8 @@ function closeNitEditForm() {
 const nitSelectedIds = new Set();
 
 function nitSyncCheckboxes() {
-  var rows = document.querySelectorAll('tbody .nit-row-check');
+  var rows = document.querySelectorAll('tbody .nit-row-check:not(:disabled)');
+  document.querySelectorAll('tbody .nit-row-check:disabled').forEach(function(cb){ nitSelectedIds.delete(cb.value); cb.checked = false; });
   var selectAll = document.getElementById('nitSelectAll');
   if (!selectAll) return;
   var checked = 0;
@@ -952,13 +977,13 @@ function nitSyncCheckboxes() {
 }
 
 document.addEventListener('change', function(e) {
-  if (e.target.classList.contains('nit-row-check')) {
+  if (e.target.classList.contains('nit-row-check') && !e.target.disabled) {
     if (e.target.checked) nitSelectedIds.add(e.target.value);
     else nitSelectedIds.delete(e.target.value);
     nitSyncCheckboxes(); nitUpdateBulkBar();
   }
   if (e.target.id === 'nitSelectAll') {
-    document.querySelectorAll('tbody .nit-row-check').forEach(function(cb){
+    document.querySelectorAll('tbody .nit-row-check:not(:disabled)').forEach(function(cb){
       cb.checked = e.target.checked;
       if (e.target.checked) nitSelectedIds.add(cb.value);
       else nitSelectedIds.delete(cb.value);
@@ -978,7 +1003,7 @@ function nitClearSelection() {
   nitSelectedIds.clear();
   var sa = document.getElementById('nitSelectAll');
   if (sa) { sa.checked = false; sa.indeterminate = false; }
-  document.querySelectorAll('tbody .nit-row-check').forEach(function(cb){ cb.checked = false; });
+  document.querySelectorAll('tbody .nit-row-check:not(:disabled)').forEach(function(cb){ cb.checked = false; });
   nitUpdateBulkBar();
 }
 
@@ -1271,4 +1296,3 @@ function escHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&l
 })();
 </script>
 @endpush
-
