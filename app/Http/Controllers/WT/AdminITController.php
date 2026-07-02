@@ -354,4 +354,3 @@ class AdminITController extends Controller
         return back()->with('success', 'Password reset request rejected.');
     }
 }
-

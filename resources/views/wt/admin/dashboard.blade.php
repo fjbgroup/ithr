@@ -239,10 +239,9 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 w-full md:w-auto">
-            <button onclick="window.location.href='{{ route('wt.admin.profile') }}'" class="profile-btn bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition border border-white/10 flex items-center justify-center gap-2 w-full md:w-auto">
-                <i class="fas fa-edit"></i> Profile
-            </button>
+        <div class="flex flex-col gap-1.5 w-full md:w-auto md:min-w-[190px] px-1 py-1 text-right">
+            <div data-live-time class="text-2xl font-black leading-none tracking-[0.04em] text-white">--:--:--</div>
+            <div data-live-date class="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-200">Loading date</div>
         </div>
     </div>
 </div>
