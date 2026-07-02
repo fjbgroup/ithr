@@ -182,8 +182,6 @@ Route::prefix('it')->name('it.')->group(function () {
                 Route::post('/disposal/{id}/restore',        [DisposalController::class, 'restore'])->name('disposal.restore');
                 Route::delete('/disposal/{id}',              [DisposalController::class, 'destroy'])->name('disposal.destroy');
 
-                Route::get('/masterdata',                    [MasterdataController::class, 'index'])->name('masterdata.index');
-
                 Route::get('/asset-classes',                 [AssetClassController::class, 'index'])->name('asset-classes.index');
                 Route::post('/asset-classes',                [AssetClassController::class, 'store'])->name('asset-classes.store');
                 Route::post('/asset-classes/{id}',           [AssetClassController::class, 'update'])->name('asset-classes.update');
@@ -221,6 +219,7 @@ Route::prefix('it')->name('it.')->group(function () {
 
             // Admin + Finance
             Route::middleware('it.role:admin,finance_admin')->group(function () {
+                Route::get('/masterdata',       [MasterdataController::class, 'index'])->name('masterdata.index');
                 Route::get('/reports/it',         [ReportController::class, 'it'])->name('reports.it');
                 Route::get('/reports/it/export',  [ReportController::class, 'exportIt'])->name('reports.it.export');
                 Route::get('/reports/non-it',     [ReportController::class, 'nonIt'])->name('reports.non-it');

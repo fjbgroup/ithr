@@ -43,23 +43,17 @@ class Staff extends Model
         $now = now();
         
         if ($joined->isFuture()) {
-            return '0y';
+            return '0Years';
         }
         
         $diff = $joined->diff($now);
-        
         $years = $diff->y;
-        $months = $diff->m;
         
-        if ($years == 0 && $months == 0) {
-            return '< 1m';
+        if ($years == 0) {
+            return '< 1Year';
         }
         
-        $parts = [];
-        if ($years > 0) $parts[] = $years . 'y';
-        if ($months > 0) $parts[] = $months . 'm';
-        
-        return implode(' ', $parts);
+        return $years . 'Years';
     }
 
     /**

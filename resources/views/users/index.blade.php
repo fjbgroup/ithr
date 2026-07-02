@@ -132,8 +132,8 @@
         <table class="table table-sticky users-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
+                    <th style="white-space: nowrap;">Name</th>
+                    <th style="white-space: nowrap;">Email</th>
                     <th>Role</th>
                     <th>Staff No</th>
                     <th>Department</th>
@@ -144,8 +144,8 @@
             <tbody>
                 @foreach ($users as $u)
                 <tr data-name="{{ strtolower($u->name) }}" data-email="{{ strtolower($u->email) }}" data-staffno="{{ strtolower($u->staff_no ?? '') }}" data-dept="{{ strtolower($u->department->name ?? $u->staff?->department?->name ?? '') }}" data-role="{{ $u->role }}" data-status="{{ $u->is_active ? 'active' : 'inactive' }}">
-                    <td><strong>{{ $u->name }}</strong></td>
-                    <td style="font-size:.85rem;">{{ $u->email }}</td>
+                    <td style="white-space: nowrap;"><strong>{{ $u->name }}</strong></td>
+                    <td style="font-size:.85rem; white-space: nowrap;">{{ $u->email }}</td>
                     <td><span class="role-badge {{ str_replace('_','-',$u->role) }}">{{ $u->getRoleLabel() }}</span></td>
                     <td>
                         @if ($u->staff_id)
