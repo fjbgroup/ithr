@@ -3441,4 +3441,51 @@ body .content-surface #specialTable td > .btn i {
     font-size: 10px !important;
     line-height: 1 !important;
 }
+
+/* Final clean page treatment: remove outer background containers. */
+body .content-surface:has(.inventory-management-ui),
+body .content-surface:has(.inventory-page-shell),
+body .content-surface:has(.maintenance-page-shell),
+body .content-surface:has(.unused-page-shell),
+body .content-surface:has(.duplicate-page),
+body .content-surface:has(#specialTable) {
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body .content-surface .inventory-table-frame,
+body .content-surface .duplicate-hero,
+body .content-surface .inventory-page-shell,
+body .content-surface .maintenance-page-shell,
+body .content-surface .unused-page-shell,
+body .content-surface .duplicate-page,
+body .content-surface .special-page-shell {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+body .content-surface .inventory-table-frame {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body .content-surface :is(
+    .clean-admin-filter,
+    .unused-filter-panel,
+    .duplicate-search-panel,
+    .special-filter-panel,
+    .wt-data-filter
+) {
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
 </style>

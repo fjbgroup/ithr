@@ -449,7 +449,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
 <div id="notifPopupStack" style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:8000;display:flex;flex-direction:column-reverse;gap:.6rem;max-width:340px;pointer-events:none;"></div>
 
 @include('partials.chatbot')
-<script src="{{ asset('assets/js/app.js') }}"></script>
+<script src="{{ asset('assets/js/app.js') }}?v={{ filemtime(public_path('assets/js/app.js')) }}"></script>
 <script>
 const HR_DARK_VARS = {
   '--bg': '#0f172a',
