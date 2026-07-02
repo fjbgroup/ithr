@@ -827,7 +827,7 @@
                             <th class="px-3 py-3">ID No.</th>
                             <th class="px-3 py-3">Name</th>
                             <th class="px-3 py-3">Role</th>
-                            <th class="px-3 py-3">Secret Key</th>
+                            <th class="px-3 py-3">Password</th>
                             <th class="px-3 py-3">Requests</th>
                             <th class="px-3 py-3">Handovers</th>
                             <th class="px-3 py-3">Created</th>
@@ -860,7 +860,16 @@
                                 </span>
                             </td>
                             <td class="px-3 py-2.5">
-                                <code class="password-value text-[9px] font-bold text-stone-400">Stored securely</code>
+                                <div class="flex items-center gap-2">
+                                    <code class="password-value text-[9px] font-bold text-stone-400">********</code>
+                                    <button
+                                        type="button"
+                                        class="password-eye-btn"
+                                        onclick="togglePasswordVisibility(this)"
+                                        title="Show password">
+                                        <i class="fas fa-eye text-[10px]"></i>
+                                    </button>
+                                </div>
                             </td>
                             <td class="px-3 py-2.5 font-bold text-slate-600">{{ $account->request_count ?? 0 }}</td>
                             <td class="px-3 py-2.5 font-bold text-slate-600">{{ $account->handover_count ?? 0 }}</td>
@@ -903,14 +912,14 @@
                                         <button
                                             type="button"
                                             class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
-                                            onclick="openEditUserModal(@js($account->user_id), @js($account->staff_id ?? ''), @js($account->username ?? ''), @js($account->full_name ?? ''), @js($account->department ?? ''), @js($account->position ?? ''), @js($account->wt_role)); closeAllActionMenus();">
+                                            onclick="openEditUserModal('{{ $account->user_id }}', '{{ addslashes($account->staff_id ?? '') }}', '{{ addslashes($account->username ?? '') }}', '{{ addslashes($account->full_name ?? '') }}', '{{ addslashes($account->department ?? '') }}', '{{ addslashes($account->position ?? '') }}', '{{ $account->wt_role }}'); closeAllActionMenus();">
                                             <i class="fas fa-pen w-4"></i>
                                             <span>Edit</span>
                                         </button>
                                         <button
                                             type="button"
                                             class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
-                                            onclick="openResetPasswordModal(@js($account->user_id), @js($account->username ?? '')); closeAllActionMenus();">
+                                            onclick="openResetPasswordModal('{{ $account->user_id }}', '{{ addslashes($account->username ?? '') }}'); closeAllActionMenus();">
                                             <i class="fas fa-key w-4"></i>
                                             <span>Reset Password</span>
                                         </button>
@@ -1394,6 +1403,28 @@
 
     function closeResetPasswordModal() {
         document.getElementById('resetPasswordModal').classList.add('hidden');
+    }
+
+    function togglePasswordVisibility(button) {
+        const wrapper = button.closest('div');
+        const passwordValue = wrapper.querySelector('.password-value');
+        const icon = button.querySelector('i');
+        const isVisible = button.dataset.visible === 'true';
+
+        if (isVisible) {
+            passwordValue.textContent = '********';
+            button.dataset.visible = 'false';
+            button.title = 'Show password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+            return;
+        }
+
+        passwordValue.textContent = 'PROTECTED';
+        button.dataset.visible = 'true';
+        button.title = 'Hide password';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
     }
 
     document.addEventListener('click', function () {

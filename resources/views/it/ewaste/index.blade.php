@@ -111,7 +111,15 @@
 @endif
 
 <style>
-.data-table { width:100% !important; }
+.ew-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+.ew-table-scroll .data-table {
+  width: 100% !important;
+  min-width: {{ $user->isAdminOrFinance() ? '980px' : '760px' }};
+}
 .data-table td, .data-table th { vertical-align:middle !important; padding:8px 10px !important; white-space:nowrap; }
 .data-table td:nth-child({{ $user->isAdminOrFinance() ? '4' : '3' }}),
 .data-table th:nth-child({{ $user->isAdminOrFinance() ? '4' : '3' }}) { white-space:normal; word-break:break-word; min-width:100px; }
@@ -128,7 +136,7 @@
       @endif
     </span>
   </div>
-  <div>
+  <div class="ew-table-scroll">
     <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         @if($user->isAdminOrFinance())
@@ -776,4 +784,3 @@ function applyEwBulk() {
 })();
 </script>
 @endpush
-

@@ -7,7 +7,7 @@
       @endif
     </span>
   </div>
-  <div>
+  <div class="ew-table-scroll">
     <table class="table table-hover data-table" style="font-family:'Inter',sans-serif">
       <thead><tr>
         @if($user->isAdminOrFinance())
@@ -107,4 +107,3 @@
   </div>
   @endif
 </div>
-

@@ -375,8 +375,6 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       </div>
     </div>
     <div class="topbar-right">
-      <span style="font-size:12px;color:var(--muted)" id="liveClock"></span>
-
       {{-- ICT/Executive role switcher --}}
       @if($actualRole === 'admin_it')
       <div class="topbar-role-switcher">
@@ -1004,10 +1002,12 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <div style="margin-bottom:.5rem;">
         <img src="{{ asset('assets/images/footer.jpg') }}" alt="FJB" style="max-height:45px;width:auto;object-fit:contain;display:block;margin:0 auto;">
       </div>
-      <div style="font-size:.85rem;color:var(--muted,#64748b);font-weight:500;">Develop by IT team</div>
+      <div data-credit-secret style="font-size:.85rem;color:var(--muted,#64748b);font-weight:500;cursor:pointer;user-select:none;">Develop by IT team</div>
     </div>
   </div>
 </div>
+
+@include('wt.partials.credit-secret')
 
 {{-- Logout Modal --}}
 <div id="logoutModal" class="logout-modal-overlay" aria-hidden="true">
@@ -1135,12 +1135,13 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
   function pad(n){ return n < 10 ? '0'+n : n; }
   function tick() {
     var d = new Date();
-    var str = days[d.getDay()] + ', ' + pad(d.getDate()) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-    var el = document.getElementById('liveClock');
-    if (el) el.textContent = str;
+    var time = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    var date = days[d.getDay()] + ', ' + pad(d.getDate()) + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    document.querySelectorAll('[data-live-time]').forEach(function(el){ el.textContent = time; });
+    document.querySelectorAll('[data-live-date]').forEach(function(el){ el.textContent = date; });
   }
   tick();
-  setInterval(tick, 60000);
+  setInterval(tick, 1000);
 })();
 
 // ── THEME ──
