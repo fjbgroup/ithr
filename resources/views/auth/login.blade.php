@@ -24,6 +24,7 @@
     --lg-card:   #fff;
     --lg-input:  #f8fafc;
     --lg-input-focus: #fff;
+    --lg-bg:     linear-gradient(135deg, #f1f3f5 0%, #e9ecef 55%, #dee2e6 100%);
   }
   html.dark {
     --lg-border: #334155;
@@ -32,6 +33,7 @@
     --lg-card:   #1e293b;
     --lg-input:  #0f172a;
     --lg-input-focus: #1e293b;
+    --lg-bg:     linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   }
 
   .auth-page {
@@ -40,7 +42,7 @@
     align-items: center;
     justify-content: center;
     padding: 1.25rem;
-    background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 55%, #dee2e6 100%);
+    background: var(--lg-bg);
     background-attachment: fixed;
   }
 
@@ -263,6 +265,16 @@
     .auth-mobile-brand p { font-size: .85rem; color: var(--lg-muted); margin-top: .25rem; }
     .auth-main-head { display: none; }
   }
+  .switch-system { text-align: center; margin-top: .75rem; }
+  .switch-system-title { font-size: 10px; color: var(--lg-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .switch-system-links { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .sys-badge { display: inline-flex; align-items: center; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .sys-badge.active { border: 1px solid rgba(0,0,0,.08); color: #3d4d5c; background: rgba(0,0,0,.03); cursor: default; }
+  .sys-badge.link { border: 1px solid rgba(0,0,0,.15); color: #64748b; text-decoration: none; background: rgba(0,0,0,.06); transition: all .2s; }
+  .sys-badge.link:hover { background: rgba(0,0,0,.15); color: #334155; }
+  html.dark .sys-badge.active { border: 1px solid rgba(255,255,255,.08); color: #cbd5e1; background: rgba(255,255,255,.05); }
+  html.dark .sys-badge.link { border: 1px solid rgba(255,255,255,.15); color: #94a3b8; background: rgba(255,255,255,.06); }
+  html.dark .sys-badge.link:hover { background: rgba(255,255,255,.15); color: #e2e8f0; }
 </style>
 </head>
 <body class="auth-page">
@@ -384,18 +396,12 @@
         </a>
       </div>
 
-      <div style="text-align:center;margin-top:.75rem;">
-        <div style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Switch System</div>
-        <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
-          <span style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.08);font-size:11px;font-weight:600;color:#3d4d5c;background:rgba(255,255,255,.03);cursor:default;">
-            HR System
-          </span>
-          <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
-            WT System
-          </a>
-          <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15);font-size:11px;font-weight:600;color:#94a3b8;text-decoration:none;background:rgba(255,255,255,.06);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.15)';this.style.color='#e2e8f0'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='#94a3b8'">
-            IT System
-          </a>
+      <div class="switch-system">
+        <div class="switch-system-title">Switch System</div>
+        <div class="switch-system-links">
+          <span class="sys-badge active">HR System</span>
+          <a href="{{ url('/wt') }}" class="sys-badge link">WT System</a>
+          <a href="{{ url('/it/login') }}" class="sys-badge link">IT System</a>
         </div>
       </div>
     </main>
