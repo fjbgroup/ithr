@@ -44,6 +44,21 @@
         transform: none;
     }
 
+    .my-inventory-action-stack {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .my-inventory-return-btn {
+        background: #16a34a;
+    }
+
+    .my-inventory-return-btn:hover {
+        background: #15803d;
+    }
+
     .my-inventory-secondary-btn {
         display: inline-flex;
         min-height: 30px;
@@ -281,6 +296,12 @@
                             'bay_from' => $activeRequest->bay_from ?? null,
                             'location' => $activeRequest->location ?? null,
                         ], fn ($value) => filled($value)));
+                        $returnUrl = route('wt.admin.returns.create', array_filter([
+                            'mode' => 'self',
+                            'walkie_id' => $record->walkie_id,
+                            'radio_id' => $record->radio_id,
+                            'q' => $record->radio_id,
+                        ], fn ($value) => filled($value)), false);
                     @endphp
                     <tr class="hover:bg-stone-50/50 dark:hover:bg-slate-700/30 transition-colors" data-my-inventory-item data-my-inventory-search="{{ strtoupper(implode(' ', [
                         $record->radio_id,
@@ -309,10 +330,16 @@
                         <td class="px-4 py-4 text-center text-[11px] font-bold uppercase text-slate-600 dark:text-slate-300">{{ $record->ownership_type ?: '-' }}</td>
                         <td class="px-4 py-4 text-center text-[10px] font-bold text-slate-500 dark:text-slate-400">{{ $displayRemark ?: '-' }}</td>
                         <td class="px-4 py-4 text-center">
-                            <a href="{{ $reportFaultyUrl }}" class="my-inventory-view-btn">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                Report Faulty
-                            </a>
+                            <div class="my-inventory-action-stack">
+                                <a href="{{ $returnUrl }}" class="my-inventory-view-btn my-inventory-return-btn">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    Return
+                                </a>
+                                <a href="{{ $reportFaultyUrl }}" class="my-inventory-view-btn">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    Report Faulty
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     @empty

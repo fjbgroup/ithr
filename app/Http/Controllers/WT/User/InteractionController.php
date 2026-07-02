@@ -31,6 +31,18 @@ class InteractionController extends Controller
         return $request->query('mode') === 'staff' ? 'staff' : 'self';
     }
 
+    private function canManageAdminReturns(Request $request): bool
+    {
+        if (! $request->routeIs('wt.admin.*')) {
+            return false;
+        }
+
+        $user = auth('wt')->user();
+
+        return in_array($user?->wt_role, ['admin_it', 'admin'], true)
+            || $request->session()->has('impersonator_admin_it_id');
+    }
+
     private function managedUsers()
     {
         $users = User::query()
@@ -282,6 +294,10 @@ class InteractionController extends Controller
         $user = auth('wt')->user();
         $isAdminRoute = $request->routeIs('wt.admin.*');
 
+        if ($this->canManageAdminReturns($request)) {
+            return $query;
+        }
+
         if ($isAdminRoute && $mode === 'staff') {
             $managedIds = $this->managedUsers()->pluck('user_id')->filter()->values();
 
@@ -324,11 +340,72 @@ class InteractionController extends Controller
     {
         $query = $this->activeReturnRequestQuery();
 
-        if ($request->routeIs('wt.admin.*')) {
+        if ($this->canManageAdminReturns($request)) {
             return $query;
         }
 
         return $this->applyReturnOwnershipScope($query, $request, $mode);
+    }
+
+    private function directReturnWalkie(Request $request): ?WalkieTalkie
+    {
+        $walkieId = (int) $request->query('walkie_id', 0);
+        $radioId = strtoupper(trim((string) ($request->query('radio_id') ?: $request->query('q'))));
+
+        if ($walkieId <= 0 && $radioId === '') {
+            return null;
+        }
+
+        $user = auth('wt')->user();
+        $ownerNames = collect([$user->full_name, $user->username])
+            ->map(fn ($name) => strtoupper(trim((string) $name)))
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($ownerNames->isEmpty() && ! $this->canManageAdminReturns($request)) {
+            return null;
+        }
+
+        return WalkieTalkie::query()
+            ->whereRaw('UPPER(TRIM(status)) = ?', ['IN USE'])
+            ->when($walkieId > 0, fn ($query) => $query->where('walkie_id', $walkieId))
+            ->when($walkieId <= 0 && $radioId !== '', fn ($query) => $query->whereRaw('UPPER(TRIM(radio_id)) = ?', [$radioId]))
+            ->when(! $this->canManageAdminReturns($request), function ($query) use ($ownerNames) {
+                $query->whereIn(\Illuminate\Support\Facades\DB::raw('UPPER(TRIM(ownership))'), $ownerNames->all())
+                    ->orWhereIn(\Illuminate\Support\Facades\DB::raw('UPPER(TRIM(executive))'), $ownerNames->all());
+            })
+            ->first();
+    }
+
+    private function directReturnAccessFromWalkie(WalkieTalkie $walkie, Request $request): AccessRequest
+    {
+        $user = auth('wt')->user();
+        $ownerName = $walkie->ownership ?: $walkie->executive ?: ($user->full_name ?: $user->username);
+
+        return AccessRequest::create([
+            'user_id' => $user->id,
+            'request_type' => 'walkie_talkie',
+            'radio_id' => $walkie->radio_id,
+            'walkie_inventory_id' => $walkie->walkie_id,
+            'assigned_walkie_inventory_ids' => [$walkie->walkie_id],
+            'assigned_radio_ids' => [$walkie->radio_id],
+            'assigned_serial_number' => $walkie->serial_number,
+            'assigned_serial_numbers' => filled($walkie->serial_number) ? [$walkie->serial_number] : [],
+            'full_name' => $ownerName,
+            'staff_id' => $user->staff_id,
+            'request_date' => now()->toDateString(),
+            'department' => $walkie->department ?: $request->return_department,
+            'position' => $walkie->position ?: $user->position,
+            'ownership_type' => $walkie->ownership_type,
+            'shared_with' => $walkie->shared_with,
+            'location' => $walkie->location,
+            'event_name' => 'Direct Inventory Return',
+            'quantity' => 1,
+            'submit_to_admin_id' => $request->routeIs('wt.admin.*') ? $user->id : null,
+            'status' => 'Approved',
+            'return_status' => null,
+        ]);
     }
 
     // --- REQUEST ACCESS ---
@@ -420,6 +497,35 @@ class InteractionController extends Controller
             ->orderByDesc('request_date')
             ->orderByDesc('id')
             ->get();
+
+        if ($directWalkie = $this->directReturnWalkie(request())) {
+            $directAsset = new AccessRequest([
+                'radio_id' => $directWalkie->radio_id,
+                'walkie_inventory_id' => $directWalkie->walkie_id,
+                'assigned_walkie_inventory_ids' => [$directWalkie->walkie_id],
+                'assigned_radio_ids' => [$directWalkie->radio_id],
+                'assigned_serial_number' => $directWalkie->serial_number,
+                'assigned_serial_numbers' => filled($directWalkie->serial_number) ? [$directWalkie->serial_number] : [],
+                'full_name' => $directWalkie->ownership ?: $directWalkie->executive ?: (auth('wt')->user()->full_name ?: auth('wt')->user()->username),
+                'request_date' => now()->toDateString(),
+                'department' => $directWalkie->department,
+                'position' => $directWalkie->position,
+                'ownership_type' => $directWalkie->ownership_type,
+                'shared_with' => $directWalkie->shared_with,
+                'location' => $directWalkie->location,
+                'event_name' => 'Direct Inventory Return',
+                'quantity' => 1,
+            ]);
+            $directAsset->id = 'direct_walkie_' . $directWalkie->walkie_id;
+            $directAsset->setAttribute('direct_walkie_return', true);
+            $directAsset->setRelation('user', auth('wt')->user());
+
+            $activeAssets = collect([$directAsset])
+                ->concat($activeAssets)
+                ->unique(fn ($asset) => (string) ($asset->id ?? '') . '|' . (string) ($asset->walkie_inventory_id ?? ''))
+                ->values();
+        }
+
         $returnPeople = $this->returnPeopleOptions($activeAssets);
 
         return view('wt.user.returns.create', compact('activeAssets', 'mode', 'returnPeople'));
@@ -457,7 +563,7 @@ class InteractionController extends Controller
             ->limit(20)
             ->get();
 
-        $results = $assets
+        $requestResults = $assets
             ->flatMap(function (AccessRequest $asset) use ($search) {
                 $walkieIds = collect($asset->assigned_walkie_inventory_ids ?? [])->filter()->values();
                 if ($walkieIds->isEmpty() && $asset->walkie_inventory_id) {
@@ -525,6 +631,48 @@ class InteractionController extends Controller
             ->take(12)
             ->values();
 
+        $directResults = collect();
+
+        if ($this->canManageAdminReturns($request)) {
+            $like = '%' . $search . '%';
+
+            $directResults = WalkieTalkie::query()
+                ->whereRaw('UPPER(TRIM(status)) = ?', ['IN USE'])
+                ->where(function ($query) use ($like) {
+                    $query->whereRaw("UPPER(COALESCE(radio_id, '')) LIKE ?", [$like])
+                        ->orWhereRaw("UPPER(COALESCE(serial_number, '')) LIKE ?", [$like])
+                        ->orWhereRaw("UPPER(COALESCE(ownership, '')) LIKE ?", [$like])
+                        ->orWhereRaw("UPPER(COALESCE(executive, '')) LIKE ?", [$like])
+                        ->orWhereRaw("UPPER(COALESCE(department, '')) LIKE ?", [$like])
+                        ->orWhereRaw("UPPER(COALESCE(model, '')) LIKE ?", [$like]);
+                })
+                ->orderBy('radio_id')
+                ->limit(20)
+                ->get()
+                ->map(function (WalkieTalkie $walkie) {
+                    $ownerName = $walkie->ownership ?: $walkie->executive ?: '-';
+
+                    return [
+                        'id' => 'direct_walkie_' . $walkie->walkie_id,
+                        'walkie_inventory_id' => $walkie->walkie_id,
+                        'radio_id' => (string) ($walkie->radio_id ?: ''),
+                        'serial_number' => (string) ($walkie->serial_number ?: ''),
+                        'full_name' => strtoupper((string) $ownerName),
+                        'staff_id' => '-',
+                        'department' => strtoupper((string) ($walkie->department ?: '-')),
+                        'position' => strtoupper((string) ($walkie->position ?: '-')),
+                        'request_date' => 'DIRECT INVENTORY',
+                        'label' => trim('DIRECT / ' . ($walkie->radio_id ?: 'NO RADIO ID') . ' / ' . $ownerName),
+                    ];
+                });
+        }
+
+        $results = $requestResults
+            ->concat($directResults)
+            ->unique(fn ($result) => (string) ($result['walkie_inventory_id'] ?? '') . '|' . (string) ($result['radio_id'] ?? '') . '|' . (string) ($result['id'] ?? ''))
+            ->take(12)
+            ->values();
+
         return response()->json([
             'results' => $results,
         ]);
@@ -576,11 +724,20 @@ class InteractionController extends Controller
         $isAdminRoute = $request->routeIs('wt.admin.*');
         $mode = $this->managerMode($request);
 
-        $access = $this->returnLookupQuery($request, $mode)
-            ->where('id', $request->access_request_id)
-            ->firstOrFail();
+        $directAccessMatch = preg_match('/^direct_walkie_(\d+)$/', (string) $request->access_request_id, $directAccessMatches);
 
-        $access = $this->singleUnitReturnRequest($access, $request);
+        if ($directAccessMatch) {
+            $request->query->set('walkie_id', (int) $directAccessMatches[1]);
+            $directWalkie = $this->directReturnWalkie($request);
+            abort_unless($directWalkie, 404);
+            $access = $this->directReturnAccessFromWalkie($directWalkie, $request);
+        } else {
+            $access = $this->returnLookupQuery($request, $mode)
+                ->where('id', $request->access_request_id)
+                ->firstOrFail();
+
+            $access = $this->singleUnitReturnRequest($access, $request);
+        }
 
         $access->update([
             'return_status' => $isAdminRoute ? 'Pending IT Approval' : 'Pending Admin Approval',

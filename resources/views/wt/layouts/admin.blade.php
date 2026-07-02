@@ -276,7 +276,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </a>
 
     <div class="nav-section-label">Asset Interactive</div>
-    <a href="{{ route('wt.admin.returns.create', ['mode' => 'self']) }}" class="nav-link has-info {{ request()->routeIs('wt.admin.returns.*') ? 'active-sidebar' : '' }}" title="Return Unit">
+    <a href="{{ route('wt.admin.returns.create', ['mode' => 'self'], false) }}" class="nav-link has-info {{ request()->routeIs('wt.admin.returns.*') ? 'active-sidebar' : '' }}" title="Return Unit">
       <i class="fa-solid fa-rotate-left" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Return Unit</span>
       @include('wt.partials.sidebar-info', ['text' => 'Submit walkie return records for your own assigned unit.'])
     </a>
