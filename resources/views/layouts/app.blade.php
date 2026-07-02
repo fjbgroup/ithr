@@ -81,6 +81,39 @@ html.sidebar-collapsed .nav-group-toggle > svg:first-child { display: block !imp
 html.sidebar-collapsed .nav-group-toggle > span { display: none !important; }
 html.sidebar-collapsed .nav-group-toggle .toggle-arrow { display: none !important; }
 html.sidebar-collapsed .nav-group-children { display: none !important; }
+html.sidebar-collapsed .nav-group-children.open {
+  display: block !important;
+  position: fixed !important;
+  left: 64px !important;
+  top: auto !important;
+  min-width: 190px !important;
+  padding: 8px !important;
+  margin: -40px 0 0 !important;
+  border: 1px solid var(--sidebar-border) !important;
+  border-radius: 10px !important;
+  background: var(--surface) !important;
+  box-shadow: 0 18px 36px rgba(0,0,0,.15) !important;
+  z-index: 1300 !important;
+}
+html.sidebar-collapsed .nav-group-children.open .nav-child {
+  font-size: 13px !important;
+  padding: 9px 12px !important;
+  border-radius: 8px !important;
+  margin-bottom: 2px !important;
+  background: transparent !important;
+  display: block !important;
+}
+html.sidebar-collapsed .nav-group-children.open .nav-child:hover {
+  background: var(--sidebar-hover-bg) !important;
+}
+html.sidebar-collapsed .nav-group-toggle.open,
+html.sidebar-collapsed .nav-group-toggle.has-active {
+  background: rgba(2,132,199,.25) !important;
+}
+html.sidebar-collapsed .nav-group-toggle.open svg:first-child,
+html.sidebar-collapsed .nav-group-toggle.has-active svg:first-child {
+  color: #38bdf8 !important;
+}
 
 /* Hide dividers and any section labels */
 html.sidebar-collapsed .nav-divider { display: none !important; }
