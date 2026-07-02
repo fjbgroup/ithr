@@ -868,27 +868,99 @@
 </div>
 
 @if($gmHistoryCount)
+@php
+  $gmHistoryGrouped = $gmHistory->groupBy(fn($i) => $i->batch_id ?: ('single_'.$i->id))->values();
+  $gmHistoryPerPage = 5;
+  $gmHistoryPage = max(1, (int) request('gm_history_page', 1));
+  $gmHistoryPages = max(1, (int) ceil($gmHistoryGrouped->count() / $gmHistoryPerPage));
+  $gmHistoryPage = min($gmHistoryPage, $gmHistoryPages);
+  $gmHistoryPaged = $gmHistoryGrouped->forPage($gmHistoryPage, $gmHistoryPerPage);
+@endphp
 <div class="table-card" style="margin-bottom:24px">
   <div class="table-card-header">
     <div class="table-card-title" style="font-size:13px"><i class="bi bi-clock-history me-2"></i>My GM History (Last {{ $gmHistoryCount }})</div>
   </div>
-  <div style="overflow-x:auto">
-    <table class="table" style="width:100%;font-size:12px">
-      <thead><tr><th>#</th><th>Description</th><th>Asset No.</th><th>GM Status</th><th>Signed At</th><th>Remark</th></tr></thead>
-      <tbody>
-        @foreach($gmHistory as $item)
-        <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>{{ $item->description }}</td>
-          <td><code>{{ $item->asset_number ?: '—' }}</code></td>
-          <td><span class="badge-status {{ $item->gm_status === 'Checked' ? 'bs-active' : 'bs-disposed' }}">{{ $item->gm_status }}</span></td>
-          <td style="color:var(--muted)">{{ $item->gm_signed_at?->format('d M Y') ?? '—' }}</td>
-          <td style="color:var(--muted)">{{ $item->gm_remark ?: '—' }}</td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
+  <div class="pfa-hou-list">
+    @foreach($gmHistoryPaged as $historyGroup)
+    @php
+      $historyFirst = $historyGroup->first();
+      $historyCount = $historyGroup->count();
+      $historyIsBatch = $historyCount > 1;
+      $historyStatus = $historyGroup->contains(fn($i) => $i->gm_status === 'Rejected') ? 'Rejected' : 'Checked';
+      $historyRemark = $historyGroup->pluck('gm_remark')->filter()->unique()->implode(' | ');
+      $historyColId = 'gmHistoryAssets_'.md5($historyFirst->batch_id ?: ('single_'.$historyFirst->id));
+      $historyTitle = $historyIsBatch ? 'Bulk Write-Off' : ($historyFirst->description ?: 'Write-Off Submission');
+    @endphp
+    <div class="pfa-hou-card">
+      <div class="pfa-hou-card-main">
+        <div style="min-width:0">
+          <div class="pfa-hou-title-row">
+            <div class="pfa-hou-title" title="{{ $historyTitle }}">{{ $historyTitle }}</div>
+            <span class="pfa-hou-pill" style="background:rgba(2,132,199,.10);color:var(--accent)">{{ $historyCount }} {{ $historyCount === 1 ? 'item' : 'items' }}</span>
+            <span class="badge-status {{ $historyStatus === 'Checked' ? 'bs-active' : 'bs-disposed' }}">{{ $historyStatus }}</span>
+          </div>
+          <div class="pfa-hou-meta">
+            <span><i class="bi bi-calendar-check"></i> {{ $historyFirst->gm_signed_at?->format('d M Y') ?? '—' }}</span>
+            <span><i class="bi bi-person"></i> {{ $historyFirst->creator?->full_name ?? '—' }}</span>
+          </div>
+          <div class="pfa-hou-assets">
+            <div class="pfa-hou-asset-summary">
+              <div class="pfa-hou-asset-summary-text">
+                {{ $historyCount === 1 ? ($historyFirst->description ?: 'Asset reviewed') : (($historyFirst->description ?: 'First asset') . ' +' . ($historyCount - 1) . ' more') }}
+              </div>
+              <button type="button" onclick="pfaToggle('{{ $historyColId }}')" class="wo-hou-open-btn" style="padding:6px 9px">
+                <i id="{{ $historyColId }}_icon" class="bi bi-chevron-down" style="font-size:10px;transition:transform .2s"></i>
+                <span id="{{ $historyColId }}_txt" data-closed-label="View {{ $historyCount }} {{ $historyCount === 1 ? 'asset' : 'assets' }}">View {{ $historyCount }} {{ $historyCount === 1 ? 'asset' : 'assets' }}</span>
+              </button>
+            </div>
+            <div id="{{ $historyColId }}" class="pfa-hou-asset-dropdown">
+              @foreach($historyGroup as $hi)
+              <div class="pfa-hou-asset" title="{{ $hi->description }}{{ $hi->asset_number ? ' - '.$hi->asset_number : '' }}">
+                <div class="pfa-hou-asset-icon"><i class="bi bi-pc-display-horizontal"></i></div>
+                <div style="min-width:0">
+                  <div class="pfa-hou-asset-title">{{ $hi->description ?: 'Asset reviewed' }}</div>
+                  <div class="pfa-hou-asset-meta">
+                    <span>{{ $hi->asset_class ?: 'Unclassified' }}</span>
+                    <span>&bull;</span>
+                    <code>{{ $hi->asset_number ?: 'No asset no.' }}</code>
+                    @if($hi->serial_number)
+                      <span>&bull;</span>
+                      <code>{{ $hi->serial_number }}</code>
+                    @endif
+                  </div>
+                </div>
+              </div>
+              @endforeach
+            </div>
+          </div>
+          <div class="pfa-hou-actions">
+            <a href="{{ route('it.writeoff.report', $historyFirst->id) }}" target="_blank" class="wo-hou-open-btn" style="text-decoration:none;padding:5px 8px">
+              <i class="bi bi-file-earmark-text"></i> Report
+            </a>
+          </div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:9px;background:var(--body-bg);padding:12px 14px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">GM Review</div>
+          <div style="font-size:13px;font-weight:800;color:var(--text)">{{ $historyFirst->gm_signed_name ?: ($historyFirst->currentGmUser?->full_name ?? '—') }}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">{{ $historyFirst->gm_signed_at?->format('d M Y H:i') ?? '—' }}</div>
+          @if($historyRemark)
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.45">{{ $historyRemark }}</div>
+          @endif
+        </div>
+      </div>
+    </div>
+    @endforeach
   </div>
+  @if($gmHistoryPages > 1)
+  <div class="wo-page-controls">
+    <div style="font-size:12px;color:var(--muted)">Page {{ $gmHistoryPage }} of {{ $gmHistoryPages }} · {{ $gmHistoryGrouped->count() }} submissions</div>
+    <div class="wo-page-links">
+      @for($i = 1; $i <= $gmHistoryPages; $i++)
+        <a class="wo-page-link {{ $i === $gmHistoryPage ? 'is-active' : '' }}" href="{{ request()->fullUrlWithQuery(['gm_history_page' => $i]) }}">{{ $i }}</a>
+      @endfor
+    </div>
+  </div>
+  @endif
 </div>
 @endif
 @endif
