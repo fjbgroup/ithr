@@ -343,8 +343,8 @@
   @foreach([
     ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,   'Total Assets', '#0284c7'],
     ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,  'Active',       '#16a34a'],
-    ['bi-tools',              'rgba(245,158,11,.12)',  '#d97706', $nit_repair,  'In Repair',    '#d97706'],
     ['bi-trash3-fill',        'rgba(239,68,68,.12)',   '#dc2626', $nit_disp,    'Disposed',     '#dc2626'],
+    ['bi-hourglass-split',    'rgba(245,158,11,.12)',  '#d97706', $nit_pending_wo + $nit_pending_ewaste, 'Pending Approval', '#d97706'],
   ] as [$icon,$bg,$color,$val,$lbl,$border])
   <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {{ $border }};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05)">
     <div style="width:44px;height:44px;border-radius:10px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">
