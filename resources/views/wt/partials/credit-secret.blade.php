@@ -332,10 +332,12 @@
   }
 
   .credit-secret-note {
-    max-width: 260px;
-    font-size: 10.5px;
-    line-height: 1.45;
-    white-space: normal;
+    max-width: none;
+    width: 100%;
+    font-size: clamp(7.5px, 2.35vw, 10.5px);
+    line-height: 1.25;
+    letter-spacing: 0;
+    white-space: nowrap;
   }
 }
 </style>
