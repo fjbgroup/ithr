@@ -1783,7 +1783,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             })
             .catch(e => console.error('Auto-refresh failed:', e));
-    }, 30000);
+    }, 3000);
 })();
 </script>
 </body>
