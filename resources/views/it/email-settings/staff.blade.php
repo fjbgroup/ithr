@@ -9,13 +9,33 @@
 .es-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.05);margin-bottom:20px}
 .es-head{padding:16px 22px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px}
 .es-head-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.es-notify-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:16px 20px 4px}
+.es-notify-tile{border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px;padding:14px;min-height:136px;display:flex;flex-direction:column;gap:10px}
+.es-notify-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.es-notify-title{font-size:13px;font-weight:800;color:#1e293b;line-height:1.25}
+.es-notify-copy{font-size:12px;color:#64748b;line-height:1.55;margin:0}
+.es-notify-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.es-notify-chip{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;border-radius:999px;padding:4px 8px;border:1px solid}
+.es-note{margin:10px 20px 16px;padding:11px 13px;border:1px solid #bae6fd;background:#f0f9ff;border-radius:10px;font-size:12px;color:#0369a1;display:flex;gap:8px;line-height:1.55}
+html.dark .es-card{background:var(--surface)!important;border-color:var(--border)!important;box-shadow:0 1px 3px rgba(0,0,0,.24),0 8px 22px rgba(0,0,0,.18)!important}
+html.dark .es-head{background:var(--surface)!important;border-bottom-color:var(--border)!important}
+html.dark .es-card [style*="color:#1e293b"],
+html.dark .es-card [style*="color:#334155"]{color:var(--text)!important}
+html.dark .es-card [style*="color:#64748b"],
+html.dark .es-card [style*="color:#94a3b8"]{color:#cbd5e1!important}
+html.dark .es-card [style*="border-bottom:1px solid #f8fafc"]{border-bottom-color:var(--border)!important}
+html.dark .es-notify-tile{background:#111827;border-color:#334155}
+html.dark .es-notify-title{color:var(--text)}
+html.dark .es-notify-copy{color:#cbd5e1}
+html.dark .es-note{background:rgba(14,165,233,.12);border-color:rgba(56,189,248,.28);color:#bae6fd}
+@media (max-width: 991.98px){.es-notify-grid{grid-template-columns:1fr}}
 </style>
 
 <!-- HEADER -->
 <div style="margin-bottom:24px">
-  <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:5px">Settings â€º <span style="color:#0284c7">Email Notifications</span></div>
-  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:#1e293b;margin:0">My Email Notifications</h4>
-  <p style="font-size:13px;color:#64748b;margin:4px 0 0">You'll receive email updates when your requests are approved or rejected.</p>
+  <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">Settings â€º <span style="color:#0284c7">Email Notifications</span></div>
+  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">My Email Notifications</h4>
+  <p style="font-size:13px;color:var(--muted);margin:4px 0 0">You'll receive email updates when your requests are approved or rejected.</p>
 </div>
 
 <div class="row g-4">
@@ -97,32 +117,38 @@
       <div class="es-head-icon" style="background:#fef9c3;color:#ca8a04"><i class="bi bi-bell-fill"></i></div>
       <div><div style="font-size:14px;font-weight:700;color:#1e293b">What You'll Be Emailed About</div></div>
     </div>
-    <div style="padding:10px 20px 16px">
-      @foreach([
-        ['#16a34a','bi-check-circle-fill','Add Asset Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'Add Asset Request — Rejected'],
-        ['#16a34a','bi-check-circle-fill','Edit Asset Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'Edit Asset Request — Rejected'],
-        ['#16a34a','bi-check-circle-fill','Delete Asset Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'Delete Asset Request — Rejected'],
-        ['#16a34a','bi-check-circle-fill','E-Waste Request — Approved'],
-        ['#ef4444','bi-x-circle-fill',    'E-Waste Request — Rejected'],
-        ['#16a34a','bi-pen-fill',         'Write-Off — Approved by CEO'],
-        ['#ef4444','bi-pen-fill',         'Write-Off — Rejected (HOU / GM / CEO)'],
-        ['#16a34a','bi-clipboard-check-fill','IT Request Form — Approved'],
-        ['#ef4444','bi-clipboard-x-fill', 'IT Request Form — Rejected'],
-      ] as [$tc,$ti,$tt])
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc">
-        <div style="width:26px;height:26px;border-radius:7px;background:{{ $tc }}18;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">
-          <i class="bi {{ $ti }}" style="color:{{ $tc }}"></i>
+    <div class="es-notify-grid">
+      <div class="es-notify-tile">
+        <div class="es-notify-icon" style="background:rgba(2,132,199,.12);color:#0284c7"><i class="bi bi-box-seam-fill"></i></div>
+        <div class="es-notify-title">Asset Requests</div>
+        <p class="es-notify-copy">Updates for add, edit, delete, and e-waste requests after review.</p>
+        <div class="es-notify-chips">
+          <span class="es-notify-chip" style="background:rgba(22,163,74,.1);color:#16a34a;border-color:rgba(22,163,74,.25)">Approved</span>
+          <span class="es-notify-chip" style="background:rgba(239,68,68,.1);color:#ef4444;border-color:rgba(239,68,68,.25)">Rejected</span>
         </div>
-        <div style="font-size:12px;font-weight:500;color:#334155">{{ $tt }}</div>
       </div>
-      @endforeach
-      <div style="margin-top:12px;font-size:11px;color:#94a3b8;display:flex;gap:6px;line-height:1.6">
-        <i class="bi bi-info-circle" style="color:#0284c7;flex-shrink:0;margin-top:1px"></i>
-        You always get in-app bell notifications. Emails are sent in addition, only when your profile has an email address.
+      <div class="es-notify-tile">
+        <div class="es-notify-icon" style="background:rgba(217,119,6,.12);color:#d97706"><i class="bi bi-pen-fill"></i></div>
+        <div class="es-notify-title">Write-Off Flow</div>
+        <p class="es-notify-copy">Final write-off decisions from HOU, GM, or CEO approval stages.</p>
+        <div class="es-notify-chips">
+          <span class="es-notify-chip" style="background:rgba(22,163,74,.1);color:#16a34a;border-color:rgba(22,163,74,.25)">CEO Approved</span>
+          <span class="es-notify-chip" style="background:rgba(239,68,68,.1);color:#ef4444;border-color:rgba(239,68,68,.25)">Returned</span>
+        </div>
       </div>
+      <div class="es-notify-tile">
+        <div class="es-notify-icon" style="background:rgba(124,58,237,.12);color:#7c3aed"><i class="bi bi-clipboard-check-fill"></i></div>
+        <div class="es-notify-title">IT Request Forms</div>
+        <p class="es-notify-copy">Status changes for submitted IT request forms after validation.</p>
+        <div class="es-notify-chips">
+          <span class="es-notify-chip" style="background:rgba(22,163,74,.10);color:#16a34a;border-color:rgba(22,163,74,.25)">Completed</span>
+          <span class="es-notify-chip" style="background:rgba(239,68,68,.10);color:#ef4444;border-color:rgba(239,68,68,.25)">Needs Action</span>
+        </div>
+      </div>
+    </div>
+    <div class="es-note">
+      <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:1px"></i>
+      Email is sent alongside the in-app bell notification when your profile has an email address.
     </div>
   </div>
 

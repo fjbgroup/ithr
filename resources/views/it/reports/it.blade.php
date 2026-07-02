@@ -22,6 +22,12 @@
 .btn-filter:hover{background:var(--accent-h)}
 .btn-reset{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;transition:all .15s}
 .btn-reset:hover{border-color:var(--accent);color:var(--accent)}
+.it-report-table{min-width:1220px;table-layout:auto}
+.it-report-table th:nth-child(8),.it-report-table td:nth-child(8){min-width:118px;width:118px;white-space:nowrap}
+.it-report-table td:nth-child(8)>span{white-space:nowrap;max-width:none}
+.it-report-table th:nth-child(9),.it-report-table td:nth-child(9){min-width:112px}
+.it-report-table th:nth-child(10),.it-report-table td:nth-child(10){min-width:116px}
+.it-report-table th:nth-child(11),.it-report-table td:nth-child(11){min-width:124px}
 </style>
 
 <!-- PAGE HEADER -->
@@ -128,7 +134,7 @@
     </div>
   </div>
   <div class="table-responsive">
-    <table class="table">
+    <table class="table it-report-table">
       <thead>
         <tr>
           <th>#</th>

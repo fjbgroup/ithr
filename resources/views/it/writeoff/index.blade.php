@@ -314,6 +314,83 @@
     border-color: var(--accent);
     color: #fff;
   }
+  html.dark #woFormModal > div,
+  html.dark #houSignModal > div,
+  html.dark #gmSignModal > div,
+  html.dark #ceoSignModal > div,
+  html.dark #assignHOUModal > div {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+  }
+  html.dark #woFormModal [style*="background:#fff"]:not(canvas),
+  html.dark #woFormModal [style*="background: #fff"]:not(canvas),
+  html.dark #houSignModal [style*="background:#fff"]:not(canvas),
+  html.dark #houSignModal [style*="background: #fff"]:not(canvas),
+  html.dark #gmSignModal [style*="background:#fff"]:not(canvas),
+  html.dark #gmSignModal [style*="background: #fff"]:not(canvas),
+  html.dark #ceoSignModal [style*="background:#fff"]:not(canvas),
+  html.dark #ceoSignModal [style*="background: #fff"]:not(canvas),
+  html.dark [style*="background:#f9f9f9"],
+  html.dark [style*="background: #f9f9f9"],
+  html.dark [style*="background:#f9fafb"],
+  html.dark [style*="background: #f9fafb"],
+  html.dark [style*="background:#f4f4f4"],
+  html.dark [style*="background: #f4f4f4"] {
+    background: var(--surface2) !important;
+  }
+  html.dark #woSigCanvas {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  html.dark [style*="background:#fffbeb"] {
+    background: rgba(245,158,11,.12) !important;
+  }
+  html.dark #woFormModal [style*="color:#142b47"],
+  html.dark #houSignModal [style*="color:#142b47"],
+  html.dark #gmSignModal [style*="color:#142b47"],
+  html.dark #ceoSignModal [style*="color:#142b47"],
+  html.dark [style*="color:#1a1a1a"],
+  html.dark [style*="color:#333"],
+  html.dark [style*="color:#374151"] {
+    color: var(--text) !important;
+  }
+  html.dark [style*="color:#444"],
+  html.dark [style*="color:#555"],
+  html.dark [style*="color:#666"],
+  html.dark [style*="color:#777"],
+  html.dark [style*="color:#888"],
+  html.dark [style*="color:#999"] {
+    color: var(--muted) !important;
+  }
+  html.dark #woFormModal table,
+  html.dark #houSignModal table,
+  html.dark #gmSignModal table,
+  html.dark #ceoSignModal table,
+  html.dark #woFormModal td,
+  html.dark #houSignModal td,
+  html.dark #gmSignModal td,
+  html.dark #ceoSignModal td,
+  html.dark #woFormModal th,
+  html.dark #houSignModal th,
+  html.dark #gmSignModal th,
+  html.dark #ceoSignModal th {
+    border-color: #475569 !important;
+  }
+  html.dark #woFormModal [style*="border-bottom:1px solid #000"],
+  html.dark #houSignModal [style*="border-bottom:1.5px solid #000"],
+  html.dark #gmSignModal [style*="border-bottom:1.5px solid #000"],
+  html.dark #ceoSignModal [style*="border-bottom:1.5px solid #000"],
+  html.dark [style*="border-bottom:1px solid #999"],
+  html.dark [style*="border-top:1px solid #ccc"],
+  html.dark [style*="border:1px solid #d1d5db"],
+  html.dark [style*="border:1px solid #999"] {
+    border-color: #64748b !important;
+  }
+  html.dark #woFormModal [style*="border:1.5px solid #d1d5db"] {
+    background: var(--surface2) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+  }
   .pfa-hou-flow {
     display: grid;
     grid-template-columns: 1fr 26px 1fr 26px 1fr;

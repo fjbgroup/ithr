@@ -13,15 +13,35 @@
 .es-input{width:100%;padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:'Inter',sans-serif;font-size:13.5px;color:#1e293b;background:#f8fafc;outline:none;transition:border-color .18s,box-shadow .18s,background .18s;box-sizing:border-box}
 .es-input:focus{border-color:#0284c7;background:#fff;box-shadow:0 0 0 3px rgba(2,132,199,.1)}
 .es-input::placeholder{color:#94a3b8}
+html.dark .es-card{background:var(--surface)!important;border-color:var(--border)!important;box-shadow:0 1px 3px rgba(0,0,0,.24),0 8px 22px rgba(0,0,0,.18)!important}
+html.dark .es-head{background:var(--surface)!important;border-bottom-color:var(--border)!important}
+html.dark .es-label{color:#cbd5e1!important}
+html.dark .es-input{background:#111827!important;border-color:#334155!important;color:#f8fafc!important}
+html.dark .es-input:focus{background:#0f172a!important;border-color:#38bdf8!important;box-shadow:0 0 0 3px rgba(56,189,248,.16)!important}
+html.dark .es-input::placeholder{color:#94a3b8!important}
+html.dark .es-card [style*="color:#1e293b"],
+html.dark .es-card [style*="color:#334155"],
+html.dark .es-card [style*="color:#475569"]{color:var(--text)!important}
+html.dark .es-card [style*="color:#64748b"],
+html.dark .es-card [style*="color:#94a3b8"]{color:#cbd5e1!important}
+html.dark .es-card [style*="border-bottom:1px solid #f8fafc"]{border-bottom-color:var(--border)!important}
+html.dark .es-card [style*="background:#f8fafc"]{background:#111827!important}
+html.dark .es-card [style*="background:#f0f9ff"]{background:rgba(14,165,233,.12)!important}
+html.dark .es-card [style*="border:1.5px solid #e2e8f0"]{border-color:#334155!important}
+html.dark .es-modal-card{background:var(--surface)!important;border:1px solid var(--border)!important}
+html.dark .es-modal-muted{background:#111827!important;border-color:var(--border)!important}
+html.dark .es-modal-card [style*="color:#1e293b"]{color:var(--text)!important}
+html.dark .es-modal-card [style*="color:#64748b"]{color:#cbd5e1!important}
+html.dark .es-modal-card [style*="border-bottom:1px solid #f8fafc"]{border-bottom-color:var(--border)!important}
 </style>
 
 
 <!-- HEADER -->
 <div style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
   <div>
-    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:5px">Admin › <span style="color:#0284c7">Email Settings</span></div>
-    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:#1e293b;margin:0">Email Notifications</h4>
-    <p style="font-size:13px;color:#64748b;margin:4px 0 0">Configure outgoing email so admins get notified when users submit requests.</p>
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">Admin › <span style="color:#0284c7">Email Settings</span></div>
+    <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Email Notifications</h4>
+    <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Configure outgoing email so admins get notified when users submit requests.</p>
   </div>
   <div style="display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;{{ $configured ? 'background:#dcfce7;color:#16a34a;border:1px solid #bbf7d0' : 'background:#fff7ed;color:#c2410c;border:1px solid #fed7aa' }}">
     <i class="bi bi-{{ $configured ? 'check-circle-fill' : 'exclamation-triangle-fill' }}"></i>
@@ -234,7 +254,7 @@
 
 <!-- APP PASSWORD POPUP MODAL -->
 <div id="appPwModal" style="display:none;position:fixed;inset:0;z-index:9000;align-items:center;justify-content:center;background:rgba(15,23,42,.45);backdrop-filter:blur(3px);padding:1rem">
-  <div style="background:#fff;border-radius:16px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:apwIn .2s ease">
+  <div class="es-modal-card" style="background:#fff;border-radius:16px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;animation:apwIn .2s ease">
 
     <!-- Header -->
     <div style="background:#142b47;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px">
@@ -249,7 +269,7 @@
     </div>
 
     <!-- Tab switcher -->
-    <div style="display:flex;background:#f8fafc;border-bottom:1px solid #e2e8f0">
+    <div class="es-modal-muted" style="display:flex;background:#f8fafc;border-bottom:1px solid #e2e8f0">
       <button id="apwTabGmail" onclick="apwTab('gmail')"
         style="flex:1;padding:11px;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#0284c7;border-bottom:2px solid #0284c7;transition:all .15s">
         📧 Gmail
@@ -307,7 +327,7 @@
     </div>
 
     <!-- Footer -->
-    <div style="padding:14px 22px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end">
+    <div class="es-modal-muted" style="padding:14px 22px;background:#f8fafc;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end">
       <button onclick="closeAppPwPopup()"
         style="display:inline-flex;align-items:center;gap:7px;background:#142b47;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
         Got it <i class="bi bi-check-lg"></i>
@@ -356,4 +376,3 @@ document.addEventListener('click', function(e) {
 </script>
 
 @endsection
-
