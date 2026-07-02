@@ -193,12 +193,19 @@ class AdminITController extends Controller
     {
         $validated = $request->validate([
             'staff_id' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_no')->ignore($user->id)],
-            'username' => ['required', 'string', 'max:50', Rule::unique(User::class, 'staff_no')->ignore($user->id)],
+            'username' => ['required', 'string', 'max:50'],
             'full_name' => 'nullable|string|max:255',
             'department' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'wt_role' => 'required|in:admin,admin_it',
         ]);
+
+        $staffNo = trim($validated['staff_id']);
+        $validated['staff_id'] = $staffNo;
+        $validated['username'] = $staffNo;
+        $validated['full_name'] = trim((string) ($validated['full_name'] ?? ''));
+        $validated['department'] = Str::upper(trim((string) ($validated['department'] ?? '')));
+        $validated['position'] = Str::upper(trim((string) ($validated['position'] ?? '')));
 
         $original = [
             'staff_id' => $user->staff_id,
@@ -209,7 +216,14 @@ class AdminITController extends Controller
             'wt_role' => $user->wt_role,
         ];
 
-        $user->update($validated);
+        $user->update([
+            'staff_id' => $validated['staff_id'],
+            'username' => $validated['username'],
+            'full_name' => $validated['full_name'],
+            'department' => $validated['department'],
+            'position' => $validated['position'],
+            'wt_role' => $validated['wt_role'],
+        ]);
 
         UserActivityLog::create([
             'user_id' => Auth::guard('wt')->id(),
@@ -354,4 +368,3 @@ class AdminITController extends Controller
         return back()->with('success', 'Password reset request rejected.');
     }
 }
-
