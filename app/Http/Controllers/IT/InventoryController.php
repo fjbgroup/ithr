@@ -68,8 +68,29 @@ class InventoryController extends Controller
         $brands       = Brand::orderBy('sort_order')->orderBy('name')->get();
         $locations    = Location::orderBy('sort_order')->orderBy('name')->get();
 
+        $pendingEwIds = EwasteRequest::where('status', 'Pending')
+            ->whereNotNull('inventory_id')
+            ->pluck('inventory_id')
+            ->mapWithKeys(fn($id) => [(int) $id => true])
+            ->all();
+
+        $pendingEditIds = EditAssetRequest::where(function ($q) {
+                $q->whereNull('asset_type')->orWhere('asset_type', 'it');
+            })
+            ->where('status', 'Pending')
+            ->whereNotNull('asset_id')
+            ->pluck('asset_id')
+            ->mapWithKeys(fn($id) => [(int) $id => true])
+            ->all();
+
+        $pendingDeleteIds = DeleteRequest::where('status', 'Pending')
+            ->whereNotNull('inventory_id')
+            ->pluck('inventory_id')
+            ->mapWithKeys(fn($id) => [(int) $id => true])
+            ->all();
+
         if ($request->boolean('partial')) {
-            return response(view('it.inventory.partials.live-table', compact('items', 'user'))->render());
+            return response(view('it.inventory.partials.live-table', compact('items', 'user', 'pendingEwIds', 'pendingEditIds', 'pendingDeleteIds'))->render());
         }
 
         // Pending requests for admin view (separate per type)
@@ -119,7 +140,8 @@ class InventoryController extends Controller
             'items', 'assetClasses', 'brands', 'locations',
             'pendingAdds', 'pendingEw', 'pendingDeletes', 'pendingEdits',
             'pendingAddCount', 'pendingEwCount', 'pendingDelCount', 'pendingEditCount', 'totalPending',
-            'myAdds', 'myEw', 'myDeletes', 'myEdits', 'myDisposals', 'myPending', 'totalMy'
+            'myAdds', 'myEw', 'myDeletes', 'myEdits', 'myDisposals', 'myPending', 'totalMy',
+            'pendingEwIds', 'pendingEditIds', 'pendingDeleteIds'
         ));
     }
 
@@ -359,4 +381,3 @@ class InventoryController extends Controller
         );
     }
 }
-
