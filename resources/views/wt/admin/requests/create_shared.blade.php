@@ -11,6 +11,7 @@
     }
     .admin-request-card {
         padding: 20px 22px;
+        overflow: visible !important;
     }
     .request-form-accordion {
         display: grid;
@@ -19,7 +20,7 @@
     .request-form-accordion-section {
         border: 1px solid rgba(2, 132, 199, 0.18);
         border-radius: 14px;
-        overflow: hidden;
+        overflow: visible;
         background: rgba(248, 250, 252, 0.58);
     }
     .request-form-accordion-toggle {
@@ -125,6 +126,10 @@
         overflow: hidden;
         box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
         background: #fffaf5 !important;
+        z-index: 9999 !important;
+    }
+    .select2-container--open {
+        z-index: 9999 !important;
     }
     .select2-container--default .select2-results > .select2-results__options {
         background: #fffaf5 !important;
@@ -479,6 +484,13 @@
         width: 100% !important;
         max-width: 100% !important;
         display: block !important;
+    }
+    .longterm-owner-group,
+    #temporaryPicList,
+    .longterm-owner-card,
+    .temporary-unit-card,
+    .owner-details-grid {
+        overflow: visible !important;
     }
     .owner-details-grid .select2-container--default .select2-selection--single {
         position: relative;
@@ -905,7 +917,6 @@
         ->sort()
         ->values();
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $oldPicDetails = collect(old('pic_details', []))->values();
@@ -1571,7 +1582,7 @@
         <p class="request-section-help">
             {{ $isTemporaryRequest
                 ? 'Temporary request is for short-term usage. Fill the usage period, purpose, and quantity before adding ownership profiles.'
-                : 'Long-term request is for regular or permanent usage. Fill the start date, purpose, and executive signature before adding ownership profiles.' }}
+                : 'Long-term request is for regular or permanent usage. Fill the start date and purpose before adding ownership profiles.' }}
         </p>
         <div class="wt-form-row {{ $isTemporaryRequest ? 'temporary-request-details-grid' : 'longterm-request-details-grid' }}">
             @if($isTemporaryRequest)
@@ -1599,7 +1610,6 @@
                 <div class="temporary-purpose-group">
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Purpose / Usage</label>
                     <input type="text" id="temporary_purpose_usage" name="event_name" value="{{ old('event_name') }}" placeholder="Example: Temporary use for event standby, operations support, or short-term team coordination" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-[#FDFBF7]/50 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold focus:ring-2 focus:ring-[#0284c7]/20 outline-none transition dark:text-slate-200" required>
-                    <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                     <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                     <input type="hidden" id="request_justification_fallback" name="justifications" value="{{ old('justifications', old('event_name')) }}">
                     <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
@@ -1616,21 +1626,6 @@
                     <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Remark / Purpose</label>
                     <textarea name="justifications" rows="1" placeholder="Long-term usage, department coordination, or shared daily usage" class="executive-row-control executive-row-textarea w-full rounded-lg border border-[#0284c7]/30 bg-[#FDFBF7]/50 px-3 py-2 text-[11px] font-bold outline-none transition focus:ring-2 focus:ring-[#0284c7]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" required>{{ old('justifications') }}</textarea>
                 </div>
-                <div class="executive-signature-group w-full md:w-80 min-w-0">
-                    <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
-                    <div class="executive-signature-pad" data-executive-signature-pad>
-                        <canvas></canvas>
-                        <div class="executive-signature-actions">
-                            <span class="executive-signature-hint">Sign inside the box</span>
-                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="request_signature" data-executive-signature-input>
-                    @error('request_signature')
-                        <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
-                    @enderror
-                </div>
-                <input type="hidden" id="request_sector_fallback" name="sector" value="{{ old('sector') }}">
                 <input type="hidden" id="request_location_fallback" name="location" value="{{ old('location') }}">
                 <input type="hidden" id="request_bay_fallback" name="bay_from" value="{{ old('bay_from') }}">
             </div>
@@ -1679,17 +1674,33 @@
                     <option value="{{ $department }}"></option>
                     @endforeach
                 </datalist>
-                <datalist id="picSectorOptions">
-                    @foreach($sectorOptions as $sector)
-                    <option value="{{ $sector }}"></option>
-                    @endforeach
-                </datalist>
                 <datalist id="picLocationOptions">
                     @foreach($locationOptions as $location)
                     <option value="{{ $location }}"></option>
                     @endforeach
                 </datalist>
                 @error('pic_details')
+                    <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        @endunless
+
+        @unless($isTemporaryRequest)
+        <h4 class="text-[10px] font-black text-[#0284c7] border-l-4 border-[#0284c7] pl-3 uppercase tracking-widest mb-4">4. Executive Signature</h4>
+        <p class="request-section-help">Sign here after checking all request and ownership details. The request will go to ICT for review.</p>
+        <div class="temporary-signature-row flex flex-col md:flex-row md:flex-nowrap md:items-start">
+            <div class="temporary-signature-wrap">
+                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Signature</label>
+                <div class="executive-signature-pad" data-executive-signature-pad>
+                    <canvas></canvas>
+                    <div class="executive-signature-actions">
+                        <span class="executive-signature-hint">Sign inside the box</span>
+                        <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                    </div>
+                </div>
+                <input type="hidden" name="request_signature" data-executive-signature-input>
+                @error('request_signature')
                     <div class="mt-2 text-xs font-bold text-red-600">{{ $message }}</div>
                 @enderror
             </div>
@@ -1731,11 +1742,6 @@
             <datalist id="picDepartmentOptions">
                 @foreach($departmentOptions as $department)
                 <option value="{{ $department }}"></option>
-                @endforeach
-            </datalist>
-            <datalist id="picSectorOptions">
-                @foreach($sectorOptions as $sector)
-                <option value="{{ $sector }}"></option>
                 @endforeach
             </datalist>
             <datalist id="picLocationOptions">
@@ -2004,7 +2010,6 @@
         const ownershipNameOptions = @json($ownershipNameOptions);
         const pickupPersonOptions = @json($pickupPersonOptions);
         const departmentOptions = @json($departmentOptions);
-        const sectorOptions = @json($sectorOptions);
         const locationOptions = @json($locationOptions);
         const bayOptions = @json($bayOptions);
         const staffSearchUrl = @json(route('wt.admin.requests.staffSearch'));
@@ -2522,7 +2527,6 @@
                 phone_no: row.querySelector('[data-pic-phone]')?.value || '',
                 department: row.querySelector('[data-pic-department]')?.value || '',
                 ownership_type: row.querySelector('[data-pic-ownership-type]')?.value || '',
-                sector: row.querySelector('[data-pic-sector]')?.value || '',
                 bay_from: row.querySelector('[data-pic-bay]')?.value || '',
                 location: row.querySelector('[data-pic-location]')?.value || '',
                 shared_with: row.querySelector('[data-pic-shared-with]')?.value || '',
@@ -2583,12 +2587,6 @@
                             <p>Tell ICT where this unit will normally be used or issued.</p>
                         </div>
                         <div>
-                            <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Sector <span class="text-red-500">*</span></label>
-                            <select name="pic_details[${index}][sector]" data-pic-sector data-placeholder="Type or select sector" class="pic-tag-select w-full" required>
-                                ${renderOptions(sectorOptions, saved.sector || '', 'Type or select sector')}
-                            </select>
-                        </div>
-                        <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Location <span class="text-red-500">*</span></label>
                             <select name="pic_details[${index}][location]" data-pic-location data-placeholder="Type or select location" class="pic-tag-select w-full" required>
                                 ${renderOptions(locationOptions, saved.location || '', 'Type or select location')}
@@ -2637,11 +2635,10 @@
         function syncRequestFallbackFields() {
             const ownershipFallback = document.getElementById('request_ownership_type');
             const sharedWithFallback = document.getElementById('request_shared_with');
-            const sectorFallback = document.getElementById('request_sector_fallback');
             const bayFallback = document.getElementById('request_bay_fallback');
             const locationFallback = document.getElementById('request_location_fallback');
 
-            if (!ownershipFallback && !sharedWithFallback && !sectorFallback && !bayFallback && !locationFallback) {
+            if (!ownershipFallback && !sharedWithFallback && !bayFallback && !locationFallback) {
                 return;
             }
 
@@ -2649,7 +2646,6 @@
             const firstOwnership = firstRow?.querySelector('[data-pic-ownership-type]')?.value || 'Individual';
             const firstSharedWith = firstRow?.querySelector('[data-pic-shared-with]')?.value || '';
             const firstName = firstRow?.querySelector('[data-pic-name]')?.value || '';
-            const firstSector = firstRow?.querySelector('[data-pic-sector]')?.value || '';
             const firstBay = firstRow?.querySelector('[data-pic-bay]')?.value || '';
             const firstLocation = firstRow?.querySelector('[data-pic-location]')?.value || '';
 
@@ -2661,10 +2657,6 @@
                 sharedWithFallback.value = String(firstOwnership || '').toUpperCase() === 'SHARED'
                     ? (firstSharedWith || firstName)
                     : '';
-            }
-
-            if (sectorFallback) {
-                sectorFallback.value = firstSector;
             }
 
             if (bayFallback) {
@@ -2792,7 +2784,7 @@
         });
 
         $('input[name="quantity"]').on('input change', renderTemporaryPicRows);
-        $('#temporaryPicList').on('input change', '[data-pic-name], [data-pic-sector], [data-pic-bay], [data-pic-location], [data-pic-shared-with]', syncRequestFallbackFields);
+        $('#temporaryPicList').on('input change', '[data-pic-name], [data-pic-bay], [data-pic-location], [data-pic-shared-with]', syncRequestFallbackFields);
         $('#temporaryPicList').on('change select2:select', '[data-pic-name]', function () {
             fillPhoneFromName(this, '[data-pic-phone]');
             fillDepartmentFromName(this);

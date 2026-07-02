@@ -203,7 +203,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     @if($isAdminItView)
     {{-- Inventory Tools --}}
     <div class="dropdown-wrapper {{ $inventoryManagementOpen ? 'open' : '' }}">
-      <button type="button" class="dropdown-trigger has-info {{ $inventoryManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+      <button type="button" class="dropdown-trigger has-info {{ $inventoryManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Inventory Tools" aria-expanded="{{ $inventoryManagementOpen ? 'true' : 'false' }}">
         <i class="fas fa-layer-group" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Inventory Tools</span>
         @include('wt.partials.sidebar-info', ['text' => 'Open inventory management tools including inventory list, repair monitoring, duplicate IDs, and special use units.'])
@@ -227,7 +227,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 
     {{-- Approvals --}}
     <div class="dropdown-wrapper {{ $approvalManagementOpen ? 'open' : '' }}">
-      <button type="button" class="dropdown-trigger has-info {{ $approvalManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+      <button type="button" class="dropdown-trigger has-info {{ $approvalManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Approvals" aria-expanded="{{ $approvalManagementOpen ? 'true' : 'false' }}">
         <i class="fas fa-inbox" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Approvals
           @if($approvalBadgeCount > 0)
@@ -252,7 +252,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 
     {{-- Faulty Reports --}}
     <div class="dropdown-wrapper {{ $faultyManagementOpen ? 'open' : '' }}">
-      <button type="button" class="dropdown-trigger has-info {{ $faultyManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)">
+      <button type="button" class="dropdown-trigger has-info {{ $faultyManagementOpen ? 'active-sidebar' : '' }}" onclick="toggleDropdown(this)" title="Faulty Reports" aria-expanded="{{ $faultyManagementOpen ? 'true' : 'false' }}">
         <i class="fa-solid fa-triangle-exclamation" style="width:20px;text-align:center;flex-shrink:0;font-size:15px"></i>
         <span style="flex:1">Faulty Reports</span>
         @include('wt.partials.sidebar-info', ['text' => 'Consolidated view for walkie requests, handovers, and faulty reports status.'])

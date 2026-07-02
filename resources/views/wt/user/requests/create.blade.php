@@ -289,7 +289,6 @@
     $currentUser = auth('wt')->user();
     $nameOptions = $formOptionLists['names'] ?? [];
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $profileName = old('requestor_name', $currentUser->full_name ?: $currentUser->username);
@@ -386,19 +385,6 @@
         <!-- 3. REQUEST DETAILS -->
         <h4 class="form-section-title">3. Request Details</h4>
         
-        <div class="mb-4">
-            <label class="block text-[10px] font-bold text-stone-600 mb-2 uppercase tracking-widest">Sector</label>
-            <select name="sector" class="smart-select w-full" data-placeholder="Type or select sector" required>
-                <option value=""></option>
-                @foreach($sectorOptions as $sector)
-                <option value="{{ $sector }}" @selected(old('sector') === $sector)>{{ $sector }}</option>
-                @endforeach
-                @if(old('sector') && !in_array(old('sector'), $sectorOptions, true))
-                <option value="{{ old('sector') }}" selected>{{ old('sector') }}</option>
-                @endif
-            </select>
-        </div>
-
         <div class="wt-form-row">
             <div id="bay_section">
                 <label class="block text-[10px] font-bold text-stone-600 mb-1 uppercase tracking-widest">Bay <span class="text-stone-400">(Optional)</span></label>

@@ -4,6 +4,9 @@
 
     @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    @endpush
+
+    @push('scripts')
     <script>
         (function () {
             if ('scrollRestoration' in history) {
@@ -120,6 +123,15 @@
         // controller (WT master data, merged with existing values).
         $walkieTemporaryIds = $walkies->pluck('temporary_radio_id')->filter()->unique()->sort()->values();
         $walkieTrackingRefs = $walkies->pluck('tracking_ref')->filter()->unique()->sort()->values();
+        $sharedWithOptions = collect($staffOwnerships ?? [])
+            ->merge($walkieOwnerships ?? collect())
+            ->merge($walkieDepartments ?? collect())
+            ->merge($walkieLocations ?? collect())
+            ->merge($executiveOptions ?? collect())
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
         // $statusOptions comes from the controller (ALLOWED_STATUSES constant).
         $inventorySummary = [
             'total' => $walkies->count(),
@@ -530,7 +542,16 @@
 
                     <div class="form-group shared-with-group hidden">
                         <label class="form-label">Shared With <span class="required">*</span></label>
-                        <input type="text" name="shared_with" id="add_shared_with" value="{{ strtoupper(old('shared_with', '')) }}" class="form-input shared-with-input" placeholder="E.G. USER / TEAM / DEPARTMENT">
+                        @php($currentAddSharedWith = strtoupper((string) old('shared_with', '')))
+                        <select name="shared_with" id="add_shared_with" class="form-input modal-tag-select shared-with-input" data-placeholder="Type or select user / team / department">
+                            <option value=""></option>
+                            @foreach($sharedWithOptions as $sharedWithOption)
+                            <option value="{{ $sharedWithOption }}" @selected($currentAddSharedWith === $sharedWithOption)>{{ $sharedWithOption }}</option>
+                            @endforeach
+                            @if($currentAddSharedWith !== '' && !$sharedWithOptions->contains($currentAddSharedWith))
+                            <option value="{{ $currentAddSharedWith }}" selected>{{ $currentAddSharedWith }}</option>
+                            @endif
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -760,7 +781,12 @@
                     </div>
                     <div class="form-group shared-with-group hidden">
                         <label class="form-label">Shared With <span class="required">*</span></label>
-                        <input type="text" name="shared_with" id="edit_shared_with" class="form-input shared-with-input" placeholder="E.G. USER / TEAM / DEPARTMENT">
+                        <select name="shared_with" id="edit_shared_with" class="form-input modal-tag-select shared-with-input" data-placeholder="Type or select user / team / department">
+                            <option value=""></option>
+                            @foreach($sharedWithOptions as $sharedWithOption)
+                            <option value="{{ $sharedWithOption }}">{{ $sharedWithOption }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Ownership</label>
@@ -890,6 +916,7 @@
 
     @include('wt.admin.partials.inventory-management-ui')
 
+    @push('scripts')
     <script>
         const walkieTimelineData = @json($walkieTimelines ?? []);
         const inventoryActionData = @json($walkieActions ?? []);
@@ -1680,7 +1707,7 @@
             ensureSelectOption('edit_model', model || 'R7');
             ensureSelectOption('edit_status', status || 'UNUSED');
             ensureSelectOption('edit_ownership_type', ownershipType || 'UNALLOCATED');
-            document.getElementById('edit_shared_with').value = sharedWith || '';
+            ensureSelectOption('edit_shared_with', sharedWith || '');
             ensureSelectOption('edit_ownership', ownership || '');
             ensureSelectOption('edit_position', position || '');
             ensureSelectOption('edit_department', department || '');
@@ -1821,5 +1848,6 @@
             window.paintInventoryTableTheme = paintInventoryTableTheme;
         })();
     </script>
+    @endpush
 
     @endsection

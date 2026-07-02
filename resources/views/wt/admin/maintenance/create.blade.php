@@ -61,17 +61,19 @@
                 </div>
                 @endif
 
-                <div class="repair-form-group">
+                <div class="repair-form-section repair-form-group-full">Repair Timeline</div>
+
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Received Date <span class="required">*</span></label>
                     <input type="date" name="received_date" class="repair-form-input" required value="{{ old('received_date', $editRecord->received_date ?? date('Y-m-d')) }}">
                 </div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Repair Date</label>
                     <input type="date" name="repair_date" class="repair-form-input" value="{{ old('repair_date', $editRecord->repair_date ?? '') }}">
                 </div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Status <span class="required">*</span></label>
                     <select name="status" class="repair-form-input repair-smart-select" required>
                         @foreach(['UNDER REPAIR', 'FAULTY', 'B.E.R', 'READY TO COLLECT', 'ALREADY FIXED', 'DONE'] as $status)
@@ -82,7 +84,7 @@
                     </select>
                 </div>
 
-                <div class="repair-form-group">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Done?</label>
                     <select name="done" class="repair-form-input repair-smart-select">
                         <option value="0" {{ (string) old('done', isset($editRecord) ? ((int) $editRecord->done) : '0') === '0' ? 'selected' : '' }}>NO (Pending)</option>
@@ -91,18 +93,20 @@
                 </div>
 
                 @if(isset($editRecord))
-                <div class="repair-form-group repair-form-group-full">
+                <div class="repair-form-group repair-timeline-field">
                     <label class="repair-form-label">Finish Date</label>
                     <input type="date" name="finish_date" class="repair-form-input" value="{{ old('finish_date', $editRecord->finish_date ?? '') }}">
                 </div>
                 @endif
 
-                <div class="repair-form-group repair-form-group-full">
+                <div class="repair-form-section repair-form-group-full">Repair Notes</div>
+
+                <div class="repair-form-group repair-form-note-group">
                     <label class="repair-form-label">Issue Description <span class="required">*</span></label>
                     <textarea name="issue" class="repair-form-input repair-textarea" placeholder="e.g. Broken PTT" required>{{ old('issue', $editRecord->issue ?? $editRecord->issue_description ?? '') }}</textarea>
                 </div>
 
-                <div class="repair-form-group repair-form-group-full">
+                <div class="repair-form-group repair-form-note-group">
                     <label class="repair-form-label">Remarks</label>
                     <textarea name="remarks" class="repair-form-input repair-textarea" placeholder="Notes...">{{ old('remarks', $editRecord->remarks ?? '') }}</textarea>
                 </div>
@@ -126,7 +130,7 @@
     }
 
     .repair-form-header {
-        padding: 28px 36px 22px;
+        padding: 22px 30px 18px;
         border-bottom: 1px solid #243041;
         background: linear-gradient(180deg, #172033 0%, #111827 100%);
     }
@@ -150,29 +154,48 @@
     }
 
     .repair-form-body {
-        padding: 28px 36px;
+        padding: 22px 30px;
         background: #111827;
     }
 
     .repair-form-grid {
-        display: flex;
-        flex-wrap: nowrap;
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
         align-items: flex-start;
-        justify-content: flex-start;
-        gap: 22px;
+        gap: 12px 8px;
     }
 
     .repair-form-group {
-        flex: 1 1 0;
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
 
     .repair-form-group-full {
-        flex: 1 1 0;
-        min-width: 0;
+        grid-column: 1 / -1;
+    }
+
+    .repair-timeline-field {
+        grid-column: span 2;
+    }
+
+    .repair-form-section {
+        margin-top: 0;
+        padding: 7px 10px;
+        border-left: 4px solid #38bdf8;
+        border-radius: 11px;
+        background: rgba(14, 165, 233, 0.12);
+        color: #bae6fd;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .repair-form-note-group {
+        grid-column: span 3;
+        align-self: stretch;
     }
 
     .repair-form-label {
@@ -190,7 +213,7 @@
 
     .repair-form-input {
         width: 100%;
-        min-height: 46px;
+        height: 46px;
         border-radius: 16px;
         border: 1px solid #334155;
         background: #0f172a;
@@ -209,16 +232,18 @@
     }
 
     .repair-textarea {
-        min-height: 120px;
+        height: 96px;
+        min-height: 96px;
         resize: vertical;
+        line-height: 1.45;
     }
 
     .repair-form-footer {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 12px;
-        padding: 20px 36px 28px;
+        gap: 10px;
+        padding: 16px 30px 22px;
         border-top: 1px solid #243041;
         background: #0f172a;
     }
@@ -294,6 +319,11 @@
         color: #334155 !important;
     }
 
+    html:not(.dark) body .content-surface .repair-form-section {
+        background: #eaf6fc !important;
+        color: #0369a1 !important;
+    }
+
     html:not(.dark) body .content-surface .repair-form-input {
         background: #ffffff !important;
         border-color: #cbd5e1 !important;
@@ -330,6 +360,15 @@
     }
 
     @media (max-width: 768px) {
+        .repair-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .repair-timeline-field,
+        .repair-form-note-group {
+            grid-column: 1 / -1;
+        }
+
         .repair-form-header,
         .repair-form-body,
         .repair-form-footer {
@@ -348,4 +387,3 @@
     }
 </style>
 @endsection
-

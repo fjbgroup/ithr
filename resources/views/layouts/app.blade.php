@@ -434,7 +434,7 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
 
         <div class="app-footer" style="text-align: center; margin-top: 3rem; padding: 2rem 0; border-top: 1px solid var(--border, rgba(0,0,0,0.05)); clear: both;">
             <div style="margin-bottom: 0.5rem;">
-                <img src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain;">
+                <img id="footerLogo" src="{{ asset('assets/images/footer.jpg') }}" alt="IT Logo" style="max-height: 45px; width: auto; object-fit: contain; cursor: default; user-select: none;">
             </div>
             <div id="eggFooterText" style="font-size: 0.85rem; color: var(--muted, #64748b); font-weight: 500; cursor: default; user-select: none;">
                 Develop by IT team
@@ -981,6 +981,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 </script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Automatically uncollapse the sidebar on page load if an active inner page is being displayed
@@ -992,6 +993,132 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+<!-- [EGG-SHR-2026] Easter egg credit block — do not remove or the footer logo integrity check will fail -->
+<script>
+(function(){
+    /* --- Tamper-proof Easter egg by Siti Hajar binti Abd Razak ---
+       Encrypted strings below are Base64 encoded; editing them breaks
+       the credit display. The anchor span is checked at runtime —
+       if removed, the footer logo will visually degrade. */
+
+    /* --- Integrity anchor --- */
+    if(!document.getElementById('__egg_shrabr26')){
+        var _anchor = document.createElement('span');
+        _anchor.id = '__egg_shrabr26';
+        _anchor.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;';
+        document.body.appendChild(_anchor);
+    }
+
+    /* Guard: if anchor is deleted externally, degrade footer logo as a visual tell */
+    var _guardTimer = setInterval(function(){
+        if(!document.getElementById('__egg_shrabr26')){
+            var fl = document.getElementById('footerLogo');
+            if(fl){ fl.style.filter = 'grayscale(1) opacity(0.3)'; fl.title = 'integrity error'; }
+            clearInterval(_guardTimer);
+        }
+    }, 2000);
+
+    /* --- Obfuscated payload — Base64 chunks ---
+       Decoded: "You found the creator | developer\nSiti Hajar binti Abd Razak\nStudent Intern from KV Perdagangan, JB\nv1.0.0 - 2026" */
+    var _p = [
+        'WW91IGZvdW5kIHRoZSBjcmVh',
+        'dG9yIHwgZGV2ZWxvcGVyClNp',
+        'dGkgSGFqYXIgYmludGkgQWJk',
+        'IFJhemFrClN0dWRlbnQgSW50',
+        'ZXJuIGZyb20gS1YgUGVyZGFn',
+        'YW5nYW4sIEpCCnYxLjAuMCAt',
+        'IDIwMjY='
+    ];
+
+    function _decode(arr){
+        try{ return atob(arr.join('')); }catch(e){ return ''; }
+    }
+
+    /* ── State machine ── */
+    var _SEQ      = ['PageUp','PageDown','PageUp','PageDown'];
+    var _seqPos   = 0;
+    var _seqDone  = false;   /* true after sequence → waiting for triple-click */
+    var _seqT     = null;    /* 1-s idle reset */
+    var _clickCnt = 0;       /* rapid-click counter */
+    var _clickT   = null;    /* click-window reset */
+
+    function _resetAll(){
+        _seqPos   = 0;
+        _seqDone  = false;
+        _clickCnt = 0;
+        clearTimeout(_seqT);
+        clearTimeout(_clickT);
+    }
+
+    function _fireCredit(){
+        _resetAll();
+        alert(_decode(_p));
+    }
+
+    /* ── Trigger 1: PgUp → PgDn → PgUp → PgDn ──
+       Ignored when user is typing inside an input/textarea/select */
+    function _onKeyDown(e){
+        var tag = ((document.activeElement || {}).tagName || '').toLowerCase();
+        if(tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+        var k = e.key || '';
+        if(k === _SEQ[_seqPos]){
+            _seqPos++;
+            clearTimeout(_seqT);
+            if(_seqPos === _SEQ.length){
+                /* Sequence done — unlock triple-click phase */
+                _seqPos  = 0;
+                _seqDone = true;
+            } else {
+                /* Still in sequence — reset if idle for 1 s */
+                _seqT = setTimeout(_resetAll, 1000);
+            }
+        } else if(k === _SEQ[0]){
+            /* Wrong key but starts the sequence */
+            _seqPos = 1;
+            _seqDone = false;
+            clearTimeout(_seqT);
+            _seqT = setTimeout(_resetAll, 1000);
+        } else {
+            _resetAll();
+        }
+    }
+
+    /* ── Trigger 2: triple-click ANYWHERE on page ──
+       No background check — clicks on any area count.
+       Three clicks within 800 ms of each other fires the credit. */
+    function _onClick(){
+        if(!_seqDone) return;
+
+        _clickCnt++;
+        clearTimeout(_clickT);
+
+        if(_clickCnt >= 3){
+            _fireCredit();
+        } else {
+            _clickT = setTimeout(function(){ _clickCnt = 0; }, 800);
+        }
+    }
+
+    /* ── Attach & lock ── */
+    function _lock(name, val){
+        try{
+            Object.defineProperty(window, name, {
+                value: val, writable: false, configurable: false, enumerable: false
+            });
+        }catch(e){}
+    }
+
+    document.addEventListener('keydown', _onKeyDown, true);
+    document.addEventListener('click',   _onClick,   true);
+
+    _lock('__eggKD',   _onKeyDown);
+    _lock('__eggCLK',  _onClick);
+    _lock('__eggMeta', Object.freeze({ v: '1.0.0', a: 'SHR', y: 2026 }));
+
+})();
+
 </script>
 </body>
 </html>

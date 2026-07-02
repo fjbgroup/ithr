@@ -53,7 +53,6 @@ class InteractionController extends Controller
 
             $user->last_ownership_type = strtoupper((string) ($latestRecord->ownership_type ?? ''));
             $user->last_shared_with = strtoupper((string) ($latestRecord->shared_with ?? ''));
-            $user->last_sector = strtoupper((string) ($latestRecord->sector ?? ''));
             $user->last_location = strtoupper((string) ($latestRecord->location ?? ''));
 
             return $user;
@@ -352,7 +351,6 @@ class InteractionController extends Controller
             'ownership_type' => 'required|in:unallocated,shared,individual,spare',
             'shared_with' => 'nullable|string|max:255|required_if:ownership_type,shared',
             'bay_from' => 'nullable|string|max:255',
-            'sector' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'event_name' => 'required|string|max:255',
             'justification' => 'required|string|max:2000',
@@ -377,7 +375,6 @@ class InteractionController extends Controller
             'ownership_type' => $validated['ownership_type'],
             'shared_with' => $validated['ownership_type'] === 'shared' ? ($validated['shared_with'] ?? null) : null,
             'bay_from' => $validated['ownership_type'] === 'shared' ? ($validated['bay_from'] ?? null) : null,
-            'sector' => $validated['sector'],
             'location' => $validated['location'],
             'event_name' => $validated['event_name'],
             'justifications' => $validated['justification'],
@@ -895,7 +892,6 @@ class InteractionController extends Controller
                         'department' => mb_strtoupper(trim((string) ($matchedRequest?->department ?: $walkie->department))),
                         'ownership_type' => mb_strtoupper(trim((string) ($matchedRequest?->ownership_type ?: $walkie->ownership_type))),
                         'shared_with' => mb_strtoupper(trim((string) ($matchedRequest?->shared_with ?: $walkie->shared_with))),
-                        'sector' => mb_strtoupper(trim((string) ($matchedRequest?->sector ?: ''))),
                         'bay_from' => preg_replace('/^BAY\s+/i', '', mb_strtoupper(trim((string) ($matchedRequest?->bay_from ?: '')))) ?: '',
                         'location' => mb_strtoupper(trim((string) ($matchedRequest?->location ?: ''))),
                     ],
@@ -935,7 +931,6 @@ class InteractionController extends Controller
                     'department' => mb_strtoupper(trim((string) ($request->query('department') ?: $prefillWalkie->department ?: $prefillRequest?->department))),
                     'ownership_type' => mb_strtoupper(trim((string) ($request->query('ownership_type') ?: $prefillWalkie->ownership_type ?: $prefillRequest?->ownership_type))),
                     'shared_with' => mb_strtoupper(trim((string) ($request->query('shared_with') ?: $prefillWalkie->shared_with ?: $prefillRequest?->shared_with))),
-                    'sector' => mb_strtoupper(trim((string) ($request->query('sector') ?: $prefillRequest?->sector))),
                     'bay_from' => preg_replace('/^BAY\s+/i', '', mb_strtoupper(trim((string) ($request->query('bay_from') ?: $prefillRequest?->bay_from)))) ?: '',
                     'location' => mb_strtoupper(trim((string) ($request->query('location') ?: $prefillRequest?->location))),
                     'model' => mb_strtoupper(trim((string) $prefillWalkie->model)),
@@ -1082,7 +1077,6 @@ class InteractionController extends Controller
             'serial_number' => 'nullable|string|max:100',
             'ownership_type' => 'nullable|string|in:SHARED,INDIVIDUAL',
             'shared_with' => 'nullable|string|max:255|required_if:ownership_type,SHARED',
-            'sector' => 'nullable|string|max:255',
             'bay_from' => 'nullable|string|max:255',
             'location' => 'nullable|string|max:255',
             'problem_possible' => $isDraft ? 'nullable|array' : 'required|array|min:1',
@@ -1120,7 +1114,6 @@ class InteractionController extends Controller
                 $rules['recipient_details.*.department'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['recipient_details.*.ownership_type'] = ($isDraft ? 'nullable' : 'required') . '|string|in:SHARED,INDIVIDUAL';
                 $rules['recipient_details.*.shared_with'] = 'nullable|string|max:255';
-                $rules['recipient_details.*.sector'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['recipient_details.*.bay_from'] = 'nullable|string|max:255';
                 $rules['recipient_details.*.location'] = ($isDraft ? 'nullable' : 'required') . '|string|max:255';
                 $rules['device_details'] = 'nullable|array';
@@ -1221,7 +1214,6 @@ class InteractionController extends Controller
                             'department' => $recipient['department'] ?? '',
                             'ownership_type' => $recipient['ownership_type'] ?? '',
                             'shared_with' => $recipient['shared_with'] ?? null,
-                            'sector' => $recipient['sector'] ?? '',
                             'bay_from' => $recipient['bay_from'] ?? '',
                             'location' => $recipient['location'] ?? '',
                         ]);
@@ -1321,7 +1313,6 @@ class InteractionController extends Controller
             'pickup_at' => ! empty($validated['pickup_at']) ? \Carbon\Carbon::parse($validated['pickup_at'])->toDateTimeString() : null,
             'ownership_type' => $validated['ownership_type'] ?? null,
             'shared_with' => $validated['shared_with'] ?? null,
-            'sector' => $validated['sector'] ?? null,
             'location' => $validated['location'] ?? null,
             'problem_possible' => ! empty($problemList) ? implode(', ', $problemList) : null,
             'evidence_paths' => $evidencePaths ?: ($draftRecord->evidence_paths ?? null),
@@ -1348,7 +1339,6 @@ class InteractionController extends Controller
                     $payload['department_name'] = $recipientValidated['department'] ?? ($recipientUser->department ?: 'GENERAL');
                     $payload['ownership_type'] = $recipientValidated['ownership_type'] ?? null;
                     $payload['shared_with'] = $recipientValidated['shared_with'] ?? null;
-                    $payload['sector'] = $recipientValidated['sector'] ?? null;
                     $payload['location'] = $recipientValidated['location'] ?? null;
                 }
 

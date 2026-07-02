@@ -20,12 +20,6 @@
     @endforeach
 </datalist>
 
-<datalist id="sector-options">
-    @foreach(($formOptionLists['sectors'] ?? []) as $option)
-        <option value="{{ $option }}"></option>
-    @endforeach
-</datalist>
-
 <datalist id="location-options">
     @foreach(($formOptionLists['locations'] ?? []) as $option)
         <option value="{{ $option }}"></option>
@@ -37,4 +31,3 @@
         <option value="{{ $option }}"></option>
     @endforeach
 </datalist>
-

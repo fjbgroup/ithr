@@ -15,6 +15,15 @@
 @php
     $inventoryOnly = (bool) ($inventoryOnly ?? false);
     $hasTemporaryRadio = old('has_temporary_radio', filled(old('temporary_radio_id', $defaults['temporary_radio_id'] ?? null)) ? '1' : '0');
+    $sharedWithOptions = collect($staffOwnerships ?? [])
+        ->merge($walkieOwnerships ?? [])
+        ->merge($walkieDepartments ?? [])
+        ->merge($walkieLocations ?? [])
+        ->merge($executiveOptions ?? [])
+        ->filter()
+        ->unique()
+        ->sort()
+        ->values();
 @endphp
 <div class="page-header-block flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
     <div>
@@ -128,7 +137,16 @@
 
                 <div class="form-group shared-with-group hidden">
                     <label class="form-label">Shared With <span class="required">*</span></label>
-                    <input type="text" name="shared_with" value="{{ strtoupper(old('shared_with', $defaults['shared_with'] ?? '')) }}" class="form-input shared-with-input" placeholder="E.G. USER / TEAM / DEPARTMENT">
+                    @php($currentSharedWith = strtoupper((string) old('shared_with', $defaults['shared_with'] ?? '')))
+                    <select name="shared_with" class="form-input page-combo-select shared-with-input" data-placeholder="Type or select user / team / department">
+                        <option value=""></option>
+                        @foreach($sharedWithOptions as $sharedWithOption)
+                        <option value="{{ $sharedWithOption }}" @selected($currentSharedWith === $sharedWithOption)>{{ $sharedWithOption }}</option>
+                        @endforeach
+                        @if($currentSharedWith !== '' && !$sharedWithOptions->contains($currentSharedWith))
+                        <option value="{{ $currentSharedWith }}" selected>{{ $currentSharedWith }}</option>
+                        @endif
+                    </select>
                 </div>
                 @endunless
 
@@ -761,6 +779,7 @@
     }
 </style>
 
+@push('scripts')
 <script>
     $(document).ready(function() {
         function focusOpenSelect2Search() {
@@ -893,4 +912,5 @@
         syncTemporaryRadioField();
     });
 </script>
+@endpush
 @endsection

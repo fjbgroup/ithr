@@ -48,7 +48,6 @@ class MaintenanceRecord extends Model
         'pickup_at',
         'ownership_type',
         'shared_with',
-        'sector',
         'location',
         'problem_possible',
         'evidence_paths',
@@ -81,4 +80,3 @@ class MaintenanceRecord extends Model
         return $this->belongsTo(User::class, 'submit_to_admin_id', 'id');
     }
 }
-

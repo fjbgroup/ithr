@@ -3,6 +3,7 @@
 @section('title', 'ICT')
 
 @push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .ict-users-control .bg-white {
         background: var(--surface) !important;
@@ -65,28 +66,36 @@
     .adminit-staff-table .dataTables_wrapper {
         width: 100% !important;
     }
+    .adminit-reset-table,
     .adminit-staff-table {
         width: min(100%, 1380px);
         margin-left: auto;
         margin-right: auto;
     }
+    body .content-surface .ict-users-control .adminit-reset-table > .adminit-section-header,
     body .content-surface .ict-users-control .adminit-staff-table > .adminit-section-header {
         padding: 22px 34px !important;
         border-bottom: 1px solid var(--border) !important;
     }
+    .adminit-reset-table .overflow-x-auto,
     .adminit-staff-table .overflow-x-auto {
         padding: 22px 34px 28px;
+        background: var(--surface) !important;
     }
+    .adminit-reset-table .dataTables_wrapper,
     .adminit-staff-table .dataTables_wrapper {
         padding: 0;
     }
     @media (max-width: 768px) {
+        .adminit-reset-table,
         .adminit-staff-table {
             width: 100%;
         }
+        .adminit-reset-table .overflow-x-auto,
         .adminit-staff-table .overflow-x-auto {
             padding: 16px 18px 22px;
         }
+        body .content-surface .ict-users-control .adminit-reset-table > .adminit-section-header,
         body .content-surface .ict-users-control .adminit-staff-table > .adminit-section-header {
             padding: 18px 20px !important;
         }
@@ -323,6 +332,8 @@
         transform: translateY(-1px);
     }
     .account-modal-card {
+        display: flex;
+        flex-direction: column;
         width: min(560px, calc(100vw - 32px));
         max-height: calc(100vh - 112px);
         overflow: hidden;
@@ -330,6 +341,12 @@
         border: 1px solid var(--border);
         background: var(--surface);
         box-shadow: var(--shadow-lg);
+    }
+    .account-modal-card > form {
+        display: flex;
+        min-height: 0;
+        flex: 1;
+        flex-direction: column;
     }
     #createExecutiveModal {
         top: 56px;
@@ -400,8 +417,11 @@
         color: #ffffff;
     }
     .account-modal-body {
-        max-height: calc(100vh - 178px);
+        flex: 1;
+        min-height: 0;
+        max-height: none;
         overflow-y: auto;
+        overscroll-behavior: contain;
         padding: 16px;
     }
     .account-field label {
@@ -414,7 +434,8 @@
         text-transform: uppercase;
     }
     .account-field input,
-    .account-field select {
+    .account-field select,
+    .account-field .select2-container--default .select2-selection--single {
         width: 100%;
         min-height: 34px;
         border-radius: 9px;
@@ -426,6 +447,90 @@
         font-weight: 700;
         transition: all 0.18s ease;
     }
+    .account-field .select2-container {
+        width: 100% !important;
+    }
+    .account-tag-select + .select2-container {
+        width: 100% !important;
+    }
+    .account-tag-select + .select2-container .select2-selection--single {
+        min-height: 46px;
+        border-radius: 12px;
+        border: 1px solid #dbe5f2;
+        background: #ffffff;
+        padding: 8px 36px 8px 14px;
+        display: flex;
+        align-items: center;
+    }
+    .account-tag-select + .select2-container .select2-selection__rendered {
+        color: #1e293b !important;
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1.2 !important;
+        padding: 0 !important;
+        text-transform: uppercase;
+    }
+    .account-tag-select + .select2-container .select2-selection__placeholder {
+        color: #94a3b8 !important;
+    }
+    .account-tag-select + .select2-container .select2-selection__arrow {
+        height: 100% !important;
+        right: 12px !important;
+    }
+    html.dark .account-tag-select + .select2-container .select2-selection--single {
+        border-color: #334155;
+        background: #0f172a;
+    }
+    html.dark .account-tag-select + .select2-container .select2-selection__rendered {
+        color: #f8fafc !important;
+    }
+    .account-field .select2-container--default .select2-selection--single {
+        display: flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 30px 0 11px;
+    }
+    .account-field .select2-container--default .select2-selection__rendered {
+        width: 100%;
+        color: var(--form-input-color);
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1.2 !important;
+        padding: 0 !important;
+        text-transform: uppercase;
+    }
+    .account-field .select2-container--default .select2-selection__placeholder {
+        color: var(--muted);
+    }
+    .account-field .select2-container--default .select2-selection__arrow {
+        height: 100%;
+        right: 9px;
+    }
+    .account-select-dropdown {
+        z-index: 10000 !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 12px !important;
+        overflow: hidden;
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+    }
+    .account-select-dropdown .select2-search--dropdown {
+        padding: 10px;
+    }
+    .account-select-dropdown .select2-search__field {
+        border: 1px solid var(--form-input-border) !important;
+        border-radius: 9px !important;
+        padding: 8px 10px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        text-transform: uppercase;
+        outline: none;
+    }
+    .account-select-dropdown .select2-results__option {
+        padding: 10px 12px;
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
     .account-field input:focus,
     .account-field select:focus {
         outline: none;
@@ -434,6 +539,7 @@
     }
     .account-modal-footer {
         display: flex;
+        flex-shrink: 0;
         justify-content: flex-end;
         gap: 8px;
         padding: 12px 16px;
@@ -459,6 +565,102 @@
     html.dark .account-modal-footer {
         border-top-color: rgba(96, 165, 250, 0.18);
         background: #121c2e;
+    }
+    #viewUserModal {
+        top: 56px;
+        right: 0;
+        bottom: 0;
+        left: var(--sidebar-w);
+        width: auto;
+        height: auto;
+        z-index: 90;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+    }
+    .view-account-card {
+        display: flex;
+        width: min(760px, 100%);
+        max-height: calc(100vh - 112px);
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: var(--shadow-lg);
+    }
+    .view-account-header {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        background: var(--soft-surface);
+    }
+    .view-account-body {
+        min-height: 0;
+        overflow-y: auto;
+        padding: 18px 20px;
+    }
+    .view-account-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .view-account-field {
+        min-height: 78px;
+        border-radius: 12px;
+        border: 1px solid var(--form-input-border);
+        background: var(--form-input-bg);
+        padding: 14px 16px;
+    }
+    .view-account-field span:first-child {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+    .view-account-field span:last-child {
+        display: block;
+        overflow-wrap: anywhere;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1.35;
+    }
+    .view-account-footer {
+        display: flex;
+        flex-shrink: 0;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 14px 20px;
+        border-top: 1px solid var(--border);
+        background: var(--soft-surface);
+    }
+    html.dark .view-account-card {
+        border-color: rgba(96, 165, 250, 0.28);
+        background: #182338;
+        box-shadow: 0 28px 70px rgba(2, 6, 23, 0.58);
+    }
+    html.dark .view-account-header,
+    html.dark .view-account-footer {
+        border-color: rgba(96, 165, 250, 0.18);
+        background: #121c2e;
+    }
+    @media (max-width: 900px) {
+        #viewUserModal {
+            top: 56px;
+            left: 0;
+            padding: 16px;
+        }
+        .view-account-grid {
+            grid-template-columns: 1fr;
+        }
     }
     html:not(.dark) #wtStaffSearchInput,
     html[data-theme="light"] #wtStaffSearchInput {
@@ -625,7 +827,7 @@
                             <th class="px-3 py-3">ID No.</th>
                             <th class="px-3 py-3">Name</th>
                             <th class="px-3 py-3">Role</th>
-                            <th class="px-3 py-3">Password</th>
+                            <th class="px-3 py-3">Secret Key</th>
                             <th class="px-3 py-3">Requests</th>
                             <th class="px-3 py-3">Handovers</th>
                             <th class="px-3 py-3">Created</th>
@@ -658,16 +860,7 @@
                                 </span>
                             </td>
                             <td class="px-3 py-2.5">
-                                <div class="flex items-center gap-2">
-                                    <code class="password-value text-[9px] font-bold text-stone-400">********</code>
-                                    <button
-                                        type="button"
-                                        class="password-eye-btn"
-                                        onclick="togglePasswordVisibility(this)"
-                                        title="Show password">
-                                        <i class="fas fa-eye text-[10px]"></i>
-                                    </button>
-                                </div>
+                                <code class="password-value text-[9px] font-bold text-stone-400">Stored securely</code>
                             </td>
                             <td class="px-3 py-2.5 font-bold text-slate-600">{{ $account->request_count ?? 0 }}</td>
                             <td class="px-3 py-2.5 font-bold text-slate-600">{{ $account->handover_count ?? 0 }}</td>
@@ -681,8 +874,11 @@
                                 <div class="relative flex justify-center">
                                     <button
                                         type="button"
-                                        class="navy-icon-btn w-8 h-8 rounded-full transition text-xs"
+                                        class="navy-icon-btn min-w-[74px] h-8 px-3 rounded-full transition text-xs inline-flex items-center justify-center gap-2"
+                                        title="More actions"
+                                        aria-label="More actions for {{ $account->full_name ?: $account->username }}"
                                         onclick="toggleActionMenu(event, 'action-menu-{{ $account->user_id }}')">
+                                        <span class="font-black text-[10px] uppercase tracking-[0.08em]">More</span>
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
 
@@ -690,14 +886,31 @@
                                         <button
                                             type="button"
                                             class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
-                                            onclick="openEditUserModal('{{ $account->user_id }}', '{{ addslashes($account->staff_id ?? '') }}', '{{ addslashes($account->username ?? '') }}', '{{ addslashes($account->full_name ?? '') }}', '{{ addslashes($account->department ?? '') }}', '{{ addslashes($account->position ?? '') }}', '{{ $account->wt_role }}'); closeAllActionMenus();">
+                                            data-staff-id="{{ $account->staff_id ?: '-' }}"
+                                            data-username="{{ $account->username ?: '-' }}"
+                                            data-full-name="{{ $account->full_name ?: $account->username }}"
+                                            data-department="{{ $account->department ?: '-' }}"
+                                            data-position="{{ $account->position ?: '-' }}"
+                                            data-role="{{ $roleLabel }}"
+                                            data-requests="{{ $account->request_count ?? 0 }}"
+                                            data-handovers="{{ $account->handover_count ?? 0 }}"
+                                            data-created="{{ $account->created_at ? \Carbon\Carbon::parse($account->created_at)->format('d M Y H:i') : '-' }}"
+                                            data-last-activity="{{ $account->last_activity_at ? \Carbon\Carbon::parse($account->last_activity_at)->format('d M Y H:i') : 'No activity' }}"
+                                            onclick="openViewUserModalFromButton(this); closeAllActionMenus();">
+                                            <i class="fas fa-eye w-4"></i>
+                                            <span>View</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
+                                            onclick="openEditUserModal(@js($account->user_id), @js($account->staff_id ?? ''), @js($account->username ?? ''), @js($account->full_name ?? ''), @js($account->department ?? ''), @js($account->position ?? ''), @js($account->wt_role)); closeAllActionMenus();">
                                             <i class="fas fa-pen w-4"></i>
                                             <span>Edit</span>
                                         </button>
                                         <button
                                             type="button"
                                             class="adminit-action-item w-full px-4 py-3 text-left text-sm font-bold flex items-center gap-3"
-                                            onclick="openResetPasswordModal('{{ $account->user_id }}', '{{ addslashes($account->username ?? '') }}'); closeAllActionMenus();">
+                                            onclick="openResetPasswordModal(@js($account->user_id), @js($account->username ?? '')); closeAllActionMenus();">
                                             <i class="fas fa-key w-4"></i>
                                             <span>Reset Password</span>
                                         </button>
@@ -719,7 +932,7 @@
             </div>
         </div>
 
-    <div class="adminit-reset-table bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+    <div class="adminit-reset-table bg-white rounded-3xl border border-stone-200 shadow-sm overflow-hidden">
         <div class="adminit-section-header flex flex-col md:flex-row md:items-center md:justify-between gap-2 p-5 border-b border-stone-200 bg-stone-50/70">
             <div>
                 <h3 class="adminit-section-heading">Pending Forgot Password Requests</h3>
@@ -779,6 +992,24 @@
 
 </div>
 
+@php
+    $accountDepartmentOptions = collect($formOptionLists['departments'] ?? [])
+        ->merge($accounts->pluck('department'))
+        ->merge($accounts->pluck('dept_name'))
+        ->filter()
+        ->map(fn ($value) => strtoupper(trim((string) $value)))
+        ->unique()
+        ->sort()
+        ->values();
+    $accountPositionOptions = collect($formOptionLists['positions'] ?? [])
+        ->merge($accounts->pluck('position'))
+        ->filter()
+        ->map(fn ($value) => strtoupper(trim((string) $value)))
+        ->unique()
+        ->sort()
+        ->values();
+@endphp
+
 <datalist id="executive-name-options">
     @foreach($accounts as $account)
         @php
@@ -825,7 +1056,7 @@
                 {{-- Staff search --}}
                 <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(96,165,250,0.18)">
                     <label style="display:block;margin-bottom:6px;color:#9fb0c8;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase">
-                        Search HR Staff to Auto-fill
+                        Search Staff to Auto-fill
                     </label>
                     <div style="position:relative">
                         <input type="text" id="wtStaffSearchInput" autocomplete="off"
@@ -856,11 +1087,29 @@
                     </div>
                     <div class="account-field">
                         <label>Department</label>
-                        <input type="text" id="wt_field_department" name="department" list="department-options" value="{{ old('department') }}" required>
+                        @php($currentCreateDepartment = strtoupper((string) old('department', '')))
+                        <select id="wt_field_department" name="department" class="account-tag-select" data-placeholder="Type or select department" required>
+                            <option value=""></option>
+                            @foreach($accountDepartmentOptions as $departmentOption)
+                            <option value="{{ $departmentOption }}" @selected($currentCreateDepartment === $departmentOption)>{{ $departmentOption }}</option>
+                            @endforeach
+                            @if($currentCreateDepartment !== '' && !$accountDepartmentOptions->contains($currentCreateDepartment))
+                            <option value="{{ $currentCreateDepartment }}" selected>{{ $currentCreateDepartment }}</option>
+                            @endif
+                        </select>
                     </div>
                     <div class="account-field">
                         <label>Position</label>
-                        <input type="text" id="wt_field_position" name="position" value="{{ old('position') }}" placeholder="E.G. OPERATOR" required>
+                        @php($currentCreatePosition = strtoupper((string) old('position', '')))
+                        <select id="wt_field_position" name="position" class="account-tag-select" data-placeholder="Type or select position" required>
+                            <option value=""></option>
+                            @foreach($accountPositionOptions as $positionOption)
+                            <option value="{{ $positionOption }}" @selected($currentCreatePosition === $positionOption)>{{ $positionOption }}</option>
+                            @endforeach
+                            @if($currentCreatePosition !== '' && !$accountPositionOptions->contains($currentCreatePosition))
+                            <option value="{{ $currentCreatePosition }}" selected>{{ $currentCreatePosition }}</option>
+                            @endif
+                        </select>
                     </div>
                     <div class="account-field">
                         <label>Password <span style="color:#94a3b8;font-weight:400;text-transform:none;letter-spacing:0">(optional if staff exists)</span></label>
@@ -880,6 +1129,64 @@
     </div>
 </div>
 
+
+<div id="viewUserModal" class="fixed bg-stone-900/60 backdrop-blur-sm hidden flex">
+    <div class="view-account-card">
+        <div class="view-account-header">
+            <div>
+                <h3 class="text-lg font-black text-[#142b47]">View Account</h3>
+                <p class="text-xs text-stone-400 mt-1">Account details for <span id="view_full_name_heading" class="font-bold text-[#0284c7]"></span>.</p>
+            </div>
+            <button type="button" onclick="closeViewUserModal()" class="text-stone-400 hover:text-slate-700">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <div class="view-account-body">
+            <div class="view-account-grid">
+                <div class="view-account-field">
+                    <span>ID No.</span>
+                    <span id="view_staff_id"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Username</span>
+                    <span id="view_username"></span>
+                </div>
+                <div class="view-account-field md:col-span-2">
+                    <span>Name</span>
+                    <span id="view_full_name"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Department</span>
+                    <span id="view_department"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Position</span>
+                    <span id="view_position"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Role</span>
+                    <span id="view_role"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Requests / Handovers</span>
+                    <span id="view_usage"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Created</span>
+                    <span id="view_created"></span>
+                </div>
+                <div class="view-account-field">
+                    <span>Last Activity</span>
+                    <span id="view_last_activity"></span>
+                </div>
+            </div>
+        </div>
+        <div class="view-account-footer">
+            <button type="button" onclick="closeViewUserModal()" class="navy-btn navy-btn-soft">Close</button>
+        </div>
+    </div>
+</div>
 
 <div id="editUserModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="w-full max-w-xl bg-white rounded-[28px] border border-stone-200 shadow-2xl overflow-hidden">
@@ -910,11 +1217,21 @@
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Department</label>
-                    <input type="text" name="department" id="edit_department" list="department-options" class="navy-input w-full px-4 py-3 rounded-xl border">
+                    <select name="department" id="edit_department" class="navy-input account-tag-select w-full px-4 py-3 rounded-xl border" data-placeholder="Type or select department">
+                        <option value=""></option>
+                        @foreach($accountDepartmentOptions as $departmentOption)
+                        <option value="{{ $departmentOption }}">{{ $departmentOption }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Position</label>
-                    <input type="text" name="position" id="edit_position" list="position-options" class="navy-input w-full px-4 py-3 rounded-xl border" placeholder="Type or select position">
+                    <select name="position" id="edit_position" class="navy-input account-tag-select w-full px-4 py-3 rounded-xl border" data-placeholder="Type or select position">
+                        <option value=""></option>
+                        @foreach($accountPositionOptions as $positionOption)
+                        <option value="{{ $positionOption }}">{{ $positionOption }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-black uppercase tracking-widest text-stone-500 mb-2">Role</label>
@@ -965,6 +1282,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     function openCreateExecutiveModal() {
         document.getElementById('createExecutiveModal').classList.remove('hidden');
@@ -1027,13 +1345,37 @@
         }
     }
 
+    function setViewUserText(id, value) {
+        const target = document.getElementById(id);
+        if (target) target.textContent = value || '-';
+    }
+
+    function openViewUserModalFromButton(button) {
+        const data = button.dataset;
+        setViewUserText('view_full_name_heading', data.fullName);
+        setViewUserText('view_staff_id', data.staffId);
+        setViewUserText('view_username', data.username);
+        setViewUserText('view_full_name', data.fullName);
+        setViewUserText('view_department', data.department);
+        setViewUserText('view_position', data.position);
+        setViewUserText('view_role', data.role);
+        setViewUserText('view_usage', `${data.requests || 0} requests / ${data.handovers || 0} handovers`);
+        setViewUserText('view_created', data.created);
+        setViewUserText('view_last_activity', data.lastActivity);
+        document.getElementById('viewUserModal').classList.remove('hidden');
+    }
+
+    function closeViewUserModal() {
+        document.getElementById('viewUserModal').classList.add('hidden');
+    }
+
     function openEditUserModal(userId, staffId, username, fullName, department, position, role) {
         document.getElementById('editUserForm').action = "{{ url('/wt/admin/users') }}/" + userId + "/update";
         document.getElementById('edit_staff_id').value = staffId || '';
         document.getElementById('edit_username').value = username || '';
         document.getElementById('edit_full_name').value = fullName || '';
-        document.getElementById('edit_department').value = department || '';
-        document.getElementById('edit_position').value = position || '';
+        setAccountSelectValue('edit_department', department || '');
+        setAccountSelectValue('edit_position', position || '');
         document.getElementById('edit_role').value = role || 'admin';
         document.getElementById('editUserModal').classList.remove('hidden');
     }
@@ -1054,28 +1396,6 @@
         document.getElementById('resetPasswordModal').classList.add('hidden');
     }
 
-    function togglePasswordVisibility(button) {
-        const wrapper = button.closest('div');
-        const passwordValue = wrapper.querySelector('.password-value');
-        const icon = button.querySelector('i');
-        const isVisible = button.dataset.visible === 'true';
-
-        if (isVisible) {
-            passwordValue.textContent = '********';
-            button.dataset.visible = 'false';
-            button.title = 'Show password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-            return;
-        }
-
-        passwordValue.textContent = 'PROTECTED';
-        button.dataset.visible = 'true';
-        button.title = 'Hide password';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    }
-
     document.addEventListener('click', function () {
         closeAllActionMenus();
     });
@@ -1083,6 +1403,72 @@
     document.addEventListener('DOMContentLoaded', mountActionMenus);
     window.addEventListener('scroll', closeAllActionMenus, true);
     window.addEventListener('resize', closeAllActionMenus);
+
+    function normalizeAccountSelectValue(value) {
+        return String(value || '').trim().toUpperCase();
+    }
+
+    function setAccountSelectValue(id, value) {
+        const field = document.getElementById(id);
+        if (!field) return;
+
+        const normalizedValue = normalizeAccountSelectValue(value);
+        if (field.tagName === 'SELECT' && normalizedValue) {
+            const hasOption = Array.from(field.options).some(option => normalizeAccountSelectValue(option.value) === normalizedValue);
+            if (!hasOption) {
+                field.add(new Option(normalizedValue, normalizedValue, true, true));
+            }
+        }
+
+        field.value = normalizedValue;
+        if (window.jQuery && $(field).hasClass('select2-hidden-accessible')) {
+            $(field).trigger('change.select2');
+        }
+    }
+
+    function initAccountTagSelects() {
+        if (!window.jQuery || !$.fn.select2) return;
+
+        $('.account-tag-select').each(function () {
+            const $select = $(this);
+
+            if ($select.hasClass('select2-hidden-accessible')) {
+                $select.select2('destroy');
+            }
+
+            $select.select2({
+                width: '100%',
+                tags: true,
+                allowClear: !$select.prop('required'),
+                minimumResultsForSearch: 0,
+                placeholder: $select.data('placeholder') || 'Type or select option',
+                dropdownParent: $select.closest('#createExecutiveModal, #editUserModal'),
+                dropdownCssClass: 'account-select-dropdown',
+                createTag: function (params) {
+                    const term = $.trim(params.term);
+                    if (term === '') return null;
+
+                    const normalizedTerm = term.toUpperCase();
+                    return { id: normalizedTerm, text: normalizedTerm, newTag: true };
+                },
+                insertTag: function (data, tag) {
+                    data.unshift(tag);
+                }
+            });
+
+            $select.off('select2:open.accountFocus').on('select2:open.accountFocus', function () {
+                window.setTimeout(function () {
+                    const searchField = document.querySelector('.select2-container--open .select2-search__field');
+                    if (searchField) {
+                        searchField.removeAttribute('readonly');
+                        searchField.focus();
+                    }
+                }, 0);
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAccountTagSelects);
 
     @if($errors->any() && old('form_context') === 'create_executive')
     document.addEventListener('DOMContentLoaded', function () {
@@ -1121,6 +1507,9 @@
             }
 
             field.value = normalizedValue;
+            if (window.jQuery && $(field).hasClass('select2-hidden-accessible')) {
+                $(field).trigger('change.select2');
+            }
         }
 
         function upsertExecutiveNameOption(s) {
@@ -1247,8 +1636,8 @@
             upsertExecutiveNameOption(s);
             document.getElementById('wt_field_staff_id').value    = s.staff_no;
             document.getElementById('wt_field_full_name').value   = s.name;
-            document.getElementById('wt_field_department').value  = s.dept_name;
-            document.getElementById('wt_field_position').value    = s.position || '';
+            setControlValue('wt_field_department', s.dept_name);
+            setControlValue('wt_field_position', s.position || '');
             // Password becomes optional when granting access to existing HR staff
             document.getElementById('wt_field_password').removeAttribute('required');
             document.getElementById('wt_field_password_confirmation').removeAttribute('required');
@@ -1260,7 +1649,7 @@
 
         window.wtClearStaff = function () {
             ['wt_field_staff_id','wt_field_full_name','wt_field_department','wt_field_position'].forEach(function (id) {
-                document.getElementById(id).value = '';
+                setControlValue(id, '');
             });
             // Restore password as required
             document.getElementById('wt_field_password').setAttribute('required', '');

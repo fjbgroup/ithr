@@ -712,7 +712,6 @@
     $prefillDepartment = strtoupper((string) ($prefillDamage['department'] ?? ''));
     $prefillOwnershipType = strtoupper((string) ($prefillDamage['ownership_type'] ?? ''));
     $prefillSharedWith = strtoupper((string) ($prefillDamage['shared_with'] ?? ''));
-    $prefillSector = strtoupper((string) ($prefillDamage['sector'] ?? ''));
     $prefillBayFrom = strtoupper((string) ($prefillDamage['bay_from'] ?? ''));
     $prefillLocation = strtoupper((string) ($prefillDamage['location'] ?? ''));
     $prefillModel = strtoupper((string) ($prefillDamage['model'] ?? ''));
@@ -722,7 +721,6 @@
         ? route('wt.admin.all.status', ['view' => 'damages'])
         : (\Illuminate\Support\Facades\Route::has('user.all.status') ? route('wt.user.all.status', ['view' => 'damages']) : '#');
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $personMetaByName = $formOptionLists['person_meta_by_name'] ?? [];
@@ -905,7 +903,6 @@
                             data-phone="{{ $user->phone_no ?: '' }}"
                             data-ownership-type="{{ strtoupper($user->last_ownership_type ?? '') }}"
                             data-shared-with="{{ strtoupper($user->last_shared_with ?? '') }}"
-                            data-sector="{{ strtoupper($user->last_sector ?? '') }}"
                             data-location="{{ strtoupper($user->last_location ?? '') }}"
                             @selected((string) old('user_id', '') === (string) $user->user_id)>
                             {{ $displayName }} - {{ $displayDepartment }}
@@ -929,7 +926,7 @@
                         $selectedReporterName = strtoupper((string) old('reporter_name', $prefillReporterName));
                     @endphp
                     @if($selectedReporterName && !old('user_id'))
-                        <option value="{{ $selectedReporterName }}" data-name="{{ $selectedReporterName }}" data-department="{{ $prefillDepartment }}" data-ownership-type="{{ $prefillOwnershipType }}" data-shared-with="{{ $prefillSharedWith }}" data-sector="{{ $prefillSector }}" data-location="{{ $prefillLocation }}" selected>{{ $selectedReporterName }}{{ $prefillDepartment ? ' - ' . $prefillDepartment : '' }}</option>
+                        <option value="{{ $selectedReporterName }}" data-name="{{ $selectedReporterName }}" data-department="{{ $prefillDepartment }}" data-ownership-type="{{ $prefillOwnershipType }}" data-shared-with="{{ $prefillSharedWith }}" data-location="{{ $prefillLocation }}" selected>{{ $selectedReporterName }}{{ $prefillDepartment ? ' - ' . $prefillDepartment : '' }}</option>
                     @endif
                 </select>
                 <p class="ownership-name-help text-[9px] font-bold text-stone-500 dark:text-slate-400">
@@ -980,18 +977,6 @@
             <div id="sharedWithWrapper" class="@if(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? $prefillOwnershipType)) !== 'SHARED') hidden @endif">
                 <label class="form-label">Shared With <span class="text-red-500">*</span></label>
                 <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', $draftRecord->shared_with ?? $prefillSharedWith)) }}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
-            </div>
-            <div>
-                <label class="form-label">Sector <span class="text-red-500">*</span></label>
-                <select name="sector" id="sector" class="smart-select w-full" data-placeholder="Type or select sector" required>
-                    <option value=""></option>
-                    @foreach($sectorOptions as $sector)
-                    <option value="{{ $sector }}" @selected(strtoupper((string) old('sector', $draftRecord->sector ?? $prefillSector)) === $sector)>{{ $sector }}</option>
-                    @endforeach
-                    @if(old('sector', $draftRecord->sector ?? $prefillSector) && !in_array(strtoupper((string) old('sector', $draftRecord->sector ?? $prefillSector)), $sectorOptions, true))
-                    <option value="{{ strtoupper((string) old('sector', $draftRecord->sector ?? $prefillSector)) }}" selected>{{ strtoupper((string) old('sector', $draftRecord->sector ?? $prefillSector)) }}</option>
-                    @endif
-                </select>
             </div>
             <div>
                 <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
@@ -1045,18 +1030,6 @@
             <div id="sharedWithWrapper" class="@if(strtoupper((string) old('ownership_type', $draftRecord->ownership_type ?? '')) !== 'SHARED') hidden @endif">
                 <label class="form-label">Shared With <span class="text-red-500">*</span></label>
                 <input type="text" name="shared_with" id="shared_with" value="{{ strtoupper(old('shared_with', $draftRecord->shared_with ?? '')) }}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
-            </div>
-            <div>
-                <label class="form-label">Sector <span class="text-red-500">*</span></label>
-                <select name="sector" id="sector" class="smart-select w-full" data-placeholder="Type or select sector" required>
-                    <option value=""></option>
-                    @foreach($sectorOptions as $sector)
-                    <option value="{{ $sector }}" @selected(strtoupper((string) old('sector', $draftRecord->sector ?? '')) === $sector)>{{ $sector }}</option>
-                    @endforeach
-                    @if(old('sector', $draftRecord->sector ?? '') && !in_array(strtoupper((string) old('sector', $draftRecord->sector ?? '')), $sectorOptions, true))
-                    <option value="{{ strtoupper((string) old('sector', $draftRecord->sector ?? '')) }}" selected>{{ strtoupper((string) old('sector', $draftRecord->sector ?? '')) }}</option>
-                    @endif
-                </select>
             </div>
             <div>
                 <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>
@@ -1195,7 +1168,6 @@
                             data-ownership-type="{{ strtoupper($walkieAssignment['ownership_type'] ?? ($responsibleWalkie->ownership_type ?: '')) }}"
                             data-shared-with="{{ strtoupper($walkieAssignment['shared_with'] ?? ($responsibleWalkie->shared_with ?: '')) }}"
                             data-department="{{ strtoupper($walkieAssignment['department'] ?? ($responsibleWalkie->department ?: '')) }}"
-                            data-sector="{{ strtoupper($walkieAssignment['sector'] ?? '') }}"
                             data-bay-from="{{ strtoupper($walkieAssignment['bay_from'] ?? '') }}"
                             data-location="{{ strtoupper($walkieAssignment['location'] ?? '') }}">
                             {{ strtoupper($responsibleWalkie->radio_id ?: 'NO RADIO ID') }} - {{ strtoupper($responsibleWalkie->model ?: 'NO MODEL') }} - {{ strtoupper($responsibleWalkie->serial_number ?: 'NO SERIAL') }}
@@ -1504,7 +1476,6 @@
                 <p class="text-[9px] font-black uppercase tracking-widest text-stone-500">Ownership / Deployment</p>
                 <p class="mt-2 font-black text-[#142b47]">Ownership: {{ strtoupper($submittedRecord->ownership_type ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Shared With: {{ strtoupper($submittedRecord->shared_with ?: '-') }}</p>
-                <p class="mt-1 font-bold text-stone-500">Sector: {{ strtoupper($submittedRecord->sector ?: '-') }}</p>
                 <p class="mt-1 font-bold text-stone-500">Location: {{ strtoupper($submittedRecord->location ?: '-') }}</p>
             </div>
             <div class="rounded-xl border border-stone-200 bg-stone-50 px-4 py-3">
@@ -1845,7 +1816,6 @@
         const pickupPhoneNo = document.getElementById('pickup_phone_no');
         const pickupPerson = document.getElementById('pickup_person');
         const department = document.getElementById('department');
-        const sector = document.getElementById('sector');
         const bayFrom = document.getElementById('bay_from');
         const location = document.getElementById('location');
         const ownershipType = document.getElementById('ownership_type');
@@ -1918,7 +1888,6 @@
                 setFieldValue(reporterName, option.dataset.owner || '');
                 setFieldValue(ownershipType, option.dataset.ownershipType || '');
                 setFieldValue(sharedWith, option.dataset.sharedWith || '');
-                setFieldValue(sector, option.dataset.sector || '');
                 setFieldValue(bayFrom, option.dataset.bayFrom || '-');
                 setFieldValue(location, option.dataset.location || '');
 
@@ -1959,7 +1928,6 @@
                     setFieldValue(phoneNo, '');
                     setFieldValue(pickupPhoneNo, '');
                     setFieldValue(department, '');
-                    setFieldValue(sector, '');
                     setFieldValue(location, '');
                     setFieldValue(ownershipType, '');
                     setFieldValue(sharedWith, '');
@@ -1973,7 +1941,6 @@
                 const selectedDepartment = option.dataset.department || '';
                 const selectedOwnershipType = option.dataset.ownershipType || '';
                 const selectedSharedWith = option.dataset.sharedWith || '';
-                const selectedSector = option.dataset.sector || '';
                 const selectedLocation = option.dataset.location || '';
 
                 if (targetUserId) targetUserId.value = isExistingUser ? option.value : '';
@@ -1983,7 +1950,6 @@
                 setFieldValue(department, selectedDepartment);
                 setFieldValue(ownershipType, selectedOwnershipType);
                 setFieldValue(sharedWith, selectedSharedWith);
-                setFieldValue(sector, selectedSector);
                 setFieldValue(location, selectedLocation);
                 toggleSharedWith();
             };
@@ -2191,7 +2157,6 @@
         const oldRecipientDetails = @json($oldRecipientDetails);
         const oldDeviceDetails = @json($oldDeviceDetails);
         const departmentOptions = @json($departmentOptions);
-        const sectorOptions = @json($sectorOptions);
         const locationOptions = @json($locationOptions);
         const bayOptions = @json($bayOptions);
         @php
@@ -2202,7 +2167,6 @@
                 'phone' => $user->phone_no ?: '',
                 'ownership_type' => strtoupper($user->last_ownership_type ?? ''),
                 'shared_with' => strtoupper($user->last_shared_with ?? ''),
-                'sector' => strtoupper($user->last_sector ?? ''),
                 'location' => strtoupper($user->last_location ?? ''),
             ])->values();
         @endphp
@@ -2264,7 +2228,6 @@
             row.querySelector('[data-recipient-department]').value = matchedUser.department || '';
             row.querySelector('[data-recipient-ownership-type]').value = matchedUser.ownership_type || '';
             row.querySelector('[data-recipient-shared-with]').value = matchedUser.shared_with || '';
-            row.querySelector('[data-recipient-sector]').value = matchedUser.sector || '';
             row.querySelector('[data-recipient-location]').value = matchedUser.location || '';
             syncRecipientSharedWith(row);
         };
@@ -2285,7 +2248,6 @@
                 department: row.querySelector('[data-recipient-department]')?.value || '',
                 ownership_type: row.querySelector('[data-recipient-ownership-type]')?.value || '',
                 shared_with: row.querySelector('[data-recipient-shared-with]')?.value || '',
-                sector: row.querySelector('[data-recipient-sector]')?.value || '',
                 bay_from: row.querySelector('[data-recipient-bay]')?.value || '',
                 location: row.querySelector('[data-recipient-location]')?.value || '',
             }));
@@ -2324,12 +2286,6 @@
                         <div data-recipient-shared-wrapper class="${String(saved.ownership_type || '').toUpperCase() === 'SHARED' ? '' : 'hidden'}">
                             <label class="form-label">Shared With <span class="text-red-500">*</span></label>
                             <input type="text" name="recipient_details[${index}][shared_with]" data-recipient-shared-with value="${escapeHtml(saved.shared_with || '')}" placeholder="E.G. USER - DEPARTMENT" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
-                        </div>
-                        <div>
-                            <label class="form-label">Sector <span class="text-red-500">*</span></label>
-                            <select name="recipient_details[${index}][sector]" data-recipient-sector class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" required>
-                                ${optionRows(sectorOptions, saved.sector || '', 'Type or select sector')}
-                            </select>
                         </div>
                         <div>
                             <label class="form-label">Bay <span class="text-stone-400">(Optional)</span></label>

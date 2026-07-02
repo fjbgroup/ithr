@@ -359,7 +359,6 @@ class RequestController extends Controller
             'duration_days' => $isTemporaryRequest
                 ? 'nullable|integer|min:1|max:365'
                 : 'nullable|integer|min:1|max:365',
-            'sector' => $isDraft ? 'nullable|string|max:255' : 'required|string|max:255',
             'location' => $isDraft ? 'nullable|string|max:255' : 'required|string|max:255',
             'event_name' => $isTemporaryRequest
                 ? ($isDraft ? 'nullable|string|max:255' : 'required|string|max:255')
@@ -373,7 +372,6 @@ class RequestController extends Controller
             'pic_details.*.phone_no' => 'nullable|string|max:255',
             'pic_details.*.department' => ! $isSelfRequest && ! $isDraft ? 'required|string|max:255' : 'nullable|string|max:255',
             'pic_details.*.ownership_type' => ! $isSelfRequest && ! $isDraft ? 'required|in:Individual,Shared' : 'nullable|in:Individual,Shared',
-            'pic_details.*.sector' => ! $isSelfRequest && ! $isDraft ? 'required|string|max:255' : 'nullable|string|max:255',
             'pic_details.*.bay_from' => 'nullable|string|max:255',
             'pic_details.*.location' => ! $isSelfRequest && ! $isDraft ? 'required|string|max:255' : 'nullable|string|max:255',
             'pic_details.*.pickup_person' => ! $isSelfRequest && ! $isDraft ? 'required|string|max:255' : 'nullable|string|max:255',
@@ -398,14 +396,13 @@ class RequestController extends Controller
                     'phone_no' => trim((string) ($pic['phone_no'] ?? '')),
                     'department' => trim((string) ($pic['department'] ?? '')),
                     'ownership_type' => trim((string) ($pic['ownership_type'] ?? '')),
-                    'sector' => trim((string) ($pic['sector'] ?? '')),
                     'bay_from' => trim((string) ($pic['bay_from'] ?? '')),
                     'location' => trim((string) ($pic['location'] ?? '')),
                     'pickup_person' => trim((string) ($pic['pickup_person'] ?? '')),
                     'pickup_phone_no' => trim((string) ($pic['pickup_phone_no'] ?? '')),
                 ];
             })
-            ->filter(fn ($pic) => $pic['name'] !== '' || $pic['phone_no'] !== '' || $pic['department'] !== '' || $pic['ownership_type'] !== '' || $pic['sector'] !== '' || $pic['location'] !== '' || $pic['pickup_person'] !== '' || $pic['pickup_phone_no'] !== '')
+            ->filter(fn ($pic) => $pic['name'] !== '' || $pic['phone_no'] !== '' || $pic['department'] !== '' || $pic['ownership_type'] !== '' || $pic['location'] !== '' || $pic['pickup_person'] !== '' || $pic['pickup_phone_no'] !== '')
             ->values();
 
         if (! $isSelfRequest && ! $isDraft) {
@@ -415,10 +412,10 @@ class RequestController extends Controller
                     ->withInput();
             }
 
-            $missingPic = $picDetails->first(fn ($pic) => $pic['name'] === '' || $pic['department'] === '' || $pic['ownership_type'] === '' || $pic['sector'] === '' || $pic['location'] === '' || $pic['pickup_person'] === '' || $pic['pickup_phone_no'] === '');
+            $missingPic = $picDetails->first(fn ($pic) => $pic['name'] === '' || $pic['department'] === '' || $pic['ownership_type'] === '' || $pic['location'] === '' || $pic['pickup_person'] === '' || $pic['pickup_phone_no'] === '');
             if ($missingPic) {
                 return back()
-                    ->withErrors(['pic_details' => 'Each unit must have one ownership name, department, ownership type, sector, location, pickup person, and pickup phone no. Ownership phone no is optional.'])
+                    ->withErrors(['pic_details' => 'Each unit must have one ownership name, department, ownership type, location, pickup person, and pickup phone no. Ownership phone no is optional.'])
                     ->withInput();
             }
 
@@ -448,7 +445,6 @@ class RequestController extends Controller
                 ? ($validated['shared_with'] ?? null)
                 : null,
             'bay_from' => $validated['bay_from'] ?? null,
-            'sector' => $validated['sector'] ?? null,
             'location' => $validated['location'] ?? null,
             'event_name' => $isTemporaryRequest
                 ? ($validated['event_name'] ?? null)

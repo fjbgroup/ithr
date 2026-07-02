@@ -369,7 +369,6 @@
     $isTemporaryRequest = $isTemporaryRequest ?? ($requestVariant === 'temporary');
     $formAction = $isTemporaryRequest ? route('wt.admin.requests.store.temporary') : route('wt.admin.requests.store');
     $departmentOptions = $formOptionLists['departments'] ?? [];
-    $sectorOptions = $formOptionLists['sectors'] ?? [];
     $locationOptions = $formOptionLists['locations'] ?? [];
     $bayOptions = $formOptionLists['bays'] ?? [];
     $selectedDepartment = old('department', $currentUser->department);
@@ -555,18 +554,6 @@
                 </div>
             </div>
             @endunless
-            <div>
-                <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Sector</label>
-                <select name="sector" class="smart-select w-full" data-placeholder="Type or select sector" required>
-                    <option value=""></option>
-                    @foreach($sectorOptions as $sector)
-                    <option value="{{ $sector }}" @selected(old('sector') === $sector)>{{ $sector }}</option>
-                    @endforeach
-                    @if(old('sector') && !in_array(old('sector'), $sectorOptions, true))
-                    <option value="{{ old('sector') }}" selected>{{ old('sector') }}</option>
-                    @endif
-                </select>
-            </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Bay <span class="text-stone-400">(Optional)</span></label>
                 <select name="bay_from" class="smart-select w-full" data-placeholder="Type number only, e.g. 3">

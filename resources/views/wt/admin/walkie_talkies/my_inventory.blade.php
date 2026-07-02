@@ -278,7 +278,6 @@
                             'department' => $ownerDept,
                             'ownership_type' => $record->ownership_type,
                             'shared_with' => $record->shared_with,
-                            'sector' => $activeRequest->sector ?? null,
                             'bay_from' => $activeRequest->bay_from ?? null,
                             'location' => $activeRequest->location ?? null,
                         ], fn ($value) => filled($value)));
