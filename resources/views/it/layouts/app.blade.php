@@ -763,9 +763,10 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     @endif
 
     {{-- Documentation section --}}
-    @if($user->isAdmin())
     <div class="nav-section-label">Documentation</div>
-    @endif
+    <a href="{{ route('it.user-manual.index') }}" class="nav-link {{ request()->routeIs('it.user-manual.index') ? 'active' : '' }}">
+      <i class="bi bi-book"></i> User Manual
+    </a>
 
     <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
     <button type="button" class="nav-link nav-action" data-role-metric-trigger>
@@ -773,9 +774,6 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     </button>
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
-    </a>
-    <a href="{{ route('it.user-manual.index') }}" class="nav-link {{ request()->routeIs('it.user-manual.index') ? 'active' : '' }}">
-      <i class="bi bi-book"></i> User Manual
     </a>
     <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">
       <i class="bi bi-broadcast"></i> WT System
