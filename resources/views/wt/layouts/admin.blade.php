@@ -312,10 +312,6 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>
       @include('wt.partials.sidebar-info', ['text' => 'View WT System access permissions for ICT and executive users.'])
     </a>
-    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'User Manual' : 'Executive User Manual' }}">
-      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'User Manual' : 'Executive User Manual' }}</span>
-      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
-    </a>
 
     {{-- System Control (IT only) --}}
     @if($isAdminItView)
@@ -335,6 +331,11 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+    <div class="nav-section-label">Help</div>
+    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}">
+      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}</span>
+      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
+    </a>
     <a href="{{ route('home') }}" class="nav-link" title="Back to Portal">
       <i class="fas fa-th-large" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Back to Portal</span>
     </a>
