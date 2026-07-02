@@ -28,7 +28,7 @@
 <div class="profile-hero">
   <div class="profile-hero-avatar">
     @if($user->avatar && Storage::disk('public')->exists($user->avatar))
-    <img src="{{ Storage::url($user->avatar) }}" class="profile-hero-img" id="avatarPreview">
+    <img src="{{ asset('storage/' . $user->avatar) }}" class="profile-hero-img" id="avatarPreview">
     @else
     <div class="profile-hero-initial" id="avatarPreview">{{ strtoupper(substr($user->full_name, 0, 1)) }}</div>
     @endif
@@ -78,7 +78,7 @@
           <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px;padding:16px;background:var(--body-bg);border-radius:10px;border:1px solid var(--border)">
             <div id="avatarThumb" style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;background:var(--accent)">
               @if($user->avatar && Storage::disk('public')->exists($user->avatar))
-              <img src="{{ Storage::url($user->avatar) }}" style="width:100%;height:100%;object-fit:cover">
+              <img src="{{ asset('storage/' . $user->avatar) }}" style="width:100%;height:100%;object-fit:cover">
               @else
               <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:18px;color:#fff">{{ strtoupper(substr($user->full_name, 0, 1)) }}</span>
               @endif

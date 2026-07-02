@@ -23,7 +23,8 @@
 /* ── HR COLLAPSIBLE SIDEBAR ── */
 .menu-toggle { display: none !important; }
 @media(max-width:768px){ .menu-toggle { display: flex !important; } }
-.sidebar { transition: width .3s ease !important; overflow: hidden !important; }
+.sidebar { transition: width .3s ease !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; }
+.sidebar-nav { flex: 1 !important; overflow-y: auto !important; }
 .main-wrapper { transition: margin-left .3s ease; }
 html.sidebar-collapsed .sidebar { width: 64px !important; transform: none !important; }
 html.sidebar-collapsed .main-wrapper { margin-left: 64px !important; }
@@ -154,6 +155,81 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
   transform: translateY(-50%);
   border: 5px solid transparent;
   border-right-color: #1e293b;
+}
+
+/* Sidebar Footer Styling */
+.sidebar-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--sidebar-border);
+    margin-top: auto;
+    flex-shrink: 0;
+}
+.sidebar-footer .user-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.sidebar-footer .user-card:hover {
+    background: var(--sidebar-hover-bg);
+}
+.sidebar-footer .user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(255,255,255,0.1);
+}
+.sidebar-footer .user-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+}
+.sidebar-footer .user-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--sidebar-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sidebar-footer .user-role {
+    font-size: 0.65rem;
+    color: var(--sidebar-text);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Collapsed Sidebar Footer Styling */
+html.sidebar-collapsed .sidebar-footer {
+    padding: 0.75rem 0 !important;
+    display: flex;
+    justify-content: center;
+}
+html.sidebar-collapsed .sidebar-footer .user-card {
+    justify-content: center;
+    padding: 0;
+    width: 100%;
+}
+html.sidebar-collapsed .sidebar-footer .user-info {
+    display: none !important;
 }
 </style>
 <script>
@@ -343,6 +419,10 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             Back to Portal
         </a>
+        <a href="{{ route('user-manual.index') }}" class="nav-item {{ request()->is('user-manual*') ? 'active' : '' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            User Manual
+        </a>
         @else
         <a href="{{ route('login') }}" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
@@ -350,6 +430,28 @@ html.sidebar-collapsed .sidebar-section-label { display: none !important; }
         </a>
         @endauth
     </nav>
+    @auth
+    @php
+        $profileUrl = Auth::user()->staff_id ? route('staff.show', Auth::user()->staff_id) : route('users.show', Auth::id());
+        $avatarChar = strtoupper(substr(Auth::user()->name ?? 'U', 0, 1));
+        $userRoleLabel = Auth::user()->getRoleLabel();
+    @endphp
+    <div class="sidebar-footer">
+        <a href="{{ $profileUrl }}" class="user-card" title="View Profile">
+            <div class="user-avatar">
+                @if(Auth::user()->avatar && Storage::disk('public')->exists(Auth::user()->avatar))
+                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    {{ $avatarChar }}
+                @endif
+            </div>
+            <div class="user-info">
+                <div class="user-name">{{ Auth::user()->name }}</div>
+                <div class="user-role">{{ $userRoleLabel }}</div>
+            </div>
+        </a>
+    </div>
+    @endauth
 </aside>
 <div class="main-wrapper">
     <header class="topbar">

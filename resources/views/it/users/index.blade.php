@@ -446,7 +446,7 @@ $action      = request('action', 'list');
       <div class="mu-user-row">
         <!-- Avatar -->
         @if($row->avatar)
-        <img src="{{ Storage::url($row->avatar) }}" class="mu-avatar">
+        <img src="{{ asset('storage/' . $row->avatar) }}" class="mu-avatar">
         @else
         <div class="mu-avatar" style="background:{{ $aColor }}">{{ strtoupper(substr($row->full_name,0,1)) }}</div>
         @endif

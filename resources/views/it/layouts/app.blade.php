@@ -786,7 +786,7 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
   <div class="sidebar-footer">
     <a href="{{ route('it.profile') }}" class="user-card">
       @if($user->avatar)
-        <img src="{{ Storage::url($user->avatar) }}" alt="avatar"
+        <img src="{{ asset('storage/' . $user->avatar) }}" alt="avatar"
           style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0">
       @else
         <div class="user-avatar">{{ strtoupper(substr($user->full_name, 0, 1)) }}</div>

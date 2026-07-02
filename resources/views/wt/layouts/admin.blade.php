@@ -351,7 +351,13 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 
   <div class="sidebar-footer">
     <div class="user-card">
-      <div class="user-avatar">{{ strtoupper(substr(Auth::guard('wt')->user()->username ?? 'A', 0, 1)) }}</div>
+      <div class="user-avatar" style="overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;">
+        @if(Auth::guard('wt')->user() && Auth::guard('wt')->user()->avatar && Storage::disk('public')->exists(Auth::guard('wt')->user()->avatar))
+          <img src="{{ asset('storage/' . Auth::guard('wt')->user()->avatar) }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+        @else
+          {{ strtoupper(substr(Auth::guard('wt')->user()->username ?? 'A', 0, 1)) }}
+        @endif
+      </div>
       <div class="user-info">
         <div class="user-name">{{ Auth::guard('wt')->user()->username ?? 'User' }}</div>
         <div class="user-role">{{ $accountRoleLabel }}</div>

@@ -44,7 +44,7 @@
 <div class="profile-hero">
   <div class="profile-hero-avatar">
     @if($hasAvatar)
-    <img src="{{ Storage::url($user->avatar) }}" class="profile-hero-img" id="avatarPreview" alt="Profile photo">
+    <img src="{{ asset('storage/' . $user->avatar) }}" class="profile-hero-img" id="avatarPreview" alt="Profile photo">
     @else
     <div class="profile-hero-initial" id="avatarPreview">{{ $avatarInitial }}</div>
     @endif
@@ -95,7 +95,7 @@
           <div class="profile-upload-row">
             <div id="avatarThumb" class="profile-thumb">
               @if($hasAvatar)
-              <img src="{{ Storage::url($user->avatar) }}" style="width:100%;height:100%;object-fit:cover" alt="Profile photo">
+              <img src="{{ asset('storage/' . $user->avatar) }}" style="width:100%;height:100%;object-fit:cover" alt="Profile photo">
               @else
               <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:18px;color:#fff">{{ $avatarInitial }}</span>
               @endif

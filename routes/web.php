@@ -128,6 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::post('account/totp/confirm', [UserController::class, 'totpConfirm'])->name('totp.confirm');
     Route::post('account/totp/remove',  [UserController::class, 'totpRemove']) ->name('totp.remove');
     Route::get('users/search-staff', [UserController::class, 'searchStaff'])->name('users.search_staff');
+    Route::post('profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::post('system/email-toggle', [UserController::class, 'toggleEmailSending'])->name('system.email.toggle')->middleware('role:admin_it');
     Route::post('system/totp-toggle', [UserController::class, 'toggleTotp'])->name('system.totp.toggle')->middleware('role:admin_it');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
@@ -148,6 +149,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
+    Route::get('user-manual', [\App\Http\Controllers\UserManualController::class, 'index'])->name('user-manual.index');
 });
 
 Route::middleware('auth:web,wt')->group(function () {
