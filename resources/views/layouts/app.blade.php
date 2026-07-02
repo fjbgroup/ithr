@@ -761,6 +761,14 @@ function liveSearch(form, resultId, delay) {
             var href = this.getAttribute('href');
             if (!href || href === '#' || href.startsWith('javascript') || this.closest('form')) return;
             e.preventDefault();
+
+            if (this.classList.contains('nav-child') && document.documentElement.classList.contains('sidebar-collapsed')) {
+                document.documentElement.classList.remove('sidebar-collapsed');
+                localStorage.setItem('fjb-sb-collapsed', '0');
+                document.querySelectorAll('.nav-child').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            }
+
             if (content) {
                 content.classList.add('page-out');
                 setTimeout(function() { window.location.href = href; }, 150);
@@ -1371,10 +1379,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     .credit-secret-note {
-        max-width: 260px;
-        font-size: 10.5px;
-        line-height: 1.45;
-        white-space: normal;
+        max-width: none;
+        width: 100%;
+        font-size: clamp(7.5px, 2.35vw, 10.5px);
+        line-height: 1.25;
+        letter-spacing: 0;
+        white-space: nowrap;
     }
 }
 </style>
