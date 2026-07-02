@@ -538,52 +538,64 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
 
     @if($user->isAdmin())
     {{-- Admin: All Assets with sub-nav --}}
-      <div class="nav-group" id="navGroupAdminITAssets">
-        <div class="nav-group-toggle {{ $itActive ? 'open has-active' : '' }}" onclick="toggleNavGroup('navGroupAdminITAssets')"
-          style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;margin-bottom:2px;transition:all .15s;text-align:left">
-          <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
-          <span style="flex:1;font-size:13.5px;font-weight:500;color:var(--sidebar-text)">All Assets</span>
-          <i class="bi bi-chevron-down toggle-arrow" style="font-size:11px;transition:transform .2s"></i>
-        </div>
-        <div class="nav-group-children {{ $itActive ? 'open' : '' }}">
-          <div class="nav-group-children-inner">
-          <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('it.inventory.index') && !request()->get('view') ? 'active' : '' }}" style="padding:7px 12px;font-size:13px">
-            <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
-          </a>
-          <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('it.non-it.index') ? 'active' : '' }}" style="padding:7px 12px;font-size:13px">
-            <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
-          </a>
-          <a href="{{ route('it.inventory.index') }}?view=pending_requests" class="nav-link {{ $itPending ? 'active' : '' }}" style="padding:7px 12px;font-size:13px">
-            <i class="bi bi-hourglass-split" style="font-size:14px"></i> Pending Requests
-          </a>
-          </div>
-        </div>
+    <div>
+      <button onclick="toggleITAssets()" id="itAssetsToggle" class="{{ $itActive ? 'sb-active' : '' }}"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $itActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $itActive ? 'var(--sidebar-active-tx)' : '#475569' }};
+          border:none;font-size:13.5px;font-weight:{{ $itActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">All Assets</span>
+        <i class="bi bi-chevron-down" id="itAssetsChevron"
+          style="font-size:11px;transition:transform .2s;{{ $itActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="itAssetsMenu" style="{{ $itActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('it.inventory.index') && !request()->get('view') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
+        </a>
+        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('it.non-it.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
+        </a>
+        <a href="{{ route('it.inventory.index') }}?view=pending_requests" class="nav-link {{ $itPending ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-hourglass-split" style="font-size:14px"></i> Pending Requests
+        </a>
       </div>
+    </div>
     @else
     {{-- Non-admin: IT + Non-IT + My Requests --}}
-      <div class="nav-group" id="navGroupNonAdminITAssets">
-        <div class="nav-group-toggle {{ $itActive ? 'open has-active' : '' }}" onclick="toggleNavGroup('navGroupNonAdminITAssets')"
-          style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;margin-bottom:2px;transition:all .15s;text-align:left">
-          <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
-          <span style="flex:1;font-size:13.5px;font-weight:500;color:var(--sidebar-text)">All Assets</span>
-          <i class="bi bi-chevron-down toggle-arrow" style="font-size:11px;transition:transform .2s"></i>
-        </div>
-        <div class="nav-group-children {{ $itActive ? 'open' : '' }}">
-          <div class="nav-group-children-inner">
-          <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('it.inventory.index') && !$itMyRequests ? 'active' : '' }}" style="padding:7px 12px;font-size:13px">
-            <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
-          </a>
-          <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('it.non-it.index') ? 'active' : '' }}" style="padding:7px 12px;font-size:13px">
-            <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
-          </a>
-          @if(!$user->isReadOnlyViewer())
-          <a href="{{ route('it.inventory.index') }}?view=my_requests" class="nav-link {{ $itMyRequests ? 'active' : '' }}" style="padding:7px 12px;font-size:13px">
-            <i class="bi bi-clock-history" style="font-size:14px"></i> My Requests
-          </a>
-          @endif
-          </div>
-        </div>
+    <div>
+      <button onclick="toggleITAssets()" id="itAssetsToggle" class="{{ $itActive ? 'sb-active' : '' }}"
+        style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+          background:{{ $itActive ? 'var(--sidebar-active-bg)' : 'none' }};
+          color:{{ $itActive ? 'var(--sidebar-active-tx)' : '#475569' }};
+          border:none;font-size:13.5px;font-weight:{{ $itActive ? '600' : '500' }};
+          cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left">
+        <i class="bi bi-box-seam-fill" style="font-size:16px;width:20px;text-align:center;flex-shrink:0"></i>
+        <span style="flex:1">All Assets</span>
+        <i class="bi bi-chevron-down" id="itAssetsChevron"
+          style="font-size:11px;transition:transform .2s;{{ $itActive ? 'transform:rotate(180deg)' : '' }}"></i>
+      </button>
+      <div id="itAssetsMenu" style="{{ $itActive ? '' : 'display:none;' }}padding-left:14px;margin-top:2px">
+        <a href="{{ route('it.inventory.index') }}" class="nav-link {{ request()->routeIs('it.inventory.index') && !$itMyRequests ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-box-seam" style="font-size:14px"></i> IT Assets
+        </a>
+        <a href="{{ route('it.non-it.index') }}" class="nav-link {{ request()->routeIs('it.non-it.index') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-boxes" style="font-size:14px"></i> Non-IT Assets
+        </a>
+        @if(!$user->isReadOnlyViewer())
+        <a href="{{ route('it.inventory.index') }}?view=my_requests" class="nav-link {{ $itMyRequests ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-clock-history" style="font-size:14px"></i> My Requests
+        </a>
+        @endif
       </div>
+    </div>
     @endif
     <script>
     function toggleITAssets() {
