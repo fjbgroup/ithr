@@ -56,11 +56,17 @@ class WriteoffController extends Controller
                 })
                 ->orderBy('gm_assigned_at')->get();
             $myGmCount   = $myGmQueue->count();
-            $gmHistory   = EwasteItem::with(['creator', 'houUser'])
+            $gmHistory   = EwasteItem::with(['creator', 'houUser', 'currentGmUser'])
                 ->where(function ($q) use ($user) {
-                    $q->where('gm1_user_id', $user->id)
-                        ->orWhere('gm2_user_id', $user->id)
-                        ->orWhere('current_gm_user_id', $user->id);
+                    $q->where('current_gm_user_id', $user->id)
+                        ->orWhere('gm_signed_name', $user->full_name)
+                        ->orWhere(function ($legacy) use ($user) {
+                            $legacy->whereNull('current_gm_user_id')
+                                ->where(function ($assigned) use ($user) {
+                                    $assigned->where('gm1_user_id', $user->id)
+                                        ->orWhere('gm2_user_id', $user->id);
+                                });
+                        });
                 })
                 ->whereIn('gm_status', ['Checked', 'Rejected'])
                 ->orderByDesc('gm_signed_at')->limit(50)->get();

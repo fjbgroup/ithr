@@ -48,7 +48,7 @@ class WriteoffInventoryController extends Controller
             ->get();
 
         if ($items->isEmpty()) {
-            return redirect()->route('writeoff-inventory.index')->with('error', 'Batch not found or already processed.');
+            return redirect()->route('it.writeoff-inventory.index')->with('error', 'Batch not found or already processed.');
         }
 
         foreach ($items as $item) {
@@ -71,7 +71,7 @@ class WriteoffInventoryController extends Controller
             }
         }
 
-        return redirect()->route('writeoff-inventory.index')->with('success', $items->count().' items routed to E-Waste successfully.');
+        return redirect()->route('it.writeoff-inventory.index')->with('success', $items->count().' items routed to E-Waste successfully.');
     }
 
     public function routeDisposalBatch($batchId)
@@ -85,7 +85,7 @@ class WriteoffInventoryController extends Controller
             ->get();
 
         if ($items->isEmpty()) {
-            return redirect()->route('writeoff-inventory.index')->with('error', 'Batch not found or already processed.');
+            return redirect()->route('it.writeoff-inventory.index')->with('error', 'Batch not found or already processed.');
         }
 
         foreach ($items as $item) {
@@ -118,7 +118,7 @@ class WriteoffInventoryController extends Controller
             }
         }
 
-        return redirect()->route('writeoff-inventory.index')->with('success', $items->count().' items routed to Disposal successfully.');
+        return redirect()->route('it.writeoff-inventory.index')->with('success', $items->count().' items routed to Disposal successfully.');
     }
 
     public function routeEwaste($id)
@@ -150,10 +150,10 @@ class WriteoffInventoryController extends Controller
                 );
             }
 
-            return redirect()->route('writeoff-inventory.index')->with('success', 'Item routed to E-Waste successfully.');
+            return redirect()->route('it.writeoff-inventory.index')->with('success', 'Item routed to E-Waste successfully.');
         }
 
-        return redirect()->route('writeoff-inventory.index')->with('error', 'Item not found or already processed.');
+        return redirect()->route('it.writeoff-inventory.index')->with('error', 'Item not found or already processed.');
     }
 
     public function routeDisposal($id)
@@ -195,9 +195,9 @@ class WriteoffInventoryController extends Controller
                 );
             }
 
-            return redirect()->route('writeoff-inventory.index')->with('success', 'Item routed to Disposal successfully.');
+            return redirect()->route('it.writeoff-inventory.index')->with('success', 'Item routed to Disposal successfully.');
         }
 
-        return redirect()->route('writeoff-inventory.index')->with('error', 'Item not found or already processed.');
+        return redirect()->route('it.writeoff-inventory.index')->with('error', 'Item not found or already processed.');
     }
 }
