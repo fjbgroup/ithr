@@ -10,20 +10,6 @@
 </div>
 
 <!-- Staff Registry Search Panel -->
-<style>
-    .users-table td, .users-table th {
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-        max-width: none !important;
-        padding-left: 1rem !important;
-        padding-right: 1.5rem !important;
-    }
-    .users-table {
-        width: max-content;
-        min-width: 100%;
-    }
-</style>
 <div id="staffSearchPanel" style="display:none;margin-bottom:1.5rem;">
     <div class="card" style="border:1.5px solid var(--sky,#38bdf8);">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
