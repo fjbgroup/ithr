@@ -8,6 +8,7 @@ use App\Models\WT\AccessRequest;
 use App\Models\WT\MasterData;
 use App\Models\WT\MaintenanceRecord;
 use App\Models\WT\User;
+use App\Models\WT\UserActivityLog;
 use App\Models\WT\WalkieTalkie;
 use App\Models\Staff;
 use App\Services\SystemNotifier;
@@ -483,7 +484,7 @@ class RequestController extends Controller
             );
         }
 
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
@@ -539,7 +540,7 @@ class RequestController extends Controller
             'received'
         );
 
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
@@ -698,7 +699,7 @@ class RequestController extends Controller
 
         
         // Log Activity
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
@@ -742,7 +743,7 @@ class RequestController extends Controller
         );
 
 
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
@@ -780,7 +781,7 @@ class RequestController extends Controller
                 'received'
             );
 
-            \App\Models\UserActivityLog::create([
+            UserActivityLog::create([
                 'user_id' => auth('wt')->id(),
                 'username' => auth('wt')->user()->username,
                 'event_type' => 'action',
@@ -830,7 +831,7 @@ class RequestController extends Controller
         });
         
         // Log Activity
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
@@ -872,7 +873,7 @@ class RequestController extends Controller
             }
         }
 
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'maintenance',
@@ -943,7 +944,7 @@ class RequestController extends Controller
             }
         }
 
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'maintenance',
@@ -1004,7 +1005,7 @@ class RequestController extends Controller
             SystemNotifier::notifyUser($reporter, 'Damage Report Rejected', $userMessage, 'rejected');
         }
 
-        \App\Models\UserActivityLog::create([
+        UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'maintenance',

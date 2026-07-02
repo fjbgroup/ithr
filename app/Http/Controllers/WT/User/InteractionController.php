@@ -1596,7 +1596,7 @@ class InteractionController extends Controller
             ]);
         }
 
-        \App\Models\UserActivityLog::create([
+        \App\Models\WT\UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'maintenance',
