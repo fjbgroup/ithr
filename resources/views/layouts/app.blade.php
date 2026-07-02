@@ -981,5 +981,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Automatically uncollapse the sidebar on page load if an active inner page is being displayed
+        if (document.documentElement.classList.contains('sidebar-collapsed')) {
+            var hasActiveInner = document.querySelector('.nav-group-children.open .nav-child.active');
+            if (hasActiveInner) {
+                document.documentElement.classList.remove('sidebar-collapsed');
+                localStorage.setItem('fjb-sb-collapsed', '0');
+            }
+        }
+    });
+</script>
 </body>
 </html>
