@@ -1748,6 +1748,32 @@ document.addEventListener('DOMContentLoaded', function() {
 @stack('scripts')
 
 <script>
+// Prevent accidental duplicate WT submissions while the first POST is still processing.
+(function() {
+    document.addEventListener('submit', function(event) {
+        var form = event.target;
+        if (!form || form.dataset.allowRepeatSubmit === 'true') return;
+        if ((form.method || '').toLowerCase() !== 'post') return;
+
+        if (form.dataset.wtSubmitting === 'true') {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return false;
+        }
+
+        form.dataset.wtSubmitting = 'true';
+        form.setAttribute('aria-busy', 'true');
+        window.setTimeout(function() {
+            form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(function(button) {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.72';
+            });
+        }, 0);
+    }, true);
+})();
+</script>
+
+<script>
 // Background Auto-Refresh Script (Hot Swap)
 (function() {
     setInterval(() => {
