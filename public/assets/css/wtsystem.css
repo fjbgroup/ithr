@@ -1494,6 +1494,200 @@ body .content-surface .inventory-page-shell #walkiesTable {
   .logout-modal-btn { width: 100%; min-width: 0; }
 }
 
+/* Mobile usability pass: shared across WT admin and user layouts. */
+@media (max-width: 768px) {
+  html,
+  body {
+    width: 100%;
+    min-height: 100%;
+    overscroll-behavior-x: none;
+  }
+
+  .main-content,
+  body.sidebar-collapsed .main-content {
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 0 !important;
+  }
+
+  .topbar,
+  body.sidebar-collapsed .topbar {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    width: 100% !important;
+    min-height: 0;
+    padding: 10px 12px !important;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .topbar-left {
+    flex: 1 1 calc(100% - 48px);
+    min-width: 0;
+  }
+
+  .topbar-title {
+    font-size: 13.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .topbar-breadcrumb {
+    display: none;
+  }
+
+  .topbar-right {
+    order: 3;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 1px 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .topbar-right::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topbar-user,
+  .topbar-signout-btn,
+  .topbar-return-btn,
+  .topbar-role-switcher,
+  .executive-account-menu {
+    flex: 0 0 auto;
+  }
+
+  .topbar-user,
+  .topbar-signout-btn,
+  .topbar-return-btn,
+  .executive-account-toggle {
+    min-height: 36px;
+  }
+
+  .topbar-user-name {
+    max-width: 116px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sidebar,
+  body.sidebar-collapsed .sidebar {
+    width: min(84vw, 304px) !important;
+    max-width: 304px;
+    box-shadow: 18px 0 42px rgba(15, 23, 42, .24);
+  }
+
+  .sidebar-collapse-toggle {
+    display: none !important;
+  }
+
+  .sidebar-nav {
+    padding-bottom: 18px;
+  }
+
+  .page-body {
+    padding: 10px;
+  }
+
+  .content-surface {
+    width: 100%;
+    max-width: none;
+  }
+
+  .page-header-block,
+  .inventory-page-header,
+  .adminit-section-header,
+  .wt-data-page-header {
+    gap: 10px;
+  }
+
+  .page-title-standard {
+    font-size: 16px !important;
+  }
+
+  .page-subtitle-standard {
+    font-size: 11px !important;
+  }
+
+  .table-card,
+  .form-card,
+  .stat-card {
+    border-radius: 12px;
+  }
+
+  .form-card {
+    padding: 14px;
+  }
+
+  .clean-admin-table-scroll,
+  .duplicate-table-scroll,
+  .special-table-scroll,
+  .wt-data-scroll,
+  .dataTables_scrollBody,
+  .overflow-x-auto {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dataTables_wrapper .dataTables_length,
+  .dataTables_wrapper .dataTables_filter,
+  .dataTables_wrapper .dataTables_info,
+  .dataTables_wrapper .dataTables_paginate {
+    float: none !important;
+    width: 100%;
+    text-align: left !important;
+  }
+
+  .dataTables_wrapper .dataTables_filter input,
+  .dataTables_wrapper .dataTables_length select {
+    max-width: 100%;
+  }
+
+  .modal-box,
+  .logout-modal,
+  .modern-confirm-card {
+    width: min(100%, calc(100vw - 24px)) !important;
+    max-height: calc(100vh - 24px);
+  }
+
+  #systemScrollControls {
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 11.5px;
+  }
+
+  .topbar {
+    padding: 9px 10px !important;
+  }
+
+  .topbar-user {
+    padding-inline: 9px;
+  }
+
+  .topbar-role-badge {
+    padding-inline: 7px;
+  }
+
+  .topbar-signout-btn {
+    padding-inline: 10px;
+  }
+
+  .page-body {
+    padding: 8px;
+  }
+}
+
 /* ── FORM ROW LAYOUT ── */
 .wt-form-row {
     display: flex !important;

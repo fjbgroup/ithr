@@ -19,7 +19,8 @@
       'CREATOR | DEVELOPER',
       'SITI HAJAR BINTI ABD RAZAK',
       'STUDENT INTERN FROM KV PERDAGANGAN, JB',
-      'V1.0.0 - 2026'
+      '13/3/2026 - 31/7/2026<br>V1.0.0',
+      'Crafted to empower your workflow, today and onwards.'
     ];
 
     try {
@@ -29,7 +30,8 @@
         'CREATOR | DEVELOPER',
         (decoded[1] || fallback[2]).toUpperCase(),
         (decoded[2] || fallback[3]).toUpperCase(),
-        (decoded[3] || fallback[4]).toUpperCase()
+        fallback[4],
+        fallback[5]
       ];
     } catch (e) {
       return fallback;
@@ -41,7 +43,7 @@
     if(existing) existing.remove();
 
     var lines = creditLines();
-    var colors = ['#67e8f9', '#38bdf8', '#facc15', '#fb7185', '#a78bfa', '#ffffff'];
+    var colors = ['#f0abfc', '#fb7185', '#a78bfa', '#60a5fa', '#67e8f9', '#ffffff'];
     var overlay = document.createElement('div');
     overlay.id = 'creditSecretOverlay';
     overlay.innerHTML =
@@ -56,6 +58,7 @@
         '<div class="credit-secret-name">' + lines[2] + '</div>' +
         '<div class="credit-secret-copy">' + lines[3] + '</div>' +
         '<div class="credit-secret-version">' + lines[4] + '</div>' +
+        '<div class="credit-secret-note">' + lines[5] + '</div>' +
       '</div>';
 
     document.body.appendChild(overlay);
@@ -146,14 +149,15 @@
   width: min(460px, 100%);
   overflow: hidden;
   border-radius: 24px;
-  border: 1px solid rgba(125, 211, 252, 0.38);
+  border: 1px solid rgba(240, 171, 252, 0.42);
   background:
-    radial-gradient(circle at 16% 0%, rgba(125, 211, 252, 0.24), transparent 34%),
-    linear-gradient(145deg, #07111f 0%, #0f2740 52%, #12365a 100%);
+    radial-gradient(circle at 15% 0%, rgba(251, 113, 133, 0.28), transparent 34%),
+    radial-gradient(circle at 86% 8%, rgba(96, 165, 250, 0.28), transparent 36%),
+    linear-gradient(145deg, #2b124c 0%, #1d4ed8 48%, #be185d 100%);
   color: #f8fafc;
   padding: 34px 30px 30px;
   text-align: center;
-  box-shadow: 0 30px 90px rgba(2, 6, 23, 0.55), 0 0 42px rgba(56, 189, 248, 0.18);
+  box-shadow: 0 30px 90px rgba(2, 6, 23, 0.55), 0 0 52px rgba(217, 70, 239, 0.26);
   transform: translateY(16px) scale(0.96);
   transition: transform 220ms cubic-bezier(.16,.84,.44,1);
 }
@@ -172,7 +176,7 @@
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: rgba(103, 232, 249, 0.16);
+  background: rgba(240, 171, 252, 0.22);
   filter: blur(10px);
   pointer-events: none;
 }
@@ -198,16 +202,16 @@
   align-items: center;
   justify-content: center;
   border-radius: 20px;
-  background: linear-gradient(135deg, #67e8f9, #38bdf8);
-  color: #082f49;
+  background: linear-gradient(135deg, #f0abfc, #60a5fa 52%, #fb7185);
+  color: #ffffff;
   font-weight: 950;
   font-size: 20px;
-  box-shadow: 0 18px 36px rgba(56, 189, 248, 0.28);
+  box-shadow: 0 18px 36px rgba(217, 70, 239, 0.34);
   animation: creditSecretPulse 1600ms ease-in-out infinite;
 }
 @keyframes creditSecretPulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 18px 36px rgba(56, 189, 248, 0.28); }
-  50% { transform: scale(1.06); box-shadow: 0 20px 44px rgba(56, 189, 248, 0.42); }
+  0%, 100% { transform: scale(1); box-shadow: 0 18px 36px rgba(217, 70, 239, 0.34); }
+  50% { transform: scale(1.06); box-shadow: 0 20px 44px rgba(96, 165, 250, 0.46); }
 }
 .credit-secret-confetti {
   position: fixed;
@@ -233,7 +237,7 @@
 }
 .credit-secret-kicker {
   margin-top: 22px;
-  color: #7dd3fc;
+  color: #f0abfc;
   font-size: 12px;
   font-weight: 950;
   letter-spacing: 0.16em;
@@ -249,7 +253,7 @@
   height: 3px;
   margin: 20px auto;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, #67e8f9, transparent);
+  background: linear-gradient(90deg, transparent, #f0abfc, #60a5fa, #fb7185, transparent);
 }
 .credit-secret-name {
   font-size: 15px;
@@ -263,5 +267,75 @@
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.06em;
+}
+.credit-secret-note {
+  margin: 18px auto 0;
+  max-width: none;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  #creditSecretOverlay {
+    padding: 14px;
+    align-items: center;
+  }
+
+  .credit-secret-card {
+    width: 100%;
+    border-radius: 18px;
+    padding: 28px 18px 22px;
+  }
+
+  .credit-secret-close {
+    top: 10px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .credit-secret-mark {
+    width: 54px;
+    height: 54px;
+    border-radius: 17px;
+    font-size: 18px;
+  }
+
+  .credit-secret-kicker {
+    margin-top: 18px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .credit-secret-title {
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  .credit-secret-name {
+    font-size: 12px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .credit-secret-copy,
+  .credit-secret-version {
+    font-size: 10.5px;
+    line-height: 1.45;
+  }
+
+  .credit-secret-note {
+    max-width: 260px;
+    font-size: 10.5px;
+    line-height: 1.45;
+    white-space: normal;
+  }
 }
 </style>
