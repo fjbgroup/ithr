@@ -484,8 +484,8 @@
     $reportedBy = $resolveReportedBy($request);
     $requestor = $request->user
         ?: \App\Models\User::query()
-            ->whereRaw('UPPER(full_name) = ?', [strtoupper((string) $request->full_name)])
-            ->orWhereRaw('UPPER(username) = ?', [strtoupper((string) $request->full_name)])
+            ->whereRaw('UPPER(name) = ?', [strtoupper((string) $request->full_name)])
+            ->orWhereRaw('UPPER(staff_no) = ?', [strtoupper((string) $request->full_name)])
             ->first();
     $requestorStaffId = $request->staff_id ?: ($requestor->staff_id ?? null);
     $isTemporaryRequest = $request->request_type === 'temporary_walkie_talkie';
