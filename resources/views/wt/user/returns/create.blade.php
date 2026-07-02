@@ -52,6 +52,10 @@
     .return-search-wrap { margin-bottom:12px; }
     .return-search-input { width:100%;min-height:36px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);padding:8px 12px;color:var(--text);font-size:11px;font-weight:800;outline:none; }
     .return-search-input:focus { border-color:var(--sky-dark);box-shadow:0 0 0 3px rgba(56,189,248,.15); }
+    .return-radio-prefix { position:relative;min-width:0; }
+    .return-radio-prefix::before { content:'G';position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:1;color:var(--text);font-size:11px;font-weight:900;pointer-events:none; }
+    .return-radio-prefix .return-search-input,
+    .return-radio-prefix .return-date-input { padding-left:28px; }
     .return-search-empty { display:none;border:1px dashed var(--border);border-radius:7px;padding:14px;text-align:center;color:var(--muted);font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
     .return-manual-search { display:grid;grid-template-columns:1fr auto;gap:10px; }
     .return-search-btn { min-height:36px;border:0;border-radius:7px;background:var(--navy);color:#fff;padding:0 16px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase; }
@@ -152,7 +156,9 @@
             <div class="return-panel">
                 <h4 class="return-section-title"><i class="fa-solid fa-magnifying-glass"></i> Search Assignment</h4>
                 <div class="return-manual-search">
-                    <input type="search" id="manualReturnSearch" class="return-search-input" placeholder="Enter radio ID, serial no, staff ID, or name...">
+                    <div class="return-radio-prefix">
+                        <input type="search" id="manualReturnSearch" class="return-search-input" placeholder="0001, serial no, staff ID, or name...">
+                    </div>
                     <button type="button" id="manualReturnSearchBtn" class="return-search-btn">Search</button>
                 </div>
                 <div id="manualReturnResults" class="return-search-results"></div>
@@ -194,7 +200,9 @@
                     <div class="return-manual-fields" id="manualReturnFields">
                         <div>
                             <label class="form-label">Radio ID</label>
-                            <input type="text" name="manual_radio_id" id="manualRadioIdInput" class="return-date-input" placeholder="Radio ID">
+                            <div class="return-radio-prefix">
+                                <input type="text" name="manual_radio_id" id="manualRadioIdInput" class="return-date-input" placeholder="0001" data-radio-id-number-only>
+                            </div>
                         </div>
                         <div>
                             <label class="form-label">Serial No</label>
@@ -293,7 +301,9 @@
             <div class="return-panel">
                 <h4 class="return-section-title"><i class="fa-solid fa-walkie-talkie"></i> {{ $isAdminRoute && $mode === 'staff' ? 'Select Recipient Unit' : 'Select Unit' }}</h4>
                 <div class="return-search-wrap">
-                    <input type="search" id="returnUnitSearch" class="return-search-input" placeholder="Search request, radio ID, serial, purpose, or date...">
+                    <div class="return-radio-prefix">
+                        <input type="search" id="returnUnitSearch" class="return-search-input" placeholder="0001, request, serial, purpose, or date...">
+                    </div>
                 </div>
                 <div style="display:grid;gap:12px" id="returnUnitList">
                     @foreach($activeAssets as $asset)
@@ -426,7 +436,9 @@
                     <div class="return-manual-fields" id="manualReturnFields">
                         <div>
                             <label class="form-label">Radio ID</label>
-                            <input type="text" name="manual_radio_id" id="manualRadioIdInput" class="return-date-input" placeholder="Radio ID">
+                            <div class="return-radio-prefix">
+                                <input type="text" name="manual_radio_id" id="manualRadioIdInput" class="return-date-input" placeholder="0001" data-radio-id-number-only>
+                            </div>
                         </div>
                         <div>
                             <label class="form-label">Serial No</label>
@@ -552,6 +564,15 @@
         const manualDepartmentInput = document.getElementById('manualDepartmentInput');
         const manualReturnSearchUrl = @json($returnSearchUrl);
         const returnPrefillQuery = @json((string) request()->query('q', ''));
+
+        document.querySelectorAll('[data-radio-id-number-only]').forEach((input) => {
+            const stripLeadingG = () => {
+                input.value = input.value.replace(/^g/i, '');
+            };
+
+            stripLeadingG();
+            input.addEventListener('input', stripLeadingG);
+        });
 
         function setupReturnSignaturePad(container) {
             const canvas = container.querySelector('canvas');
