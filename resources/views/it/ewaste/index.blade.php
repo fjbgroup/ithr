@@ -113,17 +113,21 @@
 <style>
 .ew-table-scroll {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
   overflow-y: visible;
 }
 .ew-table-scroll .data-table {
   width: 100% !important;
-  min-width: {{ $user->isAdminOrFinance() ? '980px' : '760px' }};
+  min-width: 0;
+  table-layout: auto;
 }
-.data-table td, .data-table th { vertical-align:middle !important; padding:8px 10px !important; white-space:nowrap; }
+.data-table td, .data-table th { vertical-align:middle !important; padding:8px 8px !important; white-space:nowrap; }
 .data-table td:nth-child({{ $user->isAdminOrFinance() ? '4' : '3' }}),
-.data-table th:nth-child({{ $user->isAdminOrFinance() ? '4' : '3' }}) { white-space:normal; word-break:break-word; min-width:100px; }
-.data-table td:last-child, .data-table th:last-child { white-space:nowrap; width:1%; }
+.data-table th:nth-child({{ $user->isAdminOrFinance() ? '4' : '3' }}) { white-space:normal; word-break:break-word; min-width:160px; }
+.data-table td:last-child, .data-table th:last-child { white-space:normal; width:240px; min-width:220px; }
+.ew-actions{display:flex;align-items:center;gap:4px;flex-wrap:wrap;max-width:240px}
+.ew-actions form{display:inline-flex;margin:0}
+.ew-actions button{line-height:1.2}
 </style>
 
 <div id="ewLiveResults">
@@ -185,7 +189,7 @@
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->date_flagged ? $item->date_flagged->format('d/m/Y') : '—' }}</td>
         @if($user->isAdminOrFinance())
         <td>
-          <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
+          <div class="ew-actions">
             @if($item->disposal_status === 'Approved')
               <form method="POST" action="{{ route('it.ewaste.collect', $item->id) }}" style="display:inline" onsubmit="return confirm('Mark this item as collected?')">
                 @csrf

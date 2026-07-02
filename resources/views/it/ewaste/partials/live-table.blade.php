@@ -56,7 +56,7 @@
         <td style="font-size:13px;font-family:'Inter',sans-serif">{{ $item->date_flagged ? $item->date_flagged->format('d/m/Y') : '—' }}</td>
         @if($user->isAdminOrFinance())
         <td>
-          <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap">
+          <div class="ew-actions">
             @if($item->disposal_status === 'Approved')
               <form method="POST" action="{{ route('it.ewaste.collect', $item->id) }}" style="display:inline" onsubmit="return confirm('Mark this item as collected?')">
                 @csrf

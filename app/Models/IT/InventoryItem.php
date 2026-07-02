@@ -28,4 +28,3 @@ class InventoryItem extends Model
     public function editRequests()   { return $this->hasMany(EditAssetRequest::class, 'asset_id'); }
     public function ewasteRequests() { return $this->hasMany(EwasteRequest::class, 'inventory_id'); }
 }
-

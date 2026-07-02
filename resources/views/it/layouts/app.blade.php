@@ -266,12 +266,12 @@ textarea.form-control{min-height:90px;resize:vertical}
 }
 .btn-primary-custom:hover{background:var(--navy-mid,#254a78);color:#fff;transform:translateY(-1px)}
 .btn-secondary-custom{
-  background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;
+  background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;
   padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;
   transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:7px;
   font-family:'Inter',sans-serif;
 }
-.btn-secondary-custom:hover{border-color:var(--navy,#142b47);color:var(--navy,#142b47)}
+.btn-secondary-custom:hover{background:var(--body-bg);border-color:var(--accent);color:var(--accent)}
 .btn-icon{
   width:30px;height:30px;border-radius:6px;
   display:inline-flex;align-items:center;justify-content:center;
@@ -1350,24 +1350,10 @@ function toggleNavGroup(groupId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Automatically uncollapse the sidebar on page load if an active inner page is being displayed
-    if (document.documentElement.classList.contains('sidebar-collapsed')) {
-        var hasActiveInner = document.querySelector('.nav-group-children.open .nav-link.active');
-        if (hasActiveInner) {
-            document.documentElement.classList.remove('sidebar-collapsed');
-            localStorage.setItem('fjb-sb-collapsed', '0');
-        }
-    }
-    
-    // Add click listeners to nav-links to force uncollapse instantly
     document.querySelectorAll('.nav-group-children .nav-link').forEach(function(link) {
         link.addEventListener('click', function(e) {
-            if (document.documentElement.classList.contains('sidebar-collapsed')) {
-                document.documentElement.classList.remove('sidebar-collapsed');
-                localStorage.setItem('fjb-sb-collapsed', '0');
-                document.querySelectorAll('.nav-group-children .nav-link').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-            }
+            document.querySelectorAll('.nav-group-children .nav-link').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
         });
     });
 });

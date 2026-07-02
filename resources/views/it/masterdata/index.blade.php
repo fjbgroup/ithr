@@ -13,6 +13,10 @@
 .md-tab:hover{color:var(--text);background:rgba(0,0,0,.04)}
 .md-tab.active{background:var(--surface);color:var(--navy,#142b47);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 .md-tab i{font-size:14px}
+html.dark .md-tab-bar{background:#0f172a;border-color:#334155}
+html.dark .md-tab{color:#cbd5e1}
+html.dark .md-tab:hover{color:#f8fafc;background:rgba(148,163,184,.14)}
+html.dark .md-tab.active{background:#334155;color:#ffffff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
 
 /* ── Shared card styles ── */
 .ac-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.04)}

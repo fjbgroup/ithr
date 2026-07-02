@@ -64,7 +64,7 @@
               $itCanWriteoff = !in_array($display_status, ['Pending E-Waste', 'E-Waste', 'Collected', 'Disposed'], true);
             @endphp
             @if($user->isAdminOrFinance())
-            @if(($itCanWriteoff || $user->isAdmin()) && !$user->isReadOnlyViewer())
+            @if($itCanWriteoff && !$user->isReadOnlyViewer())
             <a href="{{ route('it.writeoff.index') }}?item_id={{ $item->id }}"
               style="font-size:11px;font-weight:700;color:#16a34a;background:rgba(22,163,74,.1);border:none;border-radius:6px;cursor:pointer;padding:4px 8px;white-space:nowrap;font-family:'Inter',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:4px"
               title="Write off to E-Waste or Disposal">
