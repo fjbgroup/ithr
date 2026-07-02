@@ -140,6 +140,237 @@
     background: var(--surface);
     padding: 10px 12px;
   }
+  .pfa-hou-list {
+    display: grid;
+    gap: 12px;
+    padding: 16px 20px 20px;
+  }
+  .pfa-hou-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .pfa-hou-card-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(360px, .9fr);
+    gap: 18px;
+    padding: 16px 18px;
+    align-items: start;
+  }
+  .pfa-hou-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin-bottom: 8px;
+  }
+  .pfa-hou-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pfa-hou-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .pfa-hou-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .pfa-hou-assets {
+    display: grid;
+    gap: 8px;
+  }
+  .pfa-hou-asset-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--body-bg);
+    padding: 9px 10px;
+  }
+  .pfa-hou-asset-summary-text {
+    min-width: 0;
+    font-size: 12px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pfa-hou-asset-dropdown {
+    display: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--body-bg);
+    padding: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .pfa-hou-asset {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--body-bg);
+    padding: 8px 10px;
+    color: var(--text);
+  }
+  .pfa-hou-asset + .pfa-hou-asset {
+    margin-top: 8px;
+  }
+  .pfa-hou-asset-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(2,132,199,.10);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .pfa-hou-asset-title {
+    font-size: 12.5px;
+    font-weight: 750;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pfa-hou-asset-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .pfa-hou-asset-meta code {
+    font-size: 10px;
+    color: var(--muted);
+    background: transparent;
+    padding: 0;
+  }
+  .pfa-hou-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .wo-page-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--body-bg);
+    flex-wrap: wrap;
+  }
+  .wo-page-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .wo-page-link {
+    min-width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .wo-page-link.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .pfa-hou-flow {
+    display: grid;
+    grid-template-columns: 1fr 26px 1fr 26px 1fr;
+    align-items: start;
+    gap: 0;
+  }
+  .pfa-step {
+    min-width: 0;
+    text-align: center;
+  }
+  .pfa-step-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 7px;
+  }
+  .pfa-step-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .pfa-step-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+  .pfa-connector {
+    height: 2px;
+    margin-top: 16px;
+    background: var(--border);
+    border-radius: 999px;
+  }
+  .pfa-step-done .pfa-step-dot {
+    border-color: #16a34a;
+    background: #16a34a;
+    color: #fff;
+  }
+  .pfa-step-active .pfa-step-dot {
+    border-color: #f59e0b;
+    background: #fffbeb;
+    color: #d97706;
+  }
+  .pfa-step-wait .pfa-step-dot {
+    color: var(--muted);
+  }
+  .pfa-connector-done {
+    background: #16a34a;
+  }
   @media (max-width: 760px) {
     .wo-hou-table,
     .wo-hou-table thead,
@@ -173,6 +404,31 @@
     }
     .wo-hou-modal-asset-meta {
       grid-column: 2;
+    }
+    .pfa-hou-list {
+      padding: 12px 14px 16px;
+    }
+    .pfa-hou-card-main {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 14px;
+    }
+    .pfa-hou-flow {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .pfa-step {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      column-gap: 10px;
+      text-align: left;
+      align-items: center;
+    }
+    .pfa-step-dot {
+      margin-bottom: 0;
+    }
+    .pfa-connector {
+      display: none;
     }
   }
 </style>
@@ -412,27 +668,99 @@
 </div>
 
 @if($houHistoryCount)
+@php
+  $houHistoryGrouped = $houHistory->groupBy(fn($i) => $i->batch_id ?: ('single_'.$i->id))->values();
+  $houHistoryPerPage = 5;
+  $houHistoryPage = max(1, (int) request('hou_history_page', 1));
+  $houHistoryPages = max(1, (int) ceil($houHistoryGrouped->count() / $houHistoryPerPage));
+  $houHistoryPage = min($houHistoryPage, $houHistoryPages);
+  $houHistoryPaged = $houHistoryGrouped->forPage($houHistoryPage, $houHistoryPerPage);
+@endphp
 <div class="table-card" style="margin-bottom:24px">
   <div class="table-card-header">
     <div class="table-card-title" style="font-size:13px"><i class="bi bi-clock-history me-2"></i>My HOU History (Last {{ $houHistoryCount }})</div>
   </div>
-  <div style="overflow-x:auto">
-    <table class="table" style="width:100%;font-size:12px">
-      <thead><tr><th>#</th><th>Description</th><th>Asset No.</th><th>HOU Status</th><th>Signed At</th><th>Remark</th></tr></thead>
-      <tbody>
-        @foreach($houHistory as $item)
-        <tr>
-          <td>{{ $loop->iteration }}</td>
-          <td>{{ $item->description }}</td>
-          <td><code>{{ $item->asset_number ?: '—' }}</code></td>
-          <td><span class="badge-status {{ $item->hou_status === 'Checked' ? 'bs-active' : 'bs-disposed' }}">{{ $item->hou_status }}</span></td>
-          <td style="color:var(--muted)">{{ $item->hou_signed_at?->format('d M Y') ?? '—' }}</td>
-          <td style="color:var(--muted)">{{ $item->hou_remark ?: '—' }}</td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
+  <div class="pfa-hou-list">
+    @foreach($houHistoryPaged as $historyGroup)
+    @php
+      $historyFirst = $historyGroup->first();
+      $historyCount = $historyGroup->count();
+      $historyIsBatch = $historyCount > 1;
+      $historyStatus = $historyGroup->contains(fn($i) => $i->hou_status === 'Rejected') ? 'Rejected' : 'Checked';
+      $historyRemark = $historyGroup->pluck('hou_remark')->filter()->unique()->implode(' | ');
+      $historyColId = 'houHistoryAssets_'.md5($historyFirst->batch_id ?: ('single_'.$historyFirst->id));
+      $historyTitle = $historyIsBatch ? 'Bulk Write-Off' : ($historyFirst->description ?: 'Write-Off Submission');
+    @endphp
+    <div class="pfa-hou-card">
+      <div class="pfa-hou-card-main">
+        <div style="min-width:0">
+          <div class="pfa-hou-title-row">
+            <div class="pfa-hou-title" title="{{ $historyTitle }}">{{ $historyTitle }}</div>
+            <span class="pfa-hou-pill" style="background:rgba(2,132,199,.10);color:var(--accent)">{{ $historyCount }} {{ $historyCount === 1 ? 'item' : 'items' }}</span>
+            <span class="badge-status {{ $historyStatus === 'Checked' ? 'bs-active' : 'bs-disposed' }}">{{ $historyStatus }}</span>
+          </div>
+          <div class="pfa-hou-meta">
+            <span><i class="bi bi-calendar-check"></i> {{ $historyFirst->hou_signed_at?->format('d M Y') ?? '—' }}</span>
+            <span><i class="bi bi-person"></i> {{ $historyFirst->creator?->full_name ?? '—' }}</span>
+          </div>
+          <div class="pfa-hou-assets">
+            <div class="pfa-hou-asset-summary">
+              <div class="pfa-hou-asset-summary-text">
+                {{ $historyCount === 1 ? ($historyFirst->description ?: 'Asset reviewed') : (($historyFirst->description ?: 'First asset') . ' +' . ($historyCount - 1) . ' more') }}
+              </div>
+              <button type="button" onclick="pfaToggle('{{ $historyColId }}')" class="wo-hou-open-btn" style="padding:6px 9px">
+                <i id="{{ $historyColId }}_icon" class="bi bi-chevron-down" style="font-size:10px;transition:transform .2s"></i>
+                <span id="{{ $historyColId }}_txt" data-closed-label="View {{ $historyCount }} {{ $historyCount === 1 ? 'asset' : 'assets' }}">View {{ $historyCount }} {{ $historyCount === 1 ? 'asset' : 'assets' }}</span>
+              </button>
+            </div>
+            <div id="{{ $historyColId }}" class="pfa-hou-asset-dropdown">
+              @foreach($historyGroup as $hi)
+              <div class="pfa-hou-asset" title="{{ $hi->description }}{{ $hi->asset_number ? ' - '.$hi->asset_number : '' }}">
+                <div class="pfa-hou-asset-icon"><i class="bi bi-pc-display-horizontal"></i></div>
+                <div style="min-width:0">
+                  <div class="pfa-hou-asset-title">{{ $hi->description ?: 'Asset reviewed' }}</div>
+                  <div class="pfa-hou-asset-meta">
+                    <span>{{ $hi->asset_class ?: 'Unclassified' }}</span>
+                    <span>&bull;</span>
+                    <code>{{ $hi->asset_number ?: 'No asset no.' }}</code>
+                    @if($hi->serial_number)
+                      <span>&bull;</span>
+                      <code>{{ $hi->serial_number }}</code>
+                    @endif
+                  </div>
+                </div>
+              </div>
+              @endforeach
+            </div>
+          </div>
+          <div class="pfa-hou-actions">
+            <a href="{{ route('it.writeoff.report', $historyFirst->id) }}" target="_blank" class="wo-hou-open-btn" style="text-decoration:none;padding:5px 8px">
+              <i class="bi bi-file-earmark-text"></i> Report
+            </a>
+          </div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:9px;background:var(--body-bg);padding:12px 14px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">HOU Review</div>
+          <div style="font-size:13px;font-weight:800;color:var(--text)">{{ $historyFirst->hou_signed_name ?: ($historyFirst->houUser?->full_name ?? '—') }}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">{{ $historyFirst->hou_signed_at?->format('d M Y H:i') ?? '—' }}</div>
+          @if($historyRemark)
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.45">{{ $historyRemark }}</div>
+          @endif
+        </div>
+      </div>
+    </div>
+    @endforeach
   </div>
+  @if($houHistoryPages > 1)
+  <div class="wo-page-controls">
+    <div style="font-size:12px;color:var(--muted)">Page {{ $houHistoryPage }} of {{ $houHistoryPages }} · {{ $houHistoryGrouped->count() }} submissions</div>
+    <div class="wo-page-links">
+      @for($i = 1; $i <= $houHistoryPages; $i++)
+        <a class="wo-page-link {{ $i === $houHistoryPage ? 'is-active' : '' }}" href="{{ request()->fullUrlWithQuery(['hou_history_page' => $i]) }}">{{ $i }}</a>
+      @endfor
+    </div>
+  </div>
+  @endif
 </div>
 @endif
 @endif
@@ -686,7 +1014,9 @@
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <div>
       <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:var(--text)">Pending Final Approval</span>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">Items signed by GM — awaiting CEO review and decision</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">
+        {{ $user->isHOU() ? 'Write-offs you checked — tracking GM and CEO approval' : 'Items signed by GM — awaiting CEO review and decision' }}
+      </div>
     </div>
     @if($woCount > 0)
     <span style="background:rgba(245,158,11,.12);color:#d97706;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700">{{ $woCount }} pending</span>
@@ -700,7 +1030,124 @@
     <div style="font-size:12px;color:var(--muted);margin-top:4px">All write-off requests have been processed</div>
   </div>
   @else
-  @php $groupedQueue = $woQueue->groupBy(fn($i) => $i->batch_id ?: 'solo_'.$i->id); @endphp
+  @php
+    $groupedQueue = $woQueue->groupBy(fn($i) => $i->batch_id ?: 'solo_'.$i->id)->values();
+    $pfaPerPage = 5;
+    $pfaPage = max(1, (int) request('pfa_page', 1));
+    $pfaPages = max(1, (int) ceil($groupedQueue->count() / $pfaPerPage));
+    $pfaPage = min($pfaPage, $pfaPages);
+    $groupedQueuePaged = $groupedQueue->forPage($pfaPage, $pfaPerPage);
+  @endphp
+  @if($user->isHOU())
+  <div class="pfa-hou-list">
+    @foreach($groupedQueuePaged as $qItems)
+    @php
+      $qFirst = $qItems->first();
+      $qCount = $qItems->count();
+      $qIsBatch = $qCount > 1;
+      $qColId = 'pfaHouBatch_'.md5($qFirst->batch_id ?: ('solo_'.$qFirst->id));
+      $qTitle = $qIsBatch ? 'Bulk Write-Off' : ($qFirst->description ?: 'Write-Off Submission');
+      $qClasses = $qItems->pluck('asset_class')->filter()->unique()->values();
+      $gmDone = $qFirst->gm_status === 'Checked';
+      $gmPending = $qFirst->gm_status === 'Pending';
+      $ceoDone = $qFirst->ceo_status === 'Approved';
+      $ceoRejected = $qFirst->ceo_status === 'Rejected';
+      $ceoPending = $qFirst->ceo_status === 'Pending';
+      $gmLabel = $gmDone ? ($qFirst->gm_signed_name ?: 'GM signed') : ($gmPending ? 'Awaiting '.($qFirst->currentGmUser?->full_name ?? 'GM') : 'Waiting');
+      $ceoLabel = $ceoRejected ? 'Rejected' : ($ceoDone ? 'Approved' : ($ceoPending ? 'Awaiting CEO' : 'After GM'));
+    @endphp
+    <div class="pfa-hou-card">
+      <div class="pfa-hou-card-main">
+        <div style="min-width:0">
+          <div class="pfa-hou-title-row">
+            <div class="pfa-hou-title" title="{{ $qTitle }}">{{ $qTitle }}</div>
+            <span class="pfa-hou-pill" style="background:rgba(2,132,199,.10);color:var(--accent)">{{ $qCount }} {{ $qCount === 1 ? 'item' : 'items' }}</span>
+          </div>
+          <div class="pfa-hou-meta">
+            <span><i class="bi bi-calendar3"></i> {{ $qFirst->created_at?->format('d M Y') }}</span>
+            @if($qFirst->writeoff_name)
+              <span><i class="bi bi-person"></i> {{ $qFirst->writeoff_name }}</span>
+            @endif
+            @foreach($qClasses as $cls)
+              <span class="badge-status bs-repair" style="font-size:10px">{{ $cls }}</span>
+            @endforeach
+          </div>
+          <div class="pfa-hou-assets">
+            <div class="pfa-hou-asset-summary">
+              <div class="pfa-hou-asset-summary-text">
+                {{ $qCount === 1 ? ($qFirst->description ?: 'Asset awaiting approval') : (($qFirst->description ?: 'First asset') . ' +' . ($qCount - 1) . ' more') }}
+              </div>
+              <button type="button" onclick="pfaToggle('{{ $qColId }}')" class="wo-hou-open-btn" style="padding:6px 9px">
+                <i id="{{ $qColId }}_icon" class="bi bi-chevron-down" style="font-size:10px;transition:transform .2s"></i>
+                <span id="{{ $qColId }}_txt" data-closed-label="View {{ $qCount }} {{ $qCount === 1 ? 'asset' : 'assets' }}">View {{ $qCount }} {{ $qCount === 1 ? 'asset' : 'assets' }}</span>
+              </button>
+            </div>
+            <div id="{{ $qColId }}" class="pfa-hou-asset-dropdown">
+            @foreach($qItems as $qi)
+              <div class="pfa-hou-asset" title="{{ $qi->description }}{{ $qi->asset_number ? ' - '.$qi->asset_number : '' }}">
+                <div class="pfa-hou-asset-icon"><i class="bi bi-pc-display-horizontal"></i></div>
+                <div style="min-width:0">
+                  <div class="pfa-hou-asset-title">{{ $qi->description ?: 'Asset awaiting approval' }}</div>
+                  <div class="pfa-hou-asset-meta">
+                    <span>{{ $qi->asset_class ?: 'Unclassified' }}</span>
+                    <span>&bull;</span>
+                    <code>{{ $qi->asset_number ?: 'No asset no.' }}</code>
+                    @if($qi->serial_number)
+                      <span>&bull;</span>
+                      <code>{{ $qi->serial_number }}</code>
+                    @endif
+                  </div>
+                </div>
+              </div>
+            @endforeach
+            </div>
+          </div>
+          <div class="pfa-hou-actions">
+            <a href="{{ route('it.writeoff.report', $qFirst->id) }}" target="_blank" class="wo-hou-open-btn" style="text-decoration:none;padding:5px 8px">
+              <i class="bi bi-file-earmark-text"></i> Report
+            </a>
+          </div>
+        </div>
+        <div class="pfa-hou-flow" aria-label="Write-off approval progress">
+          <div class="pfa-step pfa-step-done">
+            <div class="pfa-step-dot"><i class="bi bi-check-lg"></i></div>
+            <div>
+              <div class="pfa-step-label">HOU</div>
+              <div class="pfa-step-sub">{{ $qFirst->hou_signed_name ?: ($qFirst->houUser?->full_name ?? 'Approved') }}</div>
+            </div>
+          </div>
+          <div class="pfa-connector pfa-connector-done"></div>
+          <div class="pfa-step {{ $gmDone ? 'pfa-step-done' : 'pfa-step-active' }}">
+            <div class="pfa-step-dot"><i class="bi {{ $gmDone ? 'bi-check-lg' : 'bi-hourglass-split' }}"></i></div>
+            <div>
+              <div class="pfa-step-label">GM</div>
+              <div class="pfa-step-sub">{{ $gmLabel }}</div>
+            </div>
+          </div>
+          <div class="pfa-connector {{ $gmDone ? 'pfa-connector-done' : '' }}"></div>
+          <div class="pfa-step {{ $ceoDone ? 'pfa-step-done' : ($ceoPending || $ceoRejected ? 'pfa-step-active' : 'pfa-step-wait') }}">
+            <div class="pfa-step-dot"><i class="bi {{ $ceoDone ? 'bi-check-lg' : ($ceoRejected ? 'bi-x-lg' : ($ceoPending ? 'bi-hourglass-split' : 'bi-circle')) }}"></i></div>
+            <div>
+              <div class="pfa-step-label">CEO</div>
+              <div class="pfa-step-sub">{{ $ceoLabel }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    @endforeach
+  </div>
+  @if($pfaPages > 1)
+  <div class="wo-page-controls">
+    <div style="font-size:12px;color:var(--muted)">Page {{ $pfaPage }} of {{ $pfaPages }} · {{ $groupedQueue->count() }} submissions</div>
+    <div class="wo-page-links">
+      @for($i = 1; $i <= $pfaPages; $i++)
+        <a class="wo-page-link {{ $i === $pfaPage ? 'is-active' : '' }}" href="{{ request()->fullUrlWithQuery(['pfa_page' => $i]) }}">{{ $i }}</a>
+      @endfor
+    </div>
+  </div>
+  @endif
+  @else
   <div style="overflow-x:auto">
     <table class="table" style="width:100%">
       <thead><tr>
@@ -709,12 +1156,12 @@
         @if($user->isAdmin())<th>Actions</th>@endif
       </tr></thead>
       <tbody>
-        @foreach($groupedQueue as $qKey => $qItems)
+        @foreach($groupedQueue as $qItems)
         @php
           $qFirst   = $qItems->first();
           $qIsBatch = $qItems->count() > 1;
           $qCount   = $qItems->count();
-          $qColId   = 'pfaBatch_'.md5($qKey);
+          $qColId   = 'pfaBatch_'.md5($qFirst->batch_id ?: ('solo_'.$qFirst->id));
         @endphp
         {{-- Main row --}}
         <tr>
@@ -789,6 +1236,10 @@
               <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(13,148,136,.08);color:#0d9488;border:1px solid rgba(13,148,136,.2);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">
                 <i class="bi bi-check-circle-fill" style="font-size:10px"></i> {{ $qFirst->gm_signed_name }}
               </div>
+            @elseif($qFirst->gm_status === 'Pending')
+              <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.1);color:#d97706;border:1px solid rgba(245,158,11,.24);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">
+                <i class="bi bi-hourglass-split" style="font-size:10px"></i> Awaiting {{ $qFirst->currentGmUser?->full_name ?? 'GM' }}
+              </div>
             @else<span style="color:var(--muted)">—</span>
             @endif
           </td>
@@ -800,6 +1251,8 @@
               <span class="badge-status bs-disposed">CEO Rejected</span>
             @elseif($qFirst->ceo_status === 'Pending')
               <span class="badge-status bs-pending">Awaiting CEO</span>
+            @elseif($qFirst->gm_status === 'Pending')
+              <span style="color:var(--muted);font-size:12px">Waiting for GM</span>
             @else
               <span style="color:var(--muted);font-size:12px">—</span>
             @endif
@@ -827,6 +1280,7 @@
     </table>
   </div>
   @endif
+  @endif
 </div>
 @endif
 
@@ -838,7 +1292,7 @@ function pfaToggle(id) {
   var open = el.style.display !== 'none';
   el.style.display     = open ? 'none' : 'block';
   icon.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
-  if (txt) txt.textContent = open ? 'Show ' + txt.textContent.replace(/\D/g,'') + ' items' : 'Hide items';
+  if (txt) txt.textContent = open ? (txt.dataset.closedLabel || 'Show items') : 'Hide items';
 }
 </script>
 
@@ -1438,13 +1892,9 @@ function woToggleBatch(id) {
           </td>
           <td style="border:1px solid #000;padding:10px 12px;vertical-align:top;width:34%">
             <div style="font-weight:700;margin-bottom:10px">RECOMMENDATION COMMITTEE :</div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-              <div style="border-bottom:1px solid #000;width:45%;height:40px"></div>
-              <div style="border-bottom:1px solid #000;width:45%;height:40px"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:10px;font-style:italic">
-              <div style="width:45%"><em>General Manager</em><br>Date : <span style="display:inline-block;border-bottom:1px solid #000;width:60px"></span></div>
-              <div style="width:45%"><em>General Manager</em><br>Date : <span style="display:inline-block;border-bottom:1px solid #000;width:60px"></span></div>
+            <div style="border-bottom:1px solid #000;width:100%;height:40px;margin-bottom:8px"></div>
+            <div style="font-size:10px;font-style:italic">
+              <em>General Manager</em><br>Date : <span style="display:inline-block;border-bottom:1px solid #000;width:90px"></span>
             </div>
           </td>
         </tr>

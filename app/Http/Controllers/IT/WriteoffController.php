@@ -99,11 +99,20 @@ class WriteoffController extends Controller
         }
 
         // Pending Final Approval (all roles)
-        $woQueue = EwasteItem::with(['creator', 'houUser'])
+        $woQueue = EwasteItem::with(['creator', 'houUser', 'currentGmUser'])
             ->where('disposal_status', 'Pending')
             ->where(fn($q) => $q->whereNull('ceo_status')->orWhere('ceo_status', 'Pending'))
-            ->where(fn($q) => $q->where('gm_status', 'Checked')
-                ->orWhere(fn($q2) => $q2->where('hou_status', 'Checked')->whereNull('gm1_user_id')))
+            ->where(function ($q) use ($user) {
+                $q->where('gm_status', 'Checked')
+                    ->orWhere(fn($q2) => $q2->where('hou_status', 'Checked')->whereNull('gm1_user_id'));
+
+                if ($user->isHOU()) {
+                    $q->orWhere(fn($q2) => $q2
+                        ->where('checked_by_user_id', $user->id)
+                        ->where('hou_status', 'Checked')
+                        ->where('gm_status', 'Pending'));
+                }
+            })
             ->orderByDesc('gm_signed_at')->orderByDesc('hou_signed_at')->orderByDesc('created_at')
             ->get();
         $woCount = $woQueue->count();
