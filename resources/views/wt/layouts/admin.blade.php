@@ -191,13 +191,6 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
     @endif
-
-    <div class="nav-section-label">Guides</div>
-    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}">
-      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}</span>
-      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
-    </a>
-
     <div class="nav-section-label">{{ $isAdminItView ? 'Management' : 'Personal Assets' }}</div>
 
     @if($isAdminItView)
@@ -318,6 +311,10 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     <a href="{{ route('wt.admin.policies') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.policies') ? 'active-sidebar' : '' }}" title="Role Permissions Matrix">
       <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>
       @include('wt.partials.sidebar-info', ['text' => 'View WT System access permissions for ICT and executive users.'])
+    </a>
+    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'User Manual' : 'Executive User Manual' }}">
+      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'User Manual' : 'Executive User Manual' }}</span>
+      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
     </a>
 
     {{-- System Control (IT only) --}}

@@ -24,6 +24,7 @@ use App\Http\Controllers\IT\ProfileController;
 use App\Http\Controllers\IT\ReportController;
 use App\Http\Controllers\IT\RoleMetricController;
 use App\Http\Controllers\IT\UserController;
+use App\Http\Controllers\IT\UserManualController;
 use App\Http\Controllers\IT\WriteoffController;
 use App\Http\Controllers\IT\WriteoffInventoryController;
 
@@ -56,6 +57,7 @@ Route::prefix('it')->name('it.')->group(function () {
 
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
             Route::get('/role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
+            Route::get('/user-manual', [UserManualController::class, 'index'])->name('user-manual.index');
 
             // IT Inventory
             Route::get('/inventory',                      [InventoryController::class, 'index'])->name('inventory.index');
