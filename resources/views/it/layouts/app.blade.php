@@ -374,10 +374,10 @@ html.sidebar-collapsed .sidebar-nav .nav-link{font-size:0!important;padding:10px
 html.sidebar-collapsed .sidebar-nav .nav-link i{font-size:16px!important;width:auto!important;margin:0!important;text-align:center}
 html.sidebar-collapsed .sidebar-nav .nav-link .badge-count{display:none!important}
 html.sidebar-collapsed .nav-group-toggle {
-  font-size: 0 !important; padding: .6rem 0 !important;
+  padding: .6rem 0 !important;
   justify-content: center !important; gap: 0 !important;
 }
-html.sidebar-collapsed .nav-group-toggle > i:first-child { display: block !important; flex-shrink: 0; margin: 0 auto !important; width: auto !important; }
+html.sidebar-collapsed .nav-group-toggle > i:first-child { font-size: 16px !important; display: block !important; flex-shrink: 0; margin: 0 auto !important; width: auto !important; color: var(--sidebar-text); }
 html.sidebar-collapsed .nav-group-toggle > span { display: none !important; }
 html.sidebar-collapsed .nav-group-toggle .bi-chevron-down { display: none !important; }
 html.sidebar-collapsed .nav-group-children { display: none !important; }
