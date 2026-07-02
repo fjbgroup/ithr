@@ -162,8 +162,8 @@
                 <thead>
                     <tr>
                         @canwrite<th style="width:32px;text-align:center;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>@endcanwrite
-                        <th>Employee</th>
-                        <th>Role &amp; Department</th>
+                        <th style="min-width: 250px;">Employee</th>
+                        <th style="min-width: 180px;">Role &amp; Department</th>
                         <th>Co</th>
                         <th style="white-space:nowrap;">Date Joined</th>
                         <th style="white-space:nowrap;">YOS</th>
