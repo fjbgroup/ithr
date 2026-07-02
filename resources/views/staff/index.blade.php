@@ -162,8 +162,8 @@
                 <thead>
                     <tr>
                         @canwrite<th style="width:32px;text-align:center;"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>@endcanwrite
-                        <th style="min-width: 220px;">Employee</th>
-                        <th style="min-width: 160px;">Role &amp; Department</th>
+                        <th style="width: 30%; min-width: 200px;">Employee</th>
+                        <th style="width: 15%; min-width: 150px;">Role &amp; Department</th>
                         <th>Co</th>
                         <th style="white-space:nowrap;">Date Joined</th>
                         <th style="white-space:nowrap;">YOS</th>
@@ -265,7 +265,7 @@
 
                             {{-- Date Joined --}}
                             <td style="white-space:nowrap;font-size:.74rem;">
-                                {{ $s->date_joined ? date('d M Y', strtotime($s->date_joined)) : '—' }}
+                                {{ $s->date_joined ? date('d/m/Y', strtotime($s->date_joined)) : '—' }}
                             </td>
 
                             {{-- YOS --}}
@@ -299,15 +299,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </button>
                                     @endcanwrite
-                                    @if(Auth::user()->isAdminIT())
-                                        <form action="{{ route('staff.destroy', $s->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this staff record? This cannot be undone.');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-icon btn-icon-danger" title="Delete">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                                            </button>
-                                        </form>
-                                    @endif
+
                                 </div>
                             </td>
                         </tr>
@@ -406,11 +398,20 @@
                     </select>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="display: flex; align-items: center;">
+                @if(Auth::user()->isAdminIT())
+                <button type="button" class="btn btn-ghost" style="color:var(--danger); display:none; margin-right:auto;" id="staffEditDangerBtn" onclick="confirmDeleteStaff()">Delete</button>
+                @endif
                 <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </form>
+        @if(Auth::user()->isAdminIT())
+        <form id="deleteStaffForm" method="POST" action="" style="display:none;">
+            @csrf
+            @method('DELETE')
+        </form>
+        @endif
     </div>
 </div>
 
@@ -552,6 +553,8 @@ function openAddModal() {
     document.getElementById('f_id').value = '';
     document.getElementById('f_is_active').value = '1';
     document.getElementById('group_is_active').style.display = 'none';
+    const dz = document.getElementById('staffEditDangerBtn');
+    if (dz) dz.style.display = 'none';
     openModal('addStaffModal');
 }
 
@@ -583,6 +586,12 @@ function editStaff(data) {
     document.getElementById('f_is_active').value = data.is_active ? '1' : '0';
     document.getElementById('group_is_active').style.display = 'block';
 
+    const dz = document.getElementById('staffEditDangerBtn');
+    if (dz) {
+        dz.style.display = 'inline-block';
+        document.getElementById('deleteStaffForm').action = "{{ url('staff') }}/" + data.id;
+    }
+
     openModal('addStaffModal');
 }
 
@@ -599,6 +608,12 @@ const depts = {!! json_encode($departments->map(fn($d) => ['id'=>$d->id, 'name'=
 function deptOptions(selId) {
     return '<option value="">— None —</option>' +
         depts.map(d => `<option value="${d.id}" ${d.id==selId?'selected':''}>[${d.company}] ${d.name}</option>`).join('');
+}
+
+function confirmDeleteStaff() {
+    if (confirm('Delete this staff record? This cannot be undone.')) {
+        document.getElementById('deleteStaffForm').submit();
+    }
 }
 
 let rowIdx = 0;
