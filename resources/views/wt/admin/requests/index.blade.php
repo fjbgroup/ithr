@@ -667,8 +667,7 @@
     #approveModal,
     #rejectRequestModal,
     #approveDamageModal,
-    #rejectDamageModal,
-    #quickWtModal {
+    #rejectDamageModal {
         z-index: 2147483000 !important;
         background: rgba(15, 23, 42, 0.42) !important;
         backdrop-filter: blur(6px) !important;
@@ -4661,7 +4660,7 @@
 @endforeach
 
 @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
-<div id="approveModal" class="fixed inset-0 z-50 hidden flex items-center justify-center overflow-y-auto bg-slate-950/50 p-4 backdrop-blur-sm" onclick="if (event.target === this) closeApproveModal()">
+<div id="approveModal" class="fixed inset-0 z-50 hidden flex items-center justify-center gap-6 overflow-y-auto bg-slate-950/50 p-4 backdrop-blur-sm" onclick="if (event.target === this) closeApproveModal()">
     <div class="approval-modal-card" style="margin: 0 !important;">
         <div class="navy-panel px-6 py-5 relative">
             <h3 class="text-white font-black text-base tracking-tight">Assign WT Before Approval</h3>
@@ -4754,11 +4753,11 @@
     <div class="max-h-[calc(100vh-2rem)] w-full overflow-y-auto rounded-2xl">
         <div class="flex items-start justify-between gap-4 border-b px-6 py-5">
             <div>
-                <h3 class="text-base font-black tracking-tight text-white">Add New Walkie Talkie</h3>
-                <p class="mt-1 text-xs font-semibold text-slate-400">Create a new unused unit and select it for this approval.</p>
+                <h3 class="text-base font-black tracking-tight">Add New Walkie Talkie</h3>
+                <p class="mt-1 text-xs font-semibold">Create a new unused unit and select it for this approval.</p>
                 <p id="quickWtRequestHint" class="mt-2 hidden text-[10px] font-black uppercase tracking-widest text-sky-300"></p>
             </div>
-            <button type="button" onclick="closeQuickWtModal()" class="text-white/60 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+            <button type="button" onclick="closeQuickWtModal()" class="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"><i class="fas fa-times text-lg"></i></button>
         </div>
 
         <form id="quickWtForm" action="{{ route('wt.admin.walkies.store') }}" method="POST" class="px-6 py-5">
