@@ -668,6 +668,7 @@ function ewEsc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;
 })();
 
 var _ewItems = @json($items->keyBy('id'));
+var _ewasteUpdateUrlTemplate = @json(route('it.ewaste.update', ['id' => '__ID__']));
 
 function openEwasteEdit(id) {
   var d = _ewItems[id];
@@ -682,7 +683,7 @@ function openEwasteEdit(id) {
     + '<div style="font-size:15px;font-weight:700;color:var(--text)"><i class="bi bi-recycle me-2" style="color:#16a34a"></i>Edit E-Waste Record</div>'
     + '<button onclick="document.getElementById(\'ewasteEditOverlay\').style.display=\'none\'" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&times;</button>'
     + '</div>'
-    + '<form method="POST" action="/ewaste/'+id+'">'
+    + '<form method="POST" action="'+_ewasteUpdateUrlTemplate.replace('__ID__', encodeURIComponent(id))+'">'
     + '<input type="hidden" name="_token" value="{{ csrf_token() }}">'
     + '<div style="padding:24px" class="row g-3">'
     + '<div class="col-md-3"><label class="form-label">Asset Number</label><input type="text" name="asset_number" class="form-control" value="'+esc(d.asset_number||'')+'"></div>'
