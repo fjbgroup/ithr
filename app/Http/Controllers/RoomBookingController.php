@@ -357,7 +357,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Approved',
-            'Great news! Your meeting room booking has been approved by ' . $user->name . '.',
+            'Great news! Your meeting room booking has been approved.',
             $booking
         );
 
@@ -533,7 +533,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Edit Approved',
-            'Your requested changes to the meeting room booking have been approved by ' . $user->name . '.',
+            'Your requested changes to the meeting room booking have been approved.',
             $booking
         );
 
@@ -578,7 +578,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Edit Declined',
-            'Your request to modify the meeting room booking has been declined by ' . $user->name . '. The original booking remains active.',
+            'Your request to modify the meeting room booking has been declined. The original booking remains active.',
             $booking,
             null,
             '#b91c1c' // Red
