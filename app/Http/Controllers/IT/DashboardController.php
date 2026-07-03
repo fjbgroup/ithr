@@ -22,6 +22,8 @@ class DashboardController extends Controller
     {
         $user = Auth::guard('it')->user();
 
+        $this->syncInventoryAssetState();
+
         // Total counts
         $totalIT    = InventoryItem::count();
         $activeIT   = InventoryItem::where('item_status', 'Active')->count();
@@ -41,6 +43,7 @@ class DashboardController extends Controller
 
         // Combined totals
         $totalAll  = $totalIT + $totalNIT;
+        $activeAll = $activeIT + $activeNIT;
         $pendingAll = $ewastePending + AddAssetRequest::where('status', 'Pending')->count();
 
         // IT asset class distribution for chart (top 8 by count)
@@ -52,7 +55,7 @@ class DashboardController extends Controller
             ->limit(8)
             ->get();
         $itChartData = $itChartRaw->map(fn($r) => ['label' => $r->asset_class, 'value' => (int)$r->cnt])->values();
-        $itTotal     = $itChartData->sum('value');
+        $itTotal     = $totalIT;
 
         // Non-IT class distribution
         $nitChartRaw = DB::table('non_it_assets')
@@ -62,7 +65,7 @@ class DashboardController extends Controller
             ->limit(8)
             ->get();
         $nitChartData = $nitChartRaw->map(fn($r) => ['label' => $r->asset_class, 'value' => (int)$r->cnt])->values();
-        $nitTotal     = $nitChartData->sum('value');
+        $nitTotal     = $totalNIT;
 
         // Recent activity
         $recentActivity = ActivityLog::with('user')
@@ -87,11 +90,50 @@ class DashboardController extends Controller
 
         return view('it.dashboard.index', compact(
             'totalIT', 'activeIT', 'totalNIT', 'ewastePending', 'pendingApprovals',
-            'totalAll', 'pendingAll',
+            'totalAll', 'activeAll', 'pendingAll',
             'itChartData', 'nitChartData', 'itTotal', 'nitTotal',
             'recentActivity', 'recentAssets',
             'myEwastePending', 'myEwasteApproved', 'myItReq', 'disposalCount'
         ));
     }
-}
 
+    private function syncInventoryAssetState(): void
+    {
+        $orphans = EwasteItem::whereNull('original_inventory_id')
+            ->where(fn($q) => $q->whereNull('asset_source')->orWhere('asset_source', 'IT'))
+            ->get();
+
+        foreach ($orphans as $ew) {
+            $inv = InventoryItem::create([
+                'asset_number'     => $ew->asset_number,
+                'asset_class'      => $ew->asset_class,
+                'description'      => $ew->description,
+                'serial_number'    => $ew->serial_number,
+                'item_status'      => 'Disposed',
+                'condition_status' => $ew->condition_on_disposal ?: 'For Disposal',
+                'notes'            => $ew->notes,
+                'created_by'       => $ew->created_by,
+            ]);
+            $ew->update(['original_inventory_id' => $inv->id]);
+        }
+
+        $selectLocationItems = InventoryItem::where(function ($q) {
+                $q->whereNull('location')->orWhere('location', '');
+            })
+            ->where(function ($q) {
+                $q->where('item_status', '!=', 'Active')
+                  ->orWhereHas('ewasteItems', fn($ew) => $ew->whereIn('disposal_status', ['Approved', 'Collected', 'Rejected']));
+            })
+            ->get();
+
+        foreach ($selectLocationItems as $item) {
+            $item->ewasteItems()
+                ->whereIn('disposal_status', ['Approved', 'Collected', 'Rejected'])
+                ->delete();
+
+            if ($item->item_status !== 'Active') {
+                $item->update(['item_status' => 'Active']);
+            }
+        }
+    }
+}
