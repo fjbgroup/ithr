@@ -32,15 +32,18 @@ class EwasteController extends Controller
             }
         }
 
-        $items        = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
-        $assetClasses = AssetClass::where('type', 'it')->orderBy('sort_order')->pluck('name');
+        $items         = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
+        $assetClasses  = AssetClass::where('type', 'it')->orderBy('sort_order')->pluck('name');
+        $totalEwaste   = EwasteItem::where('disposal_status', '!=', 'Pending')->count();
+        $activeEwaste  = EwasteItem::where('disposal_status', 'Approved')->count();
+        $collectedEwaste = EwasteItem::where('disposal_status', 'Collected')->count();
 
         if ($request->boolean('partial')) {
             $user = Auth::guard('it')->user();
             return response(view('it.ewaste.partials.live-table', compact('items', 'user'))->render());
         }
 
-        return view('it.ewaste.index', compact('items', 'assetClasses'));
+        return view('it.ewaste.index', compact('items', 'assetClasses', 'totalEwaste', 'activeEwaste', 'collectedEwaste'));
     }
 
     public function autocomplete(Request $request)
@@ -122,8 +125,13 @@ class EwasteController extends Controller
         $item = EwasteItem::findOrFail($id);
 
         $data = $request->validate([
+            'asset_number'          => 'nullable|string|max:50',
+            'asset_class'           => 'required|string|max:50',
+            'description'           => 'required|string|max:255',
+            'serial_number'         => 'nullable|string|max:100',
             'condition_on_disposal' => 'nullable|string',
             'disposal_status'       => 'nullable|string',
+            'date_flagged'          => 'nullable|date',
             'disposal_method'       => 'nullable|string',
             'weight_kg'             => 'nullable|numeric',
             'vendor_collector'      => 'nullable|string|max:100',
@@ -336,7 +344,7 @@ class EwasteController extends Controller
         }
 
         ActivityLogService::log('UPDATE', 'ewaste', $id, 'Reverted collection: ' . $item->description);
-        return redirect()->route('ewaste.collected')->with('success', 'Item reverted back to Approved.');
+        return redirect()->route('it.ewaste.collected')->with('success', 'Item reverted back to Approved.');
     }
 
     // GM timeout auto-reassignment (called from writeoff flow)

@@ -219,8 +219,12 @@
 <div class="mb-6 bg-gradient-to-r from-[#1F2937] to-[#334155] rounded-2xl p-4 md:p-5 text-white shadow-xl relative overflow-hidden dark:border dark:border-slate-700/50">
     <div class="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
     <div class="relative flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
-        <div class="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#075985] flex items-center justify-center text-xl md:text-2xl font-black shadow-lg border border-white/10">
-            {{ strtoupper(substr(Auth::guard('wt')->user()->full_name ?? Auth::guard('wt')->user()->username, 0, 1)) }}
+        <div class="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-[#0EA5E9] to-[#075985] flex items-center justify-center text-xl md:text-2xl font-black shadow-lg border border-white/10 overflow-hidden">
+            @if(Auth::guard('wt')->user() && Auth::guard('wt')->user()->avatar && Storage::disk('public')->exists(Auth::guard('wt')->user()->avatar))
+                <img src="{{ asset('storage/' . Auth::guard('wt')->user()->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+            @else
+                {{ strtoupper(substr(Auth::guard('wt')->user()->full_name ?? Auth::guard('wt')->user()->username, 0, 1)) }}
+            @endif
         </div>
         <div class="text-left flex-1 w-full">
             <div class="profile-name mb-0.5 !text-white">{{ Auth::guard('wt')->user()->full_name ?: strtoupper(Auth::guard('wt')->user()->username) }}</div>

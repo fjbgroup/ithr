@@ -30,6 +30,7 @@ class User extends BaseUser
     public function isHOU(): bool            { return $this->it_role === 'hou'; }
     public function isGM(): bool             { return $this->it_role === 'gm' || $this->role === 'gm'; }
     public function isCEO(): bool            { return $this->it_role === 'ceo'; }
+    public function isReadOnlyViewer(): bool { return in_array($this->it_role, ['hou', 'gm', 'ceo'], true); }
 
     // ── IT-specific relationships ─────────────────────────────────────────
 

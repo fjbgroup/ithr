@@ -371,4 +371,61 @@ class UserController extends Controller
             ];
         }));
     }
+
+    /**
+     * Update the logged-in user's profile, including avatar upload and staff details sync.
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string|max:30',
+            'gender' => 'nullable|string|in:Male,Female,Other',
+            'date_of_birth' => 'nullable|date',
+            'ic_number' => 'nullable|string|max:30',
+            'avatar' => 'nullable|image|max:2048',
+        ]);
+
+        $userUpdate = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+
+        // Handle Avatar Upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+            }
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $userUpdate['avatar'] = $path;
+        }
+
+        $user->update($userUpdate);
+
+        // Sync with linked Staff record
+        if ($user->staff_id) {
+            $staff = Staff::find($user->staff_id);
+            if ($staff) {
+                $staff->update([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'phone_number' => $validated['phone_number'] ?? null,
+                    'gender' => $validated['gender'] ?? null,
+                    'date_of_birth' => $validated['date_of_birth'] ?? null,
+                    'ic_number' => $validated['ic_number'] ?? null,
+                ]);
+            }
+        }
+
+        AuditLogger::log('update', 'profile',
+            'Updated self profile and personal details for ' . $user->name . '.',
+            ['user_id' => $user->id]
+        );
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
 }

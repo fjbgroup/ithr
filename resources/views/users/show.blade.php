@@ -6,10 +6,18 @@
         <h2>User Record</h2>
         <p class="page-subtitle">Viewing profile for <strong>{{ $user->name }}</strong></p>
     </div>
-    <a href="{{ route('users.index') }}" class="btn btn-ghost btn-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-        Back to User Accounts
-    </a>
+    <div style="display:flex;gap:.5rem;align-items:center;">
+        @if(Auth::id() === $user->id || Auth::user()->isAdmin())
+        <button class="btn btn-primary btn-sm" onclick="openModal('editProfileModal')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit Profile
+        </button>
+        @endif
+        <a href="{{ route('users.index') }}" class="btn btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to User Accounts
+        </a>
+    </div>
 </div>
 
 @if (!$user->staff_id)
@@ -27,8 +35,12 @@
 @php $s = $user->staff; @endphp
 <div class="card" style="padding:2rem;max-width:640px;">
     <div style="display:flex;gap:1.25rem;align-items:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
-        <div style="width:64px;height:64px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;flex-shrink:0;">
-            {{ strtoupper(substr($s->name, 0, 1)) }}
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;flex-shrink:0;overflow:hidden;position:relative;">
+            @if($user->avatar && Storage::disk('public')->exists($user->avatar))
+                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+            @else
+                {{ strtoupper(substr($s->name, 0, 1)) }}
+            @endif
         </div>
         <div>
             <div style="font-size:1.2rem;font-weight:700;color:var(--text);">{{ $s->name }}</div>
@@ -198,6 +210,81 @@
         </table>
     </div>
     @endif
+</div>
+@endif
+
+<!-- Edit Profile Modal -->
+@if(Auth::id() === $user->id || Auth::user()->isAdmin())
+<div class="modal" id="editProfileModal">
+    <div class="modal-box" style="max-width:520px;">
+        <div class="modal-header ur-modal-header" style="background: var(--primary); padding: 1.25rem 1.5rem; border-radius: 14px 14px 0 0;">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+                <div class="ur-header-icon" style="width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h3 style="color:white;margin:0;font-size:.95rem;">Edit Profile Information</h3>
+                    <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.1rem 0 0;">
+                        Username/Staff No: <strong style="color:rgba(255,255,255,.9);">{{ $user->staff_no ?: $user->email }}</strong>
+                    </p>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeModal()" style="color:rgba(255,255,255,.6);font-size:1.4rem; background: none; border: none; cursor: pointer;">×</button>
+        </div>
+
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem;">
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Full Name *</label>
+                    <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Email *</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                @if($user->staff)
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Phone Number</label>
+                    <input type="text" name="phone_number" class="form-control" value="{{ old('phone_number', $user->staff->phone_number) }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Gender</label>
+                    <select name="gender" class="form-control" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                        <option value="">Select</option>
+                        <option value="Male" {{ old('gender', $user->staff->gender) === 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ old('gender', $user->staff->gender) === 'Female' ? 'selected' : '' }}>Female</option>
+                        <option value="Other" {{ old('gender', $user->staff->gender) === 'Other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Date of Birth</label>
+                    <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $user->staff->date_of_birth ? date('Y-m-d', strtotime($user->staff->date_of_birth)) : '') }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">IC Number</label>
+                    <input type="text" name="ic_number" class="form-control" value="{{ old('ic_number', $user->staff->ic_number) }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+                @endif
+
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Profile Picture</label>
+                    <input type="file" name="avatar" class="form-control" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                    <small style="color: var(--muted); font-size: 0.75rem; display: block; margin-top: 0.25rem;">Max file size: 2MB. Accepts images (JPG, PNG, WebP, etc.)</small>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem; border-top: 1px solid var(--border);">
+                <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
 </div>
 @endif
 

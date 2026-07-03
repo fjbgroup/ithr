@@ -40,7 +40,7 @@ Handover WT
     $statusBadge = function ($request) {
         return match ($request->status) {
             'Pending Admin Approval', 'Pending IT Approval' => ['text' => 'Processing', 'bg' => 'rgba(245,158,11,.1)', 'color' => '#d97706', 'border' => 'rgba(245,158,11,.3)'],
-            'Approved' => ['text' => 'Ready To Collect', 'bg' => 'rgba(2,132,199,.1)', 'color' => '#0369a1', 'border' => 'rgba(2,132,199,.3)'],
+            'Pending Executive Pickup', 'Approved' => ['text' => 'Ready To Collect', 'bg' => 'rgba(2,132,199,.1)', 'color' => '#0369a1', 'border' => 'rgba(2,132,199,.3)'],
             'Rejected' => ['text' => 'Rejected', 'bg' => 'rgba(239,68,68,.1)', 'color' => '#dc2626', 'border' => 'rgba(239,68,68,.3)'],
             default => ['text' => $request->status ?: 'Unknown', 'bg' => 'rgba(100,116,139,.1)', 'color' => '#475569', 'border' => 'rgba(100,116,139,.3)'],
         };
@@ -114,10 +114,16 @@ Handover WT
                         <p>Location: <span>{{ $request->location ?: '-' }}</span></p>
                         <p>Preferred Pickup: <span>{{ $request->requested_pickup_at ? \Carbon\Carbon::parse($request->requested_pickup_at)->format('d M Y H:i') : '-' }}</span></p>
                     </div>
-                    <div class="ho-info-box">Pick up walkie talkie at ICT Department after ICT approval.</div>
+                    <div class="ho-info-box">Pick up walkie talkie at ICT Department after ICT approval. Please sign the pickup form when the WT is handed over.</div>
                 </div>
 
-                <form action="{{ route($routePrefix . '.handover.store') }}" method="POST" style="display:flex;flex-direction:column;gap:8px;min-width:220px;flex-shrink:0" data-pickup-form>
+                <div style="display:flex;flex-direction:column;gap:8px;min-width:220px;flex-shrink:0">
+                    <a href="{{ route($routePrefix . '.handover.pickup', $request->id) }}" class="btn-primary-custom" style="background:#16a34a;justify-content:center">
+                        <i class="fa-solid fa-pen-to-square"></i> Pickup
+                    </a>
+                </div>
+
+                <form action="{{ route($routePrefix . '.handover.store') }}" method="POST" style="display:none;flex-direction:column;gap:8px;min-width:220px;flex-shrink:0" data-pickup-form>
                     @csrf
                     <input type="hidden" name="access_request_id" value="{{ $request->id }}">
                     <button type="submit" name="pickup_response" value="yes" class="btn-primary-custom" style="background:#16a34a;justify-content:center">
@@ -178,4 +184,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
-

@@ -87,7 +87,7 @@
       <div style="width:1px;height:36px;background:rgba(255,255,255,.24)"></div>
       <div style="padding:0 28px;text-align:center">
         <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Active</div>
-        <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeIT) }}</div>
+        <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeAll) }}</div>
       </div>
       <div style="width:1px;height:36px;background:rgba(255,255,255,.24)"></div>
       <div style="padding:0 28px;text-align:center">

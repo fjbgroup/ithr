@@ -621,8 +621,8 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     </a>
     @endif
 
-    {{-- E-Waste — Admin + Finance only --}}
-    @if($user->isAdminOrFinance())
+    {{-- E-Waste — Admin/Finance manage, HOU/GM/CEO view only --}}
+    @if($user->isAdminOrFinance() || $user->isReadOnlyViewer())
     @php $ewActive = request()->routeIs('it.ewaste.*'); @endphp
     <div class="nav-group" id="navGroupEwaste">
         <div class="nav-group-toggle {{ $ewActive ? 'open has-active' : '' }}"
@@ -646,7 +646,7 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
         </div>
       </div>
 
-    {{-- Disposal — Admin + Finance only --}}
+    {{-- Disposal — Admin/Finance manage, HOU/GM/CEO view only --}}
     @php $dispActive = request()->routeIs('it.disposal.*'); @endphp
     <div class="nav-group" id="navGroupDisposal">
         <div class="nav-group-toggle {{ $dispActive ? 'open has-active' : '' }}"
@@ -670,7 +670,10 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
         </div>
       </div>
 
+    @endif
+
     {{-- Reports — Admin + Finance only --}}
+    @if($user->isAdminOrFinance())
     @php $rptActive = request()->routeIs('it.reports.*'); @endphp
     <div class="nav-group" id="navGroupReports">
         <div class="nav-group-toggle {{ $rptActive ? 'open has-active' : '' }}"
@@ -759,12 +762,11 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     </a>
     @endif
 
-    {{-- Documentation section --}}
-    @if($user->isAdmin())
-    <div class="nav-section-label">Documentation</div>
-    @endif
-
     <div style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
+    <div class="nav-section-label">Help</div>
+    <a href="{{ route('it.user-manual.index') }}" class="nav-link {{ request()->routeIs('it.user-manual.index') ? 'active' : '' }}">
+      <i class="bi bi-book"></i> User Manual
+    </a>
     <button type="button" class="nav-link nav-action" data-role-metric-trigger>
       <i class="bi bi-table"></i> Role Metric
     </button>
@@ -783,7 +785,7 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
   <div class="sidebar-footer">
     <a href="{{ route('it.profile') }}" class="user-card">
       @if($user->avatar)
-        <img src="{{ Storage::url($user->avatar) }}" alt="avatar"
+        <img src="{{ asset('storage/' . $user->avatar) }}" alt="avatar"
           style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0">
       @else
         <div class="user-avatar">{{ strtoupper(substr($user->full_name, 0, 1)) }}</div>

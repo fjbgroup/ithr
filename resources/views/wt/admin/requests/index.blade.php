@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'Approval Inbox')
 
@@ -82,10 +82,10 @@
         width: 100%;
         min-height: 38px;
         border-radius: 9px;
-        border: 1px solid #334155;
-        background: #0f172a;
+        border: 1px solid var(--border);
+        background: var(--surface);
         padding: 8px 11px;
-        color: #e5e7eb;
+        color: var(--text);
         font-size: 11px;
         font-weight: 700;
         outline: none;
@@ -95,21 +95,21 @@
         box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
     }
     #quickWtModal input.quick-wt-input {
-        background: #ffffff;
-        border-color: #cbd5e1;
-        color: #1f2937;
+        background: var(--surface);
+        border-color: var(--border);
+        color: var(--text);
     }
     #quickWtModal input.quick-wt-input::placeholder {
-        color: #94a3b8;
+        color: var(--muted);
     }
     #quickWtModal .select2-container--default .select2-selection--single {
         min-height: 38px;
         border-radius: 9px;
-        border: 1px solid #334155;
-        background: #0f172a;
+        border: 1px solid var(--border);
+        background: var(--surface);
     }
     #quickWtModal .select2-container--default .select2-selection--single .select2-selection__rendered {
-        color: #e5e7eb;
+        color: var(--text);
         font-size: 11px;
         font-weight: 700;
         line-height: 36px;
@@ -118,21 +118,194 @@
     #quickWtModal .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 36px;
     }
+    .approval-modal-card {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        overflow-y: auto !important;
+        width: min(580px, calc(100vw - 24px)) !important;
+        max-width: 580px !important;
+        flex: 0 0 min(580px, calc(100vw - 24px)) !important;
+        max-height: calc(100vh - 2rem);
+        transition: all 0.3s ease !important;
+    }
+    .dark .approval-modal-card {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    }
     #approveModal .approval-modal-card {
         margin: 0 !important;
-        flex: 0 0 380px;
-        width: 380px !important;
-        max-height: calc(100vh - 1.5rem);
+        width: min(640px, calc(100vw - 32px)) !important;
+        max-width: 640px !important;
+        flex: 0 0 min(640px, calc(100vw - 32px)) !important;
+        max-height: min(84vh, 680px) !important;
         overflow-y: auto !important;
+        border-radius: 12px !important;
     }
     #approveModal .approval-modal-card .navy-panel {
-        padding: 16px 18px !important;
+        display: none !important;
     }
     #approveModal .approval-modal-card form {
-        padding: 18px !important;
+        padding: 24px !important;
     }
     #approveModal .approval-modal-card .mb-5 {
         margin-bottom: 14px !important;
+    }
+    #systemScrollControls {
+        display: none !important;
+    }
+
+    /* Modal Form Text, Labels and Inputs */
+    .approval-modal-card form {
+        padding: 24px !important;
+        background: transparent !important;
+    }
+    .approval-modal-card h3 {
+        font-size: 1.125rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        margin-top: 8px !important;
+    }
+    .dark .approval-modal-card h3 {
+        color: #f8fafc !important;
+    }
+    .approval-modal-card p {
+        font-size: 0.825rem !important;
+        color: #475569 !important;
+        line-height: 1.5 !important;
+    }
+    .dark .approval-modal-card p {
+        color: #94a3b8 !important;
+    }
+    .approval-modal-card label {
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: #475569 !important;
+        margin-bottom: 8px !important;
+        display: block !important;
+    }
+    .dark .approval-modal-card label {
+        color: #cbd5e1 !important;
+    }
+    .approval-modal-card label span {
+        color: #ef4444 !important;
+    }
+    .dark .approval-modal-card label span {
+        color: #fca5a5 !important;
+    }
+    .approval-modal-card .border-b {
+        border-bottom-width: 1px !important;
+        border-bottom-style: solid !important;
+        border-bottom-color: #cbd5e1 !important;
+    }
+    .dark .approval-modal-card .border-b {
+        border-bottom-color: #334155 !important;
+    }
+    .approval-modal-card .border-t {
+        border-top-width: 1px !important;
+        border-top-style: solid !important;
+        border-top-color: #cbd5e1 !important;
+    }
+    .dark .approval-modal-card .border-t {
+        border-top-color: #334155 !important;
+    }
+    .approval-modal-card #quickWtRequestHint {
+        color: #0284c7 !important;
+    }
+    .dark .approval-modal-card #quickWtRequestHint {
+        color: #7dd3fc !important;
+    }
+
+    .approval-modal-card textarea,
+    .approval-modal-card select,
+    .approval-modal-card input {
+        width: 100% !important;
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        outline: none !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    .dark .approval-modal-card textarea,
+    .dark .approval-modal-card select,
+    .dark .approval-modal-card input {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+    .approval-modal-card textarea:focus,
+    .approval-modal-card select:focus,
+    .approval-modal-card input:focus {
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15) !important;
+    }
+    .approval-modal-card textarea[name="disapproval_remark"]:focus {
+        border-color: #f87171 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+    }
+
+    /* Modal Buttons with High Contrast */
+    .approval-modal-card .approval-action-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 38px !important;
+        padding: 8px 18px !important;
+        border-radius: 8px !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.03em !important;
+        text-transform: uppercase !important;
+        border: 1px solid transparent !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view) {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #475569 !important;
+    }
+    .dark .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view) {
+        background: #334155 !important;
+        border-color: #475569 !important;
+        color: #cbd5e1 !important;
+    }
+    .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view):hover {
+        background: #e2e8f0 !important;
+        color: #1e293b !important;
+    }
+    .dark .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view):hover {
+        background: #475569 !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-approve {
+        background: #16a34a !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-approve:hover {
+        background: #15803d !important;
+    }
+    .approval-modal-card .approval-action-reject {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-reject:hover {
+        background: #b91c1c !important;
+    }
+    .approval-modal-card .approval-action-view {
+        background: #0284c7 !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-view:hover {
+        background: #0369a1 !important;
     }
     #approveModal #accessoryChecklistBox {
         padding: 14px !important;
@@ -158,8 +331,8 @@
     }
     #quickWtModal .border-b {
         padding: 14px 18px !important;
-        background: #111827 !important;
-        border-bottom-color: #334155 !important;
+        background: var(--surface) !important;
+        border-bottom-color: var(--border) !important;
     }
     #quickWtModal h3 {
         font-size: 14px !important;
@@ -490,7 +663,11 @@
     }
     [id^="requestFormModal-"],
     [id^="returnFormModal-"],
-    [id^="damageFormModal-"] {
+    [id^="damageFormModal-"],
+    #approveModal,
+    #rejectRequestModal,
+    #approveDamageModal,
+    #rejectDamageModal {
         z-index: 2147483000 !important;
         background: rgba(15, 23, 42, 0.42) !important;
         backdrop-filter: blur(6px) !important;
@@ -2431,44 +2608,44 @@
     }
     .approval-inbox .pending-queue-card .unit-detail-list {
         display: grid;
-        gap: 4px;
-        margin-top: 6px;
+        gap: 8px;
+        margin-top: 10px;
     }
     .approval-inbox .pending-queue-card .unit-detail-item {
         border: 1px solid rgba(148, 163, 184, 0.16);
-        border-radius: 6px;
+        border-radius: 10px;
         background: rgba(15, 23, 42, 0.18);
-        padding: 5px 6px;
+        padding: 10px 12px;
     }
     .approval-inbox .pending-queue-card .unit-detail-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 6px;
+        gap: 10px;
         color: #e2e8f0;
-        font-size: 7.5px;
+        font-size: 11px;
         font-weight: 900;
-        line-height: 1.2;
+        line-height: 1.35;
         text-transform: uppercase;
     }
     .approval-inbox .pending-queue-card .unit-detail-tag {
         flex: 0 0 auto;
         border-radius: 999px;
         background: rgba(129, 140, 248, 0.16);
-        padding: 1px 5px;
+        padding: 3px 8px;
         color: #c7d2fe;
-        font-size: 6px;
+        font-size: 8px;
         font-weight: 900;
     }
     .approval-inbox .pending-queue-card .unit-detail-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 3px 6px;
-        margin-top: 4px;
+        gap: 7px 14px;
+        margin-top: 8px;
         color: #94a3b8;
-        font-size: 6.8px;
+        font-size: 9.5px;
         font-weight: 800;
-        line-height: 1.2;
+        line-height: 1.35;
         text-transform: uppercase;
     }
     .approval-inbox .pending-queue-card .unit-detail-grid span {
@@ -3525,27 +3702,27 @@
 
     body .content-surface .approval-inbox table.dataTable thead th,
     body .content-surface .approval-inbox .pending-queue-card table.dataTable thead th {
-        padding: 18px 20px !important;
-        font-size: 14px !important;
+        padding: 12px 16px !important;
+        font-size: 11px !important;
         line-height: 1.25 !important;
         letter-spacing: 0.05em !important;
     }
 
     body .content-surface .approval-inbox table.dataTable tbody td,
     body .content-surface .approval-inbox .pending-queue-card table.dataTable tbody td {
-        padding: 20px !important;
-        font-size: 15px !important;
-        line-height: 1.5 !important;
+        padding: 12px 16px !important;
+        font-size: 12px !important;
+        line-height: 1.4 !important;
     }
 
     body .content-surface .approval-inbox .requestor-card,
     body .content-surface .approval-inbox .request-summary-card {
-        border-radius: 14px !important;
+        border-radius: 12px !important;
     }
 
     body .content-surface .approval-inbox .requestor-item,
     body .content-surface .approval-inbox .request-summary-card .request-meta-block {
-        padding: 14px 16px !important;
+        padding: 10px 12px !important;
     }
 
     body .content-surface .approval-inbox .requestor-name,
@@ -3554,7 +3731,7 @@
         overflow: visible !important;
         text-overflow: clip !important;
         white-space: normal !important;
-        font-size: 18px !important;
+        font-size: 13px !important;
         line-height: 1.35 !important;
         font-weight: 900 !important;
     }
@@ -3563,15 +3740,15 @@
     body .content-surface .approval-inbox .request-summary-note,
     body .content-surface .approval-inbox .approval-body-meta,
     body .content-surface .approval-inbox .approval-date {
-        font-size: 14px !important;
-        line-height: 1.55 !important;
+        font-size: 11px !important;
+        line-height: 1.45 !important;
         font-weight: 750 !important;
     }
 
     body .content-surface .approval-inbox .requestor-label,
     body .content-surface .approval-inbox .summary-label,
     body .content-surface .approval-inbox .request-meta-label {
-        font-size: 12px !important;
+        font-size: 10px !important;
         line-height: 1.25 !important;
         letter-spacing: 0.05em !important;
     }
@@ -3579,44 +3756,52 @@
     body .content-surface .approval-inbox .requestor-value,
     body .content-surface .approval-inbox .summary-value,
     body .content-surface .approval-inbox .request-meta-value {
-        font-size: 15px !important;
-        line-height: 1.5 !important;
+        font-size: 12px !important;
+        line-height: 1.4 !important;
         font-weight: 850 !important;
     }
 
     body .content-surface .approval-inbox .requestor-avatar {
-        width: 42px !important;
-        height: 42px !important;
-        font-size: 16px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
     }
 
     body .content-surface .approval-inbox .request-pill {
-        min-height: 32px !important;
-        padding: 7px 13px !important;
-        font-size: 13px !important;
+        min-height: 24px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
         line-height: 1.1 !important;
     }
 
     body .content-surface .approval-inbox :is(.pending-nav-badge, .approval-new-badge, .faulty-report-count-pill) {
-        min-height: 32px !important;
-        padding: 7px 13px !important;
-        font-size: 13px !important;
+        min-height: 24px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
         line-height: 1.1 !important;
         letter-spacing: 0.04em !important;
     }
 
     body .content-surface .approval-inbox .approval-action-row {
-        max-width: 168px !important;
-        gap: 9px !important;
+        width: 180px !important;
+        max-width: 180px !important;
+        gap: 6px !important;
+        margin-inline: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: center !important;
     }
 
     body .content-surface .approval-inbox .approval-action-btn,
     body .content-surface .approval-inbox #requestsTable .approval-action-btn,
     body .content-surface .approval-inbox .pending-queue-card .approval-action-btn {
-        min-height: 46px !important;
-        padding: 11px 16px !important;
-        border-radius: 11px !important;
-        font-size: 13px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 32px !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
+        font-size: 11px !important;
         line-height: 1.15 !important;
         letter-spacing: 0.04em !important;
     }
@@ -3905,14 +4090,14 @@
                                         'requested_pickup_at' => $req->requested_pickup_at ? \Carbon\Carbon::parse($req->requested_pickup_at)->format('Y-m-d H:i') : null,
                                     ];
                                 @endphp
-                                <button type="button" onclick='openApproveModal(@json($approvalPayload))' class="approval-action-btn approval-action-approve">Assign WT</button>
+                                <button type="button" onclick='openApproveModal(@json($approvalPayload))' class="approval-action-btn approval-action-approve">Approve and Handover</button>
                             @else
                                 <form action="{{ route('wt.admin.requests.forwardToIT', $req->id) }}" method="POST" onsubmit="return confirm('Approve this request and forward it to ICT?');">
                                     @csrf
                                     <button type="submit" class="approval-action-btn approval-action-approve">Approve</button>
                                 </form>
                             @endif
-                            <button type="button" class="approval-action-btn approval-action-reject" onclick='openRejectRequestModal(@json($req->id), @json($req->full_name))'>Reject</button>
+                            <button type="button" class="approval-action-btn approval-action-reject" onclick='openRejectRequestModal(@json($req->id), @json($req->full_name))'>Disapprove</button>
                         </div>
                     </td>
                 </tr>
@@ -4292,7 +4477,7 @@
                             <div class="approval-action-row">
                                 <button type="button" onclick="event.stopPropagation(); openDamageFormModal('damageFormModal-{{ $report->maintenance_id }}')" class="approval-action-btn approval-action-view">View Form</button>
                                 <button type="button" onclick="event.stopPropagation(); openApproveDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-approve">Approve</button>
-                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Reject</button>
+                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Disapprove</button>
                             </div>
                         @else
                             <div class="approval-action-row">
@@ -4301,7 +4486,7 @@
                                     @csrf
                                     <button type="submit" class="approval-action-btn approval-action-approve">Approve</button>
                                 </form>
-                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Reject</button>
+                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Disapprove</button>
                             </div>
                         @endif
                     </td>
@@ -4475,8 +4660,8 @@
 @endforeach
 
 @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
-<div id="approveModal" class="fixed inset-0 z-50 hidden flex-row items-center justify-center overflow-x-auto overflow-y-hidden bg-slate-950/50 p-3 backdrop-blur-sm" style="gap: 4px;" onclick="if (event.target === this) closeApproveModal()">
-    <div class="approval-modal-card" style="margin: 0 !important; width: 430px !important; flex: 0 0 430px !important;">
+<div id="approveModal" class="fixed inset-0 z-50 hidden flex items-center justify-center gap-6 overflow-y-auto bg-slate-950/50 p-4 backdrop-blur-sm" onclick="if (event.target === this) closeApproveModal()">
+    <div class="approval-modal-card" style="margin: 0 !important;">
         <div class="navy-panel px-6 py-5 relative">
             <h3 class="text-white font-black text-base tracking-tight">Assign WT Before Approval</h3>
             <p class="text-slate-300 text-xs font-medium mt-1">Approve only after enough units are selected for <span id="modalUserName" class="text-white font-bold"></span></p>
@@ -4559,20 +4744,20 @@
 
             <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
                 <button type="button" onclick="closeApproveModal()" class="approval-action-btn">Cancel</button>
-                <button type="submit" id="approveSubmitBtn" class="approval-action-btn approval-action-approve" disabled>Confirm Approval</button>
+                <button type="submit" id="approveSubmitBtn" class="approval-action-btn approval-action-approve" disabled>Approve and Handover</button>
             </div>
         </form>
     </div>
 
-<div id="quickWtModal" class="hidden" style="margin: 0 !important; width: 430px !important; flex: 0 0 430px !important;">
-    <div class="max-h-[calc(100vh-2rem)] w-full overflow-y-auto rounded-2xl border border-slate-700 bg-slate-950 shadow-2xl shadow-slate-950/40">
-        <div class="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-5">
+<div id="quickWtModal" class="hidden approval-modal-card" style="margin: 0 !important;">
+    <div class="max-h-[calc(100vh-2rem)] w-full overflow-y-auto rounded-2xl">
+        <div class="flex items-start justify-between gap-4 border-b px-6 py-5">
             <div>
-                <h3 class="text-base font-black tracking-tight text-white">Add New Walkie Talkie</h3>
-                <p class="mt-1 text-xs font-semibold text-slate-400">Create a new unused unit and select it for this approval.</p>
+                <h3 class="text-base font-black tracking-tight">Add New Walkie Talkie</h3>
+                <p class="mt-1 text-xs font-semibold">Create a new unused unit and select it for this approval.</p>
                 <p id="quickWtRequestHint" class="mt-2 hidden text-[10px] font-black uppercase tracking-widest text-sky-300"></p>
             </div>
-            <button type="button" onclick="closeQuickWtModal()" class="text-white/60 hover:text-white"><i class="fas fa-times text-lg"></i></button>
+            <button type="button" onclick="closeQuickWtModal()" class="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"><i class="fas fa-times text-lg"></i></button>
         </div>
 
         <form id="quickWtForm" action="{{ route('wt.admin.walkies.store') }}" method="POST" class="px-6 py-5">
@@ -4653,7 +4838,7 @@
                 </div>
             </div>
 
-            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800 pt-4">
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t pt-4">
                 <a href="{{ route('wt.admin.walkies.index') }}" target="_blank" rel="noopener" class="approval-action-btn approval-action-view">
                     Inventory List
                 </a>
@@ -4672,18 +4857,18 @@
     <div class="approval-modal-card">
         <form id="rejectRequestForm" method="POST" class="p-6">
             @csrf
-            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Reject Request</p>
-            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Confirm rejection?</h3>
+            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Disapprove Request</p>
+            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Confirm disapproval?</h3>
             <p class="mt-2 text-xs font-semibold leading-5 text-slate-500 dark:text-slate-400">
-                This will reject <span id="rejectRequestUserName" class="font-black text-slate-800 dark:text-slate-100"></span>'s request.
+                This will disapprove <span id="rejectRequestUserName" class="font-black text-slate-800 dark:text-slate-100"></span>'s request.
             </p>
             <div class="mt-5">
-                <label for="requestDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Rejection Remark</label>
-                <textarea id="requestDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type the reason for rejecting this request." required></textarea>
+                <label for="requestDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Disapproval Remark</label>
+                <textarea id="requestDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type the reason for disapproving this request." required></textarea>
             </div>
             <div class="mt-5 flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
                 <button type="button" onclick="closeRejectRequestModal()" class="approval-action-btn">Cancel</button>
-                <button type="submit" class="approval-action-btn approval-action-reject">Reject</button>
+                <button type="submit" class="approval-action-btn approval-action-reject">Disapprove</button>
             </div>
         </form>
     </div>
@@ -4711,15 +4896,15 @@
     <div class="approval-modal-card">
         <form id="rejectDamageForm" method="POST" class="p-6" autocomplete="off">
             @csrf
-            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Reject Faulty Report</p>
-            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Reject report from <span id="damageRejectUserName"></span>?</h3>
+            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Disapprove Faulty Report</p>
+            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Disapprove report from <span id="damageRejectUserName"></span>?</h3>
             <div class="mt-5">
-                <label for="damageDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Rejection Remark</label>
-                <textarea id="damageDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type rejection reason here." required></textarea>
+                <label for="damageDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Disapproval Remark</label>
+                <textarea id="damageDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type disapproval reason here." required></textarea>
             </div>
             <div class="mt-5 flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
                 <button type="button" onclick="closeRejectDamageModal()" class="approval-action-btn">Cancel</button>
-                <button type="submit" class="approval-action-btn approval-action-reject">Reject</button>
+                <button type="submit" class="approval-action-btn approval-action-reject">Disapprove</button>
             </div>
         </form>
     </div>
@@ -5497,7 +5682,7 @@
 
         if (modal && form && userName && remark) {
             moveApprovalModalToBody(modal);
-            form.action = "{{ url('admin/requests') }}/" + id + "/reject";
+            form.action = @json(route('wt.admin.requests.reject', ['id' => '__REQUEST_ID__'])).replace('__REQUEST_ID__', encodeURIComponent(id));
             userName.innerText = name || 'this user';
             form.reset();
             remark.value = '';
@@ -5525,7 +5710,7 @@
         if (modal && modalUserName && form) {
             moveApprovalModalToBody(modal);
             modalUserName.innerText = name;
-            form.action = "{{ url('admin/damage-reports') }}/" + id + "/approve";
+            form.action = @json(route('wt.admin.damageReports.approve', ['id' => '__DAMAGE_ID__'])).replace('__DAMAGE_ID__', encodeURIComponent(id));
             document.getElementById('damageApprovalRemark').value = '';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -5551,11 +5736,11 @@
         if (modal && modalUserName && form && remark) {
             moveApprovalModalToBody(modal);
             modalUserName.innerText = name;
-            form.action = "{{ url('admin/damage-reports') }}/" + id + "/reject";
+            form.action = @json(route('wt.admin.damageReports.reject', ['id' => '__DAMAGE_ID__'])).replace('__DAMAGE_ID__', encodeURIComponent(id));
             form.reset();
             remark.value = '';
             remark.defaultValue = '';
-            remark.placeholder = 'Type rejection reason here, example: details incomplete or no fault found.';
+            remark.placeholder = 'Type disapproval reason here, example: details incomplete or no fault found.';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';

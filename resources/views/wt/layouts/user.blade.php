@@ -114,7 +114,13 @@
 
   <div class="sidebar-footer">
     <div class="user-card">
-      <div class="user-avatar">{{ strtoupper(substr(Auth::guard('wt')->user()->username ?? 'U', 0, 1)) }}</div>
+      <div class="user-avatar" style="overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;">
+        @if(Auth::guard('wt')->user() && Auth::guard('wt')->user()->avatar && Storage::disk('public')->exists(Auth::guard('wt')->user()->avatar))
+          <img src="{{ asset('storage/' . Auth::guard('wt')->user()->avatar) }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+        @else
+          {{ strtoupper(substr(Auth::guard('wt')->user()->username ?? 'U', 0, 1)) }}
+        @endif
+      </div>
       <div class="user-info">
         <div class="user-name">{{ Auth::guard('wt')->user()->username ?? 'User' }}</div>
         <div class="user-role">{{ $accountRoleLabel }}</div>
@@ -145,6 +151,8 @@
         <i id="theme-toggle-dark-icon" class="hidden fas fa-moon" style="font-size:16px"></i>
         <i id="theme-toggle-light-icon" class="hidden fas fa-sun" style="font-size:16px;color:#f59e0b"></i>
       </button>
+
+      @include('wt.partials.header-notifications')
 
       {{-- User badge --}}
       <a href="{{ route('wt.user.profile') }}" class="topbar-user" title="My profile">
@@ -344,12 +352,19 @@ function positionSidebarInfoPopover(button, popover) {
 
 document.addEventListener('DOMContentLoaded', function() {
   // Notification toggle
-  const notifToggle = document.getElementById('notificationToggle');
+  const notifToggle = document.getElementById('notificationToggle') || document.getElementById('notifBellBtn');
   const notifDropdown = document.getElementById('notificationDropdown');
   if (notifToggle && notifDropdown) {
-    notifToggle.addEventListener('click', function(e) { e.stopPropagation(); notifDropdown.classList.toggle('hidden'); });
+    notifToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = notifDropdown.classList.toggle('hidden') === false;
+      notifToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
     document.addEventListener('click', function(e) {
-      if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) notifDropdown.classList.add('hidden');
+      if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+        notifToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   }
   // Logout modal
@@ -408,6 +423,32 @@ document.addEventListener('DOMContentLoaded', function() {
 @include('wt.partials.phone-format-script')
 
 @stack('scripts')
+
+<script>
+// Prevent accidental duplicate WT submissions while the first POST is still processing.
+(function() {
+    document.addEventListener('submit', function(event) {
+        var form = event.target;
+        if (!form || form.dataset.allowRepeatSubmit === 'true') return;
+        if ((form.method || '').toLowerCase() !== 'post') return;
+
+        if (form.dataset.wtSubmitting === 'true') {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return false;
+        }
+
+        form.dataset.wtSubmitting = 'true';
+        form.setAttribute('aria-busy', 'true');
+        window.setTimeout(function() {
+            form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(function(button) {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.72';
+            });
+        }, 0);
+    }, true);
+})();
+</script>
 
 <script>
 // Background Auto-Refresh Script (Hot Swap)

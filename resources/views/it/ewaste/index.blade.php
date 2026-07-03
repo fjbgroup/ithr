@@ -25,6 +25,26 @@
   @endif
 </div>
 
+<!-- STAT CARDS -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+  @foreach([
+    ['bi-recycle', '#0ea5e9', 'rgba(14,165,233,.12)', $totalEwaste, 'Total Items', 'All approved E-Waste records'],
+    ['bi-check-circle-fill', '#d97706', 'rgba(245,158,11,.12)', $activeEwaste, 'Active', 'Currently in E-Waste'],
+    ['bi-truck', '#16a34a', 'rgba(22,163,74,.12)', $collectedEwaste, 'Collected', 'Picked up or completed'],
+  ] as [$icon, $color, $bg, $value, $label, $hint])
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+    <div style="width:42px;height:42px;border-radius:9px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <i class="bi {{ $icon }}" style="font-size:20px;color:{{ $color }}"></i>
+    </div>
+    <div style="min-width:0">
+      <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1">{{ number_format($value) }}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--text);margin-top:5px">{{ $label }}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ $hint }}</div>
+    </div>
+  </div>
+  @endforeach
+</div>
+
 <!-- FILTER BAR -->
 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px">
   <form method="GET" action="{{ route('it.ewaste.index') }}" id="ewFilterForm" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%">
@@ -243,63 +263,120 @@
 </div>{{-- #ewLiveResults --}}
 
 {{-- Add E-Waste Modal --}}
-<div id="addEwasteModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);align-items:center;justify-content:center;padding:20px">
-  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:15px;font-weight:700;color:var(--text)">
-        <i class="bi bi-recycle me-2" style="color:#16a34a"></i>
-        {{ $user->isAdminOrFinance() ? 'Add E-Waste Item' : 'Request to Add E-Waste Item' }}
+<div id="addEwasteModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:24px">
+  <div style="background:#fff;border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);font-family:'Inter',sans-serif">
+
+    {{-- Header band --}}
+    <div style="background:#1e2d40;border-radius:12px 12px 0 0;padding:20px 28px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <i class="bi bi-recycle" style="color:#fff;font-size:18px"></i>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">Register New E-Waste Asset</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px">Fill in the details to add an item directly into E-Waste</div>
+        </div>
       </div>
-      <button onclick="document.getElementById('addEwasteModal').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&times;</button>
+      <button onclick="document.getElementById('addEwasteModal').style.display='none'" style="background:rgba(255,255,255,.1);border:none;cursor:pointer;width:32px;height:32px;border-radius:6px;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;line-height:1">&times;</button>
     </div>
-    @if(!$user->isAdminOrFinance())
-    <div style="margin:16px 24px 0;background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px">
-      <i class="bi bi-info-circle-fill" style="color:#2563eb;font-size:16px;flex-shrink:0"></i>
-      <span style="font-size:13px;color:#1d4ed8;font-weight:500">Your request will be reviewed by admin before the item appears in E-Waste.</span>
-    </div>
-    @endif
+
     <form method="POST" action="{{ route('it.ewaste.store') }}">
       @csrf
-      <div style="padding:24px" class="row g-3">
-        <div class="col-md-3">
-          <label class="form-label">Asset Number</label>
-          <input type="text" name="asset_number" class="form-control">
+
+      {{-- Section: Asset Identity --}}
+      <div style="padding:24px 28px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-tag" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Asset Identity</span>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">Asset Class <span style="color:var(--red)">*</span></label>
-          <select name="asset_class" class="form-select" required>
-            @foreach($assetClasses as $cls)
-            <option value="{{ $cls }}">{{ $cls }}</option>
-            @endforeach
-          </select>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Number</label>
+            <input type="text" name="asset_number" placeholder="e.g. OEPC1401"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Leave blank to assign later</div>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Class <span style="color:#e53e3e">*</span></label>
+            <select name="asset_class" required
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="">— Select Class —</option>
+              @foreach($assetClasses as $cls)
+              <option value="{{ $cls }}">{{ $cls }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Serial Number</label>
+            <input type="text" name="serial_number" placeholder="e.g. SGH629QBBY"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Date Flagged</label>
+            <input type="date" name="date_flagged" value="{{ date('Y-m-d') }}"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Description <span style="color:var(--red)">*</span></label>
-          <input type="text" name="description" class="form-control" required>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Serial Number</label>
-          <input type="text" name="serial_number" class="form-control">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Date Flagged</label>
-          <input type="date" name="date_flagged" class="form-control" value="{{ date('Y-m-d') }}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Weight (kg)</label>
-          <input type="number" name="weight_kg" step="0.01" class="form-control">
-        </div>
-        <div class="col-12">
-          <label class="form-label">Notes</label>
-          <textarea name="notes" class="form-control" rows="2"></textarea>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
+          <input type="text" name="description" required placeholder="e.g. HP ELITEONE 800 G2 23, AIO, NOTEBOOK..."
+            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         </div>
       </div>
-      <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px">
-        <button type="submit" class="btn-primary-custom">
-          <i class="bi bi-{{ $user->isAdminOrFinance() ? 'check-lg' : 'send' }}"></i>
-          {{ $user->isAdminOrFinance() ? 'Add Record' : 'Submit Request' }}
+
+      {{-- Section: Disposal Details --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-recycle" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Disposal Details</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Condition on Disposal</label>
+            <input type="text" name="condition_on_disposal" placeholder="e.g. Damaged / Obsolete"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Disposal Method</label>
+            <input type="text" name="disposal_method" placeholder="e.g. Recycle"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Weight (kg)</label>
+            <input type="number" name="weight_kg" step="0.01" placeholder="0.00"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+        </div>
+      </div>
+
+      {{-- Section: Notes --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-journal-text" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Notes</span>
+        </div>
+        <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Notes</label>
+        <textarea name="notes" rows="3" placeholder="Any additional remarks about this E-Waste item..."
+          style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;resize:vertical;box-sizing:border-box"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      </div>
+
+      {{-- Footer --}}
+      <div style="padding:16px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px">
+        <button type="submit"
+          style="padding:10px 22px;background:#1e2d40;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:7px">
+          <i class="bi bi-plus-lg"></i> Register Asset
         </button>
-        <button type="button" onclick="document.getElementById('addEwasteModal').style.display='none'" class="btn-secondary-custom">
+        <button type="button" onclick="document.getElementById('addEwasteModal').style.display='none'"
+          style="padding:10px 20px;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px">
           <i class="bi bi-x"></i> Cancel
         </button>
       </div>
@@ -591,6 +668,7 @@ function ewEsc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;
 })();
 
 var _ewItems = @json($items->keyBy('id'));
+var _ewasteUpdateBaseUrl = @json(rtrim(url()->current(), '/'));
 
 function openEwasteEdit(id) {
   var d = _ewItems[id];
@@ -605,7 +683,7 @@ function openEwasteEdit(id) {
     + '<div style="font-size:15px;font-weight:700;color:var(--text)"><i class="bi bi-recycle me-2" style="color:#16a34a"></i>Edit E-Waste Record</div>'
     + '<button onclick="document.getElementById(\'ewasteEditOverlay\').style.display=\'none\'" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&times;</button>'
     + '</div>'
-    + '<form method="POST" action="/ewaste/'+id+'">'
+    + '<form method="POST" action="'+_ewasteUpdateBaseUrl+'/'+encodeURIComponent(id)+'">'
     + '<input type="hidden" name="_token" value="{{ csrf_token() }}">'
     + '<div style="padding:24px" class="row g-3">'
     + '<div class="col-md-3"><label class="form-label">Asset Number</label><input type="text" name="asset_number" class="form-control" value="'+esc(d.asset_number||'')+'"></div>'

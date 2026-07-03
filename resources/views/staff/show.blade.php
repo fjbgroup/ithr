@@ -10,9 +10,9 @@
     </div>
     <div class="header-actions">
         @if(Auth::user()->staff_no === $staff->staff_no || Auth::user()->isAdmin())
-        <button class="btn btn-primary" data-requires-active onclick="openRequestModal('Staff Data')">
+        <button class="btn btn-primary" onclick="openModal('editProfileModal')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Request Update
+            Edit Profile
         </button>
         @endif
         <a href="{{ route('staff.index') }}" class="btn btn-outline">
@@ -133,13 +133,142 @@
     </div>
 </div>
 
+<!-- Edit Profile Modal -->
+@if(Auth::user()->staff_no === $staff->staff_no || Auth::user()->isAdmin())
+<div class="modal" id="editProfileModal">
+    <div class="modal-box" style="max-width:520px;">
+        <div class="modal-header ur-modal-header" style="background: var(--primary);">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+                <div class="ur-header-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h3 style="color:white;margin:0;font-size:.95rem;">Edit Profile Information</h3>
+                    <p style="color:rgba(255,255,255,.6);font-size:.75rem;margin:.1rem 0 0;">
+                        Staff No: <strong style="color:rgba(255,255,255,.9);">{{ $staff->staff_no }}</strong>
+                    </p>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeModal()" style="color:rgba(255,255,255,.6);font-size:1.4rem;">×</button>
+        </div>
+
+        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" name="name" class="form-control" value="{{ old('name', $staff->name) }}" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $staff->email) }}" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone_number" class="form-control" value="{{ old('phone_number', $staff->phone_number) }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender" class="form-control" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                        <option value="">Select</option>
+                        <option value="Male" {{ old('gender', $staff->gender) === 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ old('gender', $staff->gender) === 'Female' ? 'selected' : '' }}>Female</option>
+                        <option value="Other" {{ old('gender', $staff->gender) === 'Other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $staff->date_of_birth ? date('Y-m-d', strtotime($staff->date_of_birth)) : '') }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label>IC Number</label>
+                    <input type="text" name="ic_number" class="form-control" value="{{ old('ic_number', $staff->ic_number) }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+
+                <div class="form-group">
+                    <label>Profile Picture</label>
+                    <input type="file" name="avatar" class="form-control" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                    <small style="color: var(--muted); font-size: 0.75rem; display: block; margin-top: 0.25rem;">Max file size: 2MB. Accepts images (JPG, PNG, WebP, etc.)</small>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
+
+@canwrite
+<!-- Add/Edit Family Modal -->
+<div class="modal" id="editFamilyModal">
+    <div class="modal-box" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3 id="familyModalTitle">Add Family Record</h3>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <form id="familyForm" method="POST" action="{{ route('family.store') }}">
+            @csrf
+            <div id="methodField"></div>
+            <input type="hidden" name="staff_id" value="{{ $staff->id }}">
+            <div class="form-grid" style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem 0;">
+                <div class="form-group">
+                    <label>Family Member Name *</label>
+                    <input type="text" name="name" id="ff_name" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+                <div class="form-group">
+                    <label>Relationship *</label>
+                    <select name="relationship" id="ff_rel" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                        <option value="">Select</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Child">Child</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Sibling">Sibling</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" name="date_of_birth" id="ff_dob" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+                <div class="form-group">
+                    <label>Emergency Contact</label>
+                    <select name="emergency_contact" id="ff_ec" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone_number" id="ff_phone" placeholder="e.g. 012-3456789" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Record</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endcanwrite
+
 <div class="profile-layout">
     <div class="profile-sidebar">
         <div class="card profile-main-card">
             <div class="profile-header-strip company-{{ strtolower($staff->company) }}"></div>
             <div class="profile-card-body">
-                <div class="profile-avatar-large">
-                    {{ strtoupper(substr($staff->name, 0, 1)) }}
+                <div class="profile-avatar-large" style="position: relative; overflow: hidden; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+                    @if($staff->user && $staff->user->avatar && Storage::disk('public')->exists($staff->user->avatar))
+                        <img src="{{ asset('storage/' . $staff->user->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        {{ strtoupper(substr($staff->name, 0, 1)) }}
+                    @endif
                 </div>
                 <h3 class="profile-name">{{ $staff->name }}</h3>
                 <p class="profile-pos">{{ $staff->position ?? '—' }}</p>
@@ -249,6 +378,15 @@
 
         <!-- Family Tab -->
         <div id="tab-family" class="tab-content" style="display:none;">
+            @canwrite
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+                <button class="btn btn-primary btn-sm" onclick="openAddFamilyModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Family Member
+                </button>
+            </div>
+            @endcanwrite
+
             @php
                 $byBirthYear = fn($fm) => $fm->date_of_birth ? (int) date('Y', strtotime($fm->date_of_birth)) : PHP_INT_MAX;
                 $familySorted = $staff->familyMembers->sortBy($byBirthYear);
@@ -281,7 +419,7 @@
                         <div class="card-header"><h3>{{ $group['title'] }} <span class="md-tab-count">{{ $group['members']->count() }}</span></h3></div>
                         <div class="table-wrap">
                             <table class="table">
-                                <thead><tr><th>Name</th><th>Relationship</th><th>DOB</th><th>Phone</th></tr></thead>
+                                <thead><tr><th>Name</th><th>Relationship</th><th>DOB</th><th>Phone</th>@canwrite <th style="text-align:right;">Actions</th> @endcanwrite</tr></thead>
                                 <tbody>
                                     @foreach($group['members'] as $fm)
                                         <tr>
@@ -289,6 +427,16 @@
                                             <td>{{ $fm->relationship }}</td>
                                             <td>{{ $fm->date_of_birth ? date('d M Y', strtotime($fm->date_of_birth)) : '—' }}</td>
                                             <td>{{ $fm->phone_number ?? '—' }}</td>
+                                            @canwrite
+                                            <td style="text-align:right; display: flex; justify-content: flex-end; gap: 0.25rem;">
+                                                <button type="button" class="btn btn-xs btn-outline" style="font-size:.65rem;padding:.15rem .4rem;" onclick='openEditFamilyModal({!! json_encode($fm) !!})'>Edit</button>
+                                                <form action="{{ route('family.destroy', $fm->id) }}" method="POST" style="display:inline; margin: 0;" onsubmit="return confirm('Are you sure you want to delete this family record?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-xs btn-danger" style="font-size:.65rem;padding:.15rem .4rem;">Delete</button>
+                                                </form>
+                                            </td>
+                                            @endcanwrite
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -538,6 +686,29 @@ function switchTab(tabId) {
         content.style.display = 'none';
     });
     document.getElementById('tab-' + tabId).style.display = 'block';
+}
+
+function openAddFamilyModal() {
+    document.getElementById('familyModalTitle').textContent = 'Add Family Record';
+    const form = document.getElementById('familyForm');
+    form.action = "{{ route('family.store') }}";
+    document.getElementById('methodField').innerHTML = '';
+    form.reset();
+    openModal('editFamilyModal');
+}
+
+function openEditFamilyModal(data) {
+    document.getElementById('familyModalTitle').textContent = 'Edit Family Record';
+    const form = document.getElementById('familyForm');
+    form.action = "{{ url('family') }}/" + data.id;
+    document.getElementById('methodField').innerHTML = '@method("PUT")';
+    
+    document.getElementById('ff_name').value = data.family_member_name || data.name || '';
+    document.getElementById('ff_rel').value = data.relationship;
+    document.getElementById('ff_dob').value = data.date_of_birth || '';
+    document.getElementById('ff_ec').value = data.emergency_contact || 'No';
+    document.getElementById('ff_phone').value = data.phone_number || '';
+    openModal('editFamilyModal');
 }
 </script>
 @endsection

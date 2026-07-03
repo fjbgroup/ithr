@@ -77,6 +77,8 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::post('/requests/temporary-store', [RequestController::class, 'storeTemporary'])->name('requests.store.temporary');
         Route::get('/handover', [HandoverController::class, 'index'])->middleware('wt.role:admin_it')->name('handover.index');
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
+        Route::get('/handover/{accessRequest}/pickup', [HandoverController::class, 'showPickup'])->name('handover.pickup');
+        Route::post('/handover/{accessRequest}/pickup', [HandoverController::class, 'storePickup'])->name('handover.pickup.store');
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
         Route::get('/returns/search', [InteractionController::class, 'searchReturn'])->name('returns.search');
         Route::post('/returns', [InteractionController::class, 'storeReturn'])->name('returns.store');
@@ -101,6 +103,9 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::get('/general', [AdminGeneralController::class, 'index'])->name('general.index');
         Route::get('/profile', [AdminGeneralController::class, 'profile'])->name('profile');
         Route::post('/profile', [AdminGeneralController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/profile/signature', [UserDashboardController::class, 'updateSignature'])->name('profile.signature');
+        Route::post('/profile/signature/clear', [UserDashboardController::class, 'clearSignature'])->name('profile.signature.clear');
+        Route::get('/profile/signature-image', [UserDashboardController::class, 'serveSignature'])->name('profile.signature.image');
 
         Route::middleware('wt.role:admin_it')->group(function () {
             Route::post('/maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
@@ -143,6 +148,9 @@ Route::prefix('wt')->name('wt.')->group(function () {
         Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
         Route::get('/profile', [UserDashboardController::class, 'profile'])->name('profile');
         Route::post('/profile', [UserDashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/profile/signature', [UserDashboardController::class, 'updateSignature'])->name('profile.signature');
+        Route::post('/profile/signature/clear', [UserDashboardController::class, 'clearSignature'])->name('profile.signature.clear');
+        Route::get('/profile/signature-image', [UserDashboardController::class, 'serveSignature'])->name('profile.signature.image');
 
         Route::get('/requests/create', [InteractionController::class, 'createRequest'])->name('requests.create');
         Route::post('/requests', [InteractionController::class, 'storeRequest'])->name('requests.store');
@@ -150,6 +158,8 @@ Route::prefix('wt')->name('wt.')->group(function () {
 
         Route::get('/handover', [HandoverController::class, 'index'])->name('handover.index');
         Route::post('/handover', [HandoverController::class, 'store'])->name('handover.store');
+        Route::get('/handover/{accessRequest}/pickup', [HandoverController::class, 'showPickup'])->name('handover.pickup');
+        Route::post('/handover/{accessRequest}/pickup', [HandoverController::class, 'storePickup'])->name('handover.pickup.store');
 
         Route::get('/returns/create', [InteractionController::class, 'createReturn'])->name('returns.create');
         Route::get('/returns/search', [InteractionController::class, 'searchReturn'])->name('returns.search');

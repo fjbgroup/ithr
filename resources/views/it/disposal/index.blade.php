@@ -187,74 +187,159 @@
 
 @if($user->isAdminOrFinance())
 {{-- Add Disposal Item Modal --}}
-<div id="addDisposalModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.45);align-items:center;justify-content:center;padding:20px">
-  <div style="background:var(--surface);border-radius:16px;width:100%;max-width:620px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:15px;font-weight:700;color:var(--text)">
-        <i class="bi bi-box-arrow-right me-2" style="color:var(--accent)"></i>Add Disposal Item
+<div id="addDisposalModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.5);align-items:flex-start;justify-content:center;padding:72px 24px 24px" onclick="if(event.target===this)document.getElementById('addDisposalModal').style.display='none'">
+  <div style="background:#fff;border-radius:12px;width:100%;max-width:960px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);font-family:'Inter',sans-serif">
+
+    {{-- Header --}}
+    <div style="background:#1e2d40;border-radius:12px 12px 0 0;padding:20px 28px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center">
+          <i class="bi bi-box-arrow-right" style="color:#fff;font-size:18px"></i>
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#fff;line-height:1.2">Register New Disposal Asset</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px">Fill in the details to register an asset for disposal</div>
+        </div>
       </div>
-      <button onclick="document.getElementById('addDisposalModal').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)">&times;</button>
+      <button onclick="document.getElementById('addDisposalModal').style.display='none'" style="background:rgba(255,255,255,.1);border:none;cursor:pointer;width:32px;height:32px;border-radius:6px;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;line-height:1">&times;</button>
     </div>
+
     <form method="POST" action="{{ route('it.disposal.store') }}">
       @csrf
-      <div style="padding:24px" class="row g-3">
-        <div class="col-md-3">
-          <label class="form-label">Asset Number</label>
-          <input type="text" name="asset_number" class="form-control">
+
+      {{-- Section: Asset Identity --}}
+      <div style="padding:24px 28px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-tag" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Asset Identity</span>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">Asset Class <span style="color:var(--red)">*</span></label>
-          <select name="asset_class" class="form-select" required>
-            @foreach($assetClasses as $cls)
-            <option value="{{ $cls }}">{{ $cls }}</option>
-            @endforeach
-          </select>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Number</label>
+            <input type="text" name="asset_number" placeholder="e.g. NIT-001"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Leave blank to assign manually later</div>
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Class <span style="color:#e53e3e">*</span></label>
+            @if($assetClasses->isEmpty())
+            <select name="asset_class" required disabled
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box">
+              <option value="">— No classes yet —</option>
+            </select>
+            <div style="font-size:11px;color:#dc2626;margin-top:4px">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              No asset classes found. Add them in <a href="{{ route('it.asset-classes.index') }}" style="color:#0284c7;font-weight:600">Asset Classes</a>.
+            </div>
+            @else
+            <select name="asset_class" required
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="" disabled selected>— Select Class —</option>
+              @foreach($assetClasses as $cls)
+              <option value="{{ $cls }}">{{ $cls }}</option>
+              @endforeach
+            </select>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Manage classes under <a href="{{ route('it.asset-classes.index') }}" style="color:#0284c7">Asset Classes</a></div>
+            @endif
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Serial Number</label>
+            <input type="text" name="serial_number" placeholder="e.g. SGH629QBBY"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Status</label>
+            <select name="disposal_status"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="Approved">Approved</option>
+              <option value="Disposed">Disposed</option>
+            </select>
+          </div>
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Description <span style="color:var(--red)">*</span></label>
-          <input type="text" name="description" class="form-control" required>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Serial Number</label>
-          <input type="text" name="serial_number" class="form-control">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Status</label>
-          <select name="disposal_status" class="form-select">
-            <option value="Approved">Approved</option>
-            <option value="Disposed">Disposed</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Date Flagged</label>
-          <input type="date" name="date_flagged" class="form-control" value="{{ date('Y-m-d') }}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Date Disposed</label>
-          <input type="date" name="date_disposed" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Disposal Method</label>
-          <input type="text" name="disposal_method" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Vendor / Collector</label>
-          <input type="text" name="vendor_collector" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Certificate Number</label>
-          <input type="text" name="certificate_number" class="form-control">
-        </div>
-        <div class="col-12">
-          <label class="form-label">Notes</label>
-          <textarea name="notes" class="form-control" rows="2"></textarea>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
+          <input type="text" name="description" required placeholder="e.g. Damaged office chair, printer, cabinet..."
+            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         </div>
       </div>
-      <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px">
-        <button type="submit" class="btn-primary-custom">
-          <i class="bi bi-plus-lg"></i> Add to Disposal
+
+      {{-- Section: Disposal Details --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-trash3" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Disposal Details</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Date Flagged</label>
+            <input type="date" name="date_flagged" value="{{ date('Y-m-d') }}"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Date Disposed</label>
+            <input type="date" name="date_disposed"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Disposal Method</label>
+            <input type="text" name="disposal_method" placeholder="e.g. Sell / Recycle / Scrap"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Certificate Number</label>
+            <input type="text" name="certificate_number" placeholder="e.g. CERT-001"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+        </div>
+      </div>
+
+      {{-- Section: Collection Details --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-truck" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Collection Details</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr;gap:16px">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Vendor / Collector</label>
+            <input type="text" name="vendor_collector" placeholder="e.g. ABC Vendor"
+              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+        </div>
+      </div>
+
+      {{-- Section: Notes --}}
+      <div style="padding:24px 28px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
+          <i class="bi bi-journal-text" style="font-size:13px;color:var(--muted)"></i>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Notes</span>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Notes</label>
+          <textarea name="notes" rows="3" placeholder="Any additional remarks about this disposal item..."
+            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;resize:vertical;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+      </div>
+
+      {{-- Footer --}}
+      <div style="padding:16px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px">
+        <button type="submit"
+          style="padding:10px 22px;background:#1e2d40;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:7px">
+          <i class="bi bi-plus-lg"></i> Register Asset
         </button>
-        <button type="button" onclick="document.getElementById('addDisposalModal').style.display='none'" class="btn-secondary-custom">
+        <button type="button" onclick="document.getElementById('addDisposalModal').style.display='none'"
+          style="padding:10px 20px;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:6px">
           <i class="bi bi-x"></i> Cancel
         </button>
       </div>
@@ -624,4 +709,3 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').r
 })();
 </script>
 @endpush
-

@@ -122,7 +122,12 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     $isAdminItView = $effectiveRole === 'admin_it';
     $accountRoleLabel = $actualRole === 'admin_it' ? 'ICT' : 'Executive';
     $impersonatorAdminItId = session('impersonator_admin_it_id');
-    $isExecutiveImpersonation = $actualRole === 'admin' && filled($impersonatorAdminItId);
+    $selectedExecutiveUserId = session('selected_executive_user_id');
+    $selectedExecutiveAccount = $selectedExecutiveUserId
+        ? \App\Models\WT\User::where('wt_role', 'admin')->find($selectedExecutiveUserId)
+        : null;
+    $isExecutiveImpersonation = ($actualRole === 'admin_it' && $effectiveRole === 'admin' && filled($selectedExecutiveAccount))
+        || ($actualRole === 'admin' && filled($impersonatorAdminItId));
     $executiveSwitcherAccounts = $actualRole === 'admin_it'
         ? \App\Models\WT\User::where('wt_role', 'admin')
             ->orderBy('name')
@@ -134,10 +139,13 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
             $query->where('status', $effectiveRole === 'admin_it' ? 'Pending IT Approval' : 'Pending Admin Approval')
                 ->orWhere('return_status', $effectiveRole === 'admin_it' ? 'Pending IT Approval' : 'Pending Admin Approval');
         })
-        ->when($effectiveRole === 'admin', function ($query) {
-            $query->where(function ($scoped) {
+        ->when($effectiveRole === 'admin', function ($query) use ($selectedExecutiveAccount) {
+            $query->where(function ($scoped) use ($selectedExecutiveAccount) {
                 $scoped->whereNull('submit_to_admin_id')
-                    ->orWhere('submit_to_admin_id', auth()->id());
+                    ->orWhere('submit_to_admin_id', auth('wt')->id());
+                if ($selectedExecutiveAccount) {
+                    $scoped->orWhere('submit_to_admin_id', $selectedExecutiveAccount->id);
+                }
             });
         })
         ->count();
@@ -145,7 +153,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         $approvalBadgeCount += \App\Models\WT\MaintenanceRecord::where('status', 'PENDING ADMIN IT')->count();
     } else {
         $approvalBadgeCount += \App\Models\WT\MaintenanceRecord::where('status', 'WAITING FOR ADMIN')
-            ->where('submit_to_admin_id', auth()->id())
+            ->where('submit_to_admin_id', $selectedExecutiveAccount?->id ?? auth('wt')->id())
             ->count();
     }
 
@@ -191,13 +199,6 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <i class="fas fa-home"></i> <span>Dashboard</span>
     </a>
     @endif
-
-    <div class="nav-section-label">Guides</div>
-    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}">
-      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}</span>
-      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
-    </a>
-
     <div class="nav-section-label">{{ $isAdminItView ? 'Management' : 'Personal Assets' }}</div>
 
     @if($isAdminItView)
@@ -338,6 +339,11 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     @endif
 
     <div style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+    <div class="nav-section-label">Help</div>
+    <a href="{{ route('wt.admin.manual') }}" class="nav-link has-info {{ request()->routeIs('wt.admin.manual') ? 'active-sidebar' : '' }}" title="{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}">
+      <i class="fa-solid fa-book-open" style="width:20px;text-align:center;flex-shrink:0"></i> <span>{{ $isAdminItView ? 'ICT User Manual' : 'Executive User Manual' }}</span>
+      @include('wt.partials.sidebar-info', ['text' => $isAdminItView ? 'Open the ICT guide for approvals, inventory, maintenance, reports, users, and master data.' : 'Open the Executive guide for requests, approval review, returns, faulty reports, and status tracking.'])
+    </a>
     <a href="{{ route('home') }}" class="nav-link" title="Back to Portal">
       <i class="fas fa-th-large" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Back to Portal</span>
     </a>
@@ -351,7 +357,13 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
 
   <div class="sidebar-footer">
     <div class="user-card">
-      <div class="user-avatar">{{ strtoupper(substr(Auth::guard('wt')->user()->username ?? 'A', 0, 1)) }}</div>
+      <div class="user-avatar" style="overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;">
+        @if(Auth::guard('wt')->user() && Auth::guard('wt')->user()->avatar && Storage::disk('public')->exists(Auth::guard('wt')->user()->avatar))
+          <img src="{{ asset('storage/' . Auth::guard('wt')->user()->avatar) }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+        @else
+          {{ strtoupper(substr(Auth::guard('wt')->user()->username ?? 'A', 0, 1)) }}
+        @endif
+      </div>
       <div class="user-info">
         <div class="user-name">{{ Auth::guard('wt')->user()->username ?? 'User' }}</div>
         <div class="user-role">{{ $accountRoleLabel }}</div>
@@ -376,7 +388,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </div>
     <div class="topbar-right">
       {{-- ICT/Executive role switcher --}}
-      @if($actualRole === 'admin_it')
+      @if($actualRole === 'admin_it' && !$isExecutiveImpersonation)
       <div class="topbar-role-switcher">
         <a href="{{ route('wt.switch_view', 'admin_it') }}"
           class="topbar-role-switcher-link {{ $effectiveRole === 'admin_it' ? 'active-switcher' : '' }}"
@@ -423,6 +435,8 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         <i id="theme-toggle-dark-icon" class="hidden fas fa-moon" style="font-size:16px"></i>
         <i id="theme-toggle-light-icon" class="hidden fas fa-sun" style="font-size:16px;color:#f59e0b"></i>
       </button>
+
+      @include('wt.partials.header-notifications')
 
       {{-- User badge --}}
       <a href="{{ route('wt.admin.profile') }}" class="topbar-user" title="My profile">
@@ -1600,16 +1614,18 @@ function closeGlobalWalkieTimelineOutside(event) {
 // ── DOM READY ──
 document.addEventListener('DOMContentLoaded', function() {
   // Notification toggle
-  var notifToggle = document.getElementById('notificationToggle');
+  var notifToggle = document.getElementById('notificationToggle') || document.getElementById('notifBellBtn');
   var notifDropdown = document.getElementById('notificationDropdown');
   if (notifToggle && notifDropdown) {
     notifToggle.addEventListener('click', function(e) {
       e.stopPropagation();
-      notifDropdown.classList.toggle('hidden');
+      var isOpen = notifDropdown.classList.toggle('hidden') === false;
+      notifToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
     document.addEventListener('click', function(e) {
       if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
         notifDropdown.classList.add('hidden');
+        notifToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -1742,6 +1758,32 @@ document.addEventListener('DOMContentLoaded', function() {
 @include('wt.partials.popup-redirect')
 
 @stack('scripts')
+
+<script>
+// Prevent accidental duplicate WT submissions while the first POST is still processing.
+(function() {
+    document.addEventListener('submit', function(event) {
+        var form = event.target;
+        if (!form || form.dataset.allowRepeatSubmit === 'true') return;
+        if ((form.method || '').toLowerCase() !== 'post') return;
+
+        if (form.dataset.wtSubmitting === 'true') {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            return false;
+        }
+
+        form.dataset.wtSubmitting = 'true';
+        form.setAttribute('aria-busy', 'true');
+        window.setTimeout(function() {
+            form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach(function(button) {
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.72';
+            });
+        }, 0);
+    }, true);
+})();
+</script>
 
 <script>
 // Background Auto-Refresh Script (Hot Swap)

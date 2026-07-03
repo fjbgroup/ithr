@@ -413,7 +413,7 @@
       <ul class="manual-list">
         <li><span>1</span><div>Open <strong>Approval Inbox</strong> to review requests forwarded by Executive users and approve or reject them.</div></li>
         <li><span>2</span><div>Use <strong>Walkie Talkie List</strong>, <strong>Unused Unit</strong>, and <strong>Special Use</strong> to manage inventory records.</div></li>
-        <li><span>3</span><div>Create, update, import, assign, return, or remove walkie talkie units from the inventory tools.</div></li>
+        <li><span>3</span><div>Create, update, import, assign, return, or remove walkie talkie units from the inventory tools. Keep radio IDs clean; user-facing forms show the <strong>G</strong> prefix so users type only the number portion.</div></li>
         <li><span>4</span><div>Use <strong>Faulty Report</strong> and <strong>Maintenance</strong> to receive faulty units, track repair status, and close maintenance records.</div></li>
         <li><span>5</span><div>Manage users, master data, reports, activity logs, and database backup from the ICT-only system control menu.</div></li>
       </ul>
@@ -431,8 +431,9 @@
         <li><span>1</span><div>Open <strong>Request Walkie Talkie</strong> to submit long-term or temporary requests for yourself or another recipient.</div></li>
         <li><span>2</span><div>Use <strong>Approval Inbox</strong> to review user requests, returns, and faulty reports before forwarding them to ICT.</div></li>
         <li><span>3</span><div>Use <strong>My Inventory</strong> to check walkie talkies currently assigned to you.</div></li>
-        <li><span>4</span><div>Submit <strong>Return Unit</strong> when a unit is no longer needed or <strong>Report Faulty</strong> when a unit has an issue.</div></li>
-        <li><span>5</span><div>Open <strong>All Status</strong> to track request, handover, return, and faulty-report progress.</div></li>
+        <li><span>4</span><div>Submit <strong>Return Unit</strong> when a unit is no longer needed. Use manual unit entry if the unit does not appear in system data.</div></li>
+        <li><span>5</span><div>Submit <strong>Report Faulty</strong> when a unit has an issue, and type only the number portion in radio ID fields because the <strong>G</strong> prefix is shown on screen.</div></li>
+        <li><span>6</span><div>Open <strong>All Status</strong> to track request, handover, return, and faulty-report progress.</div></li>
       </ul>
     </section>
   </div>
@@ -449,7 +450,7 @@
       </div>
       <div class="manual-flow">
         <span class="manual-flow-label">Return Unit</span>
-        <p class="manual-flow-text">User or Executive submits the return, Executive confirms the returned unit where required, and ICT inventory is updated after confirmation.</p>
+        <p class="manual-flow-text">User or Executive submits the return, uses manual unit entry if the unit is missing from system data, Executive confirms where required, and ICT inventory is updated after confirmation.</p>
       </div>
       <div class="manual-flow">
         <span class="manual-flow-label">Faulty Unit</span>
@@ -469,6 +470,8 @@
     </div>
     <div class="manual-section-body">
       <p class="manual-note">Fill in complete staff, department, phone, date, quantity, and device details before submitting. For faulty reports, upload clear evidence when the Radio ID or Serial Number is not known.</p>
+      <p class="manual-note">Radio ID fields show the G prefix in the layout. Type only the number portion, for example 0001 for G0001.</p>
+      <p class="manual-note">Use the bottom Help section of the sidebar to open this manual, and keep My Profile updated with photo, contact details, and saved signature.</p>
       <p class="manual-note">ICT users should keep master data and inventory records clean because those records control dropdowns, reports, assignment history, and approval accuracy across the WT System.</p>
     </div>
   </section>

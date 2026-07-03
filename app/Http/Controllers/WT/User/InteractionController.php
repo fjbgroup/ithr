@@ -710,11 +710,21 @@ class InteractionController extends Controller
     public function storeReturn(Request $request)
     {
         $request->validate([
-            'access_request_id' => 'required',
+            'manual_return' => 'nullable|boolean',
+            'access_request_id' => 'required_unless:manual_return,1',
             'return_date' => 'required|date',
             'selected_walkie_inventory_id' => 'nullable|integer',
             'selected_radio_id' => 'nullable|string|max:120',
             'selected_serial_number' => 'nullable|string|max:120',
+            'manual_radio_id' => 'required_if:manual_return,1|nullable|string|max:120',
+            'manual_serial_number' => 'nullable|string|max:120',
+            'manual_model' => 'nullable|string|max:120',
+            'manual_ownership_name' => 'required_if:manual_return,1|nullable|string|max:255',
+            'manual_staff_id' => 'nullable|string|max:120',
+            'manual_department' => 'required_if:manual_return,1|nullable|string|max:255',
+            'manual_position' => 'nullable|string|max:255',
+            'manual_location' => 'nullable|string|max:255',
+            'manual_note' => 'nullable|string|max:1000',
             'return_person' => 'required|string|max:255',
             'return_department' => 'required|string|max:255',
             'return_phone_no' => 'required|string|max:50',
@@ -726,7 +736,9 @@ class InteractionController extends Controller
 
         $directAccessMatch = preg_match('/^direct_walkie_(\d+)$/', (string) $request->access_request_id, $directAccessMatches);
 
-        if ($directAccessMatch) {
+        if ($request->boolean('manual_return')) {
+            $access = $this->manualReturnAccess($request);
+        } elseif ($directAccessMatch) {
             $request->query->set('walkie_id', (int) $directAccessMatches[1]);
             $directWalkie = $this->directReturnWalkie($request);
             abort_unless($directWalkie, 404);
@@ -765,21 +777,30 @@ class InteractionController extends Controller
                 'request_sent'
             );
 
-            if ((int) $access->user_id !== (int) $senderUser->id) {
+            $returnOwner = (int) $access->user_id !== (int) $senderUser->id
+                ? User::find($access->user_id)
+                : null;
+
+            if ($returnOwner) {
                 SystemNotifier::notifyUser(
-                    (int) $access->user_id,
+                    $returnOwner,
                     'Permintaan Return Dibuat Untuk Anda',
                     "Executive telah menghantar permintaan return untuk Request #{$access->id} bagi pihak anda.",
                     'request_sent'
                 );
             }
         } else {
-            SystemNotifier::notifyUser(
-                (int) $access->submit_to_admin_id,
-                'Permintaan Return Baru',
-                "Pengguna telah menghantar permintaan return untuk Request #{$access->id}.",
-                'request_submitted'
-            );
+            $adminRecipient = User::find($access->submit_to_admin_id);
+
+            if ($adminRecipient) {
+                SystemNotifier::notifyUser(
+                    $adminRecipient,
+                    'Permintaan Return Baru',
+                    "Pengguna telah menghantar permintaan return untuk Request #{$access->id}.",
+                    'request_submitted'
+                );
+            }
+
             SystemNotifier::notifyUser(
                 $senderUser,
                 'Permintaan Return Dihantar',
@@ -797,6 +818,44 @@ class InteractionController extends Controller
         }
 
         return redirect()->route('wt.user.requests.status', ['status' => 'history'])->with('success', $successMessage);
+    }
+
+    private function manualReturnAccess(Request $request): AccessRequest
+    {
+        $user = auth('wt')->user();
+        $radioId = strtoupper(trim((string) $request->input('manual_radio_id')));
+        $serialNumber = strtoupper(trim((string) $request->input('manual_serial_number', '')));
+        $ownerName = strtoupper(trim((string) $request->input('manual_ownership_name', $request->input('return_person'))));
+        $department = strtoupper(trim((string) $request->input('manual_department', $request->input('return_department'))));
+        $manualNotes = collect([
+            'Manual return entry.',
+            filled($request->input('manual_model')) ? 'Model: ' . strtoupper(trim((string) $request->input('manual_model'))) : null,
+            filled($request->input('manual_note')) ? trim((string) $request->input('manual_note')) : null,
+        ])->filter()->implode("\n");
+
+        return AccessRequest::create([
+            'user_id' => $user->id,
+            'request_type' => 'walkie_talkie',
+            'radio_id' => $radioId,
+            'walkie_inventory_id' => null,
+            'assigned_walkie_inventory_ids' => [],
+            'assigned_radio_ids' => [$radioId],
+            'assigned_serial_number' => $serialNumber !== '' ? $serialNumber : null,
+            'assigned_serial_numbers' => $serialNumber !== '' ? [$serialNumber] : [],
+            'full_name' => $ownerName,
+            'staff_id' => strtoupper(trim((string) $request->input('manual_staff_id', $user->staff_id))),
+            'request_date' => now()->toDateString(),
+            'department' => $department,
+            'position' => strtoupper(trim((string) $request->input('manual_position', ''))),
+            'ownership_type' => 'manual',
+            'location' => strtoupper(trim((string) $request->input('manual_location', ''))),
+            'event_name' => 'Manual Return Entry',
+            'quantity' => 1,
+            'justifications' => $manualNotes,
+            'submit_to_admin_id' => $request->routeIs('wt.admin.*') ? $user->id : null,
+            'status' => 'Approved',
+            'return_status' => null,
+        ]);
     }
 
     private function singleUnitReturnRequest(AccessRequest $access, Request $request): AccessRequest
@@ -1537,7 +1596,7 @@ class InteractionController extends Controller
             ]);
         }
 
-        \App\Models\UserActivityLog::create([
+        \App\Models\WT\UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'maintenance',

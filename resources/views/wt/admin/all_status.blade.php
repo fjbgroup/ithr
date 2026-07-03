@@ -458,10 +458,18 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 text-center">
-                            <button type="button" onclick="openRequestStatusModal('requestStatusModal-{{ $request->id }}')" class="all-status-action-btn">
-                                <i class="fa-solid fa-eye"></i>
-                                View Form
-                            </button>
+                            <div class="flex flex-col items-center gap-2">
+                                <button type="button" onclick="openRequestStatusModal('requestStatusModal-{{ $request->id }}')" class="all-status-action-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                    View Form
+                                </button>
+                                @if($request->status === 'Pending Executive Pickup' && ! $request->handover)
+                                <a href="{{ route('wt.admin.handover.pickup', $request->id) }}" class="all-status-action-btn" style="background:#16a34a;color:#fff;border-color:#16a34a">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    Pickup
+                                </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach
@@ -476,8 +484,8 @@
     $reportedBy = $resolveReportedBy($request);
     $requestor = $request->user
         ?: \App\Models\User::query()
-            ->whereRaw('UPPER(full_name) = ?', [strtoupper((string) $request->full_name)])
-            ->orWhereRaw('UPPER(username) = ?', [strtoupper((string) $request->full_name)])
+            ->whereRaw('UPPER(name) = ?', [strtoupper((string) $request->full_name)])
+            ->orWhereRaw('UPPER(staff_no) = ?', [strtoupper((string) $request->full_name)])
             ->first();
     $requestorStaffId = $request->staff_id ?: ($requestor->staff_id ?? null);
     $isTemporaryRequest = $request->request_type === 'temporary_walkie_talkie';

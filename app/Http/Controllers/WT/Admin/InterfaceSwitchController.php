@@ -47,34 +47,30 @@ class InterfaceSwitchController extends Controller
             ->where('id', $validated['executive_user_id'])
             ->firstOrFail();
 
-        $ictUserId = Auth::guard('wt')->id();
-
-        $request->session()->put('impersonator_admin_it_id', $ictUserId);
-        $request->session()->forget('view_mode');
-
-        Auth::guard('wt')->login($executive);
-        $request->session()->regenerate();
-        $request->session()->put('impersonator_admin_it_id', $ictUserId);
+        $request->session()->put('view_mode', 'admin');
+        $request->session()->put('selected_executive_user_id', $executive->id);
 
         return redirect()
-            ->route('wt.admin.walkies.myInventory')
+            ->route('wt.admin.requests.create.shared')
             ->with('success', 'You are now accessing the selected Executive account.');
     }
 
     public function stopImpersonating(Request $request)
     {
-        $ictUserId = $request->session()->get('impersonator_admin_it_id');
+        if (Auth::guard('wt')->user()?->wt_role === 'admin' && $request->session()->has('impersonator_admin_it_id')) {
+            $ictUser = User::where('wt_role', 'admin_it')
+                ->where('id', $request->session()->get('impersonator_admin_it_id'))
+                ->firstOrFail();
 
-        if (! $ictUserId) {
+            Auth::guard('wt')->login($ictUser);
+            $request->session()->regenerate();
+        }
+
+        if (Auth::guard('wt')->user()?->wt_role !== 'admin_it') {
             return redirect()->route('wt.admin.dashboard');
         }
 
-        $ictUser = User::where('wt_role', 'admin_it')
-            ->where('id', $ictUserId)
-            ->firstOrFail();
-
-        Auth::guard('wt')->login($ictUser);
-        $request->session()->regenerate();
+        $request->session()->forget('selected_executive_user_id');
         $request->session()->forget('impersonator_admin_it_id');
         $request->session()->put('view_mode', 'admin_it');
 
@@ -83,5 +79,3 @@ class InterfaceSwitchController extends Controller
             ->with('success', 'Returned to ICT account.');
     }
 }
-
-

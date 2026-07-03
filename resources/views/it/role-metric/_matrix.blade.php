@@ -33,11 +33,11 @@
             <td>{!! $yes !!}</td><td>{!! $yes !!}</td><td>{!! $yes !!}</td><td>{!! $yes !!}</td><td>{!! $yes !!}</td><td>{!! $yes !!}</td>
           </tr>
           <tr>
-            <td><span class="rm-feature">IT Assets</span><span class="rm-desc">View asset records. Admin and finance can maintain records; users submit change requests.</span></td>
+            <td><span class="rm-feature">IT Assets</span><span class="rm-desc">View asset records. HOU, GM, and CEO have view-only access; users submit change requests.</span></td>
             <td>{!! $yes !!}</td><td>{!! $yes !!}</td><td><span class="rm-icon rm-partial" title="Read-only access"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Read-only access"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Read-only access"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Submit requests, not direct edits"><i class="bi bi-send"></i></span></td>
           </tr>
           <tr>
-            <td><span class="rm-feature">Non-IT Assets</span><span class="rm-desc">View non-IT assets and submit or process asset requests.</span></td>
+            <td><span class="rm-feature">Non-IT Assets</span><span class="rm-desc">View non-IT asset records. HOU, GM, and CEO have view-only access; users submit change requests.</span></td>
             <td>{!! $yes !!}</td><td>{!! $yes !!}</td><td><span class="rm-icon rm-partial" title="Read-only access"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Read-only access"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Read-only access"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Submit requests, not direct edits"><i class="bi bi-send"></i></span></td>
           </tr>
           <tr>
@@ -53,7 +53,7 @@
             <td>{!! $no !!}</td><td>{!! $yes !!}</td><td>{!! $no !!}</td><td>{!! $no !!}</td><td>{!! $no !!}</td><td>{!! $no !!}</td>
           </tr>
           <tr>
-            <td><span class="rm-feature">E-Waste / Disposal</span><span class="rm-desc">Register, review, collect, restore, and manage disposal records.</span></td>
+            <td><span class="rm-feature">E-Waste / Disposal</span><span class="rm-desc">Review E-Waste and Disposal records. HOU, GM, and CEO can view only; Admin and Finance manage records.</span></td>
             <td>{!! $yes !!}</td><td>{!! $yes !!}</td><td><span class="rm-icon rm-partial" title="View records only"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="View records only"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="View records only"><i class="bi bi-eye-fill"></i></span></td><td><span class="rm-icon rm-partial" title="Submit requests where available"><i class="bi bi-send"></i></span></td>
           </tr>
           <tr>

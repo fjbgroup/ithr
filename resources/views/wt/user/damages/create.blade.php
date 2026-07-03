@@ -105,6 +105,25 @@
         margin-top: 2px !important;
         line-height: 1.15 !important;
     }
+    .damage-radio-prefix {
+        position: relative;
+        min-width: 0;
+    }
+    .damage-radio-prefix::before {
+        content: 'G';
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+        color: var(--text);
+        font-size: 11px;
+        font-weight: 900;
+        pointer-events: none;
+    }
+    .damage-radio-prefix input {
+        padding-left: 28px !important;
+    }
     .faulty-accordion {
         display: grid;
         gap: 10px;
@@ -1210,7 +1229,9 @@
                 </div>
                 <div>
                     <label class="form-label">Radio ID <span class="text-red-500">*</span></label>
-                    <input type="text" name="radio_id" id="damage_radio_id" value="{{ old('radio_id', $draftRecord->radio_id ?? '') }}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                    <div class="damage-radio-prefix">
+                        <input type="text" name="radio_id" id="damage_radio_id" value="{{ old('radio_id', $draftRecord->radio_id ?? '') }}" placeholder="0001 if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" data-radio-id-number-only>
+                    </div>
                 </div>
                 <div class="damage-device-center-column">
                     <label class="form-label">Serial No <span class="text-red-500">*</span></label>
@@ -1585,6 +1606,17 @@
         const faultyOwnershipSection = document.querySelector('[data-faulty-ownership-section]');
         const faultyDeviceSection = document.querySelector('[data-faulty-device-section]');
         const faultyDetailFlowEnd = document.querySelector('[data-faulty-detail-flow-end]');
+
+        const stripRadioPrefix = (input) => {
+            input.value = input.value.replace(/^g/i, '');
+        };
+
+        document.querySelectorAll('[data-radio-id-number-only]').forEach(stripRadioPrefix);
+        document.addEventListener('input', function (event) {
+            if (event.target.matches('[data-radio-id-number-only]')) {
+                stripRadioPrefix(event.target);
+            }
+        });
 
         if (faultyOwnershipSection && faultyDeviceSection && faultyDetailFlowEnd) {
             const flowNodes = [];
@@ -2335,7 +2367,9 @@
                         </div>
                         <div>
                             <label class="form-label">Radio ID <span class="text-red-500">*</span></label>
-                            <input type="text" name="device_details[${index}][radio_id]" data-device-radio-id value="${escapeHtml(saved.radio_id || '')}" placeholder="Enter radio ID if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase">
+                            <div class="damage-radio-prefix">
+                                <input type="text" name="device_details[${index}][radio_id]" data-device-radio-id value="${escapeHtml(saved.radio_id || '')}" placeholder="0001 if known" class="w-full px-3 py-2 rounded-lg border border-stone-200 bg-stone-50 focus:border-[#0284c7] focus:bg-white outline-none transition text-[11px] font-bold uppercase" data-radio-id-number-only>
+                            </div>
                         </div>
                         <div class="damage-device-center-column">
                             <label class="form-label">Serial No <span class="text-red-500">*</span></label>

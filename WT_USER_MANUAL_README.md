@@ -7,9 +7,10 @@ This README explains how each WT System user role should use the Walkie Talkie M
 1. Open the WT System login page at `/wt`.
 2. Enter your username and password.
 3. Use the left sidebar to open modules.
-4. Use the top-right role switcher if your ICT account can switch between ICT and Executive view.
-5. Use `My Profile` to update your name, phone number, department, and position.
-6. Use `Sign Out` when finished.
+4. ICT and Executive accounts use the bottom `Help` section in the sidebar to open the role-specific user manual.
+5. Use the top-right role switcher if your ICT account can switch between ICT and Executive view.
+6. Use `My Profile` to update your name, photo, phone number, department, position, and saved signature.
+7. Use `Sign Out` when finished.
 
 ## User Roles
 
@@ -37,6 +38,7 @@ This README explains how each WT System user role should use the Walkie Talkie M
 5. To add units, use the create/import options available in the inventory page.
 6. Use `Duplicated ID` to handle duplicate radio ID records.
 7. Use `Special Use` for units assigned to special cases.
+8. Keep radio IDs consistent; user-facing forms show the `G` prefix so users only need to type the number portion, such as `0001`.
 
 ### 3. Handle Approvals
 
@@ -108,17 +110,19 @@ This README explains how each WT System user role should use the Walkie Talkie M
 
 1. Open `Return Unit`.
 2. Search for the assigned unit or request.
-3. Fill in return person and return details.
-4. Submit the return.
-5. Monitor return progress in status pages.
+3. If the unit does not appear in the system, use `Manual Unit Entry` and fill in the radio ID number, serial number if known, ownership name, department, and remark.
+4. Fill in return person, return details, and signature.
+5. Submit the return.
+6. Monitor return progress in status pages.
 
 ### 5. Report A Faulty Unit
 
 1. Open `Report Faulty`.
 2. Select the affected walkie talkie unit.
 3. Fill in reporter details, issue description, and evidence if required.
-4. Submit the faulty report.
-5. Monitor the report status from the relevant status page.
+4. For Radio ID fields, the system displays the `G` prefix on screen; type only the number portion such as `0001`.
+5. Submit the faulty report.
+6. Monitor the report status from the relevant status page.
 
 ### 6. Check My Inventory And Status
 
@@ -154,9 +158,10 @@ This README explains how each WT System user role should use the Walkie Talkie M
 
 1. Open `Return Unit`.
 2. Search for your assigned unit.
-3. Confirm the return information.
-4. Submit the return request.
-5. Track the status until ICT confirms the return.
+3. If the unit is not shown, use `Manual Unit Entry` and fill in the unit information manually.
+4. Confirm the return information, returner details, and signature.
+5. Submit the return request.
+6. Track the status until ICT confirms the return.
 
 ### 5. Report Faulty
 
@@ -164,13 +169,14 @@ This README explains how each WT System user role should use the Walkie Talkie M
 2. Select the faulty WT unit.
 3. Describe the issue clearly.
 4. Add evidence if requested.
-5. Submit the report.
-6. Check `Pending`, `Drafts`, or `Completed` faulty-report buckets to track progress.
+5. For Radio ID fields, type only the number portion because the form already shows `G` in front.
+6. Submit the report.
+7. Check `Pending`, `Drafts`, or `Completed` faulty-report buckets to track progress.
 
 ### 6. Update Profile
 
 1. Open `My Profile`.
-2. Update full name, phone number, department, or position.
+2. Update full name, profile photo, phone number, department, position, or saved signature.
 3. Click `Save Changes`.
 4. Keep profile information current because request forms may use it.
 
@@ -182,6 +188,7 @@ This README explains how each WT System user role should use the Walkie Talkie M
 4. If a dropdown option is missing, ICT can add it from `Master Data`.
 5. For approval issues, check `History`, `All Status`, or `System Logs`.
 6. For account access issues, contact ICT or submit forgot-password where available.
+7. For Radio ID fields with a visible `G` prefix, type the number only. Example: type `0001` to represent `G0001`.
 
 ## Suggested Training Flow
 
