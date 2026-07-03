@@ -125,8 +125,13 @@ class EwasteController extends Controller
         $item = EwasteItem::findOrFail($id);
 
         $data = $request->validate([
+            'asset_number'          => 'nullable|string|max:50',
+            'asset_class'           => 'required|string|max:50',
+            'description'           => 'required|string|max:255',
+            'serial_number'         => 'nullable|string|max:100',
             'condition_on_disposal' => 'nullable|string',
             'disposal_status'       => 'nullable|string',
+            'date_flagged'          => 'nullable|date',
             'disposal_method'       => 'nullable|string',
             'weight_kg'             => 'nullable|numeric',
             'vendor_collector'      => 'nullable|string|max:100',
@@ -339,7 +344,7 @@ class EwasteController extends Controller
         }
 
         ActivityLogService::log('UPDATE', 'ewaste', $id, 'Reverted collection: ' . $item->description);
-        return redirect()->route('ewaste.collected')->with('success', 'Item reverted back to Approved.');
+        return redirect()->route('it.ewaste.collected')->with('success', 'Item reverted back to Approved.');
     }
 
     // GM timeout auto-reassignment (called from writeoff flow)
