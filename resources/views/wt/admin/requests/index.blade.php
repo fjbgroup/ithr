@@ -123,9 +123,12 @@
         border: 1px solid #cbd5e1 !important;
         border-radius: 16px !important;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-        overflow: hidden !important;
-        width: 100% !important;
-        max-width: 460px !important;
+        overflow-y: auto !important;
+        width: min(580px, calc(100vw - 24px)) !important;
+        max-width: 580px !important;
+        flex: 0 0 min(580px, calc(100vw - 24px)) !important;
+        max-height: calc(100vh - 2rem);
+        transition: all 0.3s ease !important;
     }
     .dark .approval-modal-card {
         background: #1e293b !important;
@@ -134,10 +137,10 @@
     }
     #approveModal .approval-modal-card {
         margin: 0 !important;
-        flex: 0 0 430px !important;
-        width: 430px !important;
-        max-width: 430px !important;
-        max-height: calc(100vh - 1.5rem);
+        width: min(680px, calc(100vw - 24px)) !important;
+        max-width: 680px !important;
+        flex: 0 0 min(680px, calc(100vw - 24px)) !important;
+        max-height: calc(100vh - 2rem);
         overflow-y: auto !important;
     }
     #approveModal .approval-modal-card .navy-panel {
@@ -4622,7 +4625,7 @@
 
 @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
 <div id="approveModal" class="fixed inset-0 z-50 hidden flex-row items-center justify-center overflow-x-auto overflow-y-hidden bg-slate-950/50 p-3 backdrop-blur-sm" style="gap: 4px;" onclick="if (event.target === this) closeApproveModal()">
-    <div class="approval-modal-card" style="margin: 0 !important; width: 430px !important; flex: 0 0 430px !important;">
+    <div class="approval-modal-card" style="margin: 0 !important;">
         <div class="navy-panel px-6 py-5 relative">
             <h3 class="text-white font-black text-base tracking-tight">Assign WT Before Approval</h3>
             <p class="text-slate-300 text-xs font-medium mt-1">Approve only after enough units are selected for <span id="modalUserName" class="text-white font-bold"></span></p>
@@ -4710,7 +4713,7 @@
         </form>
     </div>
 
-<div id="quickWtModal" class="hidden" style="margin: 0 !important; width: 430px !important; flex: 0 0 430px !important;">
+<div id="quickWtModal" class="hidden approval-modal-card" style="margin: 0 !important;">
     <div class="max-h-[calc(100vh-2rem)] w-full overflow-y-auto rounded-2xl border border-slate-700 bg-slate-950 shadow-2xl shadow-slate-950/40">
         <div class="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-5">
             <div>
