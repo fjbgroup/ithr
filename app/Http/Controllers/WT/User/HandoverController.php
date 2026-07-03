@@ -417,6 +417,13 @@ class HandoverController extends Controller
             $assignedWalkies->each(function (WalkieTalkie $walkie) use ($accessRequest) {
                 $walkie->update([
                     'status' => 'IN USE',
+                    'ownership_type' => $accessRequest->ownership_type ?: 'INDIVIDUAL',
+                    'shared_with' => $accessRequest->shared_with,
+                    'ownership' => $accessRequest->full_name,
+                    'position' => $accessRequest->position,
+                    'department' => $accessRequest->department,
+                    'location' => $accessRequest->location,
+                    'executive' => $accessRequest->submitToAdmin ? $accessRequest->submitToAdmin->full_name : null,
                     'remark' => trim((string) $walkie->remark) !== ''
                         ? $walkie->remark . ' | Pickup signed for request #' . $accessRequest->id
                         : 'Pickup signed for request #' . $accessRequest->id,
