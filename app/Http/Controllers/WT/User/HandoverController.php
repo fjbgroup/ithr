@@ -312,7 +312,7 @@ class HandoverController extends Controller
     public function showPickup(AccessRequest $accessRequest)
     {
         $accessRequest = $this->authorizedPickupRequest($accessRequest)
-            ->load(['handover', 'handler']);
+            ->load(['handover', 'handler', 'submitToAdmin']);
 
         if ($accessRequest->handover) {
             return redirect()
@@ -353,6 +353,9 @@ class HandoverController extends Controller
             'handover_by_name' => 'required|string|max:255',
             'handover_by_signature_source' => 'required|in:draw,saved,upload',
             'handover_by_signature' => 'required_unless:handover_by_signature_source,saved|nullable|string',
+            'checked_by_name' => 'required|string|max:255',
+            'checked_by_signature_source' => 'required|in:draw,saved,upload',
+            'checked_by_signature' => 'required_unless:checked_by_signature_source,saved|nullable|string',
             'policy_acceptance' => 'accepted',
         ]);
 
@@ -364,6 +367,10 @@ class HandoverController extends Controller
             $validated['handover_by_signature_source'],
             $validated['handover_by_signature'] ?? null
         );
+        $checkedBySignature = $this->resolveSubmittedSignature(
+            $validated['checked_by_signature_source'],
+            $validated['checked_by_signature'] ?? null
+        );
 
         $assignedWalkies = $this->assignedWalkiesFor($accessRequest);
         if ($assignedWalkies->isEmpty()) {
@@ -372,7 +379,7 @@ class HandoverController extends Controller
                 ->withErrors(['access_request_id' => 'No assigned WT unit was found for this approved request.']);
         }
 
-        DB::transaction(function () use ($accessRequest, $assignedWalkies, $validated, $recipientSignature, $handoverSignature) {
+        DB::transaction(function () use ($accessRequest, $assignedWalkies, $validated, $recipientSignature, $handoverSignature, $checkedBySignature) {
             $now = now();
             $radioIds = $assignedWalkies->pluck('radio_id')->filter()->values();
             $serialNumbers = $assignedWalkies->pluck('serial_number')->filter()->values();
@@ -394,6 +401,9 @@ class HandoverController extends Controller
                 'handover_by_name' => $validated['handover_by_name'],
                 'handover_by_signature' => $handoverSignature,
                 'handover_by_signed_at' => $now,
+                'checked_by_name' => $validated['checked_by_name'],
+                'checked_by_signature' => $checkedBySignature,
+                'checked_by_signed_at' => $now,
                 'accessories_snapshot' => $accessRequest->accessories,
                 'policy_accepted_at' => $now,
                 'pickup_completed_at' => $now,

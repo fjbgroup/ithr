@@ -4,7 +4,8 @@
     $routePrefix = $routePrefix ?? ($isAdminRoute ? 'wt.admin' : 'wt.user');
     $currentUser = auth('wt')->user();
     $recipientName = strtoupper($accessRequest->full_name ?: ($currentUser->full_name ?: $currentUser->username));
-    $handoverByName = strtoupper(optional($accessRequest->handler)->full_name ?: optional($accessRequest->handler)->username ?: 'ICT');
+    $executiveName = strtoupper(optional($accessRequest->submitToAdmin)->full_name ?: optional($accessRequest->submitToAdmin)->username ?: 'EXECUTIVE');
+    $checkedByName = strtoupper(optional($accessRequest->handler)->full_name ?: optional($accessRequest->handler)->username ?: ($currentUser->full_name ?: $currentUser->username));
     $accessories = collect(explode(',', (string) $accessRequest->accessories))
         ->map(fn ($item) => trim($item))
         ->filter()
@@ -27,7 +28,7 @@
     .pickup-value{font-size:12px;font-weight:800;color:var(--text);overflow-wrap:anywhere}
     .pickup-accessory-list{display:flex;flex-wrap:wrap;gap:8px}
     .pickup-accessory{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(22,163,74,.25);background:rgba(22,163,74,.08);color:#15803d;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
-    .signature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .signature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
     .signature-box{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
     .signature-head{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--border);background:var(--body-bg);padding:10px 12px}
     .signature-head-title{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--text)}
@@ -112,11 +113,21 @@
 
             @include('wt.user.handover.partials.signature-box', [
                 'boxId' => 'handover_by',
-                'title' => 'ICT / Handover By Signature',
+                'title' => 'Executive Signature',
                 'nameField' => 'handover_by_name',
                 'signatureField' => 'handover_by_signature',
                 'sourceField' => 'handover_by_signature_source',
-                'defaultName' => $handoverByName,
+                'defaultName' => $executiveName,
+                'savedSignatureUrl' => null,
+            ])
+
+            @include('wt.user.handover.partials.signature-box', [
+                'boxId' => 'checked_by',
+                'title' => 'Check By Signature',
+                'nameField' => 'checked_by_name',
+                'signatureField' => 'checked_by_signature',
+                'sourceField' => 'checked_by_signature_source',
+                'defaultName' => $checkedByName,
                 'savedSignatureUrl' => $savedSignatureUrl,
             ])
         </div>
