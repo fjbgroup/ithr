@@ -338,7 +338,7 @@ class HandoverController extends Controller
     public function storePickup(Request $request, AccessRequest $accessRequest)
     {
         $accessRequest = $this->authorizedPickupRequest($accessRequest)
-            ->load(['handover', 'handler']);
+            ->load(['handover', 'handler', 'submitToAdmin']);
 
         if ($accessRequest->handover) {
             return redirect()
@@ -442,9 +442,9 @@ class HandoverController extends Controller
                 'approved'
             );
 
-            if ($accessRequest->submit_to_admin_id && (int) $accessRequest->submit_to_admin_id !== (int) auth('wt')->id()) {
+            if ($accessRequest->submitToAdmin && (int) $accessRequest->submit_to_admin_id !== (int) auth('wt')->id()) {
                 SystemNotifier::notifyUser(
-                    (int) $accessRequest->submit_to_admin_id,
+                    $accessRequest->submitToAdmin,
                     'Pickup Signed',
                     "Pickup for Request #{$accessRequest->id} has been signed by {$validated['pickup_recipient_name']}.",
                     'approved'
