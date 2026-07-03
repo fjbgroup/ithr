@@ -388,7 +388,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     </div>
     <div class="topbar-right">
       {{-- ICT/Executive role switcher --}}
-      @if($actualRole === 'admin_it')
+      @if($actualRole === 'admin_it' && !$isExecutiveImpersonation)
       <div class="topbar-role-switcher">
         <a href="{{ route('wt.switch_view', 'admin_it') }}"
           class="topbar-role-switcher-link {{ $effectiveRole === 'admin_it' ? 'active-switcher' : '' }}"
