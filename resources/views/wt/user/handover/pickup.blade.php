@@ -63,7 +63,7 @@
             <div class="pickup-item"><div class="pickup-label">Owner</div><div class="pickup-value">{{ $recipientName }}</div></div>
             <div class="pickup-item"><div class="pickup-label">Department</div><div class="pickup-value">{{ strtoupper($accessRequest->department ?: '-') }}</div></div>
             <div class="pickup-item"><div class="pickup-label">Position</div><div class="pickup-value">{{ strtoupper($accessRequest->position ?: '-') }}</div></div>
-            <div class="pickup-item"><div class="pickup-label">Approved By ICT</div><div class="pickup-value">{{ $handoverByName }}</div></div>
+            <div class="pickup-item"><div class="pickup-label">Approved By ICT</div><div class="pickup-value">{{ $checkedByName }}</div></div>
         </div>
 
         <div style="margin-top:14px" class="pickup-grid">
