@@ -338,7 +338,7 @@ class HandoverController extends Controller
     public function storePickup(Request $request, AccessRequest $accessRequest)
     {
         $accessRequest = $this->authorizedPickupRequest($accessRequest)
-            ->load(['handover', 'handler']);
+            ->load(['handover', 'handler', 'submitToAdmin']);
 
         if ($accessRequest->handover) {
             return redirect()
@@ -388,7 +388,7 @@ class HandoverController extends Controller
                 'access_request_id' => $accessRequest->id,
                 'user_id' => auth('wt')->id(),
                 'radio_id' => $radioIds->implode(', '),
-                'walkie_talkie_id' => $radioIds->implode(', '),
+                'walkie_talkie_id' => $assignedWalkies->first()?->walkie_id,
                 'staff_name' => $accessRequest->full_name,
                 'shared_with' => $accessRequest->shared_with,
                 'staff_no' => $accessRequest->staff_id ?? '',
@@ -417,6 +417,13 @@ class HandoverController extends Controller
             $assignedWalkies->each(function (WalkieTalkie $walkie) use ($accessRequest) {
                 $walkie->update([
                     'status' => 'IN USE',
+                    'ownership_type' => $accessRequest->ownership_type ?: 'INDIVIDUAL',
+                    'shared_with' => $accessRequest->shared_with,
+                    'ownership' => $accessRequest->full_name,
+                    'position' => $accessRequest->position,
+                    'department' => $accessRequest->department,
+                    'location' => $accessRequest->location,
+                    'executive' => $accessRequest->submitToAdmin ? $accessRequest->submitToAdmin->full_name : null,
                     'remark' => trim((string) $walkie->remark) !== ''
                         ? $walkie->remark . ' | Pickup signed for request #' . $accessRequest->id
                         : 'Pickup signed for request #' . $accessRequest->id,
@@ -442,9 +449,9 @@ class HandoverController extends Controller
                 'approved'
             );
 
-            if ($accessRequest->submit_to_admin_id && (int) $accessRequest->submit_to_admin_id !== (int) auth('wt')->id()) {
+            if ($accessRequest->submitToAdmin && (int) $accessRequest->submit_to_admin_id !== (int) auth('wt')->id()) {
                 SystemNotifier::notifyUser(
-                    (int) $accessRequest->submit_to_admin_id,
+                    $accessRequest->submitToAdmin,
                     'Pickup Signed',
                     "Pickup for Request #{$accessRequest->id} has been signed by {$validated['pickup_recipient_name']}.",
                     'approved'
