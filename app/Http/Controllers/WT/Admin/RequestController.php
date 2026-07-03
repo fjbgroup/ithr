@@ -1086,33 +1086,67 @@ class RequestController extends Controller
 
         $returnHistoryCutoff = $this->returnHistoryCutoff();
         
-        $requestStatuses = AccessRequest::query()
+        $actualRole = auth('wt')->user()->wt_role;
+        $userRole = $actualRole === 'admin_it'
+            ? session('view_mode', $actualRole)
+            : $actualRole;
+        $activeExecutive = $this->activeExecutiveAccount();
+
+        $requestQuery = AccessRequest::query()
             ->with(['user', 'submitToAdmin', 'handler', 'handover'])
-            ->where('submit_to_admin_id', auth('wt')->id())
             ->where(function ($query) {
                 $this->applyWalkieRequestTypeFilter($query);
             })
             ->where(function ($query) use ($returnHistoryCutoff) {
                 $this->applyReturnHistoryRetention($query, $returnHistoryCutoff);
-            })
-            ->orderByDesc('request_date')
+            });
+
+        if ($userRole === 'admin') {
+            $execId = $activeExecutive ? $activeExecutive->id : auth('wt')->id();
+            $requestQuery->where('submit_to_admin_id', $execId);
+        } else {
+            $requestQuery->where(function ($query) {
+                $this->applyExecutiveRequestFilter($query);
+            });
+        }
+
+        $requestStatuses = $requestQuery->orderByDesc('request_date')
             ->orderByDesc('id')
             ->get();
 
-        $handoverRequests = AccessRequest::with(['handover', 'user'])
-            ->where('submit_to_admin_id', auth('wt')->id())
+        $handoverQuery = AccessRequest::with(['handover', 'user'])
             ->where(function ($query) {
                 $this->applyWalkieRequestTypeFilter($query);
             })
             ->where(function ($query) use ($returnHistoryCutoff) {
                 $this->applyReturnHistoryRetention($query, $returnHistoryCutoff);
-            })
-            ->orderByDesc('request_date')
+            });
+
+        if ($userRole === 'admin') {
+            $execId = $activeExecutive ? $activeExecutive->id : auth('wt')->id();
+            $handoverQuery->where('submit_to_admin_id', $execId);
+        } else {
+            $handoverQuery->where(function ($query) {
+                $this->applyExecutiveRequestFilter($query);
+            });
+        }
+
+        $handoverRequests = $handoverQuery->orderByDesc('request_date')
             ->orderByDesc('id')
             ->get();
 
-        $damageRecords = MaintenanceRecord::where('submit_to_admin_id', auth('wt')->id())
-            ->orderByDesc('maintenance_id')
+        $damageQuery = MaintenanceRecord::query();
+
+        if ($userRole === 'admin') {
+            $execId = $activeExecutive ? $activeExecutive->id : auth('wt')->id();
+            $damageQuery->where('submit_to_admin_id', $execId);
+        } else {
+            $damageQuery->where(function ($query) {
+                $this->applyExecutiveSubmittedFilter($query);
+            });
+        }
+
+        $damageRecords = $damageQuery->orderByDesc('maintenance_id')
             ->get();
 
         $requestSummaryBucket = function (AccessRequest $request): string {
