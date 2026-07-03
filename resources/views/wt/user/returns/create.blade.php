@@ -1,4 +1,4 @@
-﻿@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
+@extends(request()->routeIs('wt.admin.*') ? 'wt.layouts.admin' : 'wt.layouts.user')
 
 @php
     $routePrefix = request()->routeIs('wt.admin.*') ? 'wt.admin' : 'wt.user';
@@ -256,18 +256,18 @@
                     <div class="return-person-field">
                         <label class="form-label">Returned By</label>
                         <div class="return-person-combobox">
-                            <input type="text" name="return_person" id="returnPersonInput" value="{{ old('return_person') }}" class="return-date-input" style="padding-right:32px" placeholder="Search or type returner's name" autocomplete="off" required>
+                            <input type="text" name="return_person" id="returnPersonInput" value="{{ old('return_person', auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="return-date-input" style="padding-right:32px" placeholder="Search or type returner's name" autocomplete="off" required>
                             <span class="return-person-toggle"><i class="fa-solid fa-caret-down"></i></span>
                         </div>
                         <div id="returnPersonSuggestions" class="return-person-suggestions"></div>
                     </div>
                     <div>
                         <label class="form-label">Department</label>
-                        <input type="text" name="return_department" id="returnDepartmentInput" value="{{ old('return_department') }}" class="return-date-input" placeholder="Department" required>
+                        <input type="text" name="return_department" id="returnDepartmentInput" value="{{ old('return_department', auth('wt')->user()->department) }}" class="return-date-input" placeholder="Department" required>
                     </div>
                     <div>
                         <label class="form-label">Phone No</label>
-                        <input type="text" name="return_phone_no" id="returnPhoneInput" value="{{ old('return_phone_no') }}" class="return-date-input" placeholder="E.g. 012-3456789" required>
+                        <input type="text" name="return_phone_no" id="returnPhoneInput" value="{{ old('return_phone_no', auth('wt')->user()->phone_no) }}" class="return-date-input" placeholder="E.g. 012-3456789" required>
                     </div>
                 </div>
 
@@ -490,18 +490,18 @@
                     <div class="return-person-field">
                         <label class="form-label">Returned By</label>
                         <div class="return-person-combobox">
-                            <input type="text" name="return_person" id="returnPersonInput" value="{{ old('return_person') }}" class="return-date-input" style="padding-right:32px" placeholder="Search or type returner's name" autocomplete="off" required>
+                            <input type="text" name="return_person" id="returnPersonInput" value="{{ old('return_person', auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="return-date-input" style="padding-right:32px" placeholder="Search or type returner's name" autocomplete="off" required>
                             <span class="return-person-toggle"><i class="fa-solid fa-caret-down"></i></span>
                         </div>
                         <div id="returnPersonSuggestions" class="return-person-suggestions"></div>
                     </div>
                     <div>
                         <label class="form-label">Department</label>
-                        <input type="text" name="return_department" id="returnDepartmentInput" value="{{ old('return_department') }}" class="return-date-input" placeholder="Department" required>
+                        <input type="text" name="return_department" id="returnDepartmentInput" value="{{ old('return_department', auth('wt')->user()->department) }}" class="return-date-input" placeholder="Department" required>
                     </div>
                     <div>
                         <label class="form-label">Phone No</label>
-                        <input type="text" name="return_phone_no" id="returnPhoneInput" value="{{ old('return_phone_no') }}" class="return-date-input" placeholder="E.g. 012-3456789" required>
+                        <input type="text" name="return_phone_no" id="returnPhoneInput" value="{{ old('return_phone_no', auth('wt')->user()->phone_no) }}" class="return-date-input" placeholder="E.g. 012-3456789" required>
                     </div>
                 </div>
 
