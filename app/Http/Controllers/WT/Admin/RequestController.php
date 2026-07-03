@@ -282,7 +282,22 @@ class RequestController extends Controller
 
         $returnHistoryCutoff = $this->returnHistoryCutoff();
 
-        $historyRequests = collect();
+        $historyRequests = AccessRequest::with(['handover', 'user', 'submitToAdmin', 'handler'])
+            ->where(function ($query) {
+                $query->whereIn('status', ['Approved', 'Rejected', 'Expired', 'Cancelled'])
+                      ->orWhere('return_status', 'Returned');
+            })
+            ->where(function ($query) {
+                $this->applyWalkieRequestTypeFilter($query);
+            })
+            ->where(function ($query) {
+                $this->applyExecutiveRequestFilter($query);
+            })
+            ->where(function ($query) use ($returnHistoryCutoff) {
+                $this->applyReturnHistoryRetention($query, $returnHistoryCutoff);
+            })
+            ->orderByDesc('id')
+            ->get();
 
         $historyDamageReports = MaintenanceRecord::with(['handler', 'submitToAdmin'])
             ->whereIn('status', ['UNDER REPAIR', 'READY TO COLLECT', 'ALREADY FIXED', 'DONE', 'REJECTED'])
