@@ -635,7 +635,12 @@
     }
     [id^="requestFormModal-"],
     [id^="returnFormModal-"],
-    [id^="damageFormModal-"] {
+    [id^="damageFormModal-"],
+    #approveModal,
+    #rejectRequestModal,
+    #approveDamageModal,
+    #rejectDamageModal,
+    #quickWtModal {
         z-index: 2147483000 !important;
         background: rgba(15, 23, 42, 0.42) !important;
         backdrop-filter: blur(6px) !important;
