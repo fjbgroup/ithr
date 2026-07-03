@@ -153,6 +153,9 @@
     #approveModal .approval-modal-card .mb-5 {
         margin-bottom: 14px !important;
     }
+    #systemScrollControls {
+        display: none !important;
+    }
 
     /* Modal Form Text, Labels and Inputs */
     .approval-modal-card form {
@@ -4625,7 +4628,7 @@
 @endforeach
 
 @if(($userRole ?? auth('wt')->user()->wt_role) === 'admin_it')
-<div id="approveModal" class="fixed inset-0 z-50 hidden flex-row items-center justify-center overflow-x-auto overflow-y-hidden bg-slate-950/50 p-3 backdrop-blur-sm" style="gap: 4px;" onclick="if (event.target === this) closeApproveModal()">
+<div id="approveModal" class="fixed inset-0 z-50 hidden flex items-center justify-center overflow-y-auto bg-slate-950/50 p-4 backdrop-blur-sm" onclick="if (event.target === this) closeApproveModal()">
     <div class="approval-modal-card" style="margin: 0 !important;">
         <div class="navy-panel px-6 py-5 relative">
             <h3 class="text-white font-black text-base tracking-tight">Assign WT Before Approval</h3>
