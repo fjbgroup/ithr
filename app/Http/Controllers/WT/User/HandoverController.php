@@ -388,7 +388,7 @@ class HandoverController extends Controller
                 'access_request_id' => $accessRequest->id,
                 'user_id' => auth('wt')->id(),
                 'radio_id' => $radioIds->implode(', '),
-                'walkie_talkie_id' => $radioIds->implode(', '),
+                'walkie_talkie_id' => $assignedWalkies->first()?->walkie_id,
                 'staff_name' => $accessRequest->full_name,
                 'shared_with' => $accessRequest->shared_with,
                 'staff_no' => $accessRequest->staff_id ?? '',
