@@ -137,17 +137,18 @@
     }
     #approveModal .approval-modal-card {
         margin: 0 !important;
-        width: min(680px, calc(100vw - 24px)) !important;
-        max-width: 680px !important;
-        flex: 0 0 min(680px, calc(100vw - 24px)) !important;
-        max-height: calc(100vh - 2rem);
+        width: min(640px, calc(100vw - 32px)) !important;
+        max-width: 640px !important;
+        flex: 0 0 min(640px, calc(100vw - 32px)) !important;
+        max-height: min(84vh, 680px) !important;
         overflow-y: auto !important;
+        border-radius: 12px !important;
     }
     #approveModal .approval-modal-card .navy-panel {
-        padding: 16px 18px !important;
+        display: none !important;
     }
     #approveModal .approval-modal-card form {
-        padding: 18px !important;
+        padding: 24px !important;
     }
     #approveModal .approval-modal-card .mb-5 {
         margin-bottom: 14px !important;
