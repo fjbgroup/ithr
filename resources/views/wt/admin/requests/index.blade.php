@@ -191,6 +191,34 @@
     .dark .approval-modal-card label {
         color: #cbd5e1 !important;
     }
+    .approval-modal-card label span {
+        color: #ef4444 !important;
+    }
+    .dark .approval-modal-card label span {
+        color: #fca5a5 !important;
+    }
+    .approval-modal-card .border-b {
+        border-bottom-width: 1px !important;
+        border-bottom-style: solid !important;
+        border-bottom-color: #cbd5e1 !important;
+    }
+    .dark .approval-modal-card .border-b {
+        border-bottom-color: #334155 !important;
+    }
+    .approval-modal-card .border-t {
+        border-top-width: 1px !important;
+        border-top-style: solid !important;
+        border-top-color: #cbd5e1 !important;
+    }
+    .dark .approval-modal-card .border-t {
+        border-top-color: #334155 !important;
+    }
+    .approval-modal-card #quickWtRequestHint {
+        color: #0284c7 !important;
+    }
+    .dark .approval-modal-card #quickWtRequestHint {
+        color: #7dd3fc !important;
+    }
 
     .approval-modal-card textarea,
     .approval-modal-card select,
@@ -4723,8 +4751,8 @@
     </div>
 
 <div id="quickWtModal" class="hidden approval-modal-card" style="margin: 0 !important;">
-    <div class="max-h-[calc(100vh-2rem)] w-full overflow-y-auto rounded-2xl border border-slate-700 bg-slate-950 shadow-2xl shadow-slate-950/40">
-        <div class="flex items-start justify-between gap-4 border-b border-slate-800 px-6 py-5">
+    <div class="max-h-[calc(100vh-2rem)] w-full overflow-y-auto rounded-2xl">
+        <div class="flex items-start justify-between gap-4 border-b px-6 py-5">
             <div>
                 <h3 class="text-base font-black tracking-tight text-white">Add New Walkie Talkie</h3>
                 <p class="mt-1 text-xs font-semibold text-slate-400">Create a new unused unit and select it for this approval.</p>
@@ -4811,7 +4839,7 @@
                 </div>
             </div>
 
-            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800 pt-4">
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t pt-4">
                 <a href="{{ route('wt.admin.walkies.index') }}" target="_blank" rel="noopener" class="approval-action-btn approval-action-view">
                     Inventory List
                 </a>
