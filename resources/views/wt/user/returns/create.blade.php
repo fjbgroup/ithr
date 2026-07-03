@@ -109,11 +109,11 @@
     $isAdminRoute = request()->routeIs('wt.admin.*');
     $mode = $mode ?? ($isAdminRoute ? 'self' : 'self');
     $returnStoreUrl = $isAdminRoute
-        ? route($routePrefix . '.returns.store', ['mode' => $mode], false)
-        : route($routePrefix . '.returns.store', [], false);
+        ? route($routePrefix . '.returns.store', ['mode' => $mode])
+        : route($routePrefix . '.returns.store', []);
     $returnSearchUrl = $isAdminRoute
-        ? route($routePrefix . '.returns.search', ['mode' => $mode], false)
-        : route($routePrefix . '.returns.search', [], false);
+        ? route($routePrefix . '.returns.search', ['mode' => $mode])
+        : route($routePrefix . '.returns.search', []);
     $returnPeople = $returnPeople ?? collect();
     $returnPeopleOptions = $returnPeople->map(function ($person) {
         return [
