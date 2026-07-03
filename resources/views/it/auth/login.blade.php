@@ -175,6 +175,28 @@ html.dark .switch-links a { color: #cbd5e1; }
 html.dark .switch-links .current { color: #F7941D; }
 html.dark .alert-error { background: rgba(220, 38, 38, 0.15); border-color: rgba(220, 38, 38, 0.3); color: #fca5a5; }
 html.dark .alert-success { background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.3); color: #86efac; }
+
+/* Responsive adjustments */
+@media (max-width: 880px) {
+  body { padding: 18px; align-items: flex-start; }
+  .card { grid-template-columns: 1fr; }
+  .card-left { padding: 34px 28px; }
+  .left-logo { margin-bottom: 24px; }
+  .left-title { font-size: 28px; }
+  .left-features { margin-top: 32px; }
+  .card-right { padding: 36px 28px; }
+}
+
+@media (max-width: 520px) {
+  body { padding: 0; background: #ffffff; }
+  .card { border-radius: 0; box-shadow: none; }
+  .card-left { padding: 28px 22px; }
+  .left-logo img { width: 54px; height: 54px; }
+  .left-title { font-size: 25px; }
+  .left-sub { font-size: 14px; }
+  .left-features li { font-size: 13px; }
+  .card-right { padding: 32px 22px; }
+}
 </style>
 
 <div class="card">
