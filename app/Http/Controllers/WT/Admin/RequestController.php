@@ -561,12 +561,15 @@ class RequestController extends Controller
             "Permohonan #{$req->id} telah disahkan executive dan menunggu tindakan ICT.",
             'received'
         );
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Permohonan Anda Diterima Executive',
-            "Permohonan #{$req->id} telah diterima executive dan diteruskan ke ICT.",
-            'received'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Permohonan Anda Diterima Executive',
+                "Permohonan #{$req->id} telah diterima executive dan diteruskan ke ICT.",
+                'received'
+            );
+        }
 
         UserActivityLog::create([
             'user_id' => auth('wt')->id(),
@@ -718,12 +721,15 @@ class RequestController extends Controller
             $pickupMessage .= " Pickup link: {$pickupLink}";
         }
 
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Walkie Talkie Ready To Collect',
-            $pickupMessage,
-            'approved'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Walkie Talkie Ready To Collect',
+                $pickupMessage,
+                'approved'
+            );
+        }
 
         
         // Log Activity
@@ -763,12 +769,15 @@ class RequestController extends Controller
             $userMessage .= " Remark ICT: {$disapprovalRemark}";
         }
 
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Permohonan Disapproved',
-            $userMessage,
-            'rejected'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Permohonan Disapproved',
+                $userMessage,
+                'rejected'
+            );
+        }
 
 
         UserActivityLog::create([
@@ -802,12 +811,15 @@ class RequestController extends Controller
                 "Return untuk Request #{$req->id} telah disahkan executive dan menunggu ICT.",
                 'received'
             );
-            SystemNotifier::notifyUser(
-                $req->user_id ? (int) $req->user_id : null,
-                'Return Anda Diterima Executive',
-                "Return untuk Request #{$req->id} telah diterima executive dan diteruskan ke ICT.",
-                'received'
-            );
+            $targetUser = $req->user_id ? User::find($req->user_id) : null;
+            if ($targetUser) {
+                SystemNotifier::notifyUser(
+                    $targetUser,
+                    'Return Anda Diterima Executive',
+                    "Return untuk Request #{$req->id} telah diterima executive dan diteruskan ke ICT.",
+                    'received'
+                );
+            }
 
             UserActivityLog::create([
                 'user_id' => auth('wt')->id(),
@@ -829,12 +841,15 @@ class RequestController extends Controller
             'handled_by' => auth('wt')->id(),
         ]);
 
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Return Unit Diterima',
-            "Return untuk Request #{$req->id} telah diterima dan disahkan.",
-            'approved'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Return Unit Diterima',
+                "Return untuk Request #{$req->id} telah diterima dan disahkan.",
+                'approved'
+            );
+        }
 
         
         $assignedWalkieIds = collect($req->assigned_walkie_inventory_ids ?? [])
