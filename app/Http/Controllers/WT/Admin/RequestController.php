@@ -28,10 +28,35 @@ class RequestController extends Controller
         return $actualRole;
     }
 
+    private function activeExecutiveAccount(): ?User
+    {
+        $user = auth('wt')->user();
+
+        if (! $user) {
+            return null;
+        }
+
+        if ($user->wt_role === 'admin_it' && session('view_mode') === 'admin') {
+            $selectedExecutiveUserId = session('selected_executive_user_id');
+
+            return $selectedExecutiveUserId
+                ? User::where('wt_role', 'admin')->find($selectedExecutiveUserId)
+                : null;
+        }
+
+        return $user->wt_role === 'admin' ? $user : null;
+    }
+
     private function redirectIfNotExecutiveRequestView()
     {
         if ($this->effectiveWtRole() !== 'admin') {
             return redirect()->route('wt.admin.dashboard');
+        }
+
+        if (auth('wt')->user()?->wt_role === 'admin_it' && ! $this->activeExecutiveAccount()) {
+            return redirect()
+                ->route('wt.admin.dashboard')
+                ->with('error', 'Please select an Executive account first.');
         }
 
         return null;
@@ -257,7 +282,22 @@ class RequestController extends Controller
 
         $returnHistoryCutoff = $this->returnHistoryCutoff();
 
-        $historyRequests = collect();
+        $historyRequests = AccessRequest::with(['handover', 'user', 'submitToAdmin', 'handler'])
+            ->where(function ($query) {
+                $query->whereIn('status', ['Approved', 'Rejected', 'Expired', 'Cancelled'])
+                      ->orWhere('return_status', 'Returned');
+            })
+            ->where(function ($query) {
+                $this->applyWalkieRequestTypeFilter($query);
+            })
+            ->where(function ($query) {
+                $this->applyExecutiveRequestFilter($query);
+            })
+            ->where(function ($query) use ($returnHistoryCutoff) {
+                $this->applyReturnHistoryRetention($query, $returnHistoryCutoff);
+            })
+            ->orderByDesc('id')
+            ->get();
 
         $historyDamageReports = MaintenanceRecord::with(['handler', 'submitToAdmin'])
             ->whereIn('status', ['UNDER REPAIR', 'READY TO COLLECT', 'ALREADY FIXED', 'DONE', 'REJECTED'])
@@ -276,7 +316,7 @@ class RequestController extends Controller
             return $redirect;
         }
 
-        $currentUser = auth('wt')->user();
+        $currentUser = $this->activeExecutiveAccount() ?: auth('wt')->user();
 
         return view('wt.admin.requests.create_shared', array_merge(
             compact('currentUser'),
@@ -305,7 +345,7 @@ class RequestController extends Controller
             return $redirect;
         }
 
-        $currentUser = auth('wt')->user();
+        $currentUser = $this->activeExecutiveAccount() ?: auth('wt')->user();
 
         return view('wt.admin.requests.create_shared', array_merge(
             compact('currentUser'),
@@ -340,6 +380,9 @@ class RequestController extends Controller
         $requestLabel = $isTemporaryRequest ? 'temporary walkie talkie request' : 'walkie talkie request';
         $requestScope = $request->input('request_scope') === 'on_behalf' ? 'on_behalf' : 'self';
         $isSelfRequest = $requestScope === 'self';
+        $activeExecutive = $this->activeExecutiveAccount();
+        $submitterUser = $activeExecutive ?: auth('wt')->user();
+        $submitterUserId = $submitterUser?->id ?? auth('wt')->id();
 
         $validated = $request->validate([
             'request_scope' => 'nullable|in:self,on_behalf',
@@ -433,7 +476,7 @@ class RequestController extends Controller
         }
 
         $accessRequest = AccessRequest::create([
-            'user_id' => $isSelfRequest ? auth('wt')->id() : null,
+            'user_id' => $isSelfRequest ? $submitterUserId : null,
             'request_type' => $requestType,
             'full_name' => $validated['full_name'] ?? null,
             'staff_id' => $validated['staff_id'] ?? null,
@@ -464,7 +507,7 @@ class RequestController extends Controller
             'justifications' => $validated['justifications'] ?? null,
             'request_signature' => $validated['request_signature'] ?? null,
             'status' => $isDraft ? 'Draft' : 'Pending IT Approval',
-            'submit_to_admin_id' => auth('wt')->id(),
+            'submit_to_admin_id' => $submitterUserId,
         ]);
 
         if (! $isDraft) {
@@ -477,7 +520,7 @@ class RequestController extends Controller
             );
 
             SystemNotifier::notifyUser(
-                auth('wt')->user(),
+                $submitterUser,
                 'Permohonan Berjaya Dihantar',
                 "Permohonan #{$accessRequest->id} telah dihantar kepada ICT untuk semakan.",
                 'request_sent'
@@ -533,12 +576,15 @@ class RequestController extends Controller
             "Permohonan #{$req->id} telah disahkan executive dan menunggu tindakan ICT.",
             'received'
         );
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Permohonan Anda Diterima Executive',
-            "Permohonan #{$req->id} telah diterima executive dan diteruskan ke ICT.",
-            'received'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Permohonan Anda Diterima Executive',
+                "Permohonan #{$req->id} telah diterima executive dan diteruskan ke ICT.",
+                'received'
+            );
+        }
 
         UserActivityLog::create([
             'user_id' => auth('wt')->id(),
@@ -690,12 +736,15 @@ class RequestController extends Controller
             $pickupMessage .= " Pickup link: {$pickupLink}";
         }
 
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Walkie Talkie Ready To Collect',
-            $pickupMessage,
-            'approved'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Walkie Talkie Ready To Collect',
+                $pickupMessage,
+                'approved'
+            );
+        }
 
         
         // Log Activity
@@ -730,31 +779,34 @@ class RequestController extends Controller
             'handled_by' => auth('wt')->id(),
         ]);
 
-        $userMessage = "Permohonan #{$req->id} telah rejected.";
+        $userMessage = "Permohonan #{$req->id} telah disapproved.";
         if ($disapprovalRemark !== '') {
             $userMessage .= " Remark ICT: {$disapprovalRemark}";
         }
 
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Permohonan Rejected',
-            $userMessage,
-            'rejected'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Permohonan Disapproved',
+                $userMessage,
+                'rejected'
+            );
+        }
 
 
         UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'action',
-            'event_action' => 'Reject',
-            'event_details' => "Rejected request #{$req->id} for {$req->full_name}" . ($disapprovalRemark !== '' ? " with remark: {$disapprovalRemark}" : ''),
+            'event_action' => 'Disapprove',
+            'event_details' => "Disapproved request #{$req->id} for {$req->full_name}" . ($disapprovalRemark !== '' ? " with remark: {$disapprovalRemark}" : ''),
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'created_at' => now(),
         ]);
 
-        return redirect()->route('wt.admin.requests.index')->with('success', 'Request rejected.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Request disapproved.');
     }
 
     public function confirmReturn($id)
@@ -774,12 +826,15 @@ class RequestController extends Controller
                 "Return untuk Request #{$req->id} telah disahkan executive dan menunggu ICT.",
                 'received'
             );
-            SystemNotifier::notifyUser(
-                $req->user_id ? (int) $req->user_id : null,
-                'Return Anda Diterima Executive',
-                "Return untuk Request #{$req->id} telah diterima executive dan diteruskan ke ICT.",
-                'received'
-            );
+            $targetUser = $req->user_id ? User::find($req->user_id) : null;
+            if ($targetUser) {
+                SystemNotifier::notifyUser(
+                    $targetUser,
+                    'Return Anda Diterima Executive',
+                    "Return untuk Request #{$req->id} telah diterima executive dan diteruskan ke ICT.",
+                    'received'
+                );
+            }
 
             UserActivityLog::create([
                 'user_id' => auth('wt')->id(),
@@ -801,12 +856,15 @@ class RequestController extends Controller
             'handled_by' => auth('wt')->id(),
         ]);
 
-        SystemNotifier::notifyUser(
-            $req->user_id ? (int) $req->user_id : null,
-            'Return Unit Diterima',
-            "Return untuk Request #{$req->id} telah diterima dan disahkan.",
-            'approved'
-        );
+        $targetUser = $req->user_id ? User::find($req->user_id) : null;
+        if ($targetUser) {
+            SystemNotifier::notifyUser(
+                $targetUser,
+                'Return Unit Diterima',
+                "Return untuk Request #{$req->id} telah diterima dan disahkan.",
+                'approved'
+            );
+        }
 
         
         $assignedWalkieIds = collect($req->assigned_walkie_inventory_ids ?? [])
@@ -998,25 +1056,25 @@ class RequestController extends Controller
                 ->where('data', 'like', '%Damage report #' . $record->maintenance_id . ' has been submitted%')
                 ->update(['read_at' => now()]);
 
-            $userMessage = "Damage report #{$record->maintenance_id} has been rejected by ICT.";
+            $userMessage = "Damage report #{$record->maintenance_id} has been disapproved by ICT.";
             if ($disapprovalRemark !== '') {
                 $userMessage .= " Reason: {$disapprovalRemark}";
             }
-            SystemNotifier::notifyUser($reporter, 'Damage Report Rejected', $userMessage, 'rejected');
+            SystemNotifier::notifyUser($reporter, 'Damage Report Disapproved', $userMessage, 'rejected');
         }
 
         UserActivityLog::create([
             'user_id' => auth('wt')->id(),
             'username' => auth('wt')->user()->username,
             'event_type' => 'maintenance',
-            'event_action' => 'Reject Damage Report',
-            'event_details' => "Rejected damage report #{$record->maintenance_id}. Remark: {$disapprovalRemark}",
+            'event_action' => 'Disapprove Damage Report',
+            'event_details' => "Disapproved damage report #{$record->maintenance_id}. Remark: {$disapprovalRemark}",
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
             'created_at' => now(),
         ]);
 
-        return redirect()->route('wt.admin.requests.index')->with('success', 'Damage report rejected and returned to user.');
+        return redirect()->route('wt.admin.requests.index')->with('success', 'Damage report disapproved and returned to user.');
     }
 
 
@@ -1028,33 +1086,67 @@ class RequestController extends Controller
 
         $returnHistoryCutoff = $this->returnHistoryCutoff();
         
-        $requestStatuses = AccessRequest::query()
+        $actualRole = auth('wt')->user()->wt_role;
+        $userRole = $actualRole === 'admin_it'
+            ? session('view_mode', $actualRole)
+            : $actualRole;
+        $activeExecutive = $this->activeExecutiveAccount();
+
+        $requestQuery = AccessRequest::query()
             ->with(['user', 'submitToAdmin', 'handler', 'handover'])
-            ->where('submit_to_admin_id', auth('wt')->id())
             ->where(function ($query) {
                 $this->applyWalkieRequestTypeFilter($query);
             })
             ->where(function ($query) use ($returnHistoryCutoff) {
                 $this->applyReturnHistoryRetention($query, $returnHistoryCutoff);
-            })
-            ->orderByDesc('request_date')
+            });
+
+        if ($userRole === 'admin') {
+            $execId = $activeExecutive ? $activeExecutive->id : auth('wt')->id();
+            $requestQuery->where('submit_to_admin_id', $execId);
+        } else {
+            $requestQuery->where(function ($query) {
+                $this->applyExecutiveRequestFilter($query);
+            });
+        }
+
+        $requestStatuses = $requestQuery->orderByDesc('request_date')
             ->orderByDesc('id')
             ->get();
 
-        $handoverRequests = AccessRequest::with(['handover', 'user'])
-            ->where('submit_to_admin_id', auth('wt')->id())
+        $handoverQuery = AccessRequest::with(['handover', 'user'])
             ->where(function ($query) {
                 $this->applyWalkieRequestTypeFilter($query);
             })
             ->where(function ($query) use ($returnHistoryCutoff) {
                 $this->applyReturnHistoryRetention($query, $returnHistoryCutoff);
-            })
-            ->orderByDesc('request_date')
+            });
+
+        if ($userRole === 'admin') {
+            $execId = $activeExecutive ? $activeExecutive->id : auth('wt')->id();
+            $handoverQuery->where('submit_to_admin_id', $execId);
+        } else {
+            $handoverQuery->where(function ($query) {
+                $this->applyExecutiveRequestFilter($query);
+            });
+        }
+
+        $handoverRequests = $handoverQuery->orderByDesc('request_date')
             ->orderByDesc('id')
             ->get();
 
-        $damageRecords = MaintenanceRecord::where('submit_to_admin_id', auth('wt')->id())
-            ->orderByDesc('maintenance_id')
+        $damageQuery = MaintenanceRecord::query();
+
+        if ($userRole === 'admin') {
+            $execId = $activeExecutive ? $activeExecutive->id : auth('wt')->id();
+            $damageQuery->where('submit_to_admin_id', $execId);
+        } else {
+            $damageQuery->where(function ($query) {
+                $this->applyExecutiveSubmittedFilter($query);
+            });
+        }
+
+        $damageRecords = $damageQuery->orderByDesc('maintenance_id')
             ->get();
 
         $requestSummaryBucket = function (AccessRequest $request): string {

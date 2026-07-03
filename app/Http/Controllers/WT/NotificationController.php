@@ -4,12 +4,14 @@ namespace App\Http\Controllers\WT;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
     public function markAsRead(Request $request, string $id): RedirectResponse
     {
-        $notification = $request->user()->notifications()->where('id', $id)->first();
+        $user = Auth::guard('wt')->user();
+        $notification = $user?->notifications()->where('id', $id)->first();
         if ($notification && $notification->read_at === null) {
             $notification->markAsRead();
         }
@@ -24,7 +26,7 @@ class NotificationController extends Controller
 
     public function markAllAsRead(Request $request): RedirectResponse
     {
-        $request->user()->unreadNotifications()->update(['read_at' => now()]);
+        Auth::guard('wt')->user()?->unreadNotifications()->update(['read_at' => now()]);
 
         return back();
     }
@@ -40,5 +42,4 @@ class NotificationController extends Controller
         return $host === $request->getHost();
     }
 }
-
 

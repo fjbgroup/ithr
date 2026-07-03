@@ -93,7 +93,7 @@
 
     <div class="pickup-card policy-note-card">
         <p class="pickup-title">WT Policy</p>
-        @include('wt.partials.walkie-policy-content', ['policyContent' => $policyContent])
+        @include('wt.partials.pickup-policy-content', ['policyContent' => $policyContent])
     </div>
 
     <form action="{{ route($routePrefix . '.handover.pickup.store', $accessRequest->id) }}" method="POST" enctype="multipart/form-data" class="pickup-card" data-pickup-signature-form>

@@ -1553,8 +1553,8 @@
     <form action="{{ $formAction }}" method="POST" class="space-y-6">
         @csrf
         <input type="hidden" name="request_scope" value="on_behalf">
-        <input type="hidden" name="full_name" value="{{ old('full_name', auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}">
-        <input type="hidden" name="department" value="{{ old('department', auth('wt')->user()->department) }}">
+        <input type="hidden" name="full_name" value="{{ old('full_name', $currentUser->full_name ?: $currentUser->username) }}">
+        <input type="hidden" name="department" value="{{ old('department', $currentUser->department) }}">
         <input type="hidden" id="request_ownership_type" name="ownership_type" value="{{ old('ownership_type', 'Individual') }}">
         <input type="hidden" id="request_shared_with" name="shared_with" value="{{ strtoupper(old('shared_with', '')) }}">
         @unless($isTemporaryRequest)
@@ -1566,15 +1566,15 @@
         <div class="wt-form-row">
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Name</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->full_name ?: auth('wt')->user()->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ strtoupper($currentUser->full_name ?: $currentUser->username) }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive ID</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->staff_id ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ strtoupper($currentUser->staff_id ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-stone-600 dark:text-slate-400 mb-2 uppercase tracking-widest">Executive Department</label>
-                <input type="text" value="{{ strtoupper(auth('wt')->user()->department ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
+                <input type="text" value="{{ strtoupper($currentUser->department ?: '-') }}" class="w-full px-4 py-2.5 rounded-xl border border-[#0284c7]/30 bg-stone-100/80 dark:bg-slate-900 dark:border-slate-700 text-[11px] font-bold outline-none transition dark:text-slate-200" readonly>
             </div>
         </div>
 
@@ -2558,7 +2558,7 @@
                             <select name="pic_details[${index}][name]" data-pic-name data-placeholder="Search staff name or ID..." class="pic-tag-select w-full" required>
                                 ${renderOptions(ownershipNameOptions, saved.name || '', 'Search staff name or ID...')}
                             </select>
-                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search staff name or ID. You can type manually if the staff is not listed.</p>
+                            <p class="mt-2 text-[10px] text-stone-500 dark:text-slate-400">Search staff name or ID. You can type manually if the staff is not listed. If it is a station, please specify which station.</p>
                         </div>
                         <div>
                             <label class="mb-1 block text-[10px] font-black uppercase tracking-wider text-stone-500 dark:text-slate-400">Ownership Type <span class="text-red-500">*</span></label>
