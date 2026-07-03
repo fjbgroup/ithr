@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'Approval Inbox')
 
@@ -3525,27 +3525,27 @@
 
     body .content-surface .approval-inbox table.dataTable thead th,
     body .content-surface .approval-inbox .pending-queue-card table.dataTable thead th {
-        padding: 18px 20px !important;
-        font-size: 14px !important;
+        padding: 12px 16px !important;
+        font-size: 11px !important;
         line-height: 1.25 !important;
         letter-spacing: 0.05em !important;
     }
 
     body .content-surface .approval-inbox table.dataTable tbody td,
     body .content-surface .approval-inbox .pending-queue-card table.dataTable tbody td {
-        padding: 20px !important;
-        font-size: 15px !important;
-        line-height: 1.5 !important;
+        padding: 12px 16px !important;
+        font-size: 12px !important;
+        line-height: 1.4 !important;
     }
 
     body .content-surface .approval-inbox .requestor-card,
     body .content-surface .approval-inbox .request-summary-card {
-        border-radius: 14px !important;
+        border-radius: 12px !important;
     }
 
     body .content-surface .approval-inbox .requestor-item,
     body .content-surface .approval-inbox .request-summary-card .request-meta-block {
-        padding: 14px 16px !important;
+        padding: 10px 12px !important;
     }
 
     body .content-surface .approval-inbox .requestor-name,
@@ -3554,7 +3554,7 @@
         overflow: visible !important;
         text-overflow: clip !important;
         white-space: normal !important;
-        font-size: 18px !important;
+        font-size: 13px !important;
         line-height: 1.35 !important;
         font-weight: 900 !important;
     }
@@ -3563,15 +3563,15 @@
     body .content-surface .approval-inbox .request-summary-note,
     body .content-surface .approval-inbox .approval-body-meta,
     body .content-surface .approval-inbox .approval-date {
-        font-size: 14px !important;
-        line-height: 1.55 !important;
+        font-size: 11px !important;
+        line-height: 1.45 !important;
         font-weight: 750 !important;
     }
 
     body .content-surface .approval-inbox .requestor-label,
     body .content-surface .approval-inbox .summary-label,
     body .content-surface .approval-inbox .request-meta-label {
-        font-size: 12px !important;
+        font-size: 10px !important;
         line-height: 1.25 !important;
         letter-spacing: 0.05em !important;
     }
@@ -3579,47 +3579,52 @@
     body .content-surface .approval-inbox .requestor-value,
     body .content-surface .approval-inbox .summary-value,
     body .content-surface .approval-inbox .request-meta-value {
-        font-size: 15px !important;
-        line-height: 1.5 !important;
+        font-size: 12px !important;
+        line-height: 1.4 !important;
         font-weight: 850 !important;
     }
 
     body .content-surface .approval-inbox .requestor-avatar {
-        width: 42px !important;
-        height: 42px !important;
-        font-size: 16px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
     }
 
     body .content-surface .approval-inbox .request-pill {
-        min-height: 32px !important;
-        padding: 7px 13px !important;
-        font-size: 13px !important;
+        min-height: 24px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
         line-height: 1.1 !important;
     }
 
     body .content-surface .approval-inbox :is(.pending-nav-badge, .approval-new-badge, .faulty-report-count-pill) {
-        min-height: 32px !important;
-        padding: 7px 13px !important;
-        font-size: 13px !important;
+        min-height: 24px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
         line-height: 1.1 !important;
         letter-spacing: 0.04em !important;
     }
 
     body .content-surface .approval-inbox .approval-action-row {
-        width: 220px !important;
-        max-width: 220px !important;
-        gap: 9px !important;
+        width: 180px !important;
+        max-width: 180px !important;
+        gap: 6px !important;
+        margin-inline: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: center !important;
     }
 
     body .content-surface .approval-inbox .approval-action-btn,
     body .content-surface .approval-inbox #requestsTable .approval-action-btn,
     body .content-surface .approval-inbox .pending-queue-card .approval-action-btn {
         width: 100% !important;
-        min-width: 220px !important;
-        min-height: 46px !important;
-        padding: 11px 16px !important;
-        border-radius: 11px !important;
-        font-size: 13px !important;
+        min-width: 0 !important;
+        min-height: 32px !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
+        font-size: 11px !important;
         line-height: 1.15 !important;
         letter-spacing: 0.04em !important;
     }
