@@ -28,6 +28,9 @@ class Handover extends Model
         'handover_by_name',
         'handover_by_signature',
         'handover_by_signed_at',
+        'checked_by_name',
+        'checked_by_signature',
+        'checked_by_signed_at',
         'accessories_snapshot',
         'policy_accepted_at',
         'pickup_completed_at',
@@ -38,6 +41,7 @@ class Handover extends Model
     protected $casts = [
         'pickup_recipient_signed_at' => 'datetime',
         'handover_by_signed_at' => 'datetime',
+        'checked_by_signed_at' => 'datetime',
         'policy_accepted_at' => 'datetime',
         'pickup_completed_at' => 'datetime',
         'issued_at' => 'datetime',
