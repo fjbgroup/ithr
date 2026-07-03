@@ -23,8 +23,5 @@
     <div class="signature-preview" data-signature-preview>
         <img alt="{{ $title }} preview">
     </div>
-    <div class="signature-actions">
-        <span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">Signed box for {{ $defaultName }}</span>
-    </div>
     <input type="hidden" name="{{ $signatureField }}" data-signature-input>
 </div>
