@@ -5,7 +5,7 @@
     </div>
     <div style="padding:10px 12px;border-bottom:1px solid var(--border)">
         <div class="pickup-label">Signer Name</div>
-        <input type="text" name="{{ $nameField }}" value="{{ old($nameField, $defaultName) }}" class="signature-name" required>
+        <input type="text" name="{{ $nameField }}" value="{{ old($nameField) }}" placeholder="Type name here..." class="signature-name" required>
     </div>
     <div class="signature-source">
         <label><input type="radio" name="{{ $sourceField }}" value="draw" data-signature-source checked> Draw</label>
