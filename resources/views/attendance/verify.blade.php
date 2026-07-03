@@ -188,7 +188,7 @@ body {
                 <label for="password">Password</label>
                 <div class="input-wrap">
                     <svg class="lead" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    <input id="password" name="password" type="password" class="has-toggle" autocomplete="current-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                    <input id="password" name="password" type="password" class="has-toggle" autocomplete="current-password" placeholder="********">
                     <button type="button" class="toggle" aria-label="Show password" onclick="togglePassword(this)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>
