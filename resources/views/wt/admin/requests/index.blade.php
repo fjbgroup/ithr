@@ -118,10 +118,25 @@
     #quickWtModal .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 36px;
     }
+    .approval-modal-card {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        max-width: 460px !important;
+    }
+    .dark .approval-modal-card {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    }
     #approveModal .approval-modal-card {
         margin: 0 !important;
-        flex: 0 0 380px;
-        width: 380px !important;
+        flex: 0 0 430px !important;
+        width: 430px !important;
+        max-width: 430px !important;
         max-height: calc(100vh - 1.5rem);
         overflow-y: auto !important;
     }
@@ -133,6 +148,129 @@
     }
     #approveModal .approval-modal-card .mb-5 {
         margin-bottom: 14px !important;
+    }
+
+    /* Modal Form Text, Labels and Inputs */
+    .approval-modal-card form {
+        padding: 24px !important;
+        background: transparent !important;
+    }
+    .approval-modal-card h3 {
+        font-size: 1.125rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        margin-top: 8px !important;
+    }
+    .dark .approval-modal-card h3 {
+        color: #f8fafc !important;
+    }
+    .approval-modal-card p {
+        font-size: 0.825rem !important;
+        color: #475569 !important;
+        line-height: 1.5 !important;
+    }
+    .dark .approval-modal-card p {
+        color: #94a3b8 !important;
+    }
+    .approval-modal-card label {
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        color: #475569 !important;
+        margin-bottom: 8px !important;
+        display: block !important;
+    }
+    .dark .approval-modal-card label {
+        color: #cbd5e1 !important;
+    }
+
+    .approval-modal-card textarea,
+    .approval-modal-card select,
+    .approval-modal-card input {
+        width: 100% !important;
+        background: #f8fafc !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        outline: none !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    .dark .approval-modal-card textarea,
+    .dark .approval-modal-card select,
+    .dark .approval-modal-card input {
+        background: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+    .approval-modal-card textarea:focus,
+    .approval-modal-card select:focus,
+    .approval-modal-card input:focus {
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15) !important;
+    }
+    .approval-modal-card textarea[name="disapproval_remark"]:focus {
+        border-color: #f87171 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+    }
+
+    /* Modal Buttons with High Contrast */
+    .approval-modal-card .approval-action-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 38px !important;
+        padding: 8px 18px !important;
+        border-radius: 8px !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.03em !important;
+        text-transform: uppercase !important;
+        border: 1px solid transparent !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view) {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #475569 !important;
+    }
+    .dark .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view) {
+        background: #334155 !important;
+        border-color: #475569 !important;
+        color: #cbd5e1 !important;
+    }
+    .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view):hover {
+        background: #e2e8f0 !important;
+        color: #1e293b !important;
+    }
+    .dark .approval-modal-card .approval-action-btn:not(.approval-action-approve):not(.approval-action-reject):not(.approval-action-view):hover {
+        background: #475569 !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-approve {
+        background: #16a34a !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-approve:hover {
+        background: #15803d !important;
+    }
+    .approval-modal-card .approval-action-reject {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-reject:hover {
+        background: #b91c1c !important;
+    }
+    .approval-modal-card .approval-action-view {
+        background: #0284c7 !important;
+        color: #ffffff !important;
+    }
+    .approval-modal-card .approval-action-view:hover {
+        background: #0369a1 !important;
     }
     #approveModal #accessoryChecklistBox {
         padding: 14px !important;
