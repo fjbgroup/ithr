@@ -545,7 +545,7 @@ class HandoverController extends Controller
             ]
         ];
 
-        $path = storage_path('app/wt/policies.json');
+        $path = storage_path('app/wt/pickup_policies.json');
         if (! is_file($path)) {
             return $default;
         }

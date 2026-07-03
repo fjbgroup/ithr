@@ -63,27 +63,27 @@
   <section class="walkie-policy-panel" data-policy-panel="en">
     <h3 style="margin:0 0 10px;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text)">English</h3>
     <p style="margin:0 0 14px;font-weight:700">
-      {!! $policyContent['en'][0] ?? '' !!}
+      {{ $policyContent['en'][0] ?? '' }}
     </p>
 
-    <div style="display:grid;gap:10px;margin:0">
+    <ul style="display:grid;gap:10px;margin:0;padding-left:18px">
       @foreach(array_slice($policyContent['en'] ?? [], 1) as $policyLine)
-      <div style="padding-left: 4px">{!! $policyLine !!}</div>
+      <li>{{ $policyLine }}</li>
       @endforeach
-    </div>
+    </ul>
   </section>
 
   <section class="walkie-policy-panel" data-policy-panel="bm" style="display:none">
     <h3 style="margin:0 0 10px;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--text)">Bahasa Malaysia</h3>
     <p style="margin:0 0 14px;font-weight:700">
-      {!! $policyContent['bm'][0] ?? '' !!}
+      {{ $policyContent['bm'][0] ?? '' }}
     </p>
 
-    <div style="display:grid;gap:10px;margin:0">
+    <ul style="display:grid;gap:10px;margin:0;padding-left:18px">
       @foreach(array_slice($policyContent['bm'] ?? [], 1) as $policyLine)
-      <div style="padding-left: 4px">{!! $policyLine !!}</div>
+      <li>{{ $policyLine }}</li>
       @endforeach
-    </div>
+    </ul>
   </section>
 
   @if($canEditPolicy)
