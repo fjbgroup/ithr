@@ -152,6 +152,8 @@
         <i id="theme-toggle-light-icon" class="hidden fas fa-sun" style="font-size:16px;color:#f59e0b"></i>
       </button>
 
+      @include('wt.partials.header-notifications')
+
       {{-- User badge --}}
       <a href="{{ route('wt.user.profile') }}" class="topbar-user" title="My profile">
         <span class="topbar-role-badge">{{ $accountRoleLabel }}</span>
@@ -350,12 +352,19 @@ function positionSidebarInfoPopover(button, popover) {
 
 document.addEventListener('DOMContentLoaded', function() {
   // Notification toggle
-  const notifToggle = document.getElementById('notificationToggle');
+  const notifToggle = document.getElementById('notificationToggle') || document.getElementById('notifBellBtn');
   const notifDropdown = document.getElementById('notificationDropdown');
   if (notifToggle && notifDropdown) {
-    notifToggle.addEventListener('click', function(e) { e.stopPropagation(); notifDropdown.classList.toggle('hidden'); });
+    notifToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = notifDropdown.classList.toggle('hidden') === false;
+      notifToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
     document.addEventListener('click', function(e) {
-      if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) notifDropdown.classList.add('hidden');
+      if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
+        notifDropdown.classList.add('hidden');
+        notifToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   }
   // Logout modal

@@ -122,7 +122,12 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     $isAdminItView = $effectiveRole === 'admin_it';
     $accountRoleLabel = $actualRole === 'admin_it' ? 'ICT' : 'Executive';
     $impersonatorAdminItId = session('impersonator_admin_it_id');
-    $isExecutiveImpersonation = $actualRole === 'admin' && filled($impersonatorAdminItId);
+    $selectedExecutiveUserId = session('selected_executive_user_id');
+    $selectedExecutiveAccount = $selectedExecutiveUserId
+        ? \App\Models\WT\User::where('wt_role', 'admin')->find($selectedExecutiveUserId)
+        : null;
+    $isExecutiveImpersonation = ($actualRole === 'admin_it' && $effectiveRole === 'admin' && filled($selectedExecutiveAccount))
+        || ($actualRole === 'admin' && filled($impersonatorAdminItId));
     $executiveSwitcherAccounts = $actualRole === 'admin_it'
         ? \App\Models\WT\User::where('wt_role', 'admin')
             ->orderBy('name')
@@ -134,10 +139,13 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
             $query->where('status', $effectiveRole === 'admin_it' ? 'Pending IT Approval' : 'Pending Admin Approval')
                 ->orWhere('return_status', $effectiveRole === 'admin_it' ? 'Pending IT Approval' : 'Pending Admin Approval');
         })
-        ->when($effectiveRole === 'admin', function ($query) {
-            $query->where(function ($scoped) {
+        ->when($effectiveRole === 'admin', function ($query) use ($selectedExecutiveAccount) {
+            $query->where(function ($scoped) use ($selectedExecutiveAccount) {
                 $scoped->whereNull('submit_to_admin_id')
-                    ->orWhere('submit_to_admin_id', auth()->id());
+                    ->orWhere('submit_to_admin_id', auth('wt')->id());
+                if ($selectedExecutiveAccount) {
+                    $scoped->orWhere('submit_to_admin_id', $selectedExecutiveAccount->id);
+                }
             });
         })
         ->count();
@@ -145,7 +153,7 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         $approvalBadgeCount += \App\Models\WT\MaintenanceRecord::where('status', 'PENDING ADMIN IT')->count();
     } else {
         $approvalBadgeCount += \App\Models\WT\MaintenanceRecord::where('status', 'WAITING FOR ADMIN')
-            ->where('submit_to_admin_id', auth()->id())
+            ->where('submit_to_admin_id', $selectedExecutiveAccount?->id ?? auth('wt')->id())
             ->count();
     }
 
@@ -427,6 +435,8 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
         <i id="theme-toggle-dark-icon" class="hidden fas fa-moon" style="font-size:16px"></i>
         <i id="theme-toggle-light-icon" class="hidden fas fa-sun" style="font-size:16px;color:#f59e0b"></i>
       </button>
+
+      @include('wt.partials.header-notifications')
 
       {{-- User badge --}}
       <a href="{{ route('wt.admin.profile') }}" class="topbar-user" title="My profile">
@@ -1604,16 +1614,18 @@ function closeGlobalWalkieTimelineOutside(event) {
 // ── DOM READY ──
 document.addEventListener('DOMContentLoaded', function() {
   // Notification toggle
-  var notifToggle = document.getElementById('notificationToggle');
+  var notifToggle = document.getElementById('notificationToggle') || document.getElementById('notifBellBtn');
   var notifDropdown = document.getElementById('notificationDropdown');
   if (notifToggle && notifDropdown) {
     notifToggle.addEventListener('click', function(e) {
       e.stopPropagation();
-      notifDropdown.classList.toggle('hidden');
+      var isOpen = notifDropdown.classList.toggle('hidden') === false;
+      notifToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
     document.addEventListener('click', function(e) {
       if (!notifDropdown.contains(e.target) && !notifToggle.contains(e.target)) {
         notifDropdown.classList.add('hidden');
+        notifToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }

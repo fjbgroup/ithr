@@ -2431,44 +2431,44 @@
     }
     .approval-inbox .pending-queue-card .unit-detail-list {
         display: grid;
-        gap: 4px;
-        margin-top: 6px;
+        gap: 8px;
+        margin-top: 10px;
     }
     .approval-inbox .pending-queue-card .unit-detail-item {
         border: 1px solid rgba(148, 163, 184, 0.16);
-        border-radius: 6px;
+        border-radius: 10px;
         background: rgba(15, 23, 42, 0.18);
-        padding: 5px 6px;
+        padding: 10px 12px;
     }
     .approval-inbox .pending-queue-card .unit-detail-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 6px;
+        gap: 10px;
         color: #e2e8f0;
-        font-size: 7.5px;
+        font-size: 11px;
         font-weight: 900;
-        line-height: 1.2;
+        line-height: 1.35;
         text-transform: uppercase;
     }
     .approval-inbox .pending-queue-card .unit-detail-tag {
         flex: 0 0 auto;
         border-radius: 999px;
         background: rgba(129, 140, 248, 0.16);
-        padding: 1px 5px;
+        padding: 3px 8px;
         color: #c7d2fe;
-        font-size: 6px;
+        font-size: 8px;
         font-weight: 900;
     }
     .approval-inbox .pending-queue-card .unit-detail-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 3px 6px;
-        margin-top: 4px;
+        gap: 7px 14px;
+        margin-top: 8px;
         color: #94a3b8;
-        font-size: 6.8px;
+        font-size: 9.5px;
         font-weight: 800;
-        line-height: 1.2;
+        line-height: 1.35;
         text-transform: uppercase;
     }
     .approval-inbox .pending-queue-card .unit-detail-grid span {
@@ -3606,13 +3606,16 @@
     }
 
     body .content-surface .approval-inbox .approval-action-row {
-        max-width: 168px !important;
+        width: 220px !important;
+        max-width: 220px !important;
         gap: 9px !important;
     }
 
     body .content-surface .approval-inbox .approval-action-btn,
     body .content-surface .approval-inbox #requestsTable .approval-action-btn,
     body .content-surface .approval-inbox .pending-queue-card .approval-action-btn {
+        width: 100% !important;
+        min-width: 220px !important;
         min-height: 46px !important;
         padding: 11px 16px !important;
         border-radius: 11px !important;
@@ -3912,7 +3915,7 @@
                                     <button type="submit" class="approval-action-btn approval-action-approve">Approve</button>
                                 </form>
                             @endif
-                            <button type="button" class="approval-action-btn approval-action-reject" onclick='openRejectRequestModal(@json($req->id), @json($req->full_name))'>Reject</button>
+                            <button type="button" class="approval-action-btn approval-action-reject" onclick='openRejectRequestModal(@json($req->id), @json($req->full_name))'>Disapprove</button>
                         </div>
                     </td>
                 </tr>
@@ -4292,7 +4295,7 @@
                             <div class="approval-action-row">
                                 <button type="button" onclick="event.stopPropagation(); openDamageFormModal('damageFormModal-{{ $report->maintenance_id }}')" class="approval-action-btn approval-action-view">View Form</button>
                                 <button type="button" onclick="event.stopPropagation(); openApproveDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-approve">Approve</button>
-                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Reject</button>
+                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Disapprove</button>
                             </div>
                         @else
                             <div class="approval-action-row">
@@ -4301,7 +4304,7 @@
                                     @csrf
                                     <button type="submit" class="approval-action-btn approval-action-approve">Approve</button>
                                 </form>
-                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Reject</button>
+                                <button type="button" onclick="event.stopPropagation(); openRejectDamageModal({{ $report->maintenance_id }}, '{{ addslashes($report->reporter_name) }}')" class="approval-action-btn approval-action-reject">Disapprove</button>
                             </div>
                         @endif
                     </td>
@@ -4672,18 +4675,18 @@
     <div class="approval-modal-card">
         <form id="rejectRequestForm" method="POST" class="p-6">
             @csrf
-            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Reject Request</p>
-            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Confirm rejection?</h3>
+            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Disapprove Request</p>
+            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Confirm disapproval?</h3>
             <p class="mt-2 text-xs font-semibold leading-5 text-slate-500 dark:text-slate-400">
-                This will reject <span id="rejectRequestUserName" class="font-black text-slate-800 dark:text-slate-100"></span>'s request.
+                This will disapprove <span id="rejectRequestUserName" class="font-black text-slate-800 dark:text-slate-100"></span>'s request.
             </p>
             <div class="mt-5">
-                <label for="requestDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Rejection Remark</label>
-                <textarea id="requestDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type the reason for rejecting this request." required></textarea>
+                <label for="requestDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Disapproval Remark</label>
+                <textarea id="requestDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type the reason for disapproving this request." required></textarea>
             </div>
             <div class="mt-5 flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
                 <button type="button" onclick="closeRejectRequestModal()" class="approval-action-btn">Cancel</button>
-                <button type="submit" class="approval-action-btn approval-action-reject">Reject</button>
+                <button type="submit" class="approval-action-btn approval-action-reject">Disapprove</button>
             </div>
         </form>
     </div>
@@ -4711,15 +4714,15 @@
     <div class="approval-modal-card">
         <form id="rejectDamageForm" method="POST" class="p-6" autocomplete="off">
             @csrf
-            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Reject Faulty Report</p>
-            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Reject report from <span id="damageRejectUserName"></span>?</h3>
+            <p class="text-[10px] font-black uppercase tracking-widest text-red-700 dark:text-red-300">Disapprove Faulty Report</p>
+            <h3 class="mt-2 text-base font-black text-slate-950 dark:text-white">Disapprove report from <span id="damageRejectUserName"></span>?</h3>
             <div class="mt-5">
-                <label for="damageDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Rejection Remark</label>
-                <textarea id="damageDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type rejection reason here." required></textarea>
+                <label for="damageDisapprovalRemark" class="mb-2 block text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Disapproval Remark</label>
+                <textarea id="damageDisapprovalRemark" name="disapproval_remark" rows="4" class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-800 outline-none focus:border-red-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Type disapproval reason here." required></textarea>
             </div>
             <div class="mt-5 flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
                 <button type="button" onclick="closeRejectDamageModal()" class="approval-action-btn">Cancel</button>
-                <button type="submit" class="approval-action-btn approval-action-reject">Reject</button>
+                <button type="submit" class="approval-action-btn approval-action-reject">Disapprove</button>
             </div>
         </form>
     </div>
@@ -5497,7 +5500,7 @@
 
         if (modal && form && userName && remark) {
             moveApprovalModalToBody(modal);
-            form.action = "{{ url('admin/requests') }}/" + id + "/reject";
+            form.action = @json(route('wt.admin.requests.reject', ['id' => '__REQUEST_ID__'])).replace('__REQUEST_ID__', encodeURIComponent(id));
             userName.innerText = name || 'this user';
             form.reset();
             remark.value = '';
@@ -5525,7 +5528,7 @@
         if (modal && modalUserName && form) {
             moveApprovalModalToBody(modal);
             modalUserName.innerText = name;
-            form.action = "{{ url('admin/damage-reports') }}/" + id + "/approve";
+            form.action = @json(route('wt.admin.damageReports.approve', ['id' => '__DAMAGE_ID__'])).replace('__DAMAGE_ID__', encodeURIComponent(id));
             document.getElementById('damageApprovalRemark').value = '';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -5551,11 +5554,11 @@
         if (modal && modalUserName && form && remark) {
             moveApprovalModalToBody(modal);
             modalUserName.innerText = name;
-            form.action = "{{ url('admin/damage-reports') }}/" + id + "/reject";
+            form.action = @json(route('wt.admin.damageReports.reject', ['id' => '__DAMAGE_ID__'])).replace('__DAMAGE_ID__', encodeURIComponent(id));
             form.reset();
             remark.value = '';
             remark.defaultValue = '';
-            remark.placeholder = 'Type rejection reason here, example: details incomplete or no fault found.';
+            remark.placeholder = 'Type disapproval reason here, example: details incomplete or no fault found.';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
