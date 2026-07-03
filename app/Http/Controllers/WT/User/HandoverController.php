@@ -524,30 +524,25 @@ class HandoverController extends Controller
 
         return $signature;
     }
-
     private function loadPolicyContent(): array
     {
         $default = [
             'en' => [
-                'This policy is established to ensure that walkie talkies at FGV Johor Bulkers Sdn Bhd are used in an orderly, controlled manner and for official purposes only.',
-                'Walkie talkies are company property and must be used for official purposes only.',
-                'All requests must be submitted through the assigned supervisor using the provided system.',
-                'Users are responsible for keeping the walkie talkie in good, clean, and safe condition.',
-                'The equipment must not be loaned to another party without supervisor approval.',
-                'Any loss, damage, or issue must be reported immediately through the provided system.',
-                'The company only covers improvement or repair costs caused by normal wear and tear or manufacturing defects.',
-                'If damage or loss is caused by negligence, misuse, or failure to follow usage instructions, the user is fully responsible for the repair or replacement cost.',
+                'The following are the terms and conditions that must be adhered to:-',
+                'a. Officers must be responsible to ensure that each walkie-talkie and additional equipment (accessories) provided are used carefully and maintained as well as possible to prevent any damage.',
+                'b. If it is found that damage or loss occurs due to :-<br><span style="padding-left:18px; display:inline-block;">&bull; Willful negligence</span><br><span style="padding-left:18px; display:inline-block;">&bull; Misuse of the walkie-talkie</span><br><span style="padding-left:18px; display:inline-block;">&bull; Intentional loss</span><br><span style="padding-left:18px; display:inline-block;">&bull; Intentional damage</span>',
+                'c. The staff member concerned will be held responsible to bear the repair and replacement cost of a new walkie-talkie if necessary.',
+                'd. However, repair costs for damage caused by "manufacturing defect" and usage exceeding the lifespan will be borne by the company.',
+                'Thank you, please be informed.'
             ],
             'bm' => [
-                'Polisi ini diwujudkan untuk memastikan penggunaan walkie talkie di FGV Johor Bulkers Sdn Bhd adalah teratur, terkawal dan digunakan bagi tujuan rasmi sahaja.',
-                'Walkie talkie adalah hak milik syarikat dan hanya untuk kegunaan rasmi sahaja.',
-                'Semua permohonan hendaklah dibuat melalui penyelia masing-masing menggunakan sistem yang disediakan.',
-                'Pengguna bertanggungjawab memastikan walkie talkie sentiasa berada dalam keadaan baik, bersih dan selamat.',
-                'Peralatan tidak boleh dipinjamkan kepada pihak lain tanpa kelulusan penyelia.',
-                'Sebarang kehilangan, kerosakan atau masalah hendaklah dilaporkan segera melalui sistem yang disediakan.',
-                'Syarikat hanya menanggung kos penambahbaikan bagi kerosakan akibat penggunaan biasa (wear and tear) atau kecacatan pembuatan.',
-                'Sekiranya kerosakan atau kehilangan berpunca daripada kecuaian, penyalahgunaan atau kegagalan mematuhi arahan penggunaan, pengguna bertanggungjawab menanggung sepenuhnya kos pembaikan atau penggantian peralatan.',
-            ],
+                'Berikut adalah syarat-syarat yang perlu dipatuhi:-',
+                'a. Petugas perlu bertanggungjawab untuk memastikan setiap walkie-talkie dan kelengkapan tambahan (aksesori) yang dibekalkan digunakan dengan cermat dan dijaga sebaik mungkin bagi mengelakkan berlakunya sebarang kerosakan.',
+                'b. Jika didapati berlaku kerosakan atau kehilangan yang disebabkan :-<br><span style="padding-left:18px; display:inline-block;">&bull; Kecuaian yang disengajakan</span><br><span style="padding-left:18px; display:inline-block;">&bull; Penyalahgunaan walkie Talkie</span><br><span style="padding-left:18px; display:inline-block;">&bull; Kehilangan yang disengajakan</span><br><span style="padding-left:18px; display:inline-block;">&bull; Kerosakan yang disengajakan</span>',
+                'c. Petugas yang berkenaan akan dipertanggungjawabkan untuk menanggung kos baik pulih dan penggantian walkie-talkie yang baru sekiranya perlu.',
+                'd. Bagaimanapun, kos baik pulih terhadap kerosakan yang disebabkan oleh "manufacturing defeat" dan penggunaan yang melebihi jangka hayat akan ditanggung oleh pihak syarikat.',
+                'Sekian, harap maklum.'
+            ]
         ];
 
         $path = storage_path('app/wt/policies.json');
