@@ -28,13 +28,14 @@ class StaffController extends Controller
     {
         $user = Auth::user();
         
-        // If regular staff, they should only see their own profile
-        if ($user->role === 'staff') {
+        // Only admin_hr can see the full staff registry.
+        // All other users should only see their own profile.
+        if (!$user->isAdminHR()) {
             $staff = Staff::where('staff_no', $user->staff_no)->first();
             if ($staff) {
                 return redirect()->route('staff.show', $staff->id);
             }
-            return abort(404, 'Staff record not found.');
+            return abort(403, 'Unauthorized access to staff directory. Only HR Admins can view the registry.');
         }
 
         // Admin view
@@ -80,9 +81,9 @@ class StaffController extends Controller
             'user.bookings.room'
         ])->findOrFail($id);
 
-        // Security check: staff can only see their own profile
-        if ($user->role === 'staff' && $user->staff_no !== $staff->staff_no) {
-            abort(403, 'Unauthorized access to staff profile.');
+        // Security check: only admin_hr can see other staff profiles
+        if (!$user->isAdminHR() && $user->staff_no !== $staff->staff_no) {
+            abort(403, 'Unauthorized access to staff profile. Only HR Admins can view other staff details.');
         }
 
         return view('staff.show', compact('staff'));

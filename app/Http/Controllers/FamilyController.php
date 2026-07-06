@@ -21,7 +21,7 @@ class FamilyController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
+        $isAdmin = $user->isAdminHR();
         $search = $request->query('search');
 
         $all_staff = Staff::with('department')->where('is_active', 1)->orderBy('name')->get();
@@ -66,7 +66,7 @@ class FamilyController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
+        $isAdmin = $user->isAdminHR();
 
         $request->validate([
             'name' => 'required',
@@ -100,7 +100,7 @@ class FamilyController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
+        $isAdmin = $user->isAdminHR();
         $familyMember = FamilyMember::findOrFail($id);
 
         if (!$isAdmin) {
@@ -132,7 +132,7 @@ class FamilyController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
+        $isAdmin = $user->isAdminHR();
         $familyMember = FamilyMember::findOrFail($id);
 
         if (!$isAdmin) {
@@ -153,7 +153,7 @@ class FamilyController extends Controller
     public function bulkDestroy(Request $request)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
+        $isAdmin = $user->isAdminHR();
 
         $ids = array_filter((array) $request->input('ids', []), 'is_numeric');
         if (empty($ids)) {
