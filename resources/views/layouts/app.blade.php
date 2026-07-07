@@ -388,6 +388,7 @@ html.sidebar-collapsed .sidebar-footer .user-info {
                       @if(Auth::user()->isAdminIT() || Auth::user()->isCeo())
                       <a href="{{ url('/users') }}" class="nav-child {{ request()->is('users*') ? 'active' : '' }}">User Accounts</a>
                       <a href="{{ route('audit-log.index') }}" class="nav-child {{ request()->is('audit-log*') ? 'active' : '' }}">Audit Log</a>
+                      <a href="{{ route('email-settings.index') }}" class="nav-child {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">Email Settings</a>
                       @endif
                       
                       @if(Auth::user()->isHrUser())

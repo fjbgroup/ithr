@@ -148,6 +148,9 @@ Route::middleware('auth')->group(function () {
 
 
 
+        Route::get('email-settings',      [\App\Http\Controllers\EmailSettingController::class, 'index'])->name('email-settings.index');
+    Route::post('email-settings',     [\App\Http\Controllers\EmailSettingController::class, 'update'])->name('email-settings.update');
+    Route::post('email-settings/test',[\App\Http\Controllers\EmailSettingController::class, 'testEmail'])->name('email-settings.test');
     Route::get('role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
     Route::get('user-manual', [\App\Http\Controllers\UserManualController::class, 'index'])->name('user-manual.index');
 });
