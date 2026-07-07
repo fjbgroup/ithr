@@ -16,11 +16,11 @@ class EmailSettingController extends Controller
         $settings   = EmailSetting::all_settings();
         $configured = !empty($settings['smtp_host']) && !empty($settings['smtp_user']) && !empty($settings['smtp_pass']);
 
-        if (!$authUser->hasRole(['superadmin', 'admin', 'hr'])) {
+        if (!$authUser->isAdmin()) {
             return view('email-settings.staff', compact('configured', 'authUser'));
         }
 
-        $admins = User::whereIn('role', ['superadmin', 'admin', 'hr'])->where('is_active', 1)->orderBy('name')->get(['name', 'email', 'role']);
+        $admins = User::whereIn('role', ['admin_hr', 'admin_it'])->where('is_active', 1)->orderBy('name')->get(['name', 'email', 'role']);
         return view('email-settings.index', compact('settings', 'admins', 'configured'));
     }
 

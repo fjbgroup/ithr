@@ -17,11 +17,11 @@ class EmailSettingController extends Controller
         $settings   = EmailSetting::all_settings();
         $configured = !empty($settings['smtp_host']) && !empty($settings['smtp_user']) && !empty($settings['smtp_pass']);
 
-        if (!$authUser->isAdmin()) {
+        if (!$authUser->isWtAdmin()) {
             return view('wt.email-settings.staff', compact('configured', 'authUser'));
         }
 
-        $admins = User::where('role', 'admin')->where('is_active', 1)->orderBy('name')->get(['name', 'email', 'role']);
+        $admins = User::whereIn('wt_role', ['admin_it', 'admin'])->where('is_active', 1)->orderBy('name')->get(['name', 'email', 'wt_role']);
         return view('wt.email-settings.index', compact('settings', 'admins', 'configured'));
     }
 

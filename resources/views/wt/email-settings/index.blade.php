@@ -190,7 +190,7 @@ html.dark .es-modal-card [style*="border-bottom:1px solid #f8fafc"]{border-botto
       @forelse($admins as $a)
         @php $hasEmail = !empty($a->email); @endphp
         <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc">
-          <div style="width:30px;height:30px;border-radius:50%;background:{{ $a->it_role === 'admin' ? '#dbeafe' : '#ede9fe' }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:{{ $a->it_role === 'admin' ? '#2563eb' : '#7c3aed' }};flex-shrink:0">{{ strtoupper(substr($a->full_name, 0, 1)) }}</div>
+          <div style="width:30px;height:30px;border-radius:50%;background:{{ $a->wt_role === 'admin' ? '#dbeafe' : '#ede9fe' }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:{{ $a->wt_role === 'admin' ? '#2563eb' : '#7c3aed' }};flex-shrink:0">{{ strtoupper(substr($a->full_name, 0, 1)) }}</div>
           <div style="flex:1;min-width:0">
             <div style="font-size:12px;font-weight:600;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ $a->full_name }}</div>
             <div style="font-size:11px;color:{{ $hasEmail ? '#64748b' : '#ef4444' }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ $hasEmail ? $a->email : '⚠ No email on profile' }}</div>
