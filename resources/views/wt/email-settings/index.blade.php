@@ -61,7 +61,7 @@ html.dark .es-modal-card [style*="border-bottom:1px solid #f8fafc"]{border-botto
         <div style="font-size:12px;color:#64748b;margin-top:1px">Outgoing mail server settings</div>
       </div>
     </div>
-    <form method="POST" action="{{ route('admin.email-settings.update') }}" style="padding:22px">
+    <form method="POST" action="{{ route('wt.admin.email-settings.update') }}" style="padding:22px">
       @csrf
       <div class="row g-3">
 
@@ -155,7 +155,7 @@ html.dark .es-modal-card [style*="border-bottom:1px solid #f8fafc"]{border-botto
         <div style="font-size:12px;color:#64748b;margin-top:1px">Verify your settings are working before relying on them</div>
       </div>
     </div>
-    <form method="POST" action="{{ route('admin.email-settings.test') }}" style="padding:18px 22px">
+    <form method="POST" action="{{ route('wt.admin.email-settings.test') }}" style="padding:18px 22px">
       @csrf
       <div class="row g-3 align-items-end">
         <div class="col">
