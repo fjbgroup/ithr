@@ -39,7 +39,7 @@
 </div>
 
 <!-- STAT STRIP -->
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px">
+<div class="stats-grid">
   <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #16a34a;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px">
     <div style="width:42px;height:42px;border-radius:10px;background:rgba(22,163,74,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">
       <i class="bi bi-truck" style="color:#16a34a"></i>
