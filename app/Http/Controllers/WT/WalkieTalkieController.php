@@ -845,6 +845,15 @@ public function repairFaulty()
         TemporaryRequestExpiryService::syncReturnedAssignments();
 
         $user = Auth::guard('wt')->user();
+        if ($user && $user->wt_role === 'admin_it' && session('view_mode') === 'admin') {
+            $selectedExecutiveUserId = session('selected_executive_user_id');
+            if ($selectedExecutiveUserId) {
+                $impersonatedUser = User::where('wt_role', 'admin')->find($selectedExecutiveUserId);
+                if ($impersonatedUser) {
+                    $user = $impersonatedUser;
+                }
+            }
+        }
         $viewMode = request()->query('view') === 'history' ? 'history' : 'inventory';
         $historyRetentionYears = max(1, min(5, (int) env('WT_RETURN_HISTORY_YEARS', 5)));
         $historyCutoff = now()->subYears($historyRetentionYears)->startOfDay();
