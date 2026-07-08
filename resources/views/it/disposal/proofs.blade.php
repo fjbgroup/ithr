@@ -23,7 +23,7 @@
 </div>
 
 <!-- STAT STRIP -->
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px">
+<div class="stats-grid">
   <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #dc2626;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px">
     <div style="width:42px;height:42px;border-radius:10px;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">
       <i class="bi bi-trash3" style="color:#dc2626"></i>

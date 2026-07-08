@@ -74,7 +74,7 @@
 @endif
 
 {{-- Stat cards (3 cards) --}}
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px" class="itr-admin-cols">
+<div class="itr-admin-cols stats-grid">
   <div class="itr-admin-stat">
     <div class="itr-admin-stat-icon" style="background:rgba(2,132,199,.1);color:#0284c7"><i class="bi bi-file-earmark-text-fill"></i></div>
     <div>

@@ -26,7 +26,7 @@
 </div>
 
 <!-- STAT CARDS -->
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+<div class="stats-grid">
   @foreach([
     ['bi-recycle', '#0ea5e9', 'rgba(14,165,233,.12)', $totalEwaste, 'Total Items', 'All approved E-Waste records'],
     ['bi-check-circle-fill', '#d97706', 'rgba(245,158,11,.12)', $activeEwaste, 'Active', 'Currently in E-Waste'],

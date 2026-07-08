@@ -388,6 +388,7 @@ html.sidebar-collapsed .sidebar-footer .user-info {
                       @if(Auth::user()->isAdminIT() || Auth::user()->isCeo())
                       <a href="{{ url('/users') }}" class="nav-child {{ request()->is('users*') ? 'active' : '' }}">User Accounts</a>
                       <a href="{{ route('audit-log.index') }}" class="nav-child {{ request()->is('audit-log*') ? 'active' : '' }}">Audit Log</a>
+                      <a href="{{ route('email-settings.index') }}" class="nav-child {{ request()->routeIs('email-settings.*') ? 'active' : '' }}">Email Settings</a>
                       @endif
                       
                       @if(Auth::user()->isHrUser())
@@ -501,7 +502,7 @@ html.sidebar-collapsed .sidebar-footer .user-info {
             @else
             <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:.3rem;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-                Sign In
+                <span class="btn-label">Sign In</span>
             </a>
             @endauth
         </div>

@@ -52,7 +52,7 @@ class SystemNotifier
     /**
      * Send email using Laravel's Mail facade.
      */
-    private static function sendEmail(string $toEmail, string $toName, string $title, string $message): void
+    public static function sendEmail(string $toEmail, string $toName, string $title, string $message): bool
     {
         $htmlBody = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f1f5f9;font-family:\'Inter\',Arial,sans-serif">
 <div style="max-width:520px;margin:36px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
@@ -74,8 +74,10 @@ class SystemNotifier
                 $mail->to($toEmail, $toName)
                      ->subject($title);
             });
+            return true;
         } catch (\Throwable $e) {
             Log::error('Walkie Talkie Email send failed: ' . $e->getMessage());
+            return false;
         }
     }
 }

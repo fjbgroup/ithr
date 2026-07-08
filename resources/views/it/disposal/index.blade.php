@@ -29,7 +29,7 @@
 </div>
 
 <!-- STAT CARDS -->
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+<div class="stats-grid">
   @foreach([
     ['bi-box-seam',     'rgba(59,130,246,.12)', '#2563eb', $total,    'Total Items', '#2563eb'],
     ['bi-check-circle', 'rgba(22,163,74,.12)',  '#16a34a', $approved, 'Approved',    '#16a34a'],

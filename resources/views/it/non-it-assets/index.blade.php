@@ -339,7 +339,7 @@
 </div>
 
 {{-- ══ STAT STRIP ══ --}}
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
+<div class="stats-grid">
   @foreach([
     ['bi-boxes',              'rgba(2,132,199,.12)',   '#0284c7', $nit_total,   'Total Assets', '#0284c7'],
     ['bi-check-circle-fill',  'rgba(22,163,74,.12)',   '#16a34a', $nit_active,  'Active',       '#16a34a'],
