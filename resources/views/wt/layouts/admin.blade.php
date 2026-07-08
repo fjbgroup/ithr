@@ -320,6 +320,10 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
       <i class="fa-solid fa-table-list" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Role Matrix</span>
       @include('wt.partials.sidebar-info', ['text' => 'View WT System access permissions for ICT and executive users.'])
     </a>
+    <a href="{{ route('it.email-settings.index') }}" class="nav-link has-info {{ request()->routeIs('it.email-settings.*') ? 'active-sidebar' : '' }}" title="Email Settings">
+      <i class="fa-solid fa-envelope" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Email Settings</span>
+      @include('wt.partials.sidebar-info', ['text' => 'View and manage email notification settings.'])
+    </a>
 
     {{-- System Control (IT only) --}}
     @if($isAdminItView)
