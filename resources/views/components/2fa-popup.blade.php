@@ -12,7 +12,7 @@
             Enhance your account security by setting up Microsoft Authenticator. It only takes a minute and provides an extra layer of protection.
         </p>
         <div style="display:flex;flex-direction:column;gap:.75rem;">
-            <a href="{{ route('user.setup-2fa') }}" style="display:inline-flex;align-items:center;justify-content:center;background:#4f46e5;color:#fff;font-weight:600;font-size:.95rem;padding:.85rem 1.5rem;border-radius:8px;text-decoration:none;transition:background 0.2s;box-shadow:0 4px 6px -1px rgba(79, 70, 229, 0.2);">
+            <a href="{{ route('totp.setup') }}" style="display:inline-flex;align-items:center;justify-content:center;background:#4f46e5;color:#fff;font-weight:600;font-size:.95rem;padding:.85rem 1.5rem;border-radius:8px;text-decoration:none;transition:background 0.2s;box-shadow:0 4px 6px -1px rgba(79, 70, 229, 0.2);">
                 Activate now
             </a>
             <button onclick="dismiss2faPrompt()" style="display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border,#cbd5e1);color:var(--text,#475569);font-weight:600;font-size:.95rem;padding:.85rem 1.5rem;border-radius:8px;cursor:pointer;transition:all 0.2s;">
