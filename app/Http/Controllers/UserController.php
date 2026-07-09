@@ -64,6 +64,10 @@ class UserController extends Controller
             $staff = Staff::where('staff_no', $validated['staff_no'])->first();
         }
 
+        if (EmailSetting::requireStaffRegistry() && !$staff) {
+            return back()->withErrors(['staff_no' => 'Staff record is required and must exist in the Staff Registry. Please select a valid staff member.'])->withInput();
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -298,6 +302,30 @@ class UserController extends Controller
             $enable
                 ? 'Microsoft Authenticator (2FA) has been enabled.'
                 : 'Microsoft Authenticator (2FA) has been disabled. It will be skipped for login and password reset until you re-enable it.'
+        );
+    }
+
+    /**
+     * Admin only — flip the global "require staff registry" master switch.
+     */
+    public function toggleRequireStaffRegistry(Request $request)
+    {
+        if (! Auth::user()->isAdminIT() && ! Auth::user()->isAdminHR()) {
+            abort(403);
+        }
+
+        $enable = $request->boolean('enable');
+        EmailSetting::setRequireStaffRegistry($enable);
+
+        AuditLogger::log('update', 'settings',
+            'Require Staff Registry ' . ($enable ? 'ENABLED' : 'DISABLED') . ' (global master switch).',
+            ['require_staff_registry' => $enable]
+        );
+
+        return redirect()->back()->with('success',
+            $enable
+                ? 'Creating user accounts now requires an existing Staff Registry record.'
+                : 'Creating user accounts without a Staff Registry record is now allowed.'
         );
     }
 

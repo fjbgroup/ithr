@@ -1837,5 +1837,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 3000);
 })();
 </script>
+@include('components.2fa-popup')
 </body>
 </html>

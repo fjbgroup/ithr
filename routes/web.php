@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
     Route::post('profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::post('system/email-toggle', [UserController::class, 'toggleEmailSending'])->name('system.email.toggle')->middleware('role:admin_it');
     Route::post('system/totp-toggle', [UserController::class, 'toggleTotp'])->name('system.totp.toggle')->middleware('role:admin_it');
+    Route::post('system/require-staff-toggle', [UserController::class, 'toggleRequireStaffRegistry'])->name('system.require-staff.toggle')->middleware('role:admin_it,admin_hr');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
     Route::patch('users/{user}/toggle-staff-status', [UserController::class, 'toggleStaffStatus'])->name('users.toggle_staff_status');
     Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset_password');

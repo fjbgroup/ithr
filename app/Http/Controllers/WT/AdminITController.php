@@ -160,6 +160,13 @@ class AdminITController extends Controller
         // Brand-new user — password is required
         $request->validate(['password' => 'required|string|min:6|confirmed']);
 
+        if (\App\Models\IT\EmailSetting::requireStaffRegistry()) {
+            $staff = \App\Models\Staff::where('staff_no', $staffNo)->first();
+            if (!$staff) {
+                return back()->withErrors(['staff_id' => 'Staff record is required and must exist in the Staff Registry.'])->withInput();
+            }
+        }
+
         $user = User::create([
             'staff_id'  => $staffNo,
             'username'  => $staffNo,

@@ -312,6 +312,10 @@ class AuthController extends Controller
         $request->session()->regenerate();
         SsoService::markAuthenticated(Auth::id());
 
+        if (empty($user->totp_secret)) {
+            $request->session()->put('prompt_2fa_setup', true);
+        }
+
         if ($request->session()->has('pending_booking')) {
             return redirect()->route('rooms.bookings.process-pending');
         }

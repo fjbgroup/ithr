@@ -19,6 +19,9 @@ class EmailSetting extends Model
     /** Setting key for the global "Microsoft Authenticator (2FA)" master switch. */
     public const KEY_TOTP_ENABLED = 'totp_enabled';
 
+    /** Setting key for the global "Require Staff Registry for New Accounts" switch. */
+    public const KEY_REQUIRE_STAFF_REGISTRY = 'require_staff_registry';
+
     public static function get(string $key, string $default = ''): string
     {
         return static::find($key)?->setting_value ?? $default;
@@ -66,6 +69,27 @@ class EmailSetting extends Model
     {
         static::updateOrCreate(
             ['setting_key' => self::KEY_TOTP_ENABLED],
+            ['setting_value' => $on ? '1' : '0']
+        );
+    }
+
+    /**
+     * Whether new user accounts require a valid staff registry record.
+     */
+    public static function requireStaffRegistry(): bool
+    {
+        try {
+            return static::get(self::KEY_REQUIRE_STAFF_REGISTRY, '0') === '1';
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    /** Flip the global require staff registry master switch on/off. */
+    public static function setRequireStaffRegistry(bool $on): void
+    {
+        static::updateOrCreate(
+            ['setting_key' => self::KEY_REQUIRE_STAFF_REGISTRY],
             ['setting_value' => $on ? '1' : '0']
         );
     }
