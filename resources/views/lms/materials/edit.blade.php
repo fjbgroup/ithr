@@ -88,7 +88,7 @@
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
   let qCount = {{ $material->questions ? max(1, $material->questions->count()) : 1 }};
   
@@ -130,4 +130,4 @@
     container.appendChild(div);
   };
 </script>
-@endpush
+@endsection

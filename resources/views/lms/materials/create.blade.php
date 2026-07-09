@@ -71,7 +71,7 @@
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
   document.getElementById('material-type').addEventListener('change', function() {
     const val = this.value;
@@ -124,4 +124,4 @@
     container.appendChild(div);
   };
 </script>
-@endpush
+@endsection
