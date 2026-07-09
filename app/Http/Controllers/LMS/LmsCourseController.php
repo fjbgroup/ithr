@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TrainingCourse;
 use App\Models\User;
+use App\Models\Company;
+use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Services\AuditLogger;
 
 class LmsCourseController extends Controller
 {
@@ -20,56 +24,80 @@ class LmsCourseController extends Controller
         }
 
         $courses = $query->latest()->get();
-        return view('lms.courses.index', compact('courses'));
+        $users = User::orderBy('name')->get();
+        $companies = Company::orderBy('name')->get();
+        $departments = Department::orderBy('name')->get();
+        
+        return view('lms.courses.index', compact('courses', 'users', 'companies', 'departments'));
     }
 
-    public function create()
-    {
-        $users = User::orderBy('name')->get();
-        return view('lms.courses.create', compact('users'));
-    }
+
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:training_courses',
-            'pic_id' => 'nullable|exists:users,id',
-            'duration' => 'nullable|string',
+        $validated = $request->validate([
+            'title'         => 'required|string|max:500',
+            'training_type' => 'required|in:Internal,External',
+            'company'       => 'nullable|string|max:100',
+            'department'    => 'nullable|string|max:100',
+            'start_date'    => 'nullable|date',
+            'end_date'      => 'nullable|date',
+            'duration'      => 'nullable|string|max:100',
+            'pic_id'        => 'nullable|exists:users,id',
         ]);
 
-        $course = new TrainingCourse();
-        $course->platform = 'LMS';
-        $course->training_type = 'Online';
-        $course->title = $request->title;
-        $course->code = $request->code;
-        $course->pic_id = $request->pic_id;
-        $course->duration = $request->duration;
-        $course->save();
+        if (empty($validated['end_date']) && !empty($validated['start_date'])) {
+            $validated['end_date'] = $validated['start_date'];
+            if (empty($validated['duration'])) $validated['duration'] = '1 day';
+        }
+
+        $prefix = $validated['training_type'] === 'Internal' ? 'INT' : 'EXT';
+        $maxSeq = DB::table('training_courses')
+            ->where('code', 'like', $prefix . '%')
+            ->pluck('code')
+            ->filter(fn($c) => preg_match('/^[A-Z]{3}[0-9]+$/', $c))
+            ->map(fn($c) => (int)substr($c, 3))
+            ->max();
+        $validated['code'] = $prefix . str_pad((int)($maxSeq ?? 0) + 1, 3, '0', STR_PAD_LEFT);
+        
+        $validated['platform'] = 'LMS';
+
+        $course = TrainingCourse::create($validated);
+
+        AuditLogger::log('create', 'training',
+            'Created online course "' . $course->title . '" (' . $course->code . ').',
+            ['course_id' => $course->id, 'type' => $course->training_type]
+        );
 
         return redirect()->route('lms.courses.index')->with('success', 'Online course created successfully.');
     }
 
-    public function edit(TrainingCourse $course)
-    {
-        $users = User::orderBy('name')->get();
-        return view('lms.courses.edit', compact('course', 'users'));
-    }
+
 
     public function update(Request $request, TrainingCourse $course)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:training_courses,code,'.$course->id,
-            'pic_id' => 'nullable|exists:users,id',
-            'duration' => 'nullable|string',
+        $validated = $request->validate([
+            'title'         => 'required|string|max:500',
+            'training_type' => 'required|in:Internal,External',
+            'company'       => 'nullable|string|max:100',
+            'department'    => 'nullable|string|max:100',
+            'start_date'    => 'nullable|date',
+            'end_date'      => 'nullable|date',
+            'duration'      => 'nullable|string|max:100',
+            'pic_id'        => 'nullable|exists:users,id',
         ]);
 
-        $course->title = $request->title;
-        $course->code = $request->code;
-        $course->pic_id = $request->pic_id;
-        $course->duration = $request->duration;
-        $course->save();
+        if (empty($validated['end_date']) && !empty($validated['start_date'])) {
+            $validated['end_date'] = $validated['start_date'];
+            if (empty($validated['duration'])) $validated['duration'] = '1 day';
+        }
+
+        $course->update($validated);
+
+        AuditLogger::log('update', 'training',
+            'Updated online course "' . $course->title . '" (' . $course->code . ').',
+            ['course_id' => $course->id]
+        );
 
         return redirect()->route('lms.courses.index')->with('success', 'Course updated successfully.');
     }

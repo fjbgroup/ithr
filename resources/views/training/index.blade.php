@@ -485,7 +485,8 @@ const courseData = {
         end_date: @json($c->end_date ?? ''),
         venue: @json($c->venue ?? ''),
         duration: @json($c->duration ?? ''),
-        is_private: {{ $c->is_private ? 'true' : 'false' }},
+        platform: @json($c->platform ?? 'HR'),
+        pic_id: @json($c->pic_id ?? ''),
     },
     @endforeach
 };
@@ -575,7 +576,21 @@ const courseData = {
                     </div>
                     <div class="form-group">
                         <label>Company</label>
-                        <input type="text" name="company" placeholder="e.g. FJB">
+                        <select name="company">
+                            <option value="">-- Optional --</option>
+                            @foreach($companies as $c)
+                                <option value="{{ $c->name }}">{{ $c->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select name="department">
+                            <option value="">-- Optional --</option>
+                            @foreach($allDepartments as $d)
+                                <option value="{{ $d->name }}">{{ $d->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="cm-section-label form-full">Schedule &amp; Location</div>
@@ -598,45 +613,47 @@ const courseData = {
                         <input type="text" name="duration" placeholder="e.g. 2 days">
                     </div>
 
-                    <div class="cm-section-label form-full">Access</div>
+                    <div class="cm-section-label form-full">Settings</div>
 
                     <div class="form-group form-full">
-                        <label>Visibility</label>
+                        <label>Platform</label>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.35rem;">
                             <label class="vis-card">
-                                <input type="radio" name="is_private" value="0" checked onchange="togglePrivatePicker('create',this.value)">
+                                <input type="radio" name="platform" value="HR" checked>
                                 <div class="vis-card-inner">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                     <div>
-                                        <div class="vis-card-title">Open</div>
-                                        <div class="vis-card-desc">Visible to all staff</div>
+                                        <div class="vis-card-title">Physical</div>
+                                        <div class="vis-card-desc">In-person training (HR)</div>
                                     </div>
                                 </div>
                             </label>
                             <label class="vis-card">
-                                <input type="radio" name="is_private" value="1" onchange="togglePrivatePicker('create',this.value)">
+                                <input type="radio" name="platform" value="LMS">
                                 <div class="vis-card-inner">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                                     <div>
-                                        <div class="vis-card-title">Private</div>
-                                        <div class="vis-card-desc">Invite selected staff only</div>
+                                        <div class="vis-card-title">Online</div>
+                                        <div class="vis-card-desc">E-Learning module (LMS)</div>
                                     </div>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <div id="create-private-picker" style="display:none;" class="form-group form-full">
-                        <label>Enroll Staff <span style="color:var(--muted);font-weight:500;">(choose who can join)</span></label>
-                        <div id="create-staff-tags" style="display:flex;flex-wrap:wrap;gap:.35rem;min-height:32px;margin-bottom:.4rem;"></div>
-                        <div class="live-search-wrap" id="create-staff-search-wrap">
+                    <div class="form-group form-full">
+                        <label>Person In Charge (PIC)</label>
+                        <input type="hidden" name="pic_id" id="create-pic-id">
+                        <div class="live-search-wrap" id="create-pic-search-wrap">
                             <div class="live-search-input-wrap">
                                 <svg class="live-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                                <input type="text" id="create-staff-search" class="live-search-input" placeholder="Search staff…" autocomplete="off">
+                                <input type="text" id="create-pic-search" class="live-search-input" placeholder="Search by name…" autocomplete="off">
+                                <button type="button" class="live-search-clear" id="create-pic-clear" onclick="clearCreatePicSearch()" style="display:none;">×</button>
                             </div>
-                            <div class="live-search-results" id="create-staff-results"></div>
+                            <div class="live-search-results" id="create-pic-results"></div>
                         </div>
-                        <div id="create-staff-hidden"></div>
+                        <div id="create-pic-selected" class="live-search-selected" style="display:none;"></div>
+                        <span style="font-size:.7rem;color:var(--muted);margin-top:.2rem;display:block;">PICs can manage this course and take attendance.</span>
                     </div>
 
                 </div>
@@ -699,7 +716,21 @@ const courseData = {
                     </div>
                     <div class="form-group">
                         <label>Company</label>
-                        <input type="text" name="company" id="ec-company" placeholder="e.g. FJB">
+                        <select name="company" id="ec-company">
+                            <option value="">-- Optional --</option>
+                            @foreach($companies as $c)
+                                <option value="{{ $c->name }}">{{ $c->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select name="department" id="ec-department">
+                            <option value="">-- Optional --</option>
+                            @foreach($allDepartments as $d)
+                                <option value="{{ $d->name }}">{{ $d->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="cm-section-label form-full">Schedule &amp; Location</div>
@@ -722,45 +753,47 @@ const courseData = {
                         <input type="text" name="duration" id="ec-duration" placeholder="e.g. 2 days">
                     </div>
 
-                    <div class="cm-section-label form-full">Access</div>
+                    <div class="cm-section-label form-full">Settings</div>
 
                     <div class="form-group form-full">
-                        <label>Visibility</label>
+                        <label>Platform</label>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.35rem;">
                             <label class="vis-card">
-                                <input type="radio" name="is_private" id="ec-open" value="0" onchange="togglePrivatePicker('edit',this.value)">
+                                <input type="radio" name="platform" id="ec-platform-hr" value="HR">
                                 <div class="vis-card-inner">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                     <div>
-                                        <div class="vis-card-title">Open</div>
-                                        <div class="vis-card-desc">Visible to all staff</div>
+                                        <div class="vis-card-title">Physical</div>
+                                        <div class="vis-card-desc">In-person training (HR)</div>
                                     </div>
                                 </div>
                             </label>
                             <label class="vis-card">
-                                <input type="radio" name="is_private" id="ec-private" value="1" onchange="togglePrivatePicker('edit',this.value)">
+                                <input type="radio" name="platform" id="ec-platform-lms" value="LMS">
                                 <div class="vis-card-inner">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                                     <div>
-                                        <div class="vis-card-title">Private</div>
-                                        <div class="vis-card-desc">Invite selected staff only</div>
+                                        <div class="vis-card-title">Online</div>
+                                        <div class="vis-card-desc">E-Learning module (LMS)</div>
                                     </div>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <div id="edit-private-picker" style="display:none;" class="form-group form-full">
-                        <label>Add Staff to Enroll <span style="color:var(--muted);font-weight:500;">(existing enrollments kept)</span></label>
-                        <div id="edit-staff-tags" style="display:flex;flex-wrap:wrap;gap:.35rem;min-height:32px;margin-bottom:.4rem;"></div>
-                        <div class="live-search-wrap" id="edit-staff-search-wrap">
+                    <div class="form-group form-full">
+                        <label>Person In Charge (PIC)</label>
+                        <input type="hidden" name="pic_id" id="edit-pic-id">
+                        <div class="live-search-wrap" id="edit-pic-search-wrap">
                             <div class="live-search-input-wrap">
                                 <svg class="live-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                                <input type="text" id="edit-staff-search" class="live-search-input" placeholder="Search staff…" autocomplete="off">
+                                <input type="text" id="edit-pic-search" class="live-search-input" placeholder="Search by name…" autocomplete="off">
+                                <button type="button" class="live-search-clear" id="edit-pic-clear" onclick="clearEditPicSearch()" style="display:none;">×</button>
                             </div>
-                            <div class="live-search-results" id="edit-staff-results"></div>
+                            <div class="live-search-results" id="edit-pic-results"></div>
                         </div>
-                        <div id="edit-staff-hidden"></div>
+                        <div id="edit-pic-selected" class="live-search-selected" style="display:none;"></div>
+                        <span style="font-size:.7rem;color:var(--muted);margin-top:.2rem;display:block;">PICs can manage this course and take attendance.</span>
                     </div>
 
                 </div>
@@ -1413,20 +1446,48 @@ function openEditCourse(id) {
     document.getElementById('ec-title').value    = d.title;
     document.getElementById(d.type === 'Internal' ? 'ec-type-int' : 'ec-type-ext').checked = true;
     document.getElementById('ec-company').value  = d.company || '';
+    document.getElementById('ec-department').value = d.department || '';
     document.getElementById('ec-start-date').value = d.start_date || '';
     document.getElementById('ec-end-date').value   = d.end_date || '';
     document.getElementById('ec-venue').value    = d.venue;
     document.getElementById('ec-duration').value = d.duration;
-    document.getElementById('ec-open').checked    = !d.is_private;
-    document.getElementById('ec-private').checked = d.is_private;
-    togglePrivatePicker('edit', d.is_private ? '1' : '0');
-    if (window['clearMsPicker_edit-staff-search']) window['clearMsPicker_edit-staff-search']();
+    document.getElementById(d.platform === 'LMS' ? 'ec-platform-lms' : 'ec-platform-hr').checked = true;
+    document.getElementById('edit-pic-id').value = d.pic_id || '';
+    if (d.pic_id && allUsersData) {
+        const pic = allUsersData.find(u => u.id == d.pic_id);
+        if (pic) {
+            document.getElementById('edit-pic-search').value = '';
+            document.getElementById('edit-pic-clear').style.display = 'none';
+            document.getElementById('edit-pic-selected').textContent = pic.name;
+            document.getElementById('edit-pic-selected').style.display = 'flex';
+        } else {
+            if (clearEditPicSearch) clearEditPicSearch();
+        }
+    } else {
+        if (clearEditPicSearch) clearEditPicSearch();
+    }
     openModal('edit-course-modal');
 }
 
-/* ── Attendance live-search ── */
-const attStaffData = @json($allStaff->map(fn($s) => ['id' => $s->id, 'name' => $s->name, 'staff_no' => $s->staff_no]));
-const attCourseData = @json($allCourses->map(fn($c) => ['id' => $c->id, 'code' => $c->code, 'title' => $c->title]));
+/* ── Attendance & PIC live-search ── */
+@php
+$mappedStaff = $allStaff->map(fn($s) => ['id' => $s->id, 'name' => $s->name, 'staff_no' => $s->staff_no])->values()->all();
+$mappedCourses = $allCourses->map(function($c) {
+    return [
+        'id' => $c->id, 'code' => $c->code, 'title' => $c->title, 
+        'company' => $c->company, 'department' => $c->department,
+        'start_date' => $c->start_date ? \Carbon\Carbon::parse($c->start_date)->format('Y-m-d') : '',
+        'end_date' => $c->end_date ? \Carbon\Carbon::parse($c->end_date)->format('Y-m-d') : '',
+        'venue' => $c->venue, 'duration' => $c->duration,
+        'platform' => $c->platform, 'pic_id' => $c->pic_id, 'training_type' => $c->training_type
+    ];
+})->values()->all();
+$mappedUsers = isset($allUsers) ? $allUsers->map(fn($u) => ['id' => $u->id, 'name' => $u->name])->values()->all() : [];
+@endphp
+
+const attStaffData = @json($mappedStaff);
+const attCourseData = @json($mappedCourses);
+const allUsersData = @json($mappedUsers);
 
 function highlight(text, q) {
     if (!q) return text;
@@ -1496,7 +1557,7 @@ function buildSearchFn(data, inputId, resultsId, hiddenId, selectedId, clearId, 
     return clear;
 }
 
-let clearStaffSearch, clearCourseSearch;
+let clearStaffSearch, clearCourseSearch, clearCreatePicSearch, clearEditPicSearch;
 
 document.addEventListener('DOMContentLoaded', function () {
     clearStaffSearch = buildSearchFn(
@@ -1508,6 +1569,16 @@ document.addEventListener('DOMContentLoaded', function () {
         attCourseData,
         'att-course-search', 'att-course-results', 'att-course-id', 'att-course-selected', 'att-course-clear',
         d => d.title, d => d.code, d => '[' + d.code + '] ' + d.title
+    );
+    clearCreatePicSearch = buildSearchFn(
+        allUsersData,
+        'create-pic-search', 'create-pic-results', 'create-pic-id', 'create-pic-selected', 'create-pic-clear',
+        d => d.name, d => '', d => d.name
+    );
+    clearEditPicSearch = buildSearchFn(
+        allUsersData,
+        'edit-pic-search', 'edit-pic-results', 'edit-pic-id', 'edit-pic-selected', 'edit-pic-clear',
+        d => d.name, d => '', d => d.name
     );
     buildMultiStaffPicker('create-staff-search', 'create-staff-results', 'create-staff-tags', 'create-staff-hidden');
     buildMultiStaffPicker('edit-staff-search',   'edit-staff-results',   'edit-staff-tags',   'edit-staff-hidden');

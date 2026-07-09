@@ -953,6 +953,9 @@ a { text-decoration: none; color: inherit; }
 .company-badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:.75rem; font-weight:600; }
 .company-fjb   { background:#ede9fe; color:#6d28d9; }
 .company-fbsb  { background:#fce7f3; color:#9d174d; }
+.company-fgvb  { background:#dbeafe; color:#1e40af; }
+.company-lbsb  { background:#ffedd5; color:#c2410c; }
+.company-fgt   { background:#d1fae5; color:#047857; }
 
 /* Training code badge */
 .training-code { background:#f0f9ff; color:#0369a1; padding:2px 6px; border-radius:4px; font-size:.8rem; font-family:monospace; }

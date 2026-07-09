@@ -7,11 +7,7 @@
 <div class="hd-banner">
     <div class="hd-banner-left">
         <div class="hd-greeting">
-            @php
-                $hour = date('H');
-                $greeting = $hour < 12 ? 'Morning' : ($hour < 17 ? 'Afternoon' : 'Evening');
-            @endphp
-            Good {{ $greeting }}, {{ explode(' ', Auth::user()->name)[0] }}
+            <span id="hd-greeting-text">Good Morning</span>, {{ explode(' ', Auth::user()->name)[0] }}
         </div>
         <div class="hd-date">{{ date('l, d F Y') }} &nbsp;·&nbsp; {{ Auth::user()->getRoleLabel() }}</div>
     </div>
@@ -427,7 +423,15 @@
         var el = document.getElementById('hdClock');
         if (!el) return;
         var now = new Date();
-        var h = String(now.getHours()).padStart(2,'0');
+        var hr = now.getHours();
+        
+        var greetingEl = document.getElementById('hd-greeting-text');
+        var salute = hr < 12 ? 'Good Morning' : (hr < 17 ? 'Good Afternoon' : 'Good Evening');
+        if (greetingEl && greetingEl.textContent !== salute) {
+            greetingEl.textContent = salute;
+        }
+
+        var h = String(hr).padStart(2,'0');
         var m = String(now.getMinutes()).padStart(2,'0');
         var s = String(now.getSeconds()).padStart(2,'0');
         el.textContent = h + ':' + m + ':' + s;
@@ -509,9 +513,18 @@
     padding: 1.4rem 1.75rem;
     margin-bottom: 1.25rem;
     box-shadow: 0 4px 20px rgba(20,43,71,.25);
+    transition: background 0.2s, color 0.2s;
+}
+html[data-theme="dark"] .hd-banner, html.dark .hd-banner {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow);
 }
 .hd-greeting { font-size: 1.35rem; font-weight: 700; font-family: 'Inter', sans-serif; }
 .hd-date     { font-size: .82rem; color: rgba(255,255,255,.65); margin-top: .2rem; }
+html[data-theme="dark"] .hd-date, html.dark .hd-date {
+    color: var(--muted);
+}
 .hd-clock    { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .05em; color: var(--sky); }
 
 /* —— KPI Row ———————————————————————————————————————————————————————— */

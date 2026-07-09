@@ -51,13 +51,33 @@ class StaffController extends Controller
         }
 
         if ($request->filled('company')) {
-            $companyCode = $request->company;
+            $companyCode = trim($request->company);
             $labels = [$companyCode];
+            
+            // Fetch from Company table
             foreach (Company::where('code', $companyCode)->pluck('name') as $name) {
                 $labels[] = trim($name);
                 $labels[] = trim(preg_replace('/^\d+\s+/', '', $name));
             }
-            $query->whereIn('company', $labels);
+
+            // Hardcode fallbacks to ensure headcount accuracy
+            if (strtoupper($companyCode) === 'FJB') {
+                $labels[] = 'FGV Johor Bulkers Sdn Bhd';
+                $labels[] = '4810 FGV Johor Bulkers Sdn Bhd';
+            } elseif (strtoupper($companyCode) === 'FGVB') {
+                $labels[] = 'FGV Bulkers Sdn Bhd';
+                $labels[] = '4300 FGV Bulkers Sdn Bhd';
+                $labels[] = 'FBSB';
+            } elseif (strtoupper($companyCode) === 'LBSB') {
+                $labels[] = 'Langsat Bulkers Sdn Bhd';
+                $labels[] = '4850 Langsat Bulkers Sdn Bhd';
+            } elseif (strtoupper($companyCode) === 'FGT') {
+                $labels[] = 'FGV Grains Terminal Sdn';
+                $labels[] = '4310 FGV Grains Terminal Sdn';
+                $labels[] = 'FGVGT';
+            }
+
+            $query->whereIn('company', array_unique($labels));
         }
 
         if ($request->filled('dept')) {
