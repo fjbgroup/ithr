@@ -19,7 +19,7 @@ class LmsLearnController extends Controller
             return redirect()->back()->with('error', 'You must have a staff record to access courses.');
         }
 
-        $materials = $course->materials()->orderBy('order')->get();
+        $materials = $course->materials()->get();
         $progress = LmsProgress::where('staff_id', $user->staff->id)
             ->where('course_id', $course->id)
             ->get()
