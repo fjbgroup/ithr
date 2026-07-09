@@ -5,7 +5,7 @@
   <h2 class="text-2xl font-bold mb-6 text-slate-800">My Learning Dashboard</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @forelse( as )
+    @forelse($enrolledCourses as $course)
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition">
       <h3 class="font-bold text-lg text-slate-800 mb-2">{{ $course->title }}</h3>
       <p class="text-sm text-slate-500 mb-4">Code: {{ $course->code }}</p>
