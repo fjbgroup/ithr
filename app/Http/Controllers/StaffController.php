@@ -51,7 +51,13 @@ class StaffController extends Controller
         }
 
         if ($request->filled('company')) {
-            $query->where('company', $request->company);
+            $companyCode = $request->company;
+            $labels = [$companyCode];
+            foreach (Company::where('code', $companyCode)->pluck('name') as $name) {
+                $labels[] = trim($name);
+                $labels[] = trim(preg_replace('/^\d+\s+/', '', $name));
+            }
+            $query->whereIn('company', $labels);
         }
 
         if ($request->filled('dept')) {
