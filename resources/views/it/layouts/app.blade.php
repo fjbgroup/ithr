@@ -773,6 +773,9 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
     </a>
+    <a href="{{ route('lms.dashboard') }}" class="nav-link">
+      <i class="bi bi-book-half"></i> LMS System
+    </a>
     <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">
       <i class="bi bi-broadcast"></i> WT System
     </a>

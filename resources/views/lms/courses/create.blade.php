@@ -1,43 +1,45 @@
 @extends('lms.layout.app')
 @section('title', 'Create Course')
 @section('content')
-<div class="max-w-3xl mx-auto">
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
-    <h2 class="text-2xl font-bold text-slate-800 mb-6">Create Online Course</h2>
-    
-    <form action="{{ route('lms.courses.store') }}" method="POST">
-      @csrf
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-slate-700 mb-1">Course Code</label>
-        <input type="text" name="code" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-      </div>
-      
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-slate-700 mb-1">Course Title</label>
-        <input type="text" name="title" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-      </div>
-      
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-slate-700 mb-1">Duration (e.g. 2 Hours, 30 Mins)</label>
-        <input type="text" name="duration" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-      </div>
+<div class="page-container" style="padding: 20px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div class="form-card">
+            <h2 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); margin: 0 0 24px 0;">Create Online Course</h2>
+            
+            <form action="{{ route('lms.courses.store') }}" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+                @csrf
+                <div>
+                    <label class="form-label" style="display: block; margin-bottom: 8px;">Course Code</label>
+                    <input type="text" name="code" required class="form-control" style="width: 100%;">
+                </div>
+                
+                <div>
+                    <label class="form-label" style="display: block; margin-bottom: 8px;">Course Title</label>
+                    <input type="text" name="title" required class="form-control" style="width: 100%;">
+                </div>
+                
+                <div>
+                    <label class="form-label" style="display: block; margin-bottom: 8px;">Duration (e.g. 2 Hours, 30 Mins)</label>
+                    <input type="text" name="duration" class="form-control" style="width: 100%;">
+                </div>
 
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-slate-700 mb-1">Assign PIC (Optional)</label>
-        <select name="pic_id" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-          <option value="">-- No PIC / Admin Only --</option>
-          @foreach($users as $u)
-            <option value="{{ $u->id }}">{{ $u->name }}</option>
-          @endforeach
-        </select>
-        <p class="text-xs text-slate-500 mt-1">PICs can manage this course's materials.</p>
-      </div>
-      
-      <div class="flex justify-end gap-3">
-        <a href="{{ route('lms.courses.index') }}" class="px-5 py-2 text-slate-600 font-medium hover:text-slate-800 transition">Cancel</a>
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2 rounded-lg transition">Save Course</button>
-      </div>
-    </form>
-  </div>
+                <div>
+                    <label class="form-label" style="display: block; margin-bottom: 8px;">Assign PIC (Optional)</label>
+                    <select name="pic_id" class="form-select" style="width: 100%;">
+                        <option value="">-- No PIC / Admin Only --</option>
+                        @foreach($users as $u)
+                            <option value="{{ $u->id }}">{{ $u->name }}</option>
+                        @endforeach
+                    </select>
+                    <p style="font-size: 11px; color: var(--muted); margin: 6px 0 0 0;">PICs can manage this course's materials.</p>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
+                    <a href="{{ route('lms.courses.index') }}" class="btn btn-outline" style="text-decoration: none;">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection

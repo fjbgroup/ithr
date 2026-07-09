@@ -353,6 +353,9 @@ body#main-body > .main-content { order: 1 !important; flex: 1 !important; min-wi
     <a href="{{ route('home') }}" class="nav-link" title="Back to Portal">
       <i class="fas fa-th-large" style="width:20px;text-align:center;flex-shrink:0"></i> <span>Back to Portal</span>
     </a>
+    <a href="{{ route('lms.dashboard') }}" class="nav-link" title="LMS System">
+      <i class="fas fa-book-reader" style="width:20px;text-align:center;flex-shrink:0"></i> <span>LMS System</span>
+    </a>
     <a href="{{ route('it.login') }}" class="nav-link" title="IT System">
       <i class="fas fa-desktop" style="width:20px;text-align:center;flex-shrink:0"></i> <span>IT System</span>
     </a>

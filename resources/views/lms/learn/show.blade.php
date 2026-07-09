@@ -1,111 +1,120 @@
 @extends('lms.layout.app')
 @section('title', $course->title)
 @section('content')
-<div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-8">
-  
-  <!-- Sidebar for Materials List -->
-  <div class="w-full md:w-1/3 order-2 md:order-1">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden sticky top-24">
-      <div class="p-4 bg-slate-50 border-b border-slate-200">
-        <h3 class="font-bold text-slate-800">Course Contents</h3>
-      </div>
-      <ul class="divide-y divide-slate-100 max-h-[60vh] overflow-y-auto">
-        @foreach($materials as $idx => $m)
-          @php
-            $isCompleted = isset($progress[$m->id]) && $progress[$m->id]->is_completed;
-          @endphp
-          <li>
-            <a href="?material_id={{ $m->id }}" class="flex items-center gap-3 p-4 hover:bg-slate-50 transition {{ request('material_id', $materials->first()->id ?? 0) == $m->id ? 'bg-indigo-50 border-l-4 border-indigo-600' : '' }}">
-              <div class="{{ $isCompleted ? 'text-green-500' : 'text-slate-300' }}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </div>
-              <div class="flex-1">
-                <p class="text-sm font-medium {{ $isCompleted ? 'text-slate-500' : 'text-slate-700' }}">{{ $idx + 1 }}. {{ $m->title }}</p>
-                <p class="text-xs text-slate-400 uppercase">{{ $m->type }}</p>
-              </div>
-            </a>
-          </li>
-        @endforeach
-      </ul>
+<div class="page-container" style="padding: 20px;">
+    <div class="hd-banner" style="margin-bottom: 24px;">
+        <div class="hd-banner-left">
+            <div class="hd-greeting">
+                {{ $course->title }}
+            </div>
+            <div class="hd-date">Code: {{ $course->code }}</div>
+        </div>
     </div>
-  </div>
 
-  <!-- Main Content Area -->
-  <div class="w-full md:w-2/3 order-1 md:order-2">
-    @php
-      $currentMaterialId = request('material_id', $materials->first()->id ?? 0);
-      $currentMaterial = $materials->firstWhere('id', $currentMaterialId);
-    @endphp
-    
-    @if($currentMaterial)
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
-        <div class="flex justify-between items-start mb-6">
-          <h2 class="text-2xl font-bold text-slate-800">{{ $currentMaterial->title }}</h2>
-          @if($currentMaterial->type !== 'quiz')
-            @if(isset($progress[$currentMaterial->id]) && $progress[$currentMaterial->id]->is_completed)
-              <span class="inline-flex items-center gap-1 text-green-600 font-medium text-sm bg-green-50 px-3 py-1 rounded-full">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                Completed
-              </span>
-            @else
-              <button onclick="markComplete({{ $course->id }}, {{ $currentMaterial->id }})" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition">Mark as Complete</button>
-            @endif
-          @endif
+    <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <!-- Sidebar for Materials List -->
+        <div style="flex: 1; min-width: 300px; max-width: 350px;">
+            <div class="table-card" style="position: sticky; top: 80px;">
+                <div style="padding: 16px; background: var(--table-head-bg); border-bottom: 1px solid var(--border);">
+                    <h3 style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin: 0;">Course Contents</h3>
+                </div>
+                <ul style="list-style: none; margin: 0; padding: 0; max-height: 60vh; overflow-y: auto;">
+                    @foreach($materials as $idx => $m)
+                    @php
+                        $isCompleted = isset($progress[$m->id]) && $progress[$m->id]->is_completed;
+                        $isActive = request('material_id', $materials->first()->id ?? 0) == $m->id;
+                    @endphp
+                    <li style="border-bottom: 1px solid var(--border);">
+                        <a href="?material_id={{ $m->id }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; text-decoration: none; transition: background 0.15s; {{ $isActive ? 'background: var(--table-hover); border-left: 3px solid var(--accent);' : 'background: var(--surface);' }}">
+                            <div style="{{ $isCompleted ? 'color: #16a34a;' : 'color: var(--muted); opacity: 0.5;' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-size: 13.5px; font-weight: 600; color: var(--text); margin: 0 0 2px 0;">{{ $idx + 1 }}. {{ $m->title }}</p>
+                                <p style="font-size: 11px; color: var(--muted); text-transform: uppercase; margin: 0; letter-spacing: 0.05em;">{{ $m->type }}</p>
+                            </div>
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
 
-        @if($currentMaterial->content)
-          <div class="prose max-w-none text-slate-600 mb-6 border-b border-slate-100 pb-6">
-            {!! nl2br(e($currentMaterial->content)) !!}
-          </div>
-        @endif
+        <!-- Main Content Area -->
+        <div style="flex: 2; min-width: 0;">
+            @php
+                $currentMaterialId = request('material_id', $materials->first()->id ?? 0);
+                $currentMaterial = $materials->firstWhere('id', $currentMaterialId);
+            @endphp
+            
+            @if($currentMaterial)
+            <div class="form-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+                    <h2 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); margin: 0;">{{ $currentMaterial->title }}</h2>
+                    @if($currentMaterial->type !== 'quiz')
+                        @if(isset($progress[$currentMaterial->id]) && $progress[$currentMaterial->id]->is_completed)
+                        <span class="badge-status bs-active" style="display: inline-flex; align-items: center; gap: 4px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Completed
+                        </span>
+                        @else
+                        <button onclick="markComplete({{ $course->id }}, {{ $currentMaterial->id }})" class="btn btn-primary btn-sm">Mark as Complete</button>
+                        @endif
+                    @endif
+                </div>
 
-        @if($currentMaterial->type === 'video' && $currentMaterial->file_path)
-          <video controls class="w-full rounded-xl shadow-sm mb-4" onended="markComplete({{ $course->id }}, {{ $currentMaterial->id }})">
-            <source src="{{ asset('storage/' . $currentMaterial->file_path) }}" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        @elseif($currentMaterial->type === 'pdf' && $currentMaterial->file_path)
-          <iframe src="{{ asset('storage/' . $currentMaterial->file_path) }}" class="w-full h-[600px] rounded-xl border border-slate-200 mb-4"></iframe>
-        @elseif($currentMaterial->type === 'quiz')
-          
-          @if(isset($progress[$currentMaterial->id]) && $progress[$currentMaterial->id]->is_completed)
-            <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-8 text-center">
-              <h3 class="text-xl font-bold text-indigo-900 mb-2">Quiz Completed!</h3>
-              <div class="text-4xl font-black text-indigo-600 mb-2">{{ $progress[$currentMaterial->id]->score }}%</div>
-              <p class="text-indigo-700 text-sm">You have successfully completed this quiz.</p>
-            </div>
-          @else
-            <form action="{{ route('lms.learn.quiz.submit', [$course->id, $currentMaterial->id]) }}" method="POST">
-              @csrf
-              <div class="space-y-6">
-                @foreach($currentMaterial->questions as $idx => $q)
-                  <div class="bg-slate-50 border border-slate-200 rounded-lg p-5">
-                    <p class="font-medium text-slate-800 mb-3">{{ $idx + 1 }}. {{ $q->question }}</p>
-                    <div class="space-y-2">
-                      @foreach($q->options as $opt)
-                        <label class="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-indigo-400 transition">
-                          <input type="radio" name="answers[{{ $q->id }}]" value="{{ trim($opt) }}" required class="text-indigo-600 w-4 h-4">
-                          <span class="text-slate-700 text-sm">{{ trim($opt) }}</span>
-                        </label>
-                      @endforeach
+                @if($currentMaterial->content)
+                <div style="font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border);">
+                    {!! nl2br(e($currentMaterial->content)) !!}
+                </div>
+                @endif
+
+                @if($currentMaterial->type === 'video' && $currentMaterial->file_path)
+                <video controls style="width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px;" onended="markComplete({{ $course->id }}, {{ $currentMaterial->id }})">
+                    <source src="{{ asset('storage/' . $currentMaterial->file_path) }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                @elseif($currentMaterial->type === 'pdf' && $currentMaterial->file_path)
+                <iframe src="{{ asset('storage/' . $currentMaterial->file_path) }}" style="width: 100%; height: 600px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px;"></iframe>
+                @elseif($currentMaterial->type === 'quiz')
+                    @if(isset($progress[$currentMaterial->id]) && $progress[$currentMaterial->id]->is_completed)
+                    <div style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 12px; padding: 32px; text-align: center;">
+                        <h3 style="font-size: 18px; font-weight: 700; color: #16a34a; margin: 0 0 8px 0;">Quiz Completed!</h3>
+                        <div style="font-size: 36px; font-weight: 800; color: #15803d; margin: 0 0 8px 0;">{{ $progress[$currentMaterial->id]->score }}%</div>
+                        <p style="font-size: 14px; color: #16a34a; margin: 0;">You have successfully completed this quiz.</p>
                     </div>
-                  </div>
-                @endforeach
-              </div>
-              <div class="mt-8 flex justify-end">
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-md transition transform hover:-translate-y-0.5">Submit Quiz</button>
-              </div>
-            </form>
-          @endif
-        @endif
-
-      </div>
-    @else
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-        <h2 class="text-xl font-bold text-slate-700">No materials available.</h2>
-      </div>
-    @endif
-  </div>
+                    @else
+                    <form action="{{ route('lms.learn.quiz.submit', [$course->id, $currentMaterial->id]) }}" method="POST">
+                        @csrf
+                        <div style="display: flex; flex-direction: column; gap: 24px;">
+                            @foreach($currentMaterial->questions as $idx => $q)
+                            <div style="background: var(--body-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px;">
+                                <p style="font-weight: 600; color: var(--text); margin: 0 0 16px 0;">{{ $idx + 1 }}. {{ $q->question }}</p>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    @foreach($q->options as $opt)
+                                    <label style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: border-color 0.15s;">
+                                        <input type="radio" name="answers[{{ $q->id }}]" value="{{ trim($opt) }}" required style="accent-color: var(--accent);">
+                                        <span style="font-size: 13.5px; color: var(--text);">{{ trim($opt) }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
+                            <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px;">Submit Quiz</button>
+                        </div>
+                    </form>
+                    @endif
+                @endif
+            </div>
+            @else
+            <div class="form-card" style="padding: 48px; text-align: center;">
+                <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0;">No materials available.</h2>
+            </div>
+            @endif
+        </div>
+    </div>
 </div>
 @endsection
 
