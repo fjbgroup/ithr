@@ -16,7 +16,7 @@ class LmsDashboardController extends Controller
         // Courses where the user's staff record is enrolled
         $enrolledCourses = collect();
         if ($user->staff) {
-            $enrolledCourses = $user->staff->trainingAttendances()
+            $enrolledCourses = $user->staff->courses()
                 ->where('platform', 'LMS')
                 ->get();
         }
