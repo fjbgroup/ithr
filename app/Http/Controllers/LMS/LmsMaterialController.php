@@ -41,12 +41,15 @@ class LmsMaterialController extends Controller
 
         if ($request->type === 'quiz' && $request->has('questions')) {
             foreach ($request->questions as $q) {
-                if (!empty($q['question']) && !empty($q['options']) && !empty($q['correct_answer'])) {
+                $options = array_filter($q['options'] ?? [], fn($opt) => trim($opt) !== '');
+                $correctIndex = $q['correct_index'] ?? null;
+                
+                if (!empty($q['question']) && count($options) >= 2 && $correctIndex !== null && isset($options[$correctIndex])) {
                     LmsQuizQuestion::create([
                         'material_id' => $material->id,
                         'question' => $q['question'],
-                        'options' => array_map('trim', explode(',', $q['options'])),
-                        'correct_answer' => trim($q['correct_answer'])
+                        'options' => array_values($options),
+                        'correct_answer' => trim($options[$correctIndex])
                     ]);
                 }
             }
@@ -80,6 +83,23 @@ class LmsMaterialController extends Controller
         }
 
         $material->save();
+
+        if ($material->type === 'quiz' && $request->has('questions')) {
+            $material->questions()->delete();
+            foreach ($request->questions as $q) {
+                $options = array_filter($q['options'] ?? [], fn($opt) => trim($opt) !== '');
+                $correctIndex = $q['correct_index'] ?? null;
+                
+                if (!empty($q['question']) && count($options) >= 2 && $correctIndex !== null && isset($options[$correctIndex])) {
+                    LmsQuizQuestion::create([
+                        'material_id' => $material->id,
+                        'question' => $q['question'],
+                        'options' => array_values($options),
+                        'correct_answer' => trim($options[$correctIndex])
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('lms.courses.show', $course->id)->with('success', 'Material updated successfully.');
     }

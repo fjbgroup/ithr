@@ -38,14 +38,24 @@
                 <!-- Quiz Questions (Only for Quiz) -->
                 <div id="quiz-section" style="display: none; background: var(--body-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px;">
                     <h3 style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin: 0 0 8px 0;">Quiz Questions</h3>
-                    <p style="font-size: 12px; color: var(--muted); margin: 0 0 16px 0;">Add multiple-choice questions here.</p>
+                    <p style="font-size: 12px; color: var(--muted); margin: 0 0 16px 0;">Add multiple-choice questions. Use the radio button to select the correct answer.</p>
                     
-                    <div id="questions-container" style="display: flex; flex-direction: column; gap: 16px;">
-                        <!-- Question 1 -->
-                        <div style="padding-bottom: 16px; border-bottom: 1px solid var(--border);">
-                            <input type="text" name="questions[0][question]" placeholder="Question text" class="form-control" style="width: 100%; margin-bottom: 8px;">
-                            <input type="text" name="questions[0][options]" placeholder="Options (comma separated: A, B, C, D)" class="form-control" style="width: 100%; margin-bottom: 8px;">
-                            <input type="text" name="questions[0][correct_answer]" placeholder="Correct Answer (must match one option exactly)" class="form-control" style="width: 100%;">
+                    <div id="questions-container" style="display: flex; flex-direction: column; gap: 24px;">
+                        <!-- Question 0 -->
+                        <div class="question-block" style="padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+                            <input type="text" name="questions[0][question]" placeholder="Question text" required class="form-control" style="width: 100%; margin-bottom: 12px; font-weight: 600;">
+                            
+                            <div class="options-container" style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="radio" name="questions[0][correct_index]" value="0" required title="Mark as correct answer" style="accent-color: var(--accent); width: 16px; height: 16px;">
+                                    <input type="text" name="questions[0][options][]" placeholder="Option A" required class="form-control" style="flex: 1;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="radio" name="questions[0][correct_index]" value="1" required title="Mark as correct answer" style="accent-color: var(--accent); width: 16px; height: 16px;">
+                                    <input type="text" name="questions[0][options][]" placeholder="Option B" required class="form-control" style="flex: 1;">
+                                </div>
+                            </div>
+                            <button type="button" class="add-option-btn" onclick="addOption(0, this)" style="margin-top: 10px; background: none; border: none; color: var(--accent); font-size: 12px; font-weight: 600; cursor: pointer;">+ Add Option</button>
                         </div>
                     </div>
                     <button type="button" id="add-question" style="margin-top: 16px; background: none; border: none; color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline;">+ Add another question</button>
@@ -82,14 +92,36 @@
   document.getElementById('add-question').addEventListener('click', function() {
     const container = document.getElementById('questions-container');
     const div = document.createElement('div');
-    div.className = 'mb-4 pb-4 border-b border-slate-200';
+    div.className = 'question-block';
+    div.style = 'padding-bottom: 20px; border-bottom: 1px solid var(--border);';
     div.innerHTML = `
-      <input type="text" name="questions[${qCount}][question]" placeholder="Question text" class="w-full px-3 py-2 border border-slate-300 rounded-lg mb-2">
-      <input type="text" name="questions[${qCount}][options]" placeholder="Options (comma separated: A, B, C, D)" class="w-full px-3 py-2 border border-slate-300 rounded-lg mb-2">
-      <input type="text" name="questions[${qCount}][correct_answer]" placeholder="Correct Answer (must match one option exactly)" class="w-full px-3 py-2 border border-slate-300 rounded-lg">
+      <input type="text" name="questions[${qCount}][question]" placeholder="Question text" required class="form-control" style="width: 100%; margin-bottom: 12px; font-weight: 600;">
+      <div class="options-container" style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="questions[${qCount}][correct_index]" value="0" required title="Mark as correct answer" style="accent-color: var(--accent); width: 16px; height: 16px;">
+              <input type="text" name="questions[${qCount}][options][]" placeholder="Option A" required class="form-control" style="flex: 1;">
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="radio" name="questions[${qCount}][correct_index]" value="1" required title="Mark as correct answer" style="accent-color: var(--accent); width: 16px; height: 16px;">
+              <input type="text" name="questions[${qCount}][options][]" placeholder="Option B" required class="form-control" style="flex: 1;">
+          </div>
+      </div>
+      <button type="button" class="add-option-btn" onclick="addOption(${qCount}, this)" style="margin-top: 10px; background: none; border: none; color: var(--accent); font-size: 12px; font-weight: 600; cursor: pointer;">+ Add Option</button>
     `;
     container.appendChild(div);
     qCount++;
   });
+
+  window.addOption = function(qIndex, btn) {
+    const container = btn.previousElementSibling;
+    const optCount = container.children.length;
+    const div = document.createElement('div');
+    div.style = 'display: flex; align-items: center; gap: 8px;';
+    div.innerHTML = `
+        <input type="radio" name="questions[${qIndex}][correct_index]" value="${optCount}" required title="Mark as correct answer" style="accent-color: var(--accent); width: 16px; height: 16px;">
+        <input type="text" name="questions[${qIndex}][options][]" placeholder="Option ${String.fromCharCode(65 + optCount)}" required class="form-control" style="flex: 1;">
+    `;
+    container.appendChild(div);
+  };
 </script>
 @endpush
