@@ -30,7 +30,7 @@ use App\Http\Controllers\IT\WriteoffInventoryController;
 
 Route::redirect('/it', '/it/login');
 
-Route::prefix('it')->name('it.')->group(function () {
+Route::prefix('it')->name('it.')->middleware(['system.status:it'])->group(function () {
 
     Route::redirect('/', '/it/login');
 

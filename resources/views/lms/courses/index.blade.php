@@ -112,19 +112,19 @@
                 </div>
                 <div>
                     <label class="form-label" style="display: block; margin-bottom: 8px;">Company</label>
-                    <select name="company" class="form-select" style="width: 100%;">
-                        <option value="">-- Optional --</option>
+                    <select name="company" id="create-company" class="form-select" style="width: 100%;" onchange="filterDepartments('create-company', 'create-department')">
+                        <option value="" data-code="">-- Optional --</option>
                         @foreach($companies as $c)
-                            <option value="{{ $c->name }}">{{ $c->name }}</option>
+                            <option value="{{ $c->name }}" data-code="{{ $c->code }}">{{ $c->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div>
                     <label class="form-label" style="display: block; margin-bottom: 8px;">Department</label>
-                    <select name="department" class="form-select" style="width: 100%;">
-                        <option value="">-- Optional --</option>
+                    <select name="department" id="create-department" class="form-select" style="width: 100%;">
+                        <option value="" data-company="">-- Optional --</option>
                         @foreach($departments as $d)
-                            <option value="{{ $d->name }}">{{ $d->name }}</option>
+                            <option value="{{ $d->name }}" data-company="{{ $d->company }}">{{ $d->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -189,19 +189,19 @@
                 </div>
                 <div>
                     <label class="form-label" style="display: block; margin-bottom: 8px;">Company</label>
-                    <select name="company" id="ec-company" class="form-select" style="width: 100%;">
-                        <option value="">-- Optional --</option>
+                    <select name="company" id="ec-company" class="form-select" style="width: 100%;" onchange="filterDepartments('ec-company', 'ec-department')">
+                        <option value="" data-code="">-- Optional --</option>
                         @foreach($companies as $c)
-                            <option value="{{ $c->name }}">{{ $c->name }}</option>
+                            <option value="{{ $c->name }}" data-code="{{ $c->code }}">{{ $c->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div>
                     <label class="form-label" style="display: block; margin-bottom: 8px;">Department</label>
                     <select name="department" id="ec-department" class="form-select" style="width: 100%;">
-                        <option value="">-- Optional --</option>
+                        <option value="" data-company="">-- Optional --</option>
                         @foreach($departments as $d)
-                            <option value="{{ $d->name }}">{{ $d->name }}</option>
+                            <option value="{{ $d->name }}" data-company="{{ $d->company }}">{{ $d->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -242,6 +242,33 @@
 </div>
 
 <script>
+    function filterDepartments(companySelectId, deptSelectId) {
+        const compSelect = document.getElementById(companySelectId);
+        const deptSelect = document.getElementById(deptSelectId);
+        if (!compSelect || !deptSelect) return;
+        
+        const selectedOpt = compSelect.options[compSelect.selectedIndex];
+        const companyCode = selectedOpt ? selectedOpt.getAttribute('data-code') : '';
+        
+        for (let i = 1; i < deptSelect.options.length; i++) {
+            const opt = deptSelect.options[i];
+            const optCompany = opt.getAttribute('data-company');
+            
+            if (!companyCode || optCompany === companyCode) {
+                opt.hidden = false;
+                opt.disabled = false;
+                opt.style.display = '';
+            } else {
+                opt.hidden = true;
+                opt.disabled = true;
+                opt.style.display = 'none';
+                if (opt.selected) {
+                    deptSelect.value = '';
+                }
+            }
+        }
+    }
+
     const courseData = {
         @foreach($courses as $c)
         {{ $c->id }}: {
@@ -272,6 +299,7 @@
         document.getElementById('ec-title').value = d.title;
         document.getElementById('ec-type').value = d.type;
         document.getElementById('ec-company').value = d.company;
+        filterDepartments(d.company, 'ec-department');
         document.getElementById('ec-department').value = d.department;
         document.getElementById('ec-start-date').value = d.start_date;
         document.getElementById('ec-end-date').value = d.end_date;

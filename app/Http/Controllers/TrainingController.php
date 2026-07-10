@@ -42,6 +42,7 @@ class TrainingController extends Controller
         $staff_filter = $isAdmin ? $request->query('staff_filter') : null;
         $year_filter = $request->query('year');
         $no_dept = $request->query('no_dept');
+        $sort = $request->query('sort');
 
         // Stats for the top bar
         if (!$isAdmin) {
@@ -84,6 +85,7 @@ class TrainingController extends Controller
             'staff_filter' => $staff_filter,
             'year_filter' => $year_filter,
             'no_dept' => $no_dept,
+            'sort' => $sort,
             'isAdmin' => $isAdmin,
             'course_id' => $course_id,
             'years' => TrainingCourse::whereNotNull('start_date')
@@ -168,7 +170,12 @@ class TrainingController extends Controller
                       ->orWhere('code', 'like', $like);
                 });
             }
-            $data['courses'] = $query->with(['staff' => fn($q) => $q->withPivot('status')->with('department')])->orderBy('code')->get();
+            if ($sort === 'recent') {
+                $query->orderBy('created_at', 'desc');
+            } else {
+                $query->orderBy('code');
+            }
+            $data['courses'] = $query->with(['staff' => fn($q) => $q->withPivot('status')->with('department')])->get();
         }
 
         $allStaff = Staff::orderBy('name')->get();

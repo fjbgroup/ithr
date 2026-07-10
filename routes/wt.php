@@ -18,7 +18,7 @@ use App\Http\Controllers\WT\Admin\DatabaseBackupController;
 use App\Http\Controllers\WT\User\InteractionController;
 use App\Http\Controllers\WT\User\HandoverController;
 
-Route::prefix('wt')->name('wt.')->group(function () {
+Route::prefix('wt')->name('wt.')->middleware(['system.status:wt'])->group(function () {
 
     Route::middleware('wt.guest')->group(function () {
         Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');

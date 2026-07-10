@@ -22,6 +22,10 @@ class EmailSetting extends Model
     /** Setting key for the global "Require Staff Registry for New Accounts" switch. */
     public const KEY_REQUIRE_STAFF_REGISTRY = 'require_staff_registry';
 
+    public const KEY_IT_ENABLED = 'system_it_enabled';
+    public const KEY_WT_ENABLED = 'system_wt_enabled';
+    public const KEY_LMS_ENABLED = 'system_lms_enabled';
+
     public static function get(string $key, string $default = ''): string
     {
         return static::find($key)?->setting_value ?? $default;
@@ -85,11 +89,29 @@ class EmailSetting extends Model
         }
     }
 
-    /** Flip the global require staff registry master switch on/off. */
     public static function setRequireStaffRegistry(bool $on): void
     {
         static::updateOrCreate(
             ['setting_key' => self::KEY_REQUIRE_STAFF_REGISTRY],
+            ['setting_value' => $on ? '1' : '0']
+        );
+    }
+
+    public static function systemEnabled(string $system): bool
+    {
+        $key = 'system_' . $system . '_enabled';
+        try {
+            return static::get($key, '1') === '1';
+        } catch (\Throwable $e) {
+            return true;
+        }
+    }
+
+    public static function setSystemEnabled(string $system, bool $on): void
+    {
+        $key = 'system_' . $system . '_enabled';
+        static::updateOrCreate(
+            ['setting_key' => $key],
             ['setting_value' => $on ? '1' : '0']
         );
     }

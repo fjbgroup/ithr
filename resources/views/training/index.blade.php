@@ -364,13 +364,12 @@
                 <option value="{{ $year }}" {{ (string)$year_filter === (string)$year ? 'selected' : '' }}>{{ $year }}</option>
             @endforeach
         </select>
-        <div class="tr-type-pills">
-            <button type="button" id="tf-all"      class="tr-type-pill active"  onclick="setCourseTimeFilter('all')">All</button>
-            <button type="button" id="tf-upcoming" class="tr-type-pill"         onclick="setCourseTimeFilter('upcoming')">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:.2rem;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Upcoming
-            </button>
-            <button type="button" id="tf-past"     class="tr-type-pill"         onclick="setCourseTimeFilter('past')">Past</button>
-        </div>
+        <select id="course-time-filter" class="tr-select" style="min-width:140px;height:32px;padding:0 .5rem;font-size:.75rem;" onchange="handleCourseFilterChange(this.value)">
+            <option value="all" {{ !request('sort') ? 'selected' : '' }}>All Time</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
+            <option value="recent" {{ request('sort') === 'recent' ? 'selected' : '' }}>Recently Added</option>
+        </select>
     </div>
     <span class="tr-search-count" id="course-count-label">{{ count($courses) }} courses</span>
 </div>
@@ -576,19 +575,19 @@ const courseData = {
                     </div>
                     <div class="form-group">
                         <label>Company</label>
-                        <select name="company">
-                            <option value="">-- Optional --</option>
+                        <select name="company" id="create-company" onchange="filterDepartments('create-company', 'create-department')">
+                            <option value="" data-code="">-- Optional --</option>
                             @foreach($companies as $c)
-                                <option value="{{ $c->name }}">{{ $c->name }}</option>
+                                <option value="{{ $c->name }}" data-code="{{ $c->code }}">{{ $c->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Department</label>
-                        <select name="department">
-                            <option value="">-- Optional --</option>
+                        <select name="department" id="create-department">
+                            <option value="" data-company="">-- Optional --</option>
                             @foreach($allDepartments as $d)
-                                <option value="{{ $d->name }}">{{ $d->name }}</option>
+                                <option value="{{ $d->name }}" data-company="{{ $d->company }}">{{ $d->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -716,19 +715,19 @@ const courseData = {
                     </div>
                     <div class="form-group">
                         <label>Company</label>
-                        <select name="company" id="ec-company">
-                            <option value="">-- Optional --</option>
+                        <select name="company" id="ec-company" onchange="filterDepartments('ec-company', 'ec-department')">
+                            <option value="" data-code="">-- Optional --</option>
                             @foreach($companies as $c)
-                                <option value="{{ $c->name }}">{{ $c->name }}</option>
+                                <option value="{{ $c->name }}" data-code="{{ $c->code }}">{{ $c->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Department</label>
                         <select name="department" id="ec-department">
-                            <option value="">-- Optional --</option>
+                            <option value="" data-company="">-- Optional --</option>
                             @foreach($allDepartments as $d)
-                                <option value="{{ $d->name }}">{{ $d->name }}</option>
+                                <option value="{{ $d->name }}" data-company="{{ $d->company }}">{{ $d->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -1253,6 +1252,33 @@ button.tr-type-pill.active { background: var(--navy); color: #fff; }
 
 @section('scripts')
 <script>
+function filterDepartments(companySelectId, deptSelectId) {
+    const compSelect = document.getElementById(companySelectId);
+    const deptSelect = document.getElementById(deptSelectId);
+    if (!compSelect || !deptSelect) return;
+    
+    const selectedOpt = compSelect.options[compSelect.selectedIndex];
+    const companyCode = selectedOpt ? selectedOpt.getAttribute('data-code') : '';
+    
+    for (let i = 1; i < deptSelect.options.length; i++) {
+        const opt = deptSelect.options[i];
+        const optCompany = opt.getAttribute('data-company');
+        
+        if (!companyCode || optCompany === companyCode) {
+            opt.hidden = false;
+            opt.disabled = false;
+            opt.style.display = '';
+        } else {
+            opt.hidden = true;
+            opt.disabled = true;
+            opt.style.display = 'none';
+            if (opt.selected) {
+                deptSelect.value = '';
+            }
+        }
+    }
+}
+
 function filterDeptCards() {
     const q = document.getElementById('dept-search').value.toLowerCase();
     document.querySelectorAll('[data-name]').forEach(card => {
@@ -1262,13 +1288,23 @@ function filterDeptCards() {
 
 let courseTimeFilter = 'all';
 
-function setCourseTimeFilter(val) {
-    courseTimeFilter = val;
-    ['all','upcoming','past'].forEach(k => {
-        const el = document.getElementById('tf-' + k);
-        if (el) el.classList.toggle('active', k === val);
-    });
-    filterCourseCards();
+function handleCourseFilterChange(val) {
+    if (val === 'recent') {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', 'recent');
+        window.location.href = url.toString();
+    } else {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('sort')) {
+            url.searchParams.delete('sort');
+            url.hash = 'time_filter=' + val;
+            window.location.href = url.toString();
+            return;
+        }
+        
+        courseTimeFilter = val;
+        filterCourseCards();
+    }
 }
 
 function filterCourseCards() {
@@ -1446,6 +1482,7 @@ function openEditCourse(id) {
     document.getElementById('ec-title').value    = d.title;
     document.getElementById(d.type === 'Internal' ? 'ec-type-int' : 'ec-type-ext').checked = true;
     document.getElementById('ec-company').value  = d.company || '';
+    if (typeof filterDepartments === 'function') filterDepartments(d.company || '', 'ec-department');
     document.getElementById('ec-department').value = d.department || '';
     document.getElementById('ec-start-date').value = d.start_date || '';
     document.getElementById('ec-end-date').value   = d.end_date || '';
@@ -1592,6 +1629,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     if (document.getElementById('course-grid')) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        if (hashParams.has('time_filter')) {
+            const tf = hashParams.get('time_filter');
+            const filterEl = document.getElementById('course-time-filter');
+            if (filterEl) {
+                filterEl.value = tf;
+                courseTimeFilter = tf;
+            }
+            // Remove the hash from URL without scrolling or reloading
+            history.replaceState(null, null, ' ');
+        }
         filterCourseCards();
     }
 

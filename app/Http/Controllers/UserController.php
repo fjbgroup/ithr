@@ -355,6 +355,35 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Admin only - toggle maintenance mode for specific systems.
+     */
+    public function toggleSystemStatus(Request $request, $system)
+    {
+        if (! Auth::user()->isAdminIT()) {
+            abort(403);
+        }
+
+        if (! in_array($system, ['it', 'wt', 'lms'])) {
+            abort(404);
+        }
+
+        $enable = $request->boolean('enable');
+        EmailSetting::setSystemEnabled($system, $enable);
+
+        $systemName = strtoupper($system);
+        AuditLogger::log('update', 'settings',
+            "{$systemName} System " . ($enable ? 'ENABLED' : 'DISABLED') . ' (maintenance mode toggle).',
+            ["system_{$system}_enabled" => $enable]
+        );
+
+        return redirect()->back()->with('success',
+            $enable
+                ? "{$systemName} System has been enabled (Maintenance mode off)."
+                : "{$systemName} System has been disabled (Maintenance mode on)."
+        );
+    }
+
     public function searchStaff(Request $request)
     {
         $staffId = trim($request->sr_staffid ?? '');

@@ -241,7 +241,9 @@ html.sidebar-collapsed .sidebar-footer .user-info {
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
+<link rel="stylesheet" href="{{ asset('assets/css/lms.css') }}?v={{ time() }}">
 @yield('styles')
 </head>
 <body class="app-body">

@@ -6,12 +6,13 @@ use App\Http\Controllers\LMS\LmsCourseController;
 use App\Http\Controllers\LMS\LmsMaterialController;
 use App\Http\Controllers\LMS\LmsLearnController;
 
-Route::middleware(['auth'])->prefix('lms')->name('lms.')->group(function () {
+Route::middleware(['auth', 'system.status:lms'])->prefix('lms')->name('lms.')->group(function () {
     Route::get('/', [LmsDashboardController::class, 'index'])->name('dashboard');
 
     // Admin / PIC Course Management
     Route::resource('courses', LmsCourseController::class);
     Route::resource('courses.materials', LmsMaterialController::class)->except(['index', 'show']);
+    Route::get('courses/{course}/materials/{material}/results', [LmsMaterialController::class, 'results'])->name('courses.materials.results');
 
     // Learning Interface for Staff
     Route::get('learn/{course}', [LmsLearnController::class, 'show'])->name('learn.show');

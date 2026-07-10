@@ -112,4 +112,18 @@ class LmsMaterialController extends Controller
         $material->delete();
         return redirect()->route('lms.courses.show', $course->id)->with('success', 'Material deleted successfully.');
     }
+
+    public function results(TrainingCourse $course, LmsMaterial $material)
+    {
+        if ($material->type !== 'quiz') {
+            return redirect()->route('lms.courses.show', $course->id)->with('error', 'Only quizzes have results.');
+        }
+
+        $results = \App\Models\LmsProgress::with('staff')
+            ->where('material_id', $material->id)
+            ->whereNotNull('score')
+            ->get();
+
+        return view('lms.materials.results', compact('course', 'material', 'results'));
+    }
 }

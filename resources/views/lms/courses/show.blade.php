@@ -49,6 +49,12 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                             <span>Edit</span>
                         </a>
+                        @if($material->type === 'quiz')
+                        <a href="{{ route('lms.courses.materials.results', [$course->id, $material->id]) }}" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 6px; margin-right: 8px; color: #0284c7; border-color: rgba(2, 132, 199, 0.2);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                            <span>Results</span>
+                        </a>
+                        @endif
                         <form action="{{ route('lms.courses.materials.destroy', [$course->id, $material->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Delete this material?');">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.2);">
