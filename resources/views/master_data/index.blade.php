@@ -280,8 +280,20 @@
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td><strong>{{ $c->code }}</strong></td>
                     <td>{{ $c->name }}</td>
-                    <td>{{ $c->dept_count }}</td>
-                    <td>{{ $c->staff_count }}</td>
+                    <td>
+                        @if($c->dept_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showCompanyDepts({{ $c->id }}, "{{ addslashes($c->name) }}")'>{{ $c->dept_count }}</button>
+                        @else
+                        {{ $c->dept_count }}
+                        @endif
+                    </td>
+                    <td>
+                        @if($c->staff_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showCompanyStaff({{ $c->id }}, "{{ addslashes($c->name) }}")'>{{ $c->staff_count }}</button>
+                        @else
+                        {{ $c->staff_count }}
+                        @endif
+                    </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $c->id }}, code:"{{ $c->code }}", name:"{{ addslashes($c->name) }}"})'>Edit</button>
@@ -478,6 +490,30 @@
             <button class="modal-close" onclick="closeStaffListModal()">✕</button>
         </div>
         <div id="staffListBody" style="max-height:420px;overflow-y:auto;">
+            <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="companyDeptsModal">
+    <div class="modal-box" style="max-width:580px;">
+        <div class="modal-header">
+            <h3 id="companyDeptsModalTitle">Departments</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div id="companyDeptsBody" style="max-height:420px;overflow-y:auto;">
+            <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="companyStaffModal">
+    <div class="modal-box" style="max-width:580px;">
+        <div class="modal-header">
+            <h3 id="companyStaffModalTitle">Active Staff</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div id="companyStaffBody" style="max-height:420px;overflow-y:auto;">
             <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
         </div>
     </div>
@@ -712,6 +748,56 @@ function openStaffListModal(deptId, deptName) {
         })
         .catch(() => {
             document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load staff.</div>';
+        });
+}
+
+function showCompanyDepts(companyId, companyName) {
+    document.getElementById('companyDeptsModalTitle').textContent = 'Departments — ' + companyName;
+    document.getElementById('companyDeptsBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('companyDeptsModal');
+    
+    fetch("{{ url('master-data/company-depts') }}/" + companyId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('companyDeptsBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No departments found.</div>';
+                return;
+            }
+            const rows = data.map((d, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${d.name}</strong></td>
+            </tr>`).join('');
+            document.getElementById('companyDeptsBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Name</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('companyDeptsBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load departments.</div>';
+        });
+}
+
+function showCompanyStaff(companyId, companyName) {
+    document.getElementById('companyStaffModalTitle').textContent = 'Active Staff — ' + companyName;
+    document.getElementById('companyStaffBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('companyStaffModal');
+    
+    fetch("{{ url('master-data/company-staff') }}/" + companyId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('companyStaffBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No active staff found.</div>';
+                return;
+            }
+            const rows = data.map((s, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${s.name}</strong></td>
+                <td class="td-muted">${s.staff_no || '—'}</td>
+                <td class="td-muted">${s.position || '—'}</td>
+            </tr>`).join('');
+            document.getElementById('companyStaffBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Name</th><th>Staff No.</th><th>Position</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('companyStaffBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load staff.</div>';
         });
 }
 

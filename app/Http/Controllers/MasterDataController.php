@@ -260,7 +260,22 @@ class MasterDataController extends Controller
             
         return response()->json($staff);
     }
-}
+
+    public function companyDepts($companyId)
+    {
+        $company = \App\Models\Company::findOrFail($companyId);
+        $depts = \App\Models\Department::where('company', $company->code)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+            
+        return response()->json($depts);
+    }
+
+    public function companyStaff($companyId)
+    {
+        $company = \App\Models\Company::findOrFail($companyId);
+        $staff = \App\Models\Staff::where('company', $company->code)
+            ->where('is_active', 1)
             ->orderBy('name')
             ->get(['id', 'name', 'staff_no', 'position']);
             

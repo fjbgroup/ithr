@@ -127,6 +127,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('requests', UpdateRequestController::class);
     Route::resource('master-data', MasterDataController::class);
     Route::get('master-data/staff-list/{deptId}', [MasterDataController::class, 'staffList'])->name('master-data.staff-list');
+    Route::get('master-data/company-depts/{companyId}', [MasterDataController::class, 'companyDepts'])->name('master-data.company-depts');
+    Route::get('master-data/company-staff/{companyId}', [MasterDataController::class, 'companyStaff'])->name('master-data.company-staff');
     Route::get('account/security',      [UserController::class, 'accountSecurity'])->name('account.security');
     Route::get('account/totp/setup',    [UserController::class, 'totpSetup'])  ->name('totp.setup');
     Route::post('account/totp/confirm', [UserController::class, 'totpConfirm'])->name('totp.confirm');
