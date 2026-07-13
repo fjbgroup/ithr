@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Models\MeetingRoom;
 use App\Models\RoomBooking;
 use App\Models\Notification;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Mail\MeetingRoomPicAssigned;
 use App\Services\AuditLogger;
 use Carbon\Carbon;
 
@@ -245,6 +247,11 @@ class RoomController extends Controller
                 if ($pid) {
                     $room->pics()->attach($pid, ['level' => $level, 'added_by' => Auth::id()]);
                     $level++;
+                    
+                    $picUser = User::find($pid);
+                    if ($picUser && $picUser->email) {
+                        Mail::to($picUser->email)->queue(new MeetingRoomPicAssigned($room->name, $picUser->name));
+                    }
                 }
             }
         }
@@ -279,6 +286,7 @@ class RoomController extends Controller
             'color_class' => $validated['room_color'],
         ]);
 
+        $oldPicIds = $room->pics->pluck('id')->toArray();
         $room->pics()->detach();
         if (!empty($validated['room_pics'])) {
             $picIds = array_slice(array_filter(array_unique($validated['room_pics'])), 0, 2);
@@ -287,6 +295,13 @@ class RoomController extends Controller
                 if ($pid) {
                     $room->pics()->attach($pid, ['level' => $level, 'added_by' => Auth::id()]);
                     $level++;
+                    
+                    if (!in_array($pid, $oldPicIds)) {
+                        $picUser = User::find($pid);
+                        if ($picUser && $picUser->email) {
+                            Mail::to($picUser->email)->queue(new MeetingRoomPicAssigned($room->name, $picUser->name));
+                        }
+                    }
                 }
             }
         }

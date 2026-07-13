@@ -230,6 +230,13 @@ class TrainingController extends Controller
 
         $course = TrainingCourse::create($validated);
 
+        if (!empty($course->pic_id)) {
+            $picUser = \App\Models\User::find($course->pic_id);
+            if ($picUser && $picUser->email) {
+                \Illuminate\Support\Facades\Mail::to($picUser->email)->queue(new \App\Mail\TrainingPicAssigned($course->title, $picUser->name));
+            }
+        }
+
         AuditLogger::log('create', 'training',
             'Created training course "' . $course->title . '" (' . $course->code . ').',
             ['course_id' => $course->id, 'type' => $course->training_type]
@@ -265,7 +272,15 @@ class TrainingController extends Controller
             if (empty($validated['duration'])) $validated['duration'] = '1 day';
         }
 
+        $oldPicId = $course->pic_id;
         $course->update($validated);
+        
+        if (!empty($course->pic_id) && $course->pic_id !== $oldPicId) {
+            $picUser = \App\Models\User::find($course->pic_id);
+            if ($picUser && $picUser->email) {
+                \Illuminate\Support\Facades\Mail::to($picUser->email)->queue(new \App\Mail\TrainingPicAssigned($course->title, $picUser->name));
+            }
+        }
 
         AuditLogger::log('update', 'training',
             'Updated training course "' . $course->title . '" (' . $course->code . ').',
