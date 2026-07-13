@@ -241,7 +241,13 @@ class MasterDataController extends Controller
         $headers = [];
         $rows = [];
 
-        if ($type === 'company_depts') {
+        if ($type === 'dept_staff') {
+            $headers = ['Name', 'Staff No.', 'Position'];
+            $staff = Staff::where('department_id', $id)->where('is_active', 1)->orderBy('name')->get();
+            foreach ($staff as $s) {
+                $rows[] = [$s->name, $s->staff_no, $s->position ?? '—'];
+            }
+        } elseif ($type === 'company_depts') {
             $headers = ['Department Name', 'Active Staff'];
             $depts = Department::where('company', $id)
                 ->withCount(['staff' => function($q) { $q->where('is_active', 1); }])
