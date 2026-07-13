@@ -96,6 +96,7 @@ class TravelController extends Controller
         $user = Auth::user();
         
         $request->validate([
+            'travel_type' => 'required|in:Domestic,International',
             'destination' => 'required',
             'departure_date' => 'required|date',
             'return_date' => 'required|date|after_or_equal:departure_date',
@@ -110,6 +111,7 @@ class TravelController extends Controller
 
         $travel = BusinessTravel::create([
             'staff_id' => $staff_id,
+            'travel_type' => $request->travel_type,
             'destination' => $request->destination,
             'purpose' => $request->purpose,
             'departure_date' => $request->departure_date,
@@ -148,6 +150,7 @@ class TravelController extends Controller
         }
 
         $request->validate([
+            'travel_type' => 'required|in:Domestic,International',
             'destination' => 'required',
             'departure_date' => 'required|date',
             'return_date' => 'required|date|after_or_equal:departure_date',
@@ -155,6 +158,7 @@ class TravelController extends Controller
 
         $travel->update([
             'staff_id' => $staff_id,
+            'travel_type' => $request->travel_type,
             'destination' => $request->destination,
             'purpose' => $request->purpose,
             'departure_date' => $request->departure_date,

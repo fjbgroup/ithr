@@ -32,10 +32,9 @@
     </div>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
 @if (auth()->user()->isHrUser())
-<div class="card" style="height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">Microsoft Authenticator</span>
@@ -52,8 +51,8 @@
 
 @if (auth()->user()->isAdminIT())
 @php $emailOn = \App\Models\IT\EmailSetting::emailEnabled(); @endphp
-<div class="card" style="border:1px solid {{ $emailOn ? 'var(--border)' : '#fca5a5' }}; height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $emailOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $emailOn ? '#0284c7' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">System Email Sending</span>
@@ -68,19 +67,20 @@
                     : 'All outgoing email is paused. Authenticator (2FA) users are unaffected.' }}
             </div>
         </div>
-        <form method="POST" action="{{ route('system.email.toggle') }}">
+        <form method="POST" action="{{ route('system.email.toggle') }}"
+              onsubmit="return confirm('{{ $emailOn ? 'Disable ALL outgoing email? OTP and notification emails will stop until you re-enable this. Authenticator (2FA) users are unaffected.' : 'Re-enable email sending for the whole system?' }}');">
             @csrf
             <input type="hidden" name="enable" value="{{ $emailOn ? 0 : 1 }}">
-            <button type="submit" class="toggle-switch {{ $emailOn ? 'active' : '' }}" title="{{ $emailOn ? 'Disable' : 'Enable' }}">
-                <div class="toggle-thumb"></div>
+            <button type="submit" class="btn btn-sm {{ $emailOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $emailOn ? 'Disable' : 'Enable' }}
             </button>
         </form>
     </div>
 </div>
 
 @php $totpOn = \App\Models\IT\EmailSetting::totpEnabled(); @endphp
-<div class="card" style="border:1px solid {{ $totpOn ? 'var(--border)' : '#fca5a5' }}; height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $totpOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $totpOn ? '#6366f1' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">Microsoft Authenticator (2FA)</span>
@@ -95,19 +95,20 @@
                     : '2FA is turned off system-wide. Login and password reset skip the authenticator until you turn it back on. Existing user setups are kept.' }}
             </div>
         </div>
-        <form method="POST" action="{{ route('system.totp.toggle') }}">
+        <form method="POST" action="{{ route('system.totp.toggle') }}"
+              onsubmit="return confirm('{{ $totpOn ? 'Turn OFF Microsoft Authenticator (2FA) for the whole system? Login and password reset will skip it until re-enabled.' : 'Turn ON Microsoft Authenticator (2FA) for the whole system?' }}');">
             @csrf
             <input type="hidden" name="enable" value="{{ $totpOn ? 0 : 1 }}">
-            <button type="submit" class="toggle-switch {{ $totpOn ? 'active' : '' }}" title="{{ $totpOn ? 'Disable' : 'Enable' }}">
-                <div class="toggle-thumb"></div>
+            <button type="submit" class="btn btn-sm {{ $totpOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $totpOn ? 'Disable' : 'Enable' }}
             </button>
         </form>
     </div>
 </div>
 
 @php $reqStaffOn = \App\Models\IT\EmailSetting::requireStaffRegistry(); @endphp
-<div class="card" style="border:1px solid {{ $reqStaffOn ? 'var(--border)' : '#fca5a5' }}; height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $reqStaffOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $reqStaffOn ? '#6366f1' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">Require Staff Registry for New Accounts</span>
@@ -122,11 +123,12 @@
                     : 'Unlinked user accounts can be created manually in the system.' }}
             </div>
         </div>
-        <form method="POST" action="{{ route('system.require-staff.toggle') }}">
+        <form method="POST" action="{{ route('system.require-staff.toggle') }}"
+              onsubmit="return confirm('{{ $reqStaffOn ? 'Allow creating users without a Staff Registry record?' : 'Require all new users to exist in the Staff Registry?' }}');">
             @csrf
             <input type="hidden" name="enable" value="{{ $reqStaffOn ? 0 : 1 }}">
-            <button type="submit" class="toggle-switch {{ $reqStaffOn ? 'active' : '' }}" title="{{ $reqStaffOn ? 'Disable' : 'Enable' }}">
-                <div class="toggle-thumb"></div>
+            <button type="submit" class="btn btn-sm {{ $reqStaffOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $reqStaffOn ? 'Disable' : 'Enable' }}
             </button>
         </form>
     </div>
@@ -134,8 +136,8 @@
 
 <!-- IT SYSTEM TOGGLE -->
 @php $itOn = \App\Models\IT\EmailSetting::systemEnabled('it'); @endphp
-<div class="card" style="border:1px solid {{ $itOn ? 'var(--border)' : '#fca5a5' }}; height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $itOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $itOn ? '#6366f1' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">IT System Status</span>
@@ -150,11 +152,12 @@
                     : 'The IT System is offline. Only ADMIN IT can access it.' }}
             </div>
         </div>
-        <form method="POST" action="{{ route('system.status.toggle', 'it') }}">
+        <form method="POST" action="{{ route('system.status.toggle', 'it') }}"
+              onsubmit="return confirm('{{ $itOn ? 'Take the IT System offline?' : 'Bring the IT System online?' }}');">
             @csrf
             <input type="hidden" name="enable" value="{{ $itOn ? 0 : 1 }}">
-            <button type="submit" class="toggle-switch {{ $itOn ? 'active' : '' }}" title="{{ $itOn ? 'Disable' : 'Enable' }}">
-                <div class="toggle-thumb"></div>
+            <button type="submit" class="btn btn-sm {{ $itOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $itOn ? 'Disable' : 'Enable' }}
             </button>
         </form>
     </div>
@@ -162,13 +165,9 @@
 
 <!-- WT SYSTEM TOGGLE -->
 @php $wtOn = \App\Models\IT\EmailSetting::systemEnabled('wt'); @endphp
-<div class="card" style="border:1px solid {{ $wtOn ? 'var(--border)' : '#fca5a5' }}; height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $wtOn ? '#6366f1' : '#dc2626' }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-            <path d="M8 22h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path>
-            <path d="M9 2v4"></path>
-            <path d="M14 18h.01"></path>
-        </svg>
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $wtOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $wtOn ? '#6366f1' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">Walkie Talkie System Status</span>
             @if ($wtOn)
@@ -182,11 +181,12 @@
                     : 'The Walkie Talkie System is offline. Only ADMIN IT can access it.' }}
             </div>
         </div>
-        <form method="POST" action="{{ route('system.status.toggle', 'wt') }}">
+        <form method="POST" action="{{ route('system.status.toggle', 'wt') }}"
+              onsubmit="return confirm('{{ $wtOn ? 'Take the Walkie Talkie System offline?' : 'Bring the Walkie Talkie System online?' }}');">
             @csrf
             <input type="hidden" name="enable" value="{{ $wtOn ? 0 : 1 }}">
-            <button type="submit" class="toggle-switch {{ $wtOn ? 'active' : '' }}" title="{{ $wtOn ? 'Disable' : 'Enable' }}">
-                <div class="toggle-thumb"></div>
+            <button type="submit" class="btn btn-sm {{ $wtOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $wtOn ? 'Disable' : 'Enable' }}
             </button>
         </form>
     </div>
@@ -194,8 +194,8 @@
 
 <!-- LMS SYSTEM TOGGLE -->
 @php $lmsOn = \App\Models\IT\EmailSetting::systemEnabled('lms'); @endphp
-<div class="card" style="border:1px solid {{ $lmsOn ? 'var(--border)' : '#fca5a5' }}; height: 100%;">
-    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;height:100%;">
+<div class="card" style="margin-bottom:1.5rem;max-width:560px;border:1px solid {{ $lmsOn ? 'var(--border)' : '#fca5a5' }};">
+    <div style="padding:.85rem 1.25rem;display:flex;align-items:center;gap:.75rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{ $lmsOn ? '#6366f1' : '#dc2626' }}" stroke-width="2" style="flex-shrink:0;"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
         <div style="flex:1;">
             <span style="font-size:.88rem;font-weight:600;">LMS System Status</span>
@@ -210,17 +210,17 @@
                     : 'The LMS System is offline. Only ADMIN IT can access it.' }}
             </div>
         </div>
-        <form method="POST" action="{{ route('system.status.toggle', 'lms') }}">
+        <form method="POST" action="{{ route('system.status.toggle', 'lms') }}"
+              onsubmit="return confirm('{{ $lmsOn ? 'Take the LMS System offline?' : 'Bring the LMS System online?' }}');">
             @csrf
             <input type="hidden" name="enable" value="{{ $lmsOn ? 0 : 1 }}">
-            <button type="submit" class="toggle-switch {{ $lmsOn ? 'active' : '' }}" title="{{ $lmsOn ? 'Disable' : 'Enable' }}">
-                <div class="toggle-thumb"></div>
+            <button type="submit" class="btn btn-sm {{ $lmsOn ? 'btn-danger' : 'btn-primary' }}">
+                {{ $lmsOn ? 'Disable' : 'Enable' }}
             </button>
         </form>
     </div>
 </div>
 @endif
-</div>
 
 <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
     <div class="app-search" style="min-width:220px;">
@@ -329,12 +329,12 @@
                     </select>
                 </div>
                 <div class="form-group"><label>Position</label>
-                    <select name="position" id="f_upos" required>
-                        <option value="">— Select —</option>
+                    <input type="text" name="position" id="f_upos" list="positions_list_u" autocomplete="off">
+                    <datalist id="positions_list_u">
                         @foreach ($positions as $pos)
-                            <option value="{{ $pos->title }}">{{ $pos->title }}</option>
+                        <option value="{{ $pos->title }}">
                         @endforeach
-                    </select>
+                    </datalist>
                 </div>
                 <div class="form-group form-full">
                     <label>Password <span id="pwLabel">(required for new user)</span></label>
@@ -640,37 +640,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 @endif
 </script>
-
-<style>
-.toggle-switch {
-    width: 44px; height: 24px;
-    border-radius: 24px;
-    background: #cbd5e1;
-    border: none;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    padding: 0;
-    flex-shrink: 0;
-}
-.toggle-switch:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
-}
-.toggle-switch.active {
-    background: #10b981;
-}
-.toggle-switch .toggle-thumb {
-    width: 18px; height: 18px;
-    background: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 3px; left: 3px;
-    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-}
-.toggle-switch.active .toggle-thumb {
-    transform: translateX(20px);
-}
-</style>
 @endsection

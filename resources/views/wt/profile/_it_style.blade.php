@@ -132,12 +132,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Position</label>
-              <select name="position" class="form-control" required>
-                  <option value="">— Select —</option>
-                  @foreach(\App\Models\Position::orderBy('title')->get() as $pos)
-                      <option value="{{ $pos->title }}" {{ old('position', $user->position) == $pos->title ? 'selected' : '' }}>{{ $pos->title }}</option>
-                  @endforeach
-              </select>
+              <input type="text" name="position" class="form-control" value="{{ old('position', $user->position) }}" placeholder="e.g. Staff" required>
             </div>
           </div>
 
