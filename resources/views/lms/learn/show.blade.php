@@ -21,10 +21,23 @@
                     @php
                         $isCompleted = isset($progress[$m->id]) && $progress[$m->id]->is_completed;
                         $isActive = request('material_id', $materials->first()->id ?? 0) == $m->id;
+                        
+                        $isLocked = false;
+                        if ($idx > 0) {
+                            $prevMaterial = $materials[$idx - 1];
+                            $isLocked = !(isset($progress[$prevMaterial->id]) && $progress[$prevMaterial->id]->is_completed);
+                        }
                     @endphp
+                    
+                    @if($isLocked)
+                    <div class="lms-nav-item" style="opacity: 0.6; cursor: not-allowed;" title="Please complete the previous material first">
+                    @else
                     <a href="?material_id={{ $m->id }}" class="lms-nav-item {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}">
+                    @endif
                         <div class="lms-icon-wrap">
-                            @if($isCompleted)
+                            @if($isLocked)
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            @elseif($isCompleted)
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             @else
                                 @if($m->type === 'video')
@@ -42,7 +55,11 @@
                             <div class="lms-nav-title">{{ $idx + 1 }}. {{ $m->title }}</div>
                             <div class="lms-nav-type">{{ $m->type }}</div>
                         </div>
+                    @if($isLocked)
+                    </div>
+                    @else
                     </a>
+                    @endif
                     @endforeach
                 </div>
             </div>
@@ -51,8 +68,34 @@
         <!-- Main Content Area -->
         <div style="flex: 2; min-width: 0;">
             @php
-                $currentMaterialId = request('material_id', $materials->first()->id ?? 0);
-                $currentMaterial = $materials->firstWhere('id', $currentMaterialId);
+                $requestedId = request('material_id', $materials->first()->id ?? 0);
+                $currentMaterial = $materials->firstWhere('id', $requestedId);
+                
+                if ($currentMaterial) {
+                    $currIdx = $materials->search(function($m) use ($currentMaterial) {
+                        return $m->id === $currentMaterial->id;
+                    });
+                    
+                    if ($currIdx > 0) {
+                        $prevMaterial = $materials[$currIdx - 1];
+                        if (!(isset($progress[$prevMaterial->id]) && $progress[$prevMaterial->id]->is_completed)) {
+                            $currentMaterial = null; // Locked
+                        }
+                    }
+                }
+                
+                if (!$currentMaterial) {
+                    // Find first incomplete
+                    foreach ($materials as $m) {
+                        if (!(isset($progress[$m->id]) && $progress[$m->id]->is_completed)) {
+                            $currentMaterial = $m;
+                            break;
+                        }
+                    }
+                    if (!$currentMaterial) {
+                        $currentMaterial = $materials->last();
+                    }
+                }
             @endphp
             
             @if($currentMaterial)
@@ -167,7 +210,15 @@
             conf.style.animation = `confettifall ${Math.random()*2 + 1}s ease-in forwards`;
             document.body.appendChild(conf);
         }
-        setTimeout(() => window.location.reload(), 1500);
+        
+        if (data.courseCompleted) {
+            setTimeout(() => {
+                alert("Congratulations! You have completed the entire course.");
+                window.location.reload();
+            }, 500);
+        } else {
+            setTimeout(() => window.location.reload(), 1500);
+        }
       }
     });
   }

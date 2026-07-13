@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\TrainingCourse;
 use App\Models\LmsMaterial;
 use App\Models\LmsProgress;
+use App\Models\TrainingAttendance;
 use Illuminate\Support\Facades\Auth;
 
 class LmsLearnController extends Controller
@@ -40,7 +41,9 @@ class LmsLearnController extends Controller
         $progress->is_completed = true;
         $progress->save();
 
-        return response()->json(['success' => true]);
+        $courseCompleted = $this->checkCourseCompletion($course, $user->staff);
+
+        return response()->json(['success' => true, 'courseCompleted' => $courseCompleted]);
     }
 
     public function submitQuiz(Request $request, TrainingCourse $course, LmsMaterial $material)
@@ -72,6 +75,36 @@ class LmsLearnController extends Controller
         $progress->score = $score;
         $progress->save();
 
-        return redirect()->back()->with('success', "Quiz completed! You scored {$score}%.");
+        $courseCompleted = $this->checkCourseCompletion($course, $user->staff);
+        
+        $msg = "Quiz completed! You scored {$score}%.";
+        if ($courseCompleted) {
+            $msg .= " Congratulations! You have completed the entire course.";
+        }
+
+        return redirect()->back()->with('success', $msg);
+    }
+
+    private function checkCourseCompletion(TrainingCourse $course, $staff)
+    {
+        $totalMaterials = $course->materials()->count();
+        if ($totalMaterials === 0) return false;
+
+        $completedCount = LmsProgress::where('staff_id', $staff->id)
+            ->where('course_id', $course->id)
+            ->where('is_completed', true)
+            ->count();
+
+        if ($completedCount >= $totalMaterials) {
+            $attendance = TrainingAttendance::where('staff_id', $staff->id)
+                ->where('course_id', $course->id)
+                ->first();
+                
+            if ($attendance && $attendance->status !== 'Completed') {
+                $attendance->update(['status' => 'Completed']);
+            }
+            return true;
+        }
+        return false;
     }
 }
