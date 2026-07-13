@@ -242,10 +242,8 @@
                     <td class="td-muted">{{ $d->created_at->format('d M Y') }}</td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $d->id }}, name:"{{ addslashes($d->name) }}", company:"{{ $d->company }}"})'>Edit</button>
-                        @if($d->staff_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $d->id }}, '{{ addslashes($d->name) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $d->id }}, name:"{{ addslashes($d->name) }}", company:"{{ $d->company }}", can_delete: {{ $d->staff_count == 0 ? "true" : "false" }}, delete_label: "{{ addslashes($d->name) }}"})'>Edit</button>
+                        @if($d->staff_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -296,10 +294,8 @@
                     </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $c->id }}, code:"{{ $c->code }}", name:"{{ addslashes($c->name) }}"})'>Edit</button>
-                        @if($c->staff_count == 0 && $c->dept_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $c->id }}, '{{ $c->code }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $c->id }}, code:"{{ $c->code }}", name:"{{ addslashes($c->name) }}", can_delete: {{ ($c->staff_count == 0 && $c->dept_count == 0) ? "true" : "false" }}, delete_label: "{{ $c->code }}"})'>Edit</button>
+                        @if($c->staff_count > 0 || $c->dept_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -358,11 +354,11 @@
                             title:"{{ addslashes($c->title) }}",
                             training_type:"{{ $c->training_type ?? 'External' }}",
                             company:"{{ $c->company }}",
-                            start_date:"{{ $c->start_date ?? '' }}"
+                            start_date:"{{ $c->start_date ?? '' }}",
+                            can_delete: {{ $c->att_count == 0 ? "true" : "false" }},
+                            delete_label: "{{ $c->code }}"
                         })'>Edit</button>
-                        @if($c->att_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $c->id }}, '{{ $c->code }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        @if($c->att_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -403,10 +399,8 @@
                     </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $p->id }}, title:"{{ addslashes($p->title) }}"})'>Edit</button>
-                        @if($p->staff_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $p->id }}, '{{ addslashes($p->title) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $p->id }}, title:"{{ addslashes($p->title) }}", can_delete: {{ $p->staff_count == 0 ? "true" : "false" }}, delete_label: "{{ addslashes($p->title) }}"})'>Edit</button>
+                        @if($p->staff_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -447,10 +441,8 @@
                     </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $t->id }}, name:"{{ addslashes($t->name) }}"})'>Edit</button>
-                        @if($t->usage_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $t->id }}, '{{ addslashes($t->name) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $t->id }}, name:"{{ addslashes($t->name) }}", can_delete: {{ $t->usage_count == 0 ? "true" : "false" }}, delete_label: "{{ addslashes($t->name) }}"})'>Edit</button>
+                        @if($t->usage_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -485,8 +477,7 @@
                     <td>{{ $s->setting_value }}</td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $s->id }}, setting_key:"{{ $s->setting_key }}", setting_value:"{{ addslashes($s->setting_value) }}"})'>Edit</button>
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $s->id }}, '{{ $s->setting_key }}')">Delete</button>
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $s->id }}, setting_key:"{{ $s->setting_key }}", setting_value:"{{ addslashes($s->setting_value) }}", can_delete: true, delete_label: "{{ $s->setting_key }}"})'>Edit</button>
                     </td>
                     @endif
                 </tr>
@@ -636,9 +627,14 @@
                 @endif
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline" onclick="closeMainModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary" id="formSubmitBtn">Add</button>
+            <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+                <div id="modalDeleteBtnContainer" style="display:none;">
+                    <button type="button" class="btn btn-danger-soft" id="modalDeleteBtn">Delete</button>
+                </div>
+                <div style="display:flex; gap:0.5rem; margin-left:auto;">
+                    <button type="button" class="btn btn-outline" onclick="closeMainModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="formSubmitBtn">Add</button>
+                </div>
             </div>
         </form>
     </div>
@@ -685,6 +681,10 @@ function openAddModal() {
     document.getElementById('mainModalTitle').textContent = 'Add ' + TAB_LABEL;
     document.getElementById('formSubmitBtn').textContent = 'Add ' + TAB_LABEL;
     
+    if (document.getElementById('modalDeleteBtnContainer')) {
+        document.getElementById('modalDeleteBtnContainer').style.display = 'none';
+    }
+    
     clearFormFields();
     openModal('mainModal');
 }
@@ -704,6 +704,18 @@ function openEditModal(data) {
     
     document.getElementById('mainModalTitle').textContent = 'Edit ' + TAB_LABEL;
     document.getElementById('formSubmitBtn').textContent = 'Save Changes';
+    
+    if (document.getElementById('modalDeleteBtnContainer')) {
+        if (data.can_delete) {
+            document.getElementById('modalDeleteBtnContainer').style.display = 'block';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                closeMainModal();
+                confirmDelete(data.id, data.delete_label);
+            };
+        } else {
+            document.getElementById('modalDeleteBtnContainer').style.display = 'none';
+        }
+    }
     
     if (TAB === 'departments') { 
         setVal('f_name', data.name); 
