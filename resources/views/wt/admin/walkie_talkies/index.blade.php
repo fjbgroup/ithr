@@ -612,14 +612,11 @@
                     {{-- Position --}}
                     <div class="form-group">
                         <label class="form-label">Position</label>
-                        <select name="position" id="add_position" class="form-input modal-tag-select" data-placeholder="Type or select position">
+                        <select name="position" id="add_position" class="form-input modal-strict-select" style="width:100%;" data-placeholder="Type or select position">
                             <option value=""></option>
-                            @foreach($walkiePositions as $position)
-                            <option value="{{ $position }}" @selected(old('position') === $position)>{{ $position }}</option>
+                            @foreach(\App\Models\Position::orderBy('title')->get() as $pos)
+                            <option value="{{ $pos->title }}" @selected(old('position') === $pos->title)>{{ $pos->title }}</option>
                             @endforeach
-                            @if(old('position') && !$walkiePositions->contains(old('position')))
-                            <option value="{{ old('position') }}" selected>{{ old('position') }}</option>
-                            @endif
                         </select>
                     </div>
 
@@ -799,10 +796,10 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Position</label>
-                        <select name="position" id="edit_position" class="form-input modal-tag-select" data-placeholder="Type or select position">
+                        <select name="position" id="edit_position" class="form-input modal-strict-select" style="width:100%;" data-placeholder="Type or select position">
                             <option value=""></option>
-                            @foreach($walkiePositions as $position)
-                            <option value="{{ $position }}">{{ $position }}</option>
+                            @foreach(\App\Models\Position::orderBy('title')->get() as $pos)
+                            <option value="{{ $pos->title }}">{{ $pos->title }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -1352,6 +1349,20 @@
             }
 
             function initModalSelects() {
+                $('.modal-strict-select').each(function() {
+                    const $select = $(this);
+                    if ($select.hasClass('select2-hidden-accessible')) {
+                        $select.select2('destroy');
+                    }
+                    $select.select2({
+                        width: '100%',
+                        tags: false,
+                        allowClear: !$select.prop('required'),
+                        placeholder: $select.data('placeholder') || 'Select option',
+                        dropdownParent: $select.closest('.modal-box')
+                    });
+                });
+
                 $('.modal-tag-select').each(function() {
                     const $select = $(this);
 

@@ -204,42 +204,24 @@ class MasterDataController extends Controller
     public function destroy(Request $request, $id)
     {
         $tab = $request->input('tab');
-        
         if ($tab === 'departments') {
             $dept = Department::findOrFail($id);
-            if ($dept->staff()->where('is_active', 1)->count() > 0) {
-                return redirect()->route('master-data.index', ['tab' => $tab])->with('error', 'Cannot delete department with active staff.');
-            }
             AuditLogger::log('delete', 'master_data', 'Deleted department "' . $dept->name . '" #' . $id . '.');
             $dept->delete();
         } elseif ($tab === 'companies') {
             $company = Company::findOrFail($id);
-            $staffCount = Staff::where('company', $company->code)->where('is_active', 1)->count();
-            $deptCount = Department::where('company', $company->code)->count();
-            if ($staffCount > 0 || $deptCount > 0) {
-                return redirect()->route('master-data.index', ['tab' => $tab])->with('error', 'Cannot delete company in use.');
-            }
             AuditLogger::log('delete', 'master_data', 'Deleted company "' . $company->name . '" (code: ' . $company->code . ').');
             $company->delete();
         } elseif ($tab === 'courses') {
             $course = TrainingCourse::findOrFail($id);
-            if ($course->staff()->count() > 0) {
-                return redirect()->route('master-data.index', ['tab' => $tab])->with('error', 'Cannot delete course with attendances.');
-            }
             AuditLogger::log('delete', 'master_data', 'Deleted training course "' . $course->title . '" (' . $course->code . ').');
             $course->delete();
         } elseif ($tab === 'positions') {
             $pos = Position::findOrFail($id);
-            if (Staff::where('position', $pos->title)->where('is_active', 1)->count() > 0) {
-                return redirect()->route('master-data.index', ['tab' => $tab])->with('error', 'Cannot delete position in use.');
-            }
             AuditLogger::log('delete', 'master_data', 'Deleted position "' . $pos->title . '".');
             $pos->delete();
         } elseif ($tab === 'transport') {
             $tm = TransportMode::findOrFail($id);
-            if (DB::table('business_travel')->where('transport', $tm->name)->count() > 0) {
-                return redirect()->route('master-data.index', ['tab' => $tab])->with('error', 'Cannot delete transport mode in use.');
-            }
             AuditLogger::log('delete', 'master_data', 'Deleted transport mode "' . $tm->name . '".');
             $tm->delete();
         } elseif ($tab === 'settings') {
@@ -249,6 +231,64 @@ class MasterDataController extends Controller
         }
 
         return redirect()->route('master-data.index', ['tab' => $tab])->with('success', 'Record deleted successfully.');
+    }
+
+    public function listDetails(Request $request)
+    {
+        $type = $request->query('type');
+        $id = $request->query('id');
+
+        $headers = [];
+        $rows = [];
+
+        if ($type === 'company_depts') {
+            $headers = ['Department Name', 'Active Staff'];
+            $depts = Department::where('company', $id)
+                ->withCount(['staff' => function($q) { $q->where('is_active', 1); }])
+                ->orderBy('name')->get();
+            foreach ($depts as $d) {
+                $rows[] = [$d->name, $d->staff_count];
+            }
+        } elseif ($type === 'company_staff') {
+            $headers = ['Name', 'Staff No.', 'Position', 'Department'];
+            $staff = Staff::where('company', $id)->where('is_active', 1)->with('department')->orderBy('name')->get();
+            
+            foreach ($staff as $s) {
+                $rows[] = [$s->name, $s->staff_no, $s->position, $s->department->name ?? '—'];
+            }
+        } elseif ($type === 'course_staff') {
+            $headers = ['Name', 'Staff No.', 'Department'];
+            $course = TrainingCourse::with(['staff' => function($q) { $q->with('department'); }])->find($id);
+            if ($course) {
+                foreach ($course->staff as $s) {
+                    $rows[] = [$s->name, $s->staff_no, $s->department->name ?? '—'];
+                }
+            }
+        } elseif ($type === 'position_staff') {
+            $headers = ['Name', 'Staff No.', 'Company', 'Department'];
+            $staff = Staff::where('position', $id)->where('is_active', 1)->with('department')->orderBy('name')->get();
+            foreach ($staff as $s) {
+                $rows[] = [$s->name, $s->staff_no, $s->company, $s->department->name ?? '—'];
+            }
+        } elseif ($type === 'transport_usage') {
+            $headers = ['Staff Name', 'Destination', 'Departure Date', 'Return Date'];
+            $trips = DB::table('business_travel')
+                ->join('staff', 'business_travel.staff_id', '=', 'staff.id')
+                ->where('business_travel.transport', $id)
+                ->orderByDesc('business_travel.departure_date')
+                ->select('staff.name as staff_name', 'business_travel.destination', 'business_travel.departure_date', 'business_travel.return_date')
+                ->get();
+            foreach ($trips as $t) {
+                $rows[] = [
+                    $t->staff_name, 
+                    $t->destination, 
+                    $t->departure_date ? date('d M Y', strtotime($t->departure_date)) : '—', 
+                    $t->return_date ? date('d M Y', strtotime($t->return_date)) : '—'
+                ];
+            }
+        }
+
+        return response()->json(compact('headers', 'rows'));
     }
 
     public function staffList($deptId)

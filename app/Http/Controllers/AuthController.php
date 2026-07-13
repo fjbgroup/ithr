@@ -150,7 +150,7 @@ class AuthController extends Controller
 
             $google2fa = new Google2FA();
 
-            if (!$google2fa->verifyKey($user->totp_secret, $request->otp)) {
+            if (!$google2fa->verifyKey($user->totp_secret, $request->otp, 4)) {
                 return back()->with('error',
                     'Invalid authenticator code. Codes expire every 30 seconds — try again with the current code.'
                 );
@@ -291,7 +291,7 @@ class AuthController extends Controller
 
         $google2fa = new Google2FA();
 
-        if (!$google2fa->verifyKey($user->totp_secret, $request->otp)) {
+        if (!$google2fa->verifyKey($user->totp_secret, $request->otp, 4)) {
             return back()->withErrors([
                 'otp' => 'Invalid authenticator code. Codes expire every 30 seconds — try again with the current code.',
             ]);

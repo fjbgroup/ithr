@@ -38,6 +38,10 @@
   :where(.content-area, .page-body, .content-surface) :is(th, td):is(:last-child, .td-actions, .actions, .action-cell, .ui-col-actions) {
     text-align: center !important;
     white-space: nowrap !important;
+    width: 160px !important;
+    max-width: none !important;
+    text-overflow: clip !important;
+    overflow: visible !important;
   }
   :where(.content-area, .page-body, .content-surface) :is(.btn-view, .btn-edit, .btn-delete, .btn-icon) {
     display: inline-flex !important;

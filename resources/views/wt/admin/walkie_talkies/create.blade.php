@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', $pageTitle ?? 'Add Walkie Talkie')
 @section('page_title', $pageTitle ?? 'Add Walkie Talkie')
@@ -223,15 +223,11 @@
 
                 <div class="form-group">
                     <label class="form-label">Position</label>
-                    @php($currentPosition = strtoupper((string) old('position', $defaults['position'] ?? '')))
-                    <select name="position" class="form-input page-combo-select" data-placeholder="Type or search position">
+                    <select name="position" class="form-input page-strict-select" data-placeholder="Select position">
                         <option value=""></option>
-                        @foreach($walkiePositions as $position)
-                        <option value="{{ $position }}" @selected($currentPosition === $position)>{{ $position }}</option>
+                        @foreach(\App\Models\Position::orderBy('title')->get() as $pos)
+                        <option value="{{ $pos->title }}" @selected($currentPosition === $pos->title)>{{ $pos->title }}</option>
                         @endforeach
-                        @if($currentPosition !== '' && !$walkiePositions->contains($currentPosition))
-                        <option value="{{ $currentPosition }}" selected>{{ $currentPosition }}</option>
-                        @endif
                     </select>
                 </div>
 
@@ -793,6 +789,18 @@
                 }
             }, 80);
         }
+
+        $('.page-strict-select').each(function() {
+            const $select = $(this);
+            $select.select2({
+                width: '100%',
+                tags: false,
+                allowClear: !$select.prop('required'),
+                minimumResultsForSearch: 0,
+                placeholder: $select.data('placeholder') || 'Select option'
+            });
+            $select.on('select2:open', focusOpenSelect2Search);
+        });
 
         $('.page-tag-select').each(function() {
             const $select = $(this);

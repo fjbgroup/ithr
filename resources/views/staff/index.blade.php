@@ -365,12 +365,12 @@
                 <div class="form-group"><label>Company ID</label><input type="text" name="company_id" id="f_company_id" placeholder="e.g. FJB-001"></div>
                 <div class="form-group form-full">
                     <label>Position</label>
-                    <input type="text" name="position" id="f_position" list="positions_list" autocomplete="off">
-                    <datalist id="positions_list">
+                    <select name="position" id="f_position" required>
+                        <option value="">— Select —</option>
                         @foreach($positions as $pos)
-                            <option value="{{ $pos->title }}">
+                            <option value="{{ $pos->title }}">{{ $pos->title }}</option>
                         @endforeach
-                    </datalist>
+                    </select>
                 </div>
                 <div class="form-group form-full">
                     <label>Department</label>
@@ -610,6 +610,9 @@ function deptOptions(selId) {
         depts.map(d => `<option value="${d.id}" ${d.id==selId?'selected':''}>[${d.company}] ${d.name}</option>`).join('');
 }
 
+const posOpts = @json($positions->pluck('title'));
+const posStr = posOpts.map(p => `<option value="${p}">${p}</option>`).join('');
+
 function confirmDeleteStaff() {
     if (confirm('Delete this staff record? This cannot be undone.')) {
         document.getElementById('deleteStaffForm').submit();
@@ -634,7 +637,7 @@ window.addBulkRow = function(data) {
             </select>
         </td>
         <td><select name="rows[${i}][department_id]" style="min-width:150px;" class="form-select btn-sm">${deptOptions('')}</select></td>
-        <td><input type="text" name="rows[${i}][position]" placeholder="Position" style="min-width:120px;" class="form-input btn-sm"></td>
+        <td><select name="rows[${i}][position]" style="min-width:120px;" class="form-select btn-sm" required><option value="">— Select —</option>${posStr}</select></td>
         <td><input type="date" name="rows[${i}][date_joined]" style="width:130px;" class="form-input btn-sm"></td>
         <td><button type="button" class="btn btn-sm btn-ghost" style="color:var(--danger);padding:.25rem .4rem;" onclick="document.getElementById('brow-${i}').remove()">×</button></td>
     `;

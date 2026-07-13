@@ -125,8 +125,9 @@ Route::middleware('auth')->group(function () {
     Route::post('requests/{update_request}/resolve', [UpdateRequestController::class, 'resolve'])->name('requests.resolve');
     Route::post('requests/{update_request}/dismiss', [UpdateRequestController::class, 'dismiss'])->name('requests.dismiss');
     Route::resource('requests', UpdateRequestController::class);
-    Route::resource('master-data', MasterDataController::class);
     Route::get('master-data/staff-list/{deptId}', [MasterDataController::class, 'staffList'])->name('master-data.staff-list');
+    Route::get('master-data/list-details', [MasterDataController::class, 'listDetails'])->name('master-data.list-details');
+    Route::resource('master-data', MasterDataController::class);
     Route::get('account/security',      [UserController::class, 'accountSecurity'])->name('account.security');
     Route::get('account/totp/setup',    [UserController::class, 'totpSetup'])  ->name('totp.setup');
     Route::post('account/totp/confirm', [UserController::class, 'totpConfirm'])->name('totp.confirm');

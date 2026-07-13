@@ -8,7 +8,7 @@
         <h2>Master Data</h2>
         <p class="page-subtitle">Centralized reference data for the entire system</p>
     </div>
-    @if(Auth::user()->isAdminIT())
+    @if(Auth::user()->isAdmin())
     <button class="btn btn-primary" onclick="openAddModal()">
         + Add {{ $tabLabels[$activeTab] }}
     </button>
@@ -216,7 +216,7 @@
                         <th>Company</th>
                         <th>Active Staff</th>
                         <th>Created</th>
-                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                        @if(Auth::user()->isAdmin())<th class="td-actions">Actions</th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -240,12 +240,10 @@
                         @else<span class="td-zero">0</span>@endif
                     </td>
                     <td class="td-muted">{{ $d->created_at->format('d M Y') }}</td>
-                    @if(Auth::user()->isAdminIT())
+                    @if(Auth::user()->isAdmin())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $d->id }}, name:"{{ addslashes($d->name) }}", company:"{{ $d->company }}"})'>Edit</button>
-                        @if($d->staff_count == 0)
                         <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $d->id }}, '{{ addslashes($d->name) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -271,7 +269,7 @@
                         <th>Full Name</th>
                         <th>Departments</th>
                         <th>Active Staff</th>
-                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                        @if(Auth::user()->isAdmin())<th class="td-actions">Actions</th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -280,14 +278,24 @@
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td><strong>{{ $c->code }}</strong></td>
                     <td>{{ $c->name }}</td>
-                    <td>{{ $c->dept_count }}</td>
-                    <td>{{ $c->staff_count }}</td>
-                    @if(Auth::user()->isAdminIT())
+                    <td>
+                        @if($c->dept_count > 0)
+                        <button class="btn-link-count" onclick="openListModal('company_depts', '{{ $c->code }}', 'Departments in {{ $c->code }}')">
+                            {{ $c->dept_count }}
+                        </button>
+                        @else<span class="td-zero">0</span>@endif
+                    </td>
+                    <td>
+                        @if($c->staff_count > 0)
+                        <button class="btn-link-count" onclick="openListModal('company_staff', '{{ $c->code }}', 'Active Staff in {{ $c->code }}')">
+                            {{ $c->staff_count }}
+                        </button>
+                        @else<span class="td-zero">0</span>@endif
+                    </td>
+                    @if(Auth::user()->isAdmin())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $c->id }}, code:"{{ $c->code }}", name:"{{ addslashes($c->name) }}"})'>Edit</button>
-                        @if($c->staff_count == 0 && $c->dept_count == 0)
                         <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $c->id }}, '{{ $c->code }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -315,7 +323,7 @@
                         <th>Company</th>
                         <th>Date</th>
                         <th>Attendances</th>
-                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                        @if(Auth::user()->isAdmin())<th class="td-actions">Actions</th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -331,8 +339,14 @@
                     </td>
                     <td>{{ $c->company }}</td>
                     <td class="td-muted">{{ $c->start_date ? \Carbon\Carbon::parse($c->start_date)->format('d M Y') : '—' }}</td>
-                    <td>{{ $c->att_count }}</td>
-                    @if(Auth::user()->isAdminIT())
+                    <td>
+                        @if($c->att_count > 0)
+                        <button class="btn-link-count" onclick="openListModal('course_staff', {{ $c->id }}, 'Staff in Course: {{ addslashes($c->title) }}')">
+                            {{ $c->att_count }}
+                        </button>
+                        @else<span class="td-zero">0</span>@endif
+                    </td>
+                    @if(Auth::user()->isAdmin())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({
                             id:{{ $c->id }},
@@ -342,9 +356,7 @@
                             company:"{{ $c->company }}",
                             start_date:"{{ $c->start_date ?? '' }}"
                         })'>Edit</button>
-                        @if($c->att_count == 0)
                         <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $c->id }}, '{{ $c->code }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -368,7 +380,7 @@
                         <th style="width:40px">#</th>
                         <th>Position Title</th>
                         <th>Staff Using</th>
-                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                        @if(Auth::user()->isAdmin())<th class="td-actions">Actions</th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -376,13 +388,17 @@
                 <tr>
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td>{{ $p->title }}</td>
-                    <td>{{ $p->staff_count }}</td>
-                    @if(Auth::user()->isAdminIT())
+                    <td>
+                        @if($p->staff_count > 0)
+                        <button class="btn-link-count" onclick="openListModal('position_staff', '{{ addslashes($p->title) }}', 'Staff as {{ addslashes($p->title) }}')">
+                            {{ $p->staff_count }}
+                        </button>
+                        @else<span class="td-zero">0</span>@endif
+                    </td>
+                    @if(Auth::user()->isAdmin())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $p->id }}, title:"{{ addslashes($p->title) }}"})'>Edit</button>
-                        @if($p->staff_count == 0)
                         <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $p->id }}, '{{ addslashes($p->title) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -406,7 +422,7 @@
                         <th style="width:40px">#</th>
                         <th>Transport Mode</th>
                         <th>Times Used</th>
-                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                        @if(Auth::user()->isAdmin())<th class="td-actions">Actions</th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -414,13 +430,17 @@
                 <tr>
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td>{{ $t->name }}</td>
-                    <td>{{ $t->usage_count }}</td>
-                    @if(Auth::user()->isAdminIT())
+                    <td>
+                        @if($t->usage_count > 0)
+                        <button class="btn-link-count" onclick="openListModal('transport_usage', '{{ addslashes($t->name) }}', 'Usage of {{ addslashes($t->name) }}')">
+                            {{ $t->usage_count }}
+                        </button>
+                        @else<span class="td-zero">0</span>@endif
+                    </td>
+                    @if(Auth::user()->isAdmin())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $t->id }}, name:"{{ addslashes($t->name) }}"})'>Edit</button>
-                        @if($t->usage_count == 0)
                         <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $t->id }}, '{{ addslashes($t->name) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -444,7 +464,7 @@
                         <th style="width:40px">#</th>
                         <th>Setting Key</th>
                         <th>Value</th>
-                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                        @if(Auth::user()->isAdmin())<th class="td-actions">Actions</th>@endif
                     </tr>
                 </thead>
                 <tbody>
@@ -453,7 +473,7 @@
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td><code>{{ $s->setting_key }}</code></td>
                     <td>{{ $s->setting_value }}</td>
-                    @if(Auth::user()->isAdminIT())
+                    @if(Auth::user()->isAdmin())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $s->id }}, setting_key:"{{ $s->setting_key }}", setting_value:"{{ addslashes($s->setting_value) }}"})'>Edit</button>
                         <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $s->id }}, '{{ $s->setting_key }}')">Delete</button>
@@ -483,7 +503,7 @@
     </div>
 </div>
 
-@if(Auth::user()->isAdminIT())
+@if(Auth::user()->isAdmin())
 <!-- Main Add/Edit Modal -->
 <div class="modal" id="mainModal">
     <div class="modal-box">
@@ -688,30 +708,35 @@ function clearFormFields() {
     setVal('f_training_type', 'External');
 }
 
-// Staff list modal functions
+// Generic list modal function
 function openStaffListModal(deptId, deptName) {
-    document.getElementById('staffListModalTitle').textContent = deptName;
+    openListModal('dept_staff', deptId, deptName);
+}
+
+function openListModal(type, id, title) {
+    document.getElementById('staffListModalTitle').textContent = title;
     document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';  
     openModal('staffListModal');
     
-    fetch("{{ url('master-data/staff-list') }}/" + deptId)
+    fetch("{{ route('master-data.list-details') }}?type=" + encodeURIComponent(type) + "&id=" + encodeURIComponent(id))
         .then(r => r.json())
         .then(data => {
-            if (!data.length) {
-                document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No active staff in this department.</div>';
+            if (!data.rows || !data.rows.length) {
+                document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No records found.</div>';
                 return;
             }
-            const rows = data.map((s, i) => `<tr>
+            
+            const thead = `<tr><th style="width:40px">#</th>` + data.headers.map(h => `<th>${h}</th>`).join('') + `</tr>`;
+            const tbody = data.rows.map((row, i) => `<tr>
                 <td class="td-num">${i + 1}</td>
-                <td><strong>${s.name}</strong></td>
-                <td class="td-muted">${s.staff_no}</td>
-                <td class="td-muted">${s.position || '—'}</td>
+                ${row.map((cell, j) => j === 0 ? `<td><strong>${cell}</strong></td>` : `<td class="td-muted">${cell || '—'}</td>`).join('')}
             </tr>`).join('');
+            
             document.getElementById('staffListBody').innerHTML =
-                `<table class="table"><thead><tr><th>#</th><th>Name</th><th>Staff No.</th><th>Position</th></tr></thead><tbody>${rows}</tbody></table>`;
+                `<table class="table"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
         })
         .catch(() => {
-            document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load staff.</div>';
+            document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load data.</div>';
         });
 }
 

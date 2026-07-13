@@ -232,6 +232,7 @@
             <button class="modal-close" onclick="closeModal()" style="color:rgba(255,255,255,.6);font-size:1.4rem; background: none; border: none; cursor: pointer;">×</button>
         </div>
 
+        @if(Auth::user()->isAdmin())
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem;">
@@ -284,6 +285,44 @@
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
         </form>
+        @else
+        <div class="modal-body" style="padding: 1.5rem; padding-bottom: 0;">
+            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.5;">
+                You can update your profile picture directly. For other data changes, please submit an update request to Human Resources.
+            </p>
+            
+            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                @csrf
+                <input type="hidden" name="name" value="{{ $user->name }}">
+                <input type="hidden" name="email" value="{{ $user->email }}">
+                
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Profile Picture</label>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <input type="file" name="avatar" class="form-control" accept="image/*" style="flex:1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);">
+                        <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+                    </div>
+                    <small style="color: var(--muted); font-size: 0.75rem; display: block; margin-top: 0.25rem;">Max file size: 2MB. Accepts JPG, PNG, WebP.</small>
+                </div>
+            </form>
+            
+            <form action="{{ route('requests.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="record_type" value="Staff Data">
+                <input type="hidden" name="record_id" value="{{ $user->id }}">
+                
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Update Details (HR Request) *</label>
+                    <textarea name="message" class="form-control" required rows="4" placeholder="E.g. Please update my phone number to 012-3456789..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);"></textarea>
+                </div>
+        </div>
+
+        <div class="modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem; border-top: 1px solid var(--border);">
+            <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="this.closest('.modal-box').querySelector('form[action=\'{{ route('requests.store') }}\']').submit()">Submit Update Request</button>
+        </div>
+            </form>
+        @endif
     </div>
 </div>
 @endif

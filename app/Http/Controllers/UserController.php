@@ -215,8 +215,12 @@ class UserController extends Controller
         $user = auth()->user();
         $google2fa = new Google2FA();
 
-        $pendingSecret = $google2fa->generateSecretKey();
-        $request->session()->put('totp_pending_secret', $pendingSecret);
+        if (!$request->session()->has('totp_pending_secret')) {
+            $pendingSecret = $google2fa->generateSecretKey();
+            $request->session()->put('totp_pending_secret', $pendingSecret);
+        } else {
+            $pendingSecret = $request->session()->get('totp_pending_secret');
+        }
 
         $qrUrl = $google2fa->getQRCodeUrl(
             config('app.name'),
@@ -244,7 +248,7 @@ class UserController extends Controller
 
         $google2fa = new Google2FA();
 
-        if (!$google2fa->verifyKey($pendingSecret, $request->totp_code)) {
+        if (!$google2fa->verifyKey($pendingSecret, $request->totp_code, 4)) {
             return back()->with('error', 'Invalid code. Check your Authenticator app and try again.');
         }
 
