@@ -962,9 +962,6 @@
             @auth
             <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'my-bookings']) }}" class="pvt-btn {{ $viewMode === 'my-bookings' ? 'pvt-active' : '' }}">My Bookings</a>
             @endauth
-            @if(Auth::check() && Auth::user()->isAdminIT())
-              <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'manage']) }}" class="pvt-btn {{ $viewMode === 'manage' ? 'pvt-active' : '' }}">Manage</a>
-            @endif
         </div>
 
         <div class="pub-date-nav">
@@ -988,6 +985,9 @@
                 <svg id="rb-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="rb-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </button>
+            @if(Auth::check() && Auth::user()->isAdminIT())
+                <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'manage']) }}" class="rb-today-btn" style="{{ $viewMode === 'manage' ? 'background:var(--bg); border-color:#3b82f6;' : '' }}">Manage</a>
+            @endif
             @if(Auth::user()->canWrite() || Auth::user()->isCeo())
             <button class="btn btn-primary btn-sm rb-desktop-new-booking" data-requires-active onclick="openRoomBookingModal('', '')">
                 + New Booking
