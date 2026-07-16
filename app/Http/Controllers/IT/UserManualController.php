@@ -62,6 +62,15 @@ class UserManualController extends Controller
             ],
         ];
 
+        $flowPath = resource_path('docs/it_system_one_page_flow.md');
+        if (File::exists($flowPath)) {
+            $manuals['one_page_flow'] = [
+                'title' => 'One Page Flow',
+                'html' => Str::markdown(File::get($flowPath)),
+                'icon' => '<i class="bi bi-diagram-3-fill"></i>'
+            ];
+        }
+
         foreach ($rolesToLoad as $r) {
             if (isset($meta[$r])) {
                 $path = resource_path('docs/' . $meta[$r]['file']);
