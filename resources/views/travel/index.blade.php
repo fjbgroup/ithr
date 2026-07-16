@@ -92,17 +92,17 @@
             <thead>
                 <tr>
                     @if(!$isStaff)
-                    <th>Staff Member</th>
-                    <th>Dept / Co</th>
+                    <th style="min-width: 170px;">Staff Member</th>
+                    <th style="min-width: 130px;">Dept / Co</th>
                     @endif
-                    <th>Destination</th>
-                    <th>Purpose</th>
-                    <th>Departure</th>
-                    <th>Return</th>
-                    <th style="text-align:center;">Duration</th>
-                    <th>Transport</th>
-                    <th>Status</th>
-                    <th style="text-align:right;">Actions</th>
+                    <th style="min-width: 180px;">Destination</th>
+                    <th style="min-width: 150px;">Purpose</th>
+                    <th style="min-width: 110px;">Departure</th>
+                    <th style="min-width: 110px;">Return</th>
+                    <th style="text-align:center; min-width: 90px;">Duration</th>
+                    <th style="min-width: 100px;">Transport</th>
+                    <th style="min-width: 100px;">Status</th>
+                    <th style="text-align:right; min-width: 90px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,8 +122,8 @@
                 <tr>
                     @if(!$isStaff)
                     <td>
-                        <div style="font-weight:600;line-height:1.3;">{{ $t->staff?->name ?? '—' }}</div>
-                        <div style="font-size:.78rem;"><a href="{{ route('staff.show', $t->staff_id) }}" style="text-decoration:none;color:#6366f1;border-bottom:1px dashed #6366f1;">{{ $t->staff?->staff_no ?? '—' }}</a></div>
+                        <div style="font-weight:600;line-height:1.3;white-space:normal;">{{ $t->staff?->name ?? '—' }}</div>
+                        <div style="font-size:.78rem;white-space:normal;"><a href="{{ route('staff.show', $t->staff_id) }}" style="text-decoration:none;color:#6366f1;border-bottom:1px dashed #6366f1;">{{ $t->staff?->staff_no ?? '—' }}</a></div>
                     </td>
                     <td>
                         <span class="dept-badge">{{ $t->staff?->department?->name ?? '—' }}</span>
@@ -133,14 +133,14 @@
                     </td>
                     @endif
                     <td>
-                        <div style="font-weight:500;">
+                        <div style="font-weight:500;white-space:normal;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-.1em;margin-right:.25rem;color:var(--muted);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             {{ $t->destination }}
                         </div>
                     </td>
-                    <td style="max-width:160px;">
+                    <td style="max-width:240px;white-space:normal;word-break:break-word;">
                         <span style="font-size:.85rem;color:var(--muted);" title="{{ $t->purpose }}">
-                            {{ $t->purpose ? \Illuminate\Support\Str::limit($t->purpose, 35) : '—' }}
+                            {{ $t->purpose ? \Illuminate\Support\Str::limit($t->purpose, 80) : '—' }}
                         </span>
                     </td>
                     <td style="white-space:nowrap;">{{ \Carbon\Carbon::parse($t->departure_date)->format('d M Y') }}</td>

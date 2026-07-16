@@ -8,6 +8,15 @@
             
             <form action="{{ route('lms.courses.materials.update', [$course->id, $material->id]) }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 20px;">
                 @csrf @method('PUT')
+                @if($errors->any())
+                    <div style="background: #fef2f2; color: #dc2626; padding: 12px; border-radius: 6px; border: 1px solid #fecaca; font-size: 13px;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            @foreach($errors->all() as $err)
+                                <li>{{ $err }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div>
                         <label class="form-label" style="display: block; margin-bottom: 8px;">Title</label>

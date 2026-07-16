@@ -21,7 +21,7 @@ class LmsMaterialController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|in:video,pdf,quiz',
-            'file' => 'nullable|file|mimes:pdf,mp4,mov,avi|max:51200', // 50MB max
+            'file' => 'nullable|file|mimes:pdf,mp4,mov,avi|max:204800', // 200MB max
             'content' => 'nullable|string',
         ]);
 
@@ -67,7 +67,8 @@ class LmsMaterialController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'file' => 'nullable|file|mimes:pdf,mp4,mov,avi|max:51200',
+            'file' => 'nullable|file|mimes:pdf,mp4,mov,avi|max:204800', // 200MB max
+            'content' => 'nullable|string',
             'content' => 'nullable|string',
         ]);
 
