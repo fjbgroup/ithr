@@ -148,7 +148,7 @@ class RoomBookingController extends Controller
 
             $room    = MeetingRoom::find($roomId);
             $picIds  = $room->pics()->pluck('users.id')->toArray();
-            $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
+            $adminIds = User::whereIn('role', ['admin_it', 'admin_hr'])->pluck('id')->toArray();
             $targets = array_unique(array_merge($picIds, $adminIds));
 
             foreach ($targets as $tid) {
@@ -220,7 +220,7 @@ class RoomBookingController extends Controller
         // Notify PICs and Admins
         $room = $booking->room;
         $picIds = $room->pics()->pluck('users.id')->toArray();
-        $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
+        $adminIds = User::whereIn('role', ['admin_it', 'admin_hr'])->pluck('id')->toArray();
         $targets = array_unique(array_merge($picIds, $adminIds));
 
         foreach ($targets as $tid) {
@@ -263,7 +263,7 @@ class RoomBookingController extends Controller
 
         $room = $booking->room;
         $picIds = $room->pics()->pluck('users.id')->toArray();
-        $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
+        $adminIds = User::whereIn('role', ['admin_it', 'admin_hr'])->pluck('id')->toArray();
         $targets = array_unique(array_merge($picIds, $adminIds));
 
         foreach ($targets as $tid) {
@@ -295,7 +295,7 @@ class RoomBookingController extends Controller
     public function approve(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -372,7 +372,7 @@ class RoomBookingController extends Controller
     public function reject(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -415,7 +415,7 @@ class RoomBookingController extends Controller
     public function approveCancel(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -453,7 +453,7 @@ class RoomBookingController extends Controller
     public function rejectCancel(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -494,7 +494,7 @@ class RoomBookingController extends Controller
     public function approveEdit(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -548,7 +548,7 @@ class RoomBookingController extends Controller
     public function rejectEdit(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 

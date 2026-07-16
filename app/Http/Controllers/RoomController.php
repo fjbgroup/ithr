@@ -35,7 +35,7 @@ class RoomController extends Controller
         }
 
         $user = Auth::user();
-        if ($viewMode === 'manage' && (!$user || !$user->isAdminIT())) {
+        if ($viewMode === 'manage' && (!$user || !$user->isAdmin())) {
             return redirect()->route('rooms.index')->with('error', 'Unauthorized.');
         }
 
@@ -95,13 +95,13 @@ class RoomController extends Controller
                 ->pluck('room_id')
                 ->toArray();
             $isPic = !empty($myPicRoomIds);
-            $canApprove = $user->isAdminIT() || $isPic;
+            $canApprove = $user->isAdmin() || $isPic;
 
             if ($canApprove) {
                 $query = RoomBooking::with(['room', 'proposedRoom'])
                     ->whereIn('status', ['Pending', 'CancelRequested', 'EditRequested']);
 
-                if (!$user->isAdminIT()) {
+                if (!$user->isAdmin()) {
                     $query->whereIn('room_id', $myPicRoomIds);
                 }
                 $pendingForMe = $query->orderBy('booking_date')->orderBy('start_time')->get();
@@ -123,7 +123,7 @@ class RoomController extends Controller
         }
 
         $allUsers = [];
-        if ($user && $user->isAdminIT()) {
+        if ($user && $user->isAdmin()) {
             $allUsers = User::where('is_active', true)->orderBy('name')->get();
         }
 
