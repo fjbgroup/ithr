@@ -10,3 +10,7 @@ Artisan::command('inspire', function () {
 
 // Auto-archive decided IT requests older than 30 days
 Schedule::command('it:auto-archive')->daily();
+
+// Auto-reject bookings that have been pending for > 24 hours
+Schedule::command('booking:auto-reject')->hourly();
+

@@ -773,8 +773,11 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
     <a href="{{ route('home') }}" class="nav-link">
       <i class="bi bi-grid-fill"></i> Back to Portal
     </a>
+    <a href="{{ route('lms.dashboard') }}" class="nav-link">
+      <i class="bi bi-book-half"></i> LMS System
+    </a>
     <a href="{{ route('wt.admin.requests.create.shared') }}" class="nav-link">
-      <i class="bi bi-broadcast"></i> WT System
+      <i style="display:inline-flex;align-items:center;justify-content:center;width:20px;margin-right:12px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="8" width="10" height="14" rx="2" ry="2"/><path d="M9 8V3"/><path d="M15 8V6"/><circle cx="12" cy="16" r="2"/><line x1="10" y1="11" x2="14" y2="11"/></svg></i> WT System
     </a>
     <a href="{{ route('dashboard') }}" class="nav-link">
       <i class="bi bi-house-door-fill"></i> HR Portal
@@ -1454,5 +1457,6 @@ function toggleSidebar() {
     }, 3000);
 })();
 </script>
+@include('components.2fa-popup')
 </body>
 </html>

@@ -1874,7 +1874,7 @@ function pfaToggle(id) {
         {{-- Authorization & Signatures --}}
         <div style="background:#1a1a1a;color:#fff;padding:5px 20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px">Authorization &amp; Signatures / Kelulusan &amp; Tandatangan</div>
         <div style="padding:0 20px 16px">
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #999;margin-top:12px">
+          <div class="stats-grid" style="border:1px solid #999;margin-top:12px">
 
             {{-- Proposed By --}}
             <div style="padding:10px;border-right:1px solid #999;display:flex;flex-direction:column">

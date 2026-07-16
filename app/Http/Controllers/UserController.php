@@ -64,6 +64,10 @@ class UserController extends Controller
             $staff = Staff::where('staff_no', $validated['staff_no'])->first();
         }
 
+        if (EmailSetting::requireStaffRegistry() && !$staff) {
+            return back()->withErrors(['staff_no' => 'Staff record is required and must exist in the Staff Registry. Please select a valid staff member.'])->withInput();
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -211,8 +215,12 @@ class UserController extends Controller
         $user = auth()->user();
         $google2fa = new Google2FA();
 
-        $pendingSecret = $google2fa->generateSecretKey();
-        $request->session()->put('totp_pending_secret', $pendingSecret);
+        if (!$request->session()->has('totp_pending_secret')) {
+            $pendingSecret = $google2fa->generateSecretKey();
+            $request->session()->put('totp_pending_secret', $pendingSecret);
+        } else {
+            $pendingSecret = $request->session()->get('totp_pending_secret');
+        }
 
         $qrUrl = $google2fa->getQRCodeUrl(
             config('app.name'),
@@ -240,7 +248,7 @@ class UserController extends Controller
 
         $google2fa = new Google2FA();
 
-        if (!$google2fa->verifyKey($pendingSecret, $request->totp_code)) {
+        if (!$google2fa->verifyKey($pendingSecret, $request->totp_code, 4)) {
             return back()->with('error', 'Invalid code. Check your Authenticator app and try again.');
         }
 
@@ -302,6 +310,30 @@ class UserController extends Controller
     }
 
     /**
+     * Admin only — flip the global "require staff registry" master switch.
+     */
+    public function toggleRequireStaffRegistry(Request $request)
+    {
+        if (! Auth::user()->isAdminIT() && ! Auth::user()->isAdminHR()) {
+            abort(403);
+        }
+
+        $enable = $request->boolean('enable');
+        EmailSetting::setRequireStaffRegistry($enable);
+
+        AuditLogger::log('update', 'settings',
+            'Require Staff Registry ' . ($enable ? 'ENABLED' : 'DISABLED') . ' (global master switch).',
+            ['require_staff_registry' => $enable]
+        );
+
+        return redirect()->back()->with('success',
+            $enable
+                ? 'Creating user accounts now requires an existing Staff Registry record.'
+                : 'Creating user accounts without a Staff Registry record is now allowed.'
+        );
+    }
+
+    /**
      * Admin (IT) only — flip the global "email sending" master switch.
      * When OFF, the whole HR system stops sending outgoing email until
      * re-enabled. Users with Microsoft Authenticator (TOTP) are unaffected.
@@ -324,6 +356,35 @@ class UserController extends Controller
             $enable
                 ? 'Email sending has been enabled.'
                 : 'Email sending has been disabled. The system will not send any email until you re-enable it.'
+        );
+    }
+
+    /**
+     * Admin only - toggle maintenance mode for specific systems.
+     */
+    public function toggleSystemStatus(Request $request, $system)
+    {
+        if (! Auth::user()->isAdminIT()) {
+            abort(403);
+        }
+
+        if (! in_array($system, ['it', 'wt', 'lms'])) {
+            abort(404);
+        }
+
+        $enable = $request->boolean('enable');
+        EmailSetting::setSystemEnabled($system, $enable);
+
+        $systemName = strtoupper($system);
+        AuditLogger::log('update', 'settings',
+            "{$systemName} System " . ($enable ? 'ENABLED' : 'DISABLED') . ' (maintenance mode toggle).',
+            ["system_{$system}_enabled" => $enable]
+        );
+
+        return redirect()->back()->with('success',
+            $enable
+                ? "{$systemName} System has been enabled (Maintenance mode off)."
+                : "{$systemName} System has been disabled (Maintenance mode on)."
         );
     }
 

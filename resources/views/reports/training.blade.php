@@ -152,7 +152,7 @@
         </div>
         <div>
             <div class="rpt-kpi-val">{{ number_format($unique_staff) }}</div>
-            <div class="rpt-kpi-lbl">Unique Staff</div>
+            <div class="rpt-kpi-lbl">Joined Staff</div>
         </div>
     </div>
     <div class="rpt-kpi">

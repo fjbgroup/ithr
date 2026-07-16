@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::middleware('web')->group(base_path('routes/wt.php'));
             Route::middleware('web')->group(base_path('routes/it.php'));
+            Route::middleware('web')->group(base_path('routes/lms.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role'          => \App\Http\Middleware\RoleMiddleware::class,
             'readonly.ceo'  => \App\Http\Middleware\ReadOnlyCeo::class,
             'sso.autologin' => \App\Http\Middleware\SsoAutoLogin::class,
+            'system.status' => \App\Http\Middleware\CheckSystemStatus::class,
             // Walkie Talkie guards
             'wt.auth'       => \App\Http\Middleware\WT\Authenticate::class,
             'wt.guest'      => \App\Http\Middleware\WT\RedirectIfAuthenticated::class,

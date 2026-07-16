@@ -260,4 +260,78 @@ class MasterDataController extends Controller
             
         return response()->json($staff);
     }
+
+    public function companyDepts($companyId)
+    {
+        $company = \App\Models\Company::findOrFail($companyId);
+        $depts = \App\Models\Department::where('company', $company->code)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+            
+        return response()->json($depts);
+    }
+
+    public function companyStaff($companyId)
+    {
+        $company = \App\Models\Company::findOrFail($companyId);
+        $staff = \App\Models\Staff::where('company', $company->code)
+            ->where('is_active', 1)
+            ->orderBy('name')
+            ->get(['id', 'name', 'staff_no', 'position']);
+            
+        return response()->json($staff);
+    }
+
+    public function courseAttendance($id)
+    {
+        $course = \App\Models\TrainingCourse::findOrFail($id);
+        $attendance = \App\Models\TrainingAttendance::with('staff')
+            ->where('course_id', $course->id)
+            ->get()
+            ->map(function ($att) {
+                return [
+                    'name' => $att->staff->name ?? 'Unknown',
+                    'staff_no' => $att->staff->staff_no ?? '-',
+                    'status' => $att->status ?? 'Attended'
+                ];
+            });
+            
+        return response()->json($attendance);
+    }
+
+    public function positionStaff($id)
+    {
+        $position = \App\Models\Position::findOrFail($id);
+        $staff = \App\Models\Staff::where('position', $position->title)
+            ->where('is_active', 1)
+            ->orderBy('name')
+            ->get(['name', 'staff_no', 'department_id'])
+            ->map(function ($s) {
+                return [
+                    'name' => $s->name,
+                    'staff_no' => $s->staff_no,
+                    'department' => $s->department->name ?? '-'
+                ];
+            });
+            
+        return response()->json($staff);
+    }
+
+    public function transportTravel($id)
+    {
+        $transport = \App\Models\TransportMode::findOrFail($id);
+        $travels = \App\Models\BusinessTravel::with('staff')
+            ->where('transport', $transport->name)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($t) {
+                return [
+                    'ref_no' => 'TRV-' . str_pad($t->id, 5, '0', STR_PAD_LEFT),
+                    'staff_name' => $t->staff->name ?? 'Unknown',
+                    'destination' => $t->destination ?? '-'
+                ];
+            });
+            
+        return response()->json($travels);
+    }
 }

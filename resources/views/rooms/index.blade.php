@@ -962,9 +962,6 @@
             @auth
             <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'my-bookings']) }}" class="pvt-btn {{ $viewMode === 'my-bookings' ? 'pvt-active' : '' }}">My Bookings</a>
             @endauth
-            @if(Auth::check() && Auth::user()->isAdminIT())
-              <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'manage']) }}" class="pvt-btn {{ $viewMode === 'manage' ? 'pvt-active' : '' }}">Manage</a>
-            @endif
         </div>
 
         <div class="pub-date-nav">
@@ -988,6 +985,9 @@
                 <svg id="rb-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="rb-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </button>
+            @if(Auth::check() && Auth::user()->isAdminIT())
+                <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'manage']) }}" class="rb-today-btn" style="{{ $viewMode === 'manage' ? 'background:var(--bg); border-color:#3b82f6;' : '' }}">Manage</a>
+            @endif
             @if(Auth::user()->canWrite() || Auth::user()->isCeo())
             <button class="btn btn-primary btn-sm rb-desktop-new-booking" data-requires-active onclick="openRoomBookingModal('', '')">
                 + New Booking
@@ -1723,24 +1723,63 @@
                 </div>
                 <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #f1f5f9;">
                     <label style="font-weight:700; font-size:.85rem; color:#1e293b; display:block; margin-bottom:.75rem;">Assign PICs (Max 2)</label>
+                    <style>
+                        .pic-opt { padding: .5rem .75rem; cursor:pointer; font-size:.85rem; color:var(--text); border-bottom:1px solid var(--border); transition:background .15s; }
+                        .pic-opt:last-child { border-bottom:none; }
+                        .pic-opt:hover { background: var(--bg); color:#1e40af; }
+                    </style>
                     <div class="form-group">
                         <label style="font-size:.72rem; font-weight:700;">Primary PIC</label>
-                        <select name="room_pics[]" id="rmmPic1" class="form-control">
-                            <option value="">-- No PIC --</option>
-                            @foreach($allUsers as $u)
-                            <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->staff_no }})</option>
-                            @endforeach
-                        </select>
+                        <div class="pic-search-wrapper" style="position:relative;">
+                            <input type="hidden" name="room_pics[]" id="rmmPic1">
+                            <input type="text" id="rmmPic1_display" class="form-control" placeholder="Search user..." autocomplete="off" onfocus="showPicOpts('pic1-list')" onkeyup="filterPicOpts(this, 'pic1-list')">
+                            <div id="pic1-list" class="pic-opts-list" style="display:none; position:absolute; top:100%; left:0; right:0; max-height:180px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; z-index:99; box-shadow:var(--shadow);">
+                                <div class="pic-opt" data-id="" onclick="selPic(this, 'rmmPic1')">-- No PIC --</div>
+                                @foreach($allUsers as $u)
+                                <div class="pic-opt" data-id="{{ $u->id }}" onclick="selPic(this, 'rmmPic1', '{{ addslashes($u->name) }} ({{ $u->staff_no }})')">{{ $u->name }} ({{ $u->staff_no }})</div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label style="font-size:.72rem; font-weight:700;">Secondary PIC (Optional)</label>
-                        <select name="room_pics[]" id="rmmPic2" class="form-control">
-                            <option value="">-- No PIC --</option>
-                            @foreach($allUsers as $u)
-                            <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->staff_no }})</option>
-                            @endforeach
-                        </select>
+                        <div class="pic-search-wrapper" style="position:relative;">
+                            <input type="hidden" name="room_pics[]" id="rmmPic2">
+                            <input type="text" id="rmmPic2_display" class="form-control" placeholder="Search user..." autocomplete="off" onfocus="showPicOpts('pic2-list')" onkeyup="filterPicOpts(this, 'pic2-list')">
+                            <div id="pic2-list" class="pic-opts-list" style="display:none; position:absolute; top:100%; left:0; right:0; max-height:180px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; z-index:99; box-shadow:var(--shadow);">
+                                <div class="pic-opt" data-id="" onclick="selPic(this, 'rmmPic2')">-- No PIC --</div>
+                                @foreach($allUsers as $u)
+                                <div class="pic-opt" data-id="{{ $u->id }}" onclick="selPic(this, 'rmmPic2', '{{ addslashes($u->name) }} ({{ $u->staff_no }})')">{{ $u->name }} ({{ $u->staff_no }})</div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
+                    <script>
+                        function showPicOpts(id) { document.getElementById(id).style.display = 'block'; }
+                        function filterPicOpts(input, listId) {
+                            let filter = input.value.toLowerCase();
+                            let opts = document.getElementById(listId).getElementsByClassName('pic-opt');
+                            for(let i=0; i<opts.length; i++) {
+                                let txt = opts[i].textContent || opts[i].innerText;
+                                opts[i].style.display = txt.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+                            }
+                        }
+                        function selPic(el, hiddenId, displayVal) {
+                            document.getElementById(hiddenId).value = el.getAttribute('data-id');
+                            document.getElementById(hiddenId + '_display').value = displayVal || '';
+                            el.parentElement.style.display = 'none';
+                        }
+                        document.addEventListener('click', function(e) {
+                            if(!e.target.closest('.pic-search-wrapper')) {
+                                document.querySelectorAll('.pic-opts-list').forEach(d => d.style.display = 'none');
+                            }
+                        });
+                        function getPicDisplayName(id) {
+                            if(!id) return '';
+                            let opt = document.querySelector('#pic1-list .pic-opt[data-id="'+id+'"]');
+                            return opt ? opt.textContent : '';
+                        }
+                    </script>
                 </div>
             </div>
             <div class="modal-footer">
@@ -2131,6 +2170,10 @@
         document.getElementById('rmmColor').value = isEdit ? data.color_class : 'room-blue';
         document.getElementById('rmmPic1').value = pics[0] || '';
         document.getElementById('rmmPic2').value = pics[1] || '';
+        if (typeof getPicDisplayName !== 'undefined') {
+            document.getElementById('rmmPic1_display').value = getPicDisplayName(pics[0]);
+            document.getElementById('rmmPic2_display').value = getPicDisplayName(pics[1]);
+        }
         openModal('roomMgmtModal');
     }
 

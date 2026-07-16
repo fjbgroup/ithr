@@ -10,7 +10,7 @@ class BusinessTravel extends Model
     protected $table = 'business_travel';
 
     protected $fillable = [
-        'staff_id', 'destination', 'purpose', 'departure_date', 'return_date',
+        'staff_id', 'travel_type', 'destination', 'purpose', 'departure_date', 'return_date',
         'transport', 'notes', 'created_by'
     ];
 

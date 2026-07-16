@@ -19,7 +19,7 @@
       'CREATOR | DEVELOPER',
       'SITI HAJAR BINTI ABD RAZAK',
       'STUDENT INTERN FROM KV PERDAGANGAN, JB',
-      '13/3/2026 - 31/7/2026<br>V1.0.0',
+      '16/3/2026 - 31/7/2026<br>V1.0.0',
       'Crafted to empower your workflow, today and onwards.'
     ];
 

@@ -242,10 +242,8 @@
                     <td class="td-muted">{{ $d->created_at->format('d M Y') }}</td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $d->id }}, name:"{{ addslashes($d->name) }}", company:"{{ $d->company }}"})'>Edit</button>
-                        @if($d->staff_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $d->id }}, '{{ addslashes($d->name) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $d->id }}, name:"{{ addslashes($d->name) }}", company:"{{ $d->company }}", can_delete: {{ $d->staff_count == 0 ? "true" : "false" }}, delete_label: "{{ addslashes($d->name) }}"})'>Edit</button>
+                        @if($d->staff_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -280,14 +278,24 @@
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td><strong>{{ $c->code }}</strong></td>
                     <td>{{ $c->name }}</td>
-                    <td>{{ $c->dept_count }}</td>
-                    <td>{{ $c->staff_count }}</td>
+                    <td>
+                        @if($c->dept_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showCompanyDepts({{ $c->id }}, "{{ addslashes($c->name) }}")'>{{ $c->dept_count }}</button>
+                        @else
+                        {{ $c->dept_count }}
+                        @endif
+                    </td>
+                    <td>
+                        @if($c->staff_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showCompanyStaff({{ $c->id }}, "{{ addslashes($c->name) }}")'>{{ $c->staff_count }}</button>
+                        @else
+                        {{ $c->staff_count }}
+                        @endif
+                    </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $c->id }}, code:"{{ $c->code }}", name:"{{ addslashes($c->name) }}"})'>Edit</button>
-                        @if($c->staff_count == 0 && $c->dept_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $c->id }}, '{{ $c->code }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $c->id }}, code:"{{ $c->code }}", name:"{{ addslashes($c->name) }}", can_delete: {{ ($c->staff_count == 0 && $c->dept_count == 0) ? "true" : "false" }}, delete_label: "{{ $c->code }}"})'>Edit</button>
+                        @if($c->staff_count > 0 || $c->dept_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -331,7 +339,13 @@
                     </td>
                     <td>{{ $c->company }}</td>
                     <td class="td-muted">{{ $c->start_date ? \Carbon\Carbon::parse($c->start_date)->format('d M Y') : '—' }}</td>
-                    <td>{{ $c->att_count }}</td>
+                    <td>
+                        @if($c->att_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showCourseAttendance({{ $c->id }}, "{{ addslashes($c->title) }}")'>{{ $c->att_count }}</button>
+                        @else
+                        {{ $c->att_count }}
+                        @endif
+                    </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
                         <button class="btn btn-outline btn-sm" onclick='openEditModal({
@@ -340,11 +354,11 @@
                             title:"{{ addslashes($c->title) }}",
                             training_type:"{{ $c->training_type ?? 'External' }}",
                             company:"{{ $c->company }}",
-                            start_date:"{{ $c->start_date ?? '' }}"
+                            start_date:"{{ $c->start_date ?? '' }}",
+                            can_delete: {{ $c->att_count == 0 ? "true" : "false" }},
+                            delete_label: "{{ $c->code }}"
                         })'>Edit</button>
-                        @if($c->att_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $c->id }}, '{{ $c->code }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        @if($c->att_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -376,13 +390,17 @@
                 <tr>
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td>{{ $p->title }}</td>
-                    <td>{{ $p->staff_count }}</td>
+                    <td>
+                        @if($p->staff_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showPositionStaff({{ $p->id }}, "{{ addslashes($p->title) }}")'>{{ $p->staff_count }}</button>
+                        @else
+                        {{ $p->staff_count }}
+                        @endif
+                    </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $p->id }}, title:"{{ addslashes($p->title) }}"})'>Edit</button>
-                        @if($p->staff_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $p->id }}, '{{ addslashes($p->title) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $p->id }}, title:"{{ addslashes($p->title) }}", can_delete: {{ $p->staff_count == 0 ? "true" : "false" }}, delete_label: "{{ addslashes($p->title) }}"})'>Edit</button>
+                        @if($p->staff_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -414,13 +432,17 @@
                 <tr>
                     <td class="td-num">{{ $i + 1 }}</td>
                     <td>{{ $t->name }}</td>
-                    <td>{{ $t->usage_count }}</td>
+                    <td>
+                        @if($t->usage_count > 0)
+                        <button class="btn btn-ghost btn-sm" style="color:var(--primary);text-decoration:underline;padding:2px 6px;" onclick='showTransportTravel({{ $t->id }}, "{{ addslashes($t->name) }}")'>{{ $t->usage_count }}</button>
+                        @else
+                        {{ $t->usage_count }}
+                        @endif
+                    </td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $t->id }}, name:"{{ addslashes($t->name) }}"})'>Edit</button>
-                        @if($t->usage_count == 0)
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $t->id }}, '{{ addslashes($t->name) }}')">Delete</button>
-                        @else<span class="td-in-use">In use</span>@endif
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $t->id }}, name:"{{ addslashes($t->name) }}", can_delete: {{ $t->usage_count == 0 ? "true" : "false" }}, delete_label: "{{ addslashes($t->name) }}"})'>Edit</button>
+                        @if($t->usage_count > 0)<span class="td-in-use">In use</span>@endif
                     </td>
                     @endif
                 </tr>
@@ -455,8 +477,7 @@
                     <td>{{ $s->setting_value }}</td>
                     @if(Auth::user()->isAdminIT())
                     <td class="td-actions">
-                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $s->id }}, setting_key:"{{ $s->setting_key }}", setting_value:"{{ addslashes($s->setting_value) }}"})'>Edit</button>
-                        <button class="btn btn-sm btn-danger-soft" onclick="confirmDelete({{ $s->id }}, '{{ $s->setting_key }}')">Delete</button>
+                        <button class="btn btn-outline btn-sm" onclick='openEditModal({id:{{ $s->id }}, setting_key:"{{ $s->setting_key }}", setting_value:"{{ addslashes($s->setting_value) }}", can_delete: true, delete_label: "{{ $s->setting_key }}"})'>Edit</button>
                     </td>
                     @endif
                 </tr>
@@ -478,6 +499,42 @@
             <button class="modal-close" onclick="closeStaffListModal()">✕</button>
         </div>
         <div id="staffListBody" style="max-height:420px;overflow-y:auto;">
+            <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="companyDeptsModal">
+    <div class="modal-box" style="max-width:580px;">
+        <div class="modal-header">
+            <h3 id="companyDeptsModalTitle">Departments</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div id="companyDeptsBody" style="max-height:420px;overflow-y:auto;">
+            <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="companyStaffModal">
+    <div class="modal-box" style="max-width:580px;">
+        <div class="modal-header">
+            <h3 id="companyStaffModalTitle">Active Staff</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div id="companyStaffBody" style="max-height:420px;overflow-y:auto;">
+            <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="genericListModal">
+    <div class="modal-box" style="max-width:580px;">
+        <div class="modal-header">
+            <h3 id="genericListModalTitle">Details</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div id="genericListBody" style="max-height:420px;overflow-y:auto;">
             <div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>
         </div>
     </div>
@@ -570,9 +627,14 @@
                 @endif
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline" onclick="closeMainModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary" id="formSubmitBtn">Add</button>
+            <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+                <div id="modalDeleteBtnContainer" style="display:none;">
+                    <button type="button" class="btn btn-danger-soft" id="modalDeleteBtn">Delete</button>
+                </div>
+                <div style="display:flex; gap:0.5rem; margin-left:auto;">
+                    <button type="button" class="btn btn-outline" onclick="closeMainModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="formSubmitBtn">Add</button>
+                </div>
             </div>
         </form>
     </div>
@@ -619,6 +681,10 @@ function openAddModal() {
     document.getElementById('mainModalTitle').textContent = 'Add ' + TAB_LABEL;
     document.getElementById('formSubmitBtn').textContent = 'Add ' + TAB_LABEL;
     
+    if (document.getElementById('modalDeleteBtnContainer')) {
+        document.getElementById('modalDeleteBtnContainer').style.display = 'none';
+    }
+    
     clearFormFields();
     openModal('mainModal');
 }
@@ -638,6 +704,18 @@ function openEditModal(data) {
     
     document.getElementById('mainModalTitle').textContent = 'Edit ' + TAB_LABEL;
     document.getElementById('formSubmitBtn').textContent = 'Save Changes';
+    
+    if (document.getElementById('modalDeleteBtnContainer')) {
+        if (data.can_delete) {
+            document.getElementById('modalDeleteBtnContainer').style.display = 'block';
+            document.getElementById('modalDeleteBtn').onclick = function() {
+                closeMainModal();
+                confirmDelete(data.id, data.delete_label);
+            };
+        } else {
+            document.getElementById('modalDeleteBtnContainer').style.display = 'none';
+        }
+    }
     
     if (TAB === 'departments') { 
         setVal('f_name', data.name); 
@@ -712,6 +790,134 @@ function openStaffListModal(deptId, deptName) {
         })
         .catch(() => {
             document.getElementById('staffListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load staff.</div>';
+        });
+}
+
+function showCompanyDepts(companyId, companyName) {
+    document.getElementById('companyDeptsModalTitle').textContent = 'Departments — ' + companyName;
+    document.getElementById('companyDeptsBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('companyDeptsModal');
+    
+    fetch("{{ url('master-data/company-depts') }}/" + companyId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('companyDeptsBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No departments found.</div>';
+                return;
+            }
+            const rows = data.map((d, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${d.name}</strong></td>
+            </tr>`).join('');
+            document.getElementById('companyDeptsBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Name</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('companyDeptsBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load departments.</div>';
+        });
+}
+
+function showCompanyStaff(companyId, companyName) {
+    document.getElementById('companyStaffModalTitle').textContent = 'Active Staff — ' + companyName;
+    document.getElementById('companyStaffBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('companyStaffModal');
+    
+    fetch("{{ url('master-data/company-staff') }}/" + companyId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('companyStaffBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No active staff found.</div>';
+                return;
+            }
+            const rows = data.map((s, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${s.name}</strong></td>
+                <td class="td-muted">${s.staff_no || '—'}</td>
+                <td class="td-muted">${s.position || '—'}</td>
+            </tr>`).join('');
+            document.getElementById('companyStaffBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Name</th><th>Staff No.</th><th>Position</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('companyStaffBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load staff.</div>';
+        });
+}
+
+function showCourseAttendance(courseId, courseTitle) {
+    document.getElementById('genericListModalTitle').textContent = 'Attendances — ' + courseTitle;
+    document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('genericListModal');
+    
+    fetch("{{ url('master-data/course-attendance') }}/" + courseId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No attendances found.</div>';
+                return;
+            }
+            const rows = data.map((d, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${d.name}</strong></td>
+                <td class="td-muted">${d.staff_no}</td>
+                <td>${d.status}</td>
+            </tr>`).join('');
+            document.getElementById('genericListBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Name</th><th>Staff No.</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load attendances.</div>';
+        });
+}
+
+function showPositionStaff(posId, posTitle) {
+    document.getElementById('genericListModalTitle').textContent = 'Staff in Position — ' + posTitle;
+    document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('genericListModal');
+    
+    fetch("{{ url('master-data/position-staff') }}/" + posId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No active staff found.</div>';
+                return;
+            }
+            const rows = data.map((d, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${d.name}</strong></td>
+                <td class="td-muted">${d.staff_no || '—'}</td>
+                <td class="td-muted">${d.department}</td>
+            </tr>`).join('');
+            document.getElementById('genericListBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Name</th><th>Staff No.</th><th>Department</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load staff.</div>';
+        });
+}
+
+function showTransportTravel(transportId, transportName) {
+    document.getElementById('genericListModalTitle').textContent = 'Travels using — ' + transportName;
+    document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">Loading…</div>';
+    openModal('genericListModal');
+    
+    fetch("{{ url('master-data/transport-travel') }}/" + transportId)
+        .then(r => r.json())
+        .then(data => {
+            if (!data.length) {
+                document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);">No travel requests found.</div>';
+                return;
+            }
+            const rows = data.map((d, i) => `<tr>
+                <td class="td-num">${i + 1}</td>
+                <td><strong>${d.ref_no}</strong></td>
+                <td>${d.staff_name}</td>
+                <td class="td-muted">${d.destination}</td>
+            </tr>`).join('');
+            document.getElementById('genericListBody').innerHTML =
+                `<table class="table"><thead><tr><th>#</th><th>Ref No.</th><th>Staff</th><th>Destination</th></tr></thead><tbody>${rows}</tbody></table>`;
+        })
+        .catch(() => {
+            document.getElementById('genericListBody').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--danger);">Failed to load travel requests.</div>';
         });
 }
 

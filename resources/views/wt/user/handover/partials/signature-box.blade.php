@@ -5,7 +5,7 @@
     </div>
     <div style="padding:10px 12px;border-bottom:1px solid var(--border)">
         <div class="pickup-label">Signer Name</div>
-        <input type="text" name="{{ $nameField }}" value="{{ old($nameField, $defaultName) }}" class="signature-name" required>
+        <input type="text" name="{{ $nameField }}" value="{{ old($nameField) }}" placeholder="Type name here..." class="signature-name" required>
     </div>
     <div class="signature-source">
         <label><input type="radio" name="{{ $sourceField }}" value="draw" data-signature-source checked> Draw</label>
@@ -22,9 +22,6 @@
     </div>
     <div class="signature-preview" data-signature-preview>
         <img alt="{{ $title }} preview">
-    </div>
-    <div class="signature-actions">
-        <span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">Signed box for {{ $defaultName }}</span>
     </div>
     <input type="hidden" name="{{ $signatureField }}" data-signature-input>
 </div>

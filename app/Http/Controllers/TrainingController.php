@@ -6,6 +6,8 @@ use App\Models\TrainingCourse;
 use App\Models\TrainingAttendance;
 use App\Models\Department;
 use App\Models\Staff;
+use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +24,9 @@ class TrainingController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
+        $isGlobalAdmin = $user->isAdmin() || $user->isCeo();
+        $isPic = TrainingCourse::where('pic_id', $user->id)->exists();
+        $isAdmin = $isGlobalAdmin || $isPic;
 
         $view = $request->query('view', $isAdmin ? 'by_dept' : 'list');
         if (!$isAdmin && $view !== 'list') {
@@ -38,6 +42,7 @@ class TrainingController extends Controller
         $staff_filter = $isAdmin ? $request->query('staff_filter') : null;
         $year_filter = $request->query('year');
         $no_dept = $request->query('no_dept');
+        $sort = $request->query('sort');
 
         // Stats for the top bar
         if (!$isAdmin) {
@@ -80,6 +85,7 @@ class TrainingController extends Controller
             'staff_filter' => $staff_filter,
             'year_filter' => $year_filter,
             'no_dept' => $no_dept,
+            'sort' => $sort,
             'isAdmin' => $isAdmin,
             'course_id' => $course_id,
             'years' => TrainingCourse::whereNotNull('start_date')
@@ -152,6 +158,9 @@ class TrainingController extends Controller
 
         } elseif ($view === 'courses') {
             $query = TrainingCourse::query();
+            if (!$isGlobalAdmin) {
+                $query->where('pic_id', $user->id);
+            }
             if ($company_f) $query->where('company', $company_f);
             if ($type_filter) $query->where('training_type', $type_filter);
             if ($search) {
@@ -161,39 +170,48 @@ class TrainingController extends Controller
                       ->orWhere('code', 'like', $like);
                 });
             }
-            $data['courses'] = $query->with(['staff' => fn($q) => $q->withPivot('status')->with('department')])->orderBy('code')->get();
+            if ($sort === 'recent') {
+                $query->orderBy('created_at', 'desc');
+            } else {
+                $query->orderBy('code');
+            }
+            $data['courses'] = $query->with(['staff' => fn($q) => $q->withPivot('status')->with('department')])->get();
         }
 
-        // Always pass lightweight lists for the Add Course / Add Attendance modals
-        $data['allStaff']       = collect();
-        $data['allCourses']     = collect();
-        $data['allDepartments'] = collect();
-        if ($isAdmin) {
-            $data['allStaff']       = Staff::select('id', 'name', 'staff_no')->where('is_active', 1)->orderBy('name')->get();
-            $data['allCourses']     = TrainingCourse::select('id', 'title', 'code', 'training_type')->orderBy('code')->get();
-            $data['allDepartments'] = Department::select('id', 'name', 'company')->orderBy('company')->orderBy('name')->get();
-        }
+        $allStaff = Staff::orderBy('name')->get();
+        $allCourses = TrainingCourse::orderBy('title')->get();
+        $allUsers = User::orderBy('name')->get();
+        $companies = Company::orderBy('name')->get();
+        $departments = Department::orderBy('name')->get();
+        
+        $data['allStaff'] = $allStaff;
+        $data['allCourses'] = $allCourses;
+        $data['allDepartments'] = $departments;
+        $data['allUsers'] = $allUsers;
+        $data['companies'] = $companies;
 
         return view('training.index', $data);
     }
 
     public function storeCourse(Request $request)
     {
-        if (!Auth::user() || !(Auth::user()->role === 'admin_it' || Auth::user()->role === 'admin_hr')) {
-            return redirect()->route('training.index')->with('error', 'Unauthorized.');
+        $user = Auth::user();
+        $isGlobalAdmin = $user && ($user->isAdmin() || $user->isCeo());
+        if (!$isGlobalAdmin) {
+            return redirect()->route('training.index')->with('error', 'Unauthorized. Only admins can create courses.');
         }
 
         $validated = $request->validate([
             'title'         => 'required|string|max:500',
             'training_type' => 'required|in:Internal,External',
-            'company'       => 'nullable|string|max:50',
+            'company'       => 'nullable|string|max:100',
+            'department'    => 'nullable|string|max:100',
             'start_date'    => 'nullable|date',
             'end_date'      => 'nullable|date',
             'venue'         => 'nullable|string|max:500',
             'duration'      => 'nullable|string|max:100',
-            'is_private'    => 'boolean',
-            'staff_ids'     => 'nullable|array',
-            'staff_ids.*'   => 'exists:staff,id',
+            'platform'      => 'required|in:HR,LMS',
+            'pic_id'        => 'nullable|exists:users,id',
         ]);
 
         if (empty($validated['end_date']) && !empty($validated['start_date'])) {
@@ -212,27 +230,17 @@ class TrainingController extends Controller
 
         $course = TrainingCourse::create($validated);
 
+        if (!empty($course->pic_id)) {
+            $picUser = \App\Models\User::find($course->pic_id);
+            if ($picUser && $picUser->email) {
+                \Illuminate\Support\Facades\Mail::to($picUser->email)->queue(new \App\Mail\TrainingPicAssigned($course->title, $picUser->name));
+            }
+        }
+
         AuditLogger::log('create', 'training',
             'Created training course "' . $course->title . '" (' . $course->code . ').',
             ['course_id' => $course->id, 'type' => $course->training_type]
         );
-
-        if (!empty($validated['is_private']) && !empty($request->input('staff_ids'))) {
-            $now = now();
-            $inserts = [];
-            foreach (array_unique($request->input('staff_ids')) as $sid) {
-                $inserts[] = [
-                    'staff_id'      => $sid,
-                    'course_id'     => $course->id,
-                    'status'        => 'Scheduled',
-                    'training_type' => $course->training_type,
-                    'created_by'    => Auth::id(),
-                    'created_at'    => $now,
-                    'updated_at'    => $now,
-                ];
-            }
-            TrainingAttendance::insertOrIgnore($inserts);
-        }
 
         return redirect()->route('training.index', ['view' => 'courses'])
             ->with('success', 'Course "' . $course->title . '" created.');
@@ -240,21 +248,23 @@ class TrainingController extends Controller
 
     public function updateCourse(Request $request, TrainingCourse $course)
     {
-        if (!Auth::user() || !(Auth::user()->role === 'admin_it' || Auth::user()->role === 'admin_hr')) {
+        $user = Auth::user();
+        $isGlobalAdmin = $user && ($user->isAdmin() || $user->isCeo());
+        if (!$isGlobalAdmin && $course->pic_id !== $user->id) {
             return redirect()->route('training.index')->with('error', 'Unauthorized.');
         }
 
         $validated = $request->validate([
             'title'         => 'required|string|max:500',
             'training_type' => 'required|in:Internal,External',
-            'company'       => 'nullable|string|max:50',
+            'company'       => 'nullable|string|max:100',
+            'department'    => 'nullable|string|max:100',
             'start_date'    => 'nullable|date',
             'end_date'      => 'nullable|date',
             'venue'         => 'nullable|string|max:500',
             'duration'      => 'nullable|string|max:100',
-            'is_private'    => 'boolean',
-            'staff_ids'     => 'nullable|array',
-            'staff_ids.*'   => 'exists:staff,id',
+            'platform'      => 'required|in:HR,LMS',
+            'pic_id'        => 'nullable|exists:users,id',
         ]);
 
         if (empty($validated['end_date']) && !empty($validated['start_date'])) {
@@ -262,29 +272,20 @@ class TrainingController extends Controller
             if (empty($validated['duration'])) $validated['duration'] = '1 day';
         }
 
+        $oldPicId = $course->pic_id;
         $course->update($validated);
+        
+        if (!empty($course->pic_id) && $course->pic_id !== $oldPicId) {
+            $picUser = \App\Models\User::find($course->pic_id);
+            if ($picUser && $picUser->email) {
+                \Illuminate\Support\Facades\Mail::to($picUser->email)->queue(new \App\Mail\TrainingPicAssigned($course->title, $picUser->name));
+            }
+        }
 
         AuditLogger::log('update', 'training',
             'Updated training course "' . $course->title . '" (' . $course->code . ').',
             ['course_id' => $course->id]
         );
-
-        if (!empty($validated['is_private']) && !empty($request->input('staff_ids'))) {
-            $now = now();
-            $inserts = [];
-            foreach (array_unique($request->input('staff_ids')) as $sid) {
-                $inserts[] = [
-                    'staff_id'      => $sid,
-                    'course_id'     => $course->id,
-                    'status'        => 'Scheduled',
-                    'training_type' => $course->training_type,
-                    'created_by'    => Auth::id(),
-                    'created_at'    => $now,
-                    'updated_at'    => $now,
-                ];
-            }
-            TrainingAttendance::insertOrIgnore($inserts);
-        }
 
         return redirect()->route('training.index', ['view' => 'courses'])
             ->with('success', 'Course "' . $course->title . '" updated.');
@@ -292,7 +293,10 @@ class TrainingController extends Controller
 
     public function storeAttendance(Request $request)
     {
-        if (!Auth::user() || !(Auth::user()->role === 'admin_it' || Auth::user()->role === 'admin_hr')) {
+        $user = Auth::user();
+        $isGlobalAdmin = $user && ($user->isAdmin() || $user->isCeo());
+        $isPic = TrainingCourse::where('pic_id', $user->id)->exists();
+        if (!$isGlobalAdmin && !$isPic) {
             return redirect()->route('training.index')->with('error', 'Unauthorized.');
         }
 
@@ -317,6 +321,19 @@ class TrainingController extends Controller
 
         return redirect()->route('training.index', ['view' => 'list'])
             ->with('success', 'Attendance record added.');
+    }
+
+    public function deleteAttendance(TrainingAttendance $attendance)
+    {
+        $user = Auth::user();
+        $isGlobalAdmin = $user && ($user->isAdmin() || $user->isCeo());
+        $course = TrainingCourse::find($attendance->course_id);
+        if (!$isGlobalAdmin && (!isset($course) || $course->pic_id !== $user->id)) {
+            return back()->with('error', 'Unauthorized.');
+        }
+
+        $attendance->delete();
+        return back()->with('success', 'Attendance record removed.');
     }
 
     public function qrPage(TrainingCourse $course)

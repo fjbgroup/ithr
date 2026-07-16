@@ -75,7 +75,7 @@ $statItems = [
   ['bi-hourglass-split',  'rgba(217,119,6,.12)',   '#d97706', $stats['pending'] ?? 0, 'Pending Approval','#d97706'],
 ];
 @endphp
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
+<div class="stats-grid">
   @foreach($statItems as [$icon,$bg,$color,$val,$lbl,$border])
   <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid {{ $border }};border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05)">
     <div style="width:44px;height:44px;border-radius:10px;background:{{ $bg }};display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0">

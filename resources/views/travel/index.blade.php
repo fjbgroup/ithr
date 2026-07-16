@@ -92,17 +92,17 @@
             <thead>
                 <tr>
                     @if(!$isStaff)
-                    <th>Staff Member</th>
-                    <th>Dept / Co</th>
+                    <th style="min-width: 170px;">Staff Member</th>
+                    <th style="min-width: 130px;">Dept / Co</th>
                     @endif
-                    <th>Destination</th>
-                    <th>Purpose</th>
-                    <th>Departure</th>
-                    <th>Return</th>
-                    <th style="text-align:center;">Duration</th>
-                    <th>Transport</th>
-                    <th>Status</th>
-                    <th style="text-align:right;">Actions</th>
+                    <th style="min-width: 180px;">Destination</th>
+                    <th style="min-width: 150px;">Purpose</th>
+                    <th style="min-width: 110px;">Departure</th>
+                    <th style="min-width: 110px;">Return</th>
+                    <th style="text-align:center; min-width: 90px;">Duration</th>
+                    <th style="min-width: 100px;">Transport</th>
+                    <th style="min-width: 100px;">Status</th>
+                    <th style="text-align:right; min-width: 90px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,8 +122,8 @@
                 <tr>
                     @if(!$isStaff)
                     <td>
-                        <div style="font-weight:600;line-height:1.3;">{{ $t->staff?->name ?? '—' }}</div>
-                        <div style="font-size:.78rem;"><a href="{{ route('staff.show', $t->staff_id) }}" style="text-decoration:none;color:#6366f1;border-bottom:1px dashed #6366f1;">{{ $t->staff?->staff_no ?? '—' }}</a></div>
+                        <div style="font-weight:600;line-height:1.3;white-space:normal;">{{ $t->staff?->name ?? '—' }}</div>
+                        <div style="font-size:.78rem;white-space:normal;"><a href="{{ route('staff.show', $t->staff_id) }}" style="text-decoration:none;color:#6366f1;border-bottom:1px dashed #6366f1;">{{ $t->staff?->staff_no ?? '—' }}</a></div>
                     </td>
                     <td>
                         <span class="dept-badge">{{ $t->staff?->department?->name ?? '—' }}</span>
@@ -133,14 +133,14 @@
                     </td>
                     @endif
                     <td>
-                        <div style="font-weight:500;">
+                        <div style="font-weight:500;white-space:normal;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-.1em;margin-right:.25rem;color:var(--muted);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             {{ $t->destination }}
                         </div>
                     </td>
-                    <td style="max-width:160px;">
+                    <td style="max-width:240px;white-space:normal;word-break:break-word;">
                         <span style="font-size:.85rem;color:var(--muted);" title="{{ $t->purpose }}">
-                            {{ $t->purpose ? \Illuminate\Support\Str::limit($t->purpose, 35) : '—' }}
+                            {{ $t->purpose ? \Illuminate\Support\Str::limit($t->purpose, 80) : '—' }}
                         </span>
                     </td>
                     <td style="white-space:nowrap;">{{ \Carbon\Carbon::parse($t->departure_date)->format('d M Y') }}</td>
@@ -186,9 +186,57 @@
         <form method="POST" action="{{ route('travel.store') }}" id="travelForm">
             @csrf
             <div id="methodField"></div>
+            <input type="hidden" name="travel_type" id="travel_type_input" value="Domestic">
             <input type="hidden" name="staff_id" id="travel_staff_id" value="">
 
-            <div class="form-grid" style="padding:1.25rem 1.5rem;">
+            <!-- WIZARD STEP 1: Type -->
+            <div id="wizardStep1" style="padding:1.5rem; text-align:center;">
+                <h4 style="margin-bottom:1rem;font-size:1.1rem;">Where are you travelling to?</h4>
+                <div style="display:flex;gap:1rem;justify-content:center;">
+                    <div onclick="selectTravelType('Domestic')" style="flex:1;padding:2rem;border:2px solid var(--border);border-radius:12px;cursor:pointer;background:var(--surface);transition:.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
+                        <div style="margin-bottom:.5rem;display:flex;justify-content:center;">
+                            <img src="https://flagcdn.com/w80/my.png" alt="Malaysia Flag" width="48" style="border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                        </div>
+                        <div style="font-weight:600;font-size:1.1rem;">Domestic</div>
+                        <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem;">Within Malaysia</div>
+                    </div>
+                    <div onclick="selectTravelType('International')" style="flex:1;padding:2rem;border:2px solid var(--border);border-radius:12px;cursor:pointer;background:var(--surface);transition:.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
+                        <div style="margin-bottom:.5rem;display:flex;justify-content:center;color:var(--primary);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        </div>
+                        <div style="font-weight:600;font-size:1.1rem;">International</div>
+                        <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem;">Outside Malaysia</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WIZARD STEP 2: Map -->
+            <div id="wizardStep2" style="display:none;padding:1.5rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="goToStep(1)">← Back</button>
+                    <span style="font-weight:600;">Select Destination</span>
+                </div>
+                <div id="travelMap" style="width:100%;height:350px;border-radius:8px;border:1px solid var(--border);background:#e2e8f0;margin-bottom:1rem;z-index:1;"></div>
+                <div style="display:flex;gap:.5rem;align-items:center;">
+                    <input type="text" id="mapDestPreview" placeholder="Type a location to search or click the map..." style="flex:1;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;background:white;">
+                    <button type="button" id="mapSearchBtn" class="btn btn-outline" onclick="searchMapLocation()" style="font-weight:600;padding:.65rem 1.25rem;">Search</button>
+                    <button type="button" id="mapProceedBtn" class="btn btn-primary" onclick="goToStep(3)" disabled style="padding:.65rem 1.25rem;">Proceed →</button>
+                </div>
+            </div>
+
+            <!-- WIZARD STEP 3: Details -->
+            <div id="wizardStep3" style="display:none;padding:1.5rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+                    <div>
+                        <span id="finalTypeBadge" style="display:inline-block;padding:.2rem .5rem;background:var(--primary);color:#fff;border-radius:4px;font-size:.7rem;font-weight:600;margin-bottom:.3rem;text-transform:uppercase;"></span>
+                        <div style="font-weight:600;font-size:1.1rem;display:flex;align-items:center;gap:.5rem;">
+                            📍 <span id="finalDestText"></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="goToStep(2)">Edit Location</button>
+                </div>
+                
+                <div class="form-grid">
                 <!-- Staff selection (admin only) -->
                 @if(!$isStaff)
                 <div class="form-group form-full" id="staffSearchGroup">
@@ -226,7 +274,7 @@
                 </div>
                 @endif
 
-                <div class="form-group form-full">
+                <div class="form-group form-full" style="display:none;">
                     <label>Destination <span style="color:var(--danger)">*</span></label>
                     <input type="text" name="destination" id="travel_destination" placeholder="e.g. Kuala Lumpur, Malaysia" required style="width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;">      
                 </div>
@@ -245,20 +293,23 @@
                 <div class="form-full" id="durationPreview" style="display:none;padding:.5rem .75rem;background:var(--bg);border-radius:8px;font-size:.85rem;color:var(--muted);text-align:center;"></div>
                 <div class="form-group form-full">
                     <label>Mode of Transport</label>
-                    <select name="transport" id="travel_transport" style="width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;background:white;">
+                    <select name="transport" id="travel_transport" onchange="toggleTransportOther()" style="width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;background:white;">
                         <option value="">— Select —</option>
                         @foreach($transportModes as $tm)
                         <option value="{{ $tm->name }}">{{ $tm->name }}</option>
                         @endforeach
+                        <option value="Others">Others</option>
                     </select>
+                    <input type="text" id="travel_transport_other" placeholder="Please specify your mode of transport..." style="display:none;width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;margin-top:.5rem;">
                 </div>
                 <div class="form-group form-full">
                     <label>Notes</label>
                     <textarea name="notes" id="travel_notes" rows="2" placeholder="Any additional info…" style="width:100%;padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-size:.875rem;resize:vertical;"></textarea>
                 </div>
-            </div>
-
-            <div class="modal-footer">
+                </div>
+            </div> <!-- End Wizard Step 3 -->
+            
+            <div class="modal-footer" id="wizardFooter" style="display:none;">
                 <button type="button" class="btn btn-outline btn-sm" onclick="closeModal()">Cancel</button>
                 <button type="submit" class="btn btn-primary btn-sm" id="travelSubmitBtn">Save Travel Record</button>
             </div>
@@ -308,6 +359,12 @@ function openAddModal() {
     document.getElementById('durationPreview').style.display = 'none';
     openModal('travelModal');
 }
+// Modification to openAddModal to start at wizard step 1
+const originalOpenAddModal = openAddModal;
+window.openAddModal = function() {
+    originalOpenAddModal();
+    goToStep(1); // Start wizard from beginning
+};
 
 async function editTravel(id) {
     const res  = await fetch("{{ url('travel') }}/" + id);
@@ -320,13 +377,39 @@ async function editTravel(id) {
     document.getElementById('methodField').innerHTML = '@method("PUT")';
     
     document.getElementById('travel_staff_id').value   = data.staff_id;
+    document.getElementById('travel_type_input').value = data.travel_type ?? 'Domestic';
     document.getElementById('travel_destination').value= data.destination;
     document.getElementById('travel_purpose').value    = data.purpose ?? '';
     document.getElementById('travel_departure').value  = data.departure_date;
     document.getElementById('travel_return').value     = data.return_date;
-    document.getElementById('travel_transport').value  = data.transport ?? '';
+    
+    const ts = document.getElementById('travel_transport');
+    const to = document.getElementById('travel_transport_other');
+    const dbTransport = data.transport ?? '';
+    
+    let optionExists = false;
+    for (let i = 0; i < ts.options.length; i++) {
+        if (ts.options[i].value === dbTransport) {
+            optionExists = true;
+            break;
+        }
+    }
+    
+    if (dbTransport && !optionExists) {
+        ts.value = 'Others';
+        to.value = dbTransport;
+        to.style.display = 'block';
+    } else {
+        ts.value = dbTransport;
+        to.style.display = 'none';
+        to.value = '';
+    }
+    
     document.getElementById('travel_notes').value      = data.notes ?? '';
     document.getElementById('travelSubmitBtn').textContent = 'Update Record';
+
+    document.getElementById('finalDestText').textContent = data.destination;
+    document.getElementById('finalTypeBadge').textContent = (data.travel_type ?? 'Domestic') + " (Edit)";
 
     if (!IS_STAFF_VIEW) {
         const staffName = data.staff ? data.staff.name : 'Unknown Staff';
@@ -335,6 +418,7 @@ async function editTravel(id) {
     }
     updateDurationPreview();
     openModal('travelModal');
+    goToStep(3);
 }
 
 function deleteTravel(id, name) {
@@ -460,6 +544,193 @@ function updateDurationPreview() {
 
 document.getElementById('travel_departure').addEventListener('change', updateDurationPreview);
 document.getElementById('travel_return').addEventListener('change', updateDurationPreview);
+</script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+let travelMap = null;
+let mapMarker = null;
+
+function initTravelMap(type) {
+    if (travelMap) {
+        travelMap.remove();
+        travelMap = null;
+        mapMarker = null;
+    }
+
+    const initialZoom = type === 'Domestic' ? 6 : 2;
+    const initialCenter = type === 'Domestic' ? [4.2105, 101.9758] : [20, 0];
+
+    let mapOptions = {
+        center: initialCenter,
+        zoom: initialZoom,
+    };
+    
+    if (type === 'Domestic') {
+        // Bounds for Malaysia
+        mapOptions.maxBounds = [
+            [0.5, 99.0], 
+            [8.0, 120.0]
+        ];
+        mapOptions.maxBoundsViscosity = 1.0;
+        mapOptions.minZoom = 5;
+    }
+
+    travelMap = L.map('travelMap', mapOptions);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(travelMap);
+
+    travelMap.on('click', function(e) {
+        if (mapMarker) travelMap.removeLayer(mapMarker);
+        mapMarker = L.marker(e.latlng).addTo(travelMap);
+
+        document.getElementById('mapDestPreview').value = "Loading location...";
+        document.getElementById('mapProceedBtn').disabled = true;
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}&zoom=10&addressdetails=1`)
+            .then(res => res.json())
+            .then(data => {
+                let locationName = '';
+                if (data.address) {
+                    if (type === 'Domestic' && data.address.country_code !== 'my') {
+                        document.getElementById('mapDestPreview').value = "Please select a location within Malaysia.";
+                        document.getElementById('mapProceedBtn').disabled = true;
+                        if (mapMarker) travelMap.removeLayer(mapMarker);
+                        mapMarker = null;
+                        return;
+                    }
+                    if (data.address.state && data.address.country) {
+                        locationName = `${data.address.state}, ${data.address.country}`;
+                    } else if (data.address.country) {
+                        locationName = data.address.country;
+                    } else {
+                        locationName = data.display_name;
+                    }
+                }
+                if (!locationName) locationName = `${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`;
+                
+                document.getElementById('mapDestPreview').value = locationName;
+                document.getElementById('travel_destination').value = locationName;
+                document.getElementById('finalDestText').textContent = locationName;
+                document.getElementById('mapProceedBtn').disabled = false;
+            })
+            .catch(() => {
+                const loc = `${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`;
+                document.getElementById('mapDestPreview').value = loc;
+                document.getElementById('travel_destination').value = loc;
+                document.getElementById('finalDestText').textContent = loc;
+                document.getElementById('mapProceedBtn').disabled = false;
+            });
+    });
+
+    setTimeout(() => travelMap.invalidateSize(), 100);
+}
+
+function searchMapLocation() {
+    const query = document.getElementById('mapDestPreview').value.trim();
+    if (!query) return;
+    
+    document.getElementById('mapSearchBtn').textContent = '...';
+    document.getElementById('mapSearchBtn').disabled = true;
+    
+    const type = document.getElementById('travel_type_input').value;
+    let url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&addressdetails=1`;
+    if (type === 'Domestic') {
+        url += '&countrycodes=my';
+    }
+    
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('mapSearchBtn').textContent = 'Search';
+            document.getElementById('mapSearchBtn').disabled = false;
+            
+            if (data && data.length > 0) {
+                const result = data[0];
+                const latlng = [result.lat, result.lon];
+                
+                if (mapMarker) travelMap.removeLayer(mapMarker);
+                mapMarker = L.marker(latlng).addTo(travelMap);
+                travelMap.setView(latlng, type === 'Domestic' ? 10 : 8);
+                
+                let locationName = '';
+                if (result.address) {
+                    if (result.address.state && result.address.country) {
+                        locationName = `${result.address.state}, ${result.address.country}`;
+                    } else if (result.address.country) {
+                        locationName = result.address.country;
+                    } else {
+                        locationName = result.display_name;
+                    }
+                }
+                if (!locationName) locationName = result.display_name || `${result.lat}, ${result.lon}`;
+                
+                document.getElementById('mapDestPreview').value = locationName;
+                document.getElementById('travel_destination').value = locationName;
+                document.getElementById('finalDestText').textContent = locationName;
+                document.getElementById('mapProceedBtn').disabled = false;
+            } else {
+                alert('Location not found in the specified region. Please try a different search term.');
+                document.getElementById('mapProceedBtn').disabled = true;
+            }
+        })
+        .catch(() => {
+            document.getElementById('mapSearchBtn').textContent = 'Search';
+            document.getElementById('mapSearchBtn').disabled = false;
+            alert('Error searching for location.');
+        });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('mapDestPreview');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchMapLocation();
+            }
+        });
+    }
+});
+
+function selectTravelType(type) {
+    document.getElementById('travel_type_input').value = type;
+    document.getElementById('finalTypeBadge').textContent = type;
+    
+    document.getElementById('mapDestPreview').value = "";
+    document.getElementById('travel_destination').value = "";
+    document.getElementById('mapProceedBtn').disabled = true;
+
+    goToStep(2);
+    initTravelMap(type);
+}
+
+function goToStep(step) {
+    document.getElementById('wizardStep1').style.display = step === 1 ? 'block' : 'none';
+    document.getElementById('wizardStep2').style.display = step === 2 ? 'block' : 'none';
+    document.getElementById('wizardStep3').style.display = step === 3 ? 'block' : 'none';
+    document.getElementById('wizardFooter').style.display = step === 3 ? 'flex' : 'none';
+    
+    if(step === 2 && travelMap) {
+        setTimeout(() => travelMap.invalidateSize(), 100);
+    }
+}
+
+function toggleTransportOther() {
+    const ts = document.getElementById('travel_transport');
+    const to = document.getElementById('travel_transport_other');
+    if (ts.value === 'Others') {
+        to.style.display = 'block';
+        to.required = true;
+    } else {
+        to.style.display = 'none';
+        to.required = false;
+        to.value = '';
+    }
+}
 
 document.getElementById('travelForm').addEventListener('submit', function(e) {
     const staffId = document.getElementById('travel_staff_id').value;
@@ -467,6 +738,21 @@ document.getElementById('travelForm').addEventListener('submit', function(e) {
         e.preventDefault();
         alert('Please select a staff member.');
         return;
+    }
+    
+    const ts = document.getElementById('travel_transport');
+    const to = document.getElementById('travel_transport_other');
+    if (ts.value === 'Others') {
+        if (!to.value.trim()) {
+            e.preventDefault();
+            alert('Please specify your mode of transport.');
+            return;
+        }
+        ts.name = 'transport_ignore';
+        to.name = 'transport';
+    } else {
+        ts.name = 'transport';
+        to.name = 'transport_ignore';
     }
 });
 

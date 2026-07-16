@@ -19,6 +19,13 @@ class EmailSetting extends Model
     /** Setting key for the global "Microsoft Authenticator (2FA)" master switch. */
     public const KEY_TOTP_ENABLED = 'totp_enabled';
 
+    /** Setting key for the global "Require Staff Registry for New Accounts" switch. */
+    public const KEY_REQUIRE_STAFF_REGISTRY = 'require_staff_registry';
+
+    public const KEY_IT_ENABLED = 'system_it_enabled';
+    public const KEY_WT_ENABLED = 'system_wt_enabled';
+    public const KEY_LMS_ENABLED = 'system_lms_enabled';
+
     public static function get(string $key, string $default = ''): string
     {
         return static::find($key)?->setting_value ?? $default;
@@ -66,6 +73,45 @@ class EmailSetting extends Model
     {
         static::updateOrCreate(
             ['setting_key' => self::KEY_TOTP_ENABLED],
+            ['setting_value' => $on ? '1' : '0']
+        );
+    }
+
+    /**
+     * Whether new user accounts require a valid staff registry record.
+     */
+    public static function requireStaffRegistry(): bool
+    {
+        try {
+            return static::get(self::KEY_REQUIRE_STAFF_REGISTRY, '0') === '1';
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    public static function setRequireStaffRegistry(bool $on): void
+    {
+        static::updateOrCreate(
+            ['setting_key' => self::KEY_REQUIRE_STAFF_REGISTRY],
+            ['setting_value' => $on ? '1' : '0']
+        );
+    }
+
+    public static function systemEnabled(string $system): bool
+    {
+        $key = 'system_' . $system . '_enabled';
+        try {
+            return static::get($key, '1') === '1';
+        } catch (\Throwable $e) {
+            return true;
+        }
+    }
+
+    public static function setSystemEnabled(string $system, bool $on): void
+    {
+        $key = 'system_' . $system . '_enabled';
+        static::updateOrCreate(
+            ['setting_key' => $key],
             ['setting_value' => $on ? '1' : '0']
         );
     }

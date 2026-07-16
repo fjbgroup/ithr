@@ -28,13 +28,14 @@ class StaffController extends Controller
     {
         $user = Auth::user();
         
-        // If regular staff, they should only see their own profile
-        if ($user->role === 'staff') {
+        // Only admin_hr can see the full staff registry.
+        // All other users should only see their own profile.
+        if (!$user->isAdminHR()) {
             $staff = Staff::where('staff_no', $user->staff_no)->first();
             if ($staff) {
                 return redirect()->route('staff.show', $staff->id);
             }
-            return abort(404, 'Staff record not found.');
+            return abort(403, 'Unauthorized access to staff directory. Only HR Admins can view the registry.');
         }
 
         // Admin view
@@ -50,7 +51,33 @@ class StaffController extends Controller
         }
 
         if ($request->filled('company')) {
-            $query->where('company', $request->company);
+            $companyCode = trim($request->company);
+            $labels = [$companyCode];
+            
+            // Fetch from Company table
+            foreach (Company::where('code', $companyCode)->pluck('name') as $name) {
+                $labels[] = trim($name);
+                $labels[] = trim(preg_replace('/^\d+\s+/', '', $name));
+            }
+
+            // Hardcode fallbacks to ensure headcount accuracy
+            if (strtoupper($companyCode) === 'FJB') {
+                $labels[] = 'FGV Johor Bulkers Sdn Bhd';
+                $labels[] = '4810 FGV Johor Bulkers Sdn Bhd';
+            } elseif (strtoupper($companyCode) === 'FGVB') {
+                $labels[] = 'FGV Bulkers Sdn Bhd';
+                $labels[] = '4300 FGV Bulkers Sdn Bhd';
+                $labels[] = 'FBSB';
+            } elseif (strtoupper($companyCode) === 'LBSB') {
+                $labels[] = 'Langsat Bulkers Sdn Bhd';
+                $labels[] = '4850 Langsat Bulkers Sdn Bhd';
+            } elseif (strtoupper($companyCode) === 'FGT') {
+                $labels[] = 'FGV Grains Terminal Sdn';
+                $labels[] = '4310 FGV Grains Terminal Sdn';
+                $labels[] = 'FGVGT';
+            }
+
+            $query->whereIn('company', array_unique($labels));
         }
 
         if ($request->filled('dept')) {
@@ -80,9 +107,9 @@ class StaffController extends Controller
             'user.bookings.room'
         ])->findOrFail($id);
 
-        // Security check: staff can only see their own profile
-        if ($user->role === 'staff' && $user->staff_no !== $staff->staff_no) {
-            abort(403, 'Unauthorized access to staff profile.');
+        // Security check: only admin_hr can see other staff profiles
+        if (!$user->isAdminHR() && $user->staff_no !== $staff->staff_no) {
+            abort(403, 'Unauthorized access to staff profile. Only HR Admins can view other staff details.');
         }
 
         return view('staff.show', compact('staff'));

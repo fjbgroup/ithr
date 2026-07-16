@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', $pageTitle ?? 'Add Walkie Talkie')
 @section('page_title', $pageTitle ?? 'Add Walkie Talkie')

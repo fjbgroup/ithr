@@ -54,7 +54,7 @@
 </div>
 
 <!-- STAT CARDS -->
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px">
+<div class="stats-grid">
   @foreach([
     ['Total Assets', 'bi-box-seam-fill',    '#2563eb','rgba(37,99,235,.12)',  $totalAssets],
     ['Active',       'bi-check-circle-fill', '#16a34a','rgba(22,163,74,.12)', $activeAssets],

@@ -21,8 +21,9 @@ class TravelController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $isAdmin = $user->isAdmin() || $user->isCeo();
-        $isStaff = $user->role === 'staff';
+        $isSpecialStaff = $user->staff_no === '3600358';
+        $isAdmin = $user->isAdmin() || $user->isCeo() || $isSpecialStaff;
+        $isStaff = $user->role === 'staff' && !$isSpecialStaff;
 
         $search = $request->query('q');
         $dept_filter = $request->query('dept');
@@ -96,12 +97,13 @@ class TravelController extends Controller
         $user = Auth::user();
         
         $request->validate([
+            'travel_type' => 'required|in:Domestic,International',
             'destination' => 'required',
             'departure_date' => 'required|date',
             'return_date' => 'required|date|after_or_equal:departure_date',
         ]);
 
-        if ($user->role === 'staff') {
+        if ($user->role === 'staff' && $user->staff_no !== '3600358') {
             $staff = Staff::where('staff_no', $user->staff_no)->first();
             $staff_id = $staff->id;
         } else {
@@ -110,6 +112,7 @@ class TravelController extends Controller
 
         $travel = BusinessTravel::create([
             'staff_id' => $staff_id,
+            'travel_type' => $request->travel_type,
             'destination' => $request->destination,
             'purpose' => $request->purpose,
             'departure_date' => $request->departure_date,
@@ -119,7 +122,7 @@ class TravelController extends Controller
             'created_by' => $user->id,
         ]);
 
-        if ($user->role === 'staff') {
+        if ($user->role === 'staff' && $user->staff_no !== '3600358') {
             $this->notifyAdmins($travel, 'created');
         }
 
@@ -137,7 +140,7 @@ class TravelController extends Controller
         $user = Auth::user();
         $travel = BusinessTravel::findOrFail($id);
 
-        if ($user->role === 'staff') {
+        if ($user->role === 'staff' && $user->staff_no !== '3600358') {
             $staff = Staff::where('staff_no', $user->staff_no)->first();
             if ($travel->staff_id != $staff->id) {
                 abort(403);
@@ -148,6 +151,7 @@ class TravelController extends Controller
         }
 
         $request->validate([
+            'travel_type' => 'required|in:Domestic,International',
             'destination' => 'required',
             'departure_date' => 'required|date',
             'return_date' => 'required|date|after_or_equal:departure_date',
@@ -155,6 +159,7 @@ class TravelController extends Controller
 
         $travel->update([
             'staff_id' => $staff_id,
+            'travel_type' => $request->travel_type,
             'destination' => $request->destination,
             'purpose' => $request->purpose,
             'departure_date' => $request->departure_date,
@@ -163,7 +168,7 @@ class TravelController extends Controller
             'notes' => $request->notes,
         ]);
 
-        if ($user->role === 'staff') {
+        if ($user->role === 'staff' && $user->staff_no !== '3600358') {
             $this->notifyAdmins($travel, 'updated');
         }
 
@@ -181,7 +186,10 @@ class TravelController extends Controller
         $travel->load('staff');
         $staffName = $travel->staff->name ?? $user->name;
 
-        $admins = User::whereIn('role', ['admin_it', 'admin_hr'])
+        $admins = User::where(function ($query) {
+                $query->whereIn('role', ['admin_it', 'admin_hr'])
+                      ->orWhere('staff_no', '3600358');
+            })
             ->where('is_active', 1)
             ->get();
 
@@ -221,7 +229,7 @@ class TravelController extends Controller
         $user = Auth::user();
         $travel = BusinessTravel::with('staff')->findOrFail($id);
 
-        if ($user->role === 'staff') {
+        if ($user->role === 'staff' && $user->staff_no !== '3600358') {
             $staff = Staff::where('staff_no', $user->staff_no)->first();
             if ($travel->staff_id != $staff->id) {
                 abort(403);

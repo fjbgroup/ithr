@@ -65,10 +65,10 @@
 
   .portal-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     width: 100%;
-    max-width: 960px;
+    max-width: 1100px;
     animation: rise .55s .1s cubic-bezier(.16,.84,.44,1) both;
   }
 
@@ -251,6 +251,28 @@
           <li>Staff & family records</li>
           <li>Training & attendance</li>
           <li>Meeting room booking</li>
+        </ul>
+      </div>
+      <svg class="module-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+
+    {{-- E-Learning LMS --}}
+    <a href="{{ route('lms.dashboard') }}" class="module-card">
+      <div class="module-icon icon-lms" style="background: rgba(168,85,247,.18); color: #a855f7;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+      </div>
+      <div class="module-body">
+        <h2>E-Learning (LMS)</h2>
+        <p>Access online training courses, video materials, and interactive quizzes.</p>
+        <ul class="module-features">
+          <li>Online video & PDF lessons</li>
+          <li>Interactive quizzes & tracking</li>
+          <li>Manage assigned online courses</li>
         </ul>
       </div>
       <svg class="module-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20">

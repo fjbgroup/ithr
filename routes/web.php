@@ -44,6 +44,10 @@ Route::middleware('guest')->group(function () {
     Route::get('restart-forgot', [AuthController::class, 'restartForgot'])->name('password.otp.restart');
 });
 
+Route::get('/system/maintenance', function () {
+    return view('errors.maintenance', ['system' => request('system')]);
+})->name('system.maintenance');
+
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     
@@ -123,6 +127,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('requests', UpdateRequestController::class);
     Route::resource('master-data', MasterDataController::class);
     Route::get('master-data/staff-list/{deptId}', [MasterDataController::class, 'staffList'])->name('master-data.staff-list');
+    Route::get('master-data/company-depts/{companyId}', [MasterDataController::class, 'companyDepts'])->name('master-data.company-depts');
+    Route::get('master-data/company-staff/{companyId}', [MasterDataController::class, 'companyStaff'])->name('master-data.company-staff');
+    Route::get('master-data/course-attendance/{id}', [MasterDataController::class, 'courseAttendance'])->name('master-data.course-attendance');
+    Route::get('master-data/position-staff/{id}', [MasterDataController::class, 'positionStaff'])->name('master-data.position-staff');
+    Route::get('master-data/transport-travel/{id}', [MasterDataController::class, 'transportTravel'])->name('master-data.transport-travel');
     Route::get('account/security',      [UserController::class, 'accountSecurity'])->name('account.security');
     Route::get('account/totp/setup',    [UserController::class, 'totpSetup'])  ->name('totp.setup');
     Route::post('account/totp/confirm', [UserController::class, 'totpConfirm'])->name('totp.confirm');
@@ -131,6 +140,8 @@ Route::middleware('auth')->group(function () {
     Route::post('profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
     Route::post('system/email-toggle', [UserController::class, 'toggleEmailSending'])->name('system.email.toggle')->middleware('role:admin_it');
     Route::post('system/totp-toggle', [UserController::class, 'toggleTotp'])->name('system.totp.toggle')->middleware('role:admin_it');
+    Route::post('system/require-staff-toggle', [UserController::class, 'toggleRequireStaffRegistry'])->name('system.require-staff.toggle')->middleware('role:admin_it,admin_hr');
+    Route::post('system/{system}/toggle', [UserController::class, 'toggleSystemStatus'])->name('system.status.toggle')->middleware('role:admin_it');
     Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle_active');
     Route::patch('users/{user}/toggle-staff-status', [UserController::class, 'toggleStaffStatus'])->name('users.toggle_staff_status');
     Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset_password');
@@ -148,6 +159,9 @@ Route::middleware('auth')->group(function () {
 
 
 
+        Route::get('email-settings',      [\App\Http\Controllers\EmailSettingController::class, 'index'])->name('email-settings.index');
+    Route::post('email-settings',     [\App\Http\Controllers\EmailSettingController::class, 'update'])->name('email-settings.update');
+    Route::post('email-settings/test',[\App\Http\Controllers\EmailSettingController::class, 'testEmail'])->name('email-settings.test');
     Route::get('role-metric', [RoleMetricController::class, 'index'])->name('role-metric');
     Route::get('user-manual', [\App\Http\Controllers\UserManualController::class, 'index'])->name('user-manual.index');
 });

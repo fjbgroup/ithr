@@ -1,4 +1,4 @@
-﻿@extends('wt.layouts.admin')
+@extends('wt.layouts.admin')
 
 @section('title', 'My Inventory')
 
@@ -301,7 +301,7 @@
                             'walkie_id' => $record->walkie_id,
                             'radio_id' => $record->radio_id,
                             'q' => $record->radio_id,
-                        ], fn ($value) => filled($value)), false);
+                        ], fn ($value) => filled($value)));
                     @endphp
                     <tr class="hover:bg-stone-50/50 dark:hover:bg-slate-700/30 transition-colors" data-my-inventory-item data-my-inventory-search="{{ strtoupper(implode(' ', [
                         $record->radio_id,

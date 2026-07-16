@@ -18,7 +18,7 @@ use App\Http\Controllers\WT\Admin\DatabaseBackupController;
 use App\Http\Controllers\WT\User\InteractionController;
 use App\Http\Controllers\WT\User\HandoverController;
 
-Route::prefix('wt')->name('wt.')->group(function () {
+Route::prefix('wt')->name('wt.')->middleware(['system.status:wt'])->group(function () {
 
     Route::middleware('wt.guest')->group(function () {
         Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -140,6 +140,10 @@ Route::prefix('wt')->name('wt.')->group(function () {
             Route::get('/database-backup', [DatabaseBackupController::class, 'download'])->name('database.backup');
             Route::post('/policies', [UserDashboardController::class, 'updatePolicies'])->name('policies.update');
             Route::get('/it', [AdminITController::class, 'index'])->name('it.index');
+
+            Route::get('/email-settings', [App\Http\Controllers\WT\EmailSettingController::class, 'index'])->name('email-settings.index');
+            Route::post('/email-settings', [App\Http\Controllers\WT\EmailSettingController::class, 'update'])->name('email-settings.update');
+            Route::post('/email-settings/test', [App\Http\Controllers\WT\EmailSettingController::class, 'testEmail'])->name('email-settings.test');
         });
     });
 

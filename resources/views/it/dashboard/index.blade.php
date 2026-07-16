@@ -58,6 +58,27 @@
 .ds-chart-footer{padding:0 28px 18px;display:flex;align-items:center;justify-content:flex-end;gap:16px;background:var(--surface)}
 
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Responsive Hero Banner */
+.ds-hero { display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 20px; padding: 22px 28px; }
+.ds-hero-stats { display: flex; align-items: center; gap: 0; border-left: 1px solid rgba(255,255,255,.24); border-right: 1px solid rgba(255,255,255,.24); padding: 0 20px; }
+.ds-hero-stat-box { padding: 0 24px; text-align: center; }
+.ds-hero-clock { text-align: right; }
+.ds-hero-divider { width: 1px; height: 36px; background: rgba(255,255,255,.24); }
+
+@media(max-width: 992px) {
+  .ds-hero { flex-direction: column; align-items: center; text-align: center; gap: 20px; padding: 24px 20px; }
+  .ds-hero-stats { flex-direction: row; justify-content: center; width: 100%; border-left: none; border-right: none; padding: 16px 0; border-top: 1px solid rgba(255,255,255,.15); border-bottom: 1px solid rgba(255,255,255,.15); }
+  .ds-hero-stat-box { padding: 0 10px; flex: 1; }
+  .ds-hero-clock { text-align: center; }
+  .ds-hero-clock > div { text-align: center !important; }
+}
+@media(max-width: 480px) {
+  .ds-hero-stat-box { padding: 0 5px; }
+  .ds-hero-stat-box > div:first-child { font-size: 9px !important; }
+  .ds-hero-stat-box > div:last-child { font-size: 20px !important; }
+  .ds-hero-divider { height: 28px; }
+}
 </style>
 @endpush
 
@@ -66,10 +87,10 @@
 
 <!-- ═══ SYSTEM STATUS BAR ═══ -->
 <div style="background:linear-gradient(160deg,#FFB84D 0%,#F7941D 50%,#C96800 100%);border-radius:14px;margin-bottom:24px;overflow:hidden;box-shadow:0 8px 28px rgba(247,148,29,.32)">
-  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:0;padding:22px 28px">
+  <div class="ds-hero">
 
     <!-- Greeting -->
-    <div style="flex:1;min-width:220px">
+    <div style="flex:1;min-width:0">
       <div style="font-size:20px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1.2" id="dsGreeting">
         Good Morning, {{ $user->full_name }}
       </div>
@@ -79,25 +100,25 @@
     </div>
 
     <!-- Stats -->
-    <div style="display:flex;align-items:center;gap:0;border-left:1px solid rgba(255,255,255,.24);border-right:1px solid rgba(255,255,255,.24);margin:0 28px" id="itDashboardStats" data-auto-refresh="true">
-      <div style="padding:0 28px;text-align:center">
+    <div class="ds-hero-stats" id="itDashboardStats" data-auto-refresh="true">
+      <div class="ds-hero-stat-box">
         <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Total Assets</div>
         <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($totalAll) }}</div>
       </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.24)"></div>
-      <div style="padding:0 28px;text-align:center">
+      <div class="ds-hero-divider"></div>
+      <div class="ds-hero-stat-box">
         <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Active</div>
         <div style="font-size:26px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;line-height:1">{{ number_format($activeAll) }}</div>
       </div>
-      <div style="width:1px;height:36px;background:rgba(255,255,255,.24)"></div>
-      <div style="padding:0 28px;text-align:center">
+      <div class="ds-hero-divider"></div>
+      <div class="ds-hero-stat-box">
         <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.76);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Pending</div>
         <div style="font-size:26px;font-weight:800;color:{{ $pendingAll > 0 ? '#fff7ed' : 'rgba(255,255,255,.42)' }};font-family:'Inter',sans-serif;line-height:1">{{ number_format($pendingAll) }}</div>
       </div>
     </div>
 
     <!-- Live Clock -->
-    <div style="text-align:right">
+    <div class="ds-hero-clock">
       <div id="dsLiveClock" style="font-size:28px;font-weight:800;color:#fff;font-family:'Inter',sans-serif;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums;min-width:168px;display:inline-block;text-align:right"></div>
       <div style="font-size:10px;color:rgba(255,255,255,.74);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">FJB Inventory System</div>
     </div>

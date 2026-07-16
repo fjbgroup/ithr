@@ -2409,19 +2409,10 @@
     }
     .approval-inbox .pending-queue-title {
         color: #f8fafc;
-        font-size: 12px;
-        line-height: 1.15;
-        font-weight: 900;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
     }
     .approval-inbox .pending-queue-subtitle {
         margin-top: 4px;
         color: #94a3b8;
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
     }
     .approval-inbox .pending-queue-count {
         margin-left: auto;
@@ -2531,14 +2522,9 @@
         font-size: 13px !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 11px !important;
-        letter-spacing: 0.08em !important;
     }
     .approval-inbox .pending-queue-subtitle {
         margin-top: 3px !important;
-        font-size: 9px !important;
-        letter-spacing: 0.06em !important;
-        line-height: 1.3 !important;
     }
     .approval-inbox .pending-queue-count {
         min-height: 28px !important;
@@ -2749,15 +2735,9 @@
         font-size: 9px !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 11px !important;
-        line-height: 1 !important;
-        letter-spacing: 0.1em !important;
     }
     .approval-inbox .pending-queue-subtitle {
         margin-top: 2px !important;
-        font-size: 6px !important;
-        line-height: 1 !important;
-        letter-spacing: 0.06em !important;
     }
     .approval-inbox .pending-queue-count {
         min-height: 20px !important;
@@ -2934,11 +2914,8 @@
         font-size: 8px !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 10px !important;
-        letter-spacing: 0.08em !important;
     }
     .approval-inbox .pending-queue-subtitle {
-        font-size: 5.5px !important;
     }
     .approval-inbox .pending-queue-count {
         min-height: 18px !important;
@@ -3024,12 +3001,8 @@
         font-weight: 800 !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 8px !important;
-        font-weight: 900 !important;
     }
     .approval-inbox .pending-queue-subtitle {
-        font-size: 6px !important;
-        font-weight: 700 !important;
     }
     .approval-inbox .pending-queue-count {
         font-size: 8px !important;
@@ -3061,7 +3034,6 @@
         .approval-empty-state,
         .approval-empty-state span
     ) {
-        font-size: 8px !important;
     }
     body .content-surface .approval-inbox .approval-title {
         font-size: 13px !important;
@@ -3071,7 +3043,6 @@
         font-size: 6.5px !important;
     }
     body .content-surface .approval-inbox .pending-queue-subtitle {
-        font-size: 6px !important;
     }
     body .content-surface .approval-inbox > .mb-4:first-child {
         min-height: 74px !important;
@@ -3152,20 +3123,11 @@
     }
     body .content-surface .approval-inbox .approval-page-header .page-title-standard {
         color: #f8fafc !important;
-        font-size: 28px !important;
-        line-height: 1 !important;
-        font-weight: 900 !important;
-        letter-spacing: 0 !important;
     }
     body .content-surface .approval-inbox .approval-page-header .page-subtitle-standard {
         margin-top: 8px !important;
         max-width: none !important;
         color: #a8b6c8 !important;
-        font-size: 13px !important;
-        line-height: 1.25 !important;
-        font-weight: 900 !important;
-        letter-spacing: 0.2em !important;
-        text-transform: uppercase !important;
     }
     body .content-surface .approval-inbox .approval-header-actions {
         display: flex !important;
@@ -3265,18 +3227,10 @@
     }
 
     body .content-surface .approval-inbox .pending-queue-title {
-        font-size: 14px !important;
-        font-weight: 900 !important;
-        letter-spacing: 0.06em !important;
-        line-height: 1.2 !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-subtitle {
         margin-top: 5px !important;
-        font-size: 11px !important;
-        font-weight: 800 !important;
-        letter-spacing: 0.04em !important;
-        line-height: 1.35 !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-count {
@@ -3360,17 +3314,9 @@
         font-size: 16px !important;
     }
     .approval-inbox .pending-queue-title {
-        font-size: 14px !important;
-        font-weight: 900 !important;
-        letter-spacing: 0.06em !important;
-        line-height: 1.2 !important;
     }
     .approval-inbox .pending-queue-subtitle {
         margin-top: 5px !important;
-        font-size: 11px !important;
-        font-weight: 800 !important;
-        letter-spacing: 0.04em !important;
-        line-height: 1.35 !important;
     }
     .approval-inbox .pending-queue-count {
         min-height: 34px !important;
@@ -3652,14 +3598,9 @@
 
     /* Final readable Approval Inbox override */
     body .content-surface .approval-inbox .approval-page-header .page-title-standard {
-        font-size: 30px !important;
-        line-height: 1.08 !important;
     }
 
     body .content-surface .approval-inbox .approval-page-header .page-subtitle-standard {
-        font-size: 14px !important;
-        line-height: 1.45 !important;
-        letter-spacing: 0.12em !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-header {
@@ -3678,15 +3619,9 @@
     }
 
     body .content-surface .approval-inbox .pending-queue-title {
-        font-size: 21px !important;
-        line-height: 1.22 !important;
-        letter-spacing: 0.04em !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-subtitle {
-        font-size: 15px !important;
-        line-height: 1.5 !important;
-        letter-spacing: 0.02em !important;
     }
 
     body .content-surface .approval-inbox .pending-queue-count {
@@ -3826,7 +3761,6 @@
         }
 
         body .content-surface .approval-inbox .approval-page-header .page-title-standard {
-            font-size: 24px !important;
         }
 
         body .content-surface .approval-inbox .pending-queue-header,
@@ -3926,10 +3860,10 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-bell text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title" style="font-size:21px!important;line-height:1.22!important;font-weight:900!important;letter-spacing:.04em!important;margin:0!important">{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Pending IT Approval Requests' : 'Pending Executive Approval Requests' }}</h4>
-            <p class="pending-queue-subtitle" style="font-size:15px!important;line-height:1.5!important;margin-top:6px!important">Review new walkie talkie applications awaiting action</p>
+            <h4 class="pending-queue-title" >{{ ($userRole ?? auth('wt')->user()->wt_role) === 'admin_it' ? 'Pending IT Approval Requests' : 'Pending Executive Approval Requests' }}</h4>
+            <p class="pending-queue-subtitle" >Review new walkie talkie applications awaiting action</p>
         </div>
-        <span class="pending-queue-count" style="min-height:46px!important;padding:10px 18px!important;font-size:15px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.03em!important"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingRequests->count() }} Pending</span>
+        <span class="pending-queue-count" ><i class="fa-solid fa-hourglass-half"></i>{{ $pendingRequests->count() }} Pending</span>
     </div>
     <div class="pending-queue-body">
         <table id="requestsTable" class="w-full text-left display nowrap">
@@ -4288,10 +4222,10 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-rotate-left text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title" style="font-size:21px!important;line-height:1.22!important;font-weight:900!important;letter-spacing:.04em!important;margin:0!important">Pending Returns</h4>
-            <p class="pending-queue-subtitle" style="font-size:15px!important;line-height:1.5!important;margin-top:6px!important">Confirm returned units before inventory is updated</p>
+            <h4 class="pending-queue-title" >Pending Returns</h4>
+            <p class="pending-queue-subtitle" >Confirm returned units before inventory is updated</p>
         </div>
-        <span class="pending-queue-count" style="min-height:46px!important;padding:10px 18px!important;font-size:15px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.03em!important"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingReturns->count() }} Pending</span>
+        <span class="pending-queue-count" ><i class="fa-solid fa-hourglass-half"></i>{{ $pendingReturns->count() }} Pending</span>
     </div>
     <div class="pending-queue-body">
         <table id="returnsTable" class="w-full text-left display nowrap">
@@ -4427,10 +4361,10 @@
     <div class="pending-queue-header">
         <span class="pending-queue-icon"><i class="fa-solid fa-triangle-exclamation text-lg"></i></span>
         <div>
-            <h4 class="pending-queue-title" style="font-size:21px!important;line-height:1.22!important;font-weight:900!important;letter-spacing:.04em!important;margin:0!important">Pending Report Faulty</h4>
-            <p class="pending-queue-subtitle" style="font-size:15px!important;line-height:1.5!important;margin-top:6px!important">Check faulty reports waiting for ICT or executive approval</p>
+            <h4 class="pending-queue-title" >Pending Report Faulty</h4>
+            <p class="pending-queue-subtitle" >Check faulty reports waiting for ICT or executive approval</p>
         </div>
-        <span class="pending-queue-count" style="min-height:46px!important;padding:10px 18px!important;font-size:15px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:.03em!important"><i class="fa-solid fa-hourglass-half"></i>{{ $pendingDamageReports->count() }} Pending</span>
+        <span class="pending-queue-count" ><i class="fa-solid fa-hourglass-half"></i>{{ $pendingDamageReports->count() }} Pending</span>
     </div>
     <div class="pending-queue-body">
         <table id="damagesTable" class="w-full text-left display nowrap">

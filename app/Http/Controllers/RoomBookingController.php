@@ -148,7 +148,7 @@ class RoomBookingController extends Controller
 
             $room    = MeetingRoom::find($roomId);
             $picIds  = $room->pics()->pluck('users.id')->toArray();
-            $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
+            $adminIds = User::whereIn('role', ['admin_it', 'admin_hr'])->pluck('id')->toArray();
             $targets = array_unique(array_merge($picIds, $adminIds));
 
             foreach ($targets as $tid) {
@@ -220,7 +220,7 @@ class RoomBookingController extends Controller
         // Notify PICs and Admins
         $room = $booking->room;
         $picIds = $room->pics()->pluck('users.id')->toArray();
-        $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
+        $adminIds = User::whereIn('role', ['admin_it', 'admin_hr'])->pluck('id')->toArray();
         $targets = array_unique(array_merge($picIds, $adminIds));
 
         foreach ($targets as $tid) {
@@ -263,7 +263,7 @@ class RoomBookingController extends Controller
 
         $room = $booking->room;
         $picIds = $room->pics()->pluck('users.id')->toArray();
-        $adminIds = User::where('role', 'admin_it')->pluck('id')->toArray();
+        $adminIds = User::whereIn('role', ['admin_it', 'admin_hr'])->pluck('id')->toArray();
         $targets = array_unique(array_merge($picIds, $adminIds));
 
         foreach ($targets as $tid) {
@@ -295,7 +295,7 @@ class RoomBookingController extends Controller
     public function approve(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -357,7 +357,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Approved',
-            'Great news! Your meeting room booking has been approved by ' . $user->name . '.',
+            'Great news! Your meeting room booking has been approved.',
             $booking
         );
 
@@ -372,7 +372,7 @@ class RoomBookingController extends Controller
     public function reject(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -415,7 +415,7 @@ class RoomBookingController extends Controller
     public function approveCancel(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -453,7 +453,7 @@ class RoomBookingController extends Controller
     public function rejectCancel(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -494,7 +494,7 @@ class RoomBookingController extends Controller
     public function approveEdit(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -533,7 +533,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Edit Approved',
-            'Your requested changes to the meeting room booking have been approved by ' . $user->name . '.',
+            'Your requested changes to the meeting room booking have been approved.',
             $booking
         );
 
@@ -548,7 +548,7 @@ class RoomBookingController extends Controller
     public function rejectEdit(Request $request, RoomBooking $booking)
     {
         $user = Auth::user();
-        if (!$user->isAdminIT() && !$this->isPicForRoom($booking->room_id, $user->id)) {
+        if (!$user->isAdmin() && !$this->isPicForRoom($booking->room_id, $user->id)) {
             return back()->with('error', 'Unauthorized.');
         }
 
@@ -578,7 +578,7 @@ class RoomBookingController extends Controller
         $this->sendMail(
             [$booking->booked_by_id],
             'Booking Edit Declined',
-            'Your request to modify the meeting room booking has been declined by ' . $user->name . '. The original booking remains active.',
+            'Your request to modify the meeting room booking has been declined. The original booking remains active.',
             $booking,
             null,
             '#b91c1c' // Red

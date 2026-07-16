@@ -3,11 +3,15 @@
 @section('title', 'My Requests')
 
 @section('content')
-<div class="page-header">
+<div class="page-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
     <div>
         <h2>My Requests</h2>
         <p class="page-subtitle">Track the status of your submitted update requests</p>
     </div>
+    <button class="btn btn-primary" onclick="document.getElementById('addRequestModal').style.display='flex';" style="display:flex;align-items:center;gap:.5rem;height:fit-content;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Add Request
+    </button>
 </div>
 
 <div class="filter-bar">
@@ -111,5 +115,111 @@
     @endforeach
 </div>
 @endif
+
+<!-- Add Request Modal -->
+<div class="modal" id="addRequestModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div class="modal-box" style="background:#fff; border-radius:14px; width:100%; max-width:520px; box-shadow:0 10px 25px rgba(0,0,0,0.1); max-height:90vh; overflow-y:auto;">
+        <div class="modal-header ur-modal-header" style="background: var(--primary); padding: 1.25rem 1.5rem; border-radius: 14px 14px 0 0; display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+                <div class="ur-header-icon" style="width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h3 style="color:white;margin:0;font-size:.95rem;">New Update Request</h3>
+                </div>
+            </div>
+            <button type="button" class="modal-close" onclick="document.getElementById('addRequestModal').style.display='none';" style="color:rgba(255,255,255,.6);font-size:1.4rem; background: none; border: none; cursor: pointer;">×</button>
+        </div>
+
+        <form action="{{ route('requests.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="record_id" value="{{ Auth::id() }}">
+            
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem;">
+                
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Information Category *</label>
+                    <select name="record_type" id="recordTypeSelect" class="form-control" required style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);" onchange="updateFieldOptions()">
+                        <option value="">Select category...</option>
+                        <option value="Staff Data">Profile Info</option>
+                        <option value="Training Record">Training Info</option>
+                        <option value="Family Information">Family Info</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="fieldsSelectionGroup" style="display:none;">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Fields to Update (Select all that apply)</label>
+                    <div id="dynamicFieldsContainer" style="display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.3rem;">
+                        <!-- Checkboxes inserted here via JS -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Update Details *</label>
+                    <textarea name="message" class="form-control" required rows="4" placeholder="Describe the updates you need..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--form-input-bg); color: var(--form-input-color);"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.5rem; border-top: 1px solid var(--border);">
+                <button type="button" class="btn btn-ghost" onclick="document.getElementById('addRequestModal').style.display='none';">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const categoryFields = {
+    'Staff Data': ['Name', 'Email', 'Phone Number', 'Gender', 'Date of Birth', 'IC Number', 'Address', 'Profile Picture'],
+    'Training Record': ['Course Name', 'Completion Date', 'Certification', 'Trainer Name', 'Institution', 'Results'],
+    'Family Information': ['Spouse Details', 'Children Details', 'Emergency Contact', 'Beneficiary', 'Relationship']
+};
+
+function updateFieldOptions() {
+    const type = document.getElementById('recordTypeSelect').value;
+    const container = document.getElementById('dynamicFieldsContainer');
+    const group = document.getElementById('fieldsSelectionGroup');
+    
+    container.innerHTML = '';
+    
+    if (type && categoryFields[type]) {
+        group.style.display = 'block';
+        categoryFields[type].forEach(field => {
+            const label = document.createElement('label');
+            label.style.display = 'flex';
+            label.style.alignItems = 'center';
+            label.style.gap = '0.35rem';
+            label.style.fontSize = '0.78rem';
+            label.style.background = 'var(--bg, #f3f4f6)';
+            label.style.padding = '0.3rem 0.6rem';
+            label.style.borderRadius = '6px';
+            label.style.border = '1px solid var(--border, #e5e7eb)';
+            label.style.cursor = 'pointer';
+            label.style.userSelect = 'none';
+            label.style.color = 'var(--text, #1f2937)';
+            
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.name = 'fields[]';
+            cb.value = field;
+            cb.style.margin = '0';
+            
+            // Add a small hover effect for better UX
+            label.onmouseover = function() { this.style.borderColor = 'var(--primary, #6366f1)'; };
+            label.onmouseout = function() { if(!cb.checked) this.style.borderColor = 'var(--border, #e5e7eb)'; };
+            cb.onchange = function() {
+                label.style.borderColor = this.checked ? 'var(--primary, #6366f1)' : 'var(--border, #e5e7eb)';
+                label.style.background = this.checked ? 'rgba(99, 102, 241, 0.05)' : 'var(--bg, #f3f4f6)';
+            };
+
+            label.appendChild(cb);
+            label.appendChild(document.createTextNode(field));
+            container.appendChild(label);
+        });
+    } else {
+        group.style.display = 'none';
+    }
+}
+</script>
 
 @endsection
