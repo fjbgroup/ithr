@@ -30,24 +30,6 @@
         background: #263042;
         color: #38bdf8;
     }
-    .nav-pills .nav-link[data-tab="attention"],
-    .dark .nav-pills .nav-link[data-tab="attention"] {
-        background: #f8d7da;
-        border-color: #f1aeb5;
-        color: #842029;
-    }
-    .nav-pills .nav-link[data-tab="attention"]:hover:not(.active),
-    .dark .nav-pills .nav-link[data-tab="attention"]:hover:not(.active) {
-        background: #f4c2c7;
-        color: #6a1a21;
-    }
-    .nav-pills .nav-link[data-tab="attention"].active {
-        background: #f4c2c7 !important;
-        border-color: #e99aa3;
-        color: #6a1a21 !important;
-        box-shadow: 0 4px 12px rgba(190, 80, 92, 0.2);
-    }
-
     .manual-content {
         line-height: 1.8;
         color: var(--text, #334155);

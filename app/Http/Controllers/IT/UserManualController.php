@@ -16,7 +16,7 @@ class UserManualController extends Controller
         // Check accessibility
         $rolesToLoad = [];
         if (in_array($itRole, ['admin_it', 'admin'])) {
-            $rolesToLoad = ['admin_it', 'finance_admin', 'ceo', 'gm', 'hou', 'staff', 'attention'];
+            $rolesToLoad = ['admin_it', 'finance_admin', 'ceo', 'gm', 'hou', 'staff'];
         } elseif ($itRole === 'finance_admin') {
             $rolesToLoad = ['finance_admin', 'staff'];
         } elseif ($itRole === 'ceo') {
@@ -59,11 +59,6 @@ class UserManualController extends Controller
                 'title' => 'Staff Manual',
                 'file' => 'it_manual_staff.md',
                 'icon' => '<i class="bi bi-person-fill"></i>'
-            ],
-            'attention' => [
-                'title' => 'Attention',
-                'file' => 'it_manual_attention.md',
-                'icon' => '<i class="bi bi-exclamation-triangle-fill"></i>'
             ],
         ];
 

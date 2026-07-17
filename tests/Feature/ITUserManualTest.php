@@ -35,7 +35,6 @@ class ITUserManualTest extends TestCase
         $response->assertDontSee('CEO Manual');
         $response->assertDontSee('GM Manual');
         $response->assertDontSee('Head of Unit Manual');
-        $response->assertDontSee('Whoever is reading is, this is the problem you need to troubleshoot');
     }
 
     public function test_hou_can_access_hou_and_staff_manuals(): void
@@ -89,8 +88,5 @@ class ITUserManualTest extends TestCase
         $response->assertSee('CEO Manual');
         $response->assertSee('GM Manual');
         $response->assertSee('Head of Unit Manual');
-        $response->assertSee('Attention');
-        $response->assertSee('After CEO approves the write-off form');
-        $response->assertSee('Irfan Zuraili (UniKL MIIT)');
     }
 }
