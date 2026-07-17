@@ -1531,3 +1531,8 @@ function pubToggleTheme() {
 </script>
 </body>
 </html>
+})();
+
+</script>
+</body>
+</html>

@@ -245,6 +245,15 @@ html.sidebar-collapsed .sidebar-footer .user-info {
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="{{ asset('assets/css/lms.css') }}?v={{ time() }}">
 @yield('styles')
+  <meta name="view-transition" content="same-origin">
+  <style>
+    html.theme-transitioning::view-transition-old(root),
+    html.theme-transitioning::view-transition-new(root) { animation: none; mix-blend-mode: normal; display: block; }
+    html.theme-transition-expand::view-transition-new(root) { z-index: 2; }
+    html.theme-transition-expand::view-transition-old(root) { z-index: 1; }
+    html.theme-transition-shrink::view-transition-old(root) { z-index: 2; }
+    html.theme-transition-shrink::view-transition-new(root) { z-index: 1; }
+  </style>
 </head>
 <body class="app-body">
 <aside class="sidebar" id="sidebar">
@@ -487,13 +496,51 @@ function applyTheme(dark) {
   }
 }
 
-function toggleTheme() {
+function toggleTheme(event) {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const next = isDark ? 'light' : 'dark';
-  localStorage.setItem('fjb-theme', next);
-  localStorage.setItem('color-theme', next);
-  localStorage.setItem('theme', next);
-  applyTheme(next === 'dark');
+
+  function applyThemeLocal() {
+    localStorage.setItem('fjb-theme', next);
+    localStorage.setItem('color-theme', next);
+    localStorage.setItem('theme', next);
+    applyTheme(next === 'dark');
+  }
+
+  if (!document.startViewTransition) {
+    applyThemeLocal();
+    return;
+  }
+
+  const x = event && event.clientX ? event.clientX : innerWidth / 2;
+  const y = event && event.clientY ? event.clientY : innerHeight / 2;
+  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+  document.documentElement.classList.add('theme-transitioning');
+  document.documentElement.classList.add(next === 'dark' ? 'theme-transition-expand' : 'theme-transition-shrink');
+  const transition = document.startViewTransition(() => {
+    applyThemeLocal();
+  });
+
+  transition.ready.then(() => {
+    const isExpanding = next === 'dark';
+    const clipPath = [
+      `circle(0px at ${x}px ${y}px)`,
+      `circle(${endRadius}px at ${x}px ${y}px)`,
+    ];
+    document.documentElement.animate(
+      { clipPath: isExpanding ? clipPath : [...clipPath].reverse() },
+      {
+        duration: 500,
+        easing: 'ease-in-out',
+        pseudoElement: isExpanding ? '::view-transition-new(root)' : '::view-transition-old(root)',
+      }
+    );
+  });
+
+  transition.finished.finally(() => {
+    document.documentElement.classList.remove('theme-transitioning', 'theme-transition-expand', 'theme-transition-shrink');
+  });
 }
 
 document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
@@ -1423,3 +1470,5 @@ document.addEventListener('DOMContentLoaded', function () {
 @include('components.2fa-popup')
 </body>
 </html>
+
+
