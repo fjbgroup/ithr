@@ -31,6 +31,14 @@ class NotificationService
         }
     }
 
+    public static function notifyFinanceAdmins(string $type, string $title, string $message, string $link = ''): void
+    {
+        $financeAdmins = User::where('it_role', 'finance_admin')->where('is_active', true)->get();
+        foreach ($financeAdmins as $financeAdmin) {
+            static::create($financeAdmin->id, $type, $title, $message, $link);
+        }
+    }
+
     public static function notifyUser(int $userId, string $type, string $title, string $message, string $link = ''): void
     {
         static::create($userId, $type, $title, $message, $link);

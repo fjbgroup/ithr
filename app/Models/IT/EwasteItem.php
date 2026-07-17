@@ -2,6 +2,7 @@
 
 namespace App\Models\IT;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class EwasteItem extends Model
@@ -29,6 +30,23 @@ class EwasteItem extends Model
         'ceo_signed_at'  => 'datetime',
     ];
 
+    /**
+     * CEO-approved write-offs that have not yet been routed by Finance.
+     *
+     * Finance status has not always been populated consistently. The durable
+     * business rule is that an approved item remains in this queue until
+     * Finance explicitly routes it to E-Waste or Disposal.
+     */
+    public function scopeAwaitingFinanceRouting(Builder $query): Builder
+    {
+        return $query
+            ->where('ceo_status', 'Approved')
+            ->where(function (Builder $query) {
+                $query->whereNull('finance_status')
+                    ->orWhereNotIn('finance_status', ['EWaste', 'Disposal']);
+            });
+    }
+
     public function inventoryItem() { return $this->belongsTo(InventoryItem::class, 'original_inventory_id'); }
     public function creator()       { return $this->belongsTo(User::class, 'created_by'); }
     public function houUser()       { return $this->belongsTo(User::class, 'checked_by_user_id'); }
@@ -37,4 +55,3 @@ class EwasteItem extends Model
     public function currentGmUser() { return $this->belongsTo(User::class, 'current_gm_user_id'); }
     public function ceoUser()       { return $this->belongsTo(User::class, 'ceo_user_id'); }
 }
-
