@@ -366,8 +366,8 @@
 
   /* Mobile Adjustments */
   @media (max-width: 640px) {
-    .pub-topbar { padding: .75rem 1rem; }
-    .pub-brand { font-size: .9rem; }
+    .pub-topbar { padding: .75rem 1rem; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .pub-brand { font-size: .9rem; text-align: center; justify-content: center; }
     .pub-brand img { height: 28px !important; width: 28px !important; }
     .pub-login-btn { padding: .4rem .85rem; font-size: .8rem; }
     .pub-container { padding: 1rem .75rem; }
