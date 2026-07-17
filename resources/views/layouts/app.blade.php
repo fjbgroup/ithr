@@ -332,13 +332,24 @@ html.sidebar-collapsed .sidebar-footer .user-info {
             $roomBadge = $canApproveRooms ? Auth::user()->getPendingBookingCount() : Auth::user()->getUnreadBookingCount();
         @endphp
 
-        <a href="{{ url('/rooms') }}" class="nav-item {{ request()->is('rooms*') || request()->is('/') ? 'active' : '' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Meeting Rooms
-            @if ($roomBadge > 0)
-                <span class="badge-count">{{ $roomBadge }}</span>
-            @endif
-        </a>
+        <div class="nav-group" id="navGroupMeetingRoom">
+            <div class="nav-group-toggle {{ request()->is('rooms*') ? 'open has-active' : '' }}" onclick="toggleNavGroup('navGroupMeetingRoom')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Meeting Rooms</span>
+                @if ($roomBadge > 0)
+                    <span class="badge-count" style="margin-right:auto; margin-left:5px;">{{ $roomBadge }}</span>
+                @endif
+                <svg class="toggle-arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </div>
+            <div class="nav-group-children {{ request()->is('rooms*') ? 'open' : '' }}">
+                <div class="nav-group-children-inner">
+                    <a href="{{ url('/rooms') }}" class="nav-child {{ request()->is('rooms') || request()->is('/') ? 'active' : '' }}">Manage Bookings</a>
+                    <a href="{{ url('/rooms/report') }}" class="nav-child {{ request()->is('rooms/report') ? 'active' : '' }}">Booking Report</a>
+                </div>
+            </div>
+        </div>
 
         <a href="{{ url('/travel') }}" class="nav-item {{ request()->is('travel*') ? 'active' : '' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -640,7 +651,7 @@ function toggleTheme(event) {
     applyTheme(next === 'dark');
   }
 
-  if (!document.startViewTransition) {
+  if (!document.startViewTransition || window.innerWidth <= 768) {
     applyThemeLocal();
     return;
   }
@@ -1603,5 +1614,6 @@ document.addEventListener('DOMContentLoaded', function () {
 @include('components.2fa-popup')
 </body>
 </html>
+
 
 

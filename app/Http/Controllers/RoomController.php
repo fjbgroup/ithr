@@ -331,4 +331,116 @@ class RoomController extends Controller
 
         return back()->with('success', 'Room deleted successfully.');
     }
+    public function report(Request $request)
+    {
+        $user = Auth::user();
+        $isPic = DB::table('room_pics')->where('user_id', $user->id)->exists();
+        $canApproveRooms = $user->isAdminIT() || $isPic;
+
+        if (!$canApproveRooms) {
+            abort(403, 'Unauthorized access to Meeting Room Booking Report.');
+        }
+
+        $query = RoomBooking::with(['room', 'user']);
+
+        // Filters
+        if ($request->filled('date_from')) {
+            $query->whereDate('booking_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('booking_date', '<=', $request->date_to);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('room_id')) {
+            $query->where('room_id', $request->room_id);
+        }
+        if ($request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('staff_no', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $bookings = $query->orderBy('booking_date', 'desc')
+                          ->orderBy('start_time', 'desc')
+                          ->paginate(20)
+                          ->withQueryString();
+
+        $rooms = MeetingRoom::orderBy('name')->get();
+
+        return view('rooms.report', compact('bookings', 'rooms', 'canApproveRooms'));
+    }
+
+    public function exportReport(Request $request)
+    {
+        $user = Auth::user();
+        $isPic = DB::table('room_pics')->where('user_id', $user->id)->exists();
+        $canApproveRooms = $user->isAdminIT() || $isPic;
+
+        if (!$canApproveRooms) {
+            abort(403, 'Unauthorized access to Meeting Room Booking Report.');
+        }
+
+        $query = RoomBooking::with(['room', 'user']);
+
+        // Filters
+        if ($request->filled('date_from')) {
+            $query->whereDate('booking_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('booking_date', '<=', $request->date_to);
+        }
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('room_id')) {
+            $query->where('room_id', $request->room_id);
+        }
+        if ($request->filled('search')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('staff_no', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $bookings = $query->orderBy('booking_date', 'desc')
+                          ->orderBy('start_time', 'desc')
+                          ->get();
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=meeting_room_booking_report_" . date('Ymd_His') . ".csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columns = ['Booking ID', 'Room Name', 'Booked By', 'Date', 'Time', 'Duration', 'Purpose', 'Attendees', 'Status', 'Submitted At'];
+
+        $callback = function() use ($bookings, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+            foreach ($bookings as $b) {
+                fputcsv($file, [
+                    $b->id,
+                    $b->room ? $b->room->name : 'N/A',
+                    $b->user ? $b->user->full_name : 'N/A',
+                    $b->booking_date,
+                    $b->start_time . ' - ' . $b->end_time,
+                    $b->duration_minutes . ' mins',
+                    $b->purpose,
+                    $b->attendee_count,
+                    $b->status,
+                    $b->created_at->format('Y-m-d H:i:s')
+                ]);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
+
+

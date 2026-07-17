@@ -1719,3 +1719,78 @@ body .content-surface .inventory-page-shell #walkiesTable {
 /* ── MISC ── */
 code { color: var(--accent); background: rgba(2,132,199,.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 .hidden { display: none !important; }
+
+/* =========================================
+   Global Mobile Responsiveness Utilities
+   ========================================= */
+
+/* Tablets & Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .dashboard-grid, .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Mobile Phones (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Data Tables: allow horizontal scroll on mobile */
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .table-responsive table:not(.rb-m-stack) { width: 100%; min-width: 700px; }
+  .table-responsive table.rb-m-stack { width: 100%; min-width: 0 !important; }
+  
+  /* Cards and Grids stack vertically */
+  .dashboard-grid, .stats-grid, .grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Layout adjustments */
+  .main-wrapper {
+    margin-left: 0 !important;
+    padding: 10px !important;
+    width: 100% !important;
+  }
+  
+  /* Topbar adjustments */
+  .topbar {
+    padding: 0 10px !important;
+    flex-wrap: wrap;
+  }
+  
+  /* Modals */
+  .modal-content, .modal-dialog, .modal-box {
+    width: 95% !important;
+    margin: 10px auto !important;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  /* Forms stack */
+  .form-group, .form-row, .d-flex {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .form-group label {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Hide specific desktop-only elements */
+  .desktop-only, .hide-mobile {
+    display: none !important;
+  }
+  
+  /* Hamburger menu icon display */
+  .menu-toggle {
+    display: flex !important;
+  }
+}
+

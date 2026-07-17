@@ -507,7 +507,7 @@ function toggleTheme(event) {
     applyTheme(next === 'dark');
   }
 
-  if (!document.startViewTransition) {
+  if (!document.startViewTransition || window.innerWidth <= 768) {
     applyThemeLocal();
     return;
   }
@@ -1470,5 +1470,6 @@ document.addEventListener('DOMContentLoaded', function () {
 @include('components.2fa-popup')
 </body>
 </html>
+
 
 

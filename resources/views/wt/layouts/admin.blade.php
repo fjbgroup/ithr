@@ -1238,7 +1238,7 @@ function toggleTheme(event) {
     applyTheme(next === 'dark');
   }
 
-  if (!document.startViewTransition) {
+  if (!document.startViewTransition || window.innerWidth <= 768) {
     applyThemeLocal();
     return;
   }
@@ -1884,7 +1884,23 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 </script>
 @include('components.2fa-popup')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.innerWidth <= 768) {
+        document.querySelectorAll('table').forEach(function(table) {
+            if (!table.parentElement.classList.contains('table-responsive')) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'table-responsive';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
+
+
 
 

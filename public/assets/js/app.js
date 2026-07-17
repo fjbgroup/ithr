@@ -149,3 +149,17 @@ function toggleNavGroup(groupId) {
     toggle.classList.toggle('open', !isOpen);
     children.classList.toggle('open', !isOpen);
 }
+
+// Auto-wrap tables for mobile responsiveness
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.innerWidth <= 768) {
+        document.querySelectorAll('table').forEach(function(table) {
+            if (!table.parentElement.classList.contains('table-responsive')) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'table-responsive';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            }
+        });
+    }
+});
