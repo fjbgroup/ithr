@@ -112,6 +112,14 @@
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 <script>!function(){var t=localStorage.getItem('fjb-theme')||localStorage.getItem('color-theme')||localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}();</script>
 <style>
+  html.theme-transitioning::view-transition-old(root),
+  html.theme-transitioning::view-transition-new(root) { animation: none; mix-blend-mode: normal; display: block; }
+  html.theme-transition-expand::view-transition-new(root) { z-index: 2; }
+  html.theme-transition-expand::view-transition-old(root) { z-index: 1; }
+  html.theme-transition-shrink::view-transition-old(root) { z-index: 2; }
+  html.theme-transition-shrink::view-transition-new(root) { z-index: 1; }
+</style>
+<style>
   body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; color: var(--text); }
   .pub-topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: .75rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
   .pub-brand  { display: flex; align-items: center; gap: .75rem; font-weight: 800; font-size: 1.1rem; color: var(--text); letter-spacing: -0.01em; }
@@ -492,7 +500,7 @@
       <a href="{{ url('/wt') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:var(--surface);transition:all .2s;">WT</a>
       <a href="{{ url('/it/login') }}" style="display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;border:1.5px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:var(--surface);transition:all .2s;">IT</a>
     </div>
-    <button id="pub-theme-toggle" onclick="pubToggleTheme()" title="Toggle dark / light mode"
+    <button id="pub-theme-toggle" onclick="pubToggleTheme(event)" title="Toggle dark / light mode"
             style="width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s;">
         <svg id="pub-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         <svg id="pub-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -1038,6 +1046,18 @@ function pubToggleSchedule() {
     const caret = document.getElementById('pubSchCaret');
     if (!body) return;
     const open = body.style.display !== 'none';
+    
+    function applyTheme() {
+      document.documentElement.classList.toggle('dark', next === 'dark');
+      localStorage.setItem('fjb-theme', next);
+      localStorage.setItem('color-theme', next);
+      localStorage.setItem('theme', next);
+      
+      const moon = document.getElementById('pub-icon-moon');
+      const sun  = document.getElementById('pub-icon-sun');
+      if (moon) moon.style.display = (next === 'dark') ? 'none' : '';
+      if (sun)  sun.style.display  = (next === 'dark') ? '' : 'none';
+    }
     body.style.display = open ? 'none' : '';
     caret.classList.toggle('collapsed', open);
 }
@@ -1505,17 +1525,58 @@ function guestProceedToLogin() {
     form.submit();
 }
 
-function pubToggleTheme() {
-    var isDark = document.documentElement.classList.contains('dark');
-    var next = isDark ? 'light' : 'dark';
-    ['fjb-theme','color-theme','theme'].forEach(function(k){ localStorage.setItem(k, next); });
-    document.documentElement.classList.toggle('dark', !isDark);
-    document.documentElement.setAttribute('data-theme', next);
-    document.documentElement.style.colorScheme = next;
-    var moon = document.getElementById('pub-icon-moon');
-    var sun  = document.getElementById('pub-icon-sun');
-    if (moon) moon.style.display = !isDark ? 'none' : '';
-    if (sun)  sun.style.display  = !isDark ? '' : 'none';
+function pubToggleTheme(event) {
+  const isDark = document.documentElement.classList.contains('dark');
+  const next = isDark ? 'light' : 'dark';
+
+  function applyTheme() {
+    document.documentElement.classList.toggle('dark', next === 'dark');
+    localStorage.setItem('fjb-theme', next);
+    localStorage.setItem('color-theme', next);
+    localStorage.setItem('theme', next);
+    
+    const moon = document.getElementById('pub-icon-moon');
+    const sun  = document.getElementById('pub-icon-sun');
+    if (moon) moon.style.display = (next === 'dark') ? 'none' : '';
+    if (sun)  sun.style.display  = (next === 'dark') ? '' : 'none';
+  }
+
+  if (!document.startViewTransition) {
+    applyTheme();
+    return;
+  }
+
+  const x = event ? event.clientX : innerWidth / 2;
+  const y = event ? event.clientY : innerHeight / 2;
+  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+  document.documentElement.classList.add('theme-transitioning');
+  document.documentElement.classList.add(next === 'dark' ? 'theme-transition-expand' : 'theme-transition-shrink');
+  const transition = document.startViewTransition(() => {
+    applyTheme();
+  });
+
+  transition.ready.then(() => {
+    const isExpanding = next === 'dark';
+    const clipPath = [
+      `circle(0px at ${x}px ${y}px)`,
+      `circle(${endRadius}px at ${x}px ${y}px)`,
+    ];
+    document.documentElement.animate(
+      {
+        clipPath: isExpanding ? clipPath : [...clipPath].reverse(),
+      },
+      {
+        duration: 500,
+        easing: 'ease-in-out',
+        pseudoElement: isExpanding ? '::view-transition-new(root)' : '::view-transition-old(root)',
+      }
+    );
+  });
+
+  transition.finished.finally(() => {
+    document.documentElement.classList.remove('theme-transitioning', 'theme-transition-expand', 'theme-transition-shrink');
+  });
 }
 
 (function(){
