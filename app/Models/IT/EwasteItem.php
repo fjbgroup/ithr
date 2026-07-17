@@ -40,7 +40,14 @@ class EwasteItem extends Model
     public function scopeAwaitingFinanceRouting(Builder $query): Builder
     {
         return $query
-            ->where('ceo_status', 'Approved')
+            ->where(function (Builder $query) {
+                $query->where('ceo_status', 'Approved')
+                    ->orWhere(function (Builder $legacyApproval) {
+                        $legacyApproval->whereNotNull('ceo_signed_at')
+                            ->whereNotNull('ceo_signed_name')
+                            ->where('disposal_status', 'Approved');
+                    });
+            })
             ->where(function (Builder $query) {
                 $query->whereNull('finance_status')
                     ->orWhereNotIn('finance_status', ['EWaste', 'Disposal']);
