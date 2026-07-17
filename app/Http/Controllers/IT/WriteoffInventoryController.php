@@ -15,8 +15,7 @@ class WriteoffInventoryController extends Controller
     {
         if (!Auth::guard('it')->user()->isFinanceAdmin()) abort(403);
 
-        $pendingQueue = EwasteItem::where('ceo_status', 'Approved')
-            ->where('finance_status', 'Pending')
+        $pendingQueue = EwasteItem::awaitingFinanceRouting()
             ->orderByDesc('ceo_signed_at')
             ->orderByDesc('created_at')
             ->get();
@@ -43,8 +42,7 @@ class WriteoffInventoryController extends Controller
         if (!$user->isFinanceAdmin()) abort(403);
 
         $items = EwasteItem::where('batch_id', $batchId)
-            ->where('ceo_status', 'Approved')
-            ->where('finance_status', 'Pending')
+            ->awaitingFinanceRouting()
             ->get();
 
         if ($items->isEmpty()) {
@@ -80,8 +78,7 @@ class WriteoffInventoryController extends Controller
         if (!$user->isFinanceAdmin()) abort(403);
 
         $items = EwasteItem::where('batch_id', $batchId)
-            ->where('ceo_status', 'Approved')
-            ->where('finance_status', 'Pending')
+            ->awaitingFinanceRouting()
             ->get();
 
         if ($items->isEmpty()) {
@@ -127,8 +124,7 @@ class WriteoffInventoryController extends Controller
         if (!$user->isFinanceAdmin()) abort(403);
 
         $item = EwasteItem::where('id', $id)
-            ->where('ceo_status', 'Approved')
-            ->where('finance_status', 'Pending')
+            ->awaitingFinanceRouting()
             ->first();
 
         if ($item) {
@@ -162,8 +158,7 @@ class WriteoffInventoryController extends Controller
         if (!$user->isFinanceAdmin()) abort(403);
 
         $item = EwasteItem::where('id', $id)
-            ->where('ceo_status', 'Approved')
-            ->where('finance_status', 'Pending')
+            ->awaitingFinanceRouting()
             ->first();
 
         if ($item) {

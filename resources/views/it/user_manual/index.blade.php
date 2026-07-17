@@ -30,7 +30,6 @@
         background: #263042;
         color: #38bdf8;
     }
-
     .manual-content {
         line-height: 1.8;
         color: var(--text, #334155);

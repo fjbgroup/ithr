@@ -92,8 +92,7 @@ class WriteoffController extends Controller
         $faPending = collect(); $faPendingCount = 0; $faProcessed = collect();
         if ($user->isFinanceAdmin()) {
             $faPending      = EwasteItem::with(['creator', 'houUser'])
-                ->where('ceo_status', 'Approved')
-                ->where('finance_status', 'Pending')
+                ->awaitingFinanceRouting()
                 ->orderByRaw("COALESCE(batch_id,'') DESC")
                 ->orderByDesc('ceo_signed_at')->get();
             $faPendingCount = $faPending->count();
@@ -278,7 +277,7 @@ class WriteoffController extends Controller
             return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) rejected.');
         }
 
-        EwasteItem::whereIn('id', $ewIds)->update(['ceo_status' => 'Approved', 'disposal_status' => 'Approved', 'finance_status' => 'Pending', 'ceo_signed_name' => $user->full_name, 'ceo_sig_img' => $sigImg, 'ceo_signed_at' => now(), 'ceo_remark' => $remark]);
+        EwasteItem::whereIn('id', $ewIds)->update(['ceo_status' => 'Approved', 'disposal_status' => 'Pending', 'finance_status' => 'Pending', 'ceo_signed_name' => $user->full_name, 'ceo_sig_img' => $sigImg, 'ceo_signed_at' => now(), 'ceo_remark' => $remark]);
         $items = EwasteItem::whereIn('id', $ewIds)->get();
         foreach ($items as $item) { $this->setAssetStatus($item, 'Pending to E-Waste/Disposal'); }
         ActivityLogService::log('CEO_APPROVED', 'ewaste', $ewId, 'CEO approved ' . count($ewIds) . ' write-off item(s).');
@@ -286,7 +285,16 @@ class WriteoffController extends Controller
             NotificationService::notifyUserWithEmail($creatorId, 'writeoff', 'Write-Off Approved by CEO', $user->full_name . ' (CEO) approved your write-off item(s). It will be forwarded to Finance for processing.', route('it.writeoff.index'));
         }
         NotificationService::notifyAdmins('writeoff', 'Write-Off Approved by CEO', 'CEO approved ' . count($ewIds) . ' write-off item(s).', route('it.writeoff.index'));
-        return redirect()->route('it.writeoff.index')->with('success', count($ewIds) . ' write-off(s) approved.');
+        NotificationService::notifyFinanceAdmins(
+            'writeoff',
+            'Write-Off Awaiting Finance Routing',
+            'CEO approved ' . count($ewIds) . ' write-off item(s). Please route the assets to E-Waste or Disposal.',
+            route('it.writeoff-inventory.index')
+        );
+        return redirect()->route('it.writeoff.index')->with(
+            'success',
+            count($ewIds) . ' write-off(s) approved and sent to Finance Admin for routing.'
+        );
     }
 
     public function assignToHOU(Request $request)
@@ -465,20 +473,23 @@ class WriteoffController extends Controller
         $ew = EwasteItem::findOrFail($id);
         $ew->update([
             'ceo_status'      => 'Approved',
-            'disposal_status' => 'Approved',
+            'disposal_status' => 'Pending',
             'finance_status'  => 'Pending',
             'ceo_signed_name' => $user->full_name,
             'ceo_signed_at'   => now(),
         ]);
         $this->setAssetStatus($ew, 'Pending to E-Waste/Disposal');
-        if ($ew->original_inventory_id) {
-            InventoryItem::where('id', $ew->original_inventory_id)->update(['location' => 'E-Waste']);
-        }
         ActivityLogService::log('CEO_APPROVED', 'ewaste', $id, 'Approved write-off: ' . $ew->description);
         if ($ew->created_by) {
             NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Approved', $user->full_name . ' approved your write-off.', route('it.writeoff.index'));
         }
-        return redirect()->route('it.writeoff.index')->with('success', 'Write-off approved.');
+        NotificationService::notifyFinanceAdmins(
+            'writeoff',
+            'Write-Off Awaiting Finance Routing',
+            'CEO approved 1 write-off item. Please route the asset to E-Waste or Disposal.',
+            route('it.writeoff-inventory.index')
+        );
+        return redirect()->route('it.writeoff.index')->with('success', 'Write-off approved and sent to Finance Admin for routing.');
     }
 
     public function approveAllWriteoffs()
@@ -493,17 +504,25 @@ class WriteoffController extends Controller
             ->get();
 
         foreach ($items as $ew) {
-            $ew->update(['ceo_status' => 'Approved', 'disposal_status' => 'Approved', 'finance_status' => 'Pending', 'ceo_signed_name' => $user->full_name, 'ceo_signed_at' => now()]);
+            $ew->update(['ceo_status' => 'Approved', 'disposal_status' => 'Pending', 'finance_status' => 'Pending', 'ceo_signed_name' => $user->full_name, 'ceo_signed_at' => now()]);
             $this->setAssetStatus($ew, 'Pending to E-Waste/Disposal');
-            if ($ew->original_inventory_id) {
-                InventoryItem::where('id', $ew->original_inventory_id)->update(['location' => 'E-Waste']);
-            }
             if ($ew->created_by) {
                 NotificationService::notifyUserWithEmail($ew->created_by, 'writeoff', 'Write-Off Approved', $user->full_name . ' approved your write-off.', route('it.writeoff.index'));
             }
         }
         ActivityLogService::log('CEO_APPROVE_ALL', 'ewaste', 0, 'Approved all ' . $items->count() . ' pending write-offs.');
-        return redirect()->route('it.writeoff.index')->with('success', $items->count() . ' write-off(s) approved.');
+        if ($items->isNotEmpty()) {
+            NotificationService::notifyFinanceAdmins(
+                'writeoff',
+                'Write-Offs Awaiting Finance Routing',
+                'CEO approved ' . $items->count() . ' write-off item(s). Please route the assets to E-Waste or Disposal.',
+                route('it.writeoff-inventory.index')
+            );
+        }
+        return redirect()->route('it.writeoff.index')->with(
+            'success',
+            $items->count() . ' write-off(s) approved and sent to Finance Admin for routing.'
+        );
     }
 
     private function setAssetStatus(EwasteItem $ew, string $status): void
@@ -538,7 +557,7 @@ class WriteoffController extends Controller
         $finStatus = $route === 'ewaste' ? 'EWaste' : 'Disposal';
         $newLoc    = $route === 'ewaste' ? 'E-Waste' : 'Disposal';
 
-        $items     = EwasteItem::whereIn('id', $ewIds)->where('ceo_status', 'Approved')->where('finance_status', 'Pending')->get();
+        $items     = EwasteItem::whereIn('id', $ewIds)->awaitingFinanceRouting()->get();
         $firstItem = null;
         foreach ($items as $item) {
             if (!$firstItem) $firstItem = $item;

@@ -1222,7 +1222,13 @@
       $historyFirst = $historyGroup->first();
       $historyCount = $historyGroup->count();
       $historyIsBatch = $historyCount > 1;
-      $historyStatus = $historyGroup->contains(fn($i) => $i->ceo_status === 'Rejected') ? 'Rejected' : 'Approved';
+      $historyStatus = $historyGroup->contains(fn($i) => $i->ceo_status === 'Rejected')
+        ? 'Rejected'
+        : ($historyGroup->every(fn($i) => $i->finance_status === 'EWaste')
+          ? 'Routed to E-Waste'
+          : ($historyGroup->every(fn($i) => $i->finance_status === 'Disposal')
+            ? 'Routed to Disposal'
+            : 'Sent to Finance Admin'));
       $historyRemark = $historyGroup->pluck('ceo_remark')->filter()->unique()->implode(' | ');
       $historyColId = 'ceoHistoryAssets_'.md5($historyFirst->batch_id ?: ('single_'.$historyFirst->id));
       $historyTitle = $historyIsBatch ? 'Bulk Write-Off' : ($historyFirst->description ?: 'Write-Off Submission');
@@ -1233,7 +1239,7 @@
           <div class="pfa-hou-title-row">
             <div class="pfa-hou-title" title="{{ $historyTitle }}">{{ $historyTitle }}</div>
             <span class="pfa-hou-pill" style="background:rgba(2,132,199,.10);color:var(--accent)">{{ $historyCount }} {{ $historyCount === 1 ? 'item' : 'items' }}</span>
-            <span class="badge-status {{ $historyStatus === 'Approved' ? 'bs-active' : 'bs-disposed' }}">{{ $historyStatus }}</span>
+            <span class="badge-status {{ $historyStatus === 'Rejected' ? 'bs-disposed' : 'bs-active' }}">{{ $historyStatus }}</span>
           </div>
           <div class="pfa-hou-meta">
             <span><i class="bi bi-calendar-check"></i> {{ $historyFirst->ceo_signed_at?->format('d M Y') ?? '—' }}</span>
