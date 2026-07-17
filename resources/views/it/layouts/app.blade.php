@@ -854,7 +854,7 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
         <span class="topbar-role-badge">{{ $user->getItRoleLabel() }}</span>
         <span class="topbar-user-name">{{ $user->full_name }}</span>
       </a>
-      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark" onclick="toggleTheme()">
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark" onclick="toggleTheme(event)">
         <i class="bi bi-sun-fill" id="themeIcon"></i>
       </button>
       <form method="POST" action="{{ route('it.logout') }}" style="margin:0">

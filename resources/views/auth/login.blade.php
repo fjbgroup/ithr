@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="view-transition" content="same-origin">
 <title>Login — {{ config('app.name', 'HR Admin System') }}</title>
 @include('partials.favicons')
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -276,17 +275,10 @@
   html.dark .sys-badge.active { border: 1px solid rgba(255,255,255,.08); color: #cbd5e1; background: rgba(255,255,255,.05); }
   html.dark .sys-badge.link { border: 1px solid rgba(255,255,255,.15); color: #94a3b8; background: rgba(255,255,255,.06); }
   html.dark .sys-badge.link:hover { background: rgba(255,255,255,.15); color: #e2e8f0; }
-  
-  html.theme-transitioning::view-transition-old(root),
-  html.theme-transitioning::view-transition-new(root) { animation: none; mix-blend-mode: normal; display: block; }
-  html.theme-transition-expand::view-transition-new(root) { z-index: 2; }
-  html.theme-transition-expand::view-transition-old(root) { z-index: 1; }
-  html.theme-transition-shrink::view-transition-old(root) { z-index: 2; }
-  html.theme-transition-shrink::view-transition-new(root) { z-index: 1; }
 </style>
 </head>
 <body class="auth-page">
-  <button onclick="toggleTheme(event)" class="auth-theme-toggle" aria-label="Toggle theme">
+  <button onclick="toggleTheme()" class="auth-theme-toggle" aria-label="Toggle theme">
     <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
     <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
   </button>
@@ -428,53 +420,13 @@
       : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
   }
 
-  function toggleTheme(event) {
+  function toggleTheme() {
     const isDark = document.documentElement.classList.contains('dark');
     const next = isDark ? 'light' : 'dark';
-
-    function applyTheme() {
-      document.documentElement.classList.toggle('dark', next === 'dark');
-      localStorage.setItem('fjb-theme', next);
-      localStorage.setItem('color-theme', next);
-      localStorage.setItem('theme', next);
-    }
-
-    if (!document.startViewTransition) {
-      applyTheme();
-      return;
-    }
-
-    const x = event ? event.clientX : innerWidth / 2;
-    const y = event ? event.clientY : innerHeight / 2;
-    const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-
-    document.documentElement.classList.add('theme-transitioning');
-    document.documentElement.classList.add(next === 'dark' ? 'theme-transition-expand' : 'theme-transition-shrink');
-    const transition = document.startViewTransition(() => {
-      applyTheme();
-    });
-
-    transition.ready.then(() => {
-      const isExpanding = next === 'dark';
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
-      document.documentElement.animate(
-        {
-          clipPath: isExpanding ? clipPath : [...clipPath].reverse(),
-        },
-        {
-          duration: 500,
-          easing: 'ease-in-out',
-          pseudoElement: isExpanding ? '::view-transition-new(root)' : '::view-transition-old(root)',
-        }
-      );
-    });
-
-    transition.finished.finally(() => {
-      document.documentElement.classList.remove('theme-transitioning', 'theme-transition-expand', 'theme-transition-shrink');
-    });
+    document.documentElement.classList.toggle('dark', next === 'dark');
+    localStorage.setItem('fjb-theme', next);
+    localStorage.setItem('color-theme', next);
+    localStorage.setItem('theme', next);
   }
 </script>
 </body>

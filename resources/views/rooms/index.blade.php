@@ -981,7 +981,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:.25rem;vertical-align:middle;"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10H12z"/></svg>Monthly Report
             </button>
             @endif
-            <button id="rb-theme-toggle" class="rb-today-btn" onclick="toggleTheme()" title="Toggle dark / light mode" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;flex-shrink:0;">
+            <button id="rb-theme-toggle" class="rb-today-btn" onclick="toggleTheme(event)" title="Toggle dark / light mode" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;flex-shrink:0;">
                 <svg id="rb-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="rb-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </button>

@@ -496,51 +496,13 @@ function applyTheme(dark) {
   }
 }
 
-function toggleTheme(event) {
+function toggleTheme() {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const next = isDark ? 'light' : 'dark';
-
-  function applyThemeLocal() {
-    localStorage.setItem('fjb-theme', next);
-    localStorage.setItem('color-theme', next);
-    localStorage.setItem('theme', next);
-    applyTheme(next === 'dark');
-  }
-
-  if (!document.startViewTransition) {
-    applyThemeLocal();
-    return;
-  }
-
-  const x = event && event.clientX ? event.clientX : innerWidth / 2;
-  const y = event && event.clientY ? event.clientY : innerHeight / 2;
-  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-
-  document.documentElement.classList.add('theme-transitioning');
-  document.documentElement.classList.add(next === 'dark' ? 'theme-transition-expand' : 'theme-transition-shrink');
-  const transition = document.startViewTransition(() => {
-    applyThemeLocal();
-  });
-
-  transition.ready.then(() => {
-    const isExpanding = next === 'dark';
-    const clipPath = [
-      `circle(0px at ${x}px ${y}px)`,
-      `circle(${endRadius}px at ${x}px ${y}px)`,
-    ];
-    document.documentElement.animate(
-      { clipPath: isExpanding ? clipPath : [...clipPath].reverse() },
-      {
-        duration: 500,
-        easing: 'ease-in-out',
-        pseudoElement: isExpanding ? '::view-transition-new(root)' : '::view-transition-old(root)',
-      }
-    );
-  });
-
-  transition.finished.finally(() => {
-    document.documentElement.classList.remove('theme-transitioning', 'theme-transition-expand', 'theme-transition-shrink');
-  });
+  localStorage.setItem('fjb-theme', next);
+  localStorage.setItem('color-theme', next);
+  localStorage.setItem('theme', next);
+  applyTheme(next === 'dark');
 }
 
 document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
