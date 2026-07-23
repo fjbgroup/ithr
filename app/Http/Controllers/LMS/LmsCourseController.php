@@ -42,9 +42,12 @@ class LmsCourseController extends Controller
             'department'    => 'nullable|string|max:100',
             'start_date'    => 'nullable|date',
             'end_date'      => 'nullable|date',
+            'due_date'      => 'nullable|date',
             'duration'      => 'nullable|string|max:100',
             'pic_id'        => 'nullable|exists:users,id',
         ]);
+
+        $validated['is_open_enrollment'] = $request->has('is_open_enrollment');
 
         if (empty($validated['end_date']) && !empty($validated['start_date'])) {
             $validated['end_date'] = $validated['start_date'];
@@ -83,9 +86,12 @@ class LmsCourseController extends Controller
             'department'    => 'nullable|string|max:100',
             'start_date'    => 'nullable|date',
             'end_date'      => 'nullable|date',
+            'due_date'      => 'nullable|date',
             'duration'      => 'nullable|string|max:100',
             'pic_id'        => 'nullable|exists:users,id',
         ]);
+
+        $validated['is_open_enrollment'] = $request->has('is_open_enrollment');
 
         if (empty($validated['end_date']) && !empty($validated['start_date'])) {
             $validated['end_date'] = $validated['start_date'];

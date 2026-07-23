@@ -58,6 +58,7 @@
                     <th>Module</th>
                     <th>Description</th>
                     <th>IP Address</th>
+                    <th>MAC Address</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,6 +109,9 @@
                     <td style="font-size:.875rem;max-width:340px;">{{ $log->description }}</td>
                     <td style="font-size:.78rem;color:var(--muted);font-family:monospace;white-space:nowrap;">
                         {{ $log->ip_address ?? '—' }}
+                    </td>
+                    <td style="font-size:.78rem;color:var(--muted);font-family:monospace;white-space:nowrap;">
+                        {{ $log->mac_address ?? '—' }}
                     </td>
                 </tr>
                 @endforeach

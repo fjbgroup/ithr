@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class TrainingCourse extends Model
 {
-    protected $fillable = ['code', 'title', 'training_type', 'company', 'department', 'start_date', 'end_date', 'venue', 'duration', 'is_private', 'platform', 'pic_id'];
+    protected $fillable = ['code', 'title', 'training_type', 'company', 'department', 'start_date', 'end_date', 'due_date', 'venue', 'duration', 'is_private', 'is_open_enrollment', 'platform', 'pic_id'];
 
-    protected $casts = ['is_private' => 'boolean'];
+    protected $casts = [
+        'is_private' => 'boolean',
+        'is_open_enrollment' => 'boolean',
+        'due_date' => 'date',
+    ];
 
     public function staff(): BelongsToMany
     {

@@ -4,12 +4,13 @@
 <style>
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
     .modal.show { display: flex; }
-    .modal-box { background: var(--body-bg); border-radius: 12px; width: 100%; max-width: 520px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+    .modal-box { background: var(--body-bg); border-radius: 12px; width: 100%; max-width: 520px; max-height: 90vh; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden; }
+    .modal-box form { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
     .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
     .modal-header h3 { color: #fff; margin: 0; font-size: 16px; font-family: 'Inter', sans-serif; font-weight: 600; }
     .modal-close { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 20px; padding: 0; }
     .modal-close:hover { color: #fff; }
-    .modal-body { padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; overflow: visible; }
+    .modal-body { padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
     .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: var(--table-hover); }
 
     /* Live Search CSS */
@@ -138,9 +139,22 @@
                         <input type="date" name="end_date" class="form-control" style="width: 100%;">
                     </div>
                 </div>
-                <div>
-                    <label class="form-label" style="display: block; margin-bottom: 8px;">Duration</label>
-                    <input type="text" name="duration" class="form-control" style="width: 100%;" placeholder="e.g. 2 Hours">
+                <div style="display: flex; gap: 16px; margin-top: 16px;">
+                    <div style="flex: 1;">
+                        <label class="form-label" style="display: block; margin-bottom: 8px;">Due Date</label>
+                        <input type="date" name="due_date" class="form-control" style="width: 100%;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="form-label" style="display: block; margin-bottom: 8px;">Duration</label>
+                        <input type="text" name="duration" class="form-control" style="width: 100%;" placeholder="e.g. 2 Hours">
+                    </div>
+                </div>
+                <div style="margin-top: 16px; margin-bottom: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" name="is_open_enrollment" value="1">
+                        <span class="form-label" style="margin: 0;">Open Enrollment (All Staff)</span>
+                    </label>
+                    <p style="font-size: 11px; color: var(--muted); margin: 6px 0 0 0;">If checked, all staff can view and start this course.</p>
                 </div>
                 <div>
                     <label class="form-label" style="display: block; margin-bottom: 8px;">Person In Charge (PIC)</label>
@@ -215,9 +229,22 @@
                         <input type="date" name="end_date" id="ec-end-date" class="form-control" style="width: 100%;">
                     </div>
                 </div>
-                <div>
-                    <label class="form-label" style="display: block; margin-bottom: 8px;">Duration</label>
-                    <input type="text" name="duration" id="ec-duration" class="form-control" style="width: 100%;">
+                <div style="display: flex; gap: 16px; margin-top: 16px;">
+                    <div style="flex: 1;">
+                        <label class="form-label" style="display: block; margin-bottom: 8px;">Due Date</label>
+                        <input type="date" name="due_date" id="ec-due-date" class="form-control" style="width: 100%;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="form-label" style="display: block; margin-bottom: 8px;">Duration</label>
+                        <input type="text" name="duration" id="ec-duration" class="form-control" style="width: 100%;">
+                    </div>
+                </div>
+                <div style="margin-top: 16px; margin-bottom: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" name="is_open_enrollment" id="ec-open-enrollment" value="1">
+                        <span class="form-label" style="margin: 0;">Open Enrollment (All Staff)</span>
+                    </label>
+                    <p style="font-size: 11px; color: var(--muted); margin: 6px 0 0 0;">If checked, all staff can view and start this course.</p>
                 </div>
                 <div>
                     <label class="form-label" style="display: block; margin-bottom: 8px;">Person In Charge (PIC)</label>
@@ -278,7 +305,9 @@
             department: @json($c->department ?? ''),
             start_date: @json($c->start_date ? \Carbon\Carbon::parse($c->start_date)->format('Y-m-d') : ''),
             end_date: @json($c->end_date ? \Carbon\Carbon::parse($c->end_date)->format('Y-m-d') : ''),
+            due_date: @json($c->due_date ? \Carbon\Carbon::parse($c->due_date)->format('Y-m-d') : ''),
             duration: @json($c->duration ?? ''),
+            is_open_enrollment: @json($c->is_open_enrollment ? true : false),
             pic_id: @json($c->pic_id ?? '')
         },
         @endforeach
@@ -303,7 +332,9 @@
         document.getElementById('ec-department').value = d.department;
         document.getElementById('ec-start-date').value = d.start_date;
         document.getElementById('ec-end-date').value = d.end_date;
+        document.getElementById('ec-due-date').value = d.due_date;
         document.getElementById('ec-duration').value = d.duration;
+        document.getElementById('ec-open-enrollment').checked = d.is_open_enrollment;
         document.getElementById('edit-pic-id').value = d.pic_id || '';
         
         if (d.pic_id && allUsersData) {

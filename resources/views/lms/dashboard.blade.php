@@ -28,6 +28,13 @@
             <div class="lms-course-content">
                 <h3 class="lms-course-title">{{ $course->title }}</h3>
                 <div class="lms-course-code">Code: {{ $course->code }}</div>
+                @if($course->due_date)
+                <div style="font-size: 0.85rem; color: var(--danger); margin-bottom: 12px; font-weight: 500;">
+                    Due Date: {{ \Carbon\Carbon::parse($course->due_date)->format('d M Y') }}
+                </div>
+                @else
+                <div style="margin-bottom: 12px;"></div>
+                @endif
                 
                 <div style="display: flex; justify-content: flex-end;">
                     <a href="{{ route('lms.learn.show', $course->id) }}" class="lms-btn-play">
@@ -47,5 +54,39 @@
         </div>
         @endforelse
     </div>
+
+    @if($availableCourses->count() > 0)
+    <div style="margin-top: 48px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+        <h2 style="font-family: var(--lms-font-heading); font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0;">Available Courses</h2>
+    </div>
+
+    <div class="lms-course-grid">
+        @foreach($availableCourses as $course)
+        <div class="lms-course-card">
+            <div class="lms-course-thumbnail">
+                <div class="lms-course-type-badge" style="background: rgba(34,197,94,0.1); color: var(--success); border-color: rgba(34,197,94,0.2);">Open Enrollment</div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            </div>
+            <div class="lms-course-content">
+                <h3 class="lms-course-title">{{ $course->title }}</h3>
+                <div class="lms-course-code">Code: {{ $course->code }}</div>
+                @if($course->due_date)
+                <div style="font-size: 0.85rem; color: var(--danger); margin-bottom: 12px; font-weight: 500;">
+                    Due Date: {{ \Carbon\Carbon::parse($course->due_date)->format('d M Y') }}
+                </div>
+                @else
+                <div style="margin-bottom: 12px;"></div>
+                @endif
+                <div style="display: flex; justify-content: flex-end; margin-top: auto;">
+                    <a href="{{ route('lms.learn.show', $course->id) }}" class="lms-btn-play">
+                        <span class="btn-label">Start Learning</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    @endif
 </div>
 @endsection

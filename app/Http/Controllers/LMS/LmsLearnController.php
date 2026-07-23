@@ -100,8 +100,18 @@ class LmsLearnController extends Controller
                 ->where('course_id', $course->id)
                 ->first();
                 
-            if ($attendance && $attendance->status !== 'Completed') {
-                $attendance->update(['status' => 'Completed']);
+            if ($attendance) {
+                if ($attendance->status !== 'Completed') {
+                    $attendance->update(['status' => 'Completed']);
+                }
+            } else {
+                TrainingAttendance::create([
+                    'staff_id' => $staff->id,
+                    'course_id' => $course->id,
+                    'status' => 'Completed',
+                    'training_type' => $course->training_type ?? 'Internal',
+                    'created_by' => Auth::id() ?? 1,
+                ]);
             }
             return true;
         }
