@@ -259,13 +259,13 @@ input:checked + .sys-slider:before { transform: translateX(20px); }
         <table class="table table-sticky users-table">
             <thead>
                 <tr>
-                    <th style="white-space: nowrap;">Name</th>
-                    <th style="white-space: nowrap;">Email</th>
-                    <th>Role</th>
-                    <th>Staff No</th>
+                    <th style="width: 28%;">Name</th>
+                    <th style="width: 28%;">Email</th>
+                    <th style="white-space: nowrap;">Role</th>
+                    <th style="white-space: nowrap;">Staff No</th>
                     <th>Department</th>
-                    <th>Status</th>
-                    <th style="width: 180px; min-width: 180px; text-align: right; white-space: nowrap;">Actions</th>
+                    <th style="white-space: nowrap;">Status</th>
+                    <th style="width: 140px; min-width: 140px; text-align: right; white-space: nowrap;">Actions</th>
                 </tr>
             </thead>
             <tbody>
