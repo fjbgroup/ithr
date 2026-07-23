@@ -437,8 +437,4 @@
         );
     });
 </script>
-@endsection     d => d.name, d => '', d => d.name
-        );
-    });
-</script>
 @endsection
