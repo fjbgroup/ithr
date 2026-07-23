@@ -119,7 +119,3 @@ class LmsCourseController extends Controller
         return redirect()->route('lms.courses.index')->with('success', 'Course deleted successfully.');
     }
 }
-        );
-        return redirect()->route('lms.courses.index')->with('success', 'Course deleted successfully.');
-    }
-}
