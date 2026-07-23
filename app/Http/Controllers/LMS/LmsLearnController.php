@@ -118,4 +118,3 @@ class LmsLearnController extends Controller
         return false;
     }
 }
-}
