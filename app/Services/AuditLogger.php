@@ -14,8 +14,6 @@ class AuditLogger
     ): void {
         try {
             $user = auth()->user();
-            $ip = request()->ip();
-            $mac = self::getMacAddress($ip);
 
             ActivityLog::create([
                 'user_id'     => $user?->id,
@@ -24,31 +22,11 @@ class AuditLogger
                 'action'      => $action,
                 'module'      => $module,
                 'description' => $description,
-                'ip_address'  => $ip,
-                'mac_address' => $mac,
+                'ip_address'  => request()->ip(),
                 'properties'  => empty($properties) ? null : $properties,
             ]);
         } catch (\Throwable $e) {
             \Log::error('AuditLogger::log failed: ' . $e->getMessage());
         }
-    }
-
-    private static function getMacAddress(?string $ip): ?string
-    {
-        if (!$ip || $ip === '127.0.0.1' || $ip === '::1') {
-            return null;
-        }
-
-        $macPattern = '/([a-fA-F0-9]{2}[:-]){5}[a-fA-F0-9]{2}/';
-        @exec('arp -a ' . escapeshellarg($ip), $output, $status);
-
-        if ($status === 0 && !empty($output)) {
-            foreach ($output as $line) {
-                if (preg_match($macPattern, $line, $matches)) {
-                    return str_replace('-', ':', strtoupper($matches[0]));
-                }
-            }
-        }
-        return null;
     }
 }
