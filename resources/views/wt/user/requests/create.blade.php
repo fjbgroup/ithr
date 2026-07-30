@@ -281,6 +281,24 @@
         text-transform: uppercase;
         padding: 6px 10px;
     }
+    .signature-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        padding: 6px 10px;
+        cursor: pointer;
+    }
+    .signature-upload input {
+        display: none;
+    }
 </style>
 @endpush
 
@@ -464,7 +482,14 @@
                 <canvas></canvas>
                 <div class="signature-actions">
                     <span style="font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.12em">Sign inside the box</span>
-                    <button type="button" class="signature-clear" data-signature-clear>Clear</button>
+                    <div class="flex items-center gap-2">
+                        <label class="signature-upload">
+                            <i class="fa-solid fa-upload"></i>
+                            Upload Signature
+                            <input type="file" accept="image/*" data-signature-upload>
+                        </label>
+                        <button type="button" class="signature-clear" data-signature-clear>Clear</button>
+                    </div>
                 </div>
             </div>
             <input type="hidden" name="request_signature" data-signature-input required>
@@ -514,6 +539,7 @@
             const canvas = container.querySelector('canvas');
             const input = container.parentElement.querySelector('[data-signature-input]');
             const clearButton = container.querySelector('[data-signature-clear]');
+            const uploadInput = container.querySelector('[data-signature-upload]');
             const context = canvas.getContext('2d');
             let drawing = false;
             let hasSignature = false;
@@ -546,6 +572,25 @@
 
             function updateInput() {
                 input.value = hasSignature ? canvas.toDataURL('image/png') : '';
+            }
+
+            function drawUploadedSignature(source) {
+                const image = new Image();
+                image.onload = function () {
+                    const rect = canvas.getBoundingClientRect();
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+
+                    const scale = Math.min(rect.width / image.width, rect.height / image.height);
+                    const drawWidth = image.width * scale;
+                    const drawHeight = image.height * scale;
+                    const drawX = (rect.width - drawWidth) / 2;
+                    const drawY = (rect.height - drawHeight) / 2;
+
+                    context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+                    hasSignature = true;
+                    updateInput();
+                };
+                image.src = source;
             }
 
             function start(event) {
@@ -583,8 +628,26 @@
             clearButton.addEventListener('click', function () {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 hasSignature = false;
+                if (uploadInput) uploadInput.value = '';
                 updateInput();
             });
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function () {
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    if (!file.type.startsWith('image/')) {
+                        alert('Please upload a valid signature image.');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        drawUploadedSignature(event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
         }
 
         document.querySelectorAll('[data-signature-pad]').forEach(setupSignaturePad);

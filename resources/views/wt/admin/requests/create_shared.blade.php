@@ -15,75 +15,60 @@
     }
     .request-form-accordion {
         display: grid;
-        gap: 10px;
+        gap: 14px;
     }
     .request-form-accordion-section {
-        border: 1px solid rgba(2, 132, 199, 0.18);
-        border-radius: 14px;
-        overflow: visible;
-        background: rgba(248, 250, 252, 0.58);
+        border: 1px solid var(--border, #dbe3ec);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface, #ffffff);
     }
-    .request-form-accordion-toggle {
+    .request-form-section-head {
         width: 100%;
-        min-height: 52px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 13px 16px;
-        border: 0;
-        background: rgba(2, 132, 199, 0.08);
-        color: #0284c7;
-        text-align: left;
-        font-size: 10px;
-        font-weight: 900;
-        letter-spacing: .14em;
-        text-transform: uppercase;
-        cursor: pointer;
-    }
-    .request-form-accordion-toggle:hover,
-    .request-form-accordion-toggle[aria-expanded="true"] {
-        background: rgba(2, 132, 199, 0.15);
-    }
-    .request-form-accordion-title {
         display: flex;
         align-items: center;
         gap: 10px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border, #dbe3ec);
+        background: var(--body-bg, #f8fafc);
+    }
+    .request-form-section-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: rgba(2, 132, 199, .12);
+        color: var(--accent, #0284c7);
+        font-size: 11px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+    .request-form-accordion-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--text, #142b47);
+        letter-spacing: 0;
+        text-transform: none;
         min-width: 0;
     }
     .request-form-accordion-title::before {
-        content: "";
-        width: 4px;
-        height: 22px;
-        border-radius: 999px;
-        background: #0284c7;
-        flex: 0 0 auto;
-    }
-    .request-form-accordion-icon {
-        color: #64748b;
-        transition: transform .18s ease;
-        flex: 0 0 auto;
-    }
-    .request-form-accordion-toggle[aria-expanded="true"] .request-form-accordion-icon {
-        transform: rotate(180deg);
-        color: #0284c7;
+        content: none;
     }
     .request-form-accordion-panel {
-        padding: 16px;
+        padding: 20px;
     }
     .request-form-accordion-panel[hidden] {
-        display: none !important;
+        display: block !important;
     }
     html.dark .request-form-accordion-section {
-        background: rgba(15, 23, 42, 0.35);
-        border-color: rgba(51, 65, 85, 0.9);
+        background: var(--surface, #1e293b);
+        border-color: var(--border, #334155);
     }
-    html.dark .request-form-accordion-toggle {
-        background: rgba(2, 132, 199, 0.12);
-    }
-    html.dark .request-form-accordion-toggle:hover,
-    html.dark .request-form-accordion-toggle[aria-expanded="true"] {
-        background: rgba(2, 132, 199, 0.2);
+    html.dark .request-form-section-head {
+        background: var(--body-bg, #0f172a);
     }
     .longterm-owner-toggle {
         border-radius: 12px;
@@ -613,6 +598,28 @@
         padding: 6px 10px;
         text-transform: uppercase;
     }
+    .executive-signature-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid rgba(2, 132, 199, 0.2);
+        border-radius: 7px;
+        background: #0284c7;
+        color: #ffffff;
+        font-size: 7px;
+        font-weight: 900;
+        line-height: 1.15;
+        letter-spacing: 0.08em;
+        padding: 5px 8px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .executive-signature-upload i {
+        font-size: 9px;
+    }
+    .executive-signature-file {
+        display: none;
+    }
     .dark .executive-signature-pad {
         border-color: #334155;
         background: #ffffff;
@@ -625,6 +632,11 @@
         border-color: #334155;
         background: #1e293b;
         color: #e2e8f0;
+    }
+    .dark .executive-signature-upload {
+        border-color: rgba(56, 189, 248, 0.35);
+        background: #0284c7;
+        color: #ffffff;
     }
     .executive-request-inline-row {
         align-items: end;
@@ -923,10 +935,10 @@
 @endphp
 <style>
     .match-report-faulty.admin-request-shell { max-width: 1470px !important; margin-left: auto !important; margin-right: auto !important; }
-    .match-report-faulty .page-header-block { padding: 0.85rem 1rem !important; margin: 0 0 12px !important; background: linear-gradient(90deg, rgba(139, 94, 60, 0.10), rgba(248, 250, 252, 0.92) 42%, #ffffff) !important; border: 0 !important; border-left: 5px solid #0284c7 !important; border-radius: 10px !important; box-shadow: none !important; }
+    .match-report-faulty .page-header-block { padding: 0 !important; margin: 0 0 28px !important; background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
     .match-report-faulty .page-title-standard { font-size: 16px !important; line-height: 1.15 !important; letter-spacing: -0.01em !important; }
     .match-report-faulty .page-subtitle-standard { margin-top: 7px !important; font-size: 9px !important; line-height: 1.35 !important; letter-spacing: 0.18em !important; }
-    .match-report-faulty > .mb-3 { margin-bottom: 8px !important; }
+    .match-report-faulty > .mb-3 { margin-bottom: 24px !important; }
     .match-report-faulty > .mb-3 a,
     .match-report-faulty .page-header-block a { min-height: 26px !important; padding: 6px 10px !important; border-radius: 8px !important; font-size: 8.5px !important; }
     .match-report-faulty .admin-request-card { padding: 10px 12px !important; border-radius: 10px !important; }
@@ -1190,8 +1202,8 @@
     }
     .dark .longterm-modern .page-header-block,
     .dark .match-report-faulty .page-header-block {
-        border-left-color: #38bdf8 !important;
-        background: linear-gradient(90deg, rgba(217, 179, 140, 0.14), rgba(30, 41, 59, 0.96) 46%, #1e293b) !important;
+        background: transparent !important;
+        border: 0 !important;
     }
     .dark .longterm-modern .page-title-standard,
     .dark .match-report-faulty .page-title-standard {
@@ -1202,7 +1214,6 @@
         color: #94a3b8 !important;
     }
 
-    html:not(.dark) .longterm-modern .page-header-block,
     html:not(.dark) .longterm-modern .admin-request-card,
     html:not(.dark) .longterm-modern .admin-request-card form > .grid,
     html:not(.dark) .longterm-modern .admin-request-card form > .rounded-2xl,
@@ -1237,6 +1248,17 @@
     }
     html.dark .content-surface:has(.admin-request-shell.match-report-faulty) {
         align-items: stretch !important;
+    }
+    html .match-report-faulty .page-header-block,
+    html .longterm-modern.match-report-faulty .page-header-block,
+    html.dark .match-report-faulty .page-header-block,
+    html.dark .longterm-modern.match-report-faulty .page-header-block {
+        padding: 0 !important;
+        margin: 0 0 28px !important;
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
     }
     html .match-report-faulty .admin-request-card,
     html .longterm-modern.match-report-faulty .admin-request-card,
@@ -1487,16 +1509,139 @@
             max-width: none !important;
         }
     }
+    html .match-report-faulty .request-form-accordion {
+        gap: 14px !important;
+    }
+    html .match-report-faulty .request-form-accordion-section,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-section,
+    html.dark .match-report-faulty .request-form-accordion-section {
+        border: 1px solid var(--border, #dbe3ec) !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        background: var(--surface, #ffffff) !important;
+        box-shadow: none !important;
+    }
+    html .match-report-faulty .request-form-section-head,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-section-head,
+    html.dark .match-report-faulty .request-form-section-head {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 14px 20px !important;
+        border-bottom: 1px solid var(--border, #dbe3ec) !important;
+        background: var(--body-bg, #f8fafc) !important;
+    }
+    html .match-report-faulty .request-form-section-num {
+        width: 24px !important;
+        height: 24px !important;
+        border-radius: 999px !important;
+        background: rgba(2, 132, 199, .12) !important;
+        color: var(--accent, #0284c7) !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 auto !important;
+    }
+    html .match-report-faulty .request-form-accordion-title,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-title,
+    html.dark .match-report-faulty .request-form-accordion-title {
+        color: var(--text, #142b47) !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 13.5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0 !important;
+        line-height: 1.25 !important;
+        text-transform: none !important;
+    }
+    html .match-report-faulty .request-form-accordion-title::before {
+        content: none !important;
+    }
+    html .match-report-faulty .request-form-accordion-panel,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-panel,
+    html.dark .match-report-faulty .request-form-accordion-panel {
+        display: block !important;
+        padding: 20px !important;
+        background: var(--surface, #ffffff) !important;
+    }
+    html .match-report-faulty .request-form-accordion-panel label,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-panel label {
+        display: flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        margin-bottom: 6px !important;
+        color: var(--text, #142b47) !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0 !important;
+        text-transform: none !important;
+    }
+    html .match-report-faulty .request-form-accordion-panel input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    html .match-report-faulty .request-form-accordion-panel select,
+    html .match-report-faulty .request-form-accordion-panel textarea,
+    html .match-report-faulty .request-form-accordion-panel .select2-container .select2-selection--single,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-panel input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-panel select,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-panel textarea,
+    html:not(.dark) .longterm-modern.match-report-faulty .request-form-accordion-panel .select2-container .select2-selection--single {
+        width: 100% !important;
+        min-height: 40px !important;
+        height: auto !important;
+        border: 1.5px solid var(--border, #dbe3ec) !important;
+        border-radius: 8px !important;
+        background: var(--surface, #ffffff) !important;
+        color: var(--text, #142b47) !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        line-height: 1.4 !important;
+        padding: 9px 12px !important;
+        outline: none !important;
+        box-shadow: none !important;
+        text-transform: none !important;
+        transition: border-color .15s, box-shadow .15s !important;
+    }
+    html .match-report-faulty .request-form-accordion-panel input:focus,
+    html .match-report-faulty .request-form-accordion-panel select:focus,
+    html .match-report-faulty .request-form-accordion-panel textarea:focus {
+        border-color: var(--accent, #0284c7) !important;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, .12) !important;
+    }
+    html .match-report-faulty .request-form-accordion-panel input[readonly] {
+        background: var(--body-bg, #f8fafc) !important;
+        color: var(--muted, #64748b) !important;
+        cursor: default !important;
+    }
+    html .match-report-faulty .request-form-accordion-panel textarea {
+        min-height: 100px !important;
+        resize: vertical !important;
+    }
+    html .match-report-faulty .request-section-help {
+        margin: 0 0 14px !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        color: var(--muted, #64748b) !important;
+        font-size: 12.5px !important;
+        font-weight: 500 !important;
+        line-height: 1.55 !important;
+        letter-spacing: 0 !important;
+        text-transform: none !important;
+    }
+    html .match-report-faulty .wt-form-row,
+    html .match-report-faulty .longterm-request-details-grid,
+    html .match-report-faulty .owner-details-grid {
+        gap: 14px !important;
+    }
 </style>
 <div class="px-1 sm:px-2 admin-request-shell match-report-faulty {{ $isTemporaryRequest ? '' : 'longterm-modern' }}">
-@if($isTemporaryRequest)
 <div class="mb-3">
     <a href="{{ route('wt.admin.requests.create') }}" onclick="event.preventDefault(); if (window.history.length > 1) { window.history.back(); } else { window.location.href = this.href; }" class="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white px-4 py-2 text-[10px] font-black uppercase tracking-widest text-stone-600 transition hover:bg-stone-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
         <i class="fas fa-arrow-left"></i>
         Back
     </a>
 </div>
-@endif
 <div class="page-header-block">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -1696,7 +1841,14 @@
                     <canvas></canvas>
                     <div class="executive-signature-actions">
                         <span class="executive-signature-hint">Sign inside the box</span>
-                        <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                        <div class="flex items-center gap-2">
+                            <label class="executive-signature-upload">
+                                <i class="fa-solid fa-upload"></i>
+                                Upload Signature
+                                <input type="file" accept="image/*" class="executive-signature-file" data-executive-signature-upload>
+                            </label>
+                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" name="request_signature" data-executive-signature-input>
@@ -1763,7 +1915,14 @@
                     <canvas></canvas>
                     <div class="executive-signature-actions">
                         <span class="executive-signature-hint">Sign inside the box</span>
-                        <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                        <div class="flex items-center gap-2">
+                            <label class="executive-signature-upload">
+                                <i class="fa-solid fa-upload"></i>
+                                Upload Signature
+                                <input type="file" accept="image/*" class="executive-signature-file" data-executive-signature-upload>
+                            </label>
+                            <button type="button" class="executive-signature-clear" data-executive-signature-clear>Clear</button>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" name="request_signature" data-executive-signature-input>
@@ -1803,30 +1962,32 @@
             accordion.className = 'request-form-accordion';
             requestForm.insertBefore(accordion, headings[0]);
 
-            const sections = headings.map((heading, index) => {
+            headings.forEach((heading, index) => {
                 const section = document.createElement('section');
                 section.className = 'request-form-accordion-section';
 
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'request-form-accordion-toggle';
-                button.setAttribute('aria-expanded', 'false');
+                const head = document.createElement('div');
+                head.className = 'request-form-section-head';
 
                 const panel = document.createElement('div');
                 panel.className = 'request-form-accordion-panel';
-                panel.id = `requestAccordionPanel${index + 1}`;
-                panel.hidden = true;
-                button.setAttribute('aria-controls', panel.id);
+                panel.id = `requestSectionPanel${index + 1}`;
+
+                const rawTitle = heading.textContent.trim();
+                const titleMatch = rawTitle.match(/^(\d+)\.\s*(.*)$/);
+                const numberText = titleMatch ? titleMatch[1] : String(index + 1);
+                const titleText = titleMatch ? titleMatch[2] : rawTitle;
+
+                const number = document.createElement('div');
+                number.className = 'request-form-section-num';
+                number.textContent = numberText;
 
                 const title = document.createElement('span');
                 title.className = 'request-form-accordion-title';
-                title.innerHTML = heading.innerHTML;
+                title.textContent = titleText;
 
-                const icon = document.createElement('i');
-                icon.className = 'fa-solid fa-chevron-down request-form-accordion-icon';
-
-                button.append(title, icon);
-                section.append(button, panel);
+                head.append(number, title);
+                section.append(head, panel);
                 accordion.appendChild(section);
 
                 let node = heading.nextSibling;
@@ -1839,36 +2000,6 @@
                     panel.appendChild(node);
                     node = nextNode;
                 }
-
-                return { button, panel };
-            });
-
-            const closeAllSections = () => {
-                sections.forEach(({ button, panel }) => {
-                    button.setAttribute('aria-expanded', 'false');
-                    panel.hidden = true;
-                });
-            };
-
-            const openSection = (target) => {
-                sections.forEach(({ button, panel }) => {
-                    const isOpen = panel === target.panel;
-                    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                    panel.hidden = !isOpen;
-                });
-            };
-
-            sections.forEach((section) => {
-                section.button.addEventListener('click', () => {
-                    if (section.button.getAttribute('aria-expanded') === 'true') {
-                        closeAllSections();
-                        window.dispatchEvent(new Event('resize'));
-                        return;
-                    }
-
-                    openSection(section);
-                    window.dispatchEvent(new Event('resize'));
-                });
             });
 
             requestForm.addEventListener('invalid', (event) => {
@@ -1879,18 +2010,7 @@
                     ownerToggle.setAttribute('aria-expanded', 'true');
                     ownerPanel.hidden = false;
                 }
-
-                const panel = event.target.closest('.request-form-accordion-panel');
-                const section = sections.find((item) => item.panel === panel);
-                if (section) {
-                    openSection(section);
-                    window.dispatchEvent(new Event('resize'));
-                }
             }, true);
-
-            if (sections[0]) {
-                openSection(sections[0]);
-            }
         }
 
         mountRequestFormAccordion();
@@ -1899,6 +2019,7 @@
             const canvas = container.querySelector('canvas');
             const input = container.parentElement.querySelector('[data-executive-signature-input]');
             const clearButton = container.querySelector('[data-executive-signature-clear]');
+            const uploadInput = container.querySelector('[data-executive-signature-upload]');
             const context = canvas.getContext('2d');
             let drawing = false;
             let hasSignature = false;
@@ -1931,6 +2052,25 @@
 
             function updateInput() {
                 input.value = hasSignature ? canvas.toDataURL('image/png') : '';
+            }
+
+            function drawUploadedSignature(source) {
+                const image = new Image();
+                image.onload = function () {
+                    const rect = canvas.getBoundingClientRect();
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+
+                    const scale = Math.min(rect.width / image.width, rect.height / image.height);
+                    const drawWidth = image.width * scale;
+                    const drawHeight = image.height * scale;
+                    const drawX = (rect.width - drawWidth) / 2;
+                    const drawY = (rect.height - drawHeight) / 2;
+
+                    context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+                    hasSignature = true;
+                    updateInput();
+                };
+                image.src = source;
             }
 
             function start(event) {
@@ -1971,8 +2111,26 @@
             clearButton.addEventListener('click', function () {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 hasSignature = false;
+                if (uploadInput) uploadInput.value = '';
                 updateInput();
             });
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function () {
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    if (!file.type.startsWith('image/')) {
+                        alert('Please upload a valid signature image.');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        drawUploadedSignature(event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
         }
 
         document.querySelectorAll('[data-executive-signature-pad]').forEach(setupExecutiveSignaturePad);

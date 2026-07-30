@@ -126,69 +126,67 @@
     }
     .faulty-accordion {
         display: grid;
-        gap: 10px;
+        gap: 14px;
     }
     .damage-form-page .damage-card.table-card {
-        width: min(100%, 1120px) !important;
+        width: min(100%, 1470px) !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
     .faulty-accordion-section {
-        border: 1px solid var(--border);
+        border: 1px solid var(--border, #dbe3ec);
         border-radius: 12px;
-        background: rgba(15, 23, 42, 0.18);
+        background: var(--surface, #ffffff);
         overflow: hidden;
     }
-    .faulty-accordion-toggle {
+    .faulty-section-head {
         width: 100%;
-        min-height: 44px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 12px 14px;
-        border: 0;
-        background: rgba(2, 132, 199, 0.08);
-        color: var(--accent);
+        gap: 10px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border, #dbe3ec);
+        background: var(--body-bg, #f8fafc);
         text-align: left;
-        font-size: 10px;
-        font-weight: 900;
-        letter-spacing: .12em;
-        text-transform: uppercase;
-        cursor: pointer;
     }
-    .faulty-accordion-toggle:hover,
-    .faulty-accordion-toggle[aria-expanded="true"] {
-        background: rgba(2, 132, 199, 0.16);
+    .faulty-section-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: rgba(2, 132, 199, .12);
+        color: var(--accent, #0284c7);
+        font-size: 11px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
     }
     .faulty-accordion-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        color: var(--text, #142b47);
+        font-family: 'Inter', sans-serif;
+        font-size: 13.5px;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.25;
+        text-transform: none;
         min-width: 0;
     }
     .faulty-accordion-title::before {
-        content: "";
-        width: 3px;
-        height: 18px;
-        border-radius: 999px;
-        background: var(--accent);
-        flex: 0 0 auto;
-    }
-    .faulty-accordion-icon {
-        color: var(--muted);
-        transition: transform .18s ease;
-        flex: 0 0 auto;
-    }
-    .faulty-accordion-toggle[aria-expanded="true"] .faulty-accordion-icon {
-        transform: rotate(180deg);
-        color: var(--accent);
+        content: none;
     }
     .faulty-accordion-panel {
-        padding: 16px 14px 18px;
+        padding: 20px;
     }
     .faulty-accordion-panel[hidden] {
-        display: none !important;
+        display: block !important;
+    }
+    html.dark .faulty-accordion-section {
+        background: var(--surface, #1e293b);
+        border-color: var(--border, #334155);
+    }
+    html.dark .faulty-section-head {
+        background: var(--body-bg, #0f172a);
     }
     .staff-account-selection,
     .staff-account-option {
@@ -328,8 +326,32 @@
         color: var(--text) !important;
     }
     .damage-form-page {
-        --damage-compact-width: 980px;
+        --damage-compact-width: 1470px;
         font-size: 10px !important;
+    }
+    .damage-form-page .page-header-block {
+        padding: 0 !important;
+        margin: 0 0 28px !important;
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+    .damage-form-page .page-title-standard {
+        color: var(--text, #142b47) !important;
+        font-size: 16px !important;
+        font-weight: 900 !important;
+        line-height: 1.15 !important;
+        letter-spacing: -0.01em !important;
+    }
+    .damage-form-page .page-subtitle-standard {
+        margin-top: 7px !important;
+        color: var(--muted, #64748b) !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        line-height: 1.35 !important;
+        letter-spacing: 0.18em !important;
+        text-transform: uppercase !important;
     }
     .damage-form-page > .mb-4,
     .damage-form-page > .px-2,
@@ -345,6 +367,19 @@
         border-radius: 10px !important;
         padding: 10px 12px !important;
         box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04) !important;
+    }
+    .damage-form-page .damage-card > .flex:first-child {
+        gap: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    .damage-form-page .damage-card > .flex:first-child > div {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 9px !important;
     }
     .damage-form-page form {
         margin-top: 6px !important;
@@ -415,15 +450,17 @@
     .damage-form-page label,
     .damage-form-page .damage-check-text,
     .damage-form-page p {
-        font-size: 11.5px !important;
-        line-height: 1.35 !important;
+        font-size: 12.5px !important;
+        line-height: 1.55 !important;
         color: var(--text) !important;
     }
     .damage-form-page label {
-        font-size: 13px !important;
+        font-size: 12px !important;
         margin-bottom: 6px !important;
-        letter-spacing: 0.08em !important;
-        color: var(--muted) !important;
+        letter-spacing: 0 !important;
+        color: var(--text) !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
     }
     .damage-form-page .damage-card,
     .damage-form-page .damage-panel {
@@ -448,32 +485,36 @@
     .damage-form-page input:not([type="checkbox"]):not([type="file"]),
     .damage-form-page select,
     .damage-form-page textarea {
-        min-height: 28px !important;
-        height: 28px !important;
-        border-radius: 7px !important;
-        padding: 5px 8px !important;
-        font-size: 9.5px !important;
-        line-height: 1.2 !important;
-        border: 1px solid var(--border) !important;
+        min-height: 40px !important;
+        height: auto !important;
+        border-radius: 8px !important;
+        padding: 9px 12px !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        line-height: 1.4 !important;
+        border: 1.5px solid var(--border) !important;
         background: var(--surface) !important;
         color: var(--text) !important;
+        text-transform: none !important;
     }
     .damage-form-page textarea {
-        min-height: 44px !important;
+        min-height: 100px !important;
         height: auto !important;
     }
     .damage-form-page .smart-select + .select2-container .select2-selection--single,
     .damage-form-page .admin-select + .select2-container .select2-selection--single,
     .damage-form-page .person-select + .select2-container .select2-selection--single {
-        min-height: 28px !important;
-        height: 28px !important;
-        border-radius: 7px !important;
-        padding: 2px 8px !important;
+        min-height: 40px !important;
+        height: auto !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
     }
     .damage-form-page .smart-select + .select2-container .select2-selection__rendered,
     .damage-form-page .admin-select + .select2-container .select2-selection__rendered,
     .damage-form-page .person-select + .select2-container .select2-selection__rendered {
-        font-size: 9.5px !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        text-transform: none !important;
     }
     .damage-form-page .damage-muted-panel,
     .damage-form-page .rounded-xl {
@@ -824,15 +865,17 @@
         $draftReplacementFreeNote = isset($matches[2]) ? trim($matches[2]) : '';
     }
 @endphp
-<div class="damage-form-page">
-<div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px">
+<div class="damage-form-page px-1 sm:px-2">
+<div class="page-header-block">
+<div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px">
     <div>
-        <div style="font-size:16px;font-weight:800;color:var(--text)">Report Faulty</div>
-        <p style="margin-top:4px;font-size:12px;color:var(--muted)">Submit a maintenance request for faulty or damaged Walkie Talkies.</p>
+        <div class="page-title-standard">Report Faulty</div>
+        <p class="page-subtitle-standard">Submit a maintenance request for faulty or damaged Walkie Talkies.</p>
     </div>
     <a href="{{ $faultyStatusRoute }}" class="btn-primary-custom">
         <i class="fa-solid fa-list-check"></i> Status Tracking
     </a>
+</div>
 </div>
 
 @if(session('error'))
@@ -847,8 +890,8 @@
 <div class="alert-danger-custom mb-4"><i class="fa-solid fa-circle-exclamation"></i> {{ $errors->first() }}</div>
 @endif
 
-<div class="damage-card table-card" style="padding:20px 22px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+<div class="damage-card table-card admin-request-card" style="padding:20px 22px">
+    <div class="flex items-center gap-2.5 mb-5">
         <div style="background:var(--accent);color:#fff;padding:8px;border-radius:8px;display:flex;align-items:center">
             <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
@@ -1641,31 +1684,33 @@
                 accordion.className = 'faulty-accordion';
                 repairForm.insertBefore(accordion, sectionHeadings[0]);
 
-                const sections = sectionHeadings.map((heading, index) => {
+                sectionHeadings.forEach((heading, index) => {
                     const section = document.createElement('section');
                     section.className = 'faulty-accordion-section';
 
-                    const button = document.createElement('button');
-                    button.type = 'button';
-                    button.className = 'faulty-accordion-toggle';
-                    button.setAttribute('aria-expanded', 'false');
+                    const head = document.createElement('div');
+                    head.className = 'faulty-section-head';
 
                     const panelId = `faultyAccordionPanel${index + 1}`;
                     const panel = document.createElement('div');
                     panel.className = 'faulty-accordion-panel';
                     panel.id = panelId;
-                    panel.hidden = true;
-                    button.setAttribute('aria-controls', panelId);
+
+                    const rawTitle = heading.textContent.trim();
+                    const titleMatch = rawTitle.match(/^(\d+)\.\s*(.*)$/);
+                    const numberText = titleMatch ? titleMatch[1] : String(index + 1);
+                    const titleText = titleMatch ? titleMatch[2] : rawTitle;
+
+                    const number = document.createElement('div');
+                    number.className = 'faulty-section-num';
+                    number.textContent = numberText;
 
                     const title = document.createElement('span');
                     title.className = 'faulty-accordion-title';
-                    title.innerHTML = heading.innerHTML;
+                    title.textContent = titleText;
 
-                    const icon = document.createElement('i');
-                    icon.className = 'fa-solid fa-chevron-down faulty-accordion-icon';
-
-                    button.append(title, icon);
-                    section.append(button, panel);
+                    head.append(number, title);
+                    section.append(head, panel);
                     accordion.appendChild(section);
 
                     let node = heading.nextSibling;
@@ -1682,41 +1727,12 @@
                         panel.appendChild(node);
                         node = nextNode;
                     }
-
-                    return { section, button, panel };
-                });
-
-                const openSection = (targetSection) => {
-                    sections.forEach(({ button, panel }) => {
-                        const isOpen = panel === targetSection.panel;
-                        button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                        panel.hidden = !isOpen;
-                    });
-                };
-
-                const closeAllSections = () => {
-                    sections.forEach(({ button, panel }) => {
-                        button.setAttribute('aria-expanded', 'false');
-                        panel.hidden = true;
-                    });
-                };
-
-                sections.forEach((section) => {
-                    section.button.addEventListener('click', () => {
-                        if (section.button.getAttribute('aria-expanded') === 'true') {
-                            closeAllSections();
-                            return;
-                        }
-
-                        openSection(section);
-                    });
                 });
 
                 repairForm.addEventListener('invalid', (event) => {
                     const panel = event.target.closest('.faulty-accordion-panel');
-                    const section = sections.find((item) => item.panel === panel);
-                    if (section) {
-                        openSection(section);
+                    if (panel) {
+                        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                 }, true);
             }
