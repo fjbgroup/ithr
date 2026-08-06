@@ -261,99 +261,88 @@
     <form method="POST" id="itEditFormEl" action="">
       @csrf
       <input type="hidden" name="_method" value="POST">
-      <div class="nit-form-body">
+      <div class="nit-form-body" style="padding:24px 28px;">
 
-        <div class="nit-section-label"><i class="bi bi-tag-fill"></i> Asset Identity</div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-3 nit-field">
-            <label>Asset Number</label>
-            <input type="text" name="asset_number" id="ief_asset_number" placeholder="e.g. IT-001">
+        <div style="margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:8px;border-bottom:1.5px dashed var(--border)">
+            <i class="bi bi-person-badge" style="font-size:14px;color:var(--accent)"></i>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Asset Identity</span>
           </div>
-          <div class="col-md-3 nit-field">
-            <label>FA Code</label>
-            <input type="text" name="fa_code" id="ief_fa_code" placeholder="e.g. 4100000047">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Asset Class</label>
-            <select name="asset_class" id="ief_asset_class">
-              <option value="">— Select Class —</option>
-              @foreach($assetClasses as $cls)
-              <option value="{{ $cls->name }}">{{ $cls->name }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Serial Number</label>
-            <input type="text" name="serial_number" id="ief_serial_number" placeholder="e.g. SN123456">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Warranty Until</label>
-            <input type="date" name="warranty_date" id="ief_warranty_date">
-          </div>
-          <div class="col-12 nit-field">
-            <label>Description <span class="req">*</span></label>
-            <input type="text" name="description" id="ief_description" required placeholder="e.g. Dell Latitude 5420 Laptop">
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;">
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Name <span style="color:var(--red)">*</span></label><input type="text" name="asset_name" id="ief_asset_name"  style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Type <span style="color:var(--red)">*</span></label><input type="text" name="asset_type" id="ief_asset_type" list="assetTypeOptions" autocomplete="off" style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Model <span style="color:var(--red)">*</span></label><input type="text" name="model" id="ief_model"  style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Serial Number <span style="color:var(--red)">*</span></label><input type="text" name="serial_number" id="ief_serial_number"  style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div style="grid-column: span 4;"><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:var(--red)">*</span></label><input type="text" name="description" id="ief_description"  style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Manufacturer </label><input type="text" name="manufacturer" id="ief_manufacturer"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">System SKU </label><input type="text" name="system_sku" id="ief_system_sku"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Bar Code </label><input type="text" name="bar_code" id="ief_bar_code"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Domain </label><input type="text" name="domain" id="ief_domain"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Chrome OS Device ID </label><input type="text" name="chrome_os_device_id" id="ief_chrome_os_device_id"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">FQDN </label><input type="text" name="fqdn" id="ief_fqdn"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+
           </div>
         </div>
 
-        <div class="nit-divider"></div>
+        <div style="margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:8px;border-bottom:1.5px dashed var(--border)">
+            <i class="bi bi-pc-display" style="font-size:14px;color:var(--accent)"></i>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Technical Details</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;">
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">IP Address </label><input type="text" name="ip_address" id="ief_ip_address"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">MAC Address </label><input type="text" name="mac_address" id="ief_mac_address"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">OS Code </label><input type="text" name="os_code" id="ief_os_code"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">SP </label><input type="text" name="sp" id="ief_sp"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Memory (GB) </label><input type="text" name="memory_mb" id="ief_memory_mb"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Nr Processors </label><input type="text" name="nr_processors" id="ief_nr_processors"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Processor </label><input type="text" name="processor" id="ief_processor"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Scan Server </label><input type="text" name="scan_server" id="ief_scan_server"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Last Patched </label><input type="text" name="last_patched" id="ief_last_patched"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Last Full Backup </label><input type="text" name="last_full_backup" id="ief_last_full_backup"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Last Full Image </label><input type="text" name="last_full_image" id="ief_last_full_image"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
 
-        <div class="nit-section-label"><i class="bi bi-currency-dollar"></i> Financial Details</div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-3 nit-field">
-            <label>Purchase Price (RM)</label>
-            <input type="number" name="purchase_price" id="ief_purchase_price" placeholder="0.00" step="0.01" min="0">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Years of Purchase</label>
-            <input type="number" name="years_purchase" id="ief_years_purchase" placeholder="e.g. 2020" min="1990" max="2099">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Total Cost (RM)</label>
-            <input type="number" name="total_cost" id="ief_total_cost" placeholder="0.00" step="0.01" min="0">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Accumulated (RM)</label>
-            <input type="number" name="accumulated" id="ief_accumulated" placeholder="0.00" step="0.01" min="0">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>NBV At (RM)</label>
-            <input type="number" name="nbv_at" id="ief_nbv_at" placeholder="0.00" step="0.01" min="0">
           </div>
         </div>
 
-        <div class="nit-divider"></div>
+        <div style="margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:8px;border-bottom:1.5px dashed var(--border)">
+            <i class="bi bi-currency-dollar" style="font-size:14px;color:var(--accent)"></i>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Financial Details</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;">
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Purchase Date </label><input type="date" name="purchase_date" id="ief_purchase_date"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Order Number </label><input type="text" name="order_number" id="ief_order_number"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
 
-        <div class="nit-section-label"><i class="bi bi-geo-alt-fill"></i> Brand, Location &amp; Notes</div>
-        <div class="row g-3 mb-4">
-          <div class="col-md-3 nit-field">
-            <label>Brand</label>
-            <select name="brand" id="ief_brand">
-              <option value="">— Select Brand —</option>
-              @foreach($brands as $brand)
-              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Model</label>
-            <input type="text" name="model" id="ief_model" placeholder="e.g. Latitude 5420">
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Location</label>
-            <select name="location" id="ief_location">
-              <option value="">— Select Location —</option>
-              @foreach($locations as $loc)
-              <option value="{{ $loc->name }}">{{ $loc->name }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="col-md-3 nit-field">
-            <label>Notes</label>
-            <input type="text" name="notes" id="ief_notes" placeholder="Any additional remarks...">
           </div>
         </div>
 
+        <div style="margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:8px;border-bottom:1.5px dashed var(--border)">
+            <i class="bi bi-shield-check" style="font-size:14px;color:var(--accent)"></i>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Warranty & Lifespan</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;">
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Warranty Until </label><input type="date" name="warranty_date" id="ief_warranty_date"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+
+          </div>
+        </div>
+
+        <div style="margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:8px;border-bottom:1.5px dashed var(--border)">
+            <i class="bi bi-journal-text" style="font-size:14px;color:var(--accent)"></i>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Notes / Other</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;">
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Location </label><input type="text" name="location" id="ief_location"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Building </label><input type="text" name="building" id="ief_building"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Department </label><input type="text" name="department" id="ief_department"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Branch Office </label><input type="text" name="branch_office" id="ief_branch_office"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Contact </label><input type="text" name="contact" id="ief_contact"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            <div style="grid-column: span 4;"><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Comments </label><textarea name="comments" id="ief_comments"  style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></textarea></div>
+
+          </div>
+        </div>
 
       </div>
       <div class="nit-form-footer">
@@ -517,7 +506,7 @@
         </td>
       </tr>
       @empty
-      <tr><td colspan="11" style="text-align:center;padding:40px;color:var(--muted)">No assets found.</td></tr>
+      <tr><td colspan="11" style="text-align:center;padding:40px;color:var(--muted)">{{ session('global_year', 'all') !== 'all' ? 'NO info for this year' : 'No assets found.' }}</td></tr>
       @endforelse
       </tbody>
     </table>
@@ -555,157 +544,106 @@
     <form method="POST" action="{{ route('it.inventory.store') }}">
       @csrf
 
-      {{-- Section: Asset Identity --}}
-      <div style="padding:24px 28px">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
-          <i class="bi bi-tag" style="font-size:13px;color:var(--muted)"></i>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Asset Identity</span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:16px">
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Number</label>
-            <input type="text" name="asset_number" placeholder="e.g. OEPC1401"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">Leave blank to assign later</div>
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">F/A Code</label>
-            <input type="text" name="fa_code" placeholder="e.g. 4100000047"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Class <span style="color:#e53e3e">*</span></label>
-            <select name="asset_class" required
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-              <option value="">— Select Class —</option>
-              @foreach($assetClasses as $cls)
-              <option value="{{ $cls->name }}">{{ $cls->name }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Serial Number</label>
-            <input type="text" name="serial_number" placeholder="e.g. SGH629QBBY"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Warranty Until</label>
-            <input type="date" name="warranty_date"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-        </div>
-        <div>
-          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:#e53e3e">*</span></label>
-          <div style="position:relative">
-            <input type="text" id="addDescInput" name="description" required placeholder="e.g. HP ELITEONE 800 G2 23, AIO, NOTEBOOK..." autocomplete="off"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-            <div id="descSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
-          </div>
-          <div style="font-size:11px;color:#d97706;margin-top:4px;display:flex;align-items:center;gap:4px">
-            <i class="bi bi-lightbulb" style="font-size:11px"></i> Type an abbreviation or existing name.
-          </div>
-        </div>
-      </div>
+   <div style="padding:24px 28px">
+<div class="wizard-container" style="display:flex;flex-direction:column;gap:12px;">
 
-      {{-- Section: Financial Details --}}
-      <div style="padding:24px 28px;border-top:1px solid var(--border)">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
-          <i class="bi bi-currency-dollar" style="font-size:13px;color:var(--muted)"></i>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Financial Details</span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px">
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Years Purchase</label>
-            <input type="number" name="years_purchase" placeholder="e.g. 2017"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Total Cost (RM)</label>
-            <input type="number" step="0.01" name="total_cost" placeholder="0.00"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Accumulated (RM)</label>
-            <input type="number" step="0.01" name="accumulated" placeholder="0.00"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">NBV AT (RM)</label>
-            <input type="number" step="0.01" name="nbv_at" placeholder="0.00"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-        </div>
-      </div>
-
-      {{-- Section: Technical Details --}}
-      <div style="padding:24px 28px;border-top:1px solid var(--border)">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
-          <i class="bi bi-gear" style="font-size:13px;color:var(--muted)"></i>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Technical Details</span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Location</label>
-            <select name="location"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-              <option value="">— Select Location —</option>
-              @foreach($locations as $loc)
-              <option value="{{ $loc->name }}">{{ $loc->name }}</option>
-              @endforeach
-            </select>
-            @if($locations->isEmpty())
-            <div style="font-size:11px;color:#dc2626;margin-top:4px"><i class="bi bi-exclamation-triangle-fill"></i> No locations yet. Add them in <a href="{{ route('it.locations.index') }}" style="color:#0284c7">Masterdata &rsaquo; Locations</a>.</div>
-            @endif
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Brand</label>
-            <select name="brand"
-              style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-              <option value="">— Select Brand —</option>
-              @foreach($brands as $brand)
-              <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-              @endforeach
-            </select>
-            @if($brands->isEmpty())
-            <div style="font-size:11px;color:#dc2626;margin-top:4px"><i class="bi bi-exclamation-triangle-fill"></i> No brands yet. Add them in <a href="{{ route('it.brands.index') }}" style="color:#0284c7">Masterdata &rsaquo; Brands</a>.</div>
-            @endif
-          </div>
-          <div>
-            <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Model</label>
-            <div style="position:relative">
-              <input type="text" id="addModelInput" name="model" placeholder="e.g. ELITEONE 800 G2..." autocomplete="off"
-                style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"
-                onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-              <div id="modelSuggestions" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:500;background:#fff;border:1.5px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;max-height:260px;overflow-y:auto"></div>
+        <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;">
+          <div id="header_add_0" onclick="toggleAccordion('add_', 0, 5)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(14, 165, 233, 0.05);border-bottom: 1px solid #0ea5e9;cursor:pointer;transition:all .2s;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-person-badge" style="font-size:16px;color:var(--accent)"></i>
+                <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)">Asset Identity</span>
             </div>
+            <i class="bi bi-chevron-down" id="icon_add_0" style="color:var(--muted);transition:all .2s;transform: rotate(180deg);"></i>
+          </div>
+          <div id="body_add_0" style="display:block;">
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;padding:24px 20px;">
+              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Name <span style="color:var(--red)">*</span></label><input type="text" name="asset_name"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Asset Type <span style="color:var(--red)">*</span></label><input type="text" name="asset_type"  list="assetTypeOptions" autocomplete="off" style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Model <span style="color:var(--red)">*</span></label><input type="text" name="model"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Serial Number <span style="color:var(--red)">*</span></label><input type="text" name="serial_number"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div style="grid-column: span 4;"><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Description <span style="color:var(--red)">*</span></label><input type="text" name="description"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Manufacturer </label><input type="text" name="manufacturer"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">System SKU </label><input type="text" name="system_sku"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Bar Code </label><input type="text" name="bar_code"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Domain </label><input type="text" name="domain"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Chrome OS Device ID </label><input type="text" name="chrome_os_device_id"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">FQDN </label><input type="text" name="fqdn"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            </div>
+
+            <div style="padding:0 20px 20px;text-align:right;">
+                <button type="button" class="btn-secondary-custom" onclick="nextAccordion('add_', 0, 5)" style="padding:8px 16px;font-size:13px;"><i class="bi bi-arrow-down-circle"></i> Next: Technical Details</button>
+            </div>
+
           </div>
         </div>
-      </div>
 
-      {{-- Section: Notes --}}
-      <div style="padding:24px 28px;border-top:1px solid var(--border)">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:18px">
-          <i class="bi bi-journal-text" style="font-size:13px;color:var(--muted)"></i>
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Notes</span>
+        <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;">
+          <div id="header_add_1" onclick="toggleAccordion('add_', 1, 5)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#f8fafc;border-bottom: 1px solid var(--border);cursor:pointer;transition:all .2s;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-pc-display" style="font-size:16px;color:var(--accent)"></i>
+                <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)">Technical Details</span>
+            </div>
+            <i class="bi bi-chevron-down" id="icon_add_1" style="color:var(--muted);transition:all .2s;"></i>
+          </div>
+          <div id="body_add_1" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;padding:24px 20px;">
+              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">IP Address </label><input type="text" name="ip_address"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">MAC Address </label><input type="text" name="mac_address"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">OS Code </label><input type="text" name="os_code"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">SP </label><input type="text" name="sp"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Memory (GB) </label><input type="text" name="memory_mb"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Nr Processors </label><input type="text" name="nr_processors"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Processor </label><input type="text" name="processor"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Scan Server </label><input type="text" name="scan_server"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Last Patched </label><input type="text" name="last_patched"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Last Full Backup </label><input type="text" name="last_full_backup"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Last Full Image </label><input type="text" name="last_full_image"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            </div>
+
+            <div style="padding:0 20px 20px;text-align:right;">
+                <button type="button" class="btn-secondary-custom" onclick="nextAccordion('add_', 1, 5)" style="padding:8px 16px;font-size:13px;"><i class="bi bi-arrow-down-circle"></i> Next: Financial Details</button>
+            </div>
+
+          </div>
         </div>
-        <div>
-          <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Notes</label>
-          <textarea name="notes" rows="3" placeholder="Any additional remarks about this asset..."
-            style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;resize:vertical;box-sizing:border-box"
-            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+
+        <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;">
+          <div id="header_add_2" onclick="toggleAccordion('add_', 2, 5)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#f8fafc;border-bottom: 1px solid var(--border);cursor:pointer;transition:all .2s;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-currency-dollar" style="font-size:16px;color:var(--accent)"></i>
+                <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)">Financial Details</span>
+            </div>
+            <i class="bi bi-chevron-down" id="icon_add_2" style="color:var(--muted);transition:all .2s;"></i>
+          </div>
+          <div id="body_add_2" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;padding:24px 20px;">
+              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Purchase Date </label><input type="date" name="purchase_date"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Order Number </label><input type="text" name="order_number"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            </div>
+
+            <div style="padding:0 20px 20px;text-align:right;">
+                <button type="button" class="btn-secondary-custom" onclick="nextAccordion('add_', 2, 5)" style="padding:8px 16px;font-size:13px;"><i class="bi bi-arrow-down-circle"></i> Next: Warranty & Lifespan</button>
+            </div>
+
+          </div>
         </div>
+
+        <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;">
+          <div id="header_add_3" onclick="toggleAccordion('add_', 3, 5)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#f8fafc;border-bottom: 1px solid var(--border);cursor:pointer;transition:all .2s;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-shield-check" style="font-size:16px;color:var(--accent)"></i>
+                <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)">Warranty & Lifespan</span>
+            </div>
+            <i class="bi bi-chevron-down" id="icon_add_3" style="color:var(--muted);transition:all .2s;"></i>
+          </div>
+          <div id="body_add_3" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;padding:24px 20px;">
+              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Warranty Until </label><input type="date" name="warranty_date"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>
+            </div>
+
+            <div style="padding:0 20px 20px;text-align:right;">
+                <button type="button" class="btn-secondary-custom" onclick="nextAccordion('add_', 3, 5)" style="padding:8px 16px;font-size:13px;"><i class="bi bi-arrow-down-circle"></i> Next: Notes / Other</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff;">
+          <div id="header_add_4" onclick="toggleAccordion('add_', 4, 5)" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:#f8fafc;border-bottom: 1px solid var(--border);cursor:pointer;transition:all .2s;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-journal-text" style="font-size:16px;color:var(--accent)"></i>
+                <span style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)">Notes / Other</span>
+            </div>
+            <i class="bi bi-chevron-down" id="icon_add_4" style="color:var(--muted);transition:all .2s;"></i>
+          </div>
+          <div id="body_add_4" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;padding:24px 20px;">
+              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Location </label><input type="text" name="location"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Building </label><input type="text" name="building"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Department </label><input type="text" name="department"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Branch Office </label><input type="text" name="branch_office"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div ><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Contact </label><input type="text" name="contact"   style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></div>              <div style="grid-column: span 4;"><label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Comments </label><textarea name="comments"  style="width:100%;padding:9px 12px;background:#f8fafc;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;outline:none;box-sizing:border-box"></textarea></div>
+            </div>
+
+          </div>
+        </div>
+</div>
+
       </div>
 
       {{-- Footer --}}
@@ -768,17 +706,96 @@
   </div>
 </div>
 
+
+<datalist id="assetTypeOptions">
+  @foreach($assetClasses as $cls)
+  <option value="{{ $cls->name }}">
+  @endforeach
+</datalist>
+
 @endsection
 
 @push('scripts')
-<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js">
+function nextAccordion(prefix, index, total) {
+  // Collapse current
+  var currentBody = document.getElementById('body_' + prefix + index);
+  var currentHeader = document.getElementById('header_' + prefix + index);
+  var currentIcon = document.getElementById('icon_' + prefix + index);
+  currentBody.style.display = 'none';
+  currentIcon.style.transform = 'rotate(0deg)';
+  currentHeader.style.background = '#f8fafc';
+  currentHeader.style.borderBottom = '1px solid var(--border)';
+  
+  // Expand next
+  var nextIndex = index + 1;
+  if (nextIndex < total) {
+    var nextBody = document.getElementById('body_' + prefix + nextIndex);
+    var nextHeader = document.getElementById('header_' + prefix + nextIndex);
+    var nextIcon = document.getElementById('icon_' + prefix + nextIndex);
+    nextBody.style.display = 'block';
+    nextIcon.style.transform = 'rotate(180deg)';
+    nextHeader.style.background = 'rgba(14, 165, 233, 0.05)';
+    nextHeader.style.borderBottom = '1px solid #0ea5e9';
+    // Scroll to next section
+    nextHeader.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+}
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
+
+function toggleAccordion(prefix, index, total) {
+  var body = document.getElementById('body_' + prefix + index);
+  var header = document.getElementById('header_' + prefix + index);
+  var icon = document.getElementById('icon_' + prefix + index);
+  
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    icon.style.transform = 'rotate(180deg)';
+    header.style.background = 'rgba(14, 165, 233, 0.05)';
+    header.style.borderBottom = '1px solid #0ea5e9';
+  } else {
+    body.style.display = 'none';
+    icon.style.transform = 'rotate(0deg)';
+    header.style.background = '#f8fafc';
+    header.style.borderBottom = '1px solid var(--border)';
+  }
+}
+
+function nextAccordion(prefix, index, total) {
+  var currentBody = document.getElementById('body_' + prefix + index);
+  var currentHeader = document.getElementById('header_' + prefix + index);
+  var currentIcon = document.getElementById('icon_' + prefix + index);
+  if (currentBody) currentBody.style.display = 'none';
+  if (currentIcon) currentIcon.style.transform = 'rotate(0deg)';
+  if (currentHeader) {
+      currentHeader.style.background = '#f8fafc';
+      currentHeader.style.borderBottom = '1px solid var(--border)';
+  }
+  
+  var nextIndex = index + 1;
+  if (nextIndex < total) {
+    var nextBody = document.getElementById('body_' + prefix + nextIndex);
+    var nextHeader = document.getElementById('header_' + prefix + nextIndex);
+    var nextIcon = document.getElementById('icon_' + prefix + nextIndex);
+    if (nextBody) nextBody.style.display = 'block';
+    if (nextIcon) nextIcon.style.transform = 'rotate(180deg)';
+    if (nextHeader) {
+        nextHeader.style.background = 'rgba(14, 165, 233, 0.05)';
+        nextHeader.style.borderBottom = '1px solid #0ea5e9';
+        nextHeader.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
+}
+
 function openAddModal() { document.getElementById('addModal').style.display = 'flex'; }
 
 var _editData     = @json($items->keyBy('id'));
 var _brandOpts    = @json($brands->pluck('name'));
 var _locationOpts = @json($locations->pluck('name'));
+
 
 function openEditModal(id) {
   var d = _editData[id];
@@ -786,21 +803,45 @@ function openEditModal(id) {
   var isAdminOrFinance = {{ $user->isAdminOrFinance() ? 'true' : 'false' }};
 
   document.getElementById('itEditFormEl').action = '{{ url("it/inventory") }}/' + id;
-  document.getElementById('ief_asset_number').value   = d.asset_number   || '';
-  document.getElementById('ief_fa_code').value        = d.fa_code        || '';
-  document.getElementById('ief_asset_class').value    = d.asset_class    || '';
-  document.getElementById('ief_serial_number').value  = d.serial_number  || '';
-  document.getElementById('ief_description').value    = d.description    || '';
-  document.getElementById('ief_purchase_price').value = d.purchase_price !== null ? d.purchase_price : '';
-  document.getElementById('ief_years_purchase').value = d.years_purchase  || '';
-  document.getElementById('ief_total_cost').value     = d.total_cost     !== null ? d.total_cost     : '';
-  document.getElementById('ief_accumulated').value    = d.accumulated    !== null ? d.accumulated    : '';
-  document.getElementById('ief_nbv_at').value         = d.nbv_at         !== null ? d.nbv_at         : '';
-  document.getElementById('ief_brand').value          = d.brand          || '';
-  document.getElementById('ief_model').value          = d.model          || '';
-  document.getElementById('ief_location').value       = d.location       || '';
-  document.getElementById('ief_notes').value          = d.notes          || '';
-  document.getElementById('ief_warranty_date').value  = d.warranty_date ? d.warranty_date.substring(0,10) : '';
+  
+  // New fields
+  document.getElementById('ief_asset_name').value = d.asset_name || '';
+  document.getElementById('ief_asset_type').value = d.asset_type || '';
+  document.getElementById('ief_model').value = d.model || '';
+  document.getElementById('ief_serial_number').value = d.serial_number || '';
+  
+  document.getElementById('ief_domain').value = d.domain || '';
+  document.getElementById('ief_ip_address').value = d.ip_address || '';
+  document.getElementById('ief_os_code').value = d.os_code || '';
+  document.getElementById('ief_sp').value = d.sp || '';
+  document.getElementById('ief_description').value = d.description || '';
+  document.getElementById('ief_fqdn').value = d.fqdn || '';
+  document.getElementById('ief_mac_address').value = d.mac_address || '';
+  document.getElementById('ief_memory_mb').value = d.memory_mb || '';
+  document.getElementById('ief_nr_processors').value = d.nr_processors || '';
+  document.getElementById('ief_processor').value = d.processor || '';
+  document.getElementById('ief_state').value = d.state || '';
+  
+  // Date fields need to be in YYYY-MM-DD if input is type="date", we might need to parse. Assuming d.purchase_date is string or we can just try assigning. 
+  // Wait, if it's 'date' casted, it might come as full ISO string. Let's just assign substring(0,10)
+  document.getElementById('ief_purchase_date').value = d.purchase_date ? d.purchase_date.substring(0, 10) : '';
+  document.getElementById('ief_warranty_date').value = d.warranty_date ? d.warranty_date.substring(0, 10) : '';
+  
+  document.getElementById('ief_last_patched').value = d.last_patched || '';
+  document.getElementById('ief_last_full_backup').value = d.last_full_backup || '';
+  document.getElementById('ief_last_full_image').value = d.last_full_image || '';
+  document.getElementById('ief_order_number').value = d.order_number || '';
+  document.getElementById('ief_comments').value = d.comments || '';
+  document.getElementById('ief_location').value = d.location || '';
+  document.getElementById('ief_building').value = d.building || '';
+  document.getElementById('ief_department').value = d.department || '';
+  document.getElementById('ief_branch_office').value = d.branch_office || '';
+  document.getElementById('ief_bar_code').value = d.bar_code || '';
+  document.getElementById('ief_manufacturer').value = d.manufacturer || '';
+  document.getElementById('ief_contact').value = d.contact || '';
+  document.getElementById('ief_scan_server').value = d.scan_server || '';
+  document.getElementById('ief_chrome_os_device_id').value = d.chrome_os_device_id || '';
+  document.getElementById('ief_system_sku').value = d.system_sku || '';
 
   if (!isAdminOrFinance) {
     document.getElementById('itEditFormTitle').textContent = 'Request to Edit Asset';

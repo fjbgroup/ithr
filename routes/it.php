@@ -17,6 +17,7 @@ use App\Http\Controllers\IT\DisposalController;
 use App\Http\Controllers\IT\EmailSettingController;
 use App\Http\Controllers\IT\EwasteController;
 use App\Http\Controllers\IT\InventoryController;
+use App\Http\Controllers\IT\ItPeripheralLoanController;
 use App\Http\Controllers\IT\ItRequestFormController;
 use App\Http\Controllers\IT\NonItAssetController;
 use App\Http\Controllers\IT\NotificationController;
@@ -150,6 +151,17 @@ Route::prefix('it')->name('it.')->middleware(['system.status:it'])->group(functi
             Route::post('/it-request-form/bulk-validator-approve',  [ItRequestFormController::class, 'bulkValidatorApprove'])->name('it-request-form.bulk-validator-approve');
             Route::post('/it-request-form/bulk-validator-reject',   [ItRequestFormController::class, 'bulkValidatorReject'])->name('it-request-form.bulk-validator-reject');
 
+            // IT Peripheral Loan routes
+            Route::get('/loans', [ItPeripheralLoanController::class, 'index'])->name('loans.index');
+            Route::get('/loans/available-items', [ItPeripheralLoanController::class, 'availableItems'])->name('loans.available-items');
+            Route::post('/loans/store', [ItPeripheralLoanController::class, 'store'])->name('loans.store');
+            Route::post('/loans/{id}/user-return', [ItPeripheralLoanController::class, 'userReturn'])->name('loans.user-return');
+            Route::get('/loans/{id}/receipt', [ItPeripheralLoanController::class, 'receipt'])->name('loans.receipt');
+            
+            // IT Peripheral Loan Admin actions
+            Route::post('/loans/{id}/verify-pickup', [ItPeripheralLoanController::class, 'verifyPickup'])->name('loans.verify-pickup');
+            Route::post('/loans/{id}/endorse-return', [ItPeripheralLoanController::class, 'endorseReturn'])->name('loans.endorse-return');
+
             // Profile
             Route::get('/profile',                        [ProfileController::class, 'index'])->name('profile');
             Route::post('/profile',                       [ProfileController::class, 'update'])->name('profile.update');
@@ -226,6 +238,8 @@ Route::prefix('it')->name('it.')->middleware(['system.status:it'])->group(functi
                 Route::get('/reports/it/export',  [ReportController::class, 'exportIt'])->name('reports.it.export');
                 Route::get('/reports/non-it',     [ReportController::class, 'nonIt'])->name('reports.non-it');
                 Route::get('/reports/non-it/export', [ReportController::class, 'exportNonIt'])->name('reports.non-it.export');
+                Route::get('/reports/loans',      [ReportController::class, 'peripheralLoans'])->name('reports.loans');
+                Route::get('/reports/loans/export', [ReportController::class, 'exportPeripheralLoans'])->name('reports.loans.export');
             });
 
             // Finance Admin only

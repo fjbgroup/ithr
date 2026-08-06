@@ -22,7 +22,14 @@ class NonItAssetController extends Controller
         $status   = trim($request->nit_status   ?? '');
         $location = trim($request->nit_location ?? '');
 
-        $query = NonItAsset::query();
+        $globalYear = session('global_year', 'all');
+        $applyYear = function ($query) use ($globalYear) {
+            if ($globalYear !== 'all') {
+                $query->whereYear('created_at', $globalYear);
+            }
+        };
+
+        $query = NonItAsset::query()->where($applyYear);
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('asset_number', 'like', "%$search%")
@@ -36,29 +43,29 @@ class NonItAssetController extends Controller
         if ($location) $query->where('location', $location);
 
         $items       = $query->orderByDesc('created_at')->get();
-        $nit_total      = NonItAsset::count();
-        $nit_active     = NonItAsset::where('item_status', 'Active')->count();
-        $nit_repair     = NonItAsset::where('item_status', 'In Repair')->count();
-        $nit_disp       = NonItAsset::where('item_status', 'Disposed')->count();
-        $nit_pending_wo     = NonItAsset::where('item_status', 'Pending for Write-Off')->count();
-        $nit_pending_ewaste = NonItAsset::where('item_status', 'Pending to E-Waste/Disposal')->count();
+        $nit_total      = NonItAsset::where($applyYear)->count();
+        $nit_active     = NonItAsset::where($applyYear)->where('item_status', 'Active')->count();
+        $nit_repair     = NonItAsset::where($applyYear)->where('item_status', 'In Repair')->count();
+        $nit_disp       = NonItAsset::where($applyYear)->where('item_status', 'Disposed')->count();
+        $nit_pending_wo     = NonItAsset::where($applyYear)->where('item_status', 'Pending for Write-Off')->count();
+        $nit_pending_ewaste = NonItAsset::where($applyYear)->where('item_status', 'Pending to E-Waste/Disposal')->count();
 
         $filtered_total = $items->count();
 
         $assetClasses   = AssetClass::where('type', 'non_it')->orderBy('sort_order')->orderBy('name')->get();
         $brands         = Brand::orderBy('sort_order')->orderBy('name')->get();
         $locations      = Location::orderBy('sort_order')->orderBy('name')->get();
-        $nitClassesUsed = NonItAsset::distinct()->orderBy('asset_class')->pluck('asset_class')
+        $nitClassesUsed = NonItAsset::where($applyYear)->distinct()->orderBy('asset_class')->pluck('asset_class')
                             ->filter()->values();
         $allLocations   = $locations->pluck('name');
 
-        $pendingEditIds = EditAssetRequest::where('asset_type', 'non_it')
+        $pendingEditIds = EditAssetRequest::where($applyYear)->where('asset_type', 'non_it')
                             ->where('status', 'Pending')
                             ->pluck('asset_id')
                             ->mapWithKeys(fn($id) => [$id => true])
                             ->all();
 
-        $pendingDeleteIds = \App\Models\IT\DeleteRequest::whereNotNull('non_it_id')
+        $pendingDeleteIds = \App\Models\IT\DeleteRequest::where($applyYear)->whereNotNull('non_it_id')
                             ->where('status', 'Pending')
                             ->pluck('non_it_id')
                             ->mapWithKeys(fn($id) => [$id => true])

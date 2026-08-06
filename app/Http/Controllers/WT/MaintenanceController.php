@@ -108,10 +108,24 @@ class MaintenanceController extends Controller
 
     public function index()
     {
+        $globalYear = session('global_year', 'all');
+        $applyYear = function ($query) use ($globalYear) {
+            if ($globalYear !== 'all') {
+                $query->whereYear('received_date', $globalYear)
+                      ->orWhereYear('created_at', $globalYear);
+            }
+        };
+
         $records = MaintenanceRecord::with('walkieTalkie')
             ->where(function ($query) {
                 $query->whereNull('status')
                     ->orWhereRaw("UPPER(status) <> 'DRAFT'");
+            })
+            ->where(function($q) use ($globalYear) {
+                if ($globalYear !== 'all') {
+                    $q->whereYear('received_date', $globalYear)
+                      ->orWhereYear('created_at', $globalYear);
+                }
             })
             ->orderByDesc('received_date')
             ->orderByDesc('repair_date')
@@ -143,10 +157,18 @@ class MaintenanceController extends Controller
 
     public function faultyReports()
     {
+        $globalYear = session('global_year', 'all');
+
         $records = MaintenanceRecord::query()
             ->with('temporarySpareWalkie')
             ->where('request_source', 'user')
             ->whereNotIn('status', ['Draft'])
+            ->where(function($q) use ($globalYear) {
+                if ($globalYear !== 'all') {
+                    $q->whereYear('received_date', $globalYear)
+                      ->orWhereYear('created_at', $globalYear);
+                }
+            })
             ->orderByDesc('received_date')
             ->orderByDesc('repair_date')
             ->orderByDesc('finish_date')

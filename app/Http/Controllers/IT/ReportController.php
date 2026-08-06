@@ -65,6 +65,7 @@ class ReportController extends Controller
         if ($request->filled('class'))     $q->where('asset_class', $request->class);
         if ($request->filled('date_from')) $q->whereDate('date_registered', '>=', $request->date_from);
         if ($request->filled('date_to'))   $q->whereDate('date_registered', '<=', $request->date_to);
+        if ($request->filled('year'))      $q->whereYear('created_at', $request->year);
         if ($request->filled('search'))    $q->where(function($sq) use ($request) {
             $s = $request->search;
             $sq->where('asset_number', 'like', "%$s%")
@@ -82,7 +83,48 @@ class ReportController extends Controller
 
     public function exportNonIt(Request $request)
     {
-        $filters = $request->only(['status', 'class', 'date_from', 'date_to', 'search']);
+        $filters = $request->only(['status', 'class', 'date_from', 'date_to', 'year', 'search']);
         return Excel::download(new NonItAssetExport($filters), 'non-it-assets-' . now()->format('Ymd') . '.xlsx');
+    }
+
+    public function peripheralLoans(Request $request)
+    {
+        $q = \App\Models\IT\ItPeripheralLoan::with(['staff.department', 'inventoryItem'])->orderBy('created_at', 'desc');
+
+        if ($request->filled('year')) {
+            $q->whereYear('created_at', $request->year);
+        }
+        if ($request->filled('month')) {
+            $q->whereMonth('created_at', $request->month);
+        }
+        if ($request->filled('department_id')) {
+            $q->whereHas('staff', function ($sq) use ($request) {
+                $sq->where('department_id', $request->department_id);
+            });
+        }
+        if ($request->filled('asset_class')) {
+            $q->whereHas('inventoryItem', function ($sq) use ($request) {
+                $sq->where('asset_class', $request->asset_class);
+            });
+        }
+
+        $loans = $q->paginate(25)->withQueryString();
+        $departments = \App\Models\Department::orderBy('name')->get();
+        $assetClasses = \App\Models\IT\AssetClass::orderBy('name')->get();
+
+        $stats = [
+            'total' => \App\Models\IT\ItPeripheralLoan::count(),
+            'pending' => \App\Models\IT\ItPeripheralLoan::where('status', 'Pending Verification')->count(),
+            'active' => \App\Models\IT\ItPeripheralLoan::where('status', 'Pending Return')->count(),
+            'completed' => \App\Models\IT\ItPeripheralLoan::where('status', 'Completed')->count(),
+        ];
+
+        return view('it.reports.loans', compact('loans', 'departments', 'assetClasses', 'stats'));
+    }
+
+    public function exportPeripheralLoans(Request $request)
+    {
+        $filters = $request->only(['year', 'month', 'department_id', 'asset_class']);
+        return Excel::download(new \App\Exports\ItPeripheralLoanExport($filters), 'it-peripheral-loans-' . now()->format('Ymd') . '.xlsx');
     }
 }

@@ -702,6 +702,10 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
           style="padding:7px 12px;font-size:13px">
           <i class="bi bi-archive" style="font-size:14px"></i> Non-IT Assets
         </a>
+        <a href="{{ route('it.reports.loans') }}" class="nav-link {{ request()->routeIs('it.reports.loans') ? 'active' : '' }}"
+          style="padding:7px 12px;font-size:13px">
+          <i class="bi bi-person-workspace" style="font-size:14px"></i> Peripheral Loans
+        </a>
       </div>
         </div>
       </div>
@@ -740,6 +744,11 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
       <i class="bi bi-file-earmark-text-fill"></i> IT Request Form
     </a>
     @endif
+
+    {{-- IT Peripheral Loan --}}
+    <a href="{{ route('it.loans.index') }}" class="nav-link {{ request()->routeIs('it.loans.*') ? 'active' : '' }}">
+      <i class="bi bi-laptop"></i> IT Peripheral Loan
+    </a>
 
     {{-- Admin section --}}
     @if($user->isAdminOrFinance())
@@ -823,6 +832,19 @@ html.dark .rm-user{background:rgba(74,222,128,.15);color:#86efac}
       <div class="topbar-breadcrumb">FGV Johor Bulkers Sdn Bhd &rsaquo; @yield('page_title', 'Dashboard')</div>
     </div>
     <div class="topbar-right">
+      <form id="globalYearForm" action="{{ route('system.set-year') }}" method="POST" style="display:inline-flex; align-items:center; margin-right: 15px;">
+          @csrf
+          <select name="global_year" onchange="document.getElementById('globalYearForm').submit()" class="form-control" style="padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; height: auto; background-color: var(--surface); color: var(--text); border: 1px solid var(--border); cursor: pointer; outline: none; transition: border-color 0.2s;">
+              <option value="all" {{ session('global_year') === 'all' ? 'selected' : '' }}>All Years</option>
+              @php
+                  $currentYear = date('Y');
+                  $selectedYear = session('global_year', $currentYear);
+              @endphp
+              @for($y = $currentYear; $y >= 2020; $y--)
+                  <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+              @endfor
+          </select>
+      </form>
       <span style="font-size:12px;color:var(--muted)" id="liveClock"></span>
 
       {{-- Bell notification --}}
@@ -1063,7 +1085,7 @@ $(document).ready(function () {
         searchPlaceholder: 'Search...',
         lengthMenu: 'Show _MENU_',
         info: 'Showing _START_-_END_ of _TOTAL_ items',
-        paginate: { previous: 'â† Previous', next: 'Next →' }
+        paginate: { previous: '&laquo; Previous', next: 'Next &raquo;' }
       },
       drawCallback: function() {
         if (typeof window._onDtDraw === 'function') window._onDtDraw();

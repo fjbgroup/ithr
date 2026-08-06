@@ -15,7 +15,15 @@ class AdminDashboardController extends Controller
             return redirect()->route('wt.admin.walkies.myInventory');
         }
 
+        $globalYear = session('global_year', 'all');
+        $applyYear = function ($query) use ($globalYear) {
+            if ($globalYear !== 'all') {
+                $query->whereYear('created_at', $globalYear);
+            }
+        };
+
         $statusCounts = WalkieTalkie::select('status', DB::raw('count(*) as total'))
+            ->where($applyYear)
             ->groupBy('status')
             ->get();
 
@@ -101,10 +109,11 @@ class AdminDashboardController extends Controller
             $originalColors[] = 'rgba(100, 116, 139, 0.85)';
         }
 
-        $totalWalkie = WalkieTalkie::count();
+        $totalWalkie = WalkieTalkie::where($applyYear)->count();
 
-        $recentWalkies = WalkieTalkie::orderBy('walkie_id', 'desc')->take(5)->get();
+        $recentWalkies = WalkieTalkie::where($applyYear)->orderBy('walkie_id', 'desc')->take(5)->get();
         $recentActivities = UserActivityLog::with('user')
+            ->where($applyYear)
             ->orderByDesc('created_at')
             ->take(6)
             ->get();

@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'columns' => [
         'RADIO_ID',
         'SERIAL_NO',
@@ -14,7 +14,7 @@
     'resetId' => 'datatableReset',
     'tableId' => 'datatable',
     'itemsPerPage' => 10,
-    'emptyText' => 'NO ITEMS FOUND',
+    'emptyText' => session('global_year', 'all') !== 'all' ? 'NO INFO FOR THIS YEAR' : 'NO ITEMS FOUND',
     'minWidth' => '1180px',
     'rowSelector' => 'tbody tr',
 ])

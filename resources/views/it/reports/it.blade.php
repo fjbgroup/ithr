@@ -46,6 +46,9 @@
     <a href="{{ route('it.reports.non-it') }}" class="rpt-tab">
       <i class="bi bi-archive-fill"></i> Non-IT Assets
     </a>
+    <a href="{{ route('it.reports.loans') }}" class="rpt-tab">
+      <i class="bi bi-person-workspace"></i> Peripheral Loans
+    </a>
     <a href="{{ route('it.reports.it.export') }}?{{ http_build_query(request()->only(['status','class','date_from','date_to','search'])) }}"
        class="btn-export">
       <i class="bi bi-file-earmark-excel-fill"></i> Export Excel

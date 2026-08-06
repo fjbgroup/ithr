@@ -391,11 +391,18 @@
       <option value="{{ $loc }}" {{ $location === $loc ? 'selected' : '' }}>{{ $loc }}</option>
       @endforeach
     </select>
+    <select name="year" onchange="this.form.submit()"
+      style="padding:9px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;min-width:100px">
+      <option value="">Any Year</option>
+      @for($y = date('Y'); $y >= 2000; $y--)
+      <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+      @endfor
+    </select>
     <button type="submit"
       style="padding:9px 20px;background:var(--navy,#142b47);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:6px">
       <i class="bi bi-funnel-fill"></i> Filter
     </button>
-    @if($search || $class || $status || $location)
+    @if($search || $class || $status || $location || request('year'))
     <a href="{{ route('it.non-it.index') }}"
       style="padding:9px 16px;background:var(--surface);color:var(--muted);border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap;font-family:'Inter',sans-serif">
       Clear
@@ -603,7 +610,7 @@
   <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
     <span style="font-size:13px;color:var(--muted);font-weight:500">
       <strong style="color:var(--text)">{{ number_format($filtered_total) }}</strong> asset{{ $filtered_total !== 1 ? 's' : '' }}
-      @if($search || $class || $status || $location)
+      @if($search || $class || $status || $location || request('year'))
         &nbsp;<span style="color:var(--accent)">(filtered)</span>
       @endif
     </span>

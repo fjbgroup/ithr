@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'pageTitle',
     'pageSubtitle' => null,
     'tableId' => 'inventoryDatatable',
@@ -10,7 +10,7 @@
     'rowPartial' => null,
     'statusOptions' => [],
     'itemsPerPage' => 10,
-    'emptyText' => 'NO ITEMS FOUND',
+    'emptyText' => session('global_year', 'all') !== 'all' ? 'NO INFO FOR THIS YEAR' : 'NO ITEMS FOUND',
     'minWidth' => '1180px',
     'showStatusFilter' => true,
 ])

@@ -48,6 +48,11 @@ Route::get('/system/maintenance', function () {
     return view('errors.maintenance', ['system' => request('system')]);
 })->name('system.maintenance');
 
+Route::post('/system/set-year', function (\Illuminate\Http\Request $request) {
+    session(['global_year' => $request->global_year]);
+    return back();
+})->name('system.set-year');
+
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     

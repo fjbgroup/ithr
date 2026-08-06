@@ -14,7 +14,14 @@ class EwasteController extends Controller
 {
     public function index(Request $request)
     {
-        $query = EwasteItem::query()->where('disposal_status', '!=', 'Pending');
+        $globalYear = session('global_year', 'all');
+        $applyYear = function ($query) use ($globalYear) {
+            if ($globalYear !== 'all') {
+                $query->whereYear('created_at', $globalYear);
+            }
+        };
+
+        $query = EwasteItem::query()->where('disposal_status', '!=', 'Pending')->where($applyYear);
 
         if ($s = $request->ew_search) {
             $query->where(function ($q) use ($s) {
@@ -31,12 +38,15 @@ class EwasteController extends Controller
                 $query->where('disposal_status', $st);
             }
         }
+        if ($y = $request->year) {
+            $query->whereYear('created_at', $y);
+        }
 
         $items         = $query->orderByDesc('created_at')->paginate(25)->withQueryString();
         $assetClasses  = AssetClass::where('type', 'it')->orderBy('sort_order')->pluck('name');
-        $totalEwaste   = EwasteItem::where('disposal_status', '!=', 'Pending')->count();
-        $activeEwaste  = EwasteItem::where('disposal_status', 'Approved')->count();
-        $collectedEwaste = EwasteItem::where('disposal_status', 'Collected')->count();
+        $totalEwaste   = EwasteItem::where($applyYear)->where('disposal_status', '!=', 'Pending')->count();
+        $activeEwaste  = EwasteItem::where($applyYear)->where('disposal_status', 'Approved')->count();
+        $collectedEwaste = EwasteItem::where($applyYear)->where('disposal_status', 'Collected')->count();
 
         if ($request->boolean('partial')) {
             $user = Auth::guard('it')->user();

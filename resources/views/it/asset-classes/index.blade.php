@@ -50,10 +50,10 @@
 <!-- PAGE HEADER -->
 <div style="margin-bottom:24px">
   <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px">
-    Admin &rsaquo; <span style="color:var(--accent)">Asset Classes</span>
+    Admin &rsaquo; <span style="color:var(--accent)">Asset Types / Classes</span>
   </div>
-  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Asset Classes</h4>
-  <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Manage asset classes for IT and Non-IT assets</p>
+  <h4 style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin:0">Asset Types / Classes</h4>
+  <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Manage asset types and classes for IT and Non-IT assets</p>
 </div>
 
 @php
@@ -78,7 +78,7 @@
         <div class="ac-card-title-row">
           <div class="ac-card-accent" style="background:#0284c7"></div>
           <div class="ac-card-meta">
-            <h6>IT Asset Classes</h6>
+            <h6>IT Asset Types</h6>
             <small>Used in IT Assets &amp; E-Waste</small>
           </div>
           <span class="ac-badge" style="background:rgba(2,132,199,.1);color:#0284c7;border:1px solid rgba(2,132,199,.2)">
@@ -89,7 +89,7 @@
         <div class="ac-stat-row">
           <div class="ac-stat-box" style="background:rgba(2,132,199,.08);border-color:rgba(2,132,199,.2)">
             <div class="ac-stat-num" style="color:#0284c7">{{ $itTotal }}</div>
-            <div class="ac-stat-lbl">Classes</div>
+            <div class="ac-stat-lbl">Types</div>
           </div>
           <div class="ac-stat-box" style="background:rgba(22,163,74,.07);border-color:rgba(22,163,74,.15)">
             <div class="ac-stat-num" style="color:#16a34a">{{ $itItems }}</div>
@@ -106,10 +106,10 @@
       <form method="POST" action="{{ route('it.asset-classes.store') }}" class="ac-add-row">
         @csrf
         <input type="hidden" name="type" value="it">
-        <input type="text" name="name" class="ac-add-input" placeholder="New class name, e.g. MONITOR" required
+        <input type="text" name="name" class="ac-add-input" placeholder="New type name, e.g. MONITOR" required
           oninput="this.value=this.value.toUpperCase()">
         <button type="submit" class="ac-add-btn" style="background:var(--navy,#142b47)">
-          <i class="bi bi-plus-lg"></i> Add Class
+          <i class="bi bi-plus-lg"></i> Add Type
         </button>
       </form>
 
@@ -117,15 +117,15 @@
       @if($itClasses->isEmpty())
       <div class="ac-empty">
         <i class="bi bi-tags"></i>
-        <p>No IT asset classes yet</p>
-        <span>Add a class above to get started</span>
+        <p>No IT asset types yet</p>
+        <span>Add a type above to get started</span>
       </div>
       @else
       <div class="table-responsive">
         <table class="ac-table">
           <thead><tr>
             <th style="width:32px">#</th>
-            <th>Asset Class</th>
+            <th>Asset Type</th>
             <th>Items</th>
             <th>Status</th>
             <th style="width:72px;text-align:center">Actions</th>

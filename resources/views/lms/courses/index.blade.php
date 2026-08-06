@@ -37,10 +37,20 @@
 <div class="page-container" style="padding: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <h2 style="font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); margin: 0;">Manage Online Courses</h2>
-        <button onclick="openModal('course-modal')" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span class="btn-label">New Course</span>
-        </button>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <form method="GET" action="{{ route('lms.courses.index') }}" style="display: flex; gap: 8px; align-items: center; margin: 0;">
+                <select name="year" onchange="this.form.submit()" class="form-select" style="min-width: 120px;">
+                    <option value="">Any Year</option>
+                    @for($y = date('Y'); $y >= 2020; $y--)
+                    <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </form>
+            <button onclick="openModal('course-modal')" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span class="btn-label">New Course</span>
+            </button>
+        </div>
     </div>
 
     @if(session('success'))

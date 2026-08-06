@@ -224,7 +224,7 @@
         <button class="chatbot-clear-btn" onclick="clearChatHistory()" title="Clear conversation">Clear</button>
     </div>
     <div class="chatbot-messages" id="chatbot-messages">
-        <div class="chat-msg assistant">Hi {{ Auth::user()->name ? explode(' ', Auth::user()->name)[0] : 'there' }}! I'm your HR Assistant. Ask me anything about HR policies, room bookings, training, or travel requests.</div>
+        <div class="chat-msg assistant">Hi {{ Auth::user()->name ? explode(' ', Auth::user()->name)[0] : 'there' }}! I'm your HR Assistant. Ask me anything about HR policies, room bookings, training, or travel requests.<br><br><i>(Hai! Saya Pembantu HR anda. Boleh tanya saya apa-apa dalam Bahasa Melayu.)</i></div>
     </div>
     <div class="chatbot-footer">
         <textarea id="chatbot-input" placeholder="Ask anything…" rows="1"></textarea>
@@ -308,7 +308,7 @@
             headers: { 'X-CSRF-TOKEN': CSRF_TOKEN },
         });
         const msgs = document.getElementById('chatbot-messages');
-        msgs.innerHTML = '<div class="chat-msg assistant">Conversation cleared. How can I help you?</div>';
+        msgs.innerHTML = '<div class="chat-msg assistant">Conversation cleared. How can I help you?<br><br><i>(Perbualan dikosongkan. Boleh saya bantu anda?)</i></div>';
         saveChatHistory();
     };
 

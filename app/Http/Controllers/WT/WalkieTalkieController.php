@@ -150,7 +150,15 @@ class WalkieTalkieController extends Controller
 
     private function getFormOptions(): array
     {
-        $walkies = WalkieTalkie::orderByDesc('created_at')
+        $globalYear = session('global_year', 'all');
+        $applyYear = function ($query) use ($globalYear) {
+            if ($globalYear !== 'all') {
+                $query->whereYear('created_at', $globalYear);
+            }
+        };
+
+        $walkies = WalkieTalkie::where($applyYear)
+            ->orderByDesc('created_at')
             ->orderByDesc('walkie_id')
             ->get();
 

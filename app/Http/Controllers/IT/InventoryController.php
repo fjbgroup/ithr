@@ -58,7 +58,14 @@ class InventoryController extends Controller
             }
         }
 
-        $query  = InventoryItem::with(['ewasteItems' => fn($q) => $q->orderByDesc('id')]);
+        $globalYear = session('global_year', 'all');
+        $applyYear = function ($query) use ($globalYear) {
+            if ($globalYear !== 'all') {
+                $query->whereYear('created_at', $globalYear);
+            }
+        };
+
+        $query  = InventoryItem::with(['ewasteItems' => fn($q) => $q->orderByDesc('id')])->where($applyYear);
 
         if ($s = $request->search) {
             $query->where(function ($q) use ($s) {
@@ -86,13 +93,13 @@ class InventoryController extends Controller
         $brands       = Brand::orderBy('sort_order')->orderBy('name')->get();
         $locations    = Location::orderBy('sort_order')->orderBy('name')->get();
 
-        $pendingEwIds = EwasteRequest::where('status', 'Pending')
+        $pendingEwIds = EwasteRequest::where($applyYear)->where('status', 'Pending')
             ->whereNotNull('inventory_id')
             ->pluck('inventory_id')
             ->mapWithKeys(fn($id) => [(int) $id => true])
             ->all();
 
-        $pendingEditIds = EditAssetRequest::where(function ($q) {
+        $pendingEditIds = EditAssetRequest::where($applyYear)->where(function ($q) {
                 $q->whereNull('asset_type')->orWhere('asset_type', 'it');
             })
             ->where('status', 'Pending')
@@ -101,7 +108,7 @@ class InventoryController extends Controller
             ->mapWithKeys(fn($id) => [(int) $id => true])
             ->all();
 
-        $pendingDeleteIds = DeleteRequest::where('status', 'Pending')
+        $pendingDeleteIds = DeleteRequest::where($applyYear)->where('status', 'Pending')
             ->whereNotNull('inventory_id')
             ->pluck('inventory_id')
             ->mapWithKeys(fn($id) => [(int) $id => true])
@@ -119,10 +126,10 @@ class InventoryController extends Controller
         $pendingAddCount = $pendingEwCount = $pendingDelCount = $pendingEditCount = $totalPending = 0;
 
         if ($user->isAdmin()) {
-            $pendingAdds    = AddAssetRequest::where('status', 'Pending')->with('requester')->orderByDesc('created_at')->get();
-            $pendingEw      = EwasteRequest::where('status', 'Pending')->with('requester')->orderByDesc('created_at')->get();
-            $pendingDeletes = DeleteRequest::where('status', 'Pending')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
-            $pendingEdits   = EditAssetRequest::where('status', 'Pending')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
+            $pendingAdds    = AddAssetRequest::where($applyYear)->where('status', 'Pending')->with('requester')->orderByDesc('created_at')->get();
+            $pendingEw      = EwasteRequest::where($applyYear)->where('status', 'Pending')->with('requester')->orderByDesc('created_at')->get();
+            $pendingDeletes = DeleteRequest::where($applyYear)->where('status', 'Pending')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
+            $pendingEdits   = EditAssetRequest::where($applyYear)->where('status', 'Pending')->with('requester', 'inventoryItem')->orderByDesc('created_at')->get();
 
             $pendingAddCount  = $pendingAdds->count();
             $pendingEwCount   = $pendingEw->count();
@@ -141,11 +148,11 @@ class InventoryController extends Controller
         $totalMy    = 0;
 
         if (!$user->isAdmin() && !$user->isReadOnlyViewer()) {
-            $myAdds    = AddAssetRequest::where('requested_by', $user->id)->orderByDesc('created_at')->get();
-            $myEw      = EwasteRequest::where('requested_by', $user->id)->orderByDesc('created_at')->get();
-            $myDeletes = DeleteRequest::where('requested_by', $user->id)->with('inventoryItem')->orderByDesc('created_at')->get();
-            $myEdits   = EditAssetRequest::where('requested_by', $user->id)->with('inventoryItem')->orderByDesc('created_at')->get();
-            $myDisposals = EwasteItem::where('created_by', $user->id)->orderByDesc('created_at')->get();
+            $myAdds    = AddAssetRequest::where($applyYear)->where('requested_by', $user->id)->orderByDesc('created_at')->get();
+            $myEw      = EwasteRequest::where($applyYear)->where('requested_by', $user->id)->orderByDesc('created_at')->get();
+            $myDeletes = DeleteRequest::where($applyYear)->where('requested_by', $user->id)->with('inventoryItem')->orderByDesc('created_at')->get();
+            $myEdits   = EditAssetRequest::where($applyYear)->where('requested_by', $user->id)->with('inventoryItem')->orderByDesc('created_at')->get();
+            $myDisposals = EwasteItem::where($applyYear)->where('created_by', $user->id)->orderByDesc('created_at')->get();
 
             $myPending = $myAdds->where('status', 'Pending')->count()
                        + $myEw->where('status', 'Pending')->count()
@@ -169,25 +176,44 @@ class InventoryController extends Controller
         if ($user->isReadOnlyViewer()) abort(403);
 
         $data = $request->validate([
-            'asset_number'     => 'nullable|string|max:50',
-            'asset_class'      => 'required|string|max:50',
-            'fa_code'          => 'nullable|string|max:100',
+            'asset_name'       => 'required|string|max:255',
+            'asset_type'       => 'required|string|max:100',
+            'model'            => 'required|string|max:100',
+            'serial_number'    => 'required|string|max:100',
+            'domain'           => 'nullable|string|max:100',
+            'ip_address'       => 'nullable|string|max:100',
+            'os_code'          => 'nullable|string|max:100',
+            'sp'               => 'nullable|string|max:100',
             'description'      => 'required|string|max:255',
-            'serial_number'    => 'nullable|string|max:100',
-            'brand'            => 'nullable|string|max:100',
-            'model'            => 'nullable|string|max:100',
-            'location'         => 'nullable|string|max:100',
-            'condition_status' => 'nullable|in:Good,Fair,Poor,For Disposal',
-            'item_status'      => 'nullable|in:Active,In Repair,Disposed,Reserved,Collected',
+            'fqdn'             => 'nullable|string|max:255',
+            'mac_address'      => 'nullable|string|max:100',
+            'memory_mb'        => 'nullable|string|max:100',
+            'nr_processors'    => 'nullable|string|max:100',
+            'processor'        => 'nullable|string|max:100',
+            'state'            => 'nullable|string|max:100',
             'purchase_date'    => 'nullable|date',
-            'purchase_price'   => 'nullable|numeric',
-            'years_purchase'   => 'nullable|integer',
-            'total_cost'       => 'nullable|numeric',
-            'accumulated'      => 'nullable|numeric',
-            'nbv_at'           => 'nullable|numeric',
             'warranty_date'    => 'nullable|date',
-            'notes'            => 'nullable|string',
+            'last_patched'     => 'nullable|string|max:100',
+            'last_full_backup' => 'nullable|string|max:100',
+            'last_full_image'  => 'nullable|string|max:100',
+            'order_number'     => 'nullable|string|max:100',
+            'comments'         => 'nullable|string',
+            'location'         => 'nullable|string|max:100',
+            'building'         => 'nullable|string|max:100',
+            'department'       => 'nullable|string|max:100',
+            'branch_office'    => 'nullable|string|max:100',
+            'bar_code'         => 'nullable|string|max:100',
+            'manufacturer'     => 'nullable|string|max:100',
+            'contact'          => 'nullable|string|max:100',
+            'scan_server'      => 'nullable|string|max:100',
+            'chrome_os_device_id' => 'nullable|string|max:255',
+            'system_sku'       => 'nullable|string|max:100',
         ]);
+        
+        $data['asset_class'] = $data['asset_type'] ?? null;
+        $data['asset_number'] = 'AST-' . date('ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(4));
+        $data['state'] = 'Active';
+        $data['item_status'] = 'Active';
 
         if ($user->isAdmin()) {
             $data['created_by'] = $user->id;
@@ -212,23 +238,41 @@ class InventoryController extends Controller
         if (!$user->isAdminOrFinance() && ($item->item_status === 'Pending for Write-Off' || $ewStatus !== null)) abort(403);
 
         $data = $request->validate([
-            'asset_number'     => 'nullable|string|max:50',
-            'asset_class'      => 'required|string|max:50',
-            'fa_code'          => 'nullable|string|max:100',
+            'asset_name'       => 'required|string|max:255',
+            'asset_type'       => 'required|string|max:100',
+            'model'            => 'required|string|max:100',
+            'serial_number'    => 'required|string|max:100',
+            'domain'           => 'nullable|string|max:100',
+            'ip_address'       => 'nullable|string|max:100',
+            'os_code'          => 'nullable|string|max:100',
+            'sp'               => 'nullable|string|max:100',
             'description'      => 'required|string|max:255',
-            'serial_number'    => 'nullable|string|max:100',
-            'brand'            => 'nullable|string|max:100',
-            'model'            => 'nullable|string|max:100',
-            'location'         => 'nullable|string|max:100',
+            'fqdn'             => 'nullable|string|max:255',
+            'mac_address'      => 'nullable|string|max:100',
+            'memory_mb'        => 'nullable|string|max:100',
+            'nr_processors'    => 'nullable|string|max:100',
+            'processor'        => 'nullable|string|max:100',
+            'state'            => 'nullable|string|max:100',
             'purchase_date'    => 'nullable|date',
-            'purchase_price'   => 'nullable|numeric',
-            'years_purchase'   => 'nullable|integer',
-            'total_cost'       => 'nullable|numeric',
-            'accumulated'      => 'nullable|numeric',
-            'nbv_at'           => 'nullable|numeric',
             'warranty_date'    => 'nullable|date',
-            'notes'            => 'nullable|string',
+            'last_patched'     => 'nullable|string|max:100',
+            'last_full_backup' => 'nullable|string|max:100',
+            'last_full_image'  => 'nullable|string|max:100',
+            'order_number'     => 'nullable|string|max:100',
+            'comments'         => 'nullable|string',
+            'location'         => 'nullable|string|max:100',
+            'building'         => 'nullable|string|max:100',
+            'department'       => 'nullable|string|max:100',
+            'branch_office'    => 'nullable|string|max:100',
+            'bar_code'         => 'nullable|string|max:100',
+            'manufacturer'     => 'nullable|string|max:100',
+            'contact'          => 'nullable|string|max:100',
+            'scan_server'      => 'nullable|string|max:100',
+            'chrome_os_device_id' => 'nullable|string|max:255',
+            'system_sku'       => 'nullable|string|max:100',
         ]);
+        
+        $data['asset_class'] = $data['asset_type'] ?? null;
 
         if (array_key_exists('location', $data) && trim((string) $data['location']) === '') {
             $data['location'] = null;

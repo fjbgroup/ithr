@@ -14,13 +14,20 @@ use App\Services\AuditLogger;
 
 class LmsCourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $query = TrainingCourse::online();
 
         if (!$user->isAdminHR() && !$user->isAdminIT()) {
             $query->where('pic_id', $user->id);
+        }
+
+        $globalYear = session('global_year', 'all');
+        if ($globalYear !== 'all') {
+            $query->whereYear('created_at', $globalYear);
+        } elseif ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
         }
 
         $courses = $query->latest()->get();

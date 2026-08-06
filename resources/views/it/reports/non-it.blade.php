@@ -40,7 +40,10 @@
     <a href="{{ route('it.reports.non-it') }}" class="rpt-tab active">
       <i class="bi bi-archive-fill"></i> Non-IT Assets
     </a>
-    <a href="{{ route('it.reports.non-it.export') }}?{{ http_build_query(request()->only(['status','class','date_from','date_to','search'])) }}"
+    <a href="{{ route('it.reports.loans') }}" class="rpt-tab">
+      <i class="bi bi-person-workspace"></i> Peripheral Loans
+    </a>
+    <a href="{{ route('it.reports.non-it.export') }}?{{ http_build_query(request()->only(['status','class','date_from','date_to','search','year'])) }}"
        class="btn-export">
       <i class="bi bi-file-earmark-excel-fill"></i> Export Excel
     </a>
@@ -91,6 +94,15 @@
     </select>
   </div>
   <div>
+    <label>Year</label>
+    <select name="year" style="width:100px">
+      <option value="">Any</option>
+      @for($y = date('Y'); $y >= 2000; $y--)
+      <option value="{{ $y }}" @selected(request('year') == $y)>{{ $y }}</option>
+      @endfor
+    </select>
+  </div>
+  <div>
     <label>Date Registered From</label>
     <input type="date" name="date_from" value="{{ request('date_from') }}">
   </div>
@@ -100,7 +112,7 @@
   </div>
   <div style="display:flex;gap:8px;align-items:flex-end">
     <button type="submit" class="btn-filter"><i class="bi bi-funnel-fill"></i> Filter</button>
-    @if(request()->hasAny(['search','status','class','date_from','date_to']))
+    @if(request()->hasAny(['search','status','class','date_from','date_to','year']))
     <a href="{{ route('it.reports.non-it') }}" class="btn-reset"><i class="bi bi-x-lg"></i> Reset</a>
     @endif
   </div>

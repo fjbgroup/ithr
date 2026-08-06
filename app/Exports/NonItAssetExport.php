@@ -20,6 +20,7 @@ class NonItAssetExport implements FromQuery, WithHeadings, WithTitle, ShouldAuto
         if (!empty($this->filters['class']))      $q->where('asset_class', $this->filters['class']);
         if (!empty($this->filters['date_from']))  $q->whereDate('date_registered', '>=', $this->filters['date_from']);
         if (!empty($this->filters['date_to']))    $q->whereDate('date_registered', '<=', $this->filters['date_to']);
+        if (!empty($this->filters['year']))       $q->whereYear('created_at', $this->filters['year']);
         if (!empty($this->filters['search']))     $q->where(function($sq) {
             $s = $this->filters['search'];
             $sq->where('asset_number', 'like', "%$s%")

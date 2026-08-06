@@ -346,6 +346,19 @@ html.sidebar-collapsed .sidebar-footer .user-info {
         <div class="topbar-right">
 
             @auth
+            <form id="globalYearForm" action="{{ route('system.set-year') }}" method="POST" style="display:inline-flex; align-items:center; margin-right: 15px;">
+                @csrf
+                <select name="global_year" onchange="document.getElementById('globalYearForm').submit()" class="form-control" style="padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; height: auto; background-color: var(--surface); color: var(--text); border: 1px solid var(--border); cursor: pointer; outline: none; transition: border-color 0.2s;">
+                    <option value="all" {{ session('global_year') === 'all' ? 'selected' : '' }}>All Years</option>
+                    @php
+                        $currentYear = date('Y');
+                        $selectedYear = session('global_year', $currentYear);
+                    @endphp
+                    @for($y = $currentYear; $y >= 2020; $y--)
+                        <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </form>
             <button id="theme-toggle" type="button" class="theme-toggle" title="Toggle light/dark" aria-label="Toggle light or dark mode">
                 <svg id="theme-toggle-dark-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="theme-toggle-light-icon" class="theme-icon hidden" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>

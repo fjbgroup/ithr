@@ -46,16 +46,20 @@
             function applyInventorySearchFilter() {
                 var searchInput = document.getElementById('globalSearch');
                 var statusFilter = document.getElementById('filterStatus');
+                var yearFilter = document.getElementById('filterYear');
                 var rows = Array.from(document.querySelectorAll('#walkiesTable tbody tr.inventory-row'));
                 var keyword = normalizeInventorySearch(searchInput ? searchInput.value : '');
                 var status = normalizeInventorySearch(statusFilter ? statusFilter.value : '');
+                var year = yearFilter ? yearFilter.value : '';
 
                 rows.forEach(function (row) {
                     var haystack = row.dataset.search || row.textContent || '';
                     var rowStatus = normalizeInventorySearch(row.dataset.status || '');
+                    var rowYear = row.dataset.year || '';
                     var matchesKeyword = !keyword || normalizeInventorySearch(haystack).indexOf(keyword) !== -1;
                     var matchesStatus = !status || rowStatus === status;
-                    row.style.display = matchesKeyword && matchesStatus ? '' : 'none';
+                    var matchesYear = !year || rowYear === year;
+                    row.style.display = matchesKeyword && matchesStatus && matchesYear ? '' : 'none';
                 });
 
                 var totalItems = document.getElementById('totalItems');
@@ -92,11 +96,18 @@
                     statusFilter.addEventListener('change', applyInventorySearchFilter);
                 }
 
+                var yearFilter = document.getElementById('filterYear');
+                if (yearFilter && yearFilter.dataset.inventorySearchBound !== 'true') {
+                    yearFilter.dataset.inventorySearchBound = 'true';
+                    yearFilter.addEventListener('change', applyInventorySearchFilter);
+                }
+
                 if (resetBtn && resetBtn.dataset.inventorySearchBound !== 'true') {
                     resetBtn.dataset.inventorySearchBound = 'true';
                     resetBtn.addEventListener('click', function () {
                         if (searchInput) searchInput.value = '';
                         if (statusFilter) statusFilter.value = '';
+                        if (yearFilter) yearFilter.value = '';
                         applyInventorySearchFilter();
                     });
                 }
@@ -245,6 +256,17 @@
                     </select>
                 </div>
 
+                {{-- Year Filter --}}
+                <div class="inventory-filter-field" style="display:flex !important;flex-direction:row !important;align-items:center !important;gap:8px !important;width:auto !important;min-width:0 !important;">
+                    <label class="clean-admin-label" for="filterYear" style="margin:0 !important;line-height:30px !important;white-space:nowrap !important;">Year</label>
+                    <select id="filterYear" class="clean-admin-select" style="width:100px !important;">
+                        <option value="">Any Year</option>
+                        @for($y = date('Y'); $y >= 2000; $y--)
+                        <option value="{{ $y }}">{{ $y }}</option>
+                        @endfor
+                    </select>
+                </div>
+
                 {{-- Reset Button --}}
                 <button type="button" id="resetFilters" class="clean-admin-reset" title="Reset all filters" style="width:68px !important;min-width:68px !important;">Reset</button>
             </div>
@@ -289,6 +311,7 @@
                     <tr class="inventory-row hover:bg-slate-700/30 transition"
                         data-walkie-id="{{ $w->walkie_id }}"
                         data-status="{{ $statusValue }}"
+                        data-year="{{ $w->created_at ? \Carbon\Carbon::parse($w->created_at)->format('Y') : '' }}"
                         data-model="{{ strtoupper((string) ($w->model ?: 'NO MODEL')) }}"
                         data-ownership-type="{{ strtoupper((string) ($w->ownership_type ?: '-')) }}"
                         data-search="{{ strtoupper(trim(($w->radio_id ?? '') . ' ' . ($w->model ?? '') . ' ' . ($w->serial_number ?? '') . ' ' . ($w->ownership_type ?? '') . ' ' . ($w->shared_with ?? '') . ' ' . ($w->ownership ?? '') . ' ' . ($w->department ?? '') . ' ' . ($w->location ?? '') . ' ' . ($w->position ?? '') . ' ' . ($w->status ?? '') . ' ' . ($w->temporary_radio_id ?? '') . ' ' . ($w->tracking_ref ?? '') . ' ' . ($w->remark ?? '') . ' ' . ($w->need_to_change_id ?? '') . ' ' . ($w->ownership_type_to_be ?? ''))) }}">

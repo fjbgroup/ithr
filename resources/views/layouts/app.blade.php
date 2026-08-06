@@ -279,7 +279,7 @@ html.sidebar-collapsed .sidebar-footer .user-info {
         </a>
 
         <div class="nav-group" id="navGroupRegistry">
-            <div class="nav-group-toggle {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir', 'archived-staff']) ? 'open has-active' : '' }}"
+            <div class="nav-group-toggle {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir', 'archived-staff', 'my-requests']) ? 'open has-active' : '' }}"
                  onclick="toggleNavGroup('navGroupRegistry')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
@@ -289,7 +289,7 @@ html.sidebar-collapsed .sidebar-footer .user-info {
                     <polyline points="9 18 15 12 9 6"/>
                 </svg>
             </div>
-            <div class="nav-group-children {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir', 'archived-staff']) ? 'open' : '' }}">
+            <div class="nav-group-children {{ in_array(request()->segment(1), ['staff', 'family', 'report', 'ir', 'archived-staff', 'my-requests']) ? 'open' : '' }}">
                 <div class="nav-group-children-inner">
                     <a href="{{ url('/staff') }}" class="nav-child {{ request()->is('staff*') ? 'active' : '' }}">{{ Auth::user()->isStaff() ? 'My Profile' : 'Staff List' }}</a>
                     <a href="{{ url('/family') }}" class="nav-child {{ request()->is('family*') ? 'active' : '' }}">{{ Auth::user()->isStaff() ? 'My Family' : 'Family Info' }}</a>
@@ -299,6 +299,18 @@ html.sidebar-collapsed .sidebar-footer .user-info {
                     @if(Auth::user()->isAdmin() || Auth::user()->isCeo())
                     <a href="{{ url('/ir') }}" class="nav-child {{ request()->is('ir*') ? 'active' : '' }}">IR Records</a>
                     <a href="{{ route('archived-staff.index') }}" class="nav-child {{ request()->is('archived-staff*') ? 'active' : '' }}">Archived Staff</a>
+                    @endif
+                    @if(!Auth::user()->isAdmin() && !Auth::user()->isCeo())
+                    <a href="{{ url('/my-requests') }}" class="nav-child {{ request()->is('my-requests*') ? 'active' : '' }}" style="display:flex;justify-content:space-between;align-items:center;">
+                        My Requests
+                        @php
+                            $myPendingCount = App\Models\UpdateRequest::where('requester_id', Auth::id())->where('status', 'Pending')->count();
+                            $myRequestBadge = $myPendingCount + Auth::user()->getUnreadRequestCount();
+                        @endphp
+                        @if ($myRequestBadge > 0)
+                            <span class="badge-count" id="nav-badge-request" style="margin-left:auto;">{{ $myRequestBadge }}</span>
+                        @endif
+                    </a>
                     @endif
                 </div>
             </div>
@@ -346,7 +358,9 @@ html.sidebar-collapsed .sidebar-footer .user-info {
             <div class="nav-group-children {{ request()->is('rooms*') ? 'open' : '' }}">
                 <div class="nav-group-children-inner">
                     <a href="{{ url('/rooms') }}" class="nav-child {{ request()->is('rooms') || request()->is('/') ? 'active' : '' }}">Manage Bookings</a>
+                    @if(Auth::user()->isAdmin())
                     <a href="{{ url('/rooms/report') }}" class="nav-child {{ request()->is('rooms/report') ? 'active' : '' }}">Booking Report</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -369,25 +383,12 @@ html.sidebar-collapsed .sidebar-footer .user-info {
         </a>
         @endif
 
-        @if(!Auth::user()->isAdmin() && !Auth::user()->isCeo())
-        <a href="{{ url('/my-requests') }}" class="nav-item {{ request()->is('my-requests*') ? 'active' : '' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            My Requests
-            @php
-                $myPendingCount = App\Models\UpdateRequest::where('requester_id', Auth::id())->where('status', 'Pending')->count();
-                $myRequestBadge = $myPendingCount + Auth::user()->getUnreadRequestCount();
-            @endphp
-            @if ($myRequestBadge > 0)
-                <span class="badge-count" id="nav-badge-request">{{ $myRequestBadge }}</span>
-            @endif
-        </a>
-        @endif
-
+        
                   @php
               $sysSecActive = request()->is('master-data*') || request()->is('users*') || request()->is('audit-log*') || request()->is('account/security*');
           @endphp
           @if(Auth::user()->isAdmin() || Auth::user()->isCeo() || Auth::user()->isHrUser())
-          <div class="nav-divider"></div>
+          <div class="nav-divider" style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
           <div class="nav-group" id="navGroupSystemSecurity">
               <div class="nav-group-toggle {{ $sysSecActive ? 'open has-active' : '' }}" onclick="toggleNavGroup('navGroupSystemSecurity')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -428,7 +429,7 @@ html.sidebar-collapsed .sidebar-footer .user-info {
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
             User Manual
         </a>
-        <div class="nav-divider" style="border-top:1px solid rgba(255,255,255,.08);margin:12px 0 8px"></div>
+        <div class="nav-divider" style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
         <a href="javascript:void(0)" onclick="openModal('roleMatrixModal')" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
             Role Matrix
@@ -492,6 +493,19 @@ html.sidebar-collapsed .sidebar-footer .user-info {
         <div class="topbar-right">
 
             @auth
+            <form id="globalYearForm" action="{{ route('system.set-year') }}" method="POST" style="display:inline-flex; align-items:center; margin-right: 15px;">
+                @csrf
+                <select name="global_year" onchange="document.getElementById('globalYearForm').submit()" class="form-control" style="padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; height: auto; background-color: var(--surface); color: var(--text); border: 1px solid var(--border); cursor: pointer; outline: none; transition: border-color 0.2s;">
+                    <option value="all" {{ session('global_year') === 'all' ? 'selected' : '' }}>All Years</option>
+                    @php
+                        $currentYear = date('Y');
+                        $selectedYear = session('global_year', $currentYear);
+                    @endphp
+                    @for($y = $currentYear; $y >= 2020; $y--)
+                        <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </form>
             <button id="theme-toggle" type="button" class="theme-toggle" title="Toggle light/dark" aria-label="Toggle light or dark mode">
                 <svg id="theme-toggle-dark-icon" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="theme-toggle-light-icon" class="theme-icon hidden" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>

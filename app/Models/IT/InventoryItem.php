@@ -11,6 +11,12 @@ class InventoryItem extends Model
         'brand', 'model', 'location', 'condition_status', 'item_status',
         'purchase_date', 'purchase_price', 'notes', 'created_by',
         'fa_code', 'years_purchase', 'total_cost', 'accumulated', 'nbv_at', 'warranty_date',
+        'domain', 'ip_address', 'os_code', 'sp', 'asset_type', 'asset_name',
+        'fqdn', 'mac_address', 'memory_mb', 'nr_processors', 'processor',
+        'state', 'last_patched', 'last_full_backup', 'last_full_image',
+        'order_number', 'comments', 'building', 'department', 'branch_office',
+        'bar_code', 'manufacturer', 'contact', 'scan_server', 'chrome_os_device_id',
+        'system_sku'
     ];
 
     protected $casts = [

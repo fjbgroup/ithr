@@ -28,8 +28,13 @@ class UpdateRequestController extends Controller
         if (!in_array($filter, $validFilters)) {
             $filter = 'Pending';
         }
+        
+        $globalYear = session('global_year', 'all');
 
         $query = UpdateRequest::query();
+        if ($globalYear !== 'all') {
+            $query->whereYear('created_at', $globalYear);
+        }
         if ($filter !== 'All') {
             $query->where('status', $filter);
         }
@@ -38,9 +43,14 @@ class UpdateRequestController extends Controller
 
         $counts = [];
         foreach ($validFilters as $f) {
-            $counts[$f] = $f === 'All' 
-                ? UpdateRequest::count() 
-                : UpdateRequest::where('status', $f)->count();
+            $q = UpdateRequest::query();
+            if ($globalYear !== 'all') {
+                $q->whereYear('created_at', $globalYear);
+            }
+            if ($f !== 'All') {
+                $q->where('status', $f);
+            }
+            $counts[$f] = $q->count();
         }
 
         return view('requests.index', compact('requests', 'filter', 'validFilters', 'counts'));
@@ -59,8 +69,13 @@ class UpdateRequestController extends Controller
         if (!in_array($filter, $validFilters)) {
             $filter = 'All';
         }
+        
+        $globalYear = session('global_year', 'all');
 
         $query = UpdateRequest::where('requester_id', $user->id);
+        if ($globalYear !== 'all') {
+            $query->whereYear('created_at', $globalYear);
+        }
         if ($filter !== 'All') {
             $query->where('status', $filter);
         }
@@ -70,6 +85,9 @@ class UpdateRequestController extends Controller
         $counts = [];
         foreach ($validFilters as $f) {
             $q = UpdateRequest::where('requester_id', $user->id);
+            if ($globalYear !== 'all') {
+                $q->whereYear('created_at', $globalYear);
+            }
             if ($f !== 'All') {
                 $q->where('status', $f);
             }
