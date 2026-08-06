@@ -15,7 +15,11 @@
         <label><input type="radio" name="{{ $sourceField }}" value="upload" data-signature-source> Upload</label>
     </div>
     <div class="signature-upload" data-upload-panel>
-        <input type="file" accept="image/*" data-signature-upload class="form-control">
+        <label class="signature-clear" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;cursor:pointer">
+            <i class="fa-solid fa-upload"></i>
+            Upload Signature
+            <input type="file" accept="image/*" data-signature-upload class="form-control" style="display:none">
+        </label>
     </div>
     <div class="signature-pad" data-signature-pad>
         <canvas aria-label="{{ $title }}"></canvas>

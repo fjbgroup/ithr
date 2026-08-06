@@ -93,6 +93,8 @@
     .return-signature-actions { display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--border);background:var(--body-bg);padding:8px 10px; }
     .return-signature-hint { font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--muted); }
     .return-signature-clear { border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;padding:6px 10px; }
+    .return-signature-upload { display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:6px;background:var(--navy);color:#fff;font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;padding:6px 10px;cursor:pointer; }
+    .return-signature-upload input { display:none; }
     @media (max-width: 640px) {
         .return-assignment-cell { grid-template-columns:1fr;gap:3px; }
         .return-manual-head { align-items:flex-start;flex-direction:column; }
@@ -277,7 +279,14 @@
                         <canvas></canvas>
                         <div class="return-signature-actions">
                             <span class="return-signature-hint">Sign inside the box</span>
-                            <button type="button" class="return-signature-clear" data-return-signature-clear>Clear</button>
+                            <div class="flex items-center gap-2">
+                                <label class="return-signature-upload">
+                                    <i class="fa-solid fa-upload"></i>
+                                    Upload Signature
+                                    <input type="file" accept="image/*" data-return-signature-upload>
+                                </label>
+                                <button type="button" class="return-signature-clear" data-return-signature-clear>Clear</button>
+                            </div>
                         </div>
                     </div>
                     <input type="hidden" name="return_signature" data-return-signature-input required>
@@ -511,7 +520,14 @@
                         <canvas></canvas>
                         <div class="return-signature-actions">
                             <span class="return-signature-hint">Sign inside the box</span>
-                            <button type="button" class="return-signature-clear" data-return-signature-clear>Clear</button>
+                            <div class="flex items-center gap-2">
+                                <label class="return-signature-upload">
+                                    <i class="fa-solid fa-upload"></i>
+                                    Upload Signature
+                                    <input type="file" accept="image/*" data-return-signature-upload>
+                                </label>
+                                <button type="button" class="return-signature-clear" data-return-signature-clear>Clear</button>
+                            </div>
                         </div>
                     </div>
                     <input type="hidden" name="return_signature" data-return-signature-input required>
@@ -578,6 +594,7 @@
             const canvas = container.querySelector('canvas');
             const input = container.parentElement.querySelector('[data-return-signature-input]');
             const clearButton = container.querySelector('[data-return-signature-clear]');
+            const uploadInput = container.querySelector('[data-return-signature-upload]');
             const context = canvas.getContext('2d');
             let drawing = false;
             let hasSignature = false;
@@ -610,6 +627,25 @@
 
             function updateInput() {
                 input.value = hasSignature ? canvas.toDataURL('image/png') : '';
+            }
+
+            function drawUploadedSignature(source) {
+                const image = new Image();
+                image.onload = function () {
+                    const rect = canvas.getBoundingClientRect();
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+
+                    const scale = Math.min(rect.width / image.width, rect.height / image.height);
+                    const drawWidth = image.width * scale;
+                    const drawHeight = image.height * scale;
+                    const drawX = (rect.width - drawWidth) / 2;
+                    const drawY = (rect.height - drawHeight) / 2;
+
+                    context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+                    hasSignature = true;
+                    updateInput();
+                };
+                image.src = source;
             }
 
             function start(event) {
@@ -647,8 +683,26 @@
             clearButton.addEventListener('click', function () {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 hasSignature = false;
+                if (uploadInput) uploadInput.value = '';
                 updateInput();
             });
+            if (uploadInput) {
+                uploadInput.addEventListener('change', function () {
+                    const file = this.files && this.files[0];
+                    if (!file) return;
+                    if (!file.type.startsWith('image/')) {
+                        alert('Please upload a valid signature image.');
+                        this.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        drawUploadedSignature(event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
         }
 
         document.querySelectorAll('[data-return-signature-pad]').forEach(setupReturnSignaturePad);
