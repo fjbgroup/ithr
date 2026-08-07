@@ -985,16 +985,10 @@
                 <svg id="rb-icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 <svg id="rb-icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
             </button>
-            @if(Auth::check() && Auth::user()->isAdminIT())
-                <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'manage']) }}" class="rb-today-btn" style="{{ $viewMode === 'manage' ? 'background:var(--bg); border-color:#3b82f6;' : '' }}">Manage</a>
-            @endif
             @if(Auth::user()->canWrite() || Auth::user()->isCeo())
             <button class="btn btn-primary btn-sm rb-desktop-new-booking" data-requires-active onclick="openRoomBookingModal('', '')">
                 + New Booking
             </button>
-            @endif
-            @if($viewMode === 'manage' && Auth::user()->isAdminIT())
-                <button class="btn btn-navy btn-sm" onclick="openRoomMgmtModal()">+ Add Room</button>
             @endif
         </div>
     </div>
@@ -1299,45 +1293,8 @@
                 </div>
             @endif
         </div>
-    @elseif($viewMode === 'manage')
-        <div class="rb-grid-container">
-            <table class="table rb-m-stack" style="width:100%;">
-                <thead style="background:var(--table-head-bg);">
-                    <tr>
-                        <th style="text-align:left; padding:1rem;">Room Name</th>
-                        <th style="text-align:left; padding:1rem;">Description</th>
-                        <th style="text-align:center; padding:1rem;">Capacity</th>
-                        <th style="text-align:left; padding:1rem;">Color</th>
-                        <th style="text-align:left; padding:1rem;">PICs</th>
-                        <th style="text-align:right; padding:1rem;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($rooms as $room)
-                    <tr style="border-bottom:1px solid var(--border);">
-                        <td data-label="Room Name" style="padding:1rem;"><strong>{{ $room->name }}</strong></td>
-                        <td data-label="Description" style="padding:1rem; color:#64748b; font-size:.8rem;">{{ $room->description ?: '-' }}</td>
-                        <td data-label="Capacity" style="padding:1rem; text-align:center;">{{ $room->capacity }}</td>
-                        <td data-label="Color" style="padding:1rem;">
-                            <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:{{ $colorMap[$room->color_class]['dot'] ?? '#ccc' }}; margin-right:.4rem;"></span>
-                            {{ ucfirst(str_replace('room-', '', $room->color_class)) }}
-                        </td>
-                        <td data-label="PICs" style="padding:1rem; font-size:.8rem;">
-                            @foreach($room->pics as $pic)
-                                <div style="white-space:nowrap;">L{{ $pic->pivot->level }}: {{ $pic->name }}</div>
-                            @endforeach
-                        </td>
-                        <td class="rb-td-actions" style="padding:1rem; text-align:right;">
-                            <button class="btn btn-ghost btn-sm" onclick='openRoomMgmtModal({!! json_encode($room) !!}, {!! json_encode($room->pics->pluck("id")) !!})'>Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="confirmDeleteRoom('{{ $room->id }}', '{{ addslashes($room->name) }}')">Delete</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
     @endif
-</div>
 
 {{-- MOBILE BOTTOM NAVIGATION (hidden on desktop via CSS) --}}
 <nav class="rb-mob-nav" aria-label="View navigation">
@@ -1363,13 +1320,6 @@
         Mine
     </a>
     @endauth
-    @if(Auth::check() && Auth::user()->isAdminIT())
-    <a href="{{ route('rooms.index', ['date' => $viewDate, 'view' => 'manage']) }}"
-       class="rb-mob-nav-item {{ $viewMode === 'manage' ? 'active' : '' }}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Manage
-    </a>
-    @endif
 </nav>
 {{-- END MOBILE BOTTOM NAVIGATION --}}
 
@@ -1689,122 +1639,6 @@
 </div>
 
 <!-- PIC BOOKING VIEW MODAL -->
-
-@if(Auth::check() && Auth::user()->isAdminIT())
-<!-- ROOM MANAGEMENT MODAL -->
-<div class="modal" id="roomMgmtModal">
-    <div class="modal-box" style="max-width:500px;">
-        <div class="modal-header"><h3 id="rmmTitle">Add Room</h3><button class="modal-close" onclick="closeModal()">×</button></div>
-        <form action="{{ route('rooms.store') }}" method="POST" id="roomMgmtForm">
-            @csrf
-            <input type="hidden" name="_method" id="rmmMethod" value="POST">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Room Name <span class="req">*</span></label>
-                    <input type="text" name="room_name" id="rmmName" class="form-control" required>      
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="room_description" id="rmmDesc" class="form-control" rows="2"></textarea>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Capacity <span class="req">*</span></label>
-                        <input type="number" name="room_capacity" id="rmmCap" class="form-control" required min="1">
-                    </div>
-                    <div class="form-group">
-                        <label>Color Theme</label>
-                        <select name="room_color" id="rmmColor" class="form-control">
-                            @foreach($colorMap as $code => $info)
-                            <option value="{{ $code }}">{{ ucfirst(str_replace('room-', '', $code)) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #f1f5f9;">
-                    <label style="font-weight:700; font-size:.85rem; color:#1e293b; display:block; margin-bottom:.75rem;">Assign PICs (Max 2)</label>
-                    <style>
-                        .pic-opt { padding: .5rem .75rem; cursor:pointer; font-size:.85rem; color:var(--text); border-bottom:1px solid var(--border); transition:background .15s; }
-                        .pic-opt:last-child { border-bottom:none; }
-                        .pic-opt:hover { background: var(--bg); color:#1e40af; }
-                    </style>
-                    <div class="form-group">
-                        <label style="font-size:.72rem; font-weight:700;">Primary PIC</label>
-                        <div class="pic-search-wrapper" style="position:relative;">
-                            <input type="hidden" name="room_pics[]" id="rmmPic1">
-                            <input type="text" id="rmmPic1_display" class="form-control" placeholder="Search user..." autocomplete="off" onfocus="showPicOpts('pic1-list')" onkeyup="filterPicOpts(this, 'pic1-list')">
-                            <div id="pic1-list" class="pic-opts-list" style="display:none; position:absolute; top:100%; left:0; right:0; max-height:180px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; z-index:99; box-shadow:var(--shadow);">
-                                <div class="pic-opt" data-id="" onclick="selPic(this, 'rmmPic1')">-- No PIC --</div>
-                                @foreach($allUsers as $u)
-                                <div class="pic-opt" data-id="{{ $u->id }}" onclick="selPic(this, 'rmmPic1', '{{ addslashes($u->name) }} ({{ $u->staff_no }})')">{{ $u->name }} ({{ $u->staff_no }})</div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label style="font-size:.72rem; font-weight:700;">Secondary PIC (Optional)</label>
-                        <div class="pic-search-wrapper" style="position:relative;">
-                            <input type="hidden" name="room_pics[]" id="rmmPic2">
-                            <input type="text" id="rmmPic2_display" class="form-control" placeholder="Search user..." autocomplete="off" onfocus="showPicOpts('pic2-list')" onkeyup="filterPicOpts(this, 'pic2-list')">
-                            <div id="pic2-list" class="pic-opts-list" style="display:none; position:absolute; top:100%; left:0; right:0; max-height:180px; overflow-y:auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; z-index:99; box-shadow:var(--shadow);">
-                                <div class="pic-opt" data-id="" onclick="selPic(this, 'rmmPic2')">-- No PIC --</div>
-                                @foreach($allUsers as $u)
-                                <div class="pic-opt" data-id="{{ $u->id }}" onclick="selPic(this, 'rmmPic2', '{{ addslashes($u->name) }} ({{ $u->staff_no }})')">{{ $u->name }} ({{ $u->staff_no }})</div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                    <script>
-                        function showPicOpts(id) { document.getElementById(id).style.display = 'block'; }
-                        function filterPicOpts(input, listId) {
-                            let filter = input.value.toLowerCase();
-                            let opts = document.getElementById(listId).getElementsByClassName('pic-opt');
-                            for(let i=0; i<opts.length; i++) {
-                                let txt = opts[i].textContent || opts[i].innerText;
-                                opts[i].style.display = txt.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
-                            }
-                        }
-                        function selPic(el, hiddenId, displayVal) {
-                            document.getElementById(hiddenId).value = el.getAttribute('data-id');
-                            document.getElementById(hiddenId + '_display').value = displayVal || '';
-                            el.parentElement.style.display = 'none';
-                        }
-                        document.addEventListener('click', function(e) {
-                            if(!e.target.closest('.pic-search-wrapper')) {
-                                document.querySelectorAll('.pic-opts-list').forEach(d => d.style.display = 'none');
-                            }
-                        });
-                        function getPicDisplayName(id) {
-                            if(!id) return '';
-                            let opt = document.querySelector('#pic1-list .pic-opt[data-id="'+id+'"]');
-                            return opt ? opt.textContent : '';
-                        }
-                    </script>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary" id="rmmSubmit">Add Room</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- DELETE ROOM MODAL -->
-<div class="modal" id="deleteRoomModal">
-    <div class="modal-box modal-sm">
-        <div class="modal-header"><h3>Delete Room</h3><button class="modal-close" onclick="closeModal()">×</button></div>
-        <div class="modal-body">
-            <p>Are you sure you want to delete <strong id="drName"></strong>?</p>
-            <form action="" method="POST" id="deleteRoomForm">
-                @csrf
-                @method('DELETE')
-            </form>
-        </div>
-        <div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button><button type="submit" form="deleteRoomForm" class="btn btn-danger">Delete Room</button></div>
-    </div>
-</div>
-@endif
 
 <form id="confirmActionForm" method="POST" style="display:none;">@csrf</form>
 
@@ -2155,32 +1989,6 @@
 
         document.getElementById('rbEditForm').action = "{{ url('rooms/bookings') }}/" + id;
         
-        openModal('rbEditModal');
-    }
-
-    function openRoomMgmtModal(data = null, pics = []) {
-        const isEdit = !!data;
-        document.getElementById('rmmTitle').textContent = isEdit ? 'Edit Room' : 'Add Room';
-        document.getElementById('rmmMethod').value = isEdit ? 'PUT' : 'POST';
-        document.getElementById('roomMgmtForm').action = isEdit ? "{{ url('rooms') }}/" + data.id : "{{ route('rooms.store') }}";
-        document.getElementById('rmmSubmit').textContent = isEdit ? 'Save Changes' : 'Add Room';
-        document.getElementById('rmmName').value = isEdit ? data.name : '';
-        document.getElementById('rmmDesc').value = isEdit ? (data.description || '') : '';
-        document.getElementById('rmmCap').value = isEdit ? data.capacity : '10';
-        document.getElementById('rmmColor').value = isEdit ? data.color_class : 'room-blue';
-        document.getElementById('rmmPic1').value = pics[0] || '';
-        document.getElementById('rmmPic2').value = pics[1] || '';
-        if (typeof getPicDisplayName !== 'undefined') {
-            document.getElementById('rmmPic1_display').value = getPicDisplayName(pics[0]);
-            document.getElementById('rmmPic2_display').value = getPicDisplayName(pics[1]);
-        }
-        openModal('roomMgmtModal');
-    }
-
-    function confirmDeleteRoom(id, name) {
-        document.getElementById('drName').textContent = name;
-        document.getElementById('deleteRoomForm').action = "{{ url('rooms') }}/" + id;
-        openModal('deleteRoomModal');
     }
 
     /* Booking Wizard Logic */

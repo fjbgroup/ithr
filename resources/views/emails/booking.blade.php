@@ -104,7 +104,7 @@
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
             <tr>
               <td style="padding:4px 32px 32px;">
-                <a href="{{ config('app.url') }}/rooms?date={{ $booking->booking_date }}"
+                <a href="{{ route('rooms.index', ['date' => $booking->booking_date]) }}"
                    style="display:inline-block;background-color:{{ $statusColor }};color:#ffffff;text-decoration:none;padding:11px 22px;border-radius:7px;font-size:14px;font-weight:600;">
                   View Booking &rarr;
                 </a>

@@ -8,8 +8,13 @@ use App\Models\Position;
 use App\Models\TrainingCourse;
 use App\Models\TransportMode;
 use App\Models\Staff;
+use App\Models\MeetingRoom;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MeetingRoomPicAssigned;
 use App\Services\AuditLogger;
 
 class MasterDataController extends Controller
@@ -17,7 +22,7 @@ class MasterDataController extends Controller
     public function index(Request $request)
     {
         $activeTab = $request->query('tab', 'departments');
-        $validTabs = ['departments', 'companies', 'courses', 'positions', 'transport', 'faqs_hr'];
+        $validTabs = ['departments', 'companies', 'courses', 'positions', 'transport', 'faqs_hr', 'rooms'];
         if (!in_array($activeTab, $validTabs)) {
             $activeTab = 'departments';
         }
@@ -33,6 +38,7 @@ class MasterDataController extends Controller
             'positions'   => Position::count(),
             'transport'   => TransportMode::count(),
             'faqs_hr'     => \App\Models\Faq::where('system', 'HR')->count(),
+            'rooms'       => MeetingRoom::count(),
         ];
 
         $tabLabels = [
@@ -42,6 +48,7 @@ class MasterDataController extends Controller
             'positions'   => 'Position',
             'transport'   => 'Transport Mode',
             'faqs_hr'     => 'Chatbot FAQ',
+            'rooms'       => 'Meeting Room',
         ];
 
         if ($activeTab === 'departments') {
@@ -114,11 +121,31 @@ class MasterDataController extends Controller
                 });
             }
             $data['rows'] = $query->orderBy('sort_order')->get();
+        } elseif ($activeTab === 'rooms') {
+            $query = MeetingRoom::with('pics');
+            if ($search) {
+                $query->where('name', 'LIKE', "%$search%");
+            }
+            $data['rows'] = $query->orderBy('name')->get();
         }
 
         $allCompanies = Company::orderBy('code')->get();
+        
+        $allUsers = [];
+        $colorMap = [];
+        if ($activeTab === 'rooms') {
+            $allUsers = User::where('is_active', true)->orderBy('name')->get();
+            $colorMap = [
+                'navy' => '#1e3a8a', 'blue' => '#3b82f6', 'sky' => '#0ea5e9',
+                'indigo' => '#6366f1', 'purple' => '#a855f7', 'pink' => '#ec4899',
+                'rose' => '#f43f5e', 'red' => '#ef4444', 'orange' => '#f97316',
+                'amber' => '#f59e0b', 'yellow' => '#eab308', 'lime' => '#84cc16',
+                'green' => '#22c55e', 'emerald' => '#10b981', 'teal' => '#14b8a6',
+                'cyan' => '#06b6d4', 'slate' => '#64748b'
+            ];
+        }
 
-        return view('master_data.index', compact('activeTab', 'search', 'cFilter', 'data', 'counts', 'tabLabels', 'allCompanies'));
+        return view('master_data.index', compact('activeTab', 'search', 'cFilter', 'data', 'counts', 'tabLabels', 'allCompanies', 'allUsers', 'colorMap'));
     }
 
     public function store(Request $request)
@@ -150,6 +177,39 @@ class MasterDataController extends Controller
             if (empty($data['sort_order'])) $data['sort_order'] = 0;
             \App\Models\Faq::create($data);
             AuditLogger::log('create', 'master_data', 'Added FAQ for system "' . $data['system'] . '".');
+        } elseif ($tab === 'rooms') {
+            $validated = $request->validate([
+                'room_name' => 'required|string|max:255',
+                'room_description' => 'nullable|string',
+                'room_capacity' => 'required|integer|min:1',
+                'room_color' => 'required|string',
+                'room_pics' => 'nullable|array',
+                'room_pics.*' => 'nullable|exists:users,id',
+            ]);
+
+            $room = MeetingRoom::create([
+                'name' => $validated['room_name'],
+                'description' => $validated['room_description'],
+                'capacity' => $validated['room_capacity'],
+                'color_class' => $validated['room_color'],
+            ]);
+
+            if (!empty($validated['room_pics'])) {
+                $picIds = array_slice(array_filter(array_unique($validated['room_pics'])), 0, 2);
+                $level = 1;
+                foreach ($picIds as $pid) {
+                    if ($pid) {
+                        $room->pics()->attach($pid, ['level' => $level, 'added_by' => Auth::id()]);
+                        $level++;
+                        
+                        $picUser = User::find($pid);
+                        if ($picUser && $picUser->email) {
+                            Mail::to($picUser->email)->queue(new MeetingRoomPicAssigned($room->name, $picUser->name));
+                        }
+                    }
+                }
+            }
+            AuditLogger::log('create', 'master_data', 'Added meeting room "' . $room->name . '".');
         }
 
         return redirect()->route('master-data.index', ['tab' => $tab])->with('success', 'Record added successfully.');
@@ -222,6 +282,44 @@ class MasterDataController extends Controller
             if (empty($data['sort_order'])) $data['sort_order'] = 0;
             \App\Models\Faq::findOrFail($id)->update($data);
             AuditLogger::log('update', 'master_data', 'Updated FAQ #' . $id . '.');
+        } elseif ($tab === 'rooms') {
+            $validated = $request->validate([
+                'room_name' => 'required|string|max:255',
+                'room_description' => 'nullable|string',
+                'room_capacity' => 'required|integer|min:1',
+                'room_color' => 'required|string',
+                'room_pics' => 'nullable|array',
+                'room_pics.*' => 'nullable|exists:users,id',
+            ]);
+
+            $room = MeetingRoom::findOrFail($id);
+            $room->update([
+                'name' => $validated['room_name'],
+                'description' => $validated['room_description'],
+                'capacity' => $validated['room_capacity'],
+                'color_class' => $validated['room_color'],
+            ]);
+
+            $oldPicIds = $room->pics->pluck('id')->toArray();
+            $room->pics()->detach();
+            if (!empty($validated['room_pics'])) {
+                $picIds = array_slice(array_filter(array_unique($validated['room_pics'])), 0, 2);
+                $level = 1;
+                foreach ($picIds as $pid) {
+                    if ($pid) {
+                        $room->pics()->attach($pid, ['level' => $level, 'added_by' => Auth::id()]);
+                        $level++;
+                        
+                        if (!in_array($pid, $oldPicIds)) {
+                            $picUser = User::find($pid);
+                            if ($picUser && $picUser->email) {
+                                Mail::to($picUser->email)->queue(new MeetingRoomPicAssigned($room->name, $picUser->name));
+                            }
+                        }
+                    }
+                }
+            }
+            AuditLogger::log('update', 'master_data', 'Updated meeting room "' . $room->name . '".');
         }
 
         return redirect()->route('master-data.index', ['tab' => $tab])->with('success', 'Record updated successfully.');
@@ -276,6 +374,12 @@ class MasterDataController extends Controller
             $faq = \App\Models\Faq::findOrFail($id);
             AuditLogger::log('delete', 'master_data', 'Deleted FAQ #' . $id . '.');
             $faq->delete();
+        } elseif ($tab === 'rooms') {
+            $room = MeetingRoom::findOrFail($id);
+            AuditLogger::log('delete', 'master_data', 'Deleted meeting room "' . $room->name . '".');
+            $room->bookings()->delete();
+            $room->pics()->detach();
+            $room->delete();
         }
 
         return redirect()->route('master-data.index', ['tab' => $tab])->with('success', 'Record deleted successfully.');

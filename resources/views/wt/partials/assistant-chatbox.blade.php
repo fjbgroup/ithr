@@ -184,27 +184,31 @@
 
 .wt-chatbot-faqs {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.4rem;
-    padding: 0.5rem 1rem 0;
-    overflow-x: auto;
+    padding: 0.5rem 1rem;
+    max-height: 160px;
+    overflow-y: auto;
     background: #fff;
-    scrollbar-width: none;
+    border-top: 1px solid rgba(0,0,0,0.05);
 }
-.wt-chatbot-faqs::-webkit-scrollbar { display: none; }
 .wt-chatbot-faq-btn {
     background: #e0f2fe;
     color: #0369a1;
     border: 1px solid #bae6fd;
-    border-radius: 12px;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.75rem;
-    white-space: nowrap;
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.3;
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
     font-weight: 500;
 }
 .wt-chatbot-faq-btn:hover { background: #bae6fd; }
-.wt-chatbot-faq-btn:active { transform: scale(0.95); }
+.wt-chatbot-faq-btn:active { transform: scale(0.98); }
 
 .wt-chat-msg pre {
     background: rgba(0,0,0,.07);
@@ -257,7 +261,7 @@
     <div class="wt-chatbot-faqs">
         @foreach($wtChatbotFaqs as $faq)
             <button class="wt-chatbot-faq-btn" onclick="wtSendFaqMessage('{{ addslashes($faq->question) }}')" title="{{ $faq->question }}">
-                {{ \Illuminate\Support\Str::limit($faq->question, 30) }}
+                {{ $faq->question }}
             </button>
         @endforeach
     </div>

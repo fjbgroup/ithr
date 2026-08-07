@@ -540,6 +540,62 @@
             </table>
         </div>
     </div>
+@elseif($activeTab === 'rooms')
+    <div class="card">
+        <div class="card-header">
+            <h3>Meeting Rooms <span class="table-count">{{ count($data['rows']) }} shown</span></h3>
+        </div>
+        <div class="table-wrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Room Name</th>
+                        <th>Capacity</th>
+                        <th>PICs</th>
+                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($data['rows'] as $i => $room)
+                    <tr>
+                        <td class="td-num">{{ $i + 1 }}</td>
+                        <td>
+                            <strong>{{ $room->name }}</strong>
+                            @if($room->description)<div class="td-muted" style="font-size:.75rem;margin-top:.2rem;">{{ Str::limit($room->description, 50) }}</div>@endif
+                        </td>
+                        <td>{{ $room->capacity }} pax</td>
+                        <td>
+                            @if($room->pics && $room->pics->count() > 0)
+                                @foreach($room->pics as $pic)
+                                    <div style="font-size:.75rem; margin-bottom:.1rem;">{{ $pic->name }}</div>
+                                @endforeach
+                            @else
+                                <span class="td-muted">—</span>
+                            @endif
+                        </td>
+                        @if(Auth::user()->isAdminIT())
+                        <td class="td-actions">
+                            <button class="btn btn-outline btn-sm" onclick='openEditModal({
+                                id:{{ $room->id }},
+                                room_name:"{{ addslashes($room->name) }}",
+                                room_description:"{{ addslashes($room->description) }}",
+                                room_capacity:{{ $room->capacity }},
+                                room_color:"{{ $room->color_class }}",
+                                room_pics: @json($room->pics->pluck("id")->toArray()),
+                                can_delete: true,
+                                delete_label: "Room: {{ addslashes($room->name) }}"
+                            })'>Edit</button>
+                        </td>
+                        @endif
+                    </tr>
+                    @empty
+                    <tr><td colspan="5" class="td-muted" style="text-align:center;padding:2.5rem;">No rooms found.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endif
 </div>
 
@@ -699,6 +755,50 @@
                         </div>
                     </div>
                 </div>
+                @elseif($activeTab === 'rooms')
+                <div class="form-group">
+                    <label class="form-label">Room Name <span class="req">*</span></label>
+                    <input type="text" name="room_name" id="f_room_name" class="form-control" required>      
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea name="room_description" id="f_room_description" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Capacity <span class="req">*</span></label>
+                        <input type="number" name="room_capacity" id="f_room_capacity" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Color Theme</label>
+                        <select name="room_color" id="f_room_color" class="form-control">
+                            @foreach($colorMap as $code => $hex)
+                            <option value="{{ $code }}">{{ ucfirst($code) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #f1f5f9;">
+                    <label style="font-weight:700; font-size:.85rem; color:#1e293b; display:block; margin-bottom:.75rem;">Assign PICs (Max 2)</label>
+                    <div class="form-group">
+                        <label style="font-size:.72rem; font-weight:700;">PIC 1</label>
+                        <select name="room_pics[]" id="f_room_pic_0" class="form-control">
+                            <option value="">-- No PIC --</option>
+                            @foreach($allUsers as $u)
+                            <option value="{{ $u->id }}">{{ $u->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:.72rem; font-weight:700;">PIC 2 (Optional)</label>
+                        <select name="room_pics[]" id="f_room_pic_1" class="form-control">
+                            <option value="">-- No PIC --</option>
+                            @foreach($allUsers as $u)
+                            <option value="{{ $u->id }}">{{ $u->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 @endif
             </div>
 
@@ -825,6 +925,23 @@ function openEditModal(data) {
         const activeCheck = document.getElementById('f_is_active');
         if(activeCheck) activeCheck.checked = !!data.is_active;
     }
+    else if (TAB === 'rooms') {
+        setVal('f_room_name', data.room_name);
+        setVal('f_room_description', data.room_description);
+        setVal('f_room_capacity', data.room_capacity);
+        setVal('f_room_color', data.room_color);
+        if (data.room_pics && data.room_pics.length > 0) {
+            setVal('f_room_pic_0', data.room_pics[0]);
+            if (data.room_pics.length > 1) {
+                setVal('f_room_pic_1', data.room_pics[1]);
+            } else {
+                setVal('f_room_pic_1', '');
+            }
+        } else {
+            setVal('f_room_pic_0', '');
+            setVal('f_room_pic_1', '');
+        }
+    }
     
     openModal('mainModal');
 }
@@ -845,9 +962,10 @@ function setVal(id, val) {
 }
 
 function clearFormFields() {
-    ['f_name', 'f_code', 'f_title', 'f_start_date', 'f_setting_key', 'f_setting_value', 'f_question', 'f_answer'].forEach(id => setVal(id, ''));
+    ['f_name', 'f_code', 'f_title', 'f_start_date', 'f_setting_key', 'f_setting_value', 'f_question', 'f_answer', 'f_room_name', 'f_room_description', 'f_room_capacity', 'f_room_pic_0', 'f_room_pic_1'].forEach(id => setVal(id, ''));
     setVal('f_training_type', 'External');
     setVal('f_system', 'HR');
+    setVal('f_room_color', 'blue');
     setVal('f_sort_order', 0);
     const activeCheck = document.getElementById('f_is_active');
     if(activeCheck) activeCheck.checked = true;

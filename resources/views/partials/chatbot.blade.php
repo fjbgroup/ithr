@@ -185,27 +185,32 @@
 
 .chatbot-faqs {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.4rem;
-    padding: 0.5rem 1rem 0;
-    overflow-x: auto;
+    padding: 0.5rem 1rem;
+    max-height: 160px;
+    overflow-y: auto;
     background: var(--surface);
-    scrollbar-width: none; /* Firefox */
+    border-top: 1px solid rgba(0,0,0,0.05);
 }
-.chatbot-faqs::-webkit-scrollbar { display: none; }
+.dark .chatbot-faqs { border-top: 1px solid rgba(255,255,255,0.05); }
 .chatbot-faq-btn {
     background: #e0e7ff;
     color: #4f46e5;
     border: 1px solid #c7d2fe;
-    border-radius: 12px;
-    padding: 0.35rem 0.65rem;
-    font-size: 0.75rem;
-    white-space: nowrap;
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8rem;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.3;
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
     font-weight: 500;
 }
 .chatbot-faq-btn:hover { background: #c7d2fe; }
-.chatbot-faq-btn:active { transform: scale(0.95); }
+.chatbot-faq-btn:active { transform: scale(0.98); }
 .dark .chatbot-faq-btn { background: rgba(99,102,241,0.15); color: #818cf8; border-color: rgba(99,102,241,0.3); }
 .dark .chatbot-faq-btn:hover { background: rgba(99,102,241,0.25); }
 
@@ -260,7 +265,7 @@
     <div class="chatbot-faqs">
         @foreach($chatbotFaqs as $faq)
             <button class="chatbot-faq-btn" onclick="sendFaqMessage('{{ addslashes($faq->question) }}')" title="{{ $faq->question }}">
-                {{ \Illuminate\Support\Str::limit($faq->question, 30) }}
+                {{ $faq->question }}
             </button>
         @endforeach
     </div>
