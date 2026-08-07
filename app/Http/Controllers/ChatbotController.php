@@ -20,7 +20,7 @@ class ChatbotController extends Controller
         $dayName = now()->format('l');
 
         if ($system === 'wt') {
-            return <<<PROMPT
+            $prompt = <<<PROMPT
 You are a helpful Walkie Talkie Management Assistant for an operations system. (If speaking in Malay, introduce yourself as: "Pembantu Pengurusan Walkie Talkie"). Today is {$dayName}, {$today}.
 
 You are bilingual and can communicate in both English and Malay (Bahasa Melayu Malaysia). You MUST reply in the same language that the user speaks. Do NOT mix English and Malay in the same sentence or response.
@@ -40,9 +40,8 @@ When replying in Malay, strictly follow this Bahasa Melayu Malaysia Vocabulary G
 You assist staff with Walkie Talkie inventory, maintenance reports, replacement requests, policies, and checking on faulty units.
 Be concise and friendly. You cannot book meeting rooms or handle HR requests.
 PROMPT;
-        }
-
-        return <<<PROMPT
+        } else {
+            $prompt = <<<PROMPT
 You are a helpful HR Assistant for an HR Admin System. (If speaking in Malay, introduce yourself as: "Pembantu HR untuk Sistem Pentadbiran HR"). Today is {$dayName}, {$today}.
 
 You are bilingual and can communicate in both English and Malay (Bahasa Melayu Malaysia). You MUST reply in the same language that the user speaks. Do NOT mix English and Malay in the same sentence or response.
@@ -81,6 +80,18 @@ Important rules:
 
 Be concise and friendly. Do not output the <BOOKING> tag until you have all details confirmed by the user.
 PROMPT;
+        }
+
+        $systemKey = $system === 'wt' ? 'WT' : 'HR';
+        $faqs = \App\Models\Faq::where('is_active', true)->where('system', $systemKey)->orderBy('sort_order')->get();
+        if ($faqs->isNotEmpty()) {
+            $prompt .= "\n\n## Frequently Asked Questions (FAQ)\nUse the following FAQs to answer the user's question if relevant. Do not tell the user that you are reading from a FAQ list, just answer the question naturally.\n";
+            foreach ($faqs as $faq) {
+                $prompt .= "- Q: {$faq->question}\n  A: {$faq->answer}\n";
+            }
+        }
+
+        return $prompt;
     }
 
     public function chat(Request $request)
@@ -92,6 +103,20 @@ PROMPT;
 
         $history = session('chatbot_history', []);
         $history[] = ['role' => 'user', 'content' => $request->message];
+
+        // Check if message is an exact match for an active FAQ (e.g., from a button click)
+        $systemKey = $request->system === 'wt' ? 'WT' : 'HR';
+        $exactFaq = \App\Models\Faq::where('system', $systemKey)
+            ->where('is_active', true)
+            ->where('question', $request->message)
+            ->first();
+
+        if ($exactFaq) {
+            $reply = $exactFaq->answer;
+            $history[] = ['role' => 'assistant', 'content' => $reply];
+            session(['chatbot_history' => $history]);
+            return response()->json(['reply' => $reply]);
+        }
 
         $systemContent = $this->systemPrompt($request->system);
 

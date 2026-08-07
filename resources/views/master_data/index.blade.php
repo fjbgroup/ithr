@@ -488,6 +488,58 @@
             </table>
         </div>
     </div>
+
+@elseif(in_array($activeTab, ['faqs_hr', 'faqs_wt']))
+    <div class="card">
+        <div class="card-header">
+            <h3>{{ $activeTab === 'faqs_hr' ? 'HR Chatbot FAQs' : 'WT Chatbot FAQs' }} <span class="table-count">{{ count($data['rows']) }} shown</span></h3>
+        </div>
+        <div class="table-wrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width:40px">#</th>
+                        <th>Sort</th>
+                        <th>Question</th>
+                        <th>Status</th>
+                        @if(Auth::user()->isAdminIT())<th class="td-actions">Actions</th>@endif
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($data['rows'] as $i => $faq)
+                    <tr>
+                        <td class="td-num">{{ $i + 1 }}</td>
+                        <td>{{ $faq->sort_order }}</td>
+                        <td>{{ Str::limit($faq->question, 60) }}</td>
+                        <td>
+                            @if($faq->is_active)
+                                <span class="badge badge-success" style="padding:2px 6px;border-radius:4px;font-size:0.75rem;">Active</span>
+                            @else
+                                <span class="badge badge-danger" style="padding:2px 6px;border-radius:4px;font-size:0.75rem;">Inactive</span>
+                            @endif
+                        </td>
+                        @if(Auth::user()->isAdminIT())
+                        <td class="td-actions">
+                            <button class="btn btn-outline btn-sm" onclick='openEditModal({
+                                id:{{ $faq->id }}, 
+                                system:"{{ $faq->system }}", 
+                                question:"{{ addslashes($faq->question) }}", 
+                                answer:"{{ addslashes(str_replace("\n", '\n', $faq->answer)) }}", 
+                                sort_order:{{ $faq->sort_order }}, 
+                                is_active:{{ $faq->is_active }},
+                                can_delete: true, 
+                                delete_label: "FAQ: {{ addslashes(Str::limit($faq->question, 20)) }}"
+                            })'>Edit</button>
+                        </td>
+                        @endif
+                    </tr>
+                    @empty
+                    <tr><td colspan="6" class="td-muted" style="text-align:center;padding:2.5rem;">No FAQs found.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endif
 </div>
 
@@ -624,6 +676,29 @@
                     <label class="form-label">Value <span class="req">*</span></label>
                     <textarea name="setting_value" id="f_setting_value" class="form-control" required rows="3"></textarea>
                 </div>
+                @elseif(in_array($activeTab, ['faqs_hr', 'faqs_wt']))
+                <input type="hidden" name="system" id="f_system" value="{{ $activeTab === 'faqs_hr' ? 'HR' : 'WT' }}">
+                <div class="form-group">
+                    <label class="form-label">Question <span class="req">*</span></label>
+                    <textarea name="question" id="f_question" class="form-control" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Answer <span class="req">*</span></label>
+                    <textarea name="answer" id="f_answer" class="form-control" rows="4" required></textarea>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Sort Order <span class="req">*</span></label>
+                        <input type="number" name="sort_order" id="f_sort_order" class="form-control" value="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label d-block">Status</label>
+                        <div style="margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+                            <input type="checkbox" name="is_active" id="f_is_active" value="1" checked style="width:18px;height:18px;">
+                            <span style="font-weight:500;">Active</span>
+                        </div>
+                    </div>
+                </div>
                 @endif
             </div>
 
@@ -742,6 +817,14 @@ function openEditModal(data) {
         setVal('f_setting_key', data.setting_key); 
         setVal('f_setting_value', data.setting_value); 
     }
+    else if (TAB === 'faqs_hr' || TAB === 'faqs_wt') { 
+        setVal('f_system', data.system); 
+        setVal('f_question', data.question); 
+        setVal('f_answer', data.answer); 
+        setVal('f_sort_order', data.sort_order); 
+        const activeCheck = document.getElementById('f_is_active');
+        if(activeCheck) activeCheck.checked = !!data.is_active;
+    }
     
     openModal('mainModal');
 }
@@ -762,8 +845,12 @@ function setVal(id, val) {
 }
 
 function clearFormFields() {
-    ['f_name', 'f_code', 'f_title', 'f_start_date', 'f_setting_key', 'f_setting_value'].forEach(id => setVal(id, ''));
+    ['f_name', 'f_code', 'f_title', 'f_start_date', 'f_setting_key', 'f_setting_value', 'f_question', 'f_answer'].forEach(id => setVal(id, ''));
     setVal('f_training_type', 'External');
+    setVal('f_system', TAB === 'faqs_hr' ? 'HR' : 'WT');
+    setVal('f_sort_order', 0);
+    const activeCheck = document.getElementById('f_is_active');
+    if(activeCheck) activeCheck.checked = true;
 }
 
 // Staff list modal functions

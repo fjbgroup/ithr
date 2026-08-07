@@ -158,6 +158,7 @@ Route::middleware('auth')->group(function () {
     // Admin routes
     Route::middleware('role:admin_it,admin_hr')->group(function () {
         // Additional admin specific routes if needed
+
     });
 
     Route::middleware('role:admin_it,ceo')->group(function () {

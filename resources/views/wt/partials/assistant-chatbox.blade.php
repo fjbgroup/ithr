@@ -182,6 +182,30 @@
 #wt-chatbot-send-btn:active { transform: scale(.93); }
 #wt-chatbot-send-btn:disabled { background: #d4b896; cursor: not-allowed; }
 
+.wt-chatbot-faqs {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem 0;
+    overflow-x: auto;
+    background: #fff;
+    scrollbar-width: none;
+}
+.wt-chatbot-faqs::-webkit-scrollbar { display: none; }
+.wt-chatbot-faq-btn {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    font-weight: 500;
+}
+.wt-chatbot-faq-btn:hover { background: #bae6fd; }
+.wt-chatbot-faq-btn:active { transform: scale(0.95); }
+
 .wt-chat-msg pre {
     background: rgba(0,0,0,.07);
     border-radius: 6px;
@@ -225,6 +249,20 @@
     <div class="wt-chatbot-messages" id="wt-chatbot-messages">
         <div class="wt-chat-msg assistant">Hi {{ Auth::guard('wt')->user()->full_name ? explode(' ', Auth::guard('wt')->user()->full_name)[0] : 'there' }}! I'm your WT Assistant. Ask me anything about walkie talkie inventory, requests, or maintenance.</div>
     </div>
+    
+    @php
+        $wtChatbotFaqs = \App\Models\Faq::where('system', 'WT')->where('is_active', true)->orderBy('sort_order')->get();
+    @endphp
+    @if($wtChatbotFaqs->isNotEmpty())
+    <div class="wt-chatbot-faqs">
+        @foreach($wtChatbotFaqs as $faq)
+            <button class="wt-chatbot-faq-btn" onclick="wtSendFaqMessage('{{ addslashes($faq->question) }}')" title="{{ $faq->question }}">
+                {{ \Illuminate\Support\Str::limit($faq->question, 30) }}
+            </button>
+        @endforeach
+    </div>
+    @endif
+    
     <div class="wt-chatbot-footer">
         <textarea id="wt-chatbot-input" placeholder="Ask anything…" rows="1"></textarea>
         <button id="wt-chatbot-send-btn" onclick="wtSendChatMessage()">
@@ -289,6 +327,12 @@
             sendBtn.disabled = false;
             input.focus();
         }
+    };
+
+    window.wtSendFaqMessage = function(question) {
+        const input = document.getElementById('wt-chatbot-input');
+        input.value = question;
+        wtSendChatMessage();
     };
 
     window.wtClearChatHistory = async function() {

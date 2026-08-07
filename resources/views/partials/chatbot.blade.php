@@ -183,6 +183,32 @@
 #chatbot-send-btn:active { transform: scale(.93); }
 #chatbot-send-btn:disabled { background: #c7d2fe; cursor: not-allowed; }
 
+.chatbot-faqs {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem 0;
+    overflow-x: auto;
+    background: var(--surface);
+    scrollbar-width: none; /* Firefox */
+}
+.chatbot-faqs::-webkit-scrollbar { display: none; }
+.chatbot-faq-btn {
+    background: #e0e7ff;
+    color: #4f46e5;
+    border: 1px solid #c7d2fe;
+    border-radius: 12px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    font-weight: 500;
+}
+.chatbot-faq-btn:hover { background: #c7d2fe; }
+.chatbot-faq-btn:active { transform: scale(0.95); }
+.dark .chatbot-faq-btn { background: rgba(99,102,241,0.15); color: #818cf8; border-color: rgba(99,102,241,0.3); }
+.dark .chatbot-faq-btn:hover { background: rgba(99,102,241,0.25); }
+
 .chat-msg pre {
     background: rgba(0,0,0,.07);
     border-radius: 6px;
@@ -226,6 +252,20 @@
     <div class="chatbot-messages" id="chatbot-messages">
         <div class="chat-msg assistant">Hi {{ Auth::user()->name ? explode(' ', Auth::user()->name)[0] : 'there' }}! I'm your HR Assistant. Ask me anything about HR policies, room bookings, training, or travel requests.<br><br><i>(Hai! Saya Pembantu HR anda. Boleh tanya saya apa-apa dalam Bahasa Melayu.)</i></div>
     </div>
+    
+    @php
+        $chatbotFaqs = \App\Models\Faq::where('system', 'HR')->where('is_active', true)->orderBy('sort_order')->get();
+    @endphp
+    @if($chatbotFaqs->isNotEmpty())
+    <div class="chatbot-faqs">
+        @foreach($chatbotFaqs as $faq)
+            <button class="chatbot-faq-btn" onclick="sendFaqMessage('{{ addslashes($faq->question) }}')" title="{{ $faq->question }}">
+                {{ \Illuminate\Support\Str::limit($faq->question, 30) }}
+            </button>
+        @endforeach
+    </div>
+    @endif
+    
     <div class="chatbot-footer">
         <textarea id="chatbot-input" placeholder="Ask anything…" rows="1"></textarea>
         <button id="chatbot-send-btn" onclick="sendChatMessage()">
@@ -300,6 +340,12 @@
             sendBtn.disabled = false;
             input.focus();
         }
+    };
+
+    window.sendFaqMessage = function(question) {
+        const input = document.getElementById('chatbot-input');
+        input.value = question;
+        sendChatMessage();
     };
 
     window.clearChatHistory = async function() {
