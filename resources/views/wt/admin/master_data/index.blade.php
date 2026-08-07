@@ -109,9 +109,15 @@
             <thead>
                 <tr>
                     <th class="wtmd-num">#</th>
-                    <th>{{ $categories[$activeTab] }}</th>
-                    <th>In Use</th>
-                    <th>Created</th>
+                    @if($activeTab === 'faqs')
+                        <th>Sort</th>
+                        <th>Question</th>
+                        <th>Status</th>
+                    @else
+                        <th>{{ $categories[$activeTab] }}</th>
+                        <th>In Use</th>
+                        <th>Created</th>
+                    @endif
                     <th style="text-align:right">Actions</th>
                 </tr>
             </thead>
@@ -119,40 +125,71 @@
                 @forelse($rows as $i => $row)
                 <tr>
                     <td class="wtmd-num">{{ $i + 1 }}</td>
-                    <td><span class="wtmd-value">{{ $row->value }}</span></td>
-                    <td>
-                        @if($row->usage_count > 0)
-                        <button type="button" class="wtmd-usage-pill" title="View the {{ $row->usage_count }} walkie talkie(s) using this {{ strtolower($categories[$activeTab]) }}"
-                            onclick="wtmdShowUsage(@js($row->value), {{ $row->usage_count }})">
-                            {{ $row->usage_count }}
-                        </button>
-                        @else
-                        <span class="wtmd-usage-zero">0</span>
-                        @endif
-                    </td>
-                    <td style="color:var(--muted)">{{ optional($row->created_at)->format('d M Y') ?? '—' }}</td>
-                    <td>
-                        <div class="wtmd-actions">
-                            <button type="button" class="wtmd-btn wtmd-btn-outline wtmd-btn-sm"
-                                onclick="wtmdOpenEdit({{ $row->id }}, @js($row->value))">
-                                <i class="fas fa-pen"></i> Edit
-                            </button>
-                            @if($row->usage_count > 0)
-                            <span class="wtmd-in-use">In use</span>
+                    @if($activeTab === 'faqs')
+                        <td>{{ $row->sort_order }}</td>
+                        <td><span class="wtmd-value">{{ Str::limit($row->question, 60) }}</span></td>
+                        <td>
+                            @if($row->is_active)
+                                <span class="wtmd-status-chip" style="background:rgba(22,163,74,.15);border-color:#16a34a;color:#16a34a">Active</span>
                             @else
-                            <form method="POST" action="{{ route('wt.admin.masterData.destroy', $row->id) }}"
-                                data-modern-confirm="Delete &quot;{{ $row->value }}&quot;?"
-                                data-modern-confirm-title="Delete {{ $categories[$activeTab] }}"
-                                data-modern-confirm-remark="false" style="margin:0">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="wtmd-btn wtmd-btn-danger wtmd-btn-sm">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </form>
+                                <span class="wtmd-status-chip" style="background:rgba(220,38,38,.15);border-color:#dc2626;color:#dc2626">Inactive</span>
                             @endif
-                        </div>
-                    </td>
+                        </td>
+                        <td>
+                            <div class="wtmd-actions">
+                                <button type="button" class="wtmd-btn wtmd-btn-outline wtmd-btn-sm"
+                                    onclick="wtmdOpenFaqEdit({{ $row->id }}, @js($row->question), @js($row->answer), {{ $row->sort_order }}, {{ $row->is_active }})">
+                                    <i class="fas fa-pen"></i> Edit
+                                </button>
+                                <form method="POST" action="{{ route('wt.admin.masterData.destroy', $row->id) }}"
+                                    data-modern-confirm="Delete FAQ?"
+                                    data-modern-confirm-title="Delete FAQ"
+                                    data-modern-confirm-remark="false" style="margin:0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="category" value="faqs">
+                                    <button type="submit" class="wtmd-btn wtmd-btn-danger wtmd-btn-sm">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    @else
+                        <td><span class="wtmd-value">{{ $row->value }}</span></td>
+                        <td>
+                            @if($row->usage_count > 0)
+                            <button type="button" class="wtmd-usage-pill" title="View the {{ $row->usage_count }} walkie talkie(s) using this {{ strtolower($categories[$activeTab]) }}"
+                                onclick="wtmdShowUsage(@js($row->value), {{ $row->usage_count }})">
+                                {{ $row->usage_count }}
+                            </button>
+                            @else
+                            <span class="wtmd-usage-zero">0</span>
+                            @endif
+                        </td>
+                        <td style="color:var(--muted)">{{ optional($row->created_at)->format('d M Y') ?? '—' }}</td>
+                        <td>
+                            <div class="wtmd-actions">
+                                <button type="button" class="wtmd-btn wtmd-btn-outline wtmd-btn-sm"
+                                    onclick="wtmdOpenEdit({{ $row->id }}, @js($row->value))">
+                                    <i class="fas fa-pen"></i> Edit
+                                </button>
+                                @if($row->usage_count > 0)
+                                <span class="wtmd-in-use">In use</span>
+                                @else
+                                <form method="POST" action="{{ route('wt.admin.masterData.destroy', $row->id) }}"
+                                    data-modern-confirm="Delete &quot;{{ $row->value }}&quot;?"
+                                    data-modern-confirm-title="Delete {{ $categories[$activeTab] }}"
+                                    data-modern-confirm-remark="false" style="margin:0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="wtmd-btn wtmd-btn-danger wtmd-btn-sm">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
+                        </td>
+                    @endif
                 </tr>
                 @empty
                 <tr><td colspan="5" class="wtmd-empty">No {{ strtolower(\Illuminate\Support\Str::plural($categories[$activeTab])) }} found.</td></tr>
@@ -177,11 +214,35 @@
             <input type="hidden" name="category" value="{{ $activeTab }}">
             <input type="hidden" name="_method" id="wtmdMethod" value="POST">
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">{{ $categories[$activeTab] }} Value <span class="required">*</span></label>
-                    <input type="text" name="value" id="wtmdValue" class="form-input" required maxlength="255"
-                        placeholder="e.g. {{ $activeTab === 'model' ? 'P8200' : ($activeTab === 'ownership_type' ? 'SHARED' : 'OPERATIONS') }}">
-                </div>
+                @if($activeTab === 'faqs')
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label class="form-label" style="display:block;margin-bottom:6px;font-size:12px;font-weight:700">Question <span class="required" style="color:#dc3545">*</span></label>
+                        <textarea name="question" id="wtmdQuestion" class="form-input" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;resize:vertical;min-height:60px" required></textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label class="form-label" style="display:block;margin-bottom:6px;font-size:12px;font-weight:700">Answer <span class="required" style="color:#dc3545">*</span></label>
+                        <textarea name="answer" id="wtmdAnswer" class="form-input" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;resize:vertical;min-height:100px" required></textarea>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                        <div class="form-group">
+                            <label class="form-label" style="display:block;margin-bottom:6px;font-size:12px;font-weight:700">Sort Order</label>
+                            <input type="number" name="sort_order" id="wtmdSort" class="form-input" style="width:100%;height:38px;padding:0 14px;border:1px solid var(--border);border-radius:8px;" value="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display:block;margin-bottom:6px;font-size:12px;font-weight:700">Status</label>
+                            <div style="display:flex;align-items:center;height:38px;gap:8px">
+                                <input type="checkbox" name="is_active" id="wtmdActive" value="1" checked style="width:18px;height:18px">
+                                <span style="font-size:13px;font-weight:600">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="form-group">
+                        <label class="form-label" style="display:block;margin-bottom:6px;font-size:12px;font-weight:700">{{ $categories[$activeTab] }} Value <span class="required" style="color:#dc3545">*</span></label>
+                        <input type="text" name="value" id="wtmdValue" class="form-input" style="width:100%;height:40px;padding:0 14px;border:1px solid var(--border);border-radius:8px" required maxlength="255"
+                            placeholder="e.g. {{ $activeTab === 'model' ? 'P8200' : ($activeTab === 'ownership_type' ? 'SHARED' : 'OPERATIONS') }}">
+                    </div>
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" onclick="wtmdClose()">Cancel</button>
@@ -241,24 +302,51 @@
     var storeUrl = @js(route('wt.admin.masterData.index'));
     var baseUrl = @js(url('wt/admin/master-data'));
 
+    var activeTab = @js($activeTab);
+
     window.wtmdOpenAdd = function () {
         form.action = @js(route('wt.admin.masterData.store'));
         methodField.value = 'POST';
-        valueField.value = '';
+        
+        if (activeTab === 'faqs') {
+            document.getElementById('wtmdQuestion').value = '';
+            document.getElementById('wtmdAnswer').value = '';
+            document.getElementById('wtmdSort').value = '0';
+            document.getElementById('wtmdActive').checked = true;
+        } else {
+            if (valueField) valueField.value = '';
+        }
+        
         title.textContent = 'Add ' + label;
         submit.textContent = 'Add';
         wtmdShow();
-        setTimeout(function () { valueField.focus(); }, 60);
+        setTimeout(function () { 
+            if (activeTab === 'faqs') document.getElementById('wtmdQuestion').focus();
+            else if (valueField) valueField.focus(); 
+        }, 60);
     };
 
     window.wtmdOpenEdit = function (id, value) {
         form.action = baseUrl + '/' + id;
         methodField.value = 'PUT';
-        valueField.value = value;
+        if (valueField) valueField.value = value;
         title.textContent = 'Edit ' + label;
         submit.textContent = 'Save Changes';
         wtmdShow();
-        setTimeout(function () { valueField.focus(); valueField.select(); }, 60);
+        setTimeout(function () { if (valueField) { valueField.focus(); valueField.select(); } }, 60);
+    };
+
+    window.wtmdOpenFaqEdit = function (id, q, a, s, active) {
+        form.action = baseUrl + '/' + id;
+        methodField.value = 'PUT';
+        document.getElementById('wtmdQuestion').value = q;
+        document.getElementById('wtmdAnswer').value = a;
+        document.getElementById('wtmdSort').value = s;
+        document.getElementById('wtmdActive').checked = !!active;
+        title.textContent = 'Edit FAQ';
+        submit.textContent = 'Save Changes';
+        wtmdShow();
+        setTimeout(function () { document.getElementById('wtmdQuestion').focus(); }, 60);
     };
 
     function wtmdShow() {

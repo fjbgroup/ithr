@@ -5,6 +5,7 @@ namespace App\Http\Controllers\WT;
 use App\Models\WT\MasterData;
 use App\Models\WT\UserActivityLog;
 use App\Models\WT\WalkieTalkie;
+use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -25,7 +26,7 @@ class MasterDataController extends Controller
     public function index(Request $request)
     {
         $activeTab = $request->query('tab', 'model');
-        if (! array_key_exists($activeTab, MasterData::CATEGORIES)) {
+        if (! array_key_exists($activeTab, MasterData::CATEGORIES) && $activeTab !== 'faqs') {
             $activeTab = 'model';
         }
 
@@ -35,23 +36,35 @@ class MasterDataController extends Controller
             ->keys()
             ->mapWithKeys(fn ($category) => [$category => MasterData::category($category)->visible()->count()])
             ->all();
+        $counts['faqs'] = Faq::where('system', 'WT')->count();
 
-        $usage = $this->usageCounts($activeTab);
+        $usage = $activeTab !== 'faqs' ? $this->usageCounts($activeTab) : [];
 
-        $rows = MasterData::category($activeTab)
-            ->visible()
-            ->when($search !== '', fn ($query) => $query->where('value', 'LIKE', "%{$search}%"))
-            ->orderBy('value')
-            ->get()
-            ->map(function (MasterData $row) use ($usage) {
-                $row->usage_count = $usage[$row->value] ?? 0;
-
-                return $row;
-            });
+        if ($activeTab === 'faqs') {
+            $rows = Faq::where('system', 'WT')
+                ->when($search !== '', function ($query) use ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->where('question', 'LIKE', "%{$search}%")
+                          ->orWhere('answer', 'LIKE', "%{$search}%");
+                    });
+                })
+                ->orderBy('sort_order')
+                ->get();
+        } else {
+            $rows = MasterData::category($activeTab)
+                ->visible()
+                ->when($search !== '', fn ($query) => $query->where('value', 'LIKE', "%{$search}%"))
+                ->orderBy('value')
+                ->get()
+                ->map(function (MasterData $row) use ($usage) {
+                    $row->usage_count = $usage[$row->value] ?? 0;
+                    return $row;
+                });
+        }
 
         return view('wt.admin.master_data.index', [
             'activeTab' => $activeTab,
-            'categories' => MasterData::CATEGORIES,
+            'categories' => array_merge(MasterData::CATEGORIES, ['faqs' => 'Chatbot FAQ']),
             'counts' => $counts,
             'rows' => $rows,
             'search' => $search,
@@ -60,6 +73,17 @@ class MasterDataController extends Controller
 
     public function store(Request $request)
     {
+        $category = $request->input('category');
+        if ($category === 'faqs') {
+            $data = $request->only(['question', 'answer', 'sort_order']);
+            $data['system'] = 'WT';
+            $data['is_active'] = $request->has('is_active') ? 1 : 0;
+            if (empty($data['sort_order'])) $data['sort_order'] = 0;
+            Faq::create($data);
+            $this->log('insert', 'Added Chatbot FAQ for WT.');
+            return redirect()->route('wt.admin.masterData.index', ['tab' => 'faqs'])->with('success', 'FAQ added.');
+        }
+
         $category = $this->resolveCategory($request);
 
         $validated = $request->validate([
@@ -91,8 +115,19 @@ class MasterDataController extends Controller
             ->with('success', MasterData::CATEGORIES[$category] . ' "' . $value . '" added.');
     }
 
-    public function update(Request $request, MasterData $masterData)
+    public function update(Request $request, $id)
     {
+        $category = $request->input('category');
+        if ($category === 'faqs') {
+            $data = $request->only(['question', 'answer', 'sort_order']);
+            $data['is_active'] = $request->has('is_active') ? 1 : 0;
+            if (empty($data['sort_order'])) $data['sort_order'] = 0;
+            Faq::findOrFail($id)->update($data);
+            $this->log('update', 'Updated Chatbot FAQ #' . $id . '.');
+            return redirect()->route('wt.admin.masterData.index', ['tab' => 'faqs'])->with('success', 'FAQ updated.');
+        }
+
+        $masterData = MasterData::findOrFail($id);
         $category = $masterData->category;
 
         $validated = $request->validate([
@@ -126,8 +161,15 @@ class MasterDataController extends Controller
             ->with('success', MasterData::CATEGORIES[$category] . ' updated.');
     }
 
-    public function destroy(MasterData $masterData)
+    public function destroy(Request $request, $id)
     {
+        if ($request->input('category') === 'faqs') {
+            Faq::findOrFail($id)->delete();
+            $this->log('delete', 'Deleted Chatbot FAQ #' . $id . '.');
+            return redirect()->route('wt.admin.masterData.index', ['tab' => 'faqs'])->with('success', 'FAQ deleted.');
+        }
+
+        $masterData = MasterData::findOrFail($id);
         $category = $masterData->category;
         $value = $masterData->value;
 

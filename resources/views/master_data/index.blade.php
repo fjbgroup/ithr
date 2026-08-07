@@ -489,10 +489,10 @@
         </div>
     </div>
 
-@elseif(in_array($activeTab, ['faqs_hr', 'faqs_wt']))
+@elseif($activeTab === 'faqs_hr')
     <div class="card">
         <div class="card-header">
-            <h3>{{ $activeTab === 'faqs_hr' ? 'HR Chatbot FAQs' : 'WT Chatbot FAQs' }} <span class="table-count">{{ count($data['rows']) }} shown</span></h3>
+            <h3>Chatbot FAQs <span class="table-count">{{ count($data['rows']) }} shown</span></h3>
         </div>
         <div class="table-wrap">
             <table class="table table-hover">
@@ -676,8 +676,8 @@
                     <label class="form-label">Value <span class="req">*</span></label>
                     <textarea name="setting_value" id="f_setting_value" class="form-control" required rows="3"></textarea>
                 </div>
-                @elseif(in_array($activeTab, ['faqs_hr', 'faqs_wt']))
-                <input type="hidden" name="system" id="f_system" value="{{ $activeTab === 'faqs_hr' ? 'HR' : 'WT' }}">
+                @elseif($activeTab === 'faqs_hr')
+                <input type="hidden" name="system" id="f_system" value="HR">
                 <div class="form-group">
                     <label class="form-label">Question <span class="req">*</span></label>
                     <textarea name="question" id="f_question" class="form-control" rows="2" required></textarea>
@@ -817,7 +817,7 @@ function openEditModal(data) {
         setVal('f_setting_key', data.setting_key); 
         setVal('f_setting_value', data.setting_value); 
     }
-    else if (TAB === 'faqs_hr' || TAB === 'faqs_wt') { 
+    else if (TAB === 'faqs_hr') { 
         setVal('f_system', data.system); 
         setVal('f_question', data.question); 
         setVal('f_answer', data.answer); 
@@ -847,7 +847,7 @@ function setVal(id, val) {
 function clearFormFields() {
     ['f_name', 'f_code', 'f_title', 'f_start_date', 'f_setting_key', 'f_setting_value', 'f_question', 'f_answer'].forEach(id => setVal(id, ''));
     setVal('f_training_type', 'External');
-    setVal('f_system', TAB === 'faqs_hr' ? 'HR' : 'WT');
+    setVal('f_system', 'HR');
     setVal('f_sort_order', 0);
     const activeCheck = document.getElementById('f_is_active');
     if(activeCheck) activeCheck.checked = true;

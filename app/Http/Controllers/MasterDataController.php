@@ -17,7 +17,7 @@ class MasterDataController extends Controller
     public function index(Request $request)
     {
         $activeTab = $request->query('tab', 'departments');
-        $validTabs = ['departments', 'companies', 'courses', 'positions', 'transport', 'faqs_hr', 'faqs_wt'];
+        $validTabs = ['departments', 'companies', 'courses', 'positions', 'transport', 'faqs_hr'];
         if (!in_array($activeTab, $validTabs)) {
             $activeTab = 'departments';
         }
@@ -33,7 +33,6 @@ class MasterDataController extends Controller
             'positions'   => Position::count(),
             'transport'   => TransportMode::count(),
             'faqs_hr'     => \App\Models\Faq::where('system', 'HR')->count(),
-            'faqs_wt'     => \App\Models\Faq::where('system', 'WT')->count(),
         ];
 
         $tabLabels = [
@@ -42,8 +41,7 @@ class MasterDataController extends Controller
             'courses'     => 'Training Course',
             'positions'   => 'Position',
             'transport'   => 'Transport Mode',
-            'faqs_hr'     => 'Chatbot FAQ (HR)',
-            'faqs_wt'     => 'Chatbot FAQ (WT)',
+            'faqs_hr'     => 'Chatbot FAQ',
         ];
 
         if ($activeTab === 'departments') {
@@ -105,9 +103,9 @@ class MasterDataController extends Controller
                 $tm->usage_count = DB::table('business_travel')->where('transport', $tm->name)->count();
                 return $tm;
             });
-        } elseif (in_array($activeTab, ['faqs_hr', 'faqs_wt'])) {
+        } elseif ($activeTab === 'faqs_hr') {
             $query = \App\Models\Faq::query();
-            $query->where('system', $activeTab === 'faqs_hr' ? 'HR' : 'WT');
+            $query->where('system', 'HR');
             
             if ($search) {
                 $query->where(function($q) use ($search) {
@@ -145,9 +143,9 @@ class MasterDataController extends Controller
         } elseif ($tab === 'settings') {
             SystemSetting::create($request->only(['setting_key', 'setting_value']));
             AuditLogger::log('create', 'master_data', 'Added system setting "' . $request->setting_key . '".');
-        } elseif (in_array($tab, ['faqs_hr', 'faqs_wt'])) {
+        } elseif ($tab === 'faqs_hr') {
             $data = $request->only(['system', 'question', 'answer', 'sort_order']);
-            $data['system'] = $tab === 'faqs_hr' ? 'HR' : 'WT';
+            $data['system'] = 'HR';
             $data['is_active'] = $request->has('is_active') ? 1 : 0;
             if (empty($data['sort_order'])) $data['sort_order'] = 0;
             \App\Models\Faq::create($data);
@@ -218,7 +216,7 @@ class MasterDataController extends Controller
         } elseif ($tab === 'settings') {
             SystemSetting::findOrFail($id)->update($request->only(['setting_key', 'setting_value']));
             AuditLogger::log('update', 'master_data', 'Updated system setting "' . $request->setting_key . '" #' . $id . '.');
-        } elseif (in_array($tab, ['faqs_hr', 'faqs_wt'])) {
+        } elseif ($tab === 'faqs_hr') {
             $data = $request->only(['question', 'answer', 'sort_order']);
             $data['is_active'] = $request->has('is_active') ? 1 : 0;
             if (empty($data['sort_order'])) $data['sort_order'] = 0;
@@ -274,7 +272,7 @@ class MasterDataController extends Controller
             $setting = SystemSetting::findOrFail($id);
             AuditLogger::log('delete', 'master_data', 'Deleted system setting "' . $setting->setting_key . '".');
             $setting->delete();
-        } elseif (in_array($tab, ['faqs_hr', 'faqs_wt'])) {
+        } elseif ($tab === 'faqs_hr') {
             $faq = \App\Models\Faq::findOrFail($id);
             AuditLogger::log('delete', 'master_data', 'Deleted FAQ #' . $id . '.');
             $faq->delete();

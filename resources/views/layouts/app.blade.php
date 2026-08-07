@@ -384,8 +384,15 @@ html.sidebar-collapsed .sidebar-footer .user-info {
         @endif
 
         
-                  @php
-              $sysSecActive = request()->is('master-data*') || request()->is('users*') || request()->is('audit-log*') || request()->is('account/security*');
+        @if(Auth::user()->isAdmin() || Auth::user()->isCeo())
+        <a href="{{ url('/master-data') }}" class="nav-item {{ request()->is('master-data*') ? 'active' : '' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            Master Data
+        </a>
+        @endif
+
+          @php
+              $sysSecActive = request()->is('users*') || request()->is('audit-log*') || request()->is('account/security*');
           @endphp
           @if(Auth::user()->isAdmin() || Auth::user()->isCeo() || Auth::user()->isHrUser())
           <div class="nav-divider" style="border-top:1px solid var(--sidebar-border);margin:12px 0 8px"></div>
@@ -402,10 +409,6 @@ html.sidebar-collapsed .sidebar-footer .user-info {
               </div>
               <div class="nav-group-children {{ $sysSecActive ? 'open' : '' }}">
                   <div class="nav-group-children-inner">
-                      @if(Auth::user()->isAdmin() || Auth::user()->isCeo())
-                      <a href="{{ url('/master-data') }}" class="nav-child {{ request()->is('master-data*') ? 'active' : '' }}">Master Data</a>
-                      @endif
-                      
                       @if(Auth::user()->isAdminIT() || Auth::user()->isCeo())
                       <a href="{{ url('/users') }}" class="nav-child {{ request()->is('users*') ? 'active' : '' }}">User Accounts</a>
                       <a href="{{ route('audit-log.index') }}" class="nav-child {{ request()->is('audit-log*') ? 'active' : '' }}">Audit Log</a>
