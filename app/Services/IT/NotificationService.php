@@ -31,6 +31,14 @@ class NotificationService
         }
     }
 
+    public static function notifyAdminsWithEmail(string $type, string $title, string $message, string $link = ''): void
+    {
+        $admins = User::whereIn('it_role', ['admin_it', 'admin'])->where('is_active', true)->get();
+        foreach ($admins as $admin) {
+            static::notifyUserWithEmail($admin->id, $type, $title, $message, $link);
+        }
+    }
+
     public static function notifyFinanceAdmins(string $type, string $title, string $message, string $link = ''): void
     {
         $financeAdmins = User::where('it_role', 'finance_admin')->where('is_active', true)->get();

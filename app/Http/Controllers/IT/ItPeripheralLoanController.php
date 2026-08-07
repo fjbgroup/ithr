@@ -64,7 +64,8 @@ class ItPeripheralLoanController extends Controller
         }
 
         $loans = $query->paginate(15)->withQueryString();
-        $assetClasses = AssetClass::orderBy('name')->get();
+        $allowedClasses = ['MONITOR', 'PC', 'LAPTOP', 'PRINTER', 'SCANNER', 'UPS', 'KEYBOARD', 'MOUSE', 'OTHER'];
+        $assetClasses = AssetClass::whereIn('name', $allowedClasses)->orderBy('name')->get();
         $departments = \App\Models\Department::orderBy('name')->get();
 
         return view('it.loans.index', compact('loans', 'assetClasses', 'departments', 'stat_total', 'stat_active', 'stat_pending', 'stat_completed'));
@@ -127,6 +128,21 @@ class ItPeripheralLoanController extends Controller
             'notes' => $request->notes,
         ]);
 
+        \App\Services\IT\NotificationService::notifyAdminsWithEmail(
+            'peripheral_loan',
+            'New Peripheral Loan Request',
+            $user->full_name . ' has submitted a new peripheral loan request (' . $referralCode . ').',
+            route('it.loans.index')
+        );
+
+        \App\Services\IT\NotificationService::notifyUserWithEmail(
+            $user->id,
+            'peripheral_loan',
+            'Peripheral Loan Request Submitted',
+            'Your peripheral loan request (' . $referralCode . ') has been successfully submitted and is pending verification.',
+            route('it.loans.index')
+        );
+
         return redirect()->route('it.loans.index')->with('success', 'Loan application submitted successfully.');
     }
 
@@ -148,6 +164,27 @@ class ItPeripheralLoanController extends Controller
         if ($loan->inventoryItem) {
             $loan->inventoryItem->update(['item_status' => 'Loaned']);
         }
+
+        $staff = \App\Models\Staff::find($loan->staff_id);
+        if ($staff && $staff->email) {
+            $requesterUser = \App\Models\IT\User::where('email', $staff->email)->first();
+            if ($requesterUser) {
+                \App\Services\IT\NotificationService::notifyUserWithEmail(
+                    $requesterUser->id,
+                    'peripheral_loan',
+                    'Peripheral Loan Verified',
+                    'Your peripheral loan (' . $loan->referral_code . ') has been verified and picked up.',
+                    route('it.loans.index')
+                );
+            }
+        }
+
+        \App\Services\IT\NotificationService::notifyAdminsWithEmail(
+            'peripheral_loan',
+            'Peripheral Loan Verified',
+            'Peripheral loan (' . $loan->referral_code . ') has been verified by ' . Auth::guard('it')->user()->full_name . '.',
+            route('it.loans.index')
+        );
 
         return back()->with('success', 'Pickup verified. Item status updated to Loaned.');
     }
@@ -172,7 +209,15 @@ class ItPeripheralLoanController extends Controller
             'return_verified_at' => Carbon::now(),
         ]);
 
-        NotificationService::notifyAdminsWithEmail(
+        \App\Services\IT\NotificationService::notifyUserWithEmail(
+            $user->id,
+            'peripheral_loan',
+            'Peripheral Loan Return Initiated',
+            'You have initiated the return process for peripheral loan (' . $loan->referral_code . '). Please hand the item to IT.',
+            route('it.loans.index')
+        );
+
+        \App\Services\IT\NotificationService::notifyAdminsWithEmail(
             'peripheral_loan',
             'Peripheral Loan Return Initiated',
             $user->full_name . ' has initiated the return for peripheral loan ' . $loan->referral_code . '.',
@@ -200,6 +245,27 @@ class ItPeripheralLoanController extends Controller
         if ($loan->inventoryItem) {
             $loan->inventoryItem->update(['item_status' => 'Active']);
         }
+
+        $staff = \App\Models\Staff::find($loan->staff_id);
+        if ($staff && $staff->email) {
+            $requesterUser = \App\Models\IT\User::where('email', $staff->email)->first();
+            if ($requesterUser) {
+                \App\Services\IT\NotificationService::notifyUserWithEmail(
+                    $requesterUser->id,
+                    'peripheral_loan',
+                    'Peripheral Loan Return Endorsed',
+                    'Your return for peripheral loan (' . $loan->referral_code . ') has been endorsed and completed.',
+                    route('it.loans.index')
+                );
+            }
+        }
+
+        \App\Services\IT\NotificationService::notifyAdminsWithEmail(
+            'peripheral_loan',
+            'Peripheral Loan Return Endorsed',
+            'Peripheral loan return (' . $loan->referral_code . ') has been endorsed by ' . Auth::guard('it')->user()->full_name . '.',
+            route('it.loans.index')
+        );
 
         return back()->with('success', 'Return endorsed. Item is now Active.');
     }
