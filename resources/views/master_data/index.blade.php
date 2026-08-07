@@ -773,7 +773,7 @@
                         <label class="form-label">Color Theme</label>
                         <select name="room_color" id="f_room_color" class="form-control">
                             @foreach($colorMap as $code => $hex)
-                            <option value="{{ $code }}">{{ ucfirst($code) }}</option>
+                            <option value="{{ $code }}">{{ ucfirst(str_replace('room-', '', $code)) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -965,7 +965,7 @@ function clearFormFields() {
     ['f_name', 'f_code', 'f_title', 'f_start_date', 'f_setting_key', 'f_setting_value', 'f_question', 'f_answer', 'f_room_name', 'f_room_description', 'f_room_capacity', 'f_room_pic_0', 'f_room_pic_1'].forEach(id => setVal(id, ''));
     setVal('f_training_type', 'External');
     setVal('f_system', 'HR');
-    setVal('f_room_color', 'blue');
+    setVal('f_room_color', 'room-blue');
     setVal('f_sort_order', 0);
     const activeCheck = document.getElementById('f_is_active');
     if(activeCheck) activeCheck.checked = true;

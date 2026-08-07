@@ -1060,7 +1060,7 @@
         @foreach($rooms as $room)
         @php
             $roomBookings = $bookingsByRoom->get($room->id, collect());
-            $dotColor     = $colorMap[$room->color_class]['dot']   ?? '#185FA5';
+            $dotColor     = is_array($colorMap[$room->color_class] ?? null) ? ($colorMap[$room->color_class]['dot'] ?? '#185FA5') : ($colorMap[$room->color_class] ?? '#185FA5');
             $bookingCount = $roomBookings->count();
             $pics         = $room->pics->pluck('name')->toArray();
         @endphp

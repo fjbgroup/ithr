@@ -136,12 +136,12 @@ class MasterDataController extends Controller
         if ($activeTab === 'rooms') {
             $allUsers = User::where('is_active', true)->orderBy('name')->get();
             $colorMap = [
-                'navy' => '#1e3a8a', 'blue' => '#3b82f6', 'sky' => '#0ea5e9',
-                'indigo' => '#6366f1', 'purple' => '#a855f7', 'pink' => '#ec4899',
-                'rose' => '#f43f5e', 'red' => '#ef4444', 'orange' => '#f97316',
-                'amber' => '#f59e0b', 'yellow' => '#eab308', 'lime' => '#84cc16',
-                'green' => '#22c55e', 'emerald' => '#10b981', 'teal' => '#14b8a6',
-                'cyan' => '#06b6d4', 'slate' => '#64748b'
+                'room-navy' => '#1e3a8a', 'room-blue' => '#3b82f6', 'room-sky' => '#0ea5e9',
+                'room-indigo' => '#6366f1', 'room-purple' => '#a855f7', 'room-pink' => '#ec4899',
+                'room-rose' => '#f43f5e', 'room-red' => '#ef4444', 'room-orange' => '#f97316',
+                'room-amber' => '#f59e0b', 'room-yellow' => '#eab308', 'room-lime' => '#84cc16',
+                'room-green' => '#22c55e', 'room-emerald' => '#10b981', 'room-teal' => '#14b8a6',
+                'room-cyan' => '#06b6d4', 'room-slate' => '#64748b'
             ];
         }
 

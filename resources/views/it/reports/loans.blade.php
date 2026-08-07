@@ -46,7 +46,7 @@
     <a href="{{ route('it.reports.loans') }}" class="rpt-tab active">
       <i class="bi bi-person-workspace"></i> Peripheral Loans
     </a>
-    <a href="{{ route('it.reports.loans.export') }}?{{ http_build_query(request()->only(['year','month','department_id','asset_class'])) }}"
+    <a href="{{ route('it.reports.loans.export') }}?{{ http_build_query(request()->only(['year','month','company_code','department_id','asset_class'])) }}"
        class="btn-export">
       <i class="bi bi-file-earmark-excel-fill"></i> Export Excel
     </a>
@@ -94,11 +94,20 @@
     </select>
   </div>
   <div>
+    <label>Company</label>
+    <select name="company_code" id="filterCompany" style="width:140px">
+      <option value="">All Companies</option>
+      @foreach($companies as $company)
+        <option value="{{ $company->code }}" @selected(request('company_code') == $company->code)>{{ $company->code }}</option>
+      @endforeach
+    </select>
+  </div>
+  <div>
     <label>Department</label>
-    <select name="department_id" style="width:180px">
+    <select name="department_id" id="filterDepartment" style="width:180px">
       <option value="">All Departments</option>
       @foreach($departments as $dept)
-        <option value="{{ $dept->id }}" @selected(request('department_id') == $dept->id)>{{ $dept->name }}</option>
+        <option value="{{ $dept->id }}" data-company="{{ $dept->company }}" @selected(request('department_id') == $dept->id)>{{ $dept->name }}</option>
       @endforeach
     </select>
   </div>
@@ -113,7 +122,7 @@
   </div>
   <div style="display:flex;gap:8px;align-items:flex-end">
     <button type="submit" class="btn-filter"><i class="bi bi-funnel-fill"></i> Filter</button>
-    @if(request()->hasAny(['year','month','department_id','asset_class']))
+    @if(request()->hasAny(['year','month','company_code','department_id','asset_class']))
     <a href="{{ route('it.reports.loans') }}" class="btn-reset"><i class="bi bi-x-lg"></i> Reset</a>
     @endif
   </div>
@@ -186,4 +195,33 @@
   </div>
   @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const companySelect = document.getElementById('filterCompany');
+  const deptSelect = document.getElementById('filterDepartment');
+  const allDeptOptions = Array.from(deptSelect.options);
+
+  function filterDepartments() {
+    const selectedCompany = companySelect.value;
+    let hasSelectedValidOption = false;
+
+    deptSelect.innerHTML = '';
+    
+    allDeptOptions.forEach(opt => {
+      if (opt.value === '' || selectedCompany === '' || opt.dataset.company === selectedCompany) {
+        deptSelect.appendChild(opt);
+        if (opt.selected) hasSelectedValidOption = true;
+      }
+    });
+
+    if (!hasSelectedValidOption && deptSelect.options.length > 0) {
+      deptSelect.value = '';
+    }
+  }
+
+  companySelect.addEventListener('change', filterDepartments);
+  filterDepartments();
+});
+</script>
 @endsection

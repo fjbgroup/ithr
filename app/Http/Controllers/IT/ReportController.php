@@ -97,6 +97,11 @@ class ReportController extends Controller
         if ($request->filled('month')) {
             $q->whereMonth('created_at', $request->month);
         }
+        if ($request->filled('company_code')) {
+            $q->whereHas('staff.department', function ($sq) use ($request) {
+                $sq->where('company', $request->company_code);
+            });
+        }
         if ($request->filled('department_id')) {
             $q->whereHas('staff', function ($sq) use ($request) {
                 $sq->where('department_id', $request->department_id);
@@ -110,7 +115,10 @@ class ReportController extends Controller
 
         $loans = $q->paginate(25)->withQueryString();
         $departments = \App\Models\Department::orderBy('name')->get();
-        $assetClasses = \App\Models\IT\AssetClass::orderBy('name')->get();
+        $allowedClasses = ['MONITOR', 'PC', 'LAPTOP', 'PRINTER', 'SCANNER', 'UPS', 'KEYBOARD', 'MOUSE', 'OTHER'];
+        $assetClasses = \App\Models\IT\AssetClass::whereIn('name', $allowedClasses)->orderBy('name')->get();
+
+        $companies = \App\Models\Company::orderBy('code')->get();
 
         $stats = [
             'total' => \App\Models\IT\ItPeripheralLoan::count(),
@@ -119,12 +127,12 @@ class ReportController extends Controller
             'completed' => \App\Models\IT\ItPeripheralLoan::where('status', 'Completed')->count(),
         ];
 
-        return view('it.reports.loans', compact('loans', 'departments', 'assetClasses', 'stats'));
+        return view('it.reports.loans', compact('loans', 'companies', 'departments', 'assetClasses', 'stats'));
     }
 
     public function exportPeripheralLoans(Request $request)
     {
-        $filters = $request->only(['year', 'month', 'department_id', 'asset_class']);
+        $filters = $request->only(['year', 'month', 'company_code', 'department_id', 'asset_class']);
         return Excel::download(new \App\Exports\ItPeripheralLoanExport($filters), 'it-peripheral-loans-' . now()->format('Ymd') . '.xlsx');
     }
 }

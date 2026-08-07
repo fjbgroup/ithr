@@ -23,6 +23,11 @@ class ItPeripheralLoanExport implements FromQuery, WithHeadings, WithTitle, Shou
         if (!empty($this->filters['month'])) {
             $q->whereMonth('created_at', $this->filters['month']);
         }
+        if (!empty($this->filters['company_code'])) {
+            $q->whereHas('staff.department', function ($sq) {
+                $sq->where('company', $this->filters['company_code']);
+            });
+        }
         if (!empty($this->filters['department_id'])) {
             $q->whereHas('staff', function ($sq) {
                 $sq->where('department_id', $this->filters['department_id']);
